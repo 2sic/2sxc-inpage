@@ -1,7 +1,6 @@
 <!-- Please FILL OUT THE FOLLOWING INFORMATION or we will CLOSE YOUR ISSUE WITHOUT INVESTIGATING -->
 
 ## I'm submitting a ...  <!-- remove lines which don't apply  -->
-
 [x] story  
 [x] bug report => search github for a similar issue before submitting  
 [x] feature request  
@@ -30,4 +29,9 @@ please provide the *STEPS TO REPRODUCE* and/or a *MINIMAL DEMO* like a screensho
 
 ## What is the motivation / use case for changing the behavior? <!-- Describe the motivation or the concrete use case -->
 
-**Anything you would like to add**
+## Steps to implement
+* [ ] step1
+* [ ] step2
+* [ ] step3
+
+## Anything you would like to add
