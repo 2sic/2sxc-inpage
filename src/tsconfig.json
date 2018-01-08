@@ -8,7 +8,7 @@
     "sourceMap": true,
     "inlineSources": true,
     "target": "es5",
-    //"allowJs": true
+    "allowJs": true
   },
   "exclude": [
     "node_modules",
