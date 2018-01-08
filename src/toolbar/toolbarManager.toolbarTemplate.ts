@@ -1,5 +1,6 @@
-// the default / initial buttons in a standard toolbar
+﻿// the default / initial buttons in a standard toolbar
 (function () {
+
     // ToDo: refactor to avoid side-effects
     $2sxc._toolbarManager.toolbarTemplate = {
         groups: [
@@ -55,7 +56,8 @@
         params: {},
         settings: {
             autoAddMore: "right",
+            // these are defaults, don't set again
+            // hover: "right",
         }
     };
 })();
-//# sourceMappingURL=toolbarManager.toolbarTemplate.js.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"commands.{}.js","sourceRoot":"","sources":["commands.{}.ts"],"names":[],"mappings":"AAAA,CAAC;IACG,KAAK,CAAC,SAAS,GAAG,EAAE,CAAC;AACzB,CAAC,CAAC,EAAE,CAAC","sourcesContent":["(function() {\r\n    $2sxc._commands = {};\r\n})();"]}

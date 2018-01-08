@@ -1,5 +1,5 @@
-(function () {
-    $2sxc._commands.initializeInstanceCommands = function (editContext) {
+﻿(function() {
+    $2sxc._commands.initializeInstanceCommands = function(editContext) {
         var cg = editContext.ContentGroup;
         return $2sxc._commands.definitions.create({
             canDesign: editContext.User.CanDesign,
@@ -12,5 +12,5 @@
             allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
         });
     };
+
 })();
-//# sourceMappingURL=commands.instanceCommands.js.map
