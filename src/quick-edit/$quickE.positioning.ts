@@ -44,10 +44,10 @@ $(function () {
     // Refresh positioning / visibility of the quick-insert bar
     $quickE.refresh = function (e) {
         var highlightClass = "sc-cb-highlight-for-insert";
-
-        if (!$quickE.refreshDomObjects.lastCall || (new Date() - $quickE.refreshDomObjects.lastCall > 1000)) {
+        let newDate: any = new Date();
+        if (!$quickE.refreshDomObjects.lastCall || (newDate - $quickE.refreshDomObjects.lastCall > 1000)) {
             // console.log('refreshed contentblock and modules');
-            $quickE.refreshDomObjects.lastCall = new Date();
+            $quickE.refreshDomObjects.lastCall = newDate;
             $quickE.refreshDomObjects();
         }
 

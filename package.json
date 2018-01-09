@@ -4,11 +4,16 @@
   "description": "",
   "main": "webpack.config.js",
   "dependencies": {
+    "2": "^1.0.2",
+    "@types/i18next-xhr-backend": "^1.4.1",
     "glob": "^7.1.2",
     "source-map-loader": "^0.2.3",
     "ts-loader": "^3.2.0"
   },
   "devDependencies": {
+    "@2sic.com/2sxc-typings": "^9.0.3",
+    "@types/i18next": "^8.4.2",
+    "copy-webpack-plugin": "^4.3.1",
     "fork-ts-checker-webpack-plugin": "^0.2.10",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"

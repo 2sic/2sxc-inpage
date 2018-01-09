@@ -2,14 +2,20 @@
   "compileOnSave": true,
   "compilerOptions": {
     //"outFile": "../../dist-test/inpage/inpage.min.js",
+    //"outDir": "generated",
     "noEmitOnError": false,
     "noImplicitAny": false,
+    "noFallthroughCasesInSwitch": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "removeComments": false,
     "sourceMap": true,
     "inlineSources": true,
     "target": "es5",
     "allowJs": true,
-    "newLine": "CRLF" 
+    "newLine": "CRLF",
+    "module": "commonjs",
+    "moduleResolution": "node"
   },
   "include": [
     "src/**/*"

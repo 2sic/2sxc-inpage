@@ -1,4 +1,5 @@
 ﻿// https://tc39.github.io/ecma262/#sec-array.prototype.find
+// https://stackoverflow.com/questions/31455805/find-object-in-array-using-typescript
 if (!Array.prototype.find) {
     Object.defineProperty(Array.prototype, 'find', {
         value: function (predicate) {

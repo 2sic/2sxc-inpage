@@ -109,7 +109,14 @@ __webpack_require__(39);
 __webpack_require__(40);
 __webpack_require__(41);
 __webpack_require__(42);
-module.exports = __webpack_require__(43);
+__webpack_require__(43);
+__webpack_require__(44);
+__webpack_require__(45);
+__webpack_require__(46);
+__webpack_require__(47);
+__webpack_require__(48);
+__webpack_require__(49);
+module.exports = __webpack_require__(50);
 
 
 /***/ }),
@@ -118,8 +125,9 @@ module.exports = __webpack_require__(43);
 
 // this enhances the $2sxc client controller with stuff only needed when logged in 
 (function () {
-    if (!window.$2sxc || window.$2sxc.consts)
+    if (!(window.$2sxc || window.$2sxc.consts)) {
         return false;
+    }
     $2sxc.c = $2sxc.consts = {
         // classes
         cls: {
@@ -157,8 +165,9 @@ module.exports = __webpack_require__(43);
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function () {
-    if (!window.$2sxc || window.$2sxc.system)
+    if (!(window.$2sxc || window.$2sxc.system)) {
         return;
+    }
     $2sxc.system = {
         finishUpgrade: finishUpgrade
     };
@@ -305,7 +314,7 @@ module.exports = __webpack_require__(43);
                     return settings.entityId && settings.entityGuid && settings.entityTitle;
                 },
                 code: function (settings, event, sxc) {
-                    $2sxc.contentItems["delete"](sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+                    $2sxc.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
                 }
             }),
             'moveup': makeDef("moveup", "MoveUp", "move-up", false, true, {
@@ -509,14 +518,15 @@ module.exports = __webpack_require__(43);
                         dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
                     }, settings.params),
                     addSimpleItem: function () {
-                        var itm = {}, ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+                        var item = {};
+                        var ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
                         if (cmd.settings.entityId)
-                            itm.EntityId = cmd.settings.entityId;
+                            item.EntityId = cmd.settings.entityId;
                         if (ct)
-                            itm.ContentTypeName = ct;
+                            item.ContentTypeName = ct;
                         // only add if there was stuff to add
-                        if (itm.EntityId || itm.ContentTypeName)
-                            cmd.items.push(itm);
+                        if (item.EntityId || item.ContentTypeName)
+                            cmd.items.push(item);
                     },
                     // this adds an item of the content-group, based on the group GUID and the sequence number
                     addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
@@ -763,7 +773,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
     return {
         create: create,
         move: move,
-        "delete": remove
+        delete: remove
     };
     function create(parentId, fieldName, index, appName, container, newGuid) {
         // the wrapper, into which this will be placed and the list of pre-existing blocks
@@ -778,7 +788,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
             field: fieldName,
             sortOrder: index,
             app: appName,
-            guid: newGuid
+            guid: newGuid,
         };
         return sxc.webApi.get({ url: 'view/module/generatecontentblock', params: params })
             .then(function (result) {
@@ -798,7 +808,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
             parentId: parentId,
             field: field,
             indexFrom: indexFrom,
-            indexTo: indexTo
+            indexTo: indexTo,
         };
         // todo: need sxc!
         return sxc.webApi.get({ url: 'view/module/moveiteminlist', params: params })
@@ -814,7 +824,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
         var params = {
             parentId: parentId,
             field: field,
-            index: index
+            index: index,
         };
         return sxc.webApi.get({ url: 'view/module/RemoveItemInList', params: params })
             .then(function () {
@@ -914,6 +924,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
  */
 (function () {
     var cbm = $2sxc._contentBlock;
+    // https://stackoverflow.com/questions/38860161/using-typescript-and-object-assign-gives-me-an-error-property-assign-does-no
     Object.assign(cbm, {
         prepareToAddContent: prepareToAddContent,
         updateTemplateFromDia: updateTemplateFromDia
@@ -975,7 +986,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
             if (!data)
                 return;
             // fixes a special case where the guid is given with quotes (dependes on version of angularjs) issue #532
-            newGuid = data.replace(/[\",\']/g, '');
+            var newGuid = data.replace(/[\",\']/g, '');
             if (console)
                 console.log('created content group {' + newGuid + '}');
             sxc.manage._updateContentGroupGuid(newGuid);
@@ -1072,7 +1083,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
         edit: function () { run("edit", { useModuleList: true, sortOrder: 0 }); },
         adminApp: function () { run("app"); },
         adminZone: function () { run("zone"); },
-        develop: function () { run("template-develop"); }
+        develop: function () { run("template-develop"); },
     };
 };
 
@@ -1120,7 +1131,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
                     .replace("{title}", itemTitle));
                 if (!ok)
                     return;
-                sxc.webApi["delete"]("app-content/any/" + itemGuid, null, null, true)
+                sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
                     .success(function () {
                     location.reload();
                 }).error(function (error) {
@@ -1143,6 +1154,42 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 16 */
 /***/ (function(module, exports) {
 
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
 (function () {
     $2sxc._lib = {
         extend: function extend() {
@@ -1157,7 +1204,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 17 */
+/* 23 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -1174,7 +1221,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 18 */
+/* 24 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1276,7 +1323,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 19 */
+/* 25 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -1377,10 +1424,11 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 20 */
+/* 26 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
+// https://stackoverflow.com/questions/31455805/find-object-in-array-using-typescript
 if (!Array.prototype.find) {
     Object.defineProperty(Array.prototype, 'find', {
         value: function (predicate) {
@@ -1420,7 +1468,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 21 */
+/* 27 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -1447,7 +1495,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 22 */
+/* 28 */
 /***/ (function(module, exports) {
 
 // this is a dialog manager which is in charge of all
@@ -1614,7 +1662,7 @@ if (typeof Object.assign != 'function') {
                 //todo: only re-init if something was changed?
                 // return cbApi.reloadAndReInitialize(reSxc());
                 // cancel the dialog
-                localStorage.setItem('cancelled-dialog', true);
+                localStorage.setItem("cancelled-dialog", "true");
                 return newFrm.closeCallback();
             },
             run: function (verb) {
@@ -1662,7 +1710,7 @@ if (typeof Object.assign != 'function') {
      * @returns {null} nothing
      */
     function watchForResize(keepWatching) {
-        if (keepWatching === false && resizeWatcher) {
+        if ((keepWatching === null || keepWatching === false) && resizeWatcher) {
             clearInterval(resizeWatcher);
             resizeWatcher = null;
             return null;
@@ -1695,7 +1743,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 23 */
+/* 29 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -1764,7 +1812,7 @@ $(function () {
 
 
 /***/ }),
-/* 24 */
+/* 30 */
 /***/ (function(module, exports) {
 
 // add a clipboard to the quick edit
@@ -1852,7 +1900,7 @@ $(function () {
         var clip = $quickE.clipboard.data;
         switch (action) {
             case "delete":
-                return $quickE.cmds[clip.type]["delete"](clip);
+                return $quickE.cmds[clip.type].delete(clip);
             case "sendToPane":
                 return $quickE.cmds.mod.sendToPane(clip);
         }
@@ -1861,7 +1909,7 @@ $(function () {
 
 
 /***/ }),
-/* 25 */
+/* 31 */
 /***/ (function(module, exports) {
 
 // extend the quick edit with the core commands
@@ -1869,7 +1917,7 @@ $(function () {
     $quickE.cmds = {
         cb: {
             "delete": function (clip) {
-                return $2sxc(clip.list).manage._getCbManipulator()["delete"](clip.parent, clip.field, clip.index);
+                return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
             },
             "create": function (parent, field, index, appOrContent, list, newGuid) {
                 return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
@@ -1880,7 +1928,7 @@ $(function () {
                 if (!confirm("are you sure?"))
                     return;
                 var modId = $quickE.modManage.getModuleId(clip.item.className);
-                $quickE.modManage["delete"](modId);
+                $quickE.modManage.delete(modId);
             },
             // todo: unsure if this is a good place for this bit of code...
             move: function (oldClip, newClip, from, to) {
@@ -1902,7 +1950,7 @@ $(function () {
 
 
 /***/ }),
-/* 26 */
+/* 32 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -1947,14 +1995,14 @@ $(function () {
 
 
 /***/ }),
-/* 27 */
+/* 33 */
 /***/ (function(module, exports) {
 
 // content-block specific stuff like actions
 $(function () {
     function onCbButtonClick() {
         var list = $quickE.main.actionsForCb.closest($quickE.selectors.cb.listSelector), listItems = list.find($quickE.selectors.cb.selector), actionConfig = JSON.parse(list.attr($quickE.selectors.cb.context)), index = 0, newGuid = actionConfig.guid || null;
-        if ($quickE.main.actionsForCb.hasClass($quickE.selectors.cb["class"]))
+        if ($quickE.main.actionsForCb.hasClass($quickE.selectors.cb.class))
             index = listItems.index($quickE.main.actionsForCb[0]) + 1;
         // check cut/paste
         var cbAction = $(this).data("action");
@@ -1971,7 +2019,7 @@ $(function () {
 
 
 /***/ }),
-/* 28 */
+/* 34 */
 /***/ (function(module, exports) {
 
 // module specific stuff
@@ -2101,7 +2149,7 @@ $(function () {
 
 
 /***/ }),
-/* 29 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // module specific stuff
@@ -2121,7 +2169,7 @@ $(function () {
 
 
 /***/ }),
-/* 30 */
+/* 36 */
 /***/ (function(module, exports) {
 
 // everything related to positioning the quick-edit in-page editing
@@ -2163,9 +2211,10 @@ $(function () {
     // Refresh positioning / visibility of the quick-insert bar
     $quickE.refresh = function (e) {
         var highlightClass = "sc-cb-highlight-for-insert";
-        if (!$quickE.refreshDomObjects.lastCall || (new Date() - $quickE.refreshDomObjects.lastCall > 1000)) {
+        var newDate = new Date();
+        if (!$quickE.refreshDomObjects.lastCall || (newDate - $quickE.refreshDomObjects.lastCall > 1000)) {
             // console.log('refreshed contentblock and modules');
-            $quickE.refreshDomObjects.lastCall = new Date();
+            $quickE.refreshDomObjects.lastCall = newDate;
             $quickE.refreshDomObjects();
         }
         if ($quickE.config.innerBlocks.enable && $quickE.contentBlocks) {
@@ -2245,7 +2294,7 @@ $(function () {
 
 
 /***/ }),
-/* 31 */
+/* 37 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -2307,7 +2356,108 @@ $(function () {
 
 
 /***/ }),
-/* 32 */
+/* 38 */
+/***/ (function(module, exports) {
+
+/*
+ * Author: Alex Gibson
+ * https://github.com/alexgibson/shake.js
+ * License: MIT license
+ */
+(function (global, factory) {
+    global.Shake = factory(global, global.document);
+}(typeof window !== 'undefined' ? window : this, function (window, document) {
+    'use strict';
+    function Shake(options) {
+        //feature detect
+        this.hasDeviceMotion = 'ondevicemotion' in window;
+        this.options = {
+            threshold: 15,
+            timeout: 1000,
+            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
+        };
+        if (typeof options === 'object') {
+            for (var i in options) {
+                if (options.hasOwnProperty(i)) {
+                    this.options[i] = options[i];
+                }
+            }
+        }
+        //use date to prevent multiple shakes firing
+        this.lastTime = new Date();
+        //accelerometer values
+        this.lastX = null;
+        this.lastY = null;
+        this.lastZ = null;
+    }
+    //reset timer values
+    Shake.prototype.reset = function () {
+        this.lastTime = new Date();
+        this.lastX = null;
+        this.lastY = null;
+        this.lastZ = null;
+    };
+    //start listening for devicemotion
+    Shake.prototype.start = function () {
+        this.reset();
+        if (this.hasDeviceMotion) {
+            window.addEventListener('devicemotion', this, false);
+        }
+    };
+    //stop listening for devicemotion
+    Shake.prototype.stop = function () {
+        if (this.hasDeviceMotion) {
+            window.removeEventListener('devicemotion', this, false);
+        }
+        this.reset();
+    };
+    //calculates if shake did occur
+    Shake.prototype.devicemotion = function (e) {
+        var current = e.accelerationIncludingGravity;
+        var currentTime;
+        var timeDifference;
+        var deltaX = 0;
+        var deltaY = 0;
+        var deltaZ = 0;
+        if ((this.lastX === null) && (this.lastY === null) && (this.lastZ === null)) {
+            this.lastX = current.x;
+            this.lastY = current.y;
+            this.lastZ = current.z;
+            return;
+        }
+        deltaX = Math.abs(this.lastX - current.x);
+        deltaY = Math.abs(this.lastY - current.y);
+        deltaZ = Math.abs(this.lastZ - current.z);
+        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
+            //calculate time in milliseconds since last shake registered
+            currentTime = new Date();
+            timeDifference = currentTime.getTime() - this.lastTime.getTime();
+            if (timeDifference > this.options.timeout) {
+                // once triggered, execute  the callback
+                if (typeof this.options.callback === 'function') {
+                    this.options.callback();
+                }
+                else
+                    console.log("shake event without callback detected");
+                this.lastTime = new Date();
+            }
+        }
+        this.lastX = current.x;
+        this.lastY = current.y;
+        this.lastZ = current.z;
+    };
+    //event handler
+    Shake.prototype.handleEvent = function (e) {
+        if (typeof (this[e.type]) === 'function') {
+            return this[e.type](e);
+        }
+    };
+    return Shake;
+}));
+
+
+/***/ }),
+/* 39 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2319,7 +2469,7 @@ $(function () {
 
 
 /***/ }),
-/* 33 */
+/* 40 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -2334,7 +2484,7 @@ $(function () {
 
 
 /***/ }),
-/* 34 */
+/* 41 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -2351,7 +2501,7 @@ $(function () {
 
 
 /***/ }),
-/* 35 */
+/* 42 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2441,7 +2591,7 @@ $(function () {
 
 
 /***/ }),
-/* 36 */
+/* 43 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2484,7 +2634,7 @@ $(function () {
 
 
 /***/ }),
-/* 37 */
+/* 44 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2521,7 +2671,7 @@ $(function () {
 
 
 /***/ }),
-/* 38 */
+/* 45 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -2532,7 +2682,7 @@ $(function () {
         defaultSettings: {
             autoAddMore: null,
             hover: "right",
-            show: "hover"
+            show: "hover",
         },
         // take any common input format and convert it to a full toolbar-structure definition
         // can handle the following input formats (the param unstructuredConfig):
@@ -2750,7 +2900,7 @@ $(function () {
 
 
 /***/ }),
-/* 39 */
+/* 46 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -2770,7 +2920,7 @@ $(function () {
 
 
 /***/ }),
-/* 40 */
+/* 47 */
 /***/ (function(module, exports) {
 
 // the default / initial buttons in a standard toolbar
@@ -2829,14 +2979,14 @@ $(function () {
         defaults: {},
         params: {},
         settings: {
-            autoAddMore: "right"
+            autoAddMore: "right",
         }
     };
 })();
 
 
 /***/ }),
-/* 41 */
+/* 48 */
 /***/ (function(module, exports) {
 
 // initialize the translation system; ensure toolbars etc. are translated
@@ -2870,7 +3020,7 @@ $(function () {
 
 
 /***/ }),
-/* 42 */
+/* 49 */
 /***/ (function(module, exports) {
 
 // provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
@@ -2883,7 +3033,7 @@ $(function () {
 
 
 /***/ }),
-/* 43 */
+/* 50 */
 /***/ (function(module, exports) {
 
 // module & toolbar bootstrapping (initialize all toolbars after loading page)

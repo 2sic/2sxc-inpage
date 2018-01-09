@@ -19,13 +19,13 @@
                     }, settings.params),
 
                     addSimpleItem: function () {
-                        var itm = {},
-                            ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-                        if (cmd.settings.entityId) itm.EntityId = cmd.settings.entityId;
-                        if (ct) itm.ContentTypeName = ct;
+                        let item = {} as Item;
+                        let ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+                        if (cmd.settings.entityId) item.EntityId = cmd.settings.entityId;
+                        if (ct) item.ContentTypeName = ct;
 
                         // only add if there was stuff to add
-                        if (itm.EntityId || itm.ContentTypeName) cmd.items.push(itm);
+                        if (item.EntityId || item.ContentTypeName) cmd.items.push(item);
                     },
 
                     // this adds an item of the content-group, based on the group GUID and the sequence number

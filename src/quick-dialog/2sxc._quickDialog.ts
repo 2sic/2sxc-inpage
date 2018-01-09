@@ -61,7 +61,7 @@
          * @param {html} [container] - html-container as jQuery object
          * @returns {html} iframe object
          */
-        getIFrame: function (container) {
+        getIFrame: function (container?) {
             if (!container) container = diagManager.getContainer();
             return container.find("iframe")[0];
         },
@@ -115,7 +115,7 @@
      */
     function buildContainerAndIFrame() {
         var container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
-        var newIFrame = document.createElement("iframe");
+        var newIFrame : any = document.createElement("iframe");
         newIFrame = extendIFrameWithSxcState(newIFrame);
         container.find(".inpage-frame").html(newIFrame);
         $("body").append(container);
@@ -177,7 +177,7 @@
                 // return cbApi.reloadAndReInitialize(reSxc());
 
                 // cancel the dialog
-                localStorage.setItem('cancelled-dialog', true);
+                localStorage.setItem("cancelled-dialog", "true");
                 return newFrm.closeCallback();
             },
             run: function (verb) {
@@ -226,8 +226,8 @@
      * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
      * @returns {null} nothing
      */
-    function watchForResize(keepWatching) {
-        if (keepWatching === false && resizeWatcher) {
+    function watchForResize(keepWatching?) {
+        if ((keepWatching === null || keepWatching === false) && resizeWatcher) {
             clearInterval(resizeWatcher);
             resizeWatcher = null;
             return null;

@@ -2,6 +2,8 @@
 
 var glob = require('glob');
 var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+var path = require('path');
 
 module.exports = {
     // to automatically find tsconfig.json
@@ -36,6 +38,12 @@ module.exports = {
 
     plugins: [
         new ForkTsCheckerWebpackPlugin()
+        //new CopyWebpackPlugin([
+        //    // Copy glob results to /absolute/path/
+        //    //{ from: '/dist/**/*', to: 'c:\\Projects\\2SexyContent\\Web\\DesktopModules\\ToSIC_SexyContent\\dist\\inpage\\' },
+        //    // Copy glob results to /absolute/path/
+        //    { from: __dirname + '/dist/**/*', to: 'c:/Projects/x/inpage' }
+        //])
     ]
 
 };
