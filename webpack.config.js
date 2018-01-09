@@ -1,25 +1,41 @@
 ﻿"use strict";
 
 var glob = require('glob');
+var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
+    // to automatically find tsconfig.json
+    context: __dirname, 
+
+    // Enable sourcemaps for debugging webpack's output.
+    devtool: "source-map",
 
     // get all js files for boundle
-    entry: glob.sync('./src/**/*.js'),
+    entry: glob.sync('./src/**/*.ts'),
 
     output: {
         path: __dirname + '/dist',
         filename: 'inpage.js'
     },
 
-    // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
-
     module: {
-        loaders: [
-            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
+        rules: [
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+                options: {
+                    transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
+                }
+            }
         ]
-    }
+    },
+
+    resolve: {
+        extensions: ['.ts', '.tsx', 'js']
+    },
+
+    plugins: [
+        new ForkTsCheckerWebpackPlugin()
+    ]
 
 };
