@@ -2,7 +2,7 @@
     "use strict";
 
     // the quick-edit object
-    var $quickE = window.$quickE = {};
+    var $quickE = window.$quickE = {} as i$quickE;
 
     // selectors used all over the in-page-editing, centralized to ensure consistency
     $quickE.selectors = {

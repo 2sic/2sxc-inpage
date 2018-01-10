@@ -4,6 +4,7 @@
 (function () {
     var cbm = $2sxc._contentBlock;
 
+    // https://stackoverflow.com/questions/38860161/using-typescript-and-object-assign-gives-me-an-error-property-assign-does-no
     Object.assign(cbm, {
         prepareToAddContent: prepareToAddContent,
         updateTemplateFromDia: updateTemplateFromDia
@@ -73,7 +74,7 @@
                 if (!data) return;
 
                 // fixes a special case where the guid is given with quotes (dependes on version of angularjs) issue #532
-                newGuid = data.replace(/[\",\']/g, '');
+                let newGuid = data.replace(/[\",\']/g, '');
 
                 if (console) console.log('created content group {' + newGuid + '}');
                 sxc.manage._updateContentGroupGuid(newGuid);

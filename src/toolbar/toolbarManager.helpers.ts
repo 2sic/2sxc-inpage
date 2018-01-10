@@ -53,7 +53,7 @@
             if (Array.isArray(original) && original.length) {
                 // an array of items having buttons, so it must be button-groups
                 if (original[0].buttons)
-                    original.groups = original; // move "down"
+                    (<any>original).groups = original; // move "down"
 
                 // array of items having an action, so these are buttons
                 else if (original[0].command || original[0].action)

@@ -1,0 +1,53 @@
+{
+  "name": "2sxc-inpage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "2": "^1.0.2",
+    "@types/i18next-xhr-backend": "^1.4.1",
+    "glob": "^7.1.2",
+    "source-map-loader": "^0.2.3",
+    "ts-loader": "^3.2.0"
+  },
+  "devDependencies": {
+    "@2sic.com/2sxc-typings": "^9.0.3",
+    "@types/i18next": "^8.4.2",
+    "@types/node": "^9.3.0",
+    "css-loader": "^0.28.8",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
+    "filemanager-webpack-plugin": "^1.0.20",
+    "fork-ts-checker-webpack-plugin": "^0.2.10",
+    "style-loader": "^0.19.1",
+    "typescript": "^2.6.2",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2sic/2sxc-inpage.git"
+  },
+  "author": {
+    "name": "2sic Internet Solutions",
+    "url": "https://2sxc.org/en/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/2sic/2sxc-inpage/issues"
+  },
+  "homepage": "https://github.com/2sic/2sxc-inpage#readme",
+  "keywords": [
+    "DNN",
+    "2sxc",
+    "2SexyContent",
+    "Content",
+    "Management",
+    "CMS",
+    "TypeScript",
+    "JavaScript"
+  ]
+}

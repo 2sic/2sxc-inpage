@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="dist\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="src\interfaces\item.js">
+      <DependentUpon>item.ts</DependentUpon>
+    </None>
+  </ItemGroup>
+
+</Project>

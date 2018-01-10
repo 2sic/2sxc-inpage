@@ -1,4 +1,8 @@
-﻿// initialize the translation system; ensure toolbars etc. are translated
+﻿//import * as i18next from "i18next";
+declare var i18next: any;
+declare var jqueryI18next: any;
+
+// initialize the translation system; ensure toolbars etc. are translated
 (function () {
     var initialized = false;
 
