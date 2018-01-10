@@ -1,4 +1,6 @@
-﻿// enable shake detection on all toolbars
+﻿declare var Shake: any;
+
+// enable shake detection on all toolbars
 $(function () {
 
     // this will add a css-class to auto-show all toolbars (or remove it again)

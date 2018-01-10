@@ -13,6 +13,7 @@
   "devDependencies": {
     "@2sic.com/2sxc-typings": "^9.0.3",
     "@types/i18next": "^8.4.2",
+    "@types/node": "^9.3.0",
     "copy-webpack-plugin": "^4.3.1",
     "fork-ts-checker-webpack-plugin": "^0.2.10",
     "typescript": "^2.6.2",

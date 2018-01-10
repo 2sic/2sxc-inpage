@@ -1,4 +1,7 @@
-﻿// initialize the translation system; ensure toolbars etc. are translated
+﻿declare var jqueryI18next: any;
+declare var i18next: any;
+
+// initialize the translation system; ensure toolbars etc. are translated
 (function () {
     var initialized = false;
 

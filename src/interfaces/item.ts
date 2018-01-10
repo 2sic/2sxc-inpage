@@ -1,4 +1,4 @@
 ﻿interface Item {
-    EntityId: any;
-    ContentTypeName: any;
+    EntityId: any,
+    ContentTypeName: any,
 }

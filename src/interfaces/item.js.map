@@ -1,1 +1,1 @@
-{"version":3,"file":"item.js","sourceRoot":"","sources":["item.ts"],"names":[],"mappings":"","sourcesContent":["interface Item {\r\n    EntityId: any;\r\n    ContentTypeName: any;\r\n}"]}
+{"version":3,"file":"item.js","sourceRoot":"","sources":["item.ts"],"names":[],"mappings":"","sourcesContent":["interface Item {\r\n    EntityId: any,\r\n    ContentTypeName: any,\r\n}"]}
