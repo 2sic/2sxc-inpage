@@ -15,6 +15,7 @@
     "@types/i18next": "^8.4.2",
     "@types/node": "^9.3.0",
     "css-loader": "^0.28.8",
+    "deep-equal": "^1.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "filemanager-webpack-plugin": "^1.0.20",

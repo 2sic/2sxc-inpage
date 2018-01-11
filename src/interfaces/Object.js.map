@@ -1,1 +1,1 @@
-{"version":3,"file":"Object.js","sourceRoot":"","sources":["Object.ts"],"names":[],"mappings":"","sourcesContent":["interface Object {\r\n    sxcCacheKey: any,\r\n    closeCallback: any,\r\n    dialogName: any,\r\n    toggle: any,\r\n}"]}
+{"version":3,"file":"object.js","sourceRoot":"","sources":["object.ts"],"names":[],"mappings":"","sourcesContent":["interface Object {\r\n    sxcCacheKey: any,\r\n    closeCallback: any,\r\n    dialogName: any,\r\n    toggle: any,\r\n}"]}

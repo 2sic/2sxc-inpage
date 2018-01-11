@@ -1,0 +1,1 @@
+{"version":3,"file":"parameters-entity-interface.js","sourceRoot":"","sources":["parameters-entity-interface.ts"],"names":[],"mappings":"","sourcesContent":["/**\r\n * ParametersEntity interface\r\n */\r\nexport interface IParametersEntity {\r\n  Key: string;\r\n  Value: string;\r\n}"]}
