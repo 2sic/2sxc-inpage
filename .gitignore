@@ -173,6 +173,10 @@ Resources.zip.manifest
 node_*/
 # grunt*/
 
+# jasmine, karma
+[Cc]overage/
+_reports/
+
 # 2sxc Upgrade Logs
 /Upgrade/Log
 packages/
