@@ -1,5 +1,4 @@
-﻿// https://hackernoon.com/import-json-into-typescript-8d465beded79
-import { IhjConfig } from './ihj-config';
+﻿import { IhjConfig } from '../src/in-html-json-config/ihj-config';
 import * as rawJson from "./ihj-config.test.json";
 
 //const rawJson = <IhjConfig>JSON.parse('{"foo": "bar"}');
