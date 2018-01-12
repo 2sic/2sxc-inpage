@@ -1,4 +1,4 @@
-import { DnnSxcModule } from '@2sic.com/dnn-sxc-angular';
+// import { DnnSxcModule } from '@2sic.com/dnn-sxc-angular';
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function () {
     if (!(window.$2sxc || window.$2sxc.consts)) {
