@@ -5,7 +5,7 @@ export interface IContentGroup {
   IsCreated: boolean;
   IsList: boolean;
   TemplateId: number;
-  QueryId: number;
+  QueryId: number | null;
   ContentTypeName: string;
   AppUrl: string;
   AppSettingsId: number;

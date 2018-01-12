@@ -7,7 +7,7 @@ export class ContentGroup implements IContentGroup {
   public IsCreated: boolean;
   public IsList: boolean;
   public TemplateId: number;
-  public QueryId: number;
+  public QueryId: number | null;
   public ContentTypeName: string;
   public AppUrl: string;
   public AppSettingsId: number;

@@ -16,13 +16,17 @@
 
          // list of files / patterns to load in the browser
          files: [
-             './src/**/*.ts',
+             //'./src/**/*.ts',
+             './src/*.ts',
+             './src/in-html-json-config/*.ts',
              './test/**/*.ts'
          ],
 
          // list of files / patterns to exclude
          exclude: [
-             './test/assests/*'
+             './test/assests/*',
+             'node_modules'
+
          ],
 
          plugins: [ 'karma-*' ],

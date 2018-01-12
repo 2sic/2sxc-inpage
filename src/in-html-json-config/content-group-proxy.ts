@@ -19,7 +19,7 @@ export class ContentGroupProxy {
     checkBoolean(data.IsCreated, false, field + ".IsCreated");
     checkBoolean(data.IsList, false, field + ".IsList");
     checkNumber(data.TemplateId, false, field + ".TemplateId");
-    checkNumber(data.QueryId, false, field + ".QueryId");
+    checkNumber(data.QueryId, true, field + ".QueryId");
     checkString(data.ContentTypeName, false, field + ".ContentTypeName");
     checkString(data.AppUrl, false, field + ".AppUrl");
     checkNumber(data.AppSettingsId, true, field + ".AppSettingsId");

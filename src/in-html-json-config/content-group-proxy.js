@@ -20,7 +20,7 @@ var ContentGroupProxy = /** @class */ (function () {
         ihj_helper_1.checkBoolean(data.IsCreated, false, field + ".IsCreated");
         ihj_helper_1.checkBoolean(data.IsList, false, field + ".IsList");
         ihj_helper_1.checkNumber(data.TemplateId, false, field + ".TemplateId");
-        ihj_helper_1.checkNumber(data.QueryId, false, field + ".QueryId");
+        ihj_helper_1.checkNumber(data.QueryId, true, field + ".QueryId");
         ihj_helper_1.checkString(data.ContentTypeName, false, field + ".ContentTypeName");
         ihj_helper_1.checkString(data.AppUrl, false, field + ".AppUrl");
         ihj_helper_1.checkNumber(data.AppSettingsId, true, field + ".AppSettingsId");

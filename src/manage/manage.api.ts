@@ -41,7 +41,9 @@
      * @returns {any} object containing various properties for this current sxc-instance
      */
     $2sxc._manage.buildInstanceConfig = function(editContext) {
-        var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
+        var ce = editContext.Environment,
+            cg = editContext.ContentGroup,
+            cb = editContext.ContentBlock;
         return {
             portalId: ce.WebsiteId,
             tabId: ce.PageId,
@@ -58,7 +60,10 @@
 
 
     $2sxc._manage.getUserOfEditContext = function getUserOfEditContext(editContext) {
-        return { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign };
+        return {
+            canDesign: editContext.User.CanDesign,
+            canDevelop: editContext.User.CanDesign
+        };
     };
 
 

@@ -8,11 +8,12 @@ describe('ihj config test', () => {
   it('compare JSON', () => {
 
       let t1: string = JSON.stringify(rawJson);
+      let ihjConfigTest: IhjConfig = IhjConfigProxy.Parse(t1);
+      let t2: string = JSON.stringify(ihjConfigTest);
 
-      let ihjConfigTest: IhjConfig = IhjConfigProxy.Parse("{}");
-      //let t2: string = JSON.stringify(ihjConfigTest);
-
-      expect(rawJson).toBe(rawJson);
+      console.log(t1);
+      console.log(t2);
+      expect(t2).toBe(t1);
   });
 });
 
