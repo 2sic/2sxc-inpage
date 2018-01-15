@@ -36,6 +36,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-typescript": "^3.0.9",
     "karma-typescript-preprocessor": "^0.3.1",
+    "merge-files-webpack-plugin": "^1.1.2",
     "style-loader": "^0.19.1",
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
@@ -45,11 +46,8 @@
   },
   "scripts": {
     "lint": "tslint ./src/**/*.ts -t verbose",
-    "pree2e": "webdriver-manager update",
     "test": "karma start",
-    "test-once": "karma start --single-run",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w"
+    "test-once": "karma start --single-run"
   },
   "repository": {
     "type": "git",

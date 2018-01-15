@@ -140,7 +140,40 @@ function errorHelper(field, data, type, nullable) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var ihj_helper_1 = __webpack_require__(0);
-var content_block_1 = __webpack_require__(2);
+var parameters_entity_1 = __webpack_require__(7);
+/**
+ * proxy create ParametersEntity object from JSON
+ */
+var ParametersEntityProxy = /** @class */ (function () {
+    function ParametersEntityProxy() {
+    }
+    ParametersEntityProxy.Parse = function (data) {
+        return ParametersEntityProxy.Create(JSON.parse(data));
+    };
+    ParametersEntityProxy.Create = function (data, field) {
+        if (field === void 0) { field = 'root'; }
+        if (!field) {
+            field = "root";
+        }
+        ihj_helper_1.checkData(data, field);
+        ihj_helper_1.checkString(data.Key, false, field + ".Key");
+        ihj_helper_1.checkString(data.Value, false, field + ".Value");
+        return new parameters_entity_1.ParametersEntity(data);
+    };
+    return ParametersEntityProxy;
+}());
+exports.ParametersEntityProxy = ParametersEntityProxy;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ihj_helper_1 = __webpack_require__(0);
+var content_block_1 = __webpack_require__(3);
 /**
  * proxy create ContentBlock object from JSON
  */
@@ -174,7 +207,7 @@ exports.ContentBlockProxy = ContentBlockProxy;
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -199,14 +232,14 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var ihj_helper_1 = __webpack_require__(0);
-var content_group_1 = __webpack_require__(4);
+var content_group_1 = __webpack_require__(5);
 /**
  * proxy create ContentGroup object from JSON
  */
@@ -225,7 +258,7 @@ var ContentGroupProxy = /** @class */ (function () {
         ihj_helper_1.checkBoolean(data.IsCreated, false, field + ".IsCreated");
         ihj_helper_1.checkBoolean(data.IsList, false, field + ".IsList");
         ihj_helper_1.checkNumber(data.TemplateId, false, field + ".TemplateId");
-        ihj_helper_1.checkNumber(data.QueryId, false, field + ".QueryId");
+        ihj_helper_1.checkNumber(data.QueryId, true, field + ".QueryId");
         ihj_helper_1.checkString(data.ContentTypeName, false, field + ".ContentTypeName");
         ihj_helper_1.checkString(data.AppUrl, false, field + ".AppUrl");
         ihj_helper_1.checkNumber(data.AppSettingsId, true, field + ".AppSettingsId");
@@ -245,7 +278,7 @@ exports.ContentGroupProxy = ContentGroupProxy;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -278,14 +311,14 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var ihj_helper_1 = __webpack_require__(0);
-var parameters_entity_proxy_1 = __webpack_require__(6);
+var parameters_entity_proxy_1 = __webpack_require__(1);
 var environment_1 = __webpack_require__(8);
 /**
  * proxy create Environment object from JSON
@@ -327,39 +360,6 @@ exports.EnvironmentProxy = EnvironmentProxy;
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_helper_1 = __webpack_require__(0);
-var parameters_entity_1 = __webpack_require__(7);
-/**
- * proxy create ParametersEntity object from JSON
- */
-var ParametersEntityProxy = /** @class */ (function () {
-    function ParametersEntityProxy() {
-    }
-    ParametersEntityProxy.Parse = function (data) {
-        return ParametersEntityProxy.Create(JSON.parse(data));
-    };
-    ParametersEntityProxy.Create = function (data, field) {
-        if (field === void 0) { field = 'root'; }
-        if (!field) {
-            field = "root";
-        }
-        ihj_helper_1.checkData(data, field);
-        ihj_helper_1.checkString(data.Key, false, field + ".Key");
-        ihj_helper_1.checkString(data.Value, false, field + ".Value");
-        return new parameters_entity_1.ParametersEntity(data);
-    };
-    return ParametersEntityProxy;
-}());
-exports.ParametersEntityProxy = ParametersEntityProxy;
-
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -386,6 +386,8 @@ exports.ParametersEntity = ParametersEntity;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var ihj_helper_1 = __webpack_require__(0);
+var parameters_entity_proxy_1 = __webpack_require__(1);
 /**
  * Environment class
  */
@@ -399,8 +401,38 @@ var Environment = /** @class */ (function () {
         this.InstanceId = data.InstanceId;
         this.SxcVersion = data.SxcVersion;
         this.SxcRootUrl = data.SxcRootUrl;
-        this.IsEditable = data.IsEditable;
+        this.IsEditable = !data.IsEditable;
     }
+    // ReSharper restore InconsistentNaming
+    Environment.Parse = function (data) {
+        return this.Create(JSON.parse(data));
+    };
+    Environment.Create = function (data, field) {
+        if (field === void 0) { field = 'root'; }
+        if (!field) {
+            field = "root";
+        }
+        ihj_helper_1.checkData(data, field);
+        ihj_helper_1.checkNumber(data.WebsiteId, false, field + ".WebsiteId");
+        ihj_helper_1.checkString(data.WebsiteUrl, false, field + ".WebsiteUrl");
+        ihj_helper_1.checkNumber(data.PageId, false, field + ".PageId");
+        ihj_helper_1.checkString(data.PageUrl, false, field + ".PageUrl");
+        ihj_helper_1.checkArray(data.parameters, field + ".parameters");
+        if (data.parameters) {
+            for (var i = 0; i < data.parameters.length; i++) {
+                data.parameters[i] =
+                    parameters_entity_proxy_1.ParametersEntityProxy.Create(data.parameters[i], field + ".parameters" + "[" + i + "]");
+            }
+        }
+        if (data.parameters === undefined) {
+            data.parameters = null;
+        }
+        ihj_helper_1.checkNumber(data.InstanceId, false, field + ".InstanceId");
+        ihj_helper_1.checkString(data.SxcVersion, false, field + ".SxcVersion");
+        ihj_helper_1.checkString(data.SxcRootUrl, false, field + ".SxcRootUrl");
+        ihj_helper_1.checkBoolean(data.IsEditable, false, field + ".IsEditable");
+        return new Environment(data);
+    };
     return Environment;
 }());
 exports.Environment = Environment;
@@ -608,8 +640,6 @@ __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
 __webpack_require__(23);
-__webpack_require__(24);
-__webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
 __webpack_require__(30);
@@ -623,31 +653,31 @@ __webpack_require__(37);
 __webpack_require__(38);
 __webpack_require__(39);
 __webpack_require__(40);
-__webpack_require__(1);
-__webpack_require__(2);
 __webpack_require__(41);
+__webpack_require__(2);
 __webpack_require__(3);
-__webpack_require__(4);
 __webpack_require__(42);
+__webpack_require__(4);
 __webpack_require__(5);
-__webpack_require__(8);
 __webpack_require__(43);
+__webpack_require__(6);
+__webpack_require__(8);
+__webpack_require__(44);
 __webpack_require__(9);
 __webpack_require__(10);
-__webpack_require__(44);
 __webpack_require__(45);
+__webpack_require__(46);
 __webpack_require__(11);
 __webpack_require__(0);
-__webpack_require__(46);
+__webpack_require__(47);
 __webpack_require__(14);
 __webpack_require__(15);
-__webpack_require__(47);
-__webpack_require__(6);
-__webpack_require__(7);
 __webpack_require__(48);
+__webpack_require__(1);
+__webpack_require__(7);
+__webpack_require__(49);
 __webpack_require__(12);
 __webpack_require__(13);
-__webpack_require__(49);
 __webpack_require__(50);
 __webpack_require__(51);
 __webpack_require__(52);
@@ -681,7 +711,8 @@ __webpack_require__(79);
 __webpack_require__(80);
 __webpack_require__(81);
 __webpack_require__(82);
-module.exports = __webpack_require__(83);
+__webpack_require__(83);
+module.exports = __webpack_require__(84);
 
 
 /***/ }),
@@ -808,7 +839,8 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 /* 21 */
 /***/ (function(module, exports) {
 
-// this enhances the $2sxc client controller with stuff only needed when logged in 
+// import { DnnSxcModule } from '@2sic.com/dnn-sxc-angular';
+// this enhances the $2sxc client controller with stuff only needed when logged in
 (function () {
     if (!(window.$2sxc || window.$2sxc.consts)) {
         return false;
@@ -842,6 +874,7 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
     }, {});
     */
 })();
+
 
 
 /***/ }),
@@ -879,22 +912,17 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function subtract(a, b) {
-    return a - b;
-}
-exports.subtract = subtract;
+__webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(26);
+__webpack_require__(27);
 
 
 /***/ }),
 /* 24 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(25);
-__webpack_require__(26);
-
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 25 */
@@ -912,13 +940,19 @@ __webpack_require__(26);
 /* 27 */
 /***/ (function(module, exports) {
 
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
 (function () {
     $2sxc._commands = {};
 })();
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 /*
@@ -1218,7 +1252,7 @@ __webpack_require__(26);
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1361,7 +1395,7 @@ __webpack_require__(26);
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1382,7 +1416,7 @@ __webpack_require__(26);
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /*
@@ -1413,7 +1447,7 @@ __webpack_require__(26);
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /*
@@ -1486,7 +1520,7 @@ __webpack_require__(26);
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 // contains commands to create/move/delete a contentBlock in a page
@@ -1557,7 +1591,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /*
@@ -1637,7 +1671,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /*
@@ -1717,7 +1751,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /*
@@ -1792,7 +1826,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports) {
 
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -1810,7 +1844,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -1836,7 +1870,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
@@ -1872,15 +1906,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-/***/ }),
 /* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1904,9 +1929,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 "use strict";
 
-/**
- * Error interface
- */
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
@@ -1916,6 +1938,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 "use strict";
 
+/**
+ * Error interface
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
@@ -1926,13 +1951,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var ihj_helper_1 = __webpack_require__(0);
 var ihj_config_1 = __webpack_require__(11);
-var environment_proxy_1 = __webpack_require__(5);
+var environment_proxy_1 = __webpack_require__(6);
 var user_proxy_1 = __webpack_require__(12);
 var language_proxy_1 = __webpack_require__(14);
-var content_block_proxy_1 = __webpack_require__(1);
-var content_group_proxy_1 = __webpack_require__(3);
+var content_block_proxy_1 = __webpack_require__(2);
+var content_group_proxy_1 = __webpack_require__(4);
 var error_proxy_1 = __webpack_require__(9);
 /**
  * proxy create IhjConfig object from JSON
@@ -1964,15 +1998,6 @@ exports.IhjConfigProxy = IhjConfigProxy;
 
 
 /***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-/***/ }),
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1992,8 +2017,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 49 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
@@ -2030,6 +2058,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* 55 */
 /***/ (function(module, exports) {
 
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports) {
+
 (function () {
     $2sxc._lib = {
         extend: function extend() {
@@ -2044,7 +2078,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -2061,7 +2095,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2111,7 +2145,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
         };
     };
     $2sxc._manage.getUserOfEditContext = function getUserOfEditContext(editContext) {
-        return { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign };
+        return {
+            canDesign: editContext.User.CanDesign,
+            canDevelop: editContext.User.CanDesign
+        };
     };
     /**
      * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
@@ -2163,7 +2200,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -2264,7 +2301,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -2308,7 +2345,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -2335,7 +2372,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports) {
 
 // this is a dialog manager which is in charge of all
@@ -2583,7 +2620,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -2652,7 +2689,7 @@ $(function () {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports) {
 
 // add a clipboard to the quick edit
@@ -2749,7 +2786,7 @@ $(function () {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports) {
 
 // extend the quick edit with the core commands
@@ -2790,7 +2827,7 @@ $(function () {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -2835,7 +2872,7 @@ $(function () {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports) {
 
 // content-block specific stuff like actions
@@ -2859,7 +2896,7 @@ $(function () {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports) {
 
 // module specific stuff
@@ -2989,7 +3026,7 @@ $(function () {
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports) {
 
 // module specific stuff
@@ -3009,7 +3046,7 @@ $(function () {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports) {
 
 // everything related to positioning the quick-edit in-page editing
@@ -3134,7 +3171,7 @@ $(function () {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -3196,7 +3233,7 @@ $(function () {
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports) {
 
 /*
@@ -3297,7 +3334,7 @@ $(function () {
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3309,7 +3346,7 @@ $(function () {
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3324,7 +3361,7 @@ $(function () {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3341,7 +3378,7 @@ $(function () {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3431,7 +3468,7 @@ $(function () {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3474,7 +3511,7 @@ $(function () {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3511,7 +3548,7 @@ $(function () {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3740,7 +3777,7 @@ $(function () {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3760,7 +3797,7 @@ $(function () {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports) {
 
 // the default / initial buttons in a standard toolbar
@@ -3826,7 +3863,7 @@ $(function () {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports) {
 
 // initialize the translation system; ensure toolbars etc. are translated
@@ -3860,7 +3897,7 @@ $(function () {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports) {
 
 // provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
@@ -3873,7 +3910,7 @@ $(function () {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports) {
 
 // module & toolbar bootstrapping (initialize all toolbars after loading page)
