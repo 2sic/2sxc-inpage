@@ -1,1 +1,0 @@
-{"version":3,"file":"app.js","sourceRoot":"","sources":["app.ts"],"names":[],"mappings":";;AAAA,sBAAoB;AACpB,oCAAkC;AAClC,2CAAyC;AACzC,mCAAiC","sourcesContent":["import \"./edit.css\";\r\nimport \"./inpage-icons-codes.css\";\r\nimport \"./quick-dialog/quick-dialog.css\";\r\nimport \"./quick-edit/quickE.css\";\r\n"]}

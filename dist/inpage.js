@@ -640,6 +640,10 @@ __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
 __webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(26);
+__webpack_require__(27);
 __webpack_require__(28);
 __webpack_require__(29);
 __webpack_require__(30);
@@ -649,35 +653,35 @@ __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
 __webpack_require__(36);
-__webpack_require__(37);
-__webpack_require__(38);
-__webpack_require__(39);
-__webpack_require__(40);
-__webpack_require__(41);
 __webpack_require__(2);
 __webpack_require__(3);
-__webpack_require__(42);
+__webpack_require__(37);
 __webpack_require__(4);
 __webpack_require__(5);
-__webpack_require__(43);
+__webpack_require__(38);
 __webpack_require__(6);
 __webpack_require__(8);
-__webpack_require__(44);
+__webpack_require__(39);
 __webpack_require__(9);
 __webpack_require__(10);
-__webpack_require__(45);
-__webpack_require__(46);
+__webpack_require__(40);
+__webpack_require__(41);
 __webpack_require__(11);
 __webpack_require__(0);
-__webpack_require__(47);
+__webpack_require__(42);
 __webpack_require__(14);
 __webpack_require__(15);
-__webpack_require__(48);
+__webpack_require__(43);
 __webpack_require__(1);
 __webpack_require__(7);
-__webpack_require__(49);
+__webpack_require__(44);
 __webpack_require__(12);
 __webpack_require__(13);
+__webpack_require__(45);
+__webpack_require__(46);
+__webpack_require__(47);
+__webpack_require__(48);
+__webpack_require__(49);
 __webpack_require__(50);
 __webpack_require__(51);
 __webpack_require__(52);
@@ -707,12 +711,7 @@ __webpack_require__(75);
 __webpack_require__(76);
 __webpack_require__(77);
 __webpack_require__(78);
-__webpack_require__(79);
-__webpack_require__(80);
-__webpack_require__(81);
-__webpack_require__(82);
-__webpack_require__(83);
-module.exports = __webpack_require__(84);
+module.exports = __webpack_require__(79);
 
 
 /***/ }),
@@ -907,43 +906,6 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 
 /***/ }),
 /* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(24);
-__webpack_require__(25);
-__webpack_require__(26);
-__webpack_require__(27);
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 28 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -952,7 +914,7 @@ __webpack_require__(27);
 
 
 /***/ }),
-/* 29 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /*
@@ -1252,7 +1214,7 @@ __webpack_require__(27);
 
 
 /***/ }),
-/* 30 */
+/* 25 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1395,7 +1357,7 @@ __webpack_require__(27);
 
 
 /***/ }),
-/* 31 */
+/* 26 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1416,7 +1378,7 @@ __webpack_require__(27);
 
 
 /***/ }),
-/* 32 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /*
@@ -1447,7 +1409,7 @@ __webpack_require__(27);
 
 
 /***/ }),
-/* 33 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /*
@@ -1520,7 +1482,7 @@ __webpack_require__(27);
 
 
 /***/ }),
-/* 34 */
+/* 29 */
 /***/ (function(module, exports) {
 
 // contains commands to create/move/delete a contentBlock in a page
@@ -1591,7 +1553,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 35 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /*
@@ -1671,7 +1633,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 36 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /*
@@ -1751,7 +1713,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 37 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /*
@@ -1826,7 +1788,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 38 */
+/* 33 */
 /***/ (function(module, exports) {
 
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -1844,7 +1806,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 39 */
+/* 34 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -1870,7 +1832,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 40 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
@@ -1906,7 +1868,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 41 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1915,7 +1877,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 42 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1924,7 +1886,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 43 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1933,7 +1895,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 44 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1945,7 +1907,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 45 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1954,7 +1916,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 46 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1998,30 +1960,60 @@ exports.IhjConfigProxy = IhjConfigProxy;
 
 
 /***/ }),
-/* 47 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
 
 
 /***/ }),
 /* 48 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
 /* 49 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
@@ -2032,36 +2024,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 51 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 56 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2078,7 +2040,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 57 */
+/* 52 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -2095,7 +2057,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 58 */
+/* 53 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2200,7 +2162,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 59 */
+/* 54 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -2301,7 +2263,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 60 */
+/* 55 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -2345,7 +2307,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 61 */
+/* 56 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -2372,7 +2334,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 62 */
+/* 57 */
 /***/ (function(module, exports) {
 
 // this is a dialog manager which is in charge of all
@@ -2620,7 +2582,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 63 */
+/* 58 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -2689,7 +2651,7 @@ $(function () {
 
 
 /***/ }),
-/* 64 */
+/* 59 */
 /***/ (function(module, exports) {
 
 // add a clipboard to the quick edit
@@ -2786,7 +2748,7 @@ $(function () {
 
 
 /***/ }),
-/* 65 */
+/* 60 */
 /***/ (function(module, exports) {
 
 // extend the quick edit with the core commands
@@ -2827,7 +2789,7 @@ $(function () {
 
 
 /***/ }),
-/* 66 */
+/* 61 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -2872,7 +2834,7 @@ $(function () {
 
 
 /***/ }),
-/* 67 */
+/* 62 */
 /***/ (function(module, exports) {
 
 // content-block specific stuff like actions
@@ -2896,7 +2858,7 @@ $(function () {
 
 
 /***/ }),
-/* 68 */
+/* 63 */
 /***/ (function(module, exports) {
 
 // module specific stuff
@@ -3026,7 +2988,7 @@ $(function () {
 
 
 /***/ }),
-/* 69 */
+/* 64 */
 /***/ (function(module, exports) {
 
 // module specific stuff
@@ -3046,7 +3008,7 @@ $(function () {
 
 
 /***/ }),
-/* 70 */
+/* 65 */
 /***/ (function(module, exports) {
 
 // everything related to positioning the quick-edit in-page editing
@@ -3171,7 +3133,7 @@ $(function () {
 
 
 /***/ }),
-/* 71 */
+/* 66 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -3233,7 +3195,7 @@ $(function () {
 
 
 /***/ }),
-/* 72 */
+/* 67 */
 /***/ (function(module, exports) {
 
 /*
@@ -3334,7 +3296,7 @@ $(function () {
 
 
 /***/ }),
-/* 73 */
+/* 68 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3346,7 +3308,7 @@ $(function () {
 
 
 /***/ }),
-/* 74 */
+/* 69 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3361,7 +3323,7 @@ $(function () {
 
 
 /***/ }),
-/* 75 */
+/* 70 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3378,7 +3340,7 @@ $(function () {
 
 
 /***/ }),
-/* 76 */
+/* 71 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3468,7 +3430,7 @@ $(function () {
 
 
 /***/ }),
-/* 77 */
+/* 72 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3511,7 +3473,7 @@ $(function () {
 
 
 /***/ }),
-/* 78 */
+/* 73 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3548,7 +3510,7 @@ $(function () {
 
 
 /***/ }),
-/* 79 */
+/* 74 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3777,7 +3739,7 @@ $(function () {
 
 
 /***/ }),
-/* 80 */
+/* 75 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3797,7 +3759,7 @@ $(function () {
 
 
 /***/ }),
-/* 81 */
+/* 76 */
 /***/ (function(module, exports) {
 
 // the default / initial buttons in a standard toolbar
@@ -3863,7 +3825,7 @@ $(function () {
 
 
 /***/ }),
-/* 82 */
+/* 77 */
 /***/ (function(module, exports) {
 
 // initialize the translation system; ensure toolbars etc. are translated
@@ -3897,7 +3859,7 @@ $(function () {
 
 
 /***/ }),
-/* 83 */
+/* 78 */
 /***/ (function(module, exports) {
 
 // provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
@@ -3910,7 +3872,7 @@ $(function () {
 
 
 /***/ }),
-/* 84 */
+/* 79 */
 /***/ (function(module, exports) {
 
 // module & toolbar bootstrapping (initialize all toolbars after loading page)
