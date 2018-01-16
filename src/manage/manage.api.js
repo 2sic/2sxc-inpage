@@ -45,7 +45,10 @@
         };
     };
     $2sxc._manage.getUserOfEditContext = function getUserOfEditContext(editContext) {
-        return { canDesign: editContext.User.CanDesign, canDevelop: editContext.User.CanDesign };
+        return {
+            canDesign: editContext.User.CanDesign,
+            canDevelop: editContext.User.CanDesign
+        };
     };
     /**
      * create a config-object for the quick-dialog, with all settings which the quick-dialog will need

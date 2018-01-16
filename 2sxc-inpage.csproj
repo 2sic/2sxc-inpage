@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="dist\" />
+    <Folder Include="src\translate\libs\" />
   </ItemGroup>
 
   <ItemGroup>

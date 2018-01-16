@@ -1,7 +1,10 @@
-﻿// this enhances the $2sxc client controller with stuff only needed when logged in 
+import { Window } from '../interfaces/window';
+
+declare var window: Window;
+
 (function () {
-    if (!(window.$2sxc || window.$2sxc.consts)) {
-         return false;
+    if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
+        return false;
     }
     $2sxc.c = $2sxc.consts = {
         // classes
@@ -10,7 +13,6 @@
             scCb: "sc-content-block",
             scElm: "sc-element"
         },
-        
         // attribs
         attr: {
             toolbar: "toolbar",
@@ -18,17 +20,13 @@
             settings: "settings",
             settingsData: "data-settings"
         },
-
         publishAllowed: "DraftOptional"
-
     };
-
     // selectors
     var sel = $2sxc.c.sel = {};
     Object.keys($2sxc.c.cls).forEach(function (key, index) {
         sel[key] = "." + $2sxc.c.cls[key];
     });
-
     /*
     ToDo: functional programming
     $2sxc.c.sel = Object.entries($2sxc.c.cls).reduce((res, current) => {
@@ -37,3 +35,4 @@
     }, {});
     */
 })();
+//# sourceMappingURL=2sxc.consts.js.map

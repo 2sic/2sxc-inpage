@@ -1,4 +1,8 @@
-﻿/* 
+﻿import { Window } from '../interfaces/window';
+
+declare var window: Window;
+
+/*
  * this is the content block manager in the browser
  * 
  * A Content Block is a standalone unit of content, with it's own definition of

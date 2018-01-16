@@ -1,6 +1,7 @@
-// this enhances the $2sxc client controller with stuff only needed when logged in 
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 (function () {
-    if (!(window.$2sxc || window.$2sxc.consts)) {
+    if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
         return false;
     }
     $2sxc.c = $2sxc.consts = {
@@ -32,4 +33,5 @@
     }, {});
     */
 })();
+//# sourceMappingURL=2sxc.consts.js.map 
 //# sourceMappingURL=2sxc.consts.js.map

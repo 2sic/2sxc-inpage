@@ -5,7 +5,7 @@
   "main": "webpack.config.js",
   "dependencies": {
     "2": "^1.0.2",
-    "@types/i18next-xhr-backend": "^1.4.1",
+    "@2sic.com/dnn-sxc-angular": "^1.8.4",
     "glob": "^7.1.2",
     "source-map-loader": "^0.2.3",
     "ts-loader": "^3.2.0"
@@ -13,19 +13,42 @@
   "devDependencies": {
     "@2sic.com/2sxc-typings": "^9.0.3",
     "@types/i18next": "^8.4.2",
+    "@types/i18next-xhr-backend": "^1.4.1",
+    "@types/jasmine": "^2.8.3",
+    "@types/jasminewd2": "^2.0.3",
     "@types/node": "^9.3.0",
+    "concurrently": "^3.5.1",
     "css-loader": "^0.28.8",
+    "deep-equal": "^1.0.1",
+    "extract-css-chunks-webpack-plugin": "^2.0.18",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "filemanager-webpack-plugin": "^1.0.20",
     "fork-ts-checker-webpack-plugin": "^0.2.10",
+    "jasmine": "^2.8.0",
+    "jasmine-core": "^2.8.0",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^1.0.1",
+    "karma-coverage-istanbul-reporter": "^1.3.3",
+    "karma-html-detailed-reporter": "^1.1.21",
+    "karma-jasmine": "^1.1.1",
+    "karma-jasmine-diff-reporter": "^1.1.1",
+    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-typescript": "^3.0.9",
+    "karma-typescript-preprocessor": "^0.3.1",
     "style-loader": "^0.19.1",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
     "typescript": "^2.6.2",
+    "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "tslint ./src/**/*.ts -t verbose",
+    "test": "karma start",
+    "test-once": "karma start --single-run"
   },
   "repository": {
     "type": "git",
