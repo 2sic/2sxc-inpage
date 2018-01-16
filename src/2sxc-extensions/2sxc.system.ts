@@ -1,6 +1,10 @@
-﻿// this enhances the $2sxc client controller with stuff only needed when logged in
+﻿import { Window } from '../interfaces/window';
+
+declare var window: Window;
+
+// this enhances the $2sxc client controller with stuff only needed when logged in
 (function () {
-    if (!(window.$2sxc || window.$2sxc.system)) {
+    if (!(window.$2sxc /*|| window.$2sxc.system*/)) {
         return;
     }
 

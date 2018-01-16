@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Folder Include="dist\" />
+    <Folder Include="src\translate\libs\" />
   </ItemGroup>
 
   <ItemGroup>

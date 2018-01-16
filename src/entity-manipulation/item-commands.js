@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function () {
     if (window.$2sxc) {
