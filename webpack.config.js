@@ -1,5 +1,5 @@
 ﻿var glob = require('glob');
-var path = require('path');
+//var path = require('path');
 var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 var FileManagerPlugin = require('filemanager-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');

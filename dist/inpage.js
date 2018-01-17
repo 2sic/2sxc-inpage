@@ -73,10 +73,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Helper methods to validate JSON data
  */
-var IhjConfigValidationHelper = /** @class */ (function () {
-    function IhjConfigValidationHelper() {
+var JsonValidationHelper = /** @class */ (function () {
+    function JsonValidationHelper() {
     }
-    IhjConfigValidationHelper.checkData = function (data, field) {
+    JsonValidationHelper.checkData = function (data, field) {
         if (data === null || data === undefined) {
             this.throwNull2NonNull(field, data);
         }
@@ -87,49 +87,49 @@ var IhjConfigValidationHelper = /** @class */ (function () {
             this.throwIsArray(field, data, false);
         }
     };
-    IhjConfigValidationHelper.checkArray = function (data, field) {
+    JsonValidationHelper.checkArray = function (data, field) {
         if (!Array.isArray(data) && data !== null && data !== undefined) {
             this.errorHelper(field, data, 'array', true);
         }
     };
-    IhjConfigValidationHelper.checkNumber = function (data, nullable, field) {
+    JsonValidationHelper.checkNumber = function (data, nullable, field) {
         if (typeof (data) !== 'number' && (!nullable || (nullable && data !== null && data !== undefined))) {
             this.errorHelper(field, data, 'number', nullable);
         }
     };
-    IhjConfigValidationHelper.checkBoolean = function (data, nullable, field) {
+    JsonValidationHelper.checkBoolean = function (data, nullable, field) {
         if (typeof (data) !== 'boolean' && (!nullable || (nullable && data !== null && data !== undefined))) {
             this.errorHelper(field, data, 'boolean', nullable);
         }
     };
-    IhjConfigValidationHelper.checkString = function (data, nullable, field) {
+    JsonValidationHelper.checkString = function (data, nullable, field) {
         if (typeof (data) !== 'string' && (!nullable || (nullable && data !== null && data !== undefined))) {
             this.errorHelper(field, data, 'string', nullable);
         }
     };
-    IhjConfigValidationHelper.checkNull = function (data, field) {
+    JsonValidationHelper.checkNull = function (data, field) {
         if (data !== null && data !== undefined) {
             this.errorHelper(field, data, 'null or undefined', false);
         }
     };
-    IhjConfigValidationHelper.throwNull2NonNull = function (field, data) {
+    JsonValidationHelper.throwNull2NonNull = function (field, data) {
         return this.errorHelper(field, data, 'non-nullable object', false);
     };
-    IhjConfigValidationHelper.throwNotObject = function (field, data, nullable) {
+    JsonValidationHelper.throwNotObject = function (field, data, nullable) {
         return this.errorHelper(field, data, 'object', nullable);
     };
-    IhjConfigValidationHelper.throwIsArray = function (field, data, nullable) {
+    JsonValidationHelper.throwIsArray = function (field, data, nullable) {
         return this.errorHelper(field, data, 'object', nullable);
     };
-    IhjConfigValidationHelper.errorHelper = function (field, data, type, nullable) {
+    JsonValidationHelper.errorHelper = function (field, data, type, nullable) {
         if (nullable) {
             type += ', null, or undefined';
         }
         throw new TypeError("Expected " + type + " at " + field + " but found:\n" + JSON.stringify(data));
     };
-    return IhjConfigValidationHelper;
+    return JsonValidationHelper;
 }());
-exports.IhjConfigValidationHelper = IhjConfigValidationHelper;
+exports.JsonValidationHelper = JsonValidationHelper;
 
 
 /***/ }),
@@ -158,7 +158,7 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_config_validation_helper_1 = __webpack_require__(0);
+var json_validation_helper_1 = __webpack_require__(0);
 /**
  * create ContentBlock object from JSON
  */
@@ -167,7 +167,7 @@ var ContentBlockCreate = /** @class */ (function () {
     }
     // ReSharper disable once InconsistentNaming
     ContentBlockCreate.Parse = function (data) {
-        return ContentBlockCreate.Create(JSON.parse(data));
+        return this.Create(JSON.parse(data));
     };
     // ReSharper disable once InconsistentNaming
     ContentBlockCreate.Create = function (data, field) {
@@ -176,17 +176,17 @@ var ContentBlockCreate = /** @class */ (function () {
             field = 'root';
         }
         // validate JSON data
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkData(data, field);
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.ShowTemplatePicker, false, field + '.ShowTemplatePicker');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.IsEntity, false, field + '.IsEntity');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.VersioningRequirements, false, field + '.VersioningRequirements');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.Id, false, field + '.Id');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.ParentFieldName, true, field + '.ParentFieldName');
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.ShowTemplatePicker, false, field + '.ShowTemplatePicker');
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.IsEntity, false, field + '.IsEntity');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.VersioningRequirements, false, field + '.VersioningRequirements');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.Id, false, field + '.Id');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.ParentFieldName, true, field + '.ParentFieldName');
         if (data.ParentFieldName === undefined) {
             data.ParentFieldName = null;
         }
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.ParentFieldSortOrder, false, field + '.ParentFieldSortOrder');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.PartOfPage, false, field + '.PartOfPage');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.ParentFieldSortOrder, false, field + '.ParentFieldSortOrder');
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.PartOfPage, false, field + '.PartOfPage');
         // transfer JSON data to new object
         var contenctBlock = {
             ShowTemplatePicker: data.ShowTemplatePicker,
@@ -211,40 +211,38 @@ exports.ContentBlockCreate = ContentBlockCreate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_config_validation_helper_1 = __webpack_require__(0);
+var json_validation_helper_1 = __webpack_require__(0);
 /**
  * create ContentGroup object from JSON
  */
 var ContentGroupCreate = /** @class */ (function () {
     function ContentGroupCreate() {
     }
-    // ReSharper disable once InconsistentNaming
-    ContentGroupCreate.Parse = function (data) {
-        return ContentGroupCreate.Create(JSON.parse(data));
+    ContentGroupCreate.parse = function (data) {
+        return this.create(JSON.parse(data));
     };
-    // ReSharper disable once InconsistentNaming
-    ContentGroupCreate.Create = function (data, field) {
+    ContentGroupCreate.create = function (data, field) {
         if (field === void 0) { field = 'root'; }
         if (!field) {
             field = 'root';
         }
         // validate JSON data
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkData(data, field);
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.IsCreated, false, field + '.IsCreated');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.IsList, false, field + '.IsList');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.TemplateId, false, field + '.TemplateId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.QueryId, true, field + '.QueryId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.ContentTypeName, false, field + '.ContentTypeName');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.AppUrl, false, field + '.AppUrl');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.AppSettingsId, true, field + '.AppSettingsId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.AppResourcesId, true, field + '.AppResourcesId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.IsContent, false, field + '.IsContent');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.HasContent, false, field + '.HasContent');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.SupportsAjax, false, field + '.SupportsAjax');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.ZoneId, false, field + '.ZoneId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.AppId, false, field + '.AppId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.Guid, false, field + '.Guid');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.Id, false, field + '.Id');
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.IsCreated, false, field + '.IsCreated');
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.IsList, false, field + '.IsList');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.TemplateId, false, field + '.TemplateId');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.QueryId, true, field + '.QueryId');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.ContentTypeName, false, field + '.ContentTypeName');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.AppUrl, false, field + '.AppUrl');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.AppSettingsId, true, field + '.AppSettingsId');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.AppResourcesId, true, field + '.AppResourcesId');
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.IsContent, false, field + '.IsContent');
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.HasContent, false, field + '.HasContent');
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.SupportsAjax, false, field + '.SupportsAjax');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.ZoneId, false, field + '.ZoneId');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.AppId, false, field + '.AppId');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.Guid, false, field + '.Guid');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.Id, false, field + '.Id');
         // transfer JSON data to new object
         var contentGroup = {
             IsCreated: data.IsCreated,
@@ -277,7 +275,7 @@ exports.ContentGroupCreate = ContentGroupCreate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_config_validation_helper_1 = __webpack_require__(0);
+var json_validation_helper_1 = __webpack_require__(0);
 var parameters_entity_create_1 = __webpack_require__(7);
 /**
  * create Environment object from JSON
@@ -285,35 +283,33 @@ var parameters_entity_create_1 = __webpack_require__(7);
 var EnvironmentCreate = /** @class */ (function () {
     function EnvironmentCreate() {
     }
-    // ReSharper disable once InconsistentNaming
-    EnvironmentCreate.Parse = function (data) {
-        return EnvironmentCreate.Create(JSON.parse(data));
+    EnvironmentCreate.parse = function (data) {
+        return this.create(JSON.parse(data));
     };
-    // ReSharper disable once InconsistentNaming
-    EnvironmentCreate.Create = function (data, field) {
+    EnvironmentCreate.create = function (data, field) {
         if (field === void 0) { field = 'root'; }
         if (!field) {
             field = 'root';
         }
         // validate JSON data
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkData(data, field);
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.WebsiteId, false, field + '.WebsiteId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.WebsiteUrl, false, field + '.WebsiteUrl');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.PageId, false, field + '.PageId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.PageUrl, false, field + '.PageUrl');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkArray(data.parameters, field + '.parameters');
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.WebsiteId, false, field + '.WebsiteId');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.WebsiteUrl, false, field + '.WebsiteUrl');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.PageId, false, field + '.PageId');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.PageUrl, false, field + '.PageUrl');
+        json_validation_helper_1.JsonValidationHelper.checkArray(data.parameters, field + '.parameters');
         if (data.parameters) {
             for (var i = 0; i < data.parameters.length; i++) {
-                data.parameters[i] = parameters_entity_create_1.ParametersEntityCreate.Create(data.parameters[i], field + '.parameters' + '[' + i + ']');
+                data.parameters[i] = parameters_entity_create_1.ParametersEntityCreate.create(data.parameters[i], field + '.parameters' + '[' + i + ']');
             }
         }
         if (data.parameters === undefined) {
             data.parameters = null;
         }
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNumber(data.InstanceId, false, field + '.InstanceId');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.SxcVersion, false, field + '.SxcVersion');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.SxcRootUrl, false, field + '.SxcRootUrl');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.IsEditable, false, field + '.IsEditable');
+        json_validation_helper_1.JsonValidationHelper.checkNumber(data.InstanceId, false, field + '.InstanceId');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.SxcVersion, false, field + '.SxcVersion');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.SxcRootUrl, false, field + '.SxcRootUrl');
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.IsEditable, false, field + '.IsEditable');
         // transfer JSON data to new object
         var environment = {
             WebsiteId: data.WebsiteId,
@@ -340,27 +336,25 @@ exports.EnvironmentCreate = EnvironmentCreate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_config_validation_helper_1 = __webpack_require__(0);
+var json_validation_helper_1 = __webpack_require__(0);
 /**
  * create ParametersEntity object from JSON
  */
 var ParametersEntityCreate = /** @class */ (function () {
     function ParametersEntityCreate() {
     }
-    // ReSharper disable once InconsistentNaming
-    ParametersEntityCreate.Parse = function (data) {
-        return this.Create(JSON.parse(data));
+    ParametersEntityCreate.parse = function (data) {
+        return this.create(JSON.parse(data));
     };
-    // ReSharper disable once InconsistentNaming
-    ParametersEntityCreate.Create = function (data, field) {
+    ParametersEntityCreate.create = function (data, field) {
         if (field === void 0) { field = 'root'; }
         if (!field) {
             field = 'root';
         }
         // validate JSON data
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkData(data, field);
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.Key, false, field + '.Key');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.Value, false, field + '.Value');
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        json_validation_helper_1.JsonValidationHelper.checkString(data.Key, false, field + '.Key');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.Value, false, field + '.Value');
         // transfer JSON data to new object
         var parametersEntity = {
             Key: data.Key,
@@ -380,62 +374,25 @@ exports.ParametersEntityCreate = ParametersEntityCreate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_config_validation_helper_1 = __webpack_require__(0);
-var ErrorCreate = /** @class */ (function () {
-    function ErrorCreate() {
-    }
-    // ReSharper disable once InconsistentNaming
-    ErrorCreate.Parse = function (data) {
-        return ErrorCreate.Create(JSON.parse(data));
-    };
-    // ReSharper disable once InconsistentNaming
-    ErrorCreate.Create = function (data, field) {
-        if (field === void 0) { field = 'root'; }
-        if (!field) {
-            field = 'root';
-        }
-        // validate JSON data
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkData(data, field);
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.type, true, field + '.type');
-        // transfer JSON data to new object
-        var error = {
-            type: data.type
-        };
-        return error;
-    };
-    return ErrorCreate;
-}());
-exports.ErrorCreate = ErrorCreate;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_config_validation_helper_1 = __webpack_require__(0);
+var json_validation_helper_1 = __webpack_require__(0);
 /**
  * create User object from JSON
  */
 var UserCreate = /** @class */ (function () {
     function UserCreate() {
     }
-    // ReSharper disable once InconsistentNaming
-    UserCreate.Parse = function (data) {
-        return UserCreate.Create(JSON.parse(data));
+    UserCreate.parse = function (data) {
+        return this.create(JSON.parse(data));
     };
-    // ReSharper disable once InconsistentNaming
-    UserCreate.Create = function (data, field) {
+    UserCreate.create = function (data, field) {
         if (field === void 0) { field = 'root'; }
         if (!field) {
             field = 'root';
         }
         // validate JSON data
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkData(data, field);
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.CanDesign, false, field + '.CanDesign');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkBoolean(data.CanDevelop, false, field + '.CanDevelop');
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.CanDesign, false, field + '.CanDesign');
+        json_validation_helper_1.JsonValidationHelper.checkBoolean(data.CanDevelop, false, field + '.CanDevelop');
         // transfer JSON data to new object
         var user = {
             CanDesign: data.CanDesign,
@@ -449,37 +406,35 @@ exports.UserCreate = UserCreate;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_config_validation_helper_1 = __webpack_require__(0);
+var json_validation_helper_1 = __webpack_require__(0);
 /**
  * create Language object from JSON
  */
 var LanguageCreate = /** @class */ (function () {
     function LanguageCreate() {
     }
-    // ReSharper disable once InconsistentNaming
-    LanguageCreate.Parse = function (data) {
-        return LanguageCreate.Create(JSON.parse(data));
+    LanguageCreate.parse = function (data) {
+        return this.create(JSON.parse(data));
     };
-    // ReSharper disable once InconsistentNaming
-    LanguageCreate.Create = function (data, field) {
+    LanguageCreate.create = function (data, field) {
         if (field === void 0) { field = 'root'; }
         if (!field) {
             field = 'root';
         }
         // validate JSON data
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkData(data, field);
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.Current, false, field + '.Current');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkString(data.Primary, false, field + '.Primary');
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkArray(data.All, field + '.All');
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        json_validation_helper_1.JsonValidationHelper.checkString(data.Current, false, field + '.Current');
+        json_validation_helper_1.JsonValidationHelper.checkString(data.Primary, false, field + '.Primary');
+        json_validation_helper_1.JsonValidationHelper.checkArray(data.All, field + '.All');
         if (data.All) {
             for (var i = 0; i < data.All.length; i++) {
-                ihj_config_validation_helper_1.IhjConfigValidationHelper.checkNull(data.All[i], field + '.All' + '[' + i + ']');
+                json_validation_helper_1.JsonValidationHelper.checkNull(data.All[i], field + '.All' + '[' + i + ']');
                 if (data.All[i] === undefined) {
                     data.All[i] = null;
                 }
@@ -502,6 +457,39 @@ exports.LanguageCreate = LanguageCreate;
 
 
 /***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var json_validation_helper_1 = __webpack_require__(0);
+var ErrorCreate = /** @class */ (function () {
+    function ErrorCreate() {
+    }
+    ErrorCreate.parse = function (data) {
+        return ErrorCreate.create(JSON.parse(data));
+    };
+    ErrorCreate.create = function (data, field) {
+        if (field === void 0) { field = 'root'; }
+        if (!field) {
+            field = 'root';
+        }
+        // validate JSON data
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        json_validation_helper_1.JsonValidationHelper.checkString(data.type, true, field + '.type');
+        // transfer JSON data to new object
+        var error = {
+            type: data.type
+        };
+        return error;
+    };
+    return ErrorCreate;
+}());
+exports.ErrorCreate = ErrorCreate;
+
+
+/***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -521,25 +509,25 @@ __webpack_require__(21);
 __webpack_require__(22);
 __webpack_require__(23);
 __webpack_require__(24);
+__webpack_require__(4);
 __webpack_require__(25);
+__webpack_require__(5);
 __webpack_require__(26);
 __webpack_require__(27);
-__webpack_require__(4);
 __webpack_require__(28);
-__webpack_require__(5);
-__webpack_require__(29);
 __webpack_require__(6);
-__webpack_require__(30);
-__webpack_require__(8);
-__webpack_require__(31);
-__webpack_require__(32);
-__webpack_require__(0);
-__webpack_require__(33);
+__webpack_require__(29);
 __webpack_require__(10);
-__webpack_require__(34);
-__webpack_require__(7);
-__webpack_require__(35);
+__webpack_require__(30);
+__webpack_require__(0);
 __webpack_require__(9);
+__webpack_require__(31);
+__webpack_require__(7);
+__webpack_require__(32);
+__webpack_require__(8);
+__webpack_require__(33);
+__webpack_require__(34);
+__webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
 __webpack_require__(38);
@@ -1641,6 +1629,180 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ContentBlock = /** @class */ (function () {
+    function ContentBlock() {
+    }
+    return ContentBlock;
+}());
+exports.ContentBlock = ContentBlock;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ContentGroup = /** @class */ (function () {
+    function ContentGroup() {
+    }
+    return ContentGroup;
+}());
+exports.ContentGroup = ContentGroup;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var json_validation_helper_1 = __webpack_require__(0);
+var environment_create_1 = __webpack_require__(6);
+var user_create_1 = __webpack_require__(8);
+var language_create_1 = __webpack_require__(9);
+var content_block_create_1 = __webpack_require__(4);
+var content_group_create_1 = __webpack_require__(5);
+var error_create_1 = __webpack_require__(10);
+/**
+ * create DataEditContext object from JSON
+ *
+ */
+var DataEditContextCreate = /** @class */ (function () {
+    function DataEditContextCreate() {
+    }
+    DataEditContextCreate.parse = function (data) {
+        return this.create(JSON.parse(data));
+    };
+    DataEditContextCreate.create = function (data, field) {
+        if (field === void 0) { field = 'root'; }
+        if (!field) {
+            field = 'root';
+        }
+        // validate JSON data
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        // create sub objects from JSON data
+        data.Environment = environment_create_1.EnvironmentCreate.create(data.Environment, field + '.Environment');
+        data.User = user_create_1.UserCreate.create(data.User, field + '.User');
+        data.Language = language_create_1.LanguageCreate.create(data.Language, field + '.Language');
+        data.ContentBlock = content_block_create_1.ContentBlockCreate.Create(data.ContentBlock, field + '.ContentBlock');
+        data.ContentGroup = content_group_create_1.ContentGroupCreate.create(data.ContentGroup, field + '.ContentGroup');
+        data.error = error_create_1.ErrorCreate.create(data.error, field + '.error');
+        // transfer JSON data to new object
+        var dataEditContext = {
+            Environment: data.Environment,
+            User: data.User,
+            Language: data.Language,
+            ContentBlock: data.ContentBlock,
+            ContentGroup: data.ContentGroup,
+            error: data.error
+        };
+        return dataEditContext;
+    };
+    return DataEditContextCreate;
+}());
+exports.DataEditContextCreate = DataEditContextCreate;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var DataEditContext = /** @class */ (function () {
+    function DataEditContext() {
+    }
+    return DataEditContext;
+}());
+exports.DataEditContext = DataEditContext;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Environment = /** @class */ (function () {
+    function Environment() {
+    }
+    return Environment;
+}());
+exports.Environment = Environment;
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Error = /** @class */ (function () {
+    function Error() {
+    }
+    return Error;
+}());
+exports.Error = Error;
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Language = /** @class */ (function () {
+    function Language() {
+    }
+    return Language;
+}());
+exports.Language = Language;
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ParametersEntity = /** @class */ (function () {
+    function ParametersEntity() {
+    }
+    return ParametersEntity;
+}());
+exports.ParametersEntity = ParametersEntity;
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var User = /** @class */ (function () {
+    function User() {
+    }
+    return User;
+}());
+exports.User = User;
+
+
+/***/ }),
+/* 34 */
 /***/ (function(module, exports) {
 
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -1658,7 +1820,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 26 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -1684,7 +1846,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 27 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1720,182 +1882,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
         //#endregion
     }
 })();
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ContentBlock = /** @class */ (function () {
-    function ContentBlock() {
-    }
-    return ContentBlock;
-}());
-exports.ContentBlock = ContentBlock;
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ContentGroup = /** @class */ (function () {
-    function ContentGroup() {
-    }
-    return ContentGroup;
-}());
-exports.ContentGroup = ContentGroup;
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Environment = /** @class */ (function () {
-    function Environment() {
-    }
-    return Environment;
-}());
-exports.Environment = Environment;
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Error = /** @class */ (function () {
-    function Error() {
-    }
-    return Error;
-}());
-exports.Error = Error;
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ihj_config_validation_helper_1 = __webpack_require__(0);
-var environment_create_1 = __webpack_require__(6);
-var user_create_1 = __webpack_require__(9);
-var language_create_1 = __webpack_require__(10);
-var content_block_create_1 = __webpack_require__(4);
-var content_group_create_1 = __webpack_require__(5);
-var error_create_1 = __webpack_require__(8);
-/**
- * create IhjConfig object from JSON
- *
- */
-var IhjConfigCreate = /** @class */ (function () {
-    function IhjConfigCreate() {
-    }
-    // ReSharper disable once InconsistentNaming
-    IhjConfigCreate.Parse = function (data) {
-        return IhjConfigCreate.Create(JSON.parse(data));
-    };
-    // ReSharper disable once InconsistentNaming
-    IhjConfigCreate.Create = function (data, field) {
-        if (field === void 0) { field = 'root'; }
-        if (!field) {
-            field = 'root';
-        }
-        // validate JSON data
-        ihj_config_validation_helper_1.IhjConfigValidationHelper.checkData(data, field);
-        // create sub objects from JSON data
-        data.Environment = environment_create_1.EnvironmentCreate.Create(data.Environment, field + '.Environment');
-        data.User = user_create_1.UserCreate.Create(data.User, field + '.User');
-        data.Language = language_create_1.LanguageCreate.Create(data.Language, field + '.Language');
-        data.ContentBlock = content_block_create_1.ContentBlockCreate.Create(data.ContentBlock, field + '.ContentBlock');
-        data.ContentGroup = content_group_create_1.ContentGroupCreate.Create(data.ContentGroup, field + '.ContentGroup');
-        data.error = error_create_1.ErrorCreate.Create(data.error, field + '.error');
-        // transfer JSON data to new object
-        var ihjConfig = {
-            Environment: data.Environment,
-            User: data.User,
-            Language: data.Language,
-            ContentBlock: data.ContentBlock,
-            ContentGroup: data.ContentGroup,
-            error: data.error
-        };
-        return ihjConfig;
-    };
-    return IhjConfigCreate;
-}());
-exports.IhjConfigCreate = IhjConfigCreate;
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var IhjConfig = /** @class */ (function () {
-    function IhjConfig() {
-    }
-    return IhjConfig;
-}());
-exports.IhjConfig = IhjConfig;
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Language = /** @class */ (function () {
-    function Language() {
-    }
-    return Language;
-}());
-exports.Language = Language;
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ParametersEntity = /** @class */ (function () {
-    function ParametersEntity() {
-    }
-    return ParametersEntity;
-}());
-exports.ParametersEntity = ParametersEntity;
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var User = /** @class */ (function () {
-    function User() {
-    }
-    return User;
-}());
-exports.User = User;
 
 
 /***/ }),
