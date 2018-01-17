@@ -17,8 +17,7 @@
          // list of files / patterns to load in the browser
          files: [
              //'./src/**/*.ts',
-             './src/*.ts',
-             './src/in-html-json-config/*.ts',
+             './src/data-edit-context/*.ts',
              './test/**/*.ts'
          ],
 

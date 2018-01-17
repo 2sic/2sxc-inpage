@@ -2,15 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("jasmine");
 var data_edit_context_create_1 = require("../src/data-edit-context/data-edit-context-create");
-var rawJson = require("./assets/ihj-config.test.json");
+var rawJson = require("./assets/data-edit-context.test.json");
 describe('ihj config test', function () {
     it('compare JSON', function () {
-        var t1 = JSON.stringify(rawJson);
-        var dataEditContextTest = data_edit_context_create_1.DataEditContextCreate.parse(t1);
-        var t2 = JSON.stringify(dataEditContextTest);
-        console.log(t1);
-        console.log(t2);
-        expect(t2).toBe(t1);
+        var inHtmlConfigJson = JSON.stringify(rawJson);
+        var dataEditContext = data_edit_context_create_1.DataEditContextCreate.parse(inHtmlConfigJson);
+        var dataEditContextJson = JSON.stringify(dataEditContext);
+        console.log(inHtmlConfigJson);
+        console.log(dataEditContextJson);
+        expect(dataEditContextJson).toBe(inHtmlConfigJson);
     });
 });
 //# sourceMappingURL=test-data-edit-context.js.map

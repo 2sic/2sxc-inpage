@@ -1,18 +1,18 @@
 ﻿import 'jasmine';
 import { DataEditContext } from '../src/data-edit-context/data-edit-context';
 import { DataEditContextCreate } from '../src/data-edit-context/data-edit-context-create';
-import * as rawJson from './assets/ihj-config.test.json';
+import * as rawJson from './assets/data-edit-context.test.json';
 
 describe('ihj config test', () => {
   it('compare JSON', () => {
 
-      let t1: string = JSON.stringify(rawJson);
-      let dataEditContextTest: DataEditContext = DataEditContextCreate.parse(t1);
-      let t2: string = JSON.stringify(dataEditContextTest);
+      let inHtmlConfigJson: string = JSON.stringify(rawJson);
+      let dataEditContext: DataEditContext = DataEditContextCreate.parse(inHtmlConfigJson);
+      let dataEditContextJson: string = JSON.stringify(dataEditContext);
 
-      console.log(t1);
-      console.log(t2); 
+      console.log(inHtmlConfigJson);
+      console.log(dataEditContextJson); 
 
-      expect(t2).toBe(t1);
+      expect(dataEditContextJson).toBe(inHtmlConfigJson);
   });
 });
