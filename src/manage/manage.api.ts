@@ -1,4 +1,5 @@
-﻿
+﻿import { DataEditContextCreate } from '../data-edit-context/data-edit-context-create';
+
 (function() {
     var mngApi = $2sxc._manage;
 
@@ -20,7 +21,7 @@
      */
     $2sxc._manage.getEditContextOfTag = function getEditContextOfTag(htmlTag) {
         var attr = htmlTag.getAttribute("data-edit-context");
-        return JSON.parse(attr || "");
+        return DataEditContextCreate.parse(attr || "");
     };
 
 

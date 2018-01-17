@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -276,7 +276,61 @@ exports.ContentGroupCreate = ContentGroupCreate;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var json_validation_helper_1 = __webpack_require__(0);
-var parameters_entity_create_1 = __webpack_require__(7);
+var environment_create_1 = __webpack_require__(7);
+var user_create_1 = __webpack_require__(9);
+var language_create_1 = __webpack_require__(10);
+var content_block_create_1 = __webpack_require__(4);
+var content_group_create_1 = __webpack_require__(5);
+var error_create_1 = __webpack_require__(11);
+/**
+ * create DataEditContext object from JSON
+ *
+ */
+var DataEditContextCreate = /** @class */ (function () {
+    function DataEditContextCreate() {
+    }
+    DataEditContextCreate.parse = function (data) {
+        return this.create(JSON.parse(data));
+    };
+    DataEditContextCreate.create = function (data, field) {
+        if (field === void 0) { field = 'root'; }
+        if (!field) {
+            field = 'root';
+        }
+        // validate JSON data
+        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
+        // create sub objects from JSON data
+        data.Environment = environment_create_1.EnvironmentCreate.create(data.Environment, field + '.Environment');
+        data.User = user_create_1.UserCreate.create(data.User, field + '.User');
+        data.Language = language_create_1.LanguageCreate.create(data.Language, field + '.Language');
+        data.ContentBlock = content_block_create_1.ContentBlockCreate.Create(data.ContentBlock, field + '.ContentBlock');
+        data.ContentGroup = content_group_create_1.ContentGroupCreate.create(data.ContentGroup, field + '.ContentGroup');
+        data.error = error_create_1.ErrorCreate.create(data.error, field + '.error');
+        // transfer JSON data to new object
+        var dataEditContext = {
+            Environment: data.Environment,
+            User: data.User,
+            Language: data.Language,
+            ContentBlock: data.ContentBlock,
+            ContentGroup: data.ContentGroup,
+            error: data.error
+        };
+        return dataEditContext;
+    };
+    return DataEditContextCreate;
+}());
+exports.DataEditContextCreate = DataEditContextCreate;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var json_validation_helper_1 = __webpack_require__(0);
+var parameters_entity_create_1 = __webpack_require__(8);
 /**
  * create Environment object from JSON
  */
@@ -330,7 +384,7 @@ exports.EnvironmentCreate = EnvironmentCreate;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -368,7 +422,7 @@ exports.ParametersEntityCreate = ParametersEntityCreate;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -406,7 +460,7 @@ exports.UserCreate = UserCreate;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -457,7 +511,7 @@ exports.LanguageCreate = LanguageCreate;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -490,14 +544,13 @@ exports.ErrorCreate = ErrorCreate;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(12);
+__webpack_require__(13);
 __webpack_require__(1);
 __webpack_require__(2);
 __webpack_require__(3);
-__webpack_require__(13);
 __webpack_require__(14);
 __webpack_require__(15);
 __webpack_require__(16);
@@ -509,22 +562,23 @@ __webpack_require__(21);
 __webpack_require__(22);
 __webpack_require__(23);
 __webpack_require__(24);
-__webpack_require__(4);
 __webpack_require__(25);
-__webpack_require__(5);
+__webpack_require__(4);
 __webpack_require__(26);
+__webpack_require__(5);
 __webpack_require__(27);
-__webpack_require__(28);
 __webpack_require__(6);
+__webpack_require__(28);
+__webpack_require__(7);
 __webpack_require__(29);
-__webpack_require__(10);
+__webpack_require__(11);
 __webpack_require__(30);
 __webpack_require__(0);
-__webpack_require__(9);
+__webpack_require__(10);
 __webpack_require__(31);
-__webpack_require__(7);
-__webpack_require__(32);
 __webpack_require__(8);
+__webpack_require__(32);
+__webpack_require__(9);
 __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
@@ -567,7 +621,7 @@ module.exports = __webpack_require__(71);
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /*
@@ -668,7 +722,7 @@ module.exports = __webpack_require__(71);
 //# sourceMappingURL=shake.js.map
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -711,7 +765,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -742,7 +796,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -751,7 +805,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /*
@@ -1051,7 +1105,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1194,7 +1248,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1215,7 +1269,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /*
@@ -1246,7 +1300,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /*
@@ -1319,7 +1373,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 // contains commands to create/move/delete a contentBlock in a page
@@ -1390,7 +1444,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1473,7 +1527,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /*
@@ -1553,7 +1607,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 /*
@@ -1628,7 +1682,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1643,7 +1697,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1655,60 +1709,6 @@ var ContentGroup = /** @class */ (function () {
     return ContentGroup;
 }());
 exports.ContentGroup = ContentGroup;
-
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var json_validation_helper_1 = __webpack_require__(0);
-var environment_create_1 = __webpack_require__(6);
-var user_create_1 = __webpack_require__(8);
-var language_create_1 = __webpack_require__(9);
-var content_block_create_1 = __webpack_require__(4);
-var content_group_create_1 = __webpack_require__(5);
-var error_create_1 = __webpack_require__(10);
-/**
- * create DataEditContext object from JSON
- *
- */
-var DataEditContextCreate = /** @class */ (function () {
-    function DataEditContextCreate() {
-    }
-    DataEditContextCreate.parse = function (data) {
-        return this.create(JSON.parse(data));
-    };
-    DataEditContextCreate.create = function (data, field) {
-        if (field === void 0) { field = 'root'; }
-        if (!field) {
-            field = 'root';
-        }
-        // validate JSON data
-        json_validation_helper_1.JsonValidationHelper.checkData(data, field);
-        // create sub objects from JSON data
-        data.Environment = environment_create_1.EnvironmentCreate.create(data.Environment, field + '.Environment');
-        data.User = user_create_1.UserCreate.create(data.User, field + '.User');
-        data.Language = language_create_1.LanguageCreate.create(data.Language, field + '.Language');
-        data.ContentBlock = content_block_create_1.ContentBlockCreate.Create(data.ContentBlock, field + '.ContentBlock');
-        data.ContentGroup = content_group_create_1.ContentGroupCreate.create(data.ContentGroup, field + '.ContentGroup');
-        data.error = error_create_1.ErrorCreate.create(data.error, field + '.error');
-        // transfer JSON data to new object
-        var dataEditContext = {
-            Environment: data.Environment,
-            User: data.User,
-            Language: data.Language,
-            ContentBlock: data.ContentBlock,
-            ContentGroup: data.ContentGroup,
-            error: data.error
-        };
-        return dataEditContext;
-    };
-    return DataEditContextCreate;
-}());
-exports.DataEditContextCreate = DataEditContextCreate;
 
 
 /***/ }),
@@ -1961,8 +1961,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 45 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var data_edit_context_create_1 = __webpack_require__(6);
 (function () {
     var mngApi = $2sxc._manage;
     /**
@@ -1980,7 +1984,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
      */
     $2sxc._manage.getEditContextOfTag = function getEditContextOfTag(htmlTag) {
         var attr = htmlTag.getAttribute("data-edit-context");
-        return JSON.parse(attr || "");
+        return data_edit_context_create_1.DataEditContextCreate.parse(attr || "");
     };
     /**
      * get edit-context info of an sxc-object

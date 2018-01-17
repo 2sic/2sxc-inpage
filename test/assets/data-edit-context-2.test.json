@@ -1,13 +1,17 @@
 {
   "Environment": {
     "WebsiteId": 0,
-    "WebsiteUrl": "//2sxc.org/en/",
-    "PageId": 56,
-    "PageUrl": "https://2sxc.org/en/",
+    "WebsiteUrl": "//2sxc.me/",
+    "PageId": 55,
+    "PageUrl": "http://2sxc.me/",
     "parameters": [
       {
         "Key": "TabId",
-        "Value": "56"
+        "Value": "55"
+      },
+      {
+        "Key": "post",
+        "Value": "naslov"
       },
       {
         "Key": "language",
@@ -15,7 +19,7 @@
       }
     ],
     "InstanceId": 421,
-    "SxcVersion": "9.11.1.19251",
+    "SxcVersion": "9.14.0.23843",
     "SxcRootUrl": "/",
     "IsEditable": true
   },
@@ -26,9 +30,7 @@
   "Language": {
     "Current": "en-us",
     "Primary": "en-us",
-    "All": [
-
-    ]
+    "All": []
   },
   "ContentBlock": {
     "ShowTemplatePicker": true,
@@ -40,23 +42,21 @@
     "PartOfPage": true
   },
   "ContentGroup": {
-    "IsCreated": true,
+    "IsCreated": false,
     "IsList": false,
-    "TemplateId": 3770,
-    "QueryId": null,
-    "ContentTypeName": "e2351b42-87f2-427e-9566-ff271e3e5a9f",
-    "AppUrl": "/Portals/0/2sxc/Content",
-    "AppSettingsId": null,
-    "AppResourcesId": null,
-    "IsContent": true,
-    "HasContent": true,
+    "TemplateId": 815,
+    "QueryId": 851,
+    "ContentTypeName": "ed31a7c6-e76c-4874-958f-d67f33c02c34",
+    "AppUrl": "/Portals/0/2sxc/Blog App",
+    "AppSettingsId": 799,
+    "AppResourcesId": 800,
+    "IsContent": false,
+    "HasContent": false,
     "SupportsAjax": true,
     "ZoneId": 2,
-    "AppId": 2,
-    "Guid": "c238e78b-a6e5-4811-a5c9-51d5ebf48b39",
-    "Id": 3894
+    "AppId": 3,
+    "Guid": "00000000-0000-0000-0000-000000000000",
+    "Id": 0
   },
-  "error": {
-    "type": null
-  }
+  "error": { "type": null }
 }
