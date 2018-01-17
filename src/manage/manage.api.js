@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var data_edit_context_create_1 = require("../data-edit-context/data-edit-context-create");
+window.DataEditContextCreate = require('../data-edit-context/data-edit-context-create');
 (function () {
     var mngApi = $2sxc._manage;
     /**

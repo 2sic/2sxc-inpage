@@ -1,7 +1,10 @@
 ﻿import { DataEditContextCreate } from '../data-edit-context/data-edit-context-create';
 
-(function() {
-    var mngApi = $2sxc._manage;
+declare var window: any;
+window.DataEditContextCreate = require('../data-edit-context/data-edit-context-create');
+
+(function () {
+  var mngApi = $2sxc._manage;
 
     /**
      * Get a html tag of the current sxc instance
@@ -20,7 +23,7 @@
      * @return {any} edit-context object
      */
     $2sxc._manage.getEditContextOfTag = function getEditContextOfTag(htmlTag) {
-        var attr = htmlTag.getAttribute("data-edit-context");
+      var attr = htmlTag.getAttribute("data-edit-context");
         return DataEditContextCreate.parse(attr || "");
     };
 
