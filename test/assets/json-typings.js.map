@@ -1,1 +1,1 @@
-{"version":3,"file":"json-typings.js","sourceRoot":"","sources":["json-typings.ts"],"names":[],"mappings":"","sourcesContent":["// https://hackernoon.com/import-json-into-typescript-8d465beded79\r\ndeclare module \"*.json\" {\r\n    const value: any;\r\n    export default value;\r\n}"]}
+{"version":3,"file":"json-typings.js","sourceRoot":"","sources":["json-typings.ts"],"names":[],"mappings":""}

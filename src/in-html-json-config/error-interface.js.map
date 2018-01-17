@@ -1,1 +1,0 @@
-{"version":3,"file":"error-interface.js","sourceRoot":"","sources":["error-interface.ts"],"names":[],"mappings":";AAAA;;GAEG","sourcesContent":["/**\r\n * Error interface\r\n */\r\n\r\nexport interface IError {\r\n  type: string;\r\n}"]}

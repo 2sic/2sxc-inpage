@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="coverage\**" />
+    <Compile Remove="_reports\**" />
+    <Content Remove="coverage\**" />
+    <Content Remove="_reports\**" />
+    <EmbeddedResource Remove="coverage\**" />
+    <EmbeddedResource Remove="_reports\**" />
+    <None Remove="coverage\**" />
+    <None Remove="_reports\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="dist\" />
     <Folder Include="src\translate\libs\" />
   </ItemGroup>

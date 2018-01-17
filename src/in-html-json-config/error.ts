@@ -1,12 +1,3 @@
-﻿import { IError } from "./error-interface";
-
-/**
- * Error class
- */
-export class Error implements IError {
+﻿export class Error {
   public type: string;
-
-  constructor(data: any) {
-    this.type = data.type;
-  }
 }

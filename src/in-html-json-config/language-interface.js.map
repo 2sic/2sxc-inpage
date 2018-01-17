@@ -1,1 +1,0 @@
-{"version":3,"file":"language-interface.js","sourceRoot":"","sources":["language-interface.ts"],"names":[],"mappings":"","sourcesContent":["/**\r\n * Language interface\r\n */\r\nexport interface ILanguage {\r\n  Current: string;\r\n  Primary: string;\r\n  All: string[] | null;\r\n}"]}

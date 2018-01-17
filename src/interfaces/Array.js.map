@@ -1,1 +1,1 @@
-{"version":3,"file":"array.js","sourceRoot":"","sources":["array.ts"],"names":[],"mappings":"","sourcesContent":["// https://stackoverflow.com/questions/31455805/find-object-in-array-using-typescript\r\ninterface Array<T> {\r\n    find(predicate: (search: T) => boolean): T;\r\n}"]}
+{"version":3,"file":"array.js","sourceRoot":"","sources":["array.ts"],"names":[],"mappings":""}

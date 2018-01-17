@@ -1,1 +1,1 @@
-{"version":3,"file":"object-constructor.js","sourceRoot":"","sources":["object-constructor.ts"],"names":[],"mappings":"","sourcesContent":["// https://stackoverflow.com/questions/38860161/using-typescript-and-object-assign-gives-me-an-error-property-assign-does-no\r\ninterface ObjectConstructor {\r\n    assign(...objects: Object[]): Object;\r\n}"]}
+{"version":3,"file":"object-constructor.js","sourceRoot":"","sources":["object-constructor.ts"],"names":[],"mappings":""}

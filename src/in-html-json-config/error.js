@@ -1,11 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Error class
- */
 var Error = /** @class */ (function () {
-    function Error(data) {
-        this.type = data.type;
+    function Error() {
     }
     return Error;
 }());

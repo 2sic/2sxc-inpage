@@ -1,12 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * ParametersEntity class
- */
 var ParametersEntity = /** @class */ (function () {
-    function ParametersEntity(data) {
-        this.Key = data.Key;
-        this.Value = data.Value;
+    function ParametersEntity() {
     }
     return ParametersEntity;
 }());
