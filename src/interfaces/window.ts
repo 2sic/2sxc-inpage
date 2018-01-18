@@ -2,7 +2,7 @@
 
 // ReSharper disable InconsistentNaming
 export interface Window {
-  $2sxc: SxcController;
+  $2sxc: SxcControllerWithInternals;
   dnn_tabVersioningEnabled: any;
   dnn: any;
   $quickE: i$quickE;
