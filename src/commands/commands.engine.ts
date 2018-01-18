@@ -1,7 +1,9 @@
-﻿(function () {
+﻿import { initializeInstanceCommands } from './commands.instanceCommands';
+
+(function () {
     $2sxc._commands.instanceEngine = function (sxc, editContext) {
         var engine = {
-            commands: $2sxc._commands.initializeInstanceCommands(editContext),
+          commands: initializeInstanceCommands(editContext),
 
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {

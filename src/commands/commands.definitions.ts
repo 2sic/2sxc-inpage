@@ -15,22 +15,28 @@
  * - params - ...
  */
 
+
+function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
+  if (typeof (partOfPage) !== "boolean")
+    throw "partOfPage in commands not provided, order will be wrong!";
+
+  return $2sxc._lib.extend({
+    name: name,
+    title: "Toolbar." + translateKey,
+    icon: "icon-sxc-" + icon,
+    uiActionOnly: uiOnly,
+    partOfPage: partOfPage
+  }, more);
+}
+
+
+
 (function () {
     // helper function to create the configuration object
-    function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
-        if (typeof (partOfPage) !== "boolean")
-            throw "partOfPage in commands not provided, order will be wrong!";
 
-        return $2sxc._lib.extend({
-            name: name,
-            title: "Toolbar." + translateKey,
-            icon: "icon-sxc-" + icon,
-            uiActionOnly: uiOnly,
-            partOfPage: partOfPage
-        }, more);
-    }
 
-    $2sxc._commands.definitions = {};
+  $2sxc._commands.definitions = {};
+
     $2sxc._commands.definitions.create = function (cmdSpecs) {
         var enableTools = cmdSpecs.canDesign;
         var isContent = cmdSpecs.isContent;

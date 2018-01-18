@@ -1,7 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_instanceCommands_1 = require("./commands.instanceCommands");
 (function () {
     $2sxc._commands.instanceEngine = function (sxc, editContext) {
         var engine = {
-            commands: $2sxc._commands.initializeInstanceCommands(editContext),
+            commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
                 var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings

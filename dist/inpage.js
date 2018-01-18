@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -140,12 +140,12 @@ exports.JsonValidationHelper = JsonValidationHelper;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var json_validation_helper_1 = __webpack_require__(0);
-var environment_create_1 = __webpack_require__(7);
-var user_create_1 = __webpack_require__(9);
-var language_create_1 = __webpack_require__(10);
-var content_block_create_1 = __webpack_require__(5);
-var content_group_create_1 = __webpack_require__(6);
-var error_create_1 = __webpack_require__(11);
+var environment_create_1 = __webpack_require__(8);
+var user_create_1 = __webpack_require__(10);
+var language_create_1 = __webpack_require__(11);
+var content_block_create_1 = __webpack_require__(6);
+var content_group_create_1 = __webpack_require__(7);
+var error_create_1 = __webpack_require__(12);
 /**
  * create DataEditContext object from JSON
  *
@@ -212,6 +212,30 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+function initializeInstanceCommands(editContext) {
+    var cg = editContext.ContentGroup;
+    return $2sxc._commands.definitions.create({
+        canDesign: editContext.User.CanDesign,
+        templateId: cg.TemplateId,
+        contentTypeId: cg.ContentTypeName,
+        isContent: cg.IsContent,
+        queryId: cg.QueryId,
+        appResourcesId: cg.AppResourcesId,
+        appSettingsId: cg.AppSettingsId,
+        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
+    });
+}
+exports.initializeInstanceCommands = initializeInstanceCommands;
+;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var json_validation_helper_1 = __webpack_require__(0);
 /**
  * create ContentBlock object from JSON
@@ -259,7 +283,7 @@ exports.ContentBlockCreate = ContentBlockCreate;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -323,14 +347,14 @@ exports.ContentGroupCreate = ContentGroupCreate;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var json_validation_helper_1 = __webpack_require__(0);
-var parameters_entity_create_1 = __webpack_require__(8);
+var parameters_entity_create_1 = __webpack_require__(9);
 /**
  * create Environment object from JSON
  */
@@ -384,7 +408,7 @@ exports.EnvironmentCreate = EnvironmentCreate;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -422,7 +446,7 @@ exports.ParametersEntityCreate = ParametersEntityCreate;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -460,7 +484,7 @@ exports.UserCreate = UserCreate;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -511,7 +535,7 @@ exports.LanguageCreate = LanguageCreate;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -544,41 +568,41 @@ exports.ErrorCreate = ErrorCreate;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(13);
+__webpack_require__(14);
 __webpack_require__(2);
 __webpack_require__(3);
 __webpack_require__(4);
-__webpack_require__(14);
 __webpack_require__(15);
 __webpack_require__(16);
 __webpack_require__(17);
 __webpack_require__(18);
 __webpack_require__(19);
+__webpack_require__(5);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
 __webpack_require__(23);
 __webpack_require__(24);
 __webpack_require__(25);
-__webpack_require__(5);
-__webpack_require__(26);
 __webpack_require__(6);
+__webpack_require__(26);
+__webpack_require__(7);
 __webpack_require__(27);
 __webpack_require__(1);
 __webpack_require__(28);
-__webpack_require__(7);
+__webpack_require__(8);
 __webpack_require__(29);
-__webpack_require__(11);
+__webpack_require__(12);
 __webpack_require__(30);
 __webpack_require__(0);
-__webpack_require__(10);
+__webpack_require__(11);
 __webpack_require__(31);
-__webpack_require__(8);
-__webpack_require__(32);
 __webpack_require__(9);
+__webpack_require__(32);
+__webpack_require__(10);
 __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
@@ -621,7 +645,7 @@ module.exports = __webpack_require__(71);
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /*
@@ -722,7 +746,7 @@ module.exports = __webpack_require__(71);
 //# sourceMappingURL=shake.js.map
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -765,7 +789,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -796,7 +820,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -805,7 +829,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /*
@@ -824,19 +848,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * - disabled (new!)
  * - params - ...
  */
+function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
+    if (typeof (partOfPage) !== "boolean")
+        throw "partOfPage in commands not provided, order will be wrong!";
+    return $2sxc._lib.extend({
+        name: name,
+        title: "Toolbar." + translateKey,
+        icon: "icon-sxc-" + icon,
+        uiActionOnly: uiOnly,
+        partOfPage: partOfPage
+    }, more);
+}
 (function () {
     // helper function to create the configuration object
-    function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
-        if (typeof (partOfPage) !== "boolean")
-            throw "partOfPage in commands not provided, order will be wrong!";
-        return $2sxc._lib.extend({
-            name: name,
-            title: "Toolbar." + translateKey,
-            icon: "icon-sxc-" + icon,
-            uiActionOnly: uiOnly,
-            partOfPage: partOfPage
-        }, more);
-    }
     $2sxc._commands.definitions = {};
     $2sxc._commands.definitions.create = function (cmdSpecs) {
         var enableTools = cmdSpecs.canDesign;
@@ -1105,13 +1129,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports) {
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_instanceCommands_1 = __webpack_require__(5);
 (function () {
     $2sxc._commands.instanceEngine = function (sxc, editContext) {
         var engine = {
-            commands: $2sxc._commands.initializeInstanceCommands(editContext),
+            commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
             // assemble an object which will store the configuration and execute it
             create: function (specialSettings) {
                 var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
@@ -1243,27 +1271,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
             }
         };
         return engine;
-    };
-})();
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-(function () {
-    $2sxc._commands.initializeInstanceCommands = function (editContext) {
-        var cg = editContext.ContentGroup;
-        return $2sxc._commands.definitions.create({
-            canDesign: editContext.User.CanDesign,
-            templateId: cg.TemplateId,
-            contentTypeId: cg.ContentTypeName,
-            isContent: cg.IsContent,
-            queryId: cg.QueryId,
-            appResourcesId: cg.AppResourcesId,
-            appSettingsId: cg.AppSettingsId,
-            allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
-        });
     };
 })();
 
