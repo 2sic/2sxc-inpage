@@ -1,6 +1,6 @@
-﻿export class ParametersEntity {
+﻿export default class ParametersEntity {
   // ReSharper disable InconsistentNaming
-  public Key: string;
-  public Value: string;
+  Key: string;
+  Value: string;
   // ReSharper restore InconsistentNaming
 }

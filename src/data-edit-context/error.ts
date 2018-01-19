@@ -1,3 +1,3 @@
-﻿export class Error {
-  public type: string;
+﻿export default class Error {
+  type: string;
 }

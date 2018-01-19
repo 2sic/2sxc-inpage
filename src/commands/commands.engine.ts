@@ -1,7 +1,7 @@
 ﻿import { initializeInstanceCommands } from './commands.instanceCommands';
+import DataEditContext from '../data-edit-context/data-edit-context';
 
-
-$2sxc._commands.instanceEngine = function (sxc, editContext) {
+$2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
   var engine = {
     commands: initializeInstanceCommands(editContext),
 

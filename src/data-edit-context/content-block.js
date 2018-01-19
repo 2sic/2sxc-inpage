@@ -5,5 +5,5 @@ var ContentBlock = /** @class */ (function () {
     }
     return ContentBlock;
 }());
-exports.ContentBlock = ContentBlock;
+exports.default = ContentBlock;
 //# sourceMappingURL=content-block.js.map

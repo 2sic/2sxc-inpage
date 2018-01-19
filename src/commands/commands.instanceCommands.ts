@@ -1,8 +1,8 @@
-﻿import DataEditContext = require('../data-edit-context/data-edit-context');
-import Contentgroup = require('../data-edit-context/content-group');
+﻿import DataEditContext from '../data-edit-context/data-edit-context';
+import ContentGroup from '../data-edit-context/content-group';
 
-export function initializeInstanceCommands(editContext : DataEditContext.DataEditContext) : any {
-  let cg: Contentgroup.ContentGroup = editContext.ContentGroup;
+export function initializeInstanceCommands(editContext : DataEditContext) : any {
+  let cg: ContentGroup = editContext.ContentGroup;
   return $2sxc._commands.definitions.create({
     canDesign: editContext.User.CanDesign,
     templateId: cg.TemplateId,

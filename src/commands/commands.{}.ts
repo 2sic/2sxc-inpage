@@ -1,9 +1,10 @@
-﻿/**
+﻿
+/**
  * initialise _commands
  */
 interface ICommands {
   definitions?: IDefinitions;
-  instanceEngine?: any;
+  instanceEngine?(sxc: SxcInstanceWithInternals, editContext: any): any;
 }
 
 $2sxc._commands = {};

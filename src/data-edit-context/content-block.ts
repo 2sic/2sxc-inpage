@@ -1,11 +1,11 @@
-﻿export class ContentBlock {
+﻿export default class ContentBlock {
   // ReSharper disable InconsistentNaming
-  public ShowTemplatePicker: boolean;
-  public IsEntity: boolean;
-  public VersioningRequirements: string;
-  public Id: number;
-  public ParentFieldName: string;
-  public ParentFieldSortOrder: number;
-  public PartOfPage: boolean;
+  ShowTemplatePicker: boolean;
+  IsEntity: boolean;
+  VersioningRequirements: string;
+  Id: number;
+  ParentFieldName: string;
+  ParentFieldSortOrder: number;
+  PartOfPage: boolean;
   // ReSharper restore InconsistentNaming
 }

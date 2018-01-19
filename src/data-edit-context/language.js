@@ -5,5 +5,5 @@ var Language = /** @class */ (function () {
     }
     return Language;
 }());
-exports.Language = Language;
+exports.default = Language;
 //# sourceMappingURL=language.js.map
