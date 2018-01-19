@@ -15,6 +15,14 @@
  * - params - ...
  */
 
+interface IDefinitions {
+  create(cmdSpecs: ICmdSpec): IAct;
+}
+
+interface IAct {
+  [s: string]: IDef;
+}
+
 interface IDef {
   name?: string;
   title?: string;
@@ -42,14 +50,6 @@ interface ICmdSpec {
   contentTypeId?: string;
   templateId?: number;
   queryId?: number;
-}
-
-interface IDefinitions {
-  create(cmdSpecs: ICmdSpec): IAct;
-}
-
-interface IAct {
-  [s: string]: IDef;
 }
 
 // helper function to create the configuration object
