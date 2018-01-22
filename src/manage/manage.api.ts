@@ -1,7 +1,6 @@
-﻿import { DataEditContextCreate } from '../data-edit-context/data-edit-context-create';
+﻿import DataEditContext from '../data-edit-context/data-edit-context';
 
 declare var window: any;
-window.DataEditContextCreate = require('../data-edit-context/data-edit-context-create');
 
 (function () {
   var mngApi = $2sxc._manage;
@@ -24,7 +23,7 @@ window.DataEditContextCreate = require('../data-edit-context/data-edit-context-c
    */
   $2sxc._manage.getEditContextOfTag = function getEditContextOfTag(htmlTag) {
     var attr = htmlTag.getAttribute("data-edit-context");
-    return DataEditContextCreate.parse(attr || "");
+    return JSON.parse(attr || "") as DataEditContext;
   };
 
 

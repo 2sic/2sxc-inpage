@@ -5,5 +5,5 @@ var DataEditContext = /** @class */ (function () {
     }
     return DataEditContext;
 }());
-exports.DataEditContext = DataEditContext;
+exports.default = DataEditContext;
 //# sourceMappingURL=data-edit-context.js.map

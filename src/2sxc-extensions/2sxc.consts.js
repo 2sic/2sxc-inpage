@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 (function () {
     if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
         return false;

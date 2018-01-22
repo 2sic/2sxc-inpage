@@ -1,7 +1,3 @@
-import { Window } from '../interfaces/window';
-
-declare var window: Window;
-
 (function () {
     if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
         return false;

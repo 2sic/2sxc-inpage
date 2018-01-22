@@ -1,6 +1,7 @@
 ﻿// Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
 
-declare const $2sxc;
+declare const $2sxc: SxcControllerWithInternals;
+
 var $2sxcActionMenuMapper = moduleId => {
     var run = $2sxc(moduleId).manage.run;
     return {

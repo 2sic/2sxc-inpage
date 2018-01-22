@@ -1,7 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var data_edit_context_create_1 = require("../data-edit-context/data-edit-context-create");
-window.DataEditContextCreate = require('../data-edit-context/data-edit-context-create');
 (function () {
     var mngApi = $2sxc._manage;
     /**
@@ -19,7 +17,7 @@ window.DataEditContextCreate = require('../data-edit-context/data-edit-context-c
      */
     $2sxc._manage.getEditContextOfTag = function getEditContextOfTag(htmlTag) {
         var attr = htmlTag.getAttribute("data-edit-context");
-        return data_edit_context_create_1.DataEditContextCreate.parse(attr || "");
+        return JSON.parse(attr || "");
     };
     /**
      * get edit-context info of an sxc-object

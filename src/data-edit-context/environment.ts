@@ -1,15 +1,15 @@
-﻿import { ParametersEntity } from './parameters-entity';
+﻿import ParametersEntity from './parameters-entity';
 
-export class Environment {
+export default class Environment {
   // ReSharper disable InconsistentNaming
-  public WebsiteId: number;
-  public WebsiteUrl: string;
-  public PageId: number;
-  public PageUrl: string;
-  public parameters: ParametersEntity[] | null;
-  public InstanceId: number;
-  public SxcVersion: string;
-  public SxcRootUrl: string;
-  public IsEditable: boolean;
+  WebsiteId: number;
+  WebsiteUrl: string;
+  PageId: number;
+  PageUrl: string;
+  parameters: ParametersEntity[] | null;
+  InstanceId: number;
+  SxcVersion: string;
+  SxcRootUrl: string;
+  IsEditable: boolean;
   // ReSharper restore InconsistentNaming
 }

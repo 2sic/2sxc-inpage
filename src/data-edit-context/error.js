@@ -5,5 +5,5 @@ var Error = /** @class */ (function () {
     }
     return Error;
 }());
-exports.Error = Error;
+exports.default = Error;
 //# sourceMappingURL=error.js.map

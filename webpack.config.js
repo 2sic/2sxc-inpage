@@ -97,14 +97,10 @@ module.exports = {
       onEnd: [
         {
           copy: [
-            // TEST start
-            { source: './dist/inpage.js', destination: './dist/inpage.min.js' },
-            { source: './dist/inpage.js.map', destination: './dist/inpage.min.js.map' },
-            // TEST end
             { source: './dist/inpage.min.css', destination: './dist/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
             { source: './dist/inpage.min.css.map', destination: './dist/inpage.css.map' }, // just copy min because can't generate full and minified css.map boundle files in one pass
             { source: './dist/*', destination: '../x/inpage' },
-            { source: './dist/*', destination: '../2SexyContent/Web/DesktopModules/ToSIC_SexyContent/dist/inpage' }
+            { source: './dist/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' }
           ]
         }
       ]

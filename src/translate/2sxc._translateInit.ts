@@ -2,9 +2,6 @@
 import i18next = require('./libs/i18next.min.js');
 import i18nextXHRBackend = require('./libs/i18nextXHRBackend.min.js');
 import jqueryI18next = require('./libs/jquery-i18next.min.js');
-import { Window } from '../interfaces/window';
-
-declare var window: Window;
 window.i18next = require('./libs/i18next.min.js');
 window.i18nextXHRBackend = require('./libs/i18nextXHRBackend.min.js');
 
