@@ -1,7 +1,7 @@
 ﻿import DataEditContext from '../data-edit-context/data-edit-context';
 import ContentGroup from '../data-edit-context/content-group';
 
-export function initializeInstanceCommands(editContext : DataEditContext) : any {
+export default function initializeInstanceCommands(editContext : DataEditContext) : any {
   let cg: ContentGroup = editContext.ContentGroup;
   return $2sxc._commands.definitions.create({
     canDesign: editContext.User.CanDesign,

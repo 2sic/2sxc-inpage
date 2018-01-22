@@ -1,8 +1,4 @@
-﻿import { Window } from '../interfaces/window';
-
-declare var window: Window;
-
-$(function () {
+﻿$(function () {
     "use strict";
 
     // the quick-edit object

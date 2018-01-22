@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
 $2sxc._commands.instanceEngine = function (sxc, editContext) {
     var engine = {
-        commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
+        commands: commands_instanceCommands_1.default(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
             var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
@@ -89,7 +89,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
             return cmd.generateLink();
         },
         // open a new dialog of the angular-ui
-        _openNgDialog: function (settings, event, sxc /*, closeCallback*/) {
+        _openNgDialog: function (settings, event, sxc) {
             // the callback will handle events after closing the dialog
             // and reload the in-page view w/ajax or page reload
             var callback = function () {

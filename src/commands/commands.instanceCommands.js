@@ -13,6 +13,6 @@ function initializeInstanceCommands(editContext) {
         allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
     });
 }
-exports.initializeInstanceCommands = initializeInstanceCommands;
+exports.default = initializeInstanceCommands;
 ;
 //# sourceMappingURL=commands.instanceCommands.js.map

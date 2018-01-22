@@ -1,13 +1,12 @@
-﻿import * as i18next from 'i18next';
-
-// ReSharper disable InconsistentNaming
-export interface Window {
+﻿// ReSharper disable InconsistentNaming
+interface Window {
   $2sxc: SxcControllerWithInternals;
   dnn_tabVersioningEnabled: any;
   dnn: any;
   $quickE: i$quickE;
-  i18next: i18next.i18n;
+  i18next: any;
   i18nextXHRBackend: any;
-  location: any;
 }
 // ReSharper restore InconsistentNaming
+
+declare var windows: Window;

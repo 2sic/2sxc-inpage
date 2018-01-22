@@ -1,12 +1,22 @@
-﻿import { initializeInstanceCommands } from './commands.instanceCommands';
+﻿import initializeInstanceCommands from './commands.instanceCommands';
 import DataEditContext from '../data-edit-context/data-edit-context';
 
+interface IEngine {
+  commands: Function;
+  create(specialSettings: any): any;
+  _linkToNgDialog(specialSettings: any): string;
+  _openNgDialog(settings: any, event: any, sxc: any): any;
+  executeAction(nameOrSettings: any, settings: any, event: any): any;
+}
+
+
+
 $2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
-  var engine = {
-    commands: initializeInstanceCommands(editContext),
+  var engine: IEngine = {
+    commands : initializeInstanceCommands(editContext),
 
     // assemble an object which will store the configuration and execute it
-    create: function (specialSettings) {
+    create(specialSettings: any): any {
       var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
       var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
         "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
@@ -89,7 +99,7 @@ $2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editCo
     },
 
     // create a dialog link
-    _linkToNgDialog: function (specialSettings) {
+    _linkToNgDialog(specialSettings: any) : string {
       var cmd = sxc.manage._commands.create(specialSettings);
 
       if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
@@ -102,14 +112,14 @@ $2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editCo
     },
 
     // open a new dialog of the angular-ui
-    _openNgDialog: function (settings, event, sxc /*, closeCallback*/) {
+    _openNgDialog(settings: any, event: any, sxc: any) {
       // the callback will handle events after closing the dialog
       // and reload the in-page view w/ajax or page reload
       var callback = function () {
         $2sxc._contentBlock.reloadAndReInitialize(sxc);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
       };
-      var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
+      var link: string = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
       if (settings.inlineWindow)
         return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
       if (settings.newWindow || (event && event.shiftKey))
@@ -118,7 +128,7 @@ $2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editCo
     },
 
     // ToDo: remove dead code
-    executeAction: function (nameOrSettings, settings, event) {
+    executeAction(nameOrSettings, settings, event) {
 
       // cycle parameters, in case it was called with 2 params only
       if (!event && settings && typeof settings.altKey !== "undefined") { // no event param, but settings contains the event-object

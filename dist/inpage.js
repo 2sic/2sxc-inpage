@@ -102,7 +102,7 @@ function initializeInstanceCommands(editContext) {
         allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
     });
 }
-exports.initializeInstanceCommands = initializeInstanceCommands;
+exports.default = initializeInstanceCommands;
 ;
 
 
@@ -278,11 +278,8 @@ module.exports = __webpack_require__(63);
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 (function () {
     if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
         return false;
@@ -321,11 +318,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function () {
     if (!(window.$2sxc /*|| window.$2sxc.system*/)) {
@@ -684,7 +678,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = __webpack_require__(3);
 $2sxc._commands.instanceEngine = function (sxc, editContext) {
     var engine = {
-        commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
+        commands: commands_instanceCommands_1.default(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
             var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
@@ -770,7 +764,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
             return cmd.generateLink();
         },
         // open a new dialog of the angular-ui
-        _openNgDialog: function (settings, event, sxc /*, closeCallback*/) {
+        _openNgDialog: function (settings, event, sxc) {
             // the callback will handle events after closing the dialog
             // and reload the in-page view w/ajax or page reload
             var callback = function () {
@@ -996,11 +990,8 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 /*
  * this is the content block manager in the browser
  *
@@ -1398,11 +1389,8 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 /***/ }),
 /* 27 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function () {
     if (window.$2sxc) {
@@ -1475,12 +1463,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 34 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -2047,11 +2031,8 @@ if (typeof Object.assign != 'function') {
 
 /***/ }),
 /* 42 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 $(function () {
     "use strict";
     // the quick-edit object
