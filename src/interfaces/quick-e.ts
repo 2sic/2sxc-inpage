@@ -1,12 +1,10 @@
-﻿declare var $quickE: i$quickE;
-
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 interface i$quickE {
   // ReSharper restore InconsistentNaming
   reset: any;
   copyPasteInPage: any;
   clipboard: any;
-  selectors: any;
+  selectors: ISelectors;
   cmds: any;
   setSecondaryActionsState: any;
   selected: any;
@@ -33,11 +31,13 @@ interface i$quickE {
   nearestMod: any;
   win: any;
   enable: any;
-  prepareToolbarInDom: any;
+  prepareToolbarInDom: Function;
   initPanes: any;
   watchMouse: any;
   start: any;
   toggleParts: any;
-  btn: any;
-  template: any;
+  btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?:boolean, classes?: string): string;
+  template: string;
 }
+
+declare var $quickE: i$quickE;
