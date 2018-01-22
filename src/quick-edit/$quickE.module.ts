@@ -1,22 +1,22 @@
-﻿// module specific stuff
-$(function () {
+﻿import modManage from './$quickE.modManage';
+var mm = new modManage();
 
-    function onModuleButtonClick() {
-        var type = $(this).data("type"),
-            dnnMod = $quickE.main.actionsForModule,
-            pane = dnnMod.closest($quickE.selectors.mod.listSelector),
-            index = 0;
+// module specific stuff
+function onModuleButtonClick() {
+  var type = $(this).data("type"),
+    dnnMod = $quickE.main.actionsForModule,
+    pane = dnnMod.closest($quickE.selectors.mod.listSelector),
+    index = 0;
 
-        if (dnnMod.hasClass("DnnModule"))
-            index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
+  if (dnnMod.hasClass("DnnModule"))
+    index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
 
-        var cbAction = $(this).data("action");
-        if (cbAction)  // copy/paste
-            return $quickE.copyPasteInPage(cbAction, pane, index, $quickE.selectors.mod.id);
+  var cbAction = $(this).data("action");
+  if (cbAction)  // copy/paste
+    return $quickE.copyPasteInPage(cbAction, pane, index, $quickE.selectors.mod.id);
 
-        return $quickE.modManage.create($quickE.modManage.getPaneName(pane), index, type);
-    }
+  return mm.create(mm.getPaneName(pane), index, type);
+}
 
-    // bind module actions click
-    $quickE.modActions.click(onModuleButtonClick);
-});
+// bind module actions click
+$quickE.modActions.click(onModuleButtonClick);
