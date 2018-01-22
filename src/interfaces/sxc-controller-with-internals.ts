@@ -15,3 +15,5 @@ interface SxcControllerWithInternals {
   translate: any;
 }
 // ReSharper restore InconsistentNaming
+
+declare var $2sxc: SxcControllerWithInternals;

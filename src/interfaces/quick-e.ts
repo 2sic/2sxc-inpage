@@ -2,12 +2,12 @@
 interface i$quickE {
   // ReSharper restore InconsistentNaming
   reset: any;
-  copyPasteInPage: any;
-  clipboard: any;
+  copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
+  clipboard: IClipboard;
   selectors: ISelectors;
   cmds: any;
-  setSecondaryActionsState: any;
-  selected: any;
+  setSecondaryActionsState(state: boolean): void;
+  selected: ISelected;
   getCoordinates: any;
   positionAndAlign: any;
   modManage: any;
