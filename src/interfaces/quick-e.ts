@@ -12,7 +12,7 @@ interface i$quickE {
   positionAndAlign: any;
   modManage: any;
   main: any;
-  config: any;
+  config: IConf;
   // ReSharper disable InconsistentNaming
   _readPageConfig: any;
   // ReSharper restore InconsistentNaming
