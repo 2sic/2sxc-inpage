@@ -1,26 +1,4 @@
 ﻿// add a clipboard to the quick edit
-interface IClipboard {
-  data: any;
-  mark(newData: any): any;
-  clear(): void;
-  createSpecs(type: string, list: any, index: number): ISpecs;
-}
-
-interface ISpecs {
-  parent: any;
-  field: any;
-  list: any;
-  item: any;
-  index: number;
-  type: any;
-}
-
-interface ISelected {
-  toggle(target: any, type?: any): any;
-  hide(): void;
-  target: any;
-  find(selector: string): any;
-}
 
 // perform copy and paste commands - needs the clipboard
 $quickE.copyPasteInPage = function (cbAction, list, index, type) {

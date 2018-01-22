@@ -2240,6 +2240,7 @@ $quickE.prepareToolbarInDom = function () {
 /* 45 */
 /***/ (function(module, exports) {
 
+// add a clipboard to the quick edit
 // perform copy and paste commands - needs the clipboard
 $quickE.copyPasteInPage = function (cbAction, list, index, type) {
     var newClip = $quickE.clipboard.createSpecs(type, list, index);

@@ -41,3 +41,26 @@ interface i$quickE {
 }
 
 declare var $quickE: i$quickE;
+
+interface IClipboard {
+  data: any;
+  mark(newData: any): any;
+  clear(): void;
+  createSpecs(type: string, list: any, index: number): ISpecs;
+}
+
+interface ISpecs {
+  parent: any;
+  field: any;
+  list: any;
+  item: any;
+  index: number;
+  type: any;
+}
+
+interface ISelected {
+  toggle(target: any, type?: any): any;
+  hide(): void;
+  target: any;
+  find(selector: string): any;
+}
