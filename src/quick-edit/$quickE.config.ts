@@ -7,6 +7,7 @@
     enable: boolean | string | null;
   };
   getAttribute?(configAttr: string): any;
+  guid?: any;
 }
 
 var configAttr = "quick-edit-config";
