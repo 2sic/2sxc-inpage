@@ -4,7 +4,7 @@
  */
 interface ICommands {
   definitions?: IDefinitions;
-  instanceEngine?(sxc: SxcInstanceWithInternals, editContext: any): any;
+  instanceEngine?(sxc: SxcInstanceWithInternals, editContext: any): IEngine;
 }
 
 $2sxc._commands = {};

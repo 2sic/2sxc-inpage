@@ -1,17 +1,7 @@
 ﻿import initializeInstanceCommands from './commands.instanceCommands';
 import DataEditContext from '../data-edit-context/data-edit-context';
 
-interface IEngine {
-  commands: Function;
-  create(specialSettings: any): any;
-  _linkToNgDialog(specialSettings: any): string;
-  _openNgDialog(settings: any, event: any, sxc: any): any;
-  executeAction(nameOrSettings: any, settings: any, event: any): any;
-}
-
-
-
-$2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
+$2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
   var engine: IEngine = {
     commands : initializeInstanceCommands(editContext),
 

@@ -172,7 +172,8 @@ __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
 __webpack_require__(62);
-module.exports = __webpack_require__(63);
+__webpack_require__(63);
+module.exports = __webpack_require__(64);
 
 
 /***/ }),
@@ -1433,13 +1434,13 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 29 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 30 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -1458,17 +1459,23 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 33 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 34 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 35 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1485,7 +1492,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -1502,7 +1509,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1610,7 +1617,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -1711,7 +1718,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -1755,7 +1762,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -1782,7 +1789,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports) {
 
 // this is a dialog manager which is in charge of all
@@ -2030,7 +2037,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -2099,7 +2106,7 @@ $(function () {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports) {
 
 // add a clipboard to the quick edit
@@ -2196,7 +2203,7 @@ $(function () {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports) {
 
 // extend the quick edit with the core commands
@@ -2237,7 +2244,7 @@ $(function () {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -2282,7 +2289,7 @@ $(function () {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports) {
 
 // content-block specific stuff like actions
@@ -2306,7 +2313,7 @@ $(function () {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports) {
 
 // module specific stuff
@@ -2436,7 +2443,7 @@ $(function () {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 // module specific stuff
@@ -2456,7 +2463,7 @@ $(function () {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports) {
 
 // everything related to positioning the quick-edit in-page editing
@@ -2581,7 +2588,7 @@ $(function () {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports) {
 
 $(function () {
@@ -2643,7 +2650,7 @@ $(function () {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports) {
 
 /*
@@ -2744,7 +2751,7 @@ $(function () {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2756,7 +2763,7 @@ $(function () {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -2771,7 +2778,7 @@ $(function () {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -2788,7 +2795,7 @@ $(function () {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2878,7 +2885,7 @@ $(function () {
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2921,7 +2928,7 @@ $(function () {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2958,7 +2965,7 @@ $(function () {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3187,7 +3194,7 @@ $(function () {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3207,7 +3214,7 @@ $(function () {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports) {
 
 // the default / initial buttons in a standard toolbar
@@ -3273,7 +3280,7 @@ $(function () {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3313,7 +3320,7 @@ window.i18nextXHRBackend = __webpack_require__(1);
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports) {
 
 // provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
@@ -3326,7 +3333,7 @@ window.i18nextXHRBackend = __webpack_require__(1);
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports) {
 
 // module & toolbar bootstrapping (initialize all toolbars after loading page)
