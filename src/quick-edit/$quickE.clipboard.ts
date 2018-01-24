@@ -1,4 +1,6 @@
-﻿// add a clipboard to the quick edit
+﻿import { positionAndAlign, getCoordinates } from './$quickE.positioning';
+
+// add a clipboard to the quick edit
 
 // perform copy and paste commands - needs the clipboard
 $quickE.copyPasteInPage = function (cbAction, list, index, type) {
@@ -81,9 +83,9 @@ $quickE.selected.toggle = function (target) {
   if (!target)
     return $quickE.selected.hide();
 
-  var coords = $quickE.getCoordinates(target);
+  var coords = getCoordinates(target);
   coords.yh = coords.y + 20;
-  $quickE.positionAndAlign($quickE.selected, coords);
+  positionAndAlign($quickE.selected, coords);
   $quickE.selected.target = target;
 };
 

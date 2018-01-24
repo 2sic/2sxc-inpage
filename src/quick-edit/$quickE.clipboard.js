@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE_positioning_1 = require("./$quickE.positioning");
 // add a clipboard to the quick edit
 // perform copy and paste commands - needs the clipboard
 $quickE.copyPasteInPage = function (cbAction, list, index, type) {
@@ -71,9 +74,9 @@ $quickE.setSecondaryActionsState = function (state) {
 $quickE.selected.toggle = function (target) {
     if (!target)
         return $quickE.selected.hide();
-    var coords = $quickE.getCoordinates(target);
+    var coords = _quickE_positioning_1.getCoordinates(target);
     coords.yh = coords.y + 20;
-    $quickE.positionAndAlign($quickE.selected, coords);
+    _quickE_positioning_1.positionAndAlign($quickE.selected, coords);
     $quickE.selected.target = target;
 };
 // bind clipboard actions 
