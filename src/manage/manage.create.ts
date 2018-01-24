@@ -1,4 +1,6 @@
-﻿// A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
+﻿import { instanceEngine } from '../commands/commands.engine';
+
+// A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
 // all in-page toolbars etc.
 // if loaded, it's found under the $2sxc(module).manage
 // it has commands to
@@ -21,7 +23,7 @@
         var editContext = mngApi.getEditContext(sxc);
         var userInfo = mngApi.getUserOfEditContext(editContext);
 
-        var cmdEngine = $2sxc._commands.instanceEngine(sxc, editContext);
+        var cmdEngine = instanceEngine(sxc, editContext);
 
         var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside

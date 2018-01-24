@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -14,7 +15,31 @@
  * - disabled (new!)
  * - params - ...
  */
-// helper function to create the configuration object
+Object.defineProperty(exports, "__esModule", { value: true });
+var Act = /** @class */ (function () {
+    function Act() {
+    }
+    return Act;
+}());
+var Def = /** @class */ (function () {
+    function Def() {
+    }
+    return Def;
+}());
+var CmdSpec = /** @class */ (function () {
+    function CmdSpec() {
+    }
+    return CmdSpec;
+}());
+/**
+ * helper function to create the configuration object
+ * @param name
+ * @param translateKey
+ * @param icon
+ * @param uiOnly
+ * @param partOfPage
+ * @param more
+ */
 function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
     if (typeof (partOfPage) !== 'boolean')
         throw 'partOfPage in commands not provided, order will be wrong!';
@@ -25,11 +50,9 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         uiActionOnly: uiOnly,
         partOfPage: partOfPage
     };
-    // TODO: this is not type safe
     return $2sxc._lib.extend(newDefinition, more);
 }
-$2sxc._commands.definitions = {};
-$2sxc._commands.definitions.create = function (cmdSpecs) {
+function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
     var isContent = cmdSpecs.isContent;
     var act = {};
@@ -308,5 +331,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
         fullScreen: true
     }));
     return act;
-};
+}
+exports.create = create;
+;
 //# sourceMappingURL=commands.definitions.js.map

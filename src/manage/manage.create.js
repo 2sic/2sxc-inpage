@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_engine_1 = require("../commands/commands.engine");
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
 // all in-page toolbars etc.
 // if loaded, it's found under the $2sxc(module).manage
@@ -19,7 +22,7 @@
     function initInstance(sxc) {
         var editContext = mngApi.getEditContext(sxc);
         var userInfo = mngApi.getUserOfEditContext(editContext);
-        var cmdEngine = $2sxc._commands.instanceEngine(sxc, editContext);
+        var cmdEngine = commands_engine_1.instanceEngine(sxc, editContext);
         var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside
             /**

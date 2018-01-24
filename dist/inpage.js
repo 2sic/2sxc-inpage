@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -157,7 +157,7 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(0);
 var _quickE_positioning_1 = __webpack_require__(2);
-var _quickE_cmds_1 = __webpack_require__(10);
+var _quickE_cmds_1 = __webpack_require__(12);
 /**
  * add a clipboard to the quick edit
  */
@@ -606,477 +606,6 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
-function initializeInstanceCommands(editContext) {
-    var cg = editContext.ContentGroup;
-    return $2sxc._commands.definitions.create({
-        canDesign: editContext.User.CanDesign,
-        templateId: cg.TemplateId,
-        contentTypeId: cg.ContentTypeName,
-        isContent: cg.IsContent,
-        queryId: cg.QueryId,
-        appResourcesId: cg.AppResourcesId,
-        appSettingsId: cg.AppSettingsId,
-        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
-    });
-}
-exports.default = initializeInstanceCommands;
-;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(0);
-var _quickE_positioning_1 = __webpack_require__(2);
-var _quickE_config_1 = __webpack_require__(9);
-function enable() {
-    // build all toolbar html-elements
-    _quickE___1.prepareToolbarInDom();
-    // Cache the panes (because panes can't change dynamically)
-    initPanes();
-}
-;
-/**
- * start watching for mouse-move
- */
-function watchMouse() {
-    var refreshTimeout = null;
-    $('body').on('mousemove', function (e) {
-        if (refreshTimeout === null)
-            refreshTimeout = window.setTimeout(function () {
-                requestAnimationFrame(function () {
-                    _quickE_positioning_1.refresh(e);
-                    refreshTimeout = null;
-                });
-            }, 20);
-    });
-}
-;
-function start() {
-    try {
-        _quickE_config_1._readPageConfig();
-        if ($quickE.config.enable) {
-            // initialize first body-offset
-            $quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
-            enable();
-            toggleParts();
-            watchMouse();
-        }
-    }
-    catch (e) {
-        console.error("couldn't start quick-edit", e);
-    }
-}
-;
-/**
- * cache the panes which can contain modules
- */
-function initPanes() {
-    $quickE.cachedPanes = $(_quickE___1.selectors.mod.listSelector);
-    $quickE.cachedPanes.addClass('sc-cb-pane-glow');
-}
-;
-/**
- * enable/disable module/content-blocks as configured
- */
-function toggleParts() {
-    //// content blocks actions
-    //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
-    //// module actions
-    //$quickE.modActions.hide($quickE.config.modules.enable);
-}
-;
-/**
- * reset the quick-edit
- * for example after ajax-loading a content-block, which may cause changed configurations
- */
-function reset() {
-    _quickE_config_1._readPageConfig();
-    toggleParts();
-}
-exports.reset = reset;
-;
-/**
- * run on-load
- */
-$(start);
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(0);
-var configAttr = "quick-edit-config";
-/**
- * the initial configuration
- */
-var conf = $quickE.config = {
-    enable: true,
-    innerBlocks: {
-        enable: null // default: auto-detect
-    },
-    modules: {
-        enable: null // default: auto-detect
-    }
-};
-function _readPageConfig() {
-    var configs = $("[" + configAttr + "]");
-    var finalConfig = {};
-    var confJ;
-    var confO;
-    // any inner blocks found? will currently affect if modules can be inserted...
-    var hasInnerCBs = ($(_quickE___1.selectors.cb.listSelector).length > 0);
-    if (configs.length > 0) {
-        // go through reverse list, as the last is the most important...
-        for (var c = configs.length; c >= 0; c--) {
-            confJ = configs[0].getAttribute(configAttr);
-            try {
-                confO = JSON.parse(confJ);
-                $.extend(finalConfig, confO);
-            }
-            catch (e) {
-                console.warn('had trouble with json', e);
-            }
-        }
-        $.extend(conf, finalConfig);
-    }
-    // re-check "auto" or "null"
-    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-    if (conf.modules.enable === null || conf.modules.enable === 'auto')
-        conf.modules.enable = !hasInnerCBs;
-    // for now, ContentBlocks are only enabled if they exist on the page
-    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
-        conf.innerBlocks.enable = hasInnerCBs;
-}
-exports._readPageConfig = _readPageConfig;
-;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(0);
-var _quickE_modManage_1 = __webpack_require__(3);
-var mm = new _quickE_modManage_1.modManage();
-var cb = /** @class */ (function () {
-    function cb() {
-    }
-    cb.prototype.delete = function (clip) {
-        return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
-    };
-    cb.create = function (parent, field, index, appOrContent, list, newGuid) {
-        return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
-    };
-    return cb;
-}());
-exports.cb = cb;
-var mod = /** @class */ (function () {
-    function mod() {
-    }
-    mod.prototype.delete = function (clip) {
-        if (!confirm('are you sure?'))
-            return;
-        var modId = mm.getModuleId(clip.item.className);
-        mm.delete(modId);
-    };
-    // todo: unsure if this is a good place for this bit of code...
-    mod.move = function (oldClip, newClip, from, to) {
-        var modId = mm.getModuleId(oldClip.item.className);
-        var pane = mm.getPaneName(newClip.list);
-        mm.move(modId, pane, to);
-    };
-    mod.sendToPane = function () {
-        var pane = $quickE.main.actionsForModule.closest(_quickE___1.selectors.mod.listSelector);
-        // show the pane-options
-        var pl = $quickE.selected.find('#paneList');
-        if (!pl.is(':empty'))
-            pl.empty();
-        pl.append(mm.getMoveButtons(mm.getPaneName(pane)));
-    };
-    return mod;
-}());
-exports.mod = mod;
-;
-var CmdsStrategyFactory = /** @class */ (function () {
-    function CmdsStrategyFactory() {
-        this.cmds = {};
-        this.cmds['cb'] = new cb();
-        this.cmds['mod'] = new mod();
-    }
-    CmdsStrategyFactory.prototype.getCmds = function (cliptype) {
-        return this.cmds[cliptype];
-    };
-    CmdsStrategyFactory.prototype.delete = function (clip) {
-        return this.cmds[clip.type].delete(clip);
-    };
-    return CmdsStrategyFactory;
-}());
-exports.CmdsStrategyFactory = CmdsStrategyFactory;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(12);
-__webpack_require__(4);
-__webpack_require__(5);
-__webpack_require__(6);
-__webpack_require__(13);
-__webpack_require__(14);
-__webpack_require__(15);
-__webpack_require__(16);
-__webpack_require__(17);
-__webpack_require__(7);
-__webpack_require__(18);
-__webpack_require__(19);
-__webpack_require__(20);
-__webpack_require__(21);
-__webpack_require__(22);
-__webpack_require__(23);
-__webpack_require__(24);
-__webpack_require__(25);
-__webpack_require__(26);
-__webpack_require__(27);
-__webpack_require__(28);
-__webpack_require__(29);
-__webpack_require__(30);
-__webpack_require__(31);
-__webpack_require__(32);
-__webpack_require__(33);
-__webpack_require__(34);
-__webpack_require__(35);
-__webpack_require__(36);
-__webpack_require__(37);
-__webpack_require__(38);
-__webpack_require__(39);
-__webpack_require__(40);
-__webpack_require__(41);
-__webpack_require__(42);
-__webpack_require__(43);
-__webpack_require__(44);
-__webpack_require__(45);
-__webpack_require__(46);
-__webpack_require__(47);
-__webpack_require__(48);
-__webpack_require__(49);
-__webpack_require__(0);
-__webpack_require__(1);
-__webpack_require__(10);
-__webpack_require__(9);
-__webpack_require__(50);
-__webpack_require__(3);
-__webpack_require__(51);
-__webpack_require__(2);
-__webpack_require__(8);
-__webpack_require__(52);
-__webpack_require__(53);
-__webpack_require__(54);
-__webpack_require__(55);
-__webpack_require__(56);
-__webpack_require__(57);
-__webpack_require__(58);
-__webpack_require__(59);
-__webpack_require__(60);
-__webpack_require__(61);
-__webpack_require__(62);
-__webpack_require__(63);
-module.exports = __webpack_require__(64);
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-/*
- * Author: Alex Gibson
- * https://github.com/alexgibson/shake.js
- * License: MIT license
- */
-(function (global, factory) {
-    global.Shake = factory(global, global.document);
-}(typeof window !== 'undefined' ? window : this, function (window, document) {
-    'use strict';
-    function Shake(options) {
-        //feature detect
-        this.hasDeviceMotion = 'ondevicemotion' in window;
-        this.options = {
-            threshold: 15,
-            timeout: 1000,
-            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
-        };
-        if (typeof options === 'object') {
-            for (var i in options) {
-                if (options.hasOwnProperty(i)) {
-                    this.options[i] = options[i];
-                }
-            }
-        }
-        //use date to prevent multiple shakes firing
-        this.lastTime = new Date();
-        //accelerometer values
-        this.lastX = null;
-        this.lastY = null;
-        this.lastZ = null;
-    }
-    //reset timer values
-    Shake.prototype.reset = function () {
-        this.lastTime = new Date();
-        this.lastX = null;
-        this.lastY = null;
-        this.lastZ = null;
-    };
-    //start listening for devicemotion
-    Shake.prototype.start = function () {
-        this.reset();
-        if (this.hasDeviceMotion) {
-            window.addEventListener('devicemotion', this, false);
-        }
-    };
-    //stop listening for devicemotion
-    Shake.prototype.stop = function () {
-        if (this.hasDeviceMotion) {
-            window.removeEventListener('devicemotion', this, false);
-        }
-        this.reset();
-    };
-    //calculates if shake did occur
-    Shake.prototype.devicemotion = function (e) {
-        var current = e.accelerationIncludingGravity;
-        var currentTime;
-        var timeDifference;
-        var deltaX = 0;
-        var deltaY = 0;
-        var deltaZ = 0;
-        if ((this.lastX === null) && (this.lastY === null) && (this.lastZ === null)) {
-            this.lastX = current.x;
-            this.lastY = current.y;
-            this.lastZ = current.z;
-            return;
-        }
-        deltaX = Math.abs(this.lastX - current.x);
-        deltaY = Math.abs(this.lastY - current.y);
-        deltaZ = Math.abs(this.lastZ - current.z);
-        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
-            //calculate time in milliseconds since last shake registered
-            currentTime = new Date();
-            timeDifference = currentTime.getTime() - this.lastTime.getTime();
-            if (timeDifference > this.options.timeout) {
-                // once triggered, execute  the callback
-                if (typeof this.options.callback === 'function') {
-                    this.options.callback();
-                }
-                else
-                    console.log("shake event without callback detected");
-                this.lastTime = new Date();
-            }
-        }
-        this.lastX = current.x;
-        this.lastY = current.y;
-        this.lastZ = current.z;
-    };
-    //event handler
-    Shake.prototype.handleEvent = function (e) {
-        if (typeof (this[e.type]) === 'function') {
-            return this[e.type](e);
-        }
-    };
-    return Shake;
-}));
-//# sourceMappingURL=shake.js.map
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-(function () {
-    if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
-        return false;
-    }
-    $2sxc.c = $2sxc.consts = {
-        // classes
-        cls: {
-            scMenu: "sc-menu",
-            scCb: "sc-content-block",
-            scElm: "sc-element"
-        },
-        // attribs
-        attr: {
-            toolbar: "toolbar",
-            toolbarData: "data-toolbar",
-            settings: "settings",
-            settingsData: "data-settings"
-        },
-        publishAllowed: "DraftOptional"
-    };
-    // selectors
-    var sel = $2sxc.c.sel = {};
-    Object.keys($2sxc.c.cls).forEach(function (key, index) {
-        sel[key] = "." + $2sxc.c.cls[key];
-    });
-    /*
-    ToDo: functional programming
-    $2sxc.c.sel = Object.entries($2sxc.c.cls).reduce((res, current) => {
-        res[entry[0]] = entry[1];
-        return t;
-    }, {});
-    */
-})();
-
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-// this enhances the $2sxc client controller with stuff only needed when logged in
-(function () {
-    if (!(window.$2sxc /*|| window.$2sxc.system*/)) {
-        return;
-    }
-    $2sxc.system = {
-        finishUpgrade: finishUpgrade
-    };
-    // upgrade command - started when an error contains a link to start this
-    function finishUpgrade(domElement) {
-        var mc = $2sxc(domElement);
-        $.ajax({
-            type: "get",
-            url: mc.resolveServiceUrl("view/module/finishinstallation"),
-            beforeSend: $.ServicesFramework(mc.id).setModuleHeaders
-        }).success(function () {
-            alert("Upgrade ok, restarting the CMS and reloading...");
-            location.reload();
-        });
-        alert("starting upgrade. This could take a few minutes. You'll see an 'ok' when it's done. Please wait...");
-    }
-})();
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-$2sxc._commands = {};
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -1093,7 +622,31 @@ $2sxc._commands = {};
  * - disabled (new!)
  * - params - ...
  */
-// helper function to create the configuration object
+Object.defineProperty(exports, "__esModule", { value: true });
+var Act = /** @class */ (function () {
+    function Act() {
+    }
+    return Act;
+}());
+var Def = /** @class */ (function () {
+    function Def() {
+    }
+    return Def;
+}());
+var CmdSpec = /** @class */ (function () {
+    function CmdSpec() {
+    }
+    return CmdSpec;
+}());
+/**
+ * helper function to create the configuration object
+ * @param name
+ * @param translateKey
+ * @param icon
+ * @param uiOnly
+ * @param partOfPage
+ * @param more
+ */
 function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
     if (typeof (partOfPage) !== 'boolean')
         throw 'partOfPage in commands not provided, order will be wrong!';
@@ -1104,11 +657,9 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         uiActionOnly: uiOnly,
         partOfPage: partOfPage
     };
-    // TODO: this is not type safe
     return $2sxc._lib.extend(newDefinition, more);
 }
-$2sxc._commands.definitions = {};
-$2sxc._commands.definitions.create = function (cmdSpecs) {
+function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
     var isContent = cmdSpecs.isContent;
     var act = {};
@@ -1387,20 +938,22 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
         fullScreen: true
     }));
     return act;
-};
+}
+exports.create = create;
+;
 
 
 /***/ }),
-/* 17 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_instanceCommands_1 = __webpack_require__(7);
-$2sxc._commands.instanceEngine = function (sxc, editContext) {
+var commands_instanceCommands_1 = __webpack_require__(9);
+function instanceEngine(sxc, editContext) {
     var engine = {
-        commands: commands_instanceCommands_1.default(editContext),
+        commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
             var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
@@ -1532,11 +1085,479 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
         }
     };
     return engine;
-};
+}
+exports.instanceEngine = instanceEngine;
+;
 
 
 /***/ }),
-/* 18 */
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_definitions_1 = __webpack_require__(7);
+function initializeInstanceCommands(editContext) {
+    var cg = editContext.ContentGroup;
+    return commands_definitions_1.create({
+        canDesign: editContext.User.CanDesign,
+        templateId: cg.TemplateId,
+        contentTypeId: cg.ContentTypeName,
+        isContent: cg.IsContent,
+        queryId: cg.QueryId,
+        appResourcesId: cg.AppResourcesId,
+        appSettingsId: cg.AppSettingsId,
+        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
+    });
+}
+exports.initializeInstanceCommands = initializeInstanceCommands;
+;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var _quickE_positioning_1 = __webpack_require__(2);
+var _quickE_config_1 = __webpack_require__(11);
+function enable() {
+    // build all toolbar html-elements
+    _quickE___1.prepareToolbarInDom();
+    // Cache the panes (because panes can't change dynamically)
+    initPanes();
+}
+;
+/**
+ * start watching for mouse-move
+ */
+function watchMouse() {
+    var refreshTimeout = null;
+    $('body').on('mousemove', function (e) {
+        if (refreshTimeout === null)
+            refreshTimeout = window.setTimeout(function () {
+                requestAnimationFrame(function () {
+                    _quickE_positioning_1.refresh(e);
+                    refreshTimeout = null;
+                });
+            }, 20);
+    });
+}
+;
+function start() {
+    try {
+        _quickE_config_1._readPageConfig();
+        if ($quickE.config.enable) {
+            // initialize first body-offset
+            $quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
+            enable();
+            toggleParts();
+            watchMouse();
+        }
+    }
+    catch (e) {
+        console.error("couldn't start quick-edit", e);
+    }
+}
+;
+/**
+ * cache the panes which can contain modules
+ */
+function initPanes() {
+    $quickE.cachedPanes = $(_quickE___1.selectors.mod.listSelector);
+    $quickE.cachedPanes.addClass('sc-cb-pane-glow');
+}
+;
+/**
+ * enable/disable module/content-blocks as configured
+ */
+function toggleParts() {
+    //// content blocks actions
+    //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
+    //// module actions
+    //$quickE.modActions.hide($quickE.config.modules.enable);
+}
+;
+/**
+ * reset the quick-edit
+ * for example after ajax-loading a content-block, which may cause changed configurations
+ */
+function reset() {
+    _quickE_config_1._readPageConfig();
+    toggleParts();
+}
+exports.reset = reset;
+;
+/**
+ * run on-load
+ */
+$(start);
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var configAttr = "quick-edit-config";
+/**
+ * the initial configuration
+ */
+var conf = $quickE.config = {
+    enable: true,
+    innerBlocks: {
+        enable: null // default: auto-detect
+    },
+    modules: {
+        enable: null // default: auto-detect
+    }
+};
+function _readPageConfig() {
+    var configs = $("[" + configAttr + "]");
+    var finalConfig = {};
+    var confJ;
+    var confO;
+    // any inner blocks found? will currently affect if modules can be inserted...
+    var hasInnerCBs = ($(_quickE___1.selectors.cb.listSelector).length > 0);
+    if (configs.length > 0) {
+        // go through reverse list, as the last is the most important...
+        for (var c = configs.length; c >= 0; c--) {
+            confJ = configs[0].getAttribute(configAttr);
+            try {
+                confO = JSON.parse(confJ);
+                $.extend(finalConfig, confO);
+            }
+            catch (e) {
+                console.warn('had trouble with json', e);
+            }
+        }
+        $.extend(conf, finalConfig);
+    }
+    // re-check "auto" or "null"
+    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
+    if (conf.modules.enable === null || conf.modules.enable === 'auto')
+        conf.modules.enable = !hasInnerCBs;
+    // for now, ContentBlocks are only enabled if they exist on the page
+    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
+        conf.innerBlocks.enable = hasInnerCBs;
+}
+exports._readPageConfig = _readPageConfig;
+;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var _quickE_modManage_1 = __webpack_require__(3);
+var mm = new _quickE_modManage_1.modManage();
+var cb = /** @class */ (function () {
+    function cb() {
+    }
+    cb.prototype.delete = function (clip) {
+        return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
+    };
+    cb.create = function (parent, field, index, appOrContent, list, newGuid) {
+        return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
+    };
+    return cb;
+}());
+exports.cb = cb;
+var mod = /** @class */ (function () {
+    function mod() {
+    }
+    mod.prototype.delete = function (clip) {
+        if (!confirm('are you sure?'))
+            return;
+        var modId = mm.getModuleId(clip.item.className);
+        mm.delete(modId);
+    };
+    // todo: unsure if this is a good place for this bit of code...
+    mod.move = function (oldClip, newClip, from, to) {
+        var modId = mm.getModuleId(oldClip.item.className);
+        var pane = mm.getPaneName(newClip.list);
+        mm.move(modId, pane, to);
+    };
+    mod.sendToPane = function () {
+        var pane = $quickE.main.actionsForModule.closest(_quickE___1.selectors.mod.listSelector);
+        // show the pane-options
+        var pl = $quickE.selected.find('#paneList');
+        if (!pl.is(':empty'))
+            pl.empty();
+        pl.append(mm.getMoveButtons(mm.getPaneName(pane)));
+    };
+    return mod;
+}());
+exports.mod = mod;
+;
+var CmdsStrategyFactory = /** @class */ (function () {
+    function CmdsStrategyFactory() {
+        this.cmds = {};
+        this.cmds['cb'] = new cb();
+        this.cmds['mod'] = new mod();
+    }
+    CmdsStrategyFactory.prototype.getCmds = function (cliptype) {
+        return this.cmds[cliptype];
+    };
+    CmdsStrategyFactory.prototype.delete = function (clip) {
+        return this.cmds[clip.type].delete(clip);
+    };
+    return CmdsStrategyFactory;
+}());
+exports.CmdsStrategyFactory = CmdsStrategyFactory;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(14);
+__webpack_require__(4);
+__webpack_require__(5);
+__webpack_require__(6);
+__webpack_require__(15);
+__webpack_require__(16);
+__webpack_require__(7);
+__webpack_require__(8);
+__webpack_require__(9);
+__webpack_require__(17);
+__webpack_require__(18);
+__webpack_require__(19);
+__webpack_require__(20);
+__webpack_require__(21);
+__webpack_require__(22);
+__webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(26);
+__webpack_require__(27);
+__webpack_require__(28);
+__webpack_require__(29);
+__webpack_require__(30);
+__webpack_require__(31);
+__webpack_require__(32);
+__webpack_require__(33);
+__webpack_require__(34);
+__webpack_require__(35);
+__webpack_require__(36);
+__webpack_require__(37);
+__webpack_require__(38);
+__webpack_require__(39);
+__webpack_require__(40);
+__webpack_require__(41);
+__webpack_require__(42);
+__webpack_require__(43);
+__webpack_require__(44);
+__webpack_require__(45);
+__webpack_require__(46);
+__webpack_require__(47);
+__webpack_require__(48);
+__webpack_require__(0);
+__webpack_require__(1);
+__webpack_require__(12);
+__webpack_require__(11);
+__webpack_require__(49);
+__webpack_require__(3);
+__webpack_require__(50);
+__webpack_require__(2);
+__webpack_require__(10);
+__webpack_require__(51);
+__webpack_require__(52);
+__webpack_require__(53);
+__webpack_require__(54);
+__webpack_require__(55);
+__webpack_require__(56);
+__webpack_require__(57);
+__webpack_require__(58);
+__webpack_require__(59);
+__webpack_require__(60);
+__webpack_require__(61);
+__webpack_require__(62);
+module.exports = __webpack_require__(63);
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+/*
+ * Author: Alex Gibson
+ * https://github.com/alexgibson/shake.js
+ * License: MIT license
+ */
+(function (global, factory) {
+    global.Shake = factory(global, global.document);
+}(typeof window !== 'undefined' ? window : this, function (window, document) {
+    'use strict';
+    function Shake(options) {
+        //feature detect
+        this.hasDeviceMotion = 'ondevicemotion' in window;
+        this.options = {
+            threshold: 15,
+            timeout: 1000,
+            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
+        };
+        if (typeof options === 'object') {
+            for (var i in options) {
+                if (options.hasOwnProperty(i)) {
+                    this.options[i] = options[i];
+                }
+            }
+        }
+        //use date to prevent multiple shakes firing
+        this.lastTime = new Date();
+        //accelerometer values
+        this.lastX = null;
+        this.lastY = null;
+        this.lastZ = null;
+    }
+    //reset timer values
+    Shake.prototype.reset = function () {
+        this.lastTime = new Date();
+        this.lastX = null;
+        this.lastY = null;
+        this.lastZ = null;
+    };
+    //start listening for devicemotion
+    Shake.prototype.start = function () {
+        this.reset();
+        if (this.hasDeviceMotion) {
+            window.addEventListener('devicemotion', this, false);
+        }
+    };
+    //stop listening for devicemotion
+    Shake.prototype.stop = function () {
+        if (this.hasDeviceMotion) {
+            window.removeEventListener('devicemotion', this, false);
+        }
+        this.reset();
+    };
+    //calculates if shake did occur
+    Shake.prototype.devicemotion = function (e) {
+        var current = e.accelerationIncludingGravity;
+        var currentTime;
+        var timeDifference;
+        var deltaX = 0;
+        var deltaY = 0;
+        var deltaZ = 0;
+        if ((this.lastX === null) && (this.lastY === null) && (this.lastZ === null)) {
+            this.lastX = current.x;
+            this.lastY = current.y;
+            this.lastZ = current.z;
+            return;
+        }
+        deltaX = Math.abs(this.lastX - current.x);
+        deltaY = Math.abs(this.lastY - current.y);
+        deltaZ = Math.abs(this.lastZ - current.z);
+        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
+            //calculate time in milliseconds since last shake registered
+            currentTime = new Date();
+            timeDifference = currentTime.getTime() - this.lastTime.getTime();
+            if (timeDifference > this.options.timeout) {
+                // once triggered, execute  the callback
+                if (typeof this.options.callback === 'function') {
+                    this.options.callback();
+                }
+                else
+                    console.log("shake event without callback detected");
+                this.lastTime = new Date();
+            }
+        }
+        this.lastX = current.x;
+        this.lastY = current.y;
+        this.lastZ = current.z;
+    };
+    //event handler
+    Shake.prototype.handleEvent = function (e) {
+        if (typeof (this[e.type]) === 'function') {
+            return this[e.type](e);
+        }
+    };
+    return Shake;
+}));
+//# sourceMappingURL=shake.js.map
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+(function () {
+    if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
+        return false;
+    }
+    $2sxc.c = $2sxc.consts = {
+        // classes
+        cls: {
+            scMenu: "sc-menu",
+            scCb: "sc-content-block",
+            scElm: "sc-element"
+        },
+        // attribs
+        attr: {
+            toolbar: "toolbar",
+            toolbarData: "data-toolbar",
+            settings: "settings",
+            settingsData: "data-settings"
+        },
+        publishAllowed: "DraftOptional"
+    };
+    // selectors
+    var sel = $2sxc.c.sel = {};
+    Object.keys($2sxc.c.cls).forEach(function (key, index) {
+        sel[key] = "." + $2sxc.c.cls[key];
+    });
+    /*
+    ToDo: functional programming
+    $2sxc.c.sel = Object.entries($2sxc.c.cls).reduce((res, current) => {
+        res[entry[0]] = entry[1];
+        return t;
+    }, {});
+    */
+})();
+
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+// this enhances the $2sxc client controller with stuff only needed when logged in
+(function () {
+    if (!(window.$2sxc /*|| window.$2sxc.system*/)) {
+        return;
+    }
+    $2sxc.system = {
+        finishUpgrade: finishUpgrade
+    };
+    // upgrade command - started when an error contains a link to start this
+    function finishUpgrade(domElement) {
+        var mc = $2sxc(domElement);
+        $.ajax({
+            type: "get",
+            url: mc.resolveServiceUrl("view/module/finishinstallation"),
+            beforeSend: $.ServicesFramework(mc.id).setModuleHeaders
+        }).success(function () {
+            alert("Upgrade ok, restarting the CMS and reloading...");
+            location.reload();
+        });
+        alert("starting upgrade. This could take a few minutes. You'll see an 'ok' when it's done. Please wait...");
+    }
+})();
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports) {
 
 /*
@@ -1567,7 +1588,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /*
@@ -1640,7 +1661,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 // contains commands to create/move/delete a contentBlock in a page
@@ -1711,13 +1732,13 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE_start_1 = __webpack_require__(8);
+var _quickE_start_1 = __webpack_require__(10);
 /*
  * this is the content block manager in the browser
  *
@@ -1795,7 +1816,7 @@ var _quickE_start_1 = __webpack_require__(8);
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /*
@@ -1875,7 +1896,7 @@ var _quickE_start_1 = __webpack_require__(8);
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /*
@@ -1950,7 +1971,7 @@ var _quickE_start_1 = __webpack_require__(8);
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1965,7 +1986,7 @@ exports.default = ContentBlock;
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1980,7 +2001,7 @@ exports.default = ContentGroup;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1995,7 +2016,7 @@ exports.default = DataEditContext;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2010,7 +2031,7 @@ exports.default = Environment;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2025,7 +2046,7 @@ exports.default = Error;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2040,7 +2061,7 @@ exports.default = Language;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2055,7 +2076,7 @@ exports.default = ParametersEntity;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2070,7 +2091,7 @@ exports.default = User;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports) {
 
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -2088,7 +2109,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -2114,7 +2135,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports) {
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
@@ -2150,6 +2171,12 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
 /* 35 */
 /***/ (function(module, exports) {
 
@@ -2159,13 +2186,13 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 36 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 37 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -2196,12 +2223,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 42 */
 /***/ (function(module, exports) {
 
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports) {
-
 (function () {
     $2sxc._lib = {
         extend: function extend() {
@@ -2216,7 +2237,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -2233,7 +2254,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2341,9 +2362,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 46 */
-/***/ (function(module, exports) {
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_engine_1 = __webpack_require__(8);
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
 // all in-page toolbars etc.
 // if loaded, it's found under the $2sxc(module).manage
@@ -2365,7 +2390,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
     function initInstance(sxc) {
         var editContext = mngApi.getEditContext(sxc);
         var userInfo = mngApi.getUserOfEditContext(editContext);
-        var cmdEngine = $2sxc._commands.instanceEngine(sxc, editContext);
+        var cmdEngine = commands_engine_1.instanceEngine(sxc, editContext);
         var editManager = sxc.manage = {
             //#region Official, public properties and commands, which are stable for use from the outside
             /**
@@ -2442,7 +2467,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -2486,7 +2511,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -2513,7 +2538,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports) {
 
 // this is a dialog manager which is in charge of all
@@ -2761,7 +2786,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2795,7 +2820,7 @@ $quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2825,7 +2850,7 @@ $quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports) {
 
 /*
@@ -2926,7 +2951,7 @@ $quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2938,7 +2963,7 @@ $quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -2953,7 +2978,7 @@ $(function () {
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -2970,7 +2995,7 @@ $(function () {
 
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3060,7 +3085,7 @@ $(function () {
 
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3103,7 +3128,7 @@ $(function () {
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3140,7 +3165,7 @@ $(function () {
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3369,7 +3394,7 @@ $(function () {
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3389,7 +3414,7 @@ $(function () {
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports) {
 
 // the default / initial buttons in a standard toolbar
@@ -3455,7 +3480,7 @@ $(function () {
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3495,7 +3520,7 @@ window.i18nextXHRBackend = __webpack_require__(5);
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports) {
 
 // provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
@@ -3508,7 +3533,7 @@ window.i18nextXHRBackend = __webpack_require__(5);
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports) {
 
 // module & toolbar bootstrapping (initialize all toolbars after loading page)

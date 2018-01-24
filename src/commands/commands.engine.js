@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
-$2sxc._commands.instanceEngine = function (sxc, editContext) {
+function instanceEngine(sxc, editContext) {
     var engine = {
-        commands: commands_instanceCommands_1.default(editContext),
+        commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
             var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
@@ -135,5 +135,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
         }
     };
     return engine;
-};
+}
+exports.instanceEngine = instanceEngine;
+;
 //# sourceMappingURL=commands.engine.js.map
