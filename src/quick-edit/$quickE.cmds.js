@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = require("./$quickE.{}");
 var _quickE_modManage_1 = require("./$quickE.modManage");
 var mm = new _quickE_modManage_1.default();
 $quickE.cmds = {
@@ -25,7 +26,7 @@ $quickE.cmds = {
             mm.move(modId, pane, to);
         },
         sendToPane: function () {
-            var pane = $quickE.main.actionsForModule.closest($quickE.selectors.mod.listSelector);
+            var pane = $quickE.main.actionsForModule.closest(_quickE___1.selectors.mod.listSelector);
             // show the pane-options
             var pl = $quickE.selected.find("#paneList");
             if (!pl.is(":empty"))

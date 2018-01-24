@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = require("./$quickE.{}");
 var _quickE_positioning_1 = require("./$quickE.positioning");
 function enable() {
     // build all toolbar html-elements
-    $quickE.prepareToolbarInDom();
+    _quickE___1.prepareToolbarInDom();
     // Cache the panes (because panes can't change dynamically)
     initPanes();
 }
@@ -44,7 +45,7 @@ function start() {
  * cache the panes which can contain modules
  */
 function initPanes() {
-    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
+    $quickE.cachedPanes = $(_quickE___1.selectors.mod.listSelector);
     $quickE.cachedPanes.addClass('sc-cb-pane-glow');
 }
 ;

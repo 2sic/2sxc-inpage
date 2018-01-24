@@ -1,8 +1,9 @@
-﻿import { getBodyPosition, refresh } from './$quickE.positioning';
+﻿import { selectors, prepareToolbarInDom } from './$quickE.{}';
+import { getBodyPosition, refresh } from './$quickE.positioning';
 
 function enable(): void {
   // build all toolbar html-elements
-  $quickE.prepareToolbarInDom();
+  prepareToolbarInDom();
 
   // Cache the panes (because panes can't change dynamically)
   initPanes();
@@ -46,7 +47,7 @@ function start(): void {
  * cache the panes which can contain modules
  */
 function initPanes(): void {
-  $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
+  $quickE.cachedPanes = $(selectors.mod.listSelector);
   $quickE.cachedPanes.addClass('sc-cb-pane-glow');
 };
 
@@ -65,7 +66,7 @@ function toggleParts(): void {
  * reset the quick-edit
  * for example after ajax-loading a content-block, which may cause changed configurations
  */
-export function reset() {
+export function reset(): void {
   $quickE._readPageConfig();
   toggleParts();
 };

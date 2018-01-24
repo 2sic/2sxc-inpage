@@ -1,4 +1,5 @@
-﻿import { positionAndAlign, getCoordinates } from './$quickE.positioning';
+﻿import { selectors } from './$quickE.{}';
+import { positionAndAlign, getCoordinates } from './$quickE.positioning';
 
 // add a clipboard to the quick edit
 
@@ -22,10 +23,10 @@ $quickE.copyPasteInPage = function (cbAction, list, index, type) {
 
       // cb-numbering is a bit different, because the selector is at the bottom
       // only there we should also skip on +1;
-      if (newClip.type === $quickE.selectors.cb.id && from + 1 === to)
+      if (newClip.type === selectors.cb.id && from + 1 === to)
         return $quickE.clipboard.clear(); // don't do anything
 
-      if (type === $quickE.selectors.cb.id) {
+      if (type === selectors.cb.id) {
         $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
       } else {
         $quickE.cmds.mod.move($quickE.clipboard.data, newClip, from, to);
@@ -47,26 +48,26 @@ $quickE.clipboard = {
         return $quickE.clipboard.clear();
       $quickE.clipboard.data = newData;
     }
-    $("." + $quickE.selectors.selected).removeClass($quickE.selectors.selected); // clear previous markings
+    $("." + selectors.selected).removeClass(selectors.selected); // clear previous markings
     var cb = $($quickE.clipboard.data.item);
-    cb.addClass($quickE.selectors.selected);
+    cb.addClass(selectors.selected);
     if (cb.prev().is("iframe"))
-      cb.prev().addClass($quickE.selectors.selected);
+      cb.prev().addClass(selectors.selected);
     $quickE.setSecondaryActionsState(true);
     $quickE.selected.toggle(cb, $quickE.clipboard.data.type);
   },
   clear: function () {
-    $("." + $quickE.selectors.selected).removeClass($quickE.selectors.selected);
+    $("." + selectors.selected).removeClass(selectors.selected);
     $quickE.clipboard.data = null;
     $quickE.setSecondaryActionsState(false);
     $quickE.selected.toggle(false);
   },
 
   createSpecs: function (type, list, index) {
-    var listItems = list.find($quickE.selectors[type].selector);
+    var listItems = list.find(selectors[type].selector);
     if (index >= listItems.length) index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
     var currentItem = listItems[index];
-    var editContext = JSON.parse(list.attr($quickE.selectors.cb.context) || null) || { parent: "dnn", field: list.id };
+    var editContext = JSON.parse(list.attr(selectors.cb.context) || null) || { parent: "dnn", field: list.id };
     return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
   }
 };

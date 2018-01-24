@@ -1,8 +1,9 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = require("./$quickE.{}");
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Point is used as return type to store X,Y coordinates
  */
@@ -36,18 +37,18 @@ function refreshDomObjects() {
     $quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
     //// Cache the panes (because panes can't change dynamically)
     //if (!$quickE.cachedPanes)
-    //    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
+    //    $quickE.cachedPanes = $(selectors.mod.listSelector);
     if ($quickE.config.innerBlocks.enable) {
         // get all content-block lists which are empty, or which allow multiple child-items
-        var lists = $($quickE.selectors.cb.listSelector)
-            .filter(':not(.' + $quickE.selectors.cb.singleItem + '), :empty');
-        $quickE.contentBlocks = lists // $($quickE.selectors.cb.listSelector)
-            .find($quickE.selectors.cb.selector)
-            .add(lists); // $quickE.selectors.cb.listSelector);
+        var lists = $(_quickE___1.selectors.cb.listSelector)
+            .filter(':not(.' + _quickE___1.selectors.cb.singleItem + '), :empty');
+        $quickE.contentBlocks = lists // $(selectors.cb.listSelector)
+            .find(_quickE___1.selectors.cb.selector)
+            .add(lists); // selectors.cb.listSelector);
     }
     if ($quickE.config.modules.enable)
         $quickE.modules = $quickE.cachedPanes
-            .find($quickE.selectors.mod.selector)
+            .find(_quickE___1.selectors.mod.selector)
             .add($quickE.cachedPanes);
 }
 /**
@@ -89,8 +90,8 @@ function refresh(e) {
     if ($quickE.nearestCb !== null || $quickE.nearestMod !== null) {
         var alignTo = $quickE.nearestCb || $quickE.nearestMod;
         // find parent pane to highlight
-        var parentPane = $(alignTo.element).closest($quickE.selectors.mod.listSelector);
-        var parentCbList = $(alignTo.element).closest($quickE.selectors.cb.listSelector);
+        var parentPane = $(alignTo.element).closest(_quickE___1.selectors.mod.listSelector);
+        var parentCbList = $(alignTo.element).closest(_quickE___1.selectors.cb.listSelector);
         var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
         // put part of the pane-name into the button-labels
         if (parentPane.length > 0) {
@@ -150,7 +151,7 @@ function getCoordinates(element) {
         y: element.offset().top,
         // For content-block ITEMS, the menu must be visible at the end
         // For content-block-LISTS, the menu must be at top
-        yh: element.offset().top + (element.is($quickE.selectors.eitherCbOrMod) ? element.height() : 0)
+        yh: element.offset().top + (element.is(_quickE___1.selectors.eitherCbOrMod) ? element.height() : 0)
     };
 }
 exports.getCoordinates = getCoordinates;

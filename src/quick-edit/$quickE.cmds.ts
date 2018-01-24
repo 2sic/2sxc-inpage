@@ -1,4 +1,5 @@
-﻿import modManage from './$quickE.modManage';
+﻿import { selectors } from './$quickE.{}';
+import modManage from './$quickE.modManage';
 var mm = new modManage();
 
 // extend the quick edit with the core commands
@@ -41,7 +42,7 @@ $quickE.cmds = {
       mm.move(modId, pane, to);
     },
     sendToPane: function() {
-      var pane = $quickE.main.actionsForModule.closest($quickE.selectors.mod.listSelector);
+      var pane = $quickE.main.actionsForModule.closest(selectors.mod.listSelector);
 
       // show the pane-options
       var pl = $quickE.selected.find("#paneList");

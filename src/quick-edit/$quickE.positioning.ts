@@ -1,4 +1,6 @@
-﻿/**
+﻿import { selectors } from './$quickE.{}';
+
+/**
  * Module with everything related to positioning the quick-edit in-page editing
  */
 
@@ -34,19 +36,19 @@ function refreshDomObjects(): void {
 
   //// Cache the panes (because panes can't change dynamically)
   //if (!$quickE.cachedPanes)
-  //    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
+  //    $quickE.cachedPanes = $(selectors.mod.listSelector);
 
   if ($quickE.config.innerBlocks.enable) {
     // get all content-block lists which are empty, or which allow multiple child-items
-    var lists = $($quickE.selectors.cb.listSelector)
-      .filter(':not(.' + $quickE.selectors.cb.singleItem + '), :empty');
-    $quickE.contentBlocks = lists // $($quickE.selectors.cb.listSelector)
-      .find($quickE.selectors.cb.selector)
-      .add(lists);// $quickE.selectors.cb.listSelector);
+    var lists = $(selectors.cb.listSelector)
+      .filter(':not(.' + selectors.cb.singleItem + '), :empty');
+    $quickE.contentBlocks = lists // $(selectors.cb.listSelector)
+      .find(selectors.cb.selector)
+      .add(lists);// selectors.cb.listSelector);
   }
   if ($quickE.config.modules.enable)
     $quickE.modules = $quickE.cachedPanes
-      .find($quickE.selectors.mod.selector)
+      .find(selectors.mod.selector)
       .add($quickE.cachedPanes);
 }
 
@@ -96,8 +98,8 @@ export function refresh(e) {
     var alignTo = $quickE.nearestCb || $quickE.nearestMod;
 
     // find parent pane to highlight
-    var parentPane = $(alignTo.element).closest($quickE.selectors.mod.listSelector);
-    var parentCbList = $(alignTo.element).closest($quickE.selectors.cb.listSelector);
+    var parentPane = $(alignTo.element).closest(selectors.mod.listSelector);
+    var parentCbList = $(alignTo.element).closest(selectors.cb.listSelector);
     var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
 
     // put part of the pane-name into the button-labels
@@ -165,6 +167,6 @@ export function getCoordinates(element: any): Coords {
     y: element.offset().top,
     // For content-block ITEMS, the menu must be visible at the end
     // For content-block-LISTS, the menu must be at top
-    yh: element.offset().top + (element.is($quickE.selectors.eitherCbOrMod) ? element.height() : 0)
+    yh: element.offset().top + (element.is(selectors.eitherCbOrMod) ? element.height() : 0)
   };
 };

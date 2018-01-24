@@ -1,14 +1,4 @@
-﻿interface IConf {
-  enable: boolean;
-  innerBlocks: {
-    enable: boolean | string | null;
-  },
-  modules: {
-    enable: boolean | string | null;
-  };
-  getAttribute?(configAttr: string): any;
-  guid?: any;
-}
+﻿import { selectors } from './$quickE.{}';
 
 var configAttr = "quick-edit-config";
 
@@ -30,7 +20,7 @@ $quickE._readPageConfig = function () {
   var confO: IConf;
 
   // any inner blocks found? will currently affect if modules can be inserted...
-  var hasInnerCBs: boolean = ($($quickE.selectors.cb.listSelector).length > 0);
+  var hasInnerCBs: boolean = ($(selectors.cb.listSelector).length > 0);
 
   if (configs.length > 0) {
     // go through reverse list, as the last is the most important...

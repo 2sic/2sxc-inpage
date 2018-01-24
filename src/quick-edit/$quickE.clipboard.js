@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = require("./$quickE.{}");
 var _quickE_positioning_1 = require("./$quickE.positioning");
 // add a clipboard to the quick edit
 // perform copy and paste commands - needs the clipboard
@@ -19,9 +20,9 @@ $quickE.copyPasteInPage = function (cbAction, list, index, type) {
                 return $quickE.clipboard.clear(); // don't do anything
             // cb-numbering is a bit different, because the selector is at the bottom
             // only there we should also skip on +1;
-            if (newClip.type === $quickE.selectors.cb.id && from + 1 === to)
+            if (newClip.type === _quickE___1.selectors.cb.id && from + 1 === to)
                 return $quickE.clipboard.clear(); // don't do anything
-            if (type === $quickE.selectors.cb.id) {
+            if (type === _quickE___1.selectors.cb.id) {
                 $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
             }
             else {
@@ -43,26 +44,26 @@ $quickE.clipboard = {
                 return $quickE.clipboard.clear();
             $quickE.clipboard.data = newData;
         }
-        $("." + $quickE.selectors.selected).removeClass($quickE.selectors.selected); // clear previous markings
+        $("." + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected); // clear previous markings
         var cb = $($quickE.clipboard.data.item);
-        cb.addClass($quickE.selectors.selected);
+        cb.addClass(_quickE___1.selectors.selected);
         if (cb.prev().is("iframe"))
-            cb.prev().addClass($quickE.selectors.selected);
+            cb.prev().addClass(_quickE___1.selectors.selected);
         $quickE.setSecondaryActionsState(true);
         $quickE.selected.toggle(cb, $quickE.clipboard.data.type);
     },
     clear: function () {
-        $("." + $quickE.selectors.selected).removeClass($quickE.selectors.selected);
+        $("." + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected);
         $quickE.clipboard.data = null;
         $quickE.setSecondaryActionsState(false);
         $quickE.selected.toggle(false);
     },
     createSpecs: function (type, list, index) {
-        var listItems = list.find($quickE.selectors[type].selector);
+        var listItems = list.find(_quickE___1.selectors[type].selector);
         if (index >= listItems.length)
             index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
         var currentItem = listItems[index];
-        var editContext = JSON.parse(list.attr($quickE.selectors.cb.context) || null) || { parent: "dnn", field: list.id };
+        var editContext = JSON.parse(list.attr(_quickE___1.selectors.cb.context) || null) || { parent: "dnn", field: list.id };
         return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
     }
 };

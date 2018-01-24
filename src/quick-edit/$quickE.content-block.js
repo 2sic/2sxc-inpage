@@ -1,17 +1,22 @@
-// content-block specific stuff like actions
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = require("./$quickE.{}");
+/**
+ * content-block specific stuff like actions
+ */
 function onCbButtonClick() {
-    var list = $quickE.main.actionsForCb.closest($quickE.selectors.cb.listSelector);
-    var listItems = list.find($quickE.selectors.cb.selector);
-    var actionConfig = JSON.parse(list.attr($quickE.selectors.cb.context));
+    var list = $quickE.main.actionsForCb.closest(_quickE___1.selectors.cb.listSelector);
+    var listItems = list.find(_quickE___1.selectors.cb.selector);
+    var actionConfig = JSON.parse(list.attr(_quickE___1.selectors.cb.context));
     var index = 0;
     var newGuid = actionConfig.guid || null;
-    if ($quickE.main.actionsForCb.hasClass($quickE.selectors.cb.class))
+    if ($quickE.main.actionsForCb.hasClass(_quickE___1.selectors.cb.class))
         index = listItems.index($quickE.main.actionsForCb[0]) + 1;
     // check cut/paste
     var cbAction = $(this).data("action");
     if (cbAction) {
         // this is a cut/paste action
-        return $quickE.copyPasteInPage(cbAction, list, index, $quickE.selectors.cb.id);
+        return $quickE.copyPasteInPage(cbAction, list, index, _quickE___1.selectors.cb.id);
     }
     else {
         var appOrContent = $(this).data("type");

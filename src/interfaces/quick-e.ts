@@ -4,7 +4,7 @@ interface i$quickE {
   reset: any;
   copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
   clipboard: IClipboard;
-  selectors: ISelectors;
+  //selectors: Selectors;
   cmds: any;
   setSecondaryActionsState(state: boolean): void;
   selected: ISelected;
@@ -31,12 +31,12 @@ interface i$quickE {
   nearestMod: any;
   win: any;
   enable: any;
-  prepareToolbarInDom: Function;
+  //prepareToolbarInDom: Function;
   initPanes: any;
   watchMouse: any;
   start: any;
   toggleParts: any;
-  btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?:boolean, classes?: string): string;
+  //btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?:boolean, classes?: string): string;
   template: string;
 }
 
@@ -63,4 +63,16 @@ interface ISelected {
   hide(): void;
   target: any;
   find(selector: string): any;
+}
+
+interface IConf {
+  enable: boolean;
+  innerBlocks: {
+    enable: boolean | string | null;
+  },
+  modules: {
+    enable: boolean | string | null;
+  };
+  getAttribute?(configAttr: string): any;
+  guid?: any;
 }
