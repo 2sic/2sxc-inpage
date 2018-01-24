@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -409,17 +409,95 @@ exports.default = initializeInstanceCommands;
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(7);
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE_positioning_1 = __webpack_require__(0);
+function enable() {
+    // build all toolbar html-elements
+    $quickE.prepareToolbarInDom();
+    // Cache the panes (because panes can't change dynamically)
+    initPanes();
+}
+;
+/**
+ * start watching for mouse-move
+ */
+function watchMouse() {
+    var refreshTimeout = null;
+    $('body').on('mousemove', function (e) {
+        if (refreshTimeout === null)
+            refreshTimeout = window.setTimeout(function () {
+                requestAnimationFrame(function () {
+                    _quickE_positioning_1.refresh(e);
+                    refreshTimeout = null;
+                });
+            }, 20);
+    });
+}
+;
+function start() {
+    try {
+        $quickE._readPageConfig();
+        if ($quickE.config.enable) {
+            // initialize first body-offset
+            $quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
+            enable();
+            toggleParts();
+            watchMouse();
+        }
+    }
+    catch (e) {
+        console.error("couldn't start quick-edit", e);
+    }
+}
+;
+/**
+ * cache the panes which can contain modules
+ */
+function initPanes() {
+    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
+    $quickE.cachedPanes.addClass('sc-cb-pane-glow');
+}
+;
+/**
+ * enable/disable module/content-blocks as configured
+ */
+function toggleParts() {
+    //// content blocks actions
+    //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
+    //// module actions
+    //$quickE.modActions.hide($quickE.config.modules.enable);
+}
+;
+/**
+ * reset the quick-edit
+ * for example after ajax-loading a content-block, which may cause changed configurations
+ */
+function reset() {
+    $quickE._readPageConfig();
+    toggleParts();
+}
+exports.reset = reset;
+;
+// run on-load
+$(start);
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(8);
 __webpack_require__(2);
 __webpack_require__(3);
 __webpack_require__(4);
-__webpack_require__(8);
 __webpack_require__(9);
 __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
-__webpack_require__(5);
 __webpack_require__(13);
+__webpack_require__(5);
 __webpack_require__(14);
 __webpack_require__(15);
 __webpack_require__(16);
@@ -456,10 +534,11 @@ __webpack_require__(46);
 __webpack_require__(47);
 __webpack_require__(48);
 __webpack_require__(49);
-__webpack_require__(1);
 __webpack_require__(50);
-__webpack_require__(0);
+__webpack_require__(1);
 __webpack_require__(51);
+__webpack_require__(0);
+__webpack_require__(6);
 __webpack_require__(52);
 __webpack_require__(53);
 __webpack_require__(54);
@@ -476,7 +555,7 @@ module.exports = __webpack_require__(64);
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /*
@@ -577,7 +656,7 @@ module.exports = __webpack_require__(64);
 //# sourceMappingURL=shake.js.map
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -617,7 +696,7 @@ module.exports = __webpack_require__(64);
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
@@ -645,14 +724,14 @@ module.exports = __webpack_require__(64);
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 $2sxc._commands = {};
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /*
@@ -969,7 +1048,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1114,7 +1193,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /*
@@ -1145,7 +1224,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /*
@@ -1218,7 +1297,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 // contains commands to create/move/delete a contentBlock in a page
@@ -1289,9 +1368,13 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports) {
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE_start_1 = __webpack_require__(6);
 /*
  * this is the content block manager in the browser
  *
@@ -1341,7 +1424,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
             .then(function (result) {
             return cbm.replaceCb(sxc, result, justPreview);
         })
-            .then($quickE.reset); // reset quick-edit, because the config could have changed
+            .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
     };
     // this one assumes a replace / change has already happened, but now must be finalized...
     cbm.reloadAndReInitialize = function (sxc, forceAjax, preview) {
@@ -1369,7 +1452,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /*
@@ -1449,7 +1532,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /*
@@ -1524,7 +1607,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1539,7 +1622,7 @@ exports.default = ContentBlock;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1554,7 +1637,7 @@ exports.default = ContentGroup;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1569,7 +1652,7 @@ exports.default = DataEditContext;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1584,7 +1667,7 @@ exports.default = Environment;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1599,7 +1682,7 @@ exports.default = Error;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1614,7 +1697,7 @@ exports.default = Language;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1629,7 +1712,7 @@ exports.default = ParametersEntity;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1644,7 +1727,7 @@ exports.default = User;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -1662,7 +1745,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -1688,7 +1771,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
@@ -1724,12 +1807,6 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 30 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 31 */
 /***/ (function(module, exports) {
 
@@ -1739,13 +1816,13 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 32 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 33 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -1776,6 +1853,12 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 38 */
 /***/ (function(module, exports) {
 
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports) {
+
 (function () {
     $2sxc._lib = {
         extend: function extend() {
@@ -1790,7 +1873,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -1807,7 +1890,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1915,7 +1998,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -2016,7 +2099,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -2060,7 +2143,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -2087,7 +2170,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports) {
 
 // this is a dialog manager which is in charge of all
@@ -2335,7 +2418,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 // the quick-edit object
@@ -2401,7 +2484,7 @@ $quickE.prepareToolbarInDom = function () {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2500,7 +2583,7 @@ $("a", $quickE.selected).click(function () {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2543,7 +2626,7 @@ $quickE.cmds = {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 var configAttr = "quick-edit-config";
@@ -2589,7 +2672,7 @@ $quickE._readPageConfig = function () {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports) {
 
 // content-block specific stuff like actions
@@ -2616,7 +2699,7 @@ $quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2636,70 +2719,6 @@ function onModuleButtonClick() {
 }
 // bind module actions click
 $quickE.modActions.click(onModuleButtonClick);
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE_positioning_1 = __webpack_require__(0);
-$quickE.enable = function () {
-    // build all toolbar html-elements
-    $quickE.prepareToolbarInDom();
-    // Cache the panes (because panes can't change dynamically)
-    $quickE.initPanes();
-};
-// start watching for mouse-move
-$quickE.watchMouse = function () {
-    var refreshTimeout = null;
-    $("body").on("mousemove", function (e) {
-        if (refreshTimeout === null)
-            refreshTimeout = window.setTimeout(function () {
-                requestAnimationFrame(function () {
-                    _quickE_positioning_1.refresh(e);
-                    refreshTimeout = null;
-                });
-            }, 20);
-    });
-};
-$quickE.start = function () {
-    try {
-        $quickE._readPageConfig();
-        if ($quickE.config.enable) {
-            // initialize first body-offset
-            $quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
-            $quickE.enable();
-            $quickE.toggleParts();
-            $quickE.watchMouse();
-        }
-    }
-    catch (e) {
-        console.error("couldn't start quick-edit", e);
-    }
-};
-// cache the panes which can contain modules
-$quickE.initPanes = function () {
-    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
-    $quickE.cachedPanes.addClass("sc-cb-pane-glow");
-};
-// enable/disable module/content-blocks as configured
-$quickE.toggleParts = function () {
-    //// content blocks actions
-    //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
-    //// module actions
-    //$quickE.modActions.hide($quickE.config.modules.enable);
-};
-// reset the quick-edit
-// for example after ajax-loading a content-block, which may cause changed configurations
-$quickE.reset = function () {
-    $quickE._readPageConfig();
-    $quickE.toggleParts();
-};
-// run on-load
-$($quickE.start);
 
 
 /***/ }),

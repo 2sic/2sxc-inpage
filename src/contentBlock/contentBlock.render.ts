@@ -1,4 +1,5 @@
-﻿/*
+﻿import { reset } from '../quick-edit/$quickE.start';
+/*
  * this is the content block manager in the browser
  * 
  * A Content Block is a standalone unit of content, with it's own definition of
@@ -51,7 +52,7 @@
             .then(function (result) {
                 return cbm.replaceCb(sxc, result, justPreview);
             })
-            .then($quickE.reset); // reset quick-edit, because the config could have changed
+            .then(reset); // reset quick-edit, because the config could have changed
     };
 
     // this one assumes a replace / change has already happened, but now must be finalized...

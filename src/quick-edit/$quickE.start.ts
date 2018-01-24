@@ -1,18 +1,19 @@
 ﻿import { getBodyPosition, refresh } from './$quickE.positioning';
 
-
-$quickE.enable = function () {
+function enable(): void {
   // build all toolbar html-elements
   $quickE.prepareToolbarInDom();
 
   // Cache the panes (because panes can't change dynamically)
-  $quickE.initPanes();
+  initPanes();
 };
 
-// start watching for mouse-move
-$quickE.watchMouse = function () {
-  var refreshTimeout = null;
-  $("body").on("mousemove", function (e) {
+/**
+ * start watching for mouse-move
+ */
+function watchMouse() {
+  let refreshTimeout: any = null;
+  $('body').on('mousemove', function (e) {
     if (refreshTimeout === null)
       refreshTimeout = window.setTimeout(function () {
         requestAnimationFrame(function () {
@@ -23,32 +24,36 @@ $quickE.watchMouse = function () {
   });
 };
 
-$quickE.start = function () {
+function start(): void {
   try {
     $quickE._readPageConfig();
     if ($quickE.config.enable) {
       // initialize first body-offset
       $quickE.bodyOffset = getBodyPosition();
 
-      $quickE.enable();
+      enable();
 
-      $quickE.toggleParts();
+      toggleParts();
 
-      $quickE.watchMouse();
+      watchMouse();
     }
   } catch (e) {
     console.error("couldn't start quick-edit", e);
   }
 };
 
-// cache the panes which can contain modules
-$quickE.initPanes = function () {
+/**
+ * cache the panes which can contain modules
+ */
+function initPanes(): void {
   $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
-  $quickE.cachedPanes.addClass("sc-cb-pane-glow");
+  $quickE.cachedPanes.addClass('sc-cb-pane-glow');
 };
 
-// enable/disable module/content-blocks as configured
-$quickE.toggleParts = function () {
+/**
+ * enable/disable module/content-blocks as configured
+ */
+function toggleParts(): void {
   //// content blocks actions
   //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
 
@@ -56,12 +61,14 @@ $quickE.toggleParts = function () {
   //$quickE.modActions.hide($quickE.config.modules.enable);
 };
 
-// reset the quick-edit
-// for example after ajax-loading a content-block, which may cause changed configurations
-$quickE.reset = function () {
+/**
+ * reset the quick-edit
+ * for example after ajax-loading a content-block, which may cause changed configurations
+ */
+export function reset() {
   $quickE._readPageConfig();
-  $quickE.toggleParts();
+  toggleParts();
 };
 
 // run on-load
-$($quickE.start);
+$(start);

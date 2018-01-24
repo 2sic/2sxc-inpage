@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE_start_1 = require("../quick-edit/$quickE.start");
 /*
  * this is the content block manager in the browser
  *
@@ -47,7 +50,7 @@
             .then(function (result) {
             return cbm.replaceCb(sxc, result, justPreview);
         })
-            .then($quickE.reset); // reset quick-edit, because the config could have changed
+            .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
     };
     // this one assumes a replace / change has already happened, but now must be finalized...
     cbm.reloadAndReInitialize = function (sxc, forceAjax, preview) {
