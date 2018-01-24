@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -157,6 +157,7 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(0);
 var _quickE_positioning_1 = __webpack_require__(2);
+var _quickE_cmds_1 = __webpack_require__(10);
 /**
  * add a clipboard to the quick edit
  */
@@ -190,7 +191,7 @@ function copyPasteInPage(cbAction, list, index, type) {
                 $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
             }
             else {
-                $quickE.cmds.mod.move(clipboard.data, newClip, from, to);
+                _quickE_cmds_1.mod.move(clipboard.data, newClip, from, to);
             }
             clipboard.clear();
             break;
@@ -200,7 +201,9 @@ function copyPasteInPage(cbAction, list, index, type) {
 }
 exports.copyPasteInPage = copyPasteInPage;
 ;
-// clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
+/**
+ * clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
+ */
 var clipboard;
 (function (clipboard) {
     clipboard.data = {};
@@ -252,15 +255,18 @@ $quickE.selected.toggle = function (target) {
     _quickE_positioning_1.positionAndAlign($quickE.selected, coords);
     $quickE.selected.target = target;
 };
-// bind clipboard actions 
+var cmdsStrategyFactory = new _quickE_cmds_1.CmdsStrategyFactory();
+/**
+ * bind clipboard actions
+ */
 $('a', $quickE.selected).click(function () {
     var action = $(this).data('action');
     var clip = clipboard.data;
     switch (action) {
         case 'delete':
-            return $quickE.cmds[clip.type].delete(clip);
+            return cmdsStrategyFactory.delete(clip);
         case 'sendToPane':
-            return $quickE.cmds.mod.sendToPane(clip);
+            return _quickE_cmds_1.mod.sendToPane();
     }
 });
 
@@ -341,7 +347,10 @@ function positionAndAlign(element, coords) {
 }
 exports.positionAndAlign = positionAndAlign;
 ;
-// Refresh positioning / visibility of the quick-insert bar
+/**
+ * Refresh positioning / visibility of the quick-insert bar
+ * @param e
+ */
 function refresh(e) {
     var highlightClass = 'sc-cb-highlight-for-insert';
     var newDate = new Date();
@@ -392,7 +401,11 @@ function refresh(e) {
 }
 exports.refresh = refresh;
 ;
-// Return the nearest element to the mouse cursor from elements (jQuery elements)
+/**
+ * Return the nearest element to the mouse cursor from elements (jQuery elements)
+ * @param elements
+ * @param position
+ */
 function findNearest(elements, position) {
     var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
     var nearestItem = null;
@@ -452,7 +465,7 @@ var modManage = /** @class */ (function () {
     }
     return modManage;
 }());
-exports.default = modManage;
+exports.modManage = modManage;
 ;
 function getPaneName(pane) {
     return $(pane).attr("id").replace("dnn_", "");
@@ -620,6 +633,7 @@ exports.default = initializeInstanceCommands;
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(0);
 var _quickE_positioning_1 = __webpack_require__(2);
+var _quickE_config_1 = __webpack_require__(9);
 function enable() {
     // build all toolbar html-elements
     _quickE___1.prepareToolbarInDom();
@@ -645,7 +659,7 @@ function watchMouse() {
 ;
 function start() {
     try {
-        $quickE._readPageConfig();
+        _quickE_config_1._readPageConfig();
         if ($quickE.config.enable) {
             // initialize first body-offset
             $quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
@@ -682,12 +696,14 @@ function toggleParts() {
  * for example after ajax-loading a content-block, which may cause changed configurations
  */
 function reset() {
-    $quickE._readPageConfig();
+    _quickE_config_1._readPageConfig();
     toggleParts();
 }
 exports.reset = reset;
 ;
-// run on-load
+/**
+ * run on-load
+ */
 $(start);
 
 
@@ -695,18 +711,136 @@ $(start);
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(10);
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var configAttr = "quick-edit-config";
+/**
+ * the initial configuration
+ */
+var conf = $quickE.config = {
+    enable: true,
+    innerBlocks: {
+        enable: null // default: auto-detect
+    },
+    modules: {
+        enable: null // default: auto-detect
+    }
+};
+function _readPageConfig() {
+    var configs = $("[" + configAttr + "]");
+    var finalConfig = {};
+    var confJ;
+    var confO;
+    // any inner blocks found? will currently affect if modules can be inserted...
+    var hasInnerCBs = ($(_quickE___1.selectors.cb.listSelector).length > 0);
+    if (configs.length > 0) {
+        // go through reverse list, as the last is the most important...
+        for (var c = configs.length; c >= 0; c--) {
+            confJ = configs[0].getAttribute(configAttr);
+            try {
+                confO = JSON.parse(confJ);
+                $.extend(finalConfig, confO);
+            }
+            catch (e) {
+                console.warn('had trouble with json', e);
+            }
+        }
+        $.extend(conf, finalConfig);
+    }
+    // re-check "auto" or "null"
+    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
+    if (conf.modules.enable === null || conf.modules.enable === 'auto')
+        conf.modules.enable = !hasInnerCBs;
+    // for now, ContentBlocks are only enabled if they exist on the page
+    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
+        conf.innerBlocks.enable = hasInnerCBs;
+}
+exports._readPageConfig = _readPageConfig;
+;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var _quickE_modManage_1 = __webpack_require__(3);
+var mm = new _quickE_modManage_1.modManage();
+var cb = /** @class */ (function () {
+    function cb() {
+    }
+    cb.prototype.delete = function (clip) {
+        return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
+    };
+    cb.create = function (parent, field, index, appOrContent, list, newGuid) {
+        return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
+    };
+    return cb;
+}());
+exports.cb = cb;
+var mod = /** @class */ (function () {
+    function mod() {
+    }
+    mod.prototype.delete = function (clip) {
+        if (!confirm('are you sure?'))
+            return;
+        var modId = mm.getModuleId(clip.item.className);
+        mm.delete(modId);
+    };
+    // todo: unsure if this is a good place for this bit of code...
+    mod.move = function (oldClip, newClip, from, to) {
+        var modId = mm.getModuleId(oldClip.item.className);
+        var pane = mm.getPaneName(newClip.list);
+        mm.move(modId, pane, to);
+    };
+    mod.sendToPane = function () {
+        var pane = $quickE.main.actionsForModule.closest(_quickE___1.selectors.mod.listSelector);
+        // show the pane-options
+        var pl = $quickE.selected.find('#paneList');
+        if (!pl.is(':empty'))
+            pl.empty();
+        pl.append(mm.getMoveButtons(mm.getPaneName(pane)));
+    };
+    return mod;
+}());
+exports.mod = mod;
+;
+var CmdsStrategyFactory = /** @class */ (function () {
+    function CmdsStrategyFactory() {
+        this.cmds = {};
+        this.cmds['cb'] = new cb();
+        this.cmds['mod'] = new mod();
+    }
+    CmdsStrategyFactory.prototype.getCmds = function (cliptype) {
+        return this.cmds[cliptype];
+    };
+    CmdsStrategyFactory.prototype.delete = function (clip) {
+        return this.cmds[clip.type].delete(clip);
+    };
+    return CmdsStrategyFactory;
+}());
+exports.CmdsStrategyFactory = CmdsStrategyFactory;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(12);
 __webpack_require__(4);
 __webpack_require__(5);
 __webpack_require__(6);
-__webpack_require__(11);
-__webpack_require__(12);
 __webpack_require__(13);
 __webpack_require__(14);
 __webpack_require__(15);
-__webpack_require__(7);
 __webpack_require__(16);
 __webpack_require__(17);
+__webpack_require__(7);
 __webpack_require__(18);
 __webpack_require__(19);
 __webpack_require__(20);
@@ -737,10 +871,12 @@ __webpack_require__(44);
 __webpack_require__(45);
 __webpack_require__(46);
 __webpack_require__(47);
-__webpack_require__(0);
-__webpack_require__(1);
 __webpack_require__(48);
 __webpack_require__(49);
+__webpack_require__(0);
+__webpack_require__(1);
+__webpack_require__(10);
+__webpack_require__(9);
 __webpack_require__(50);
 __webpack_require__(3);
 __webpack_require__(51);
@@ -762,7 +898,7 @@ module.exports = __webpack_require__(64);
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /*
@@ -863,7 +999,7 @@ module.exports = __webpack_require__(64);
 //# sourceMappingURL=shake.js.map
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -903,7 +1039,7 @@ module.exports = __webpack_require__(64);
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports) {
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
@@ -931,14 +1067,14 @@ module.exports = __webpack_require__(64);
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports) {
 
 $2sxc._commands = {};
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /*
@@ -1255,7 +1391,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1400,7 +1536,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /*
@@ -1431,7 +1567,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /*
@@ -1504,7 +1640,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports) {
 
 // contains commands to create/move/delete a contentBlock in a page
@@ -1575,7 +1711,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1659,7 +1795,7 @@ var _quickE_start_1 = __webpack_require__(8);
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /*
@@ -1739,7 +1875,7 @@ var _quickE_start_1 = __webpack_require__(8);
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /*
@@ -1814,7 +1950,7 @@ var _quickE_start_1 = __webpack_require__(8);
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1829,7 +1965,7 @@ exports.default = ContentBlock;
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1844,7 +1980,7 @@ exports.default = ContentGroup;
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1859,7 +1995,7 @@ exports.default = DataEditContext;
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1874,7 +2010,7 @@ exports.default = Environment;
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1889,7 +2025,7 @@ exports.default = Error;
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1904,7 +2040,7 @@ exports.default = Language;
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1919,7 +2055,7 @@ exports.default = ParametersEntity;
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1934,7 +2070,7 @@ exports.default = User;
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports) {
 
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -1952,7 +2088,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -1978,7 +2114,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports) {
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
@@ -2014,22 +2150,9 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 33 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 35 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -2042,6 +2165,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 37 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -2066,6 +2190,18 @@ var $2sxcActionMenuMapper = function (moduleId) {
 /* 41 */
 /***/ (function(module, exports) {
 
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
 (function () {
     $2sxc._lib = {
         extend: function extend() {
@@ -2080,7 +2216,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -2097,7 +2233,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2205,7 +2341,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports) {
 
 // A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -2306,7 +2442,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -2350,7 +2486,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -2377,7 +2513,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports) {
 
 // this is a dialog manager which is in charge of all
@@ -2625,100 +2761,6 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(0);
-var _quickE_modManage_1 = __webpack_require__(3);
-var mm = new _quickE_modManage_1.default();
-$quickE.cmds = {
-    cb: {
-        delete: function (clip) {
-            return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
-        },
-        create: function (parent, field, index, appOrContent, list, newGuid) {
-            return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
-        }
-    },
-    mod: {
-        delete: function (clip) {
-            if (!confirm("are you sure?"))
-                return;
-            var modId = mm.getModuleId(clip.item.className);
-            mm.delete(modId);
-        },
-        // todo: unsure if this is a good place for this bit of code...
-        move: function (oldClip, newClip, from, to) {
-            var modId = mm.getModuleId(oldClip.item.className);
-            var pane = mm.getPaneName(newClip.list);
-            mm.move(modId, pane, to);
-        },
-        sendToPane: function () {
-            var pane = $quickE.main.actionsForModule.closest(_quickE___1.selectors.mod.listSelector);
-            // show the pane-options
-            var pl = $quickE.selected.find("#paneList");
-            if (!pl.is(":empty"))
-                pl.empty();
-            pl.append(mm.getMoveButtons(mm.getPaneName(pane)));
-        }
-    }
-};
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(0);
-var configAttr = "quick-edit-config";
-// the initial configuration
-var conf = $quickE.config = {
-    enable: true,
-    innerBlocks: {
-        enable: null // default: auto-detect
-    },
-    modules: {
-        enable: null // default: auto-detect
-    }
-};
-$quickE._readPageConfig = function () {
-    var configs = $("[" + configAttr + "]");
-    var finalConfig = {};
-    var confJ;
-    var confO;
-    // any inner blocks found? will currently affect if modules can be inserted...
-    var hasInnerCBs = ($(_quickE___1.selectors.cb.listSelector).length > 0);
-    if (configs.length > 0) {
-        // go through reverse list, as the last is the most important...
-        for (var c = configs.length; c >= 0; c--) {
-            confJ = configs[0].getAttribute(configAttr);
-            try {
-                confO = JSON.parse(confJ);
-                $.extend(finalConfig, confO);
-            }
-            catch (e) {
-                console.warn('had trouble with json', e);
-            }
-        }
-        $.extend(conf, finalConfig);
-    }
-    // re-check "auto" or "null"
-    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-    if (conf.modules.enable === null || conf.modules.enable === 'auto')
-        conf.modules.enable = !hasInnerCBs;
-    // for now, ContentBlocks are only enabled if they exist on the page
-    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
-        conf.innerBlocks.enable = hasInnerCBs;
-};
-
-
-/***/ }),
 /* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2762,7 +2804,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(0);
 var _quickE_clipboard_1 = __webpack_require__(1);
 var _quickE_modManage_1 = __webpack_require__(3);
-var mm = new _quickE_modManage_1.default();
+var mm = new _quickE_modManage_1.modManage();
 /**
  * module specific stuff
  */
@@ -2772,12 +2814,13 @@ function onModuleButtonClick() {
         index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
     var cbAction = $(this).data("action");
     if (cbAction) {
-        debugger;
         return _quickE_clipboard_1.copyPasteInPage(cbAction, pane, index, _quickE___1.selectors.mod.id); // copy/paste
     }
     return mm.create(mm.getPaneName(pane), index, type);
 }
-// bind module actions click
+/**
+ * bind module actions click
+ */
 $quickE.modActions.click(onModuleButtonClick);
 
 

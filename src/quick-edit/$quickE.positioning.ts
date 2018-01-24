@@ -71,7 +71,10 @@ export function positionAndAlign(element: any, coords: Coords) {
   }).show();
 };
 
-// Refresh positioning / visibility of the quick-insert bar
+/**
+ * Refresh positioning / visibility of the quick-insert bar
+ * @param e
+ */
 export function refresh(e) {
   let highlightClass: string = 'sc-cb-highlight-for-insert';
   let newDate: Date = new Date();
@@ -129,7 +132,11 @@ export function refresh(e) {
     $(oldParent).removeClass(highlightClass);
 };
 
-// Return the nearest element to the mouse cursor from elements (jQuery elements)
+/**
+ * Return the nearest element to the mouse cursor from elements (jQuery elements)
+ * @param elements
+ * @param position
+ */
 function findNearest(elements: any, position: Coords): Coords {
   const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
 

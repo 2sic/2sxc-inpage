@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
 var configAttr = "quick-edit-config";
-// the initial configuration
+/**
+ * the initial configuration
+ */
 var conf = $quickE.config = {
     enable: true,
     innerBlocks: {
@@ -12,7 +14,7 @@ var conf = $quickE.config = {
         enable: null // default: auto-detect
     }
 };
-$quickE._readPageConfig = function () {
+function _readPageConfig() {
     var configs = $("[" + configAttr + "]");
     var finalConfig = {};
     var confJ;
@@ -40,5 +42,7 @@ $quickE._readPageConfig = function () {
     // for now, ContentBlocks are only enabled if they exist on the page
     if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
         conf.innerBlocks.enable = hasInnerCBs;
-};
+}
+exports._readPageConfig = _readPageConfig;
+;
 //# sourceMappingURL=$quickE.config.js.map

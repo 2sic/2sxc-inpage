@@ -1,5 +1,6 @@
 ﻿import { selectors, prepareToolbarInDom } from './$quickE.{}';
 import { getBodyPosition, refresh } from './$quickE.positioning';
+import { _readPageConfig } from './$quickE.config';
 
 function enable(): void {
   // build all toolbar html-elements
@@ -27,7 +28,7 @@ function watchMouse() {
 
 function start(): void {
   try {
-    $quickE._readPageConfig();
+    _readPageConfig();
     if ($quickE.config.enable) {
       // initialize first body-offset
       $quickE.bodyOffset = getBodyPosition();
@@ -67,9 +68,11 @@ function toggleParts(): void {
  * for example after ajax-loading a content-block, which may cause changed configurations
  */
 export function reset(): void {
-  $quickE._readPageConfig();
+  _readPageConfig();
   toggleParts();
 };
 
-// run on-load
+/**
+ * run on-load
+ */
 $(start);

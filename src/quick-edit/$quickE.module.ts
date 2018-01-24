@@ -1,7 +1,8 @@
 ﻿import { selectors } from './$quickE.{}';
 import { copyPasteInPage } from './$quickE.clipboard';
-import modManage from './$quickE.modManage';
-var mm = new modManage();
+import { modManage } from './$quickE.modManage';
+
+let mm = new modManage();
 
 /**
  * module specific stuff
@@ -22,5 +23,7 @@ function onModuleButtonClick() {
   return mm.create(mm.getPaneName(pane), index, type);
 }
 
-// bind module actions click
+/**
+ * bind module actions click
+ */
 $quickE.modActions.click(onModuleButtonClick);

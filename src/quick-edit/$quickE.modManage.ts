@@ -4,7 +4,7 @@
  * module specific stuff
  */
 
-export default class modManage {
+export class modManage {
   delete = deleteMod;
   create = createModWithTypeName;
   move = moveMod;
@@ -146,5 +146,3 @@ function generatePaneMoveButtons(current) {
 
   return targets;
 }
-
-

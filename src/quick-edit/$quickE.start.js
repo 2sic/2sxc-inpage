@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
 var _quickE_positioning_1 = require("./$quickE.positioning");
+var _quickE_config_1 = require("./$quickE.config");
 function enable() {
     // build all toolbar html-elements
     _quickE___1.prepareToolbarInDom();
@@ -27,7 +28,7 @@ function watchMouse() {
 ;
 function start() {
     try {
-        $quickE._readPageConfig();
+        _quickE_config_1._readPageConfig();
         if ($quickE.config.enable) {
             // initialize first body-offset
             $quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
@@ -64,11 +65,13 @@ function toggleParts() {
  * for example after ajax-loading a content-block, which may cause changed configurations
  */
 function reset() {
-    $quickE._readPageConfig();
+    _quickE_config_1._readPageConfig();
     toggleParts();
 }
 exports.reset = reset;
 ;
-// run on-load
+/**
+ * run on-load
+ */
 $(start);
 //# sourceMappingURL=$quickE.start.js.map

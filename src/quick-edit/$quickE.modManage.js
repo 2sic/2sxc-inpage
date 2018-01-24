@@ -15,7 +15,7 @@ var modManage = /** @class */ (function () {
     }
     return modManage;
 }());
-exports.default = modManage;
+exports.modManage = modManage;
 ;
 function getPaneName(pane) {
     return $(pane).attr("id").replace("dnn_", "");

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
 var _quickE_clipboard_1 = require("./$quickE.clipboard");
 var _quickE_modManage_1 = require("./$quickE.modManage");
-var mm = new _quickE_modManage_1.default();
+var mm = new _quickE_modManage_1.modManage();
 /**
  * module specific stuff
  */
@@ -17,6 +17,8 @@ function onModuleButtonClick() {
     }
     return mm.create(mm.getPaneName(pane), index, type);
 }
-// bind module actions click
+/**
+ * bind module actions click
+ */
 $quickE.modActions.click(onModuleButtonClick);
 //# sourceMappingURL=$quickE.module.js.map

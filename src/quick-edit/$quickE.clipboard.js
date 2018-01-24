@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
 var _quickE_positioning_1 = require("./$quickE.positioning");
+var _quickE_cmds_1 = require("./$quickE.cmds");
 /**
  * add a clipboard to the quick edit
  */
@@ -35,7 +36,7 @@ function copyPasteInPage(cbAction, list, index, type) {
                 $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
             }
             else {
-                $quickE.cmds.mod.move(clipboard.data, newClip, from, to);
+                _quickE_cmds_1.mod.move(clipboard.data, newClip, from, to);
             }
             clipboard.clear();
             break;
@@ -45,7 +46,9 @@ function copyPasteInPage(cbAction, list, index, type) {
 }
 exports.copyPasteInPage = copyPasteInPage;
 ;
-// clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
+/**
+ * clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
+ */
 var clipboard;
 (function (clipboard) {
     clipboard.data = {};
@@ -97,15 +100,18 @@ $quickE.selected.toggle = function (target) {
     _quickE_positioning_1.positionAndAlign($quickE.selected, coords);
     $quickE.selected.target = target;
 };
-// bind clipboard actions 
+var cmdsStrategyFactory = new _quickE_cmds_1.CmdsStrategyFactory();
+/**
+ * bind clipboard actions
+ */
 $('a', $quickE.selected).click(function () {
     var action = $(this).data('action');
     var clip = clipboard.data;
     switch (action) {
         case 'delete':
-            return $quickE.cmds[clip.type].delete(clip);
+            return cmdsStrategyFactory.delete(clip);
         case 'sendToPane':
-            return $quickE.cmds.mod.sendToPane(clip);
+            return _quickE_cmds_1.mod.sendToPane();
     }
 });
 //# sourceMappingURL=$quickE.clipboard.js.map

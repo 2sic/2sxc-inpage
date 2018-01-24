@@ -1,9 +1,11 @@
 ﻿import { selectors } from './$quickE.{}';
 
-var configAttr = "quick-edit-config";
+const configAttr: string = "quick-edit-config";
 
-// the initial configuration
-var conf = $quickE.config = {
+/**
+ * the initial configuration
+ */
+let conf = $quickE.config = {
   enable: true,
   innerBlocks: {
     enable: null    // default: auto-detect
@@ -13,7 +15,7 @@ var conf = $quickE.config = {
   }
 };
 
-$quickE._readPageConfig = function () {
+export function _readPageConfig() {
   var configs: IConf[] = $("[" + configAttr + "]");
   var finalConfig: IConf = {} as IConf;
   var confJ: string;
