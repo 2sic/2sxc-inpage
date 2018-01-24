@@ -1,4 +1,8 @@
-﻿// module specific stuff
+﻿import { clipboard } from './$quickE.clipboard';
+
+/**
+ * module specific stuff
+ */
 
 export default class modManage {
   delete = deleteMod;
@@ -133,7 +137,7 @@ function generatePaneMoveButtons(current) {
   // attach click event...
   targets.find("a").click(function (d) {
     var link = $(this),
-      clip = $quickE.clipboard.data,
+      clip = clipboard.data,
       modId = getModuleId(clip.item.className),
       newPane = link.attr("data");
 

@@ -2,7 +2,7 @@
 interface i$quickE {
   // ReSharper restore InconsistentNaming
   reset: any;
-  copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
+  //copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
   clipboard: IClipboard;
   //selectors: Selectors;
   cmds: any;

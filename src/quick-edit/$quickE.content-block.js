@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
+var _quickE_clipboard_1 = require("./$quickE.clipboard");
 /**
  * content-block specific stuff like actions
  */
@@ -16,7 +17,7 @@ function onCbButtonClick() {
     var cbAction = $(this).data("action");
     if (cbAction) {
         // this is a cut/paste action
-        return $quickE.copyPasteInPage(cbAction, list, index, _quickE___1.selectors.cb.id);
+        return _quickE_clipboard_1.copyPasteInPage(cbAction, list, index, _quickE___1.selectors.cb.id);
     }
     else {
         var appOrContent = $(this).data("type");

@@ -1,4 +1,5 @@
 ﻿import { selectors } from './$quickE.{}';
+import { copyPasteInPage } from './$quickE.clipboard';
 
 /**
  * content-block specific stuff like actions
@@ -17,7 +18,7 @@ function onCbButtonClick() {
   var cbAction = $(this).data("action");
   if (cbAction) {
     // this is a cut/paste action
-    return $quickE.copyPasteInPage(cbAction, list, index, selectors.cb.id);
+    return copyPasteInPage(cbAction, list, index, selectors.cb.id);
   } else {
     var appOrContent = $(this).data("type");
     return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);

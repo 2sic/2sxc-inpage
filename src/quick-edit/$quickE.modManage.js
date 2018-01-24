@@ -1,6 +1,9 @@
 "use strict";
-// module specific stuff
 Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE_clipboard_1 = require("./$quickE.clipboard");
+/**
+ * module specific stuff
+ */
 var modManage = /** @class */ (function () {
     function modManage() {
         this.delete = deleteMod;
@@ -121,7 +124,7 @@ function generatePaneMoveButtons(current) {
     }
     // attach click event...
     targets.find("a").click(function (d) {
-        var link = $(this), clip = $quickE.clipboard.data, modId = getModuleId(clip.item.className), newPane = link.attr("data");
+        var link = $(this), clip = _quickE_clipboard_1.clipboard.data, modId = getModuleId(clip.item.className), newPane = link.attr("data");
         moveMod(modId, newPane, 0);
     });
     return targets;

@@ -1,4 +1,5 @@
 ﻿import { selectors } from './$quickE.{}';
+import { copyPasteInPage } from './$quickE.clipboard';
 import modManage from './$quickE.modManage';
 var mm = new modManage();
 
@@ -15,9 +16,9 @@ function onModuleButtonClick() {
     index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
 
   var cbAction = $(this).data("action");
-  if (cbAction)  // copy/paste
-    return $quickE.copyPasteInPage(cbAction, pane, index, selectors.mod.id);
-
+  if (cbAction) {
+    return copyPasteInPage(cbAction, pane, index, selectors.mod.id); // copy/paste
+  }
   return mm.create(mm.getPaneName(pane), index, type);
 }
 
