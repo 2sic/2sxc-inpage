@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
+var _2sxc_translate_1 = require("../translate/2sxc.translate");
 function instanceEngine(sxc, editContext) {
     var engine = {
         commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
@@ -38,7 +39,7 @@ function instanceEngine(sxc, editContext) {
                             Part: part,
                             Add: isAdd
                         },
-                        Title: $2sxc.translate(sectionLanguageKey)
+                        Title: _2sxc_translate_1.translate(sectionLanguageKey)
                     });
                 },
                 // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item

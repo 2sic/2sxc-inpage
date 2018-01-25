@@ -1,6 +1,7 @@
 ﻿import { initializeInstanceCommands } from './commands.instanceCommands';
 import DataEditContext from '../data-edit-context/data-edit-context';
 import { showOrToggle } from '../quick-dialog/2sxc._quickDialog';
+import { translate } from '../translate/2sxc.translate';
 
 export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
   var engine: IEngine = {
@@ -40,7 +41,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
               Part: part,
               Add: isAdd
             },
-            Title: $2sxc.translate(sectionLanguageKey)
+            Title: translate(sectionLanguageKey)
           });
         },
 

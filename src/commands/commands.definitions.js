@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = require("../translate/2sxc.translate");
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -15,7 +17,6 @@
  * - disabled (new!)
  * - params - ...
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 var Act = /** @class */ (function () {
     function Act() {
     }
@@ -120,7 +121,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            if (confirm($2sxc.translate('Toolbar.ConfirmRemove'))) {
+            if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
                 $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
                 //sxc.manage.contentBlock
                 //    .removeFromList(settings.sortOrder);
@@ -172,7 +173,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             if (settings.isPublished)
-                return alert($2sxc.translate('Toolbar.AlreadyPublished'));
+                return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
             // if we have an entity-id, publish based on that
             if (settings.entityId)
                 return $2sxc._contentBlock.publishId(sxc, settings.entityId);

@@ -1,4 +1,6 @@
-﻿/*
+﻿import { translate } from '../translate/2sxc.translate';
+
+/*
  * Actions of 2sxc - mostly used in toolbars
  * 
  * Minimal documentation regarding a button
@@ -146,7 +148,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
     },
     code(settings, event, sxc) {
-      if (confirm($2sxc.translate('Toolbar.ConfirmRemove'))) {
+      if (confirm(translate('Toolbar.ConfirmRemove'))) {
         $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
         //sxc.manage.contentBlock
         //    .removeFromList(settings.sortOrder);
@@ -203,7 +205,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return !cmdSpecs.allowPublish;
     },
     code(settings, event, sxc) {
-      if (settings.isPublished) return alert($2sxc.translate('Toolbar.AlreadyPublished'));
+      if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
 
       // if we have an entity-id, publish based on that
       if (settings.entityId) return $2sxc._contentBlock.publishId(sxc, settings.entityId);
