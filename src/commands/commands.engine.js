@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
+var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
 function instanceEngine(sxc, editContext) {
     var engine = {
         commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
@@ -98,7 +99,7 @@ function instanceEngine(sxc, editContext) {
             };
             var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
             if (settings.inlineWindow)
-                return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+                return _2sxc__quickDialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
             if (settings.newWindow || (event && event.shiftKey))
                 return window.open(link);
             return $2sxc.totalPopup.open(link, callback);

@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
 // module & toolbar bootstrapping (initialize all toolbars after loading page)
 // this will run onReady...
 $(function () {
@@ -30,7 +33,7 @@ $(function () {
         if (cancelledDialog || openedTemplatePickerOnce)
             return false;
         // already showing a dialog
-        if ($2sxc._quickDialog.current !== null)
+        if (_2sxc__quickDialog_1.current !== null)
             return false;
         // not exactly one uninitialized module
         if (uninitializedModules.length !== 1)

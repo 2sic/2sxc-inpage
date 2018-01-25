@@ -1,4 +1,5 @@
 ﻿import { reset } from '../quick-edit/$quickE.start';
+import { hide } from '../quick-dialog/2sxc._quickDialog';
 /*
  * this is the content block manager in the browser
  * 
@@ -78,7 +79,7 @@
 
                 // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
                 // must check for side-effects, which would need the manager to re-build the configuration
-                $2sxc._quickDialog.hide();
+                hide();
             });
     };
 

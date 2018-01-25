@@ -1,5 +1,6 @@
 ﻿import { initializeInstanceCommands } from './commands.instanceCommands';
 import DataEditContext from '../data-edit-context/data-edit-context';
+import { showOrToggle } from '../quick-dialog/2sxc._quickDialog';
 
 export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
   var engine: IEngine = {
@@ -111,7 +112,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
       };
       var link: string = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
       if (settings.inlineWindow)
-        return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+        return showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
       if (settings.newWindow || (event && event.shiftKey))
         return window.open(link);
       return $2sxc.totalPopup.open(link, callback);

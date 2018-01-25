@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE_start_1 = require("../quick-edit/$quickE.start");
+var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
 /*
  * this is the content block manager in the browser
  *
@@ -71,7 +72,7 @@ var _quickE_start_1 = require("../quick-edit/$quickE.start");
             // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
             // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
             // must check for side-effects, which would need the manager to re-build the configuration
-            $2sxc._quickDialog.hide();
+            _2sxc__quickDialog_1.hide();
         });
     };
 })();

@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
 /*
  * this is part of the content block manager
  */
@@ -43,7 +46,7 @@
         // or just reset it, so it picks up the right values again ?
         return updateTemplate(sxc, templateId, forceCreate)
             .then(function () {
-            $2sxc._quickDialog.hide();
+            _2sxc__quickDialog_1.hide();
             // if it didn't have content, then it only has now...
             if (!contentGroup.HasContent)
                 contentGroup.HasContent = forceCreate;
