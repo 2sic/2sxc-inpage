@@ -1,7 +1,8 @@
-﻿// this is a dialog manager which is in charge of all
+﻿import { getTag } from '../manage/manage.api';
+
+// this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
-
 
 const resizeInterval: number = 200;
 const scrollTopOffset: number = 80;
@@ -150,7 +151,7 @@ function extendIFrameWithSxcState(iFrame) {
     closeCallback: null,
     rewire: function (sxc, callback, dialogName) {
       hiddenSxc = sxc;
-      tagModule = $($($2sxc._manage.getTag(sxc)).parent().eq(0));
+      tagModule = $($(getTag(sxc)).parent().eq(0));
       newFrm.sxcCacheKey = sxc.cacheKey;
       newFrm.closeCallback = callback;
       if (dialogName) newFrm.dialogName = dialogName;

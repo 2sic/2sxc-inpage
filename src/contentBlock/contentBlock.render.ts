@@ -1,5 +1,6 @@
 ﻿import { reset } from '../quick-edit/$quickE.start';
 import { hide } from '../quick-dialog/2sxc._quickDialog';
+import { getTag } from '../manage/manage.api';
 /*
  * this is the content block manager in the browser
  * 
@@ -28,7 +29,7 @@ import { hide } from '../quick-dialog/2sxc._quickDialog';
             // Must disable toolbar before we attach to DOM
             if (justPreview) $2sxc._toolbarManager.disable(newStuff);
 
-            $($2sxc._manage.getTag(sxc)).replaceWith(newStuff);
+            $(getTag(sxc)).replaceWith(newStuff);
 
             // reset the cache, so the sxc-object is refreshed
             sxc.recreate(true);
@@ -44,7 +45,7 @@ import { hide } from '../quick-dialog/2sxc._quickDialog';
      * @returns {} - nothing
      */
     cbm.showMessage = function (sxc, newContent) {
-        $($2sxc._manage.getTag(sxc)).html(newContent);
+        $(getTag(sxc)).html(newContent);
     };
 
     cbm.ajaxLoad = function (sxc, alternateTemplateId, justPreview) {

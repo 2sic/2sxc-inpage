@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE_start_1 = require("../quick-edit/$quickE.start");
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
+var manage_api_1 = require("../manage/manage.api");
 /*
  * this is the content block manager in the browser
  *
@@ -28,7 +29,7 @@ var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
             // Must disable toolbar before we attach to DOM
             if (justPreview)
                 $2sxc._toolbarManager.disable(newStuff);
-            $($2sxc._manage.getTag(sxc)).replaceWith(newStuff);
+            $(manage_api_1.getTag(sxc)).replaceWith(newStuff);
             // reset the cache, so the sxc-object is refreshed
             sxc.recreate(true);
         }
@@ -43,7 +44,7 @@ var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
      * @returns {} - nothing
      */
     cbm.showMessage = function (sxc, newContent) {
-        $($2sxc._manage.getTag(sxc)).html(newContent);
+        $(manage_api_1.getTag(sxc)).html(newContent);
     };
     cbm.ajaxLoad = function (sxc, alternateTemplateId, justPreview) {
         // ajax-call, then replace

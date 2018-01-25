@@ -1,8 +1,9 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var manage_api_1 = require("../manage/manage.api");
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
-Object.defineProperty(exports, "__esModule", { value: true });
 var resizeInterval = 200;
 var scrollTopOffset = 80;
 var resizeWatcher = null;
@@ -149,7 +150,7 @@ function extendIFrameWithSxcState(iFrame) {
         closeCallback: null,
         rewire: function (sxc, callback, dialogName) {
             hiddenSxc = sxc;
-            tagModule = $($($2sxc._manage.getTag(sxc)).parent().eq(0));
+            tagModule = $($(manage_api_1.getTag(sxc)).parent().eq(0));
             newFrm.sxcCacheKey = sxc.cacheKey;
             newFrm.closeCallback = callback;
             if (dialogName)

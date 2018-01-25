@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
+var manage_api_1 = require("../manage/manage.api");
 // module & toolbar bootstrapping (initialize all toolbars after loading page)
 // this will run onReady...
 $(function () {
@@ -68,7 +69,7 @@ $(function () {
         if (sxc.manage._editContext.ContentGroup.TemplateId !== 0)
             return false;
         // already has a glasses button
-        var tag = $($2sxc._manage.getTag(sxc));
+        var tag = $(manage_api_1.getTag(sxc));
         if (tag.find(".sc-uninitialized").length !== 0)
             return false;
         // note: title is added on mouseover, as the translation isn't ready at page-load
