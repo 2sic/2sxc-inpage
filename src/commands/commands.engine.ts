@@ -1,7 +1,9 @@
-﻿import initializeInstanceCommands from './commands.instanceCommands';
+﻿import { initializeInstanceCommands } from './commands.instanceCommands';
 import DataEditContext from '../data-edit-context/data-edit-context';
+import { showOrToggle } from '../quick-dialog/2sxc._quickDialog';
+import { translate } from '../translate/2sxc.translate';
 
-$2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
+export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
   var engine: IEngine = {
     commands : initializeInstanceCommands(editContext),
 
@@ -39,7 +41,7 @@ $2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editCo
               Part: part,
               Add: isAdd
             },
-            Title: $2sxc.translate(sectionLanguageKey)
+            Title: translate(sectionLanguageKey)
           });
         },
 
@@ -111,7 +113,7 @@ $2sxc._commands.instanceEngine = function (sxc: SxcInstanceWithInternals, editCo
       };
       var link: string = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
       if (settings.inlineWindow)
-        return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+        return showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
       if (settings.newWindow || (event && event.shiftKey))
         return window.open(link);
       return $2sxc.totalPopup.open(link, callback);

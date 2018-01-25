@@ -1,4 +1,7 @@
-﻿/*
+﻿import { reset } from '../quick-edit/$quickE.start';
+import { hide } from '../quick-dialog/2sxc._quickDialog';
+import { getTag } from '../manage/manage.api';
+/*
  * this is the content block manager in the browser
  * 
  * A Content Block is a standalone unit of content, with it's own definition of
@@ -26,7 +29,7 @@
             // Must disable toolbar before we attach to DOM
             if (justPreview) $2sxc._toolbarManager.disable(newStuff);
 
-            $($2sxc._manage.getTag(sxc)).replaceWith(newStuff);
+            $(getTag(sxc)).replaceWith(newStuff);
 
             // reset the cache, so the sxc-object is refreshed
             sxc.recreate(true);
@@ -42,7 +45,7 @@
      * @returns {} - nothing
      */
     cbm.showMessage = function (sxc, newContent) {
-        $($2sxc._manage.getTag(sxc)).html(newContent);
+        $(getTag(sxc)).html(newContent);
     };
 
     cbm.ajaxLoad = function (sxc, alternateTemplateId, justPreview) {
@@ -51,7 +54,7 @@
             .then(function (result) {
                 return cbm.replaceCb(sxc, result, justPreview);
             })
-            .then($quickE.reset); // reset quick-edit, because the config could have changed
+            .then(reset); // reset quick-edit, because the config could have changed
     };
 
     // this one assumes a replace / change has already happened, but now must be finalized...
@@ -77,7 +80,7 @@
 
                 // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
                 // must check for side-effects, which would need the manager to re-build the configuration
-                $2sxc._quickDialog.hide();
+                hide();
             });
     };
 

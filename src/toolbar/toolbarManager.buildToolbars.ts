@@ -1,4 +1,6 @@
-﻿(function () {
+﻿import { getTag } from '../manage/manage.api';
+
+(function () {
     // quick debug - set to false if not needed for production
     var dbg = false;
 
@@ -93,7 +95,7 @@
     }
 
     function isDisabled(sxc) {
-        var tag = $($2sxc._manage.getTag(sxc));
+        var tag = $(getTag(sxc));
         return !!tag.attr($2sxc._toolbarManager.cDisableAttrName);
     }
 })();

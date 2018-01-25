@@ -1,4 +1,6 @@
-﻿// contains commands to create/move/delete a contentBlock in a page
+﻿import { translate } from '../translate/2sxc.translate';
+
+// contains commands to create/move/delete a contentBlock in a page
 
 $2sxc._contentBlock.manipulator = function (sxc) {
     return {
@@ -55,7 +57,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
     // delete a content-block inside a list of content-blocks
     function remove(parentId, field, index) {
-        if (!confirm($2sxc.translate('QuickInsertMenu.ConfirmDelete'))) return null;
+        if (!confirm(translate('QuickInsertMenu.ConfirmDelete'))) return null;
         var params = {
             parentId: parentId,
             field: field,

@@ -3,7 +3,7 @@
  */
 // ReSharper disable InconsistentNaming
 interface SxcControllerWithInternals {
-  _commands: ICommands;
+  _commands: any;
   _contentBlock: any;
   _lib: any;
   _quickDialog: any;
@@ -15,3 +15,5 @@ interface SxcControllerWithInternals {
   translate: any;
 }
 // ReSharper restore InconsistentNaming
+
+declare var $2sxc: SxcControllerWithInternals;

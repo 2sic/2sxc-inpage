@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = require("../translate/2sxc.translate");
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -14,7 +17,30 @@
  * - disabled (new!)
  * - params - ...
  */
-// helper function to create the configuration object
+var Act = /** @class */ (function () {
+    function Act() {
+    }
+    return Act;
+}());
+var Def = /** @class */ (function () {
+    function Def() {
+    }
+    return Def;
+}());
+var CmdSpec = /** @class */ (function () {
+    function CmdSpec() {
+    }
+    return CmdSpec;
+}());
+/**
+ * helper function to create the configuration object
+ * @param name
+ * @param translateKey
+ * @param icon
+ * @param uiOnly
+ * @param partOfPage
+ * @param more
+ */
 function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
     if (typeof (partOfPage) !== 'boolean')
         throw 'partOfPage in commands not provided, order will be wrong!';
@@ -25,11 +51,9 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         uiActionOnly: uiOnly,
         partOfPage: partOfPage
     };
-    // TODO: this is not type safe
     return $2sxc._lib.extend(newDefinition, more);
 }
-$2sxc._commands.definitions = {};
-$2sxc._commands.definitions.create = function (cmdSpecs) {
+function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
     var isContent = cmdSpecs.isContent;
     var act = {};
@@ -97,7 +121,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            if (confirm($2sxc.translate('Toolbar.ConfirmRemove'))) {
+            if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
                 $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
                 //sxc.manage.contentBlock
                 //    .removeFromList(settings.sortOrder);
@@ -149,7 +173,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             if (settings.isPublished)
-                return alert($2sxc.translate('Toolbar.AlreadyPublished'));
+                return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
             // if we have an entity-id, publish based on that
             if (settings.entityId)
                 return $2sxc._contentBlock.publishId(sxc, settings.entityId);
@@ -308,5 +332,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
         fullScreen: true
     }));
     return act;
-};
+}
+exports.create = create;
+;
 //# sourceMappingURL=commands.definitions.js.map

@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
-$2sxc._commands.instanceEngine = function (sxc, editContext) {
+var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
+var _2sxc_translate_1 = require("../translate/2sxc.translate");
+function instanceEngine(sxc, editContext) {
     var engine = {
-        commands: commands_instanceCommands_1.default(editContext),
+        commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
             var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
@@ -37,7 +39,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
                             Part: part,
                             Add: isAdd
                         },
-                        Title: $2sxc.translate(sectionLanguageKey)
+                        Title: _2sxc_translate_1.translate(sectionLanguageKey)
                     });
                 },
                 // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
@@ -98,7 +100,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
             };
             var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
             if (settings.inlineWindow)
-                return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+                return _2sxc__quickDialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
             if (settings.newWindow || (event && event.shiftKey))
                 return window.open(link);
             return $2sxc.totalPopup.open(link, callback);
@@ -135,5 +137,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
         }
     };
     return engine;
-};
+}
+exports.instanceEngine = instanceEngine;
+;
 //# sourceMappingURL=commands.engine.js.map

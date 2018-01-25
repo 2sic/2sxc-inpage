@@ -1,20 +1,18 @@
-﻿declare var $quickE: i$quickE;
-
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 interface i$quickE {
   // ReSharper restore InconsistentNaming
   reset: any;
-  copyPasteInPage: any;
-  clipboard: any;
-  selectors: any;
+  //copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
+  clipboard: IClipboard;
+  //selectors: Selectors;
   cmds: any;
-  setSecondaryActionsState: any;
-  selected: any;
+  setSecondaryActionsState(state: boolean): void;
+  selected: ISelected;
   getCoordinates: any;
   positionAndAlign: any;
   modManage: any;
   main: any;
-  config: any;
+  config: IConf;
   // ReSharper disable InconsistentNaming
   _readPageConfig: any;
   // ReSharper restore InconsistentNaming
@@ -33,11 +31,48 @@ interface i$quickE {
   nearestMod: any;
   win: any;
   enable: any;
-  prepareToolbarInDom: any;
+  //prepareToolbarInDom: Function;
   initPanes: any;
   watchMouse: any;
   start: any;
   toggleParts: any;
-  btn: any;
-  template: any;
+  //btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?:boolean, classes?: string): string;
+  template: string;
+}
+
+declare var $quickE: i$quickE;
+
+interface IClipboard {
+  data: any;
+  mark(newData: any): any;
+  clear(): void;
+  createSpecs(type: string, list: any, index: number): ISpecs;
+}
+
+interface ISpecs {
+  parent: any;
+  field: any;
+  list: any;
+  item: any;
+  index: number;
+  type: any;
+}
+
+interface ISelected {
+  toggle(target: any, type?: any): any;
+  hide(): void;
+  target: any;
+  find(selector: string): any;
+}
+
+interface IConf {
+  enable: boolean;
+  innerBlocks: {
+    enable: boolean | string | null;
+  },
+  modules: {
+    enable: boolean | string | null;
+  };
+  getAttribute?(configAttr: string): any;
+  guid?: any;
 }

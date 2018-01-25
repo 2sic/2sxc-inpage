@@ -1,3 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE_start_1 = require("../quick-edit/$quickE.start");
+var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
+var manage_api_1 = require("../manage/manage.api");
 /*
  * this is the content block manager in the browser
  *
@@ -24,7 +29,7 @@
             // Must disable toolbar before we attach to DOM
             if (justPreview)
                 $2sxc._toolbarManager.disable(newStuff);
-            $($2sxc._manage.getTag(sxc)).replaceWith(newStuff);
+            $(manage_api_1.getTag(sxc)).replaceWith(newStuff);
             // reset the cache, so the sxc-object is refreshed
             sxc.recreate(true);
         }
@@ -39,7 +44,7 @@
      * @returns {} - nothing
      */
     cbm.showMessage = function (sxc, newContent) {
-        $($2sxc._manage.getTag(sxc)).html(newContent);
+        $(manage_api_1.getTag(sxc)).html(newContent);
     };
     cbm.ajaxLoad = function (sxc, alternateTemplateId, justPreview) {
         // ajax-call, then replace
@@ -47,7 +52,7 @@
             .then(function (result) {
             return cbm.replaceCb(sxc, result, justPreview);
         })
-            .then($quickE.reset); // reset quick-edit, because the config could have changed
+            .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
     };
     // this one assumes a replace / change has already happened, but now must be finalized...
     cbm.reloadAndReInitialize = function (sxc, forceAjax, preview) {
@@ -68,7 +73,7 @@
             // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
             // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
             // must check for side-effects, which would need the manager to re-build the configuration
-            $2sxc._quickDialog.hide();
+            _2sxc__quickDialog_1.hide();
         });
     };
 })();

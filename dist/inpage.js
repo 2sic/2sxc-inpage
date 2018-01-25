@@ -60,27 +60,233 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-!function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define("i18next",t):e.i18next=t()}(this,function(){"use strict";function e(e){return null==e?"":""+e}function t(e,t,n){e.forEach(function(e){t[e]&&(n[e]=t[e])})}function n(e,t,n){function o(e){return e&&e.indexOf("###")>-1?e.replace(/###/g,"."):e}for(var r="string"!=typeof t?[].concat(t):t.split(".");r.length>1;){if(!e)return{};var i=o(r.shift());!e[i]&&n&&(e[i]=new n),e=e[i]}return e?{obj:e,k:o(r.shift())}:{}}function o(e,t,o){var r=n(e,t,Object),i=r.obj,s=r.k;i[s]=o}function r(e,t,o,r){var i=n(e,t,Object),s=i.obj,a=i.k;s[a]=s[a]||[],r&&(s[a]=s[a].concat(o)),r||s[a].push(o)}function i(e,t){var o=n(e,t),r=o.obj,i=o.k;return r?r[i]:void 0}function s(e,t,n){for(var o in t)o in e?"string"==typeof e[o]||e[o]instanceof String||"string"==typeof t[o]||t[o]instanceof String?n&&(e[o]=t[o]):s(e[o],t[o],n):e[o]=t[o];return e}function a(e){return e.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,"\\$&")}function l(e){return"string"==typeof e?e.replace(/[&<>"'\/]/g,function(e){return C[e]}):e}function u(e){return e.interpolation={unescapeSuffix:"HTML"},e.interpolation.prefix=e.interpolationPrefix||"__",e.interpolation.suffix=e.interpolationSuffix||"__",e.interpolation.escapeValue=e.escapeInterpolation||!1,e.interpolation.nestingPrefix=e.reusePrefix||"$t(",e.interpolation.nestingSuffix=e.reuseSuffix||")",e}function c(e){return e.resStore&&(e.resources=e.resStore),e.ns&&e.ns.defaultNs?(e.defaultNS=e.ns.defaultNs,e.ns=e.ns.namespaces):e.defaultNS=e.ns||"translation",e.fallbackToDefaultNS&&e.defaultNS&&(e.fallbackNS=e.defaultNS),e.saveMissing=e.sendMissing,e.saveMissingTo=e.sendMissingTo||"current",e.returnNull=!e.fallbackOnNull,e.returnEmptyString=!e.fallbackOnEmpty,e.returnObjects=e.returnObjectTrees,e.joinArrays="\n",e.returnedObjectHandler=e.objectTreeKeyHandler,e.parseMissingKeyHandler=e.parseMissingKey,e.appendNamespaceToMissingKey=!0,e.nsSeparator=e.nsseparator,e.keySeparator=e.keyseparator,"sprintf"===e.shortcutFunction&&(e.overloadTranslationOptionHandler=function(e){for(var t=[],n=1;n<e.length;n++)t.push(e[n]);return{postProcess:"sprintf",sprintf:t}}),e.whitelist=e.lngWhitelist,e.preload=e.preload,"current"===e.load&&(e.load="currentOnly"),"unspecific"===e.load&&(e.load="languageOnly"),e.backend=e.backend||{},e.backend.loadPath=e.resGetPath||"locales/__lng__/__ns__.json",e.backend.addPath=e.resPostPath||"locales/add/__lng__/__ns__",e.backend.allowMultiLoading=e.dynamicLoad,e.cache=e.cache||{},e.cache.prefix="res_",e.cache.expirationTime=6048e5,e.cache.enabled=!!e.useLocalStorage,e=u(e),e.defaultVariables&&(e.interpolation.defaultVariables=e.defaultVariables),e}function p(e){return e=u(e),e.joinArrays="\n",e}function f(e){return(e.interpolationPrefix||e.interpolationSuffix||e.escapeInterpolation)&&(e=u(e)),e.nsSeparator=e.nsseparator,e.keySeparator=e.keyseparator,e.returnObjects=e.returnObjectTrees,e}function h(e){e.lng=function(){return S.deprecate("i18next.lng() can be replaced by i18next.language for detected language or i18next.languages for languages ordered by translation lookup."),e.services.languageUtils.toResolveHierarchy(e.language)[0]},e.preload=function(t,n){S.deprecate("i18next.preload() can be replaced with i18next.loadLanguages()"),e.loadLanguages(t,n)},e.setLng=function(t,n,o){return S.deprecate("i18next.setLng() can be replaced with i18next.changeLanguage() or i18next.getFixedT() to get a translation function with fixed language or namespace."),"function"==typeof n&&(o=n,n={}),n||(n={}),n.fixLng===!0&&o?o(null,e.getFixedT(t)):void e.changeLanguage(t,o)},e.addPostProcessor=function(t,n){S.deprecate("i18next.addPostProcessor() can be replaced by i18next.use({ type: 'postProcessor', name: 'name', process: fc })"),e.use({type:"postProcessor",name:t,process:n})}}function g(e){return e.charAt(0).toUpperCase()+e.slice(1)}function d(){var e={};return R.forEach(function(t){t.lngs.forEach(function(n){return e[n]={numbers:t.nr,plurals:P[t.fc]}})}),e}function v(e,t){for(var n=e.indexOf(t);-1!==n;)e.splice(n,1),n=e.indexOf(t)}function y(){return{debug:!1,ns:["translation"],defaultNS:["translation"],fallbackLng:["dev"],fallbackNS:!1,whitelist:!1,load:"all",preload:!1,keySeparator:".",nsSeparator:":",pluralSeparator:"_",contextSeparator:"_",saveMissing:!1,saveMissingTo:"fallback",missingKeyHandler:!1,postProcess:!1,returnNull:!0,returnEmptyString:!0,returnObjects:!1,joinArrays:!1,returnedObjectHandler:function(){},parseMissingKeyHandler:!1,appendNamespaceToMissingKey:!1,overloadTranslationOptionHandler:function(e){return{defaultValue:e[1]}},interpolation:{escapeValue:!0,prefix:"{{",suffix:"}}",unescapePrefix:"-",nestingPrefix:"$t(",nestingSuffix:")",defaultVariables:void 0}}}function b(e){return"string"==typeof e.ns&&(e.ns=[e.ns]),"string"==typeof e.fallbackLng&&(e.fallbackLng=[e.fallbackLng]),"string"==typeof e.fallbackNS&&(e.fallbackNS=[e.fallbackNS]),e.whitelist&&e.whitelist.indexOf("cimode")<0&&e.whitelist.push("cimode"),e}var m={};m["typeof"]="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},m.classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")},m["extends"]=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var o in n)Object.prototype.hasOwnProperty.call(n,o)&&(e[o]=n[o])}return e},m.inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)},m.possibleConstructorReturn=function(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t},m.slicedToArray=function(){function e(e,t){var n=[],o=!0,r=!1,i=void 0;try{for(var s,a=e[Symbol.iterator]();!(o=(s=a.next()).done)&&(n.push(s.value),!t||n.length!==t);o=!0);}catch(l){r=!0,i=l}finally{try{!o&&a["return"]&&a["return"]()}finally{if(r)throw i}}return n}return function(t,n){if(Array.isArray(t))return t;if(Symbol.iterator in Object(t))return e(t,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}();var x={type:"logger",log:function(e){this._output("log",e)},warn:function(e){this._output("warn",e)},error:function(e){this._output("error",e)},_output:function(e,t){console&&console[e]&&console[e].apply(console,Array.prototype.slice.call(t))}},k=function(){function e(t){var n=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];m.classCallCheck(this,e),this.subs=[],this.init(t,n)}return e.prototype.init=function(e){var t=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];this.prefix=t.prefix||"i18next:",this.logger=e||x,this.options=t,this.debug=t.debug!==!1},e.prototype.setDebug=function(e){this.debug=e,this.subs.forEach(function(t){t.setDebug(e)})},e.prototype.log=function(){this.forward(arguments,"log","",!0)},e.prototype.warn=function(){this.forward(arguments,"warn","",!0)},e.prototype.error=function(){this.forward(arguments,"error","")},e.prototype.deprecate=function(){this.forward(arguments,"warn","WARNING DEPRECATED: ",!0)},e.prototype.forward=function(e,t,n,o){o&&!this.debug||("string"==typeof e[0]&&(e[0]=n+this.prefix+" "+e[0]),this.logger[t](e))},e.prototype.create=function(t){var n=new e(this.logger,m["extends"]({prefix:this.prefix+":"+t+":"},this.options));return this.subs.push(n),n},e}(),S=new k,w=function(){function e(){m.classCallCheck(this,e),this.observers={}}return e.prototype.on=function(e,t){var n=this;e.split(" ").forEach(function(e){n.observers[e]=n.observers[e]||[],n.observers[e].push(t)})},e.prototype.off=function(e,t){var n=this;this.observers[e]&&this.observers[e].forEach(function(){if(t){var o=n.observers[e].indexOf(t);o>-1&&n.observers[e].splice(o,1)}else delete n.observers[e]})},e.prototype.emit=function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),o=1;t>o;o++)n[o-1]=arguments[o];this.observers[e]&&this.observers[e].forEach(function(e){e.apply(void 0,n)}),this.observers["*"]&&this.observers["*"].forEach(function(t){var o;t.apply(t,(o=[e]).concat.apply(o,n))})},e}(),C={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","/":"&#x2F;"},L=function(e){function t(){var n=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],o=arguments.length<=1||void 0===arguments[1]?{ns:["translation"],defaultNS:"translation"}:arguments[1];m.classCallCheck(this,t);var r=m.possibleConstructorReturn(this,e.call(this));return r.data=n,r.options=o,r}return m.inherits(t,e),t.prototype.addNamespaces=function(e){this.options.ns.indexOf(e)<0&&this.options.ns.push(e)},t.prototype.removeNamespaces=function(e){var t=this.options.ns.indexOf(e);t>-1&&this.options.ns.splice(t,1)},t.prototype.getResource=function(e,t,n){var o=arguments.length<=3||void 0===arguments[3]?{}:arguments[3],r=o.keySeparator||this.options.keySeparator;void 0===r&&(r=".");var s=[e,t];return n&&"string"!=typeof n&&(s=s.concat(n)),n&&"string"==typeof n&&(s=s.concat(r?n.split(r):n)),e.indexOf(".")>-1&&(s=e.split(".")),i(this.data,s)},t.prototype.addResource=function(e,t,n,r){var i=arguments.length<=4||void 0===arguments[4]?{silent:!1}:arguments[4],s=this.options.keySeparator;void 0===s&&(s=".");var a=[e,t];n&&(a=a.concat(s?n.split(s):n)),e.indexOf(".")>-1&&(a=e.split("."),r=t,t=a[1]),this.addNamespaces(t),o(this.data,a,r),i.silent||this.emit("added",e,t,n,r)},t.prototype.addResources=function(e,t,n){for(var o in n)"string"==typeof n[o]&&this.addResource(e,t,o,n[o],{silent:!0});this.emit("added",e,t,n)},t.prototype.addResourceBundle=function(e,t,n,r,a){var l=[e,t];e.indexOf(".")>-1&&(l=e.split("."),r=n,n=t,t=l[1]),this.addNamespaces(t);var u=i(this.data,l)||{};r?s(u,n,a):u=m["extends"]({},u,n),o(this.data,l,u),this.emit("added",e,t,n)},t.prototype.removeResourceBundle=function(e,t){this.hasResourceBundle(e,t)&&delete this.data[e][t],this.removeNamespaces(t),this.emit("removed",e,t)},t.prototype.hasResourceBundle=function(e,t){return void 0!==this.getResource(e,t)},t.prototype.getResourceBundle=function(e,t){return t||(t=this.options.defaultNS),"v1"===this.options.compatibilityAPI?m["extends"]({},this.getResource(e,t)):this.getResource(e,t)},t.prototype.toJSON=function(){return this.data},t}(w),N={processors:{},addPostProcessor:function(e){this.processors[e.name]=e},handle:function(e,t,n,o,r){var i=this;return e.forEach(function(e){i.processors[e]&&(t=i.processors[e].process(t,n,o,r))}),t}},O=function(e){function n(o){var r=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];m.classCallCheck(this,n);var i=m.possibleConstructorReturn(this,e.call(this));return t(["resourceStore","languageUtils","pluralResolver","interpolator","backendConnector"],o,i),i.options=r,i.logger=S.create("translator"),i}return m.inherits(n,e),n.prototype.changeLanguage=function(e){e&&(this.language=e)},n.prototype.exists=function(e){var t=arguments.length<=1||void 0===arguments[1]?{interpolation:{}}:arguments[1];return"v1"===this.options.compatibilityAPI&&(t=f(t)),void 0!==this.resolve(e,t)},n.prototype.extractFromKey=function(e,t){var n=t.nsSeparator||this.options.nsSeparator;void 0===n&&(n=":");var o=t.ns||this.options.defaultNS;if(n&&e.indexOf(n)>-1){var r=e.split(n);o=r[0],e=r[1]}return"string"==typeof o&&(o=[o]),{key:e,namespaces:o}},n.prototype.translate=function(e){var t=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];if("object"!==("undefined"==typeof t?"undefined":m["typeof"](t))?t=this.options.overloadTranslationOptionHandler(arguments):"v1"===this.options.compatibilityAPI&&(t=f(t)),void 0===e||null===e||""===e)return"";"number"==typeof e&&(e=String(e)),"string"==typeof e&&(e=[e]);var n=t.lng||this.language;if(n&&"cimode"===n.toLowerCase())return e[e.length-1];var o=t.keySeparator||this.options.keySeparator||".",r=this.extractFromKey(e[e.length-1],t),i=r.key,s=r.namespaces,a=s[s.length-1],l=this.resolve(e,t),u=Object.prototype.toString.apply(l),c=["[object Number]","[object Function]","[object RegExp]"],p=void 0!==t.joinArrays?t.joinArrays:this.options.joinArrays;if(l&&"string"!=typeof l&&c.indexOf(u)<0&&(!p||"[object Array]"!==u)){if(!t.returnObjects&&!this.options.returnObjects)return this.logger.warn("accessing an object - but returnObjects options is not enabled!"),this.options.returnedObjectHandler?this.options.returnedObjectHandler(i,l,t):"key '"+i+" ("+this.language+")' returned an object instead of string.";var h="[object Array]"===u?[]:{};for(var g in l)h[g]=this.translate(""+i+o+g,m["extends"]({joinArrays:!1,ns:s},t));l=h}else if(p&&"[object Array]"===u)l=l.join(p),l&&(l=this.extendTranslation(l,i,t));else{var d=!1,v=!1;if(!this.isValidLookup(l)&&t.defaultValue&&(d=!0,l=t.defaultValue),this.isValidLookup(l)||(v=!0,l=i),(v||d)&&(this.logger.log("missingKey",n,a,i,l),this.options.saveMissing)){var y=[];if("fallback"===this.options.saveMissingTo&&this.options.fallbackLng&&this.options.fallbackLng[0])for(var b=0;b<this.options.fallbackLng.length;b++)y.push(this.options.fallbackLng[b]);else"all"===this.options.saveMissingTo?y=this.languageUtils.toResolveHierarchy(t.lng||this.language):y.push(t.lng||this.language);this.options.missingKeyHandler?this.options.missingKeyHandler(y,a,i,l):this.backendConnector&&this.backendConnector.saveMissing&&this.backendConnector.saveMissing(y,a,i,l),this.emit("missingKey",y,a,i,l)}l=this.extendTranslation(l,i,t),v&&l===i&&this.options.appendNamespaceToMissingKey&&(l=a+":"+i),v&&this.options.parseMissingKeyHandler&&(l=this.options.parseMissingKeyHandler(l))}return l},n.prototype.extendTranslation=function(e,t,n){var o=this;n.interpolation&&this.interpolator.init(n);var r=n.replace&&"string"!=typeof n.replace?n.replace:n;this.options.interpolation.defaultVariables&&(r=m["extends"]({},this.options.interpolation.defaultVariables,r)),e=this.interpolator.interpolate(e,r),e=this.interpolator.nest(e,function(){for(var e=arguments.length,t=Array(e),n=0;e>n;n++)t[n]=arguments[n];return o.translate.apply(o,t)},n),n.interpolation&&this.interpolator.reset();var i=n.postProcess||this.options.postProcess,s="string"==typeof i?[i]:i;return void 0!==e&&s&&s.length&&n.applyPostProcessor!==!1&&(e=N.handle(s,e,t,n,this)),e},n.prototype.resolve=function(e){var t=this,n=arguments.length<=1||void 0===arguments[1]?{}:arguments[1],o=void 0;return"string"==typeof e&&(e=[e]),e.forEach(function(e){if(!t.isValidLookup(o)){var r=t.extractFromKey(e,n),i=r.key,s=r.namespaces;t.options.fallbackNS&&(s=s.concat(t.options.fallbackNS));var a=void 0!==n.count&&"string"!=typeof n.count,l=void 0!==n.context&&"string"==typeof n.context&&""!==n.context,u=n.lngs?n.lngs:t.languageUtils.toResolveHierarchy(n.lng||t.language);s.forEach(function(e){t.isValidLookup(o)||u.forEach(function(r){if(!t.isValidLookup(o)){var s=i,u=[s],c=void 0;a&&(c=t.pluralResolver.getSuffix(r,n.count)),a&&l&&u.push(s+c),l&&u.push(s+=""+t.options.contextSeparator+n.context),a&&u.push(s+=c);for(var p=void 0;p=u.pop();)t.isValidLookup(o)||(o=t.getResource(r,e,p,n))}})})}}),o},n.prototype.isValidLookup=function(e){return!(void 0===e||!this.options.returnNull&&null===e||!this.options.returnEmptyString&&""===e)},n.prototype.getResource=function(e,t,n){var o=arguments.length<=3||void 0===arguments[3]?{}:arguments[3];return this.resourceStore.getResource(e,t,n,o)},n}(w),j=function(){function e(t){m.classCallCheck(this,e),this.options=t,this.whitelist=this.options.whitelist||!1,this.logger=S.create("languageUtils")}return e.prototype.getLanguagePartFromCode=function(e){if(e.indexOf("-")<0)return e;var t=["NB-NO","NN-NO","nb-NO","nn-NO","nb-no","nn-no"],n=e.split("-");return this.formatLanguageCode(t.indexOf(e)>-1?n[1].toLowerCase():n[0])},e.prototype.formatLanguageCode=function(e){if("string"==typeof e&&e.indexOf("-")>-1){var t=["hans","hant","latn","cyrl","cans","mong","arab"],n=e.split("-");return this.options.lowerCaseLng?n=n.map(function(e){return e.toLowerCase()}):2===n.length?(n[0]=n[0].toLowerCase(),n[1]=n[1].toUpperCase(),t.indexOf(n[1].toLowerCase())>-1&&(n[1]=g(n[1].toLowerCase()))):3===n.length&&(n[0]=n[0].toLowerCase(),2===n[1].length&&(n[1]=n[1].toUpperCase()),"sgn"!==n[0]&&2===n[2].length&&(n[2]=n[2].toUpperCase()),t.indexOf(n[1].toLowerCase())>-1&&(n[1]=g(n[1].toLowerCase())),t.indexOf(n[2].toLowerCase())>-1&&(n[2]=g(n[2].toLowerCase()))),n.join("-")}return this.options.cleanCode||this.options.lowerCaseLng?e.toLowerCase():e},e.prototype.isWhitelisted=function(e){return"languageOnly"===this.options.load&&(e=this.getLanguagePartFromCode(e)),!this.whitelist||!this.whitelist.length||this.whitelist.indexOf(e)>-1},e.prototype.toResolveHierarchy=function(e,t){var n=this;t=t||this.options.fallbackLng||[],"string"==typeof t&&(t=[t]);var o=[],r=function(e){n.isWhitelisted(e)?o.push(e):n.logger.warn("rejecting non-whitelisted language code: "+e)};return"string"==typeof e&&e.indexOf("-")>-1?("languageOnly"!==this.options.load&&r(this.formatLanguageCode(e)),"currentOnly"!==this.options.load&&r(this.getLanguagePartFromCode(e))):"string"==typeof e&&r(this.formatLanguageCode(e)),t.forEach(function(e){o.indexOf(e)<0&&r(n.formatLanguageCode(e))}),o},e}(),R=[{lngs:["ach","ak","am","arn","br","fil","gun","ln","mfe","mg","mi","oc","tg","ti","tr","uz","wa"],nr:[1,2],fc:1},{lngs:["af","an","ast","az","bg","bn","ca","da","de","dev","el","en","eo","es","es_ar","et","eu","fi","fo","fur","fy","gl","gu","ha","he","hi","hu","hy","ia","it","kn","ku","lb","mai","ml","mn","mr","nah","nap","nb","ne","nl","nn","no","nso","pa","pap","pms","ps","pt","pt_br","rm","sco","se","si","so","son","sq","sv","sw","ta","te","tk","ur","yo"],nr:[1,2],fc:2},{lngs:["ay","bo","cgg","fa","id","ja","jbo","ka","kk","km","ko","ky","lo","ms","sah","su","th","tt","ug","vi","wo","zh"],nr:[1],fc:3},{lngs:["be","bs","dz","hr","ru","sr","uk"],nr:[1,2,5],fc:4},{lngs:["ar"],nr:[0,1,2,3,11,100],fc:5},{lngs:["cs","sk"],nr:[1,2,5],fc:6},{lngs:["csb","pl"],nr:[1,2,5],fc:7},{lngs:["cy"],nr:[1,2,3,8],fc:8},{lngs:["fr"],nr:[1,2],fc:9},{lngs:["ga"],nr:[1,2,3,7,11],fc:10},{lngs:["gd"],nr:[1,2,3,20],fc:11},{lngs:["is"],nr:[1,2],fc:12},{lngs:["jv"],nr:[0,1],fc:13},{lngs:["kw"],nr:[1,2,3,4],fc:14},{lngs:["lt"],nr:[1,2,10],fc:15},{lngs:["lv"],nr:[1,2,0],fc:16},{lngs:["mk"],nr:[1,2],fc:17},{lngs:["mnk"],nr:[0,1,2],fc:18},{lngs:["mt"],nr:[1,2,11,20],fc:19},{lngs:["or"],nr:[2,1],fc:2},{lngs:["ro"],nr:[1,2,20],fc:20},{lngs:["sl"],nr:[5,1,2,3],fc:21}],P={1:function(e){return Number(e>1)},2:function(e){return Number(1!=e)},3:function(e){return 0},4:function(e){return Number(e%10==1&&e%100!=11?0:e%10>=2&&4>=e%10&&(10>e%100||e%100>=20)?1:2)},5:function(e){return Number(0===e?0:1==e?1:2==e?2:e%100>=3&&10>=e%100?3:e%100>=11?4:5)},6:function(e){return Number(1==e?0:e>=2&&4>=e?1:2)},7:function(e){return Number(1==e?0:e%10>=2&&4>=e%10&&(10>e%100||e%100>=20)?1:2)},8:function(e){return Number(1==e?0:2==e?1:8!=e&&11!=e?2:3)},9:function(e){return Number(e>=2)},10:function(e){return Number(1==e?0:2==e?1:7>e?2:11>e?3:4)},11:function(e){return Number(1==e||11==e?0:2==e||12==e?1:e>2&&20>e?2:3)},12:function(e){return Number(e%10!=1||e%100==11)},13:function(e){return Number(0!==e)},14:function(e){return Number(1==e?0:2==e?1:3==e?2:3)},15:function(e){return Number(e%10==1&&e%100!=11?0:e%10>=2&&(10>e%100||e%100>=20)?1:2)},16:function(e){return Number(e%10==1&&e%100!=11?0:0!==e?1:2)},17:function(e){return Number(1==e||e%10==1?0:1)},18:function(e){return Number(0==e?0:1==e?1:2)},19:function(e){return Number(1==e?0:0===e||e%100>1&&11>e%100?1:e%100>10&&20>e%100?2:3)},20:function(e){return Number(1==e?0:0===e||e%100>0&&20>e%100?1:2)},21:function(e){return Number(e%100==1?1:e%100==2?2:e%100==3||e%100==4?3:0)}},E=function(){function e(t){var n=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];m.classCallCheck(this,e),this.languageUtils=t,this.options=n,this.logger=S.create("pluralResolver"),this.rules=d()}return e.prototype.addRule=function(e,t){this.rules[e]=t},e.prototype.getRule=function(e){return this.rules[this.languageUtils.getLanguagePartFromCode(e)]},e.prototype.needsPlural=function(e){var t=this.getRule(e);return!(t&&t.numbers.length<=1)},e.prototype.getSuffix=function(e,t){var n=this.getRule(e);if(n){if(1===n.numbers.length)return"";var o=n.noAbs?n.plurals(t):n.plurals(Math.abs(t)),r=n.numbers[o];if(2===n.numbers.length&&1===n.numbers[0]&&(2===r?r="plural":1===r&&(r="")),"v1"===this.options.compatibilityJSON){if(1===r)return"";if("number"==typeof r)return"_plural_"+r.toString()}return this.options.prepend&&r.toString()?this.options.prepend+r.toString():r.toString()}return this.logger.warn("no plural rule found for: "+e),""},e}(),_=function(){function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];m.classCallCheck(this,t),this.logger=S.create("interpolator"),this.init(e,!0)}return t.prototype.init=function(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],t=arguments[1];t&&(this.options=e),e.interpolation||(e.interpolation={escapeValue:!0});var n=e.interpolation;this.escapeValue=n.escapeValue,this.prefix=n.prefix?a(n.prefix):n.prefixEscaped||"{{",this.suffix=n.suffix?a(n.suffix):n.suffixEscaped||"}}",this.unescapePrefix=n.unescapeSuffix?"":n.unescapePrefix||"-",this.unescapeSuffix=this.unescapePrefix?"":n.unescapeSuffix||"",this.nestingPrefix=n.nestingPrefix?a(n.nestingPrefix):n.nestingPrefixEscaped||a("$t("),this.nestingSuffix=n.nestingSuffix?a(n.nestingSuffix):n.nestingSuffixEscaped||a(")");var o=this.prefix+"(.+?)"+this.suffix;this.regexp=new RegExp(o,"g");var r=this.prefix+this.unescapePrefix+"(.+?)"+this.unescapeSuffix+this.suffix;this.regexpUnescape=new RegExp(r,"g");var i=this.nestingPrefix+"(.+?)"+this.nestingSuffix;this.nestingRegexp=new RegExp(i,"g")},t.prototype.reset=function(){this.options&&this.init(this.options)},t.prototype.interpolate=function(t,n){function o(e){return e.replace(/\$/g,"$$$$")}for(var r=void 0,s=void 0;r=this.regexpUnescape.exec(t);){var a=i(n,r[1].trim());t=t.replace(r[0],a)}for(;r=this.regexp.exec(t);)s=i(n,r[1].trim()),"string"!=typeof s&&(s=e(s)),s||(this.logger.warn("missed to pass in variable "+r[1]+" for interpolating "+t),s=""),s=o(this.escapeValue?l(s):s),t=t.replace(r[0],s),this.regexp.lastIndex=0;return t},t.prototype.nest=function(t,n){function o(e){return e.replace(/\$/g,"$$$$")}function r(e){if(e.indexOf(",")<0)return e;var t=e.split(",");e=t.shift();var n=t.join(",");n=this.interpolate(n,u);try{u=JSON.parse(n)}catch(o){this.logger.error("failed parsing options string in nesting for key "+e,o)}return e}var i=arguments.length<=2||void 0===arguments[2]?{}:arguments[2],s=void 0,a=void 0,u=JSON.parse(JSON.stringify(i));for(u.applyPostProcessor=!1;s=this.nestingRegexp.exec(t);)a=n(r.call(this,s[1].trim()),u),"string"!=typeof a&&(a=e(a)),a||(this.logger.warn("missed to pass in variable "+s[1]+" for interpolating "+t),a=""),a=o(this.escapeValue?l(a):a),t=t.replace(s[0],a),this.regexp.lastIndex=0;return t},t}(),T=function(e){function t(n,o,r){var i=arguments.length<=3||void 0===arguments[3]?{}:arguments[3];m.classCallCheck(this,t);var s=m.possibleConstructorReturn(this,e.call(this));return s.backend=n,s.store=o,s.services=r,s.options=i,s.logger=S.create("backendConnector"),s.state={},s.queue=[],s.backend&&s.backend.init&&s.backend.init(r,i.backend,i),s}return m.inherits(t,e),t.prototype.queueLoad=function(e,t,n){var o=this,r=[],i=[],s=[],a=[];return e.forEach(function(e){var n=!0;t.forEach(function(t){var s=e+"|"+t;o.store.hasResourceBundle(e,t)?o.state[s]=2:o.state[s]<0||(1===o.state[s]?i.indexOf(s)<0&&i.push(s):(o.state[s]=1,n=!1,i.indexOf(s)<0&&i.push(s),r.indexOf(s)<0&&r.push(s),a.indexOf(t)<0&&a.push(t)))}),n||s.push(e)}),(r.length||i.length)&&this.queue.push({pending:i,loaded:{},errors:[],callback:n}),{toLoad:r,pending:i,toLoadLanguages:s,toLoadNamespaces:a}},t.prototype.loaded=function(e,t,n){var o=this,i=e.split("|"),s=m.slicedToArray(i,2),a=s[0],l=s[1];t&&this.emit("failedLoading",a,l,t),n&&this.store.addResourceBundle(a,l,n),this.state[e]=t?-1:2,this.queue.forEach(function(n){r(n.loaded,[a],l),v(n.pending,e),t&&n.errors.push(t),0!==n.pending.length||n.done||(n.errors.length?n.callback(n.errors):n.callback(),o.emit("loaded",n.loaded),n.done=!0)}),this.queue=this.queue.filter(function(e){return!e.done})},t.prototype.read=function(e,t,n,o,r,i){var s=this;return o||(o=0),r||(r=250),e.length?void this.backend[n](e,t,function(a,l){return a&&l&&5>o?void setTimeout(function(){s.read.call(s,e,t,n,++o,2*r,i)},r):void i(a,l)}):i(null,{})},t.prototype.load=function(e,t,n){var o=this;if(!this.backend)return this.logger.warn("No backend was added via i18next.use. Will not load resources."),n&&n();var r=m["extends"]({},this.backend.options,this.options.backend);"string"==typeof e&&(e=this.services.languageUtils.toResolveHierarchy(e)),"string"==typeof t&&(t=[t]);var s=this.queueLoad(e,t,n);return s.toLoad.length?void(r.allowMultiLoading&&this.backend.readMulti?this.read(s.toLoadLanguages,s.toLoadNamespaces,"readMulti",null,null,function(e,t){e&&o.logger.warn("loading namespaces "+s.toLoadNamespaces.join(", ")+" for languages "+s.toLoadLanguages.join(", ")+" via multiloading failed",e),!e&&t&&o.logger.log("loaded namespaces "+s.toLoadNamespaces.join(", ")+" for languages "+s.toLoadLanguages.join(", ")+" via multiloading",t),s.toLoad.forEach(function(n){var r=n.split("|"),s=m.slicedToArray(r,2),a=s[0],l=s[1],u=i(t,[a,l]);if(u)o.loaded(n,e,u);else{var c="loading namespace "+l+" for language "+a+" via multiloading failed";o.loaded(n,c),o.logger.error(c)}})}):!function(){var e=function(e){var t=this,n=e.split("|"),o=m.slicedToArray(n,2),r=o[0],i=o[1];this.read(r,i,"read",null,null,function(n,o){n&&t.logger.warn("loading namespace "+i+" for language "+r+" failed",n),!n&&o&&t.logger.log("loaded namespace "+i+" for language "+r,o),t.loaded(e,n,o)})};s.toLoad.forEach(function(t){e.call(o,t)})}()):void(s.pending.length||n())},t.prototype.saveMissing=function(e,t,n,o){this.backend&&this.backend.create&&this.backend.create(e,t,n,o),this.store.addResource(e[0],t,n,o)},t}(w),A=function(e){function t(n,o,r){var i=arguments.length<=3||void 0===arguments[3]?{}:arguments[3];m.classCallCheck(this,t);var s=m.possibleConstructorReturn(this,e.call(this));return s.cache=n,s.store=o,s.services=r,s.options=i,s.logger=S.create("cacheConnector"),s.cache&&s.cache.init&&s.cache.init(r,i.cache,i),s}return m.inherits(t,e),t.prototype.load=function(e,t,n){var o=this;if(!this.cache)return n&&n();var r=m["extends"]({},this.cache.options,this.options.cache);"string"==typeof e&&(e=this.services.languageUtils.toResolveHierarchy(e)),"string"==typeof t&&(t=[t]),r.enabled?this.cache.load(e,function(t,r){if(t&&o.logger.error("loading languages "+e.join(", ")+" from cache failed",t),r)for(var i in r)for(var s in r[i])if("i18nStamp"!==s){var a=r[i][s];a&&o.store.addResourceBundle(i,s,a)}n&&n()}):n&&n()},t.prototype.save=function(){this.cache&&this.options.cache&&this.options.cache.enabled&&this.cache.save(this.store.data)},t}(w),M=function(e){function t(){var n=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],o=arguments[1];m.classCallCheck(this,t);var r=m.possibleConstructorReturn(this,e.call(this));return r.options=b(n),r.services={},r.logger=S,r.modules={},o&&!r.isInitialized&&r.init(n,o),r}return m.inherits(t,e),t.prototype.init=function(e,t){function n(e){return e?"function"==typeof e?new e:e:void 0}var o=this;if("function"==typeof e&&(t=e,e={}),e||(e={}),"v1"===e.compatibilityAPI?this.options=m["extends"]({},y(),b(c(e)),{}):"v1"===e.compatibilityJSON?this.options=m["extends"]({},y(),b(p(e)),{}):this.options=m["extends"]({},y(),this.options,b(e)),t||(t=function(){}),!this.options.isClone){this.modules.logger?S.init(n(this.modules.logger),this.options):S.init(null,this.options);var r=new j(this.options);this.store=new L(this.options.resources,this.options);var i=this.services;i.logger=S,i.resourceStore=this.store,i.resourceStore.on("added removed",function(e,t){i.cacheConnector.save()}),i.languageUtils=r,i.pluralResolver=new E(r,{prepend:this.options.pluralSeparator,compatibilityJSON:this.options.compatibilityJSON}),i.interpolator=new _(this.options),i.backendConnector=new T(n(this.modules.backend),i.resourceStore,i,this.options),i.backendConnector.on("*",function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),r=1;t>r;r++)n[r-1]=arguments[r];o.emit.apply(o,[e].concat(n))}),i.backendConnector.on("loaded",function(e){i.cacheConnector.save()}),i.cacheConnector=new A(n(this.modules.cache),i.resourceStore,i,this.options),i.cacheConnector.on("*",function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),r=1;t>r;r++)n[r-1]=arguments[r];o.emit.apply(o,[e].concat(n))}),this.modules.languageDetector&&(i.languageDetector=n(this.modules.languageDetector),i.languageDetector.init(i,this.options.detection,this.options)),this.translator=new O(this.services,this.options),this.translator.on("*",function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),r=1;t>r;r++)n[r-1]=arguments[r];o.emit.apply(o,[e].concat(n))})}var s=["getResource","addResource","addResources","addResourceBundle","removeResourceBundle","hasResourceBundle","getResourceBundle"];s.forEach(function(e){o[e]=function(){return this.store[e].apply(this.store,arguments)}}),"v1"===this.options.compatibilityAPI&&h(this);var a=function(){o.changeLanguage(o.options.lng,function(e,n){o.emit("initialized",o.options),o.logger.log("initialized",o.options),t(e,n)})};return this.options.resources?a():setTimeout(a,10),this},t.prototype.loadResources=function(e){var t=this;if(e||(e=function(){}),this.options.resources)e(null);else{var n=function(){if(t.language&&"cimode"===t.language.toLowerCase())return{v:e()};var n=[],o=function(e){var o=t.services.languageUtils.toResolveHierarchy(e);o.forEach(function(e){n.indexOf(e)<0&&n.push(e)})};o(t.language),t.options.preload&&t.options.preload.forEach(function(e){o(e)}),t.services.cacheConnector.load(n,t.options.ns,function(){t.services.backendConnector.load(n,t.options.ns,e)})}();if("object"===("undefined"==typeof n?"undefined":m["typeof"](n)))return n.v}},t.prototype.use=function(e){return"backend"===e.type&&(this.modules.backend=e),"cache"===e.type&&(this.modules.cache=e),("logger"===e.type||e.log&&e.warn&&e.warn)&&(this.modules.logger=e),"languageDetector"===e.type&&(this.modules.languageDetector=e),"postProcessor"===e.type&&N.addPostProcessor(e),this},t.prototype.changeLanguage=function(e,t){var n=this,o=function(o){e&&(n.emit("languageChanged",e),n.logger.log("languageChanged",e)),t&&t(o,function(){for(var e=arguments.length,t=Array(e),o=0;e>o;o++)t[o]=arguments[o];return n.t.apply(n,t)})};!e&&this.services.languageDetector&&(e=this.services.languageDetector.detect()),e&&(this.language=e,this.languages=this.services.languageUtils.toResolveHierarchy(e),this.translator.changeLanguage(e),this.services.languageDetector&&this.services.languageDetector.cacheUserLanguage(e)),this.loadResources(function(e){o(e)})},t.prototype.getFixedT=function(e,t){var n=this,o=function r(e,t){return t=t||{},t.lng=t.lng||r.lng,t.ns=t.ns||r.ns,n.t(e,t)};return o.lng=e,o.ns=t,o},t.prototype.t=function(){return this.translator&&this.translator.translate.apply(this.translator,arguments)},t.prototype.exists=function(){return this.translator&&this.translator.exists.apply(this.translator,arguments)},t.prototype.setDefaultNamespace=function(e){this.options.defaultNS=e},t.prototype.loadNamespaces=function(e,t){var n=this;return this.options.ns?("string"==typeof e&&(e=[e]),e.forEach(function(e){n.options.ns.indexOf(e)<0&&n.options.ns.push(e)}),void this.loadResources(t)):t&&t()},t.prototype.loadLanguages=function(e,t){"string"==typeof e&&(e=[e]);var n=this.options.preload||[],o=e.filter(function(e){return n.indexOf(e)<0});return o.length?(this.options.preload=n.concat(o),
-void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language);var t=["ar","shu","sqr","ssh","xaa","yhd","yud","aao","abh","abv","acm","acq","acw","acx","acy","adf","ads","aeb","aec","afb","ajp","apc","apd","arb","arq","ars","ary","arz","auz","avl","ayh","ayl","ayn","ayp","bbz","pga","he","iw","ps","pbt","pbu","pst","prp","prd","ur","ydd","yds","yih","ji","yi","hbo","men","xmn","fa","jpr","peo","pes","prs","dv","sam"];return t.indexOf(this.services.languageUtils.getLanguagePartFromCode(e))?"ltr":"rtl"},t.prototype.createInstance=function(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],n=arguments[1];return new t(e,n)},t.prototype.cloneInstance=function(){var e=this,n=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],o=arguments[1],r=new t(m["extends"]({},n,this.options,{isClone:!0}),o),i=["store","translator","services","language"];return i.forEach(function(t){r[t]=e[t]}),r},t}(w),H=new M;return H});
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CbOrMod = /** @class */ (function () {
+    function CbOrMod() {
+    }
+    return CbOrMod;
+}());
+;
+var Selectors = /** @class */ (function () {
+    function Selectors() {
+    }
+    return Selectors;
+}());
+// the quick-edit object
+var $quickE = window.$quickE = {};
+// selectors used all over the in-page-editing, centralized to ensure consistency
+exports.selectors = {
+    cb: {
+        id: 'cb',
+        "class": 'sc-content-block',
+        selector: '.sc-content-block',
+        listSelector: '.sc-content-block-list',
+        context: 'data-list-context',
+        singleItem: 'single-item'
+    },
+    mod: {
+        id: 'mod',
+        "class": 'DnnModule',
+        selector: '.DnnModule',
+        listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)',
+        context: null
+    },
+    eitherCbOrMod: '.DnnModule, .sc-content-block',
+    selected: 'sc-cb-is-selected'
+};
+function btn(action, icon, i18N, invisible, unavailable, classes) {
+    return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + ' '
+        + (invisible ? ' sc-invisible ' : '')
+        + (unavailable ? ' sc-unavailable ' : '')
+        + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
+}
+;
+// the quick-insert object
+$.extend($quickE, {
+    body: $('body'),
+    win: $(window),
+    main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
+    template: "<a class='sc-content-block-menu-addcontent sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a>"
+        + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
+        + btn('select', 'ok', 'Select', true)
+        + btn('paste', 'paste', 'Paste', true, true),
+    selected: $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
+        .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>"),
+    contentBlocks: null,
+    cachedPanes: null,
+    modules: null,
+    nearestCb: null,
+    nearestMod: null,
+    modManage: null // will be populated later in the module section
+});
+// add stuff which dependes on other values to create
+$.extend($quickE, {
+    cbActions: $($quickE.template),
+    modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
+        .attr('data-context', 'module')
+        .addClass('sc-content-block-menu-module')
+});
+/**
+ * build the toolbar (hidden, but ready to show)
+ */
+function prepareToolbarInDom() {
+    $quickE.body.append($quickE.main)
+        .append($quickE.selected);
+    $quickE.main.append($quickE.cbActions)
+        .append($quickE.modActions);
+}
+exports.prepareToolbarInDom = prepareToolbarInDom;
+;
+
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-!function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define("i18nextXHRBackend",t):e.i18nextXHRBackend=t()}(this,function(){"use strict";function e(e){return a.call(r.call(arguments,1),function(t){if(t)for(var n in t)void 0===e[n]&&(e[n]=t[n])}),e}function t(e,t,n,i,a){if(i&&"object"===("undefined"==typeof i?"undefined":o["typeof"](i))){var r="",s=encodeURIComponent;for(var l in i)r+="&"+s(l)+"="+s(i[l]);i=r.slice(1)+(a?"":"&_t="+new Date)}try{var c=new(XMLHttpRequest||ActiveXObject)("MSXML2.XMLHTTP.3.0");c.open(i?"POST":"GET",e,1),t.crossDomain||c.setRequestHeader("X-Requested-With","XMLHttpRequest"),c.setRequestHeader("Content-type","application/x-www-form-urlencoded"),c.onreadystatechange=function(){c.readyState>3&&n&&n(c.responseText,c)},c.send(i)}catch(s){window.console&&console.log(s)}}function n(){return{loadPath:"/locales/{{lng}}/{{ns}}.json",addPath:"locales/add/{{lng}}/{{ns}}",allowMultiLoading:!1,parse:JSON.parse,crossDomain:!1,ajax:t}}var o={};o["typeof"]="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},o.classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")},o.createClass=function(){function e(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}return function(t,n,o){return n&&e(t.prototype,n),o&&e(t,o),t}}();var i=[],a=i.forEach,r=i.slice,s=function(){function t(e){var n=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];o.classCallCheck(this,t),this.init(e,n),this.type="backend"}return o.createClass(t,[{key:"init",value:function(t){var o=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];this.services=t,this.options=e(o,this.options||{},n())}},{key:"readMulti",value:function(e,t,n){var o=this.services.interpolator.interpolate(this.options.loadPath,{lng:e.join("+"),ns:t.join("+")});this.loadUrl(o,n)}},{key:"read",value:function(e,t,n){var o=this.services.interpolator.interpolate(this.options.loadPath,{lng:e,ns:t});this.loadUrl(o,n)}},{key:"loadUrl",value:function(e,t){var n=this;this.options.ajax(e,this.options,function(o,i){var a=i.status.toString();if(0===a.indexOf("5"))return t("failed loading "+e,!0);if(0===a.indexOf("4"))return t("failed loading "+e,!1);var r=void 0,s=void 0;try{r=n.options.parse(o)}catch(l){s="failed parsing "+e+" to json"}return s?t(s,!1):void t(null,r)})}},{key:"create",value:function(e,t,n,o){var i=this;"string"==typeof e&&(e=[e]);var a={};a[n]=o||"",e.forEach(function(e){var n=i.services.interpolator.interpolate(i.options.addPath,{lng:e,ns:t});i.options.ajax(n,i.options,function(e,t){},a)})}}]),t}();return s.type="backend",s});
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//var mngApi = $2sxc._manage;
+/**
+ * Get a html tag of the current sxc instance
+ * @param {any} sxci
+ * @return {jquery} - resulting html
+ */
+function getTag(sxci) {
+    return $("div[data-cb-id='" + sxci.cbid + "']")[0];
+}
+exports.getTag = getTag;
+;
+/**
+ * get the edit-context object (a json object) of the current tag/sxc-instance
+ * @param {any} htmlTag
+ * @return {any} edit-context object
+ */
+function getEditContextOfTag(htmlTag) {
+    var attr = htmlTag.getAttribute("data-edit-context");
+    return JSON.parse(attr || "");
+}
+exports.getEditContextOfTag = getEditContextOfTag;
+;
+/**
+ * get edit-context info of an sxc-object
+ * @param {any} sxc
+ * @return {any} edit context info
+ */
+function getEditContext(sxc) {
+    return getEditContextOfTag(getTag(sxc));
+}
+exports.getEditContext = getEditContext;
+;
+/**
+ * builds a config object used in the toolbar system
+ * @param {any} editContext
+ * @returns {any} object containing various properties for this current sxc-instance
+ */
+function buildInstanceConfig(editContext) {
+    var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
+    return {
+        portalId: ce.WebsiteId,
+        tabId: ce.PageId,
+        moduleId: ce.InstanceId,
+        version: ce.SxcVersion,
+        contentGroupId: cg.Guid,
+        cbIsEntity: cb.IsEntity,
+        cbId: cb.Id,
+        appPath: cg.AppUrl,
+        isList: cg.IsList
+    };
+}
+exports.buildInstanceConfig = buildInstanceConfig;
+;
+function getUserOfEditContext(editContext) {
+    return {
+        canDesign: editContext.User.CanDesign,
+        canDevelop: editContext.User.CanDesign
+    };
+}
+exports.getUserOfEditContext = getUserOfEditContext;
+;
+/**
+ * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
+ * @param {any} editContext
+ * @returns {any}
+ */
+function buildQuickDialogConfig(editContext) {
+    return {
+        appId: editContext.ContentGroup.AppId,
+        isContent: editContext.ContentGroup.IsContent,
+        hasContent: editContext.ContentGroup.HasContent,
+        isList: editContext.ContentGroup.IsList,
+        templateId: editContext.ContentGroup.TemplateId,
+        contentTypeId: editContext.ContentGroup.ContentTypeName,
+        templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker,
+        user: getUserOfEditContext(editContext),
+        supportsAjax: editContext.ContentGroup.SupportsAjax
+    };
+}
+exports.buildQuickDialogConfig = buildQuickDialogConfig;
+;
+/**
+ * get all parameters needed by NG dialogs from an sxc
+ * @param {any} sxc
+ * @param {any} [editContext]
+ * @return {any} special object containing the ng-dialog parameters
+ */
+function buildNgDialogParams(sxc, editContext) {
+    if (!editContext)
+        editContext = getEditContext(sxc);
+    return {
+        zoneId: editContext.ContentGroup.ZoneId,
+        appId: editContext.ContentGroup.AppId,
+        tid: editContext.Environment.PageId,
+        mid: editContext.Environment.InstanceId,
+        cbid: sxc.cbid,
+        lang: editContext.Language.Current,
+        langpri: editContext.Language.Primary,
+        langs: JSON.stringify(editContext.Language.All),
+        portalroot: editContext.Environment.WebsiteUrl,
+        websiteroot: editContext.Environment.SxcRootUrl,
+        partOfPage: editContext.ContentBlock.PartOfPage,
+        //versioningRequirements: editContext.ContentBlock.VersioningRequirements,
+        publishing: editContext.ContentBlock.VersioningRequirements,
+        // todo: probably move the user into the dashboard info
+        user: getUserOfEditContext(editContext),
+        approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
+    };
+}
+exports.buildNgDialogParams = buildNgDialogParams;
+;
+
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-!function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define("jqueryI18next",e):t.jqueryI18next=e()}(this,function(){"use strict";function t(t,a){function r(n,a,r){function i(t,n){return s.parseDefaultValueFromContent?e["extends"]({},t,{defaultValue:n}):t}if(0!==a.length){var o="text";if(0===a.indexOf("[")){var f=a.split("]");a=f[1],o=f[0].substr(1,f[0].length-1)}if(a.indexOf(";")===a.length-1&&(a=a.substr(0,a.length-2)),"html"===o)n.html(t.t(a,i(r,n.html())));else if("text"===o)n.text(t.t(a,i(r,n.text())));else if("prepend"===o)n.prepend(t.t(a,i(r,n.html())));else if("append"===o)n.append(t.t(a,i(r,n.html())));else if(0===o.indexOf("data-")){var l=o.substr("data-".length),d=t.t(a,i(r,n.data(l)));n.data(l,d),n.attr(o,d)}else n.attr(o,t.t(a,i(r,n.attr(o))))}}function i(t,n){var i=t.attr(s.selectorAttr);if(i||"undefined"==typeof i||i===!1||(i=t.text()||t.val()),i){var o=t,f=t.data(s.targetAttr);if(f&&(o=t.find(f)||t),n||s.useOptionsAttr!==!0||(n=t.data(s.optionsAttr)),n=n||{},i.indexOf(";")>=0){var l=i.split(";");a.each(l,function(t,e){""!==e&&r(o,e,n)})}else r(o,i,n);if(s.useOptionsAttr===!0){var d={};d=e["extends"]({clone:d},n),delete d.lng,t.data(s.optionsAttr,d)}}}function o(t){return this.each(function(){i(a(this),t);var e=a(this).find("["+s.selectorAttr+"]");e.each(function(){i(a(this),t)})})}var s=arguments.length<=2||void 0===arguments[2]?{}:arguments[2];s=e["extends"]({},n,s),a[s.tName]=t.t.bind(t),a[s.i18nName]=t,a.fn[s.handleName]=o}var e={};e["extends"]=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var a in n)Object.prototype.hasOwnProperty.call(n,a)&&(t[a]=n[a])}return t};var n={tName:"t",i18nName:"i18n",handleName:"localize",selectorAttr:"data-i18n",targetAttr:"i18n-target",optionsAttr:"i18n-options",useOptionsAttr:!1,parseDefaultValueFromContent:!0},a={init:t};return a});
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
+ * @param key
+ */
+function translate(key) {
+    // return key;
+    return ($.t && $.t(key)) || key;
+}
+exports.translate = translate;
+;
+$2sxc.translate = translate;
+
 
 /***/ }),
 /* 3 */
@@ -89,273 +295,394 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function initializeInstanceCommands(editContext) {
-    var cg = editContext.ContentGroup;
-    return $2sxc._commands.definitions.create({
-        canDesign: editContext.User.CanDesign,
-        templateId: cg.TemplateId,
-        contentTypeId: cg.ContentTypeName,
-        isContent: cg.IsContent,
-        queryId: cg.QueryId,
-        appResourcesId: cg.AppResourcesId,
-        appSettingsId: cg.AppSettingsId,
-        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
-    });
+var manage_api_1 = __webpack_require__(1);
+// this is a dialog manager which is in charge of all
+// quick-dialogs. 
+// it always has a reference to the latest dialog created by any module instance
+var resizeInterval = 200;
+var scrollTopOffset = 80;
+var resizeWatcher = null;
+var diagShowClass = "dia-select";
+var isFullscreen = false;
+/**
+ * dialog manager - the currently active dialog object
+ */
+//var diagManager = $2sxc._quickDialog = {}
+exports.current = null;
+/**
+ * toggle visibility
+ * @param {boolean} [show] true/false optional
+ */
+function toggle(show) {
+    var cont = $(getContainer());
+    if (show === undefined)
+        show = !cont.hasClass(diagShowClass);
+    // show/hide visually
+    cont.toggleClass(diagShowClass, show);
+    exports.current = show ? getIFrame() : null;
 }
-exports.default = initializeInstanceCommands;
+exports.toggle = toggle;
 ;
+function hide() {
+    if (exports.current)
+        toggle(false);
+}
+exports.hide = hide;
+;
+/**
+ * cancel the current dialog
+ */
+function cancel() {
+    if (exports.current)
+        exports.current.cancel(); // cancel & hide
+}
+exports.cancel = cancel;
+;
+/**
+ * Remember dialog state across page-reload
+ * @param {Object<any>} sxc - the sxc which is persisted for
+ */
+function persistDialog(sxc) {
+    sessionStorage.setItem("dia-cbid", sxc.cbid);
+}
+exports.persistDialog = persistDialog;
+;
+/**
+ * get the current container
+ * @returns {element} html element of the div
+ */
+function getContainer() {
+    var container = $(".inpage-frame-wrapper");
+    return container.length > 0 ? container : buildContainerAndIFrame();
+}
+exports.getContainer = getContainer;
+;
+/**
+ * find the iframe which hosts the dialog
+ * @param {html} [container] - html-container as jQuery object
+ * @returns {html} iframe object
+ */
+function getIFrame(container) {
+    if (!container)
+        container = getContainer();
+    return container.find("iframe")[0];
+}
+exports.getIFrame = getIFrame;
+;
+/**
+ * check if the dialog is showing for the current sxc-instance
+ * @param {Object<any>} sxc - sxc object
+ * @param {string} dialogName - name of dialog
+ * @returns {boolean} true if it's currently showing for this sxc-instance
+ */
+function isShowing(sxc, dialogName) {
+    return exports.current // there is a current dialog
+        &&
+            exports.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
+        &&
+            exports.current.dialogName === dialogName; // the view is the same as previously
+}
+exports.isShowing = isShowing;
+;
+/**
+ * show / reset the current iframe to use new url and callback
+ * @param {any} sxc - sxc object
+ * @param {string} url - url to show
+ * @param {function()} closeCallback - callback event
+ * @param {boolean} fullScreen - if it should open full screen
+ * @param {string} [dialogName] - optional name of dialog, to check if it's already open
+ * @returns {any} jquery object of the iframe
+ */
+function showOrToggle(sxc, url, closeCallback, fullScreen, dialogName) {
+    setSize(fullScreen);
+    var iFrame = getIFrame();
+    // in case it's a toggle
+    if (dialogName && isShowing(sxc, dialogName))
+        return hide();
+    iFrame.rewire(sxc, closeCallback, dialogName);
+    iFrame.setAttribute("src", rewriteUrl(url));
+    // if the window had already been loaded, re-init
+    if (iFrame.contentWindow && iFrame.contentWindow.reboot)
+        iFrame.contentWindow.reboot();
+    // make sure it's visible'
+    iFrame.toggle(true);
+    return iFrame;
+}
+exports.showOrToggle = showOrToggle;
+/**
+ * build the container in the dom w/iframe for re-use
+ * @return {jquery} jquery dom-object
+ */
+function buildContainerAndIFrame() {
+    var container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
+    var newIFrame = document.createElement("iframe");
+    newIFrame = extendIFrameWithSxcState(newIFrame);
+    container.find(".inpage-frame").html(newIFrame);
+    $("body").append(container);
+    watchForResize();
+    return container;
+}
+function setSize(fullScreen) {
+    var container = getContainer();
+    // set container height
+    container.css("min-height", fullScreen ? "100%" : "225px");
+    isFullscreen = fullScreen;
+}
+function extendIFrameWithSxcState(iFrame) {
+    var hiddenSxc = null;
+    var cbApi = $2sxc._contentBlock;
+    var tagModule = null;
+    /**
+     * get the sxc-object of this iframe
+     * @returns {Object<any>} refreshed sxc-object
+     */
+    function reSxc() {
+        if (!hiddenSxc)
+            throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
+        return hiddenSxc.recreate();
+    }
+    var newFrm = Object.assign(iFrame, {
+        closeCallback: null,
+        rewire: function (sxc, callback, dialogName) {
+            hiddenSxc = sxc;
+            tagModule = $($(manage_api_1.getTag(sxc)).parent().eq(0));
+            newFrm.sxcCacheKey = sxc.cacheKey;
+            newFrm.closeCallback = callback;
+            if (dialogName)
+                newFrm.dialogName = dialogName;
+        },
+        getManageInfo: function () {
+            return reSxc().manage._dialogParameters;
+        },
+        getAdditionalDashboardConfig: function () {
+            return reSxc().manage._quickDialogConfig;
+        },
+        persistDia: function () {
+            persistDialog(reSxc());
+        },
+        scrollToTarget: function () {
+            $("body").animate({
+                scrollTop: tagModule.offset().top - scrollTopOffset
+            });
+        },
+        toggle: function (show) {
+            toggle(show);
+        },
+        cancel: function () {
+            newFrm.toggle(false);
+            //todo: only re-init if something was changed?
+            // return cbApi.reloadAndReInitialize(reSxc());
+            // cancel the dialog
+            localStorage.setItem("cancelled-dialog", "true");
+            return newFrm.closeCallback();
+        },
+        run: function (verb) {
+            reSxc().manage.run(verb);
+        },
+        showMessage: function (message) {
+            cbApi.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
+        },
+        reloadAndReInit: function () {
+            return cbApi.reloadAndReInitialize(reSxc(), true, true);
+        },
+        saveTemplate: function (templateId) {
+            return cbApi.updateTemplateFromDia(reSxc(), templateId, false);
+        },
+        previewTemplate: function (templateId) {
+            return cbApi.ajaxLoad(reSxc(), templateId, true);
+        }
+    });
+    return newFrm;
+}
+/**
+ * rewrite the url to fit the quick-dialog situation
+ * optionally with a live-compiled version from ng-serve
+ * @param {string} url - original url pointing to the "wrong" dialog
+ * @returns {string} new url
+ */
+function rewriteUrl(url) {
+    // change default url-schema from the primary angular-app to the quick-dialog
+    url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
+    // special debug-code when running on local ng-serve
+    // this is only activated if the developer manually sets a value in the localStorage
+    try {
+        var devMode = localStorage.getItem("devMode");
+        if (devMode && ~~devMode)
+            url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
+    }
+    catch (e) {
+        // ignore
+    }
+    return url;
+}
+/**
+ * create watcher which monitors the iframe size and adjusts the container as needed
+ * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
+ * @returns {null} nothing
+ */
+function watchForResize(keepWatching) {
+    if ((keepWatching === null || keepWatching === false) && resizeWatcher) {
+        clearInterval(resizeWatcher);
+        resizeWatcher = null;
+        return null;
+    }
+    var cont = getContainer();
+    if (!resizeWatcher)
+        resizeWatcher = setInterval(function () {
+            try {
+                var frm = getIFrame(cont);
+                if (!frm)
+                    return;
+                var height = frm.contentDocument.body.offsetHeight;
+                if (frm.previousHeight === height)
+                    return;
+                frm.style.minHeight = cont.css("min-height");
+                frm.style.height = height + "px";
+                frm.previousHeight = height;
+                if (isFullscreen) {
+                    frm.style.height = "100%";
+                    frm.style.position = "absolute";
+                }
+            }
+            catch (e) {
+                // ignore
+            }
+        }, resizeInterval);
+    return resizeWatcher;
+}
 
 
 /***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(5);
-__webpack_require__(0);
-__webpack_require__(1);
-__webpack_require__(2);
-__webpack_require__(6);
-__webpack_require__(7);
-__webpack_require__(8);
-__webpack_require__(9);
-__webpack_require__(10);
-__webpack_require__(3);
-__webpack_require__(11);
-__webpack_require__(12);
-__webpack_require__(13);
-__webpack_require__(14);
-__webpack_require__(15);
-__webpack_require__(16);
-__webpack_require__(17);
-__webpack_require__(18);
-__webpack_require__(19);
-__webpack_require__(20);
-__webpack_require__(21);
-__webpack_require__(22);
-__webpack_require__(23);
-__webpack_require__(24);
-__webpack_require__(25);
-__webpack_require__(26);
-__webpack_require__(27);
-__webpack_require__(28);
-__webpack_require__(29);
-__webpack_require__(30);
-__webpack_require__(31);
-__webpack_require__(32);
-__webpack_require__(33);
-__webpack_require__(34);
-__webpack_require__(35);
-__webpack_require__(36);
-__webpack_require__(37);
-__webpack_require__(38);
-__webpack_require__(39);
-__webpack_require__(40);
-__webpack_require__(41);
-__webpack_require__(42);
-__webpack_require__(43);
-__webpack_require__(44);
-__webpack_require__(45);
-__webpack_require__(46);
-__webpack_require__(47);
-__webpack_require__(48);
-__webpack_require__(49);
-__webpack_require__(50);
-__webpack_require__(51);
-__webpack_require__(52);
-__webpack_require__(53);
-__webpack_require__(54);
-__webpack_require__(55);
-__webpack_require__(56);
-__webpack_require__(57);
-__webpack_require__(58);
-__webpack_require__(59);
-__webpack_require__(60);
-__webpack_require__(61);
-__webpack_require__(62);
-__webpack_require__(63);
-module.exports = __webpack_require__(64);
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var _quickE_positioning_1 = __webpack_require__(8);
+var _quickE_cmds_1 = __webpack_require__(16);
+/**
+ * add a clipboard to the quick edit
+ */
+/**
+ * perform copy and paste commands - needs the clipboard
+ * @param cbAction
+ * @param list
+ * @param index
+ * @param type
+ */
+function copyPasteInPage(cbAction, list, index, type) {
+    var newClip = clipboard.createSpecs(type, list, index);
+    // action!
+    switch (cbAction) {
+        case 'select':
+            clipboard.mark(newClip);
+            break;
+        case 'paste':
+            var from = clipboard.data.index;
+            var to = newClip.index;
+            // check that we only move block-to-block or module to module
+            if (clipboard.data.type !== newClip.type)
+                return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
+            if (isNaN(from) || isNaN(to) || from === to)
+                return clipboard.clear(); // don't do anything
+            // cb-numbering is a bit different, because the selector is at the bottom
+            // only there we should also skip on +1;
+            if (newClip.type === _quickE___1.selectors.cb.id && from + 1 === to)
+                return clipboard.clear(); // don't do anything
+            if (type === _quickE___1.selectors.cb.id) {
+                $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+            }
+            else {
+                _quickE_cmds_1.mod.move(clipboard.data, newClip, from, to);
+            }
+            clipboard.clear();
+            break;
+        default:
+    }
+    return null;
+}
+exports.copyPasteInPage = copyPasteInPage;
+;
+/**
+ * clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
+ */
+var clipboard;
+(function (clipboard) {
+    clipboard.data = {};
+    function mark(newData) {
+        if (newData) {
+            // if it was already selected with the same thing, then release it
+            if (clipboard.data && clipboard.data.item === newData.item)
+                return clear();
+            clipboard.data = newData;
+        }
+        $('.' + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected); // clear previous markings
+        var cb = $(clipboard.data.item);
+        cb.addClass(_quickE___1.selectors.selected);
+        if (cb.prev().is('iframe'))
+            cb.prev().addClass(_quickE___1.selectors.selected);
+        setSecondaryActionsState(true);
+        $quickE.selected.toggle(cb, clipboard.data.type);
+    }
+    clipboard.mark = mark;
+    function clear() {
+        $('.' + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected);
+        clipboard.data = null;
+        setSecondaryActionsState(false);
+        $quickE.selected.toggle(false);
+    }
+    clipboard.clear = clear;
+    function createSpecs(type, list, index) {
+        var listItems = list.find(_quickE___1.selectors[type].selector);
+        if (index >= listItems.length)
+            index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
+        var currentItem = listItems[index];
+        var editContext = JSON.parse(list.attr(_quickE___1.selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
+        return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
+    }
+    clipboard.createSpecs = createSpecs;
+})(clipboard = exports.clipboard || (exports.clipboard = {}));
+;
+function setSecondaryActionsState(state) {
+    var btns = $('a.sc-content-block-menu-btn');
+    btns = btns.filter('.icon-sxc-paste');
+    btns.toggleClass('sc-unavailable', !state);
+}
+;
+$quickE.selected.toggle = function (target) {
+    if (!target)
+        return $quickE.selected.hide();
+    var coords = _quickE_positioning_1.getCoordinates(target);
+    coords.yh = coords.y + 20;
+    _quickE_positioning_1.positionAndAlign($quickE.selected, coords);
+    $quickE.selected.target = target;
+};
+var cmdsStrategyFactory = new _quickE_cmds_1.CmdsStrategyFactory();
+/**
+ * bind clipboard actions
+ */
+$('a', $quickE.selected).click(function () {
+    var action = $(this).data('action');
+    var clip = clipboard.data;
+    switch (action) {
+        case 'delete':
+            return cmdsStrategyFactory.delete(clip);
+        case 'sendToPane':
+            return _quickE_cmds_1.mod.sendToPane();
+    }
+});
 
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-/*
- * Author: Alex Gibson
- * https://github.com/alexgibson/shake.js
- * License: MIT license
- */
-(function (global, factory) {
-    global.Shake = factory(global, global.document);
-}(typeof window !== 'undefined' ? window : this, function (window, document) {
-    'use strict';
-    function Shake(options) {
-        //feature detect
-        this.hasDeviceMotion = 'ondevicemotion' in window;
-        this.options = {
-            threshold: 15,
-            timeout: 1000,
-            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
-        };
-        if (typeof options === 'object') {
-            for (var i in options) {
-                if (options.hasOwnProperty(i)) {
-                    this.options[i] = options[i];
-                }
-            }
-        }
-        //use date to prevent multiple shakes firing
-        this.lastTime = new Date();
-        //accelerometer values
-        this.lastX = null;
-        this.lastY = null;
-        this.lastZ = null;
-    }
-    //reset timer values
-    Shake.prototype.reset = function () {
-        this.lastTime = new Date();
-        this.lastX = null;
-        this.lastY = null;
-        this.lastZ = null;
-    };
-    //start listening for devicemotion
-    Shake.prototype.start = function () {
-        this.reset();
-        if (this.hasDeviceMotion) {
-            window.addEventListener('devicemotion', this, false);
-        }
-    };
-    //stop listening for devicemotion
-    Shake.prototype.stop = function () {
-        if (this.hasDeviceMotion) {
-            window.removeEventListener('devicemotion', this, false);
-        }
-        this.reset();
-    };
-    //calculates if shake did occur
-    Shake.prototype.devicemotion = function (e) {
-        var current = e.accelerationIncludingGravity;
-        var currentTime;
-        var timeDifference;
-        var deltaX = 0;
-        var deltaY = 0;
-        var deltaZ = 0;
-        if ((this.lastX === null) && (this.lastY === null) && (this.lastZ === null)) {
-            this.lastX = current.x;
-            this.lastY = current.y;
-            this.lastZ = current.z;
-            return;
-        }
-        deltaX = Math.abs(this.lastX - current.x);
-        deltaY = Math.abs(this.lastY - current.y);
-        deltaZ = Math.abs(this.lastZ - current.z);
-        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
-            //calculate time in milliseconds since last shake registered
-            currentTime = new Date();
-            timeDifference = currentTime.getTime() - this.lastTime.getTime();
-            if (timeDifference > this.options.timeout) {
-                // once triggered, execute  the callback
-                if (typeof this.options.callback === 'function') {
-                    this.options.callback();
-                }
-                else
-                    console.log("shake event without callback detected");
-                this.lastTime = new Date();
-            }
-        }
-        this.lastX = current.x;
-        this.lastY = current.y;
-        this.lastZ = current.z;
-    };
-    //event handler
-    Shake.prototype.handleEvent = function (e) {
-        if (typeof (this[e.type]) === 'function') {
-            return this[e.type](e);
-        }
-    };
-    return Shake;
-}));
-//# sourceMappingURL=shake.js.map
+"use strict";
 
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-(function () {
-    if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
-        return false;
-    }
-    $2sxc.c = $2sxc.consts = {
-        // classes
-        cls: {
-            scMenu: "sc-menu",
-            scCb: "sc-content-block",
-            scElm: "sc-element"
-        },
-        // attribs
-        attr: {
-            toolbar: "toolbar",
-            toolbarData: "data-toolbar",
-            settings: "settings",
-            settingsData: "data-settings"
-        },
-        publishAllowed: "DraftOptional"
-    };
-    // selectors
-    var sel = $2sxc.c.sel = {};
-    Object.keys($2sxc.c.cls).forEach(function (key, index) {
-        sel[key] = "." + $2sxc.c.cls[key];
-    });
-    /*
-    ToDo: functional programming
-    $2sxc.c.sel = Object.entries($2sxc.c.cls).reduce((res, current) => {
-        res[entry[0]] = entry[1];
-        return t;
-    }, {});
-    */
-})();
-
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-// this enhances the $2sxc client controller with stuff only needed when logged in
-(function () {
-    if (!(window.$2sxc /*|| window.$2sxc.system*/)) {
-        return;
-    }
-    $2sxc.system = {
-        finishUpgrade: finishUpgrade
-    };
-    // upgrade command - started when an error contains a link to start this
-    function finishUpgrade(domElement) {
-        var mc = $2sxc(domElement);
-        $.ajax({
-            type: "get",
-            url: mc.resolveServiceUrl("view/module/finishinstallation"),
-            beforeSend: $.ServicesFramework(mc.id).setModuleHeaders
-        }).success(function () {
-            alert("Upgrade ok, restarting the CMS and reloading...");
-            location.reload();
-        });
-        alert("starting upgrade. This could take a few minutes. You'll see an 'ok' when it's done. Please wait...");
-    }
-})();
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-$2sxc._commands = {};
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = __webpack_require__(2);
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -372,7 +699,30 @@ $2sxc._commands = {};
  * - disabled (new!)
  * - params - ...
  */
-// helper function to create the configuration object
+var Act = /** @class */ (function () {
+    function Act() {
+    }
+    return Act;
+}());
+var Def = /** @class */ (function () {
+    function Def() {
+    }
+    return Def;
+}());
+var CmdSpec = /** @class */ (function () {
+    function CmdSpec() {
+    }
+    return CmdSpec;
+}());
+/**
+ * helper function to create the configuration object
+ * @param name
+ * @param translateKey
+ * @param icon
+ * @param uiOnly
+ * @param partOfPage
+ * @param more
+ */
 function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
     if (typeof (partOfPage) !== 'boolean')
         throw 'partOfPage in commands not provided, order will be wrong!';
@@ -383,11 +733,9 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         uiActionOnly: uiOnly,
         partOfPage: partOfPage
     };
-    // TODO: this is not type safe
     return $2sxc._lib.extend(newDefinition, more);
 }
-$2sxc._commands.definitions = {};
-$2sxc._commands.definitions.create = function (cmdSpecs) {
+function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
     var isContent = cmdSpecs.isContent;
     var act = {};
@@ -455,7 +803,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            if (confirm($2sxc.translate('Toolbar.ConfirmRemove'))) {
+            if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
                 $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
                 //sxc.manage.contentBlock
                 //    .removeFromList(settings.sortOrder);
@@ -507,7 +855,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             if (settings.isPublished)
-                return alert($2sxc.translate('Toolbar.AlreadyPublished'));
+                return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
             // if we have an entity-id, publish based on that
             if (settings.entityId)
                 return $2sxc._contentBlock.publishId(sxc, settings.entityId);
@@ -666,20 +1014,24 @@ $2sxc._commands.definitions.create = function (cmdSpecs) {
         fullScreen: true
     }));
     return act;
-};
+}
+exports.create = create;
+;
 
 
 /***/ }),
-/* 10 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_instanceCommands_1 = __webpack_require__(3);
-$2sxc._commands.instanceEngine = function (sxc, editContext) {
+var commands_instanceCommands_1 = __webpack_require__(7);
+var _2sxc__quickDialog_1 = __webpack_require__(3);
+var _2sxc_translate_1 = __webpack_require__(2);
+function instanceEngine(sxc, editContext) {
     var engine = {
-        commands: commands_instanceCommands_1.default(editContext),
+        commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
             var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
@@ -713,7 +1065,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
                             Part: part,
                             Add: isAdd
                         },
-                        Title: $2sxc.translate(sectionLanguageKey)
+                        Title: _2sxc_translate_1.translate(sectionLanguageKey)
                     });
                 },
                 // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
@@ -774,7 +1126,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
             };
             var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
             if (settings.inlineWindow)
-                return $2sxc._quickDialog.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+                return _2sxc__quickDialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
             if (settings.newWindow || (event && event.shiftKey))
                 return window.open(link);
             return $2sxc.totalPopup.open(link, callback);
@@ -811,11 +1163,937 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
         }
     };
     return engine;
+}
+exports.instanceEngine = instanceEngine;
+;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_definitions_1 = __webpack_require__(5);
+function initializeInstanceCommands(editContext) {
+    var cg = editContext.ContentGroup;
+    return commands_definitions_1.create({
+        canDesign: editContext.User.CanDesign,
+        templateId: cg.TemplateId,
+        contentTypeId: cg.ContentTypeName,
+        isContent: cg.IsContent,
+        queryId: cg.QueryId,
+        appResourcesId: cg.AppResourcesId,
+        appSettingsId: cg.AppSettingsId,
+        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed
+    });
+}
+exports.initializeInstanceCommands = initializeInstanceCommands;
+;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+/**
+ * Module with everything related to positioning the quick-edit in-page editing
+ */
+/**
+ * Point is used as return type to store X,Y coordinates
+ */
+var Coords = /** @class */ (function () {
+    function Coords(x, y, w, yh, element // TODO: find this type
+    ) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.yh = yh;
+        this.element = element; // TODO: find this type
+    }
+    return Coords;
+}());
+/**
+ * Prepare offset calculation based on body positioning
+ * @returns Point
+ */
+function getBodyPosition() {
+    var bodyPos = $quickE.body.css('position');
+    return bodyPos === 'relative' || bodyPos === 'absolute'
+        ? new Coords($quickE.body.offset().left, $quickE.body.offset().top)
+        : new Coords(0, 0);
+}
+exports.getBodyPosition = getBodyPosition;
+;
+/**
+ * Refresh content block and modules elements
+ */
+function refreshDomObjects() {
+    $quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
+    //// Cache the panes (because panes can't change dynamically)
+    //if (!$quickE.cachedPanes)
+    //    $quickE.cachedPanes = $(selectors.mod.listSelector);
+    if ($quickE.config.innerBlocks.enable) {
+        // get all content-block lists which are empty, or which allow multiple child-items
+        var lists = $(_quickE___1.selectors.cb.listSelector)
+            .filter(':not(.' + _quickE___1.selectors.cb.singleItem + '), :empty');
+        $quickE.contentBlocks = lists // $(selectors.cb.listSelector)
+            .find(_quickE___1.selectors.cb.selector)
+            .add(lists); // selectors.cb.listSelector);
+    }
+    if ($quickE.config.modules.enable)
+        $quickE.modules = $quickE.cachedPanes
+            .find(_quickE___1.selectors.mod.selector)
+            .add($quickE.cachedPanes);
+}
+/**
+ * Last time when contentblock and modules are refreshed.
+ * Helps to skip unnecessary calls to refresh(e).
+ */
+(function (refreshDomObjects) {
+})(refreshDomObjects || (refreshDomObjects = {}));
+/**
+ * position, align and show a menu linked to another item
+ */
+function positionAndAlign(element, coords) {
+    return element.css({
+        left: coords.x - $quickE.bodyOffset.x,
+        top: coords.yh - $quickE.bodyOffset.y,
+        width: coords.element.width()
+    }).show();
+}
+exports.positionAndAlign = positionAndAlign;
+;
+/**
+ * Refresh positioning / visibility of the quick-insert bar
+ * @param e
+ */
+function refresh(e) {
+    var highlightClass = 'sc-cb-highlight-for-insert';
+    var newDate = new Date();
+    if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
+        // console.log('refreshed contentblock and modules');
+        refreshDomObjects.lastCall = newDate;
+        refreshDomObjects();
+    }
+    if ($quickE.config.innerBlocks.enable && $quickE.contentBlocks) {
+        $quickE.nearestCb = findNearest($quickE.contentBlocks, new Coords(e.clientX, e.clientY));
+    }
+    if ($quickE.config.modules.enable && $quickE.modules) {
+        $quickE.nearestMod = findNearest($quickE.modules, new Coords(e.clientX, e.clientY));
+    }
+    $quickE.modActions.toggleClass('sc-invisible', $quickE.nearestMod === null);
+    $quickE.cbActions.toggleClass('sc-invisible', $quickE.nearestCb === null);
+    var oldParent = $quickE.main.parentContainer;
+    if ($quickE.nearestCb !== null || $quickE.nearestMod !== null) {
+        var alignTo = $quickE.nearestCb || $quickE.nearestMod;
+        // find parent pane to highlight
+        var parentPane = $(alignTo.element).closest(_quickE___1.selectors.mod.listSelector);
+        var parentCbList = $(alignTo.element).closest(_quickE___1.selectors.cb.listSelector);
+        var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
+        // put part of the pane-name into the button-labels
+        if (parentPane.length > 0) {
+            var paneName_1 = parentPane.attr('id') || '';
+            if (paneName_1.length > 4)
+                paneName_1 = paneName_1.substr(4);
+            $quickE.modActions.filter('[titleTemplate]').each(function () {
+                var t = $(this);
+                t.attr('title', t.attr('titleTemplate').replace('{0}', paneName_1));
+            });
+        }
+        positionAndAlign($quickE.main, alignTo);
+        // Keep current block as current on menu
+        $quickE.main.actionsForCb = $quickE.nearestCb ? $quickE.nearestCb.element : null;
+        $quickE.main.actionsForModule = $quickE.nearestMod ? $quickE.nearestMod.element : null;
+        $quickE.main.parentContainer = parentContainer;
+        $(parentContainer).addClass(highlightClass);
+    }
+    else {
+        $quickE.main.parentContainer = null;
+        $quickE.main.hide();
+    }
+    // if previously a parent-pane was highlighted, un-highlight it now
+    if (oldParent && oldParent !== $quickE.main.parentContainer)
+        $(oldParent).removeClass(highlightClass);
+}
+exports.refresh = refresh;
+;
+/**
+ * Return the nearest element to the mouse cursor from elements (jQuery elements)
+ * @param elements
+ * @param position
+ */
+function findNearest(elements, position) {
+    var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
+    var nearestItem = null;
+    var nearestDistance = maxDistance;
+    var posX = position.x + $quickE.win.scrollLeft();
+    var posY = position.y + $quickE.win.scrollTop();
+    // Find nearest element
+    elements.each(function () {
+        var e = getCoordinates($(this));
+        // First check x coordinates - must be within container
+        if (posX < e.x || posX > e.x + e.w)
+            return;
+        // Check if y coordinates are within boundaries
+        var distance = Math.abs(posY - e.yh);
+        if (distance < maxDistance && distance < nearestDistance) {
+            nearestItem = e;
+            nearestDistance = distance;
+        }
+    });
+    return nearestItem;
+}
+;
+function getCoordinates(element) {
+    return {
+        element: element,
+        x: element.offset().left,
+        w: element.width(),
+        y: element.offset().top,
+        // For content-block ITEMS, the menu must be visible at the end
+        // For content-block-LISTS, the menu must be at top
+        yh: element.offset().top + (element.is(_quickE___1.selectors.eitherCbOrMod) ? element.height() : 0)
+    };
+}
+exports.getCoordinates = getCoordinates;
+;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE_clipboard_1 = __webpack_require__(4);
+/**
+ * module specific stuff
+ */
+var modManage = /** @class */ (function () {
+    function modManage() {
+        this.delete = deleteMod;
+        this.create = createModWithTypeName;
+        this.move = moveMod;
+        this.getPaneName = getPaneName;
+        this.getModuleId = getModuleId;
+        this.getMoveButtons = generatePaneMoveButtons;
+    }
+    return modManage;
+}());
+exports.modManage = modManage;
+;
+function getPaneName(pane) {
+    return $(pane).attr("id").replace("dnn_", "");
+}
+// find the correct module id from a list of classes - used on the module-wrapper
+function getModuleId(classes) {
+    var result = classes.match(/DnnModule-([0-9]+)(?:\W|$)/);
+    return (result && result.length === 2) ? result[1] : null;
+}
+// show an error when an xhr error occurs
+function xhrError(xhr, optionalMessage) {
+    alert(optionalMessage || "Error while talking to server.");
+    console.log(xhr);
+}
+// service calls we'll need
+function createModWithTypeName(paneName, index, type) {
+    return sendDnnAjax(null, "controlbar/GetPortalDesktopModules", {
+        data: "category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=",
+        success: function (desktopModules) {
+            var moduleToFind = type === "Default" ? " Content" : " App";
+            var module = null;
+            desktopModules.forEach(function (e, i) {
+                if (e.ModuleName === moduleToFind)
+                    module = e;
+            });
+            return (!module)
+                ? alert(moduleToFind + " module not found.")
+                : createMod(paneName, index, module.ModuleID);
+        }
+    });
+}
+// move a dnn module
+function moveMod(modId, pane, order) {
+    var service = $.dnnSF(modId);
+    var tabId = service.getTabId();
+    var dataVar = {
+        TabId: tabId,
+        ModuleId: modId,
+        Pane: pane,
+        ModuleOrder: (2 * order + 4) // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
+    };
+    sendDnnAjax(modId, "ModuleService/MoveModule", {
+        type: "POST",
+        data: dataVar,
+        success: function () {
+            window.location.reload();
+        }
+    });
+    //fire window resize to reposition action menus
+    $(window).resize();
+}
+// delete a module
+function deleteMod(modId) {
+    var service = $.dnnSF(modId);
+    var tabId = service.getTabId();
+    return sendDnnAjax(modId, "2sxc/dnn/module/delete", {
+        url: $.dnnSF().getServiceRoot("2sxc") + "dnn/module/delete",
+        type: "GET",
+        data: {
+            tabId: tabId,
+            modId: modId
+        },
+        success: function (d) {
+            window.location.reload();
+        }
+    });
+}
+// call an api on dnn
+function sendDnnAjax(modId, serviceName, options) {
+    var service = $.dnnSF(modId);
+    return $.ajax($.extend({
+        type: "GET",
+        url: service.getServiceRoot("internalservices") + serviceName,
+        beforeSend: service.setModuleHeaders,
+        error: xhrError
+    }, options));
+}
+// create / insert a new module
+function createMod(paneName, position, modId) {
+    var postData = {
+        Module: modId,
+        Page: "",
+        Pane: paneName,
+        Position: -1,
+        Sort: position,
+        Visibility: 0,
+        AddExistingModule: false,
+        CopyModule: false
+    };
+    return sendDnnAjax(null, "controlbar/AddModule", {
+        type: "POST",
+        data: postData,
+        success: function (d) {
+            window.location.reload();
+        }
+    });
+}
+function generatePaneMoveButtons(current) {
+    var pns = $quickE.cachedPanes;
+    // generate list of panes as links
+    var targets = $("<div>");
+    for (var p = 0; p < pns.length; p++) {
+        var pName = getPaneName(pns[p]), selected = (current === pName) ? " selected " : "";
+        if (!selected)
+            targets.append("<a data='" + pName + "'>" + pName + "</a>");
+    }
+    // attach click event...
+    targets.find("a").click(function (d) {
+        var link = $(this), clip = _quickE_clipboard_1.clipboard.data, modId = getModuleId(clip.item.className), newPane = link.attr("data");
+        moveMod(modId, newPane, 0);
+    });
+    return targets;
+}
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define("i18next",t):e.i18next=t()}(this,function(){"use strict";function e(e){return null==e?"":""+e}function t(e,t,n){e.forEach(function(e){t[e]&&(n[e]=t[e])})}function n(e,t,n){function o(e){return e&&e.indexOf("###")>-1?e.replace(/###/g,"."):e}for(var r="string"!=typeof t?[].concat(t):t.split(".");r.length>1;){if(!e)return{};var i=o(r.shift());!e[i]&&n&&(e[i]=new n),e=e[i]}return e?{obj:e,k:o(r.shift())}:{}}function o(e,t,o){var r=n(e,t,Object),i=r.obj,s=r.k;i[s]=o}function r(e,t,o,r){var i=n(e,t,Object),s=i.obj,a=i.k;s[a]=s[a]||[],r&&(s[a]=s[a].concat(o)),r||s[a].push(o)}function i(e,t){var o=n(e,t),r=o.obj,i=o.k;return r?r[i]:void 0}function s(e,t,n){for(var o in t)o in e?"string"==typeof e[o]||e[o]instanceof String||"string"==typeof t[o]||t[o]instanceof String?n&&(e[o]=t[o]):s(e[o],t[o],n):e[o]=t[o];return e}function a(e){return e.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,"\\$&")}function l(e){return"string"==typeof e?e.replace(/[&<>"'\/]/g,function(e){return C[e]}):e}function u(e){return e.interpolation={unescapeSuffix:"HTML"},e.interpolation.prefix=e.interpolationPrefix||"__",e.interpolation.suffix=e.interpolationSuffix||"__",e.interpolation.escapeValue=e.escapeInterpolation||!1,e.interpolation.nestingPrefix=e.reusePrefix||"$t(",e.interpolation.nestingSuffix=e.reuseSuffix||")",e}function c(e){return e.resStore&&(e.resources=e.resStore),e.ns&&e.ns.defaultNs?(e.defaultNS=e.ns.defaultNs,e.ns=e.ns.namespaces):e.defaultNS=e.ns||"translation",e.fallbackToDefaultNS&&e.defaultNS&&(e.fallbackNS=e.defaultNS),e.saveMissing=e.sendMissing,e.saveMissingTo=e.sendMissingTo||"current",e.returnNull=!e.fallbackOnNull,e.returnEmptyString=!e.fallbackOnEmpty,e.returnObjects=e.returnObjectTrees,e.joinArrays="\n",e.returnedObjectHandler=e.objectTreeKeyHandler,e.parseMissingKeyHandler=e.parseMissingKey,e.appendNamespaceToMissingKey=!0,e.nsSeparator=e.nsseparator,e.keySeparator=e.keyseparator,"sprintf"===e.shortcutFunction&&(e.overloadTranslationOptionHandler=function(e){for(var t=[],n=1;n<e.length;n++)t.push(e[n]);return{postProcess:"sprintf",sprintf:t}}),e.whitelist=e.lngWhitelist,e.preload=e.preload,"current"===e.load&&(e.load="currentOnly"),"unspecific"===e.load&&(e.load="languageOnly"),e.backend=e.backend||{},e.backend.loadPath=e.resGetPath||"locales/__lng__/__ns__.json",e.backend.addPath=e.resPostPath||"locales/add/__lng__/__ns__",e.backend.allowMultiLoading=e.dynamicLoad,e.cache=e.cache||{},e.cache.prefix="res_",e.cache.expirationTime=6048e5,e.cache.enabled=!!e.useLocalStorage,e=u(e),e.defaultVariables&&(e.interpolation.defaultVariables=e.defaultVariables),e}function p(e){return e=u(e),e.joinArrays="\n",e}function f(e){return(e.interpolationPrefix||e.interpolationSuffix||e.escapeInterpolation)&&(e=u(e)),e.nsSeparator=e.nsseparator,e.keySeparator=e.keyseparator,e.returnObjects=e.returnObjectTrees,e}function h(e){e.lng=function(){return S.deprecate("i18next.lng() can be replaced by i18next.language for detected language or i18next.languages for languages ordered by translation lookup."),e.services.languageUtils.toResolveHierarchy(e.language)[0]},e.preload=function(t,n){S.deprecate("i18next.preload() can be replaced with i18next.loadLanguages()"),e.loadLanguages(t,n)},e.setLng=function(t,n,o){return S.deprecate("i18next.setLng() can be replaced with i18next.changeLanguage() or i18next.getFixedT() to get a translation function with fixed language or namespace."),"function"==typeof n&&(o=n,n={}),n||(n={}),n.fixLng===!0&&o?o(null,e.getFixedT(t)):void e.changeLanguage(t,o)},e.addPostProcessor=function(t,n){S.deprecate("i18next.addPostProcessor() can be replaced by i18next.use({ type: 'postProcessor', name: 'name', process: fc })"),e.use({type:"postProcessor",name:t,process:n})}}function g(e){return e.charAt(0).toUpperCase()+e.slice(1)}function d(){var e={};return R.forEach(function(t){t.lngs.forEach(function(n){return e[n]={numbers:t.nr,plurals:P[t.fc]}})}),e}function v(e,t){for(var n=e.indexOf(t);-1!==n;)e.splice(n,1),n=e.indexOf(t)}function y(){return{debug:!1,ns:["translation"],defaultNS:["translation"],fallbackLng:["dev"],fallbackNS:!1,whitelist:!1,load:"all",preload:!1,keySeparator:".",nsSeparator:":",pluralSeparator:"_",contextSeparator:"_",saveMissing:!1,saveMissingTo:"fallback",missingKeyHandler:!1,postProcess:!1,returnNull:!0,returnEmptyString:!0,returnObjects:!1,joinArrays:!1,returnedObjectHandler:function(){},parseMissingKeyHandler:!1,appendNamespaceToMissingKey:!1,overloadTranslationOptionHandler:function(e){return{defaultValue:e[1]}},interpolation:{escapeValue:!0,prefix:"{{",suffix:"}}",unescapePrefix:"-",nestingPrefix:"$t(",nestingSuffix:")",defaultVariables:void 0}}}function b(e){return"string"==typeof e.ns&&(e.ns=[e.ns]),"string"==typeof e.fallbackLng&&(e.fallbackLng=[e.fallbackLng]),"string"==typeof e.fallbackNS&&(e.fallbackNS=[e.fallbackNS]),e.whitelist&&e.whitelist.indexOf("cimode")<0&&e.whitelist.push("cimode"),e}var m={};m["typeof"]="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},m.classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")},m["extends"]=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var o in n)Object.prototype.hasOwnProperty.call(n,o)&&(e[o]=n[o])}return e},m.inherits=function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)},m.possibleConstructorReturn=function(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t},m.slicedToArray=function(){function e(e,t){var n=[],o=!0,r=!1,i=void 0;try{for(var s,a=e[Symbol.iterator]();!(o=(s=a.next()).done)&&(n.push(s.value),!t||n.length!==t);o=!0);}catch(l){r=!0,i=l}finally{try{!o&&a["return"]&&a["return"]()}finally{if(r)throw i}}return n}return function(t,n){if(Array.isArray(t))return t;if(Symbol.iterator in Object(t))return e(t,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}();var x={type:"logger",log:function(e){this._output("log",e)},warn:function(e){this._output("warn",e)},error:function(e){this._output("error",e)},_output:function(e,t){console&&console[e]&&console[e].apply(console,Array.prototype.slice.call(t))}},k=function(){function e(t){var n=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];m.classCallCheck(this,e),this.subs=[],this.init(t,n)}return e.prototype.init=function(e){var t=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];this.prefix=t.prefix||"i18next:",this.logger=e||x,this.options=t,this.debug=t.debug!==!1},e.prototype.setDebug=function(e){this.debug=e,this.subs.forEach(function(t){t.setDebug(e)})},e.prototype.log=function(){this.forward(arguments,"log","",!0)},e.prototype.warn=function(){this.forward(arguments,"warn","",!0)},e.prototype.error=function(){this.forward(arguments,"error","")},e.prototype.deprecate=function(){this.forward(arguments,"warn","WARNING DEPRECATED: ",!0)},e.prototype.forward=function(e,t,n,o){o&&!this.debug||("string"==typeof e[0]&&(e[0]=n+this.prefix+" "+e[0]),this.logger[t](e))},e.prototype.create=function(t){var n=new e(this.logger,m["extends"]({prefix:this.prefix+":"+t+":"},this.options));return this.subs.push(n),n},e}(),S=new k,w=function(){function e(){m.classCallCheck(this,e),this.observers={}}return e.prototype.on=function(e,t){var n=this;e.split(" ").forEach(function(e){n.observers[e]=n.observers[e]||[],n.observers[e].push(t)})},e.prototype.off=function(e,t){var n=this;this.observers[e]&&this.observers[e].forEach(function(){if(t){var o=n.observers[e].indexOf(t);o>-1&&n.observers[e].splice(o,1)}else delete n.observers[e]})},e.prototype.emit=function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),o=1;t>o;o++)n[o-1]=arguments[o];this.observers[e]&&this.observers[e].forEach(function(e){e.apply(void 0,n)}),this.observers["*"]&&this.observers["*"].forEach(function(t){var o;t.apply(t,(o=[e]).concat.apply(o,n))})},e}(),C={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","/":"&#x2F;"},L=function(e){function t(){var n=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],o=arguments.length<=1||void 0===arguments[1]?{ns:["translation"],defaultNS:"translation"}:arguments[1];m.classCallCheck(this,t);var r=m.possibleConstructorReturn(this,e.call(this));return r.data=n,r.options=o,r}return m.inherits(t,e),t.prototype.addNamespaces=function(e){this.options.ns.indexOf(e)<0&&this.options.ns.push(e)},t.prototype.removeNamespaces=function(e){var t=this.options.ns.indexOf(e);t>-1&&this.options.ns.splice(t,1)},t.prototype.getResource=function(e,t,n){var o=arguments.length<=3||void 0===arguments[3]?{}:arguments[3],r=o.keySeparator||this.options.keySeparator;void 0===r&&(r=".");var s=[e,t];return n&&"string"!=typeof n&&(s=s.concat(n)),n&&"string"==typeof n&&(s=s.concat(r?n.split(r):n)),e.indexOf(".")>-1&&(s=e.split(".")),i(this.data,s)},t.prototype.addResource=function(e,t,n,r){var i=arguments.length<=4||void 0===arguments[4]?{silent:!1}:arguments[4],s=this.options.keySeparator;void 0===s&&(s=".");var a=[e,t];n&&(a=a.concat(s?n.split(s):n)),e.indexOf(".")>-1&&(a=e.split("."),r=t,t=a[1]),this.addNamespaces(t),o(this.data,a,r),i.silent||this.emit("added",e,t,n,r)},t.prototype.addResources=function(e,t,n){for(var o in n)"string"==typeof n[o]&&this.addResource(e,t,o,n[o],{silent:!0});this.emit("added",e,t,n)},t.prototype.addResourceBundle=function(e,t,n,r,a){var l=[e,t];e.indexOf(".")>-1&&(l=e.split("."),r=n,n=t,t=l[1]),this.addNamespaces(t);var u=i(this.data,l)||{};r?s(u,n,a):u=m["extends"]({},u,n),o(this.data,l,u),this.emit("added",e,t,n)},t.prototype.removeResourceBundle=function(e,t){this.hasResourceBundle(e,t)&&delete this.data[e][t],this.removeNamespaces(t),this.emit("removed",e,t)},t.prototype.hasResourceBundle=function(e,t){return void 0!==this.getResource(e,t)},t.prototype.getResourceBundle=function(e,t){return t||(t=this.options.defaultNS),"v1"===this.options.compatibilityAPI?m["extends"]({},this.getResource(e,t)):this.getResource(e,t)},t.prototype.toJSON=function(){return this.data},t}(w),N={processors:{},addPostProcessor:function(e){this.processors[e.name]=e},handle:function(e,t,n,o,r){var i=this;return e.forEach(function(e){i.processors[e]&&(t=i.processors[e].process(t,n,o,r))}),t}},O=function(e){function n(o){var r=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];m.classCallCheck(this,n);var i=m.possibleConstructorReturn(this,e.call(this));return t(["resourceStore","languageUtils","pluralResolver","interpolator","backendConnector"],o,i),i.options=r,i.logger=S.create("translator"),i}return m.inherits(n,e),n.prototype.changeLanguage=function(e){e&&(this.language=e)},n.prototype.exists=function(e){var t=arguments.length<=1||void 0===arguments[1]?{interpolation:{}}:arguments[1];return"v1"===this.options.compatibilityAPI&&(t=f(t)),void 0!==this.resolve(e,t)},n.prototype.extractFromKey=function(e,t){var n=t.nsSeparator||this.options.nsSeparator;void 0===n&&(n=":");var o=t.ns||this.options.defaultNS;if(n&&e.indexOf(n)>-1){var r=e.split(n);o=r[0],e=r[1]}return"string"==typeof o&&(o=[o]),{key:e,namespaces:o}},n.prototype.translate=function(e){var t=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];if("object"!==("undefined"==typeof t?"undefined":m["typeof"](t))?t=this.options.overloadTranslationOptionHandler(arguments):"v1"===this.options.compatibilityAPI&&(t=f(t)),void 0===e||null===e||""===e)return"";"number"==typeof e&&(e=String(e)),"string"==typeof e&&(e=[e]);var n=t.lng||this.language;if(n&&"cimode"===n.toLowerCase())return e[e.length-1];var o=t.keySeparator||this.options.keySeparator||".",r=this.extractFromKey(e[e.length-1],t),i=r.key,s=r.namespaces,a=s[s.length-1],l=this.resolve(e,t),u=Object.prototype.toString.apply(l),c=["[object Number]","[object Function]","[object RegExp]"],p=void 0!==t.joinArrays?t.joinArrays:this.options.joinArrays;if(l&&"string"!=typeof l&&c.indexOf(u)<0&&(!p||"[object Array]"!==u)){if(!t.returnObjects&&!this.options.returnObjects)return this.logger.warn("accessing an object - but returnObjects options is not enabled!"),this.options.returnedObjectHandler?this.options.returnedObjectHandler(i,l,t):"key '"+i+" ("+this.language+")' returned an object instead of string.";var h="[object Array]"===u?[]:{};for(var g in l)h[g]=this.translate(""+i+o+g,m["extends"]({joinArrays:!1,ns:s},t));l=h}else if(p&&"[object Array]"===u)l=l.join(p),l&&(l=this.extendTranslation(l,i,t));else{var d=!1,v=!1;if(!this.isValidLookup(l)&&t.defaultValue&&(d=!0,l=t.defaultValue),this.isValidLookup(l)||(v=!0,l=i),(v||d)&&(this.logger.log("missingKey",n,a,i,l),this.options.saveMissing)){var y=[];if("fallback"===this.options.saveMissingTo&&this.options.fallbackLng&&this.options.fallbackLng[0])for(var b=0;b<this.options.fallbackLng.length;b++)y.push(this.options.fallbackLng[b]);else"all"===this.options.saveMissingTo?y=this.languageUtils.toResolveHierarchy(t.lng||this.language):y.push(t.lng||this.language);this.options.missingKeyHandler?this.options.missingKeyHandler(y,a,i,l):this.backendConnector&&this.backendConnector.saveMissing&&this.backendConnector.saveMissing(y,a,i,l),this.emit("missingKey",y,a,i,l)}l=this.extendTranslation(l,i,t),v&&l===i&&this.options.appendNamespaceToMissingKey&&(l=a+":"+i),v&&this.options.parseMissingKeyHandler&&(l=this.options.parseMissingKeyHandler(l))}return l},n.prototype.extendTranslation=function(e,t,n){var o=this;n.interpolation&&this.interpolator.init(n);var r=n.replace&&"string"!=typeof n.replace?n.replace:n;this.options.interpolation.defaultVariables&&(r=m["extends"]({},this.options.interpolation.defaultVariables,r)),e=this.interpolator.interpolate(e,r),e=this.interpolator.nest(e,function(){for(var e=arguments.length,t=Array(e),n=0;e>n;n++)t[n]=arguments[n];return o.translate.apply(o,t)},n),n.interpolation&&this.interpolator.reset();var i=n.postProcess||this.options.postProcess,s="string"==typeof i?[i]:i;return void 0!==e&&s&&s.length&&n.applyPostProcessor!==!1&&(e=N.handle(s,e,t,n,this)),e},n.prototype.resolve=function(e){var t=this,n=arguments.length<=1||void 0===arguments[1]?{}:arguments[1],o=void 0;return"string"==typeof e&&(e=[e]),e.forEach(function(e){if(!t.isValidLookup(o)){var r=t.extractFromKey(e,n),i=r.key,s=r.namespaces;t.options.fallbackNS&&(s=s.concat(t.options.fallbackNS));var a=void 0!==n.count&&"string"!=typeof n.count,l=void 0!==n.context&&"string"==typeof n.context&&""!==n.context,u=n.lngs?n.lngs:t.languageUtils.toResolveHierarchy(n.lng||t.language);s.forEach(function(e){t.isValidLookup(o)||u.forEach(function(r){if(!t.isValidLookup(o)){var s=i,u=[s],c=void 0;a&&(c=t.pluralResolver.getSuffix(r,n.count)),a&&l&&u.push(s+c),l&&u.push(s+=""+t.options.contextSeparator+n.context),a&&u.push(s+=c);for(var p=void 0;p=u.pop();)t.isValidLookup(o)||(o=t.getResource(r,e,p,n))}})})}}),o},n.prototype.isValidLookup=function(e){return!(void 0===e||!this.options.returnNull&&null===e||!this.options.returnEmptyString&&""===e)},n.prototype.getResource=function(e,t,n){var o=arguments.length<=3||void 0===arguments[3]?{}:arguments[3];return this.resourceStore.getResource(e,t,n,o)},n}(w),j=function(){function e(t){m.classCallCheck(this,e),this.options=t,this.whitelist=this.options.whitelist||!1,this.logger=S.create("languageUtils")}return e.prototype.getLanguagePartFromCode=function(e){if(e.indexOf("-")<0)return e;var t=["NB-NO","NN-NO","nb-NO","nn-NO","nb-no","nn-no"],n=e.split("-");return this.formatLanguageCode(t.indexOf(e)>-1?n[1].toLowerCase():n[0])},e.prototype.formatLanguageCode=function(e){if("string"==typeof e&&e.indexOf("-")>-1){var t=["hans","hant","latn","cyrl","cans","mong","arab"],n=e.split("-");return this.options.lowerCaseLng?n=n.map(function(e){return e.toLowerCase()}):2===n.length?(n[0]=n[0].toLowerCase(),n[1]=n[1].toUpperCase(),t.indexOf(n[1].toLowerCase())>-1&&(n[1]=g(n[1].toLowerCase()))):3===n.length&&(n[0]=n[0].toLowerCase(),2===n[1].length&&(n[1]=n[1].toUpperCase()),"sgn"!==n[0]&&2===n[2].length&&(n[2]=n[2].toUpperCase()),t.indexOf(n[1].toLowerCase())>-1&&(n[1]=g(n[1].toLowerCase())),t.indexOf(n[2].toLowerCase())>-1&&(n[2]=g(n[2].toLowerCase()))),n.join("-")}return this.options.cleanCode||this.options.lowerCaseLng?e.toLowerCase():e},e.prototype.isWhitelisted=function(e){return"languageOnly"===this.options.load&&(e=this.getLanguagePartFromCode(e)),!this.whitelist||!this.whitelist.length||this.whitelist.indexOf(e)>-1},e.prototype.toResolveHierarchy=function(e,t){var n=this;t=t||this.options.fallbackLng||[],"string"==typeof t&&(t=[t]);var o=[],r=function(e){n.isWhitelisted(e)?o.push(e):n.logger.warn("rejecting non-whitelisted language code: "+e)};return"string"==typeof e&&e.indexOf("-")>-1?("languageOnly"!==this.options.load&&r(this.formatLanguageCode(e)),"currentOnly"!==this.options.load&&r(this.getLanguagePartFromCode(e))):"string"==typeof e&&r(this.formatLanguageCode(e)),t.forEach(function(e){o.indexOf(e)<0&&r(n.formatLanguageCode(e))}),o},e}(),R=[{lngs:["ach","ak","am","arn","br","fil","gun","ln","mfe","mg","mi","oc","tg","ti","tr","uz","wa"],nr:[1,2],fc:1},{lngs:["af","an","ast","az","bg","bn","ca","da","de","dev","el","en","eo","es","es_ar","et","eu","fi","fo","fur","fy","gl","gu","ha","he","hi","hu","hy","ia","it","kn","ku","lb","mai","ml","mn","mr","nah","nap","nb","ne","nl","nn","no","nso","pa","pap","pms","ps","pt","pt_br","rm","sco","se","si","so","son","sq","sv","sw","ta","te","tk","ur","yo"],nr:[1,2],fc:2},{lngs:["ay","bo","cgg","fa","id","ja","jbo","ka","kk","km","ko","ky","lo","ms","sah","su","th","tt","ug","vi","wo","zh"],nr:[1],fc:3},{lngs:["be","bs","dz","hr","ru","sr","uk"],nr:[1,2,5],fc:4},{lngs:["ar"],nr:[0,1,2,3,11,100],fc:5},{lngs:["cs","sk"],nr:[1,2,5],fc:6},{lngs:["csb","pl"],nr:[1,2,5],fc:7},{lngs:["cy"],nr:[1,2,3,8],fc:8},{lngs:["fr"],nr:[1,2],fc:9},{lngs:["ga"],nr:[1,2,3,7,11],fc:10},{lngs:["gd"],nr:[1,2,3,20],fc:11},{lngs:["is"],nr:[1,2],fc:12},{lngs:["jv"],nr:[0,1],fc:13},{lngs:["kw"],nr:[1,2,3,4],fc:14},{lngs:["lt"],nr:[1,2,10],fc:15},{lngs:["lv"],nr:[1,2,0],fc:16},{lngs:["mk"],nr:[1,2],fc:17},{lngs:["mnk"],nr:[0,1,2],fc:18},{lngs:["mt"],nr:[1,2,11,20],fc:19},{lngs:["or"],nr:[2,1],fc:2},{lngs:["ro"],nr:[1,2,20],fc:20},{lngs:["sl"],nr:[5,1,2,3],fc:21}],P={1:function(e){return Number(e>1)},2:function(e){return Number(1!=e)},3:function(e){return 0},4:function(e){return Number(e%10==1&&e%100!=11?0:e%10>=2&&4>=e%10&&(10>e%100||e%100>=20)?1:2)},5:function(e){return Number(0===e?0:1==e?1:2==e?2:e%100>=3&&10>=e%100?3:e%100>=11?4:5)},6:function(e){return Number(1==e?0:e>=2&&4>=e?1:2)},7:function(e){return Number(1==e?0:e%10>=2&&4>=e%10&&(10>e%100||e%100>=20)?1:2)},8:function(e){return Number(1==e?0:2==e?1:8!=e&&11!=e?2:3)},9:function(e){return Number(e>=2)},10:function(e){return Number(1==e?0:2==e?1:7>e?2:11>e?3:4)},11:function(e){return Number(1==e||11==e?0:2==e||12==e?1:e>2&&20>e?2:3)},12:function(e){return Number(e%10!=1||e%100==11)},13:function(e){return Number(0!==e)},14:function(e){return Number(1==e?0:2==e?1:3==e?2:3)},15:function(e){return Number(e%10==1&&e%100!=11?0:e%10>=2&&(10>e%100||e%100>=20)?1:2)},16:function(e){return Number(e%10==1&&e%100!=11?0:0!==e?1:2)},17:function(e){return Number(1==e||e%10==1?0:1)},18:function(e){return Number(0==e?0:1==e?1:2)},19:function(e){return Number(1==e?0:0===e||e%100>1&&11>e%100?1:e%100>10&&20>e%100?2:3)},20:function(e){return Number(1==e?0:0===e||e%100>0&&20>e%100?1:2)},21:function(e){return Number(e%100==1?1:e%100==2?2:e%100==3||e%100==4?3:0)}},E=function(){function e(t){var n=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];m.classCallCheck(this,e),this.languageUtils=t,this.options=n,this.logger=S.create("pluralResolver"),this.rules=d()}return e.prototype.addRule=function(e,t){this.rules[e]=t},e.prototype.getRule=function(e){return this.rules[this.languageUtils.getLanguagePartFromCode(e)]},e.prototype.needsPlural=function(e){var t=this.getRule(e);return!(t&&t.numbers.length<=1)},e.prototype.getSuffix=function(e,t){var n=this.getRule(e);if(n){if(1===n.numbers.length)return"";var o=n.noAbs?n.plurals(t):n.plurals(Math.abs(t)),r=n.numbers[o];if(2===n.numbers.length&&1===n.numbers[0]&&(2===r?r="plural":1===r&&(r="")),"v1"===this.options.compatibilityJSON){if(1===r)return"";if("number"==typeof r)return"_plural_"+r.toString()}return this.options.prepend&&r.toString()?this.options.prepend+r.toString():r.toString()}return this.logger.warn("no plural rule found for: "+e),""},e}(),_=function(){function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];m.classCallCheck(this,t),this.logger=S.create("interpolator"),this.init(e,!0)}return t.prototype.init=function(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],t=arguments[1];t&&(this.options=e),e.interpolation||(e.interpolation={escapeValue:!0});var n=e.interpolation;this.escapeValue=n.escapeValue,this.prefix=n.prefix?a(n.prefix):n.prefixEscaped||"{{",this.suffix=n.suffix?a(n.suffix):n.suffixEscaped||"}}",this.unescapePrefix=n.unescapeSuffix?"":n.unescapePrefix||"-",this.unescapeSuffix=this.unescapePrefix?"":n.unescapeSuffix||"",this.nestingPrefix=n.nestingPrefix?a(n.nestingPrefix):n.nestingPrefixEscaped||a("$t("),this.nestingSuffix=n.nestingSuffix?a(n.nestingSuffix):n.nestingSuffixEscaped||a(")");var o=this.prefix+"(.+?)"+this.suffix;this.regexp=new RegExp(o,"g");var r=this.prefix+this.unescapePrefix+"(.+?)"+this.unescapeSuffix+this.suffix;this.regexpUnescape=new RegExp(r,"g");var i=this.nestingPrefix+"(.+?)"+this.nestingSuffix;this.nestingRegexp=new RegExp(i,"g")},t.prototype.reset=function(){this.options&&this.init(this.options)},t.prototype.interpolate=function(t,n){function o(e){return e.replace(/\$/g,"$$$$")}for(var r=void 0,s=void 0;r=this.regexpUnescape.exec(t);){var a=i(n,r[1].trim());t=t.replace(r[0],a)}for(;r=this.regexp.exec(t);)s=i(n,r[1].trim()),"string"!=typeof s&&(s=e(s)),s||(this.logger.warn("missed to pass in variable "+r[1]+" for interpolating "+t),s=""),s=o(this.escapeValue?l(s):s),t=t.replace(r[0],s),this.regexp.lastIndex=0;return t},t.prototype.nest=function(t,n){function o(e){return e.replace(/\$/g,"$$$$")}function r(e){if(e.indexOf(",")<0)return e;var t=e.split(",");e=t.shift();var n=t.join(",");n=this.interpolate(n,u);try{u=JSON.parse(n)}catch(o){this.logger.error("failed parsing options string in nesting for key "+e,o)}return e}var i=arguments.length<=2||void 0===arguments[2]?{}:arguments[2],s=void 0,a=void 0,u=JSON.parse(JSON.stringify(i));for(u.applyPostProcessor=!1;s=this.nestingRegexp.exec(t);)a=n(r.call(this,s[1].trim()),u),"string"!=typeof a&&(a=e(a)),a||(this.logger.warn("missed to pass in variable "+s[1]+" for interpolating "+t),a=""),a=o(this.escapeValue?l(a):a),t=t.replace(s[0],a),this.regexp.lastIndex=0;return t},t}(),T=function(e){function t(n,o,r){var i=arguments.length<=3||void 0===arguments[3]?{}:arguments[3];m.classCallCheck(this,t);var s=m.possibleConstructorReturn(this,e.call(this));return s.backend=n,s.store=o,s.services=r,s.options=i,s.logger=S.create("backendConnector"),s.state={},s.queue=[],s.backend&&s.backend.init&&s.backend.init(r,i.backend,i),s}return m.inherits(t,e),t.prototype.queueLoad=function(e,t,n){var o=this,r=[],i=[],s=[],a=[];return e.forEach(function(e){var n=!0;t.forEach(function(t){var s=e+"|"+t;o.store.hasResourceBundle(e,t)?o.state[s]=2:o.state[s]<0||(1===o.state[s]?i.indexOf(s)<0&&i.push(s):(o.state[s]=1,n=!1,i.indexOf(s)<0&&i.push(s),r.indexOf(s)<0&&r.push(s),a.indexOf(t)<0&&a.push(t)))}),n||s.push(e)}),(r.length||i.length)&&this.queue.push({pending:i,loaded:{},errors:[],callback:n}),{toLoad:r,pending:i,toLoadLanguages:s,toLoadNamespaces:a}},t.prototype.loaded=function(e,t,n){var o=this,i=e.split("|"),s=m.slicedToArray(i,2),a=s[0],l=s[1];t&&this.emit("failedLoading",a,l,t),n&&this.store.addResourceBundle(a,l,n),this.state[e]=t?-1:2,this.queue.forEach(function(n){r(n.loaded,[a],l),v(n.pending,e),t&&n.errors.push(t),0!==n.pending.length||n.done||(n.errors.length?n.callback(n.errors):n.callback(),o.emit("loaded",n.loaded),n.done=!0)}),this.queue=this.queue.filter(function(e){return!e.done})},t.prototype.read=function(e,t,n,o,r,i){var s=this;return o||(o=0),r||(r=250),e.length?void this.backend[n](e,t,function(a,l){return a&&l&&5>o?void setTimeout(function(){s.read.call(s,e,t,n,++o,2*r,i)},r):void i(a,l)}):i(null,{})},t.prototype.load=function(e,t,n){var o=this;if(!this.backend)return this.logger.warn("No backend was added via i18next.use. Will not load resources."),n&&n();var r=m["extends"]({},this.backend.options,this.options.backend);"string"==typeof e&&(e=this.services.languageUtils.toResolveHierarchy(e)),"string"==typeof t&&(t=[t]);var s=this.queueLoad(e,t,n);return s.toLoad.length?void(r.allowMultiLoading&&this.backend.readMulti?this.read(s.toLoadLanguages,s.toLoadNamespaces,"readMulti",null,null,function(e,t){e&&o.logger.warn("loading namespaces "+s.toLoadNamespaces.join(", ")+" for languages "+s.toLoadLanguages.join(", ")+" via multiloading failed",e),!e&&t&&o.logger.log("loaded namespaces "+s.toLoadNamespaces.join(", ")+" for languages "+s.toLoadLanguages.join(", ")+" via multiloading",t),s.toLoad.forEach(function(n){var r=n.split("|"),s=m.slicedToArray(r,2),a=s[0],l=s[1],u=i(t,[a,l]);if(u)o.loaded(n,e,u);else{var c="loading namespace "+l+" for language "+a+" via multiloading failed";o.loaded(n,c),o.logger.error(c)}})}):!function(){var e=function(e){var t=this,n=e.split("|"),o=m.slicedToArray(n,2),r=o[0],i=o[1];this.read(r,i,"read",null,null,function(n,o){n&&t.logger.warn("loading namespace "+i+" for language "+r+" failed",n),!n&&o&&t.logger.log("loaded namespace "+i+" for language "+r,o),t.loaded(e,n,o)})};s.toLoad.forEach(function(t){e.call(o,t)})}()):void(s.pending.length||n())},t.prototype.saveMissing=function(e,t,n,o){this.backend&&this.backend.create&&this.backend.create(e,t,n,o),this.store.addResource(e[0],t,n,o)},t}(w),A=function(e){function t(n,o,r){var i=arguments.length<=3||void 0===arguments[3]?{}:arguments[3];m.classCallCheck(this,t);var s=m.possibleConstructorReturn(this,e.call(this));return s.cache=n,s.store=o,s.services=r,s.options=i,s.logger=S.create("cacheConnector"),s.cache&&s.cache.init&&s.cache.init(r,i.cache,i),s}return m.inherits(t,e),t.prototype.load=function(e,t,n){var o=this;if(!this.cache)return n&&n();var r=m["extends"]({},this.cache.options,this.options.cache);"string"==typeof e&&(e=this.services.languageUtils.toResolveHierarchy(e)),"string"==typeof t&&(t=[t]),r.enabled?this.cache.load(e,function(t,r){if(t&&o.logger.error("loading languages "+e.join(", ")+" from cache failed",t),r)for(var i in r)for(var s in r[i])if("i18nStamp"!==s){var a=r[i][s];a&&o.store.addResourceBundle(i,s,a)}n&&n()}):n&&n()},t.prototype.save=function(){this.cache&&this.options.cache&&this.options.cache.enabled&&this.cache.save(this.store.data)},t}(w),M=function(e){function t(){var n=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],o=arguments[1];m.classCallCheck(this,t);var r=m.possibleConstructorReturn(this,e.call(this));return r.options=b(n),r.services={},r.logger=S,r.modules={},o&&!r.isInitialized&&r.init(n,o),r}return m.inherits(t,e),t.prototype.init=function(e,t){function n(e){return e?"function"==typeof e?new e:e:void 0}var o=this;if("function"==typeof e&&(t=e,e={}),e||(e={}),"v1"===e.compatibilityAPI?this.options=m["extends"]({},y(),b(c(e)),{}):"v1"===e.compatibilityJSON?this.options=m["extends"]({},y(),b(p(e)),{}):this.options=m["extends"]({},y(),this.options,b(e)),t||(t=function(){}),!this.options.isClone){this.modules.logger?S.init(n(this.modules.logger),this.options):S.init(null,this.options);var r=new j(this.options);this.store=new L(this.options.resources,this.options);var i=this.services;i.logger=S,i.resourceStore=this.store,i.resourceStore.on("added removed",function(e,t){i.cacheConnector.save()}),i.languageUtils=r,i.pluralResolver=new E(r,{prepend:this.options.pluralSeparator,compatibilityJSON:this.options.compatibilityJSON}),i.interpolator=new _(this.options),i.backendConnector=new T(n(this.modules.backend),i.resourceStore,i,this.options),i.backendConnector.on("*",function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),r=1;t>r;r++)n[r-1]=arguments[r];o.emit.apply(o,[e].concat(n))}),i.backendConnector.on("loaded",function(e){i.cacheConnector.save()}),i.cacheConnector=new A(n(this.modules.cache),i.resourceStore,i,this.options),i.cacheConnector.on("*",function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),r=1;t>r;r++)n[r-1]=arguments[r];o.emit.apply(o,[e].concat(n))}),this.modules.languageDetector&&(i.languageDetector=n(this.modules.languageDetector),i.languageDetector.init(i,this.options.detection,this.options)),this.translator=new O(this.services,this.options),this.translator.on("*",function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),r=1;t>r;r++)n[r-1]=arguments[r];o.emit.apply(o,[e].concat(n))})}var s=["getResource","addResource","addResources","addResourceBundle","removeResourceBundle","hasResourceBundle","getResourceBundle"];s.forEach(function(e){o[e]=function(){return this.store[e].apply(this.store,arguments)}}),"v1"===this.options.compatibilityAPI&&h(this);var a=function(){o.changeLanguage(o.options.lng,function(e,n){o.emit("initialized",o.options),o.logger.log("initialized",o.options),t(e,n)})};return this.options.resources?a():setTimeout(a,10),this},t.prototype.loadResources=function(e){var t=this;if(e||(e=function(){}),this.options.resources)e(null);else{var n=function(){if(t.language&&"cimode"===t.language.toLowerCase())return{v:e()};var n=[],o=function(e){var o=t.services.languageUtils.toResolveHierarchy(e);o.forEach(function(e){n.indexOf(e)<0&&n.push(e)})};o(t.language),t.options.preload&&t.options.preload.forEach(function(e){o(e)}),t.services.cacheConnector.load(n,t.options.ns,function(){t.services.backendConnector.load(n,t.options.ns,e)})}();if("object"===("undefined"==typeof n?"undefined":m["typeof"](n)))return n.v}},t.prototype.use=function(e){return"backend"===e.type&&(this.modules.backend=e),"cache"===e.type&&(this.modules.cache=e),("logger"===e.type||e.log&&e.warn&&e.warn)&&(this.modules.logger=e),"languageDetector"===e.type&&(this.modules.languageDetector=e),"postProcessor"===e.type&&N.addPostProcessor(e),this},t.prototype.changeLanguage=function(e,t){var n=this,o=function(o){e&&(n.emit("languageChanged",e),n.logger.log("languageChanged",e)),t&&t(o,function(){for(var e=arguments.length,t=Array(e),o=0;e>o;o++)t[o]=arguments[o];return n.t.apply(n,t)})};!e&&this.services.languageDetector&&(e=this.services.languageDetector.detect()),e&&(this.language=e,this.languages=this.services.languageUtils.toResolveHierarchy(e),this.translator.changeLanguage(e),this.services.languageDetector&&this.services.languageDetector.cacheUserLanguage(e)),this.loadResources(function(e){o(e)})},t.prototype.getFixedT=function(e,t){var n=this,o=function r(e,t){return t=t||{},t.lng=t.lng||r.lng,t.ns=t.ns||r.ns,n.t(e,t)};return o.lng=e,o.ns=t,o},t.prototype.t=function(){return this.translator&&this.translator.translate.apply(this.translator,arguments)},t.prototype.exists=function(){return this.translator&&this.translator.exists.apply(this.translator,arguments)},t.prototype.setDefaultNamespace=function(e){this.options.defaultNS=e},t.prototype.loadNamespaces=function(e,t){var n=this;return this.options.ns?("string"==typeof e&&(e=[e]),e.forEach(function(e){n.options.ns.indexOf(e)<0&&n.options.ns.push(e)}),void this.loadResources(t)):t&&t()},t.prototype.loadLanguages=function(e,t){"string"==typeof e&&(e=[e]);var n=this.options.preload||[],o=e.filter(function(e){return n.indexOf(e)<0});return o.length?(this.options.preload=n.concat(o),
+void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language);var t=["ar","shu","sqr","ssh","xaa","yhd","yud","aao","abh","abv","acm","acq","acw","acx","acy","adf","ads","aeb","aec","afb","ajp","apc","apd","arb","arq","ars","ary","arz","auz","avl","ayh","ayl","ayn","ayp","bbz","pga","he","iw","ps","pbt","pbu","pst","prp","prd","ur","ydd","yds","yih","ji","yi","hbo","men","xmn","fa","jpr","peo","pes","prs","dv","sam"];return t.indexOf(this.services.languageUtils.getLanguagePartFromCode(e))?"ltr":"rtl"},t.prototype.createInstance=function(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],n=arguments[1];return new t(e,n)},t.prototype.cloneInstance=function(){var e=this,n=arguments.length<=0||void 0===arguments[0]?{}:arguments[0],o=arguments[1],r=new t(m["extends"]({},n,this.options,{isClone:!0}),o),i=["store","translator","services","language"];return i.forEach(function(t){r[t]=e[t]}),r},t}(w),H=new M;return H});
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define("i18nextXHRBackend",t):e.i18nextXHRBackend=t()}(this,function(){"use strict";function e(e){return a.call(r.call(arguments,1),function(t){if(t)for(var n in t)void 0===e[n]&&(e[n]=t[n])}),e}function t(e,t,n,i,a){if(i&&"object"===("undefined"==typeof i?"undefined":o["typeof"](i))){var r="",s=encodeURIComponent;for(var l in i)r+="&"+s(l)+"="+s(i[l]);i=r.slice(1)+(a?"":"&_t="+new Date)}try{var c=new(XMLHttpRequest||ActiveXObject)("MSXML2.XMLHTTP.3.0");c.open(i?"POST":"GET",e,1),t.crossDomain||c.setRequestHeader("X-Requested-With","XMLHttpRequest"),c.setRequestHeader("Content-type","application/x-www-form-urlencoded"),c.onreadystatechange=function(){c.readyState>3&&n&&n(c.responseText,c)},c.send(i)}catch(s){window.console&&console.log(s)}}function n(){return{loadPath:"/locales/{{lng}}/{{ns}}.json",addPath:"locales/add/{{lng}}/{{ns}}",allowMultiLoading:!1,parse:JSON.parse,crossDomain:!1,ajax:t}}var o={};o["typeof"]="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol?"symbol":typeof e},o.classCallCheck=function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")},o.createClass=function(){function e(e,t){for(var n=0;n<t.length;n++){var o=t[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}return function(t,n,o){return n&&e(t.prototype,n),o&&e(t,o),t}}();var i=[],a=i.forEach,r=i.slice,s=function(){function t(e){var n=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];o.classCallCheck(this,t),this.init(e,n),this.type="backend"}return o.createClass(t,[{key:"init",value:function(t){var o=arguments.length<=1||void 0===arguments[1]?{}:arguments[1];this.services=t,this.options=e(o,this.options||{},n())}},{key:"readMulti",value:function(e,t,n){var o=this.services.interpolator.interpolate(this.options.loadPath,{lng:e.join("+"),ns:t.join("+")});this.loadUrl(o,n)}},{key:"read",value:function(e,t,n){var o=this.services.interpolator.interpolate(this.options.loadPath,{lng:e,ns:t});this.loadUrl(o,n)}},{key:"loadUrl",value:function(e,t){var n=this;this.options.ajax(e,this.options,function(o,i){var a=i.status.toString();if(0===a.indexOf("5"))return t("failed loading "+e,!0);if(0===a.indexOf("4"))return t("failed loading "+e,!1);var r=void 0,s=void 0;try{r=n.options.parse(o)}catch(l){s="failed parsing "+e+" to json"}return s?t(s,!1):void t(null,r)})}},{key:"create",value:function(e,t,n,o){var i=this;"string"==typeof e&&(e=[e]);var a={};a[n]=o||"",e.forEach(function(e){var n=i.services.interpolator.interpolate(i.options.addPath,{lng:e,ns:t});i.options.ajax(n,i.options,function(e,t){},a)})}}]),t}();return s.type="backend",s});
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(t,e){ true?module.exports=e():"function"==typeof define&&define.amd?define("jqueryI18next",e):t.jqueryI18next=e()}(this,function(){"use strict";function t(t,a){function r(n,a,r){function i(t,n){return s.parseDefaultValueFromContent?e["extends"]({},t,{defaultValue:n}):t}if(0!==a.length){var o="text";if(0===a.indexOf("[")){var f=a.split("]");a=f[1],o=f[0].substr(1,f[0].length-1)}if(a.indexOf(";")===a.length-1&&(a=a.substr(0,a.length-2)),"html"===o)n.html(t.t(a,i(r,n.html())));else if("text"===o)n.text(t.t(a,i(r,n.text())));else if("prepend"===o)n.prepend(t.t(a,i(r,n.html())));else if("append"===o)n.append(t.t(a,i(r,n.html())));else if(0===o.indexOf("data-")){var l=o.substr("data-".length),d=t.t(a,i(r,n.data(l)));n.data(l,d),n.attr(o,d)}else n.attr(o,t.t(a,i(r,n.attr(o))))}}function i(t,n){var i=t.attr(s.selectorAttr);if(i||"undefined"==typeof i||i===!1||(i=t.text()||t.val()),i){var o=t,f=t.data(s.targetAttr);if(f&&(o=t.find(f)||t),n||s.useOptionsAttr!==!0||(n=t.data(s.optionsAttr)),n=n||{},i.indexOf(";")>=0){var l=i.split(";");a.each(l,function(t,e){""!==e&&r(o,e,n)})}else r(o,i,n);if(s.useOptionsAttr===!0){var d={};d=e["extends"]({clone:d},n),delete d.lng,t.data(s.optionsAttr,d)}}}function o(t){return this.each(function(){i(a(this),t);var e=a(this).find("["+s.selectorAttr+"]");e.each(function(){i(a(this),t)})})}var s=arguments.length<=2||void 0===arguments[2]?{}:arguments[2];s=e["extends"]({},n,s),a[s.tName]=t.t.bind(t),a[s.i18nName]=t,a.fn[s.handleName]=o}var e={};e["extends"]=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var a in n)Object.prototype.hasOwnProperty.call(n,a)&&(t[a]=n[a])}return t};var n={tName:"t",i18nName:"i18n",handleName:"localize",selectorAttr:"data-i18n",targetAttr:"i18n-target",optionsAttr:"i18n-options",useOptionsAttr:!1,parseDefaultValueFromContent:!0},a={init:t};return a});
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var _quickE_positioning_1 = __webpack_require__(8);
+var _quickE_config_1 = __webpack_require__(14);
+function enable() {
+    // build all toolbar html-elements
+    _quickE___1.prepareToolbarInDom();
+    // Cache the panes (because panes can't change dynamically)
+    initPanes();
+}
+;
+/**
+ * start watching for mouse-move
+ */
+function watchMouse() {
+    var refreshTimeout = null;
+    $('body').on('mousemove', function (e) {
+        if (refreshTimeout === null)
+            refreshTimeout = window.setTimeout(function () {
+                requestAnimationFrame(function () {
+                    _quickE_positioning_1.refresh(e);
+                    refreshTimeout = null;
+                });
+            }, 20);
+    });
+}
+;
+function start() {
+    try {
+        _quickE_config_1._readPageConfig();
+        if ($quickE.config.enable) {
+            // initialize first body-offset
+            $quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
+            enable();
+            toggleParts();
+            watchMouse();
+        }
+    }
+    catch (e) {
+        console.error("couldn't start quick-edit", e);
+    }
+}
+;
+/**
+ * cache the panes which can contain modules
+ */
+function initPanes() {
+    $quickE.cachedPanes = $(_quickE___1.selectors.mod.listSelector);
+    $quickE.cachedPanes.addClass('sc-cb-pane-glow');
+}
+;
+/**
+ * enable/disable module/content-blocks as configured
+ */
+function toggleParts() {
+    //// content blocks actions
+    //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
+    //// module actions
+    //$quickE.modActions.hide($quickE.config.modules.enable);
+}
+;
+/**
+ * reset the quick-edit
+ * for example after ajax-loading a content-block, which may cause changed configurations
+ */
+function reset() {
+    _quickE_config_1._readPageConfig();
+    toggleParts();
+}
+exports.reset = reset;
+;
+/**
+ * run on-load
+ */
+$(start);
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var configAttr = "quick-edit-config";
+/**
+ * the initial configuration
+ */
+var conf = $quickE.config = {
+    enable: true,
+    innerBlocks: {
+        enable: null // default: auto-detect
+    },
+    modules: {
+        enable: null // default: auto-detect
+    }
+};
+function _readPageConfig() {
+    var configs = $("[" + configAttr + "]");
+    var finalConfig = {};
+    var confJ;
+    var confO;
+    // any inner blocks found? will currently affect if modules can be inserted...
+    var hasInnerCBs = ($(_quickE___1.selectors.cb.listSelector).length > 0);
+    if (configs.length > 0) {
+        // go through reverse list, as the last is the most important...
+        for (var c = configs.length; c >= 0; c--) {
+            confJ = configs[0].getAttribute(configAttr);
+            try {
+                confO = JSON.parse(confJ);
+                $.extend(finalConfig, confO);
+            }
+            catch (e) {
+                console.warn('had trouble with json', e);
+            }
+        }
+        $.extend(conf, finalConfig);
+    }
+    // re-check "auto" or "null"
+    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
+    if (conf.modules.enable === null || conf.modules.enable === 'auto')
+        conf.modules.enable = !hasInnerCBs;
+    // for now, ContentBlocks are only enabled if they exist on the page
+    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
+        conf.innerBlocks.enable = hasInnerCBs;
+}
+exports._readPageConfig = _readPageConfig;
+;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_engine_1 = __webpack_require__(6);
+var manage_api_1 = __webpack_require__(1);
+/**
+ * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
+ * all in-page toolbars etc.
+ * if loaded, it's found under the $2sxc(module).manage
+ * it has commands to
+ * - getButton
+ * - getToolbar
+ * - run(...)
+ * - isEditMode
+ * @param sxc
+ */
+function initInstance(sxc) {
+    try {
+        _initInstance(sxc);
+    }
+    catch (e) {
+        console.error("error in 2sxc - will log but not throw", e);
+    }
+}
+exports.initInstance = initInstance;
+;
+//var mngApi = $2sxc._manage;
+function _initInstance(sxc) {
+    var editContext = manage_api_1.getEditContext(sxc);
+    var userInfo = manage_api_1.getUserOfEditContext(editContext);
+    var cmdEngine = commands_engine_1.instanceEngine(sxc, editContext);
+    var editManager = sxc.manage = {
+        //#region Official, public properties and commands, which are stable for use from the outside
+        /**
+         * run a command - often used in toolbars and custom buttons
+         */
+        run: cmdEngine.executeAction,
+        /**
+         * Generate a button (an <a>-tag) for one specific toolbar-action.
+         * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
+         * @param {int} groupIndex - number what button-group it's in'
+         * @returns {string} html of a button
+         */
+        getButton: function (actDef, groupIndex) {
+            return $2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
+        },
+        /**
+         * Builds the toolbar and returns it as HTML
+         * @param {Object<any>} tbConfig - general toolbar config
+         * @param {Object<any>} moreSettings - additional / override settings
+         * @returns {string} html of the current toolbar
+         */
+        getToolbar: function (tbConfig, moreSettings) {
+            return $2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
+        },
+        //#endregion official, public properties - everything below this can change at any time
+        // internal method to find out if it's in edit-mode
+        _isEditMode: function () { return editContext.Environment.IsEditable; },
+        _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
+        _dialogParameters: manage_api_1.buildNgDialogParams(sxc, editContext),
+        _instanceConfig: manage_api_1.buildInstanceConfig(editContext),
+        _editContext: editContext,
+        _quickDialogConfig: manage_api_1.buildQuickDialogConfig(editContext),
+        _commands: cmdEngine,
+        _user: userInfo,
+        // init this object 
+        init: function init() {
+            // enhance UI in case there are known errors / issues
+            if (editContext.error.type)
+                editManager._handleErrors(editContext.error.type, manage_api_1.getTag(sxc));
+            // todo: move this to dialog-handling
+            // display the dialog
+            var openDialogId = sessionStorage.getItem("dia-cbid");
+            if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
+                return false;
+            sessionStorage.removeItem("dia-cbid");
+            editManager.run("layout");
+        },
+        // private: show error when the app-data hasn't been installed yet for this imported-module
+        _handleErrors: function (errType, cbTag) {
+            var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
+            var msg = "";
+            var toolbar = $("<ul class='sc-menu'></ul>");
+            if (errType === "DataIsMissing") {
+                msg = "Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import";
+                toolbar.attr("data-toolbar", '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
+            }
+            errWrapper.append(msg);
+            errWrapper.append(toolbar);
+            $(cbTag).append(errWrapper);
+        },
+        // change config by replacing the guid, and refreshing dependend sub-objects
+        _updateContentGroupGuid: function (newGuid) {
+            editContext.ContentGroup.Guid = newGuid;
+            editManager._instanceConfig = manage_api_1.buildInstanceConfig(editContext);
+        },
+        _getCbManipulator: function () {
+            return $2sxc._contentBlock.manipulator(sxc);
+        }
+    };
+    editManager.init();
+    return editManager;
+}
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var _quickE_modManage_1 = __webpack_require__(9);
+var mm = new _quickE_modManage_1.modManage();
+var cb = /** @class */ (function () {
+    function cb() {
+    }
+    cb.prototype.delete = function (clip) {
+        return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
+    };
+    cb.create = function (parent, field, index, appOrContent, list, newGuid) {
+        return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
+    };
+    return cb;
+}());
+exports.cb = cb;
+var mod = /** @class */ (function () {
+    function mod() {
+    }
+    mod.prototype.delete = function (clip) {
+        if (!confirm('are you sure?'))
+            return;
+        var modId = mm.getModuleId(clip.item.className);
+        mm.delete(modId);
+    };
+    // todo: unsure if this is a good place for this bit of code...
+    mod.move = function (oldClip, newClip, from, to) {
+        var modId = mm.getModuleId(oldClip.item.className);
+        var pane = mm.getPaneName(newClip.list);
+        mm.move(modId, pane, to);
+    };
+    mod.sendToPane = function () {
+        var pane = $quickE.main.actionsForModule.closest(_quickE___1.selectors.mod.listSelector);
+        // show the pane-options
+        var pl = $quickE.selected.find('#paneList');
+        if (!pl.is(':empty'))
+            pl.empty();
+        pl.append(mm.getMoveButtons(mm.getPaneName(pane)));
+    };
+    return mod;
+}());
+exports.mod = mod;
+;
+var CmdsStrategyFactory = /** @class */ (function () {
+    function CmdsStrategyFactory() {
+        this.cmds = {};
+        this.cmds['cb'] = new cb();
+        this.cmds['mod'] = new mod();
+    }
+    CmdsStrategyFactory.prototype.getCmds = function (cliptype) {
+        return this.cmds[cliptype];
+    };
+    CmdsStrategyFactory.prototype.delete = function (clip) {
+        return this.cmds[clip.type].delete(clip);
+    };
+    return CmdsStrategyFactory;
+}());
+exports.CmdsStrategyFactory = CmdsStrategyFactory;
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(18);
+__webpack_require__(10);
+__webpack_require__(11);
+__webpack_require__(12);
+__webpack_require__(19);
+__webpack_require__(20);
+__webpack_require__(21);
+__webpack_require__(5);
+__webpack_require__(6);
+__webpack_require__(7);
+__webpack_require__(22);
+__webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(25);
+__webpack_require__(26);
+__webpack_require__(27);
+__webpack_require__(28);
+__webpack_require__(29);
+__webpack_require__(30);
+__webpack_require__(31);
+__webpack_require__(32);
+__webpack_require__(33);
+__webpack_require__(34);
+__webpack_require__(35);
+__webpack_require__(36);
+__webpack_require__(37);
+__webpack_require__(38);
+__webpack_require__(39);
+__webpack_require__(40);
+__webpack_require__(41);
+__webpack_require__(42);
+__webpack_require__(43);
+__webpack_require__(44);
+__webpack_require__(45);
+__webpack_require__(46);
+__webpack_require__(47);
+__webpack_require__(48);
+__webpack_require__(1);
+__webpack_require__(15);
+__webpack_require__(49);
+__webpack_require__(50);
+__webpack_require__(3);
+__webpack_require__(0);
+__webpack_require__(4);
+__webpack_require__(16);
+__webpack_require__(14);
+__webpack_require__(51);
+__webpack_require__(9);
+__webpack_require__(52);
+__webpack_require__(8);
+__webpack_require__(13);
+__webpack_require__(53);
+__webpack_require__(54);
+__webpack_require__(55);
+__webpack_require__(56);
+__webpack_require__(57);
+__webpack_require__(58);
+__webpack_require__(59);
+__webpack_require__(60);
+__webpack_require__(61);
+__webpack_require__(62);
+__webpack_require__(63);
+__webpack_require__(2);
+module.exports = __webpack_require__(64);
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+/*
+ * Author: Alex Gibson
+ * https://github.com/alexgibson/shake.js
+ * License: MIT license
+ */
+(function (global, factory) {
+    global.Shake = factory(global, global.document);
+}(typeof window !== 'undefined' ? window : this, function (window, document) {
+    'use strict';
+    function Shake(options) {
+        //feature detect
+        this.hasDeviceMotion = 'ondevicemotion' in window;
+        this.options = {
+            threshold: 15,
+            timeout: 1000,
+            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
+        };
+        if (typeof options === 'object') {
+            for (var i in options) {
+                if (options.hasOwnProperty(i)) {
+                    this.options[i] = options[i];
+                }
+            }
+        }
+        //use date to prevent multiple shakes firing
+        this.lastTime = new Date();
+        //accelerometer values
+        this.lastX = null;
+        this.lastY = null;
+        this.lastZ = null;
+    }
+    //reset timer values
+    Shake.prototype.reset = function () {
+        this.lastTime = new Date();
+        this.lastX = null;
+        this.lastY = null;
+        this.lastZ = null;
+    };
+    //start listening for devicemotion
+    Shake.prototype.start = function () {
+        this.reset();
+        if (this.hasDeviceMotion) {
+            window.addEventListener('devicemotion', this, false);
+        }
+    };
+    //stop listening for devicemotion
+    Shake.prototype.stop = function () {
+        if (this.hasDeviceMotion) {
+            window.removeEventListener('devicemotion', this, false);
+        }
+        this.reset();
+    };
+    //calculates if shake did occur
+    Shake.prototype.devicemotion = function (e) {
+        var current = e.accelerationIncludingGravity;
+        var currentTime;
+        var timeDifference;
+        var deltaX = 0;
+        var deltaY = 0;
+        var deltaZ = 0;
+        if ((this.lastX === null) && (this.lastY === null) && (this.lastZ === null)) {
+            this.lastX = current.x;
+            this.lastY = current.y;
+            this.lastZ = current.z;
+            return;
+        }
+        deltaX = Math.abs(this.lastX - current.x);
+        deltaY = Math.abs(this.lastY - current.y);
+        deltaZ = Math.abs(this.lastZ - current.z);
+        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
+            //calculate time in milliseconds since last shake registered
+            currentTime = new Date();
+            timeDifference = currentTime.getTime() - this.lastTime.getTime();
+            if (timeDifference > this.options.timeout) {
+                // once triggered, execute  the callback
+                if (typeof this.options.callback === 'function') {
+                    this.options.callback();
+                }
+                else
+                    console.log("shake event without callback detected");
+                this.lastTime = new Date();
+            }
+        }
+        this.lastX = current.x;
+        this.lastY = current.y;
+        this.lastZ = current.z;
+    };
+    //event handler
+    Shake.prototype.handleEvent = function (e) {
+        if (typeof (this[e.type]) === 'function') {
+            return this[e.type](e);
+        }
+    };
+    return Shake;
+}));
+//# sourceMappingURL=shake.js.map
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+(function () {
+    if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
+        return false;
+    }
+    $2sxc.c = $2sxc.consts = {
+        // classes
+        cls: {
+            scMenu: "sc-menu",
+            scCb: "sc-content-block",
+            scElm: "sc-element"
+        },
+        // attribs
+        attr: {
+            toolbar: "toolbar",
+            toolbarData: "data-toolbar",
+            settings: "settings",
+            settingsData: "data-settings"
+        },
+        publishAllowed: "DraftOptional"
+    };
+    // selectors
+    var sel = $2sxc.c.sel = {};
+    Object.keys($2sxc.c.cls).forEach(function (key, index) {
+        sel[key] = "." + $2sxc.c.cls[key];
+    });
+    /*
+    ToDo: functional programming
+    $2sxc.c.sel = Object.entries($2sxc.c.cls).reduce((res, current) => {
+        res[entry[0]] = entry[1];
+        return t;
+    }, {});
+    */
+})();
+
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+// this enhances the $2sxc client controller with stuff only needed when logged in
+(function () {
+    if (!(window.$2sxc /*|| window.$2sxc.system*/)) {
+        return;
+    }
+    $2sxc.system = {
+        finishUpgrade: finishUpgrade
+    };
+    // upgrade command - started when an error contains a link to start this
+    function finishUpgrade(domElement) {
+        var mc = $2sxc(domElement);
+        $.ajax({
+            type: "get",
+            url: mc.resolveServiceUrl("view/module/finishinstallation"),
+            beforeSend: $.ServicesFramework(mc.id).setModuleHeaders
+        }).success(function () {
+            alert("Upgrade ok, restarting the CMS and reloading...");
+            location.reload();
+        });
+        alert("starting upgrade. This could take a few minutes. You'll see an 'ok' when it's done. Please wait...");
+    }
+})();
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_definitions_1 = __webpack_require__(5);
+var commands_engine_1 = __webpack_require__(6);
+var commands_instanceCommands_1 = __webpack_require__(7);
+$2sxc._commands = {
+    definitions: {
+        create: commands_definitions_1.create,
+    },
+    instanceEngine: commands_engine_1.instanceEngine,
+    initializeInstanceCommands: commands_instanceCommands_1.initializeInstanceCommands
 };
 
 
 /***/ }),
-/* 11 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /*
@@ -846,7 +2124,7 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 12 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /*
@@ -919,9 +2197,13 @@ $2sxc._commands.instanceEngine = function (sxc, editContext) {
 
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports) {
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = __webpack_require__(2);
 // contains commands to create/move/delete a contentBlock in a page
 $2sxc._contentBlock.manipulator = function (sxc) {
     return {
@@ -973,7 +2255,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
     }
     // delete a content-block inside a list of content-blocks
     function remove(parentId, field, index) {
-        if (!confirm($2sxc.translate('QuickInsertMenu.ConfirmDelete')))
+        if (!confirm(_2sxc_translate_1.translate('QuickInsertMenu.ConfirmDelete')))
             return null;
         var params = {
             parentId: parentId,
@@ -990,9 +2272,15 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports) {
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE_start_1 = __webpack_require__(13);
+var _2sxc__quickDialog_1 = __webpack_require__(3);
+var manage_api_1 = __webpack_require__(1);
 /*
  * this is the content block manager in the browser
  *
@@ -1019,7 +2307,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
             // Must disable toolbar before we attach to DOM
             if (justPreview)
                 $2sxc._toolbarManager.disable(newStuff);
-            $($2sxc._manage.getTag(sxc)).replaceWith(newStuff);
+            $(manage_api_1.getTag(sxc)).replaceWith(newStuff);
             // reset the cache, so the sxc-object is refreshed
             sxc.recreate(true);
         }
@@ -1034,7 +2322,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
      * @returns {} - nothing
      */
     cbm.showMessage = function (sxc, newContent) {
-        $($2sxc._manage.getTag(sxc)).html(newContent);
+        $(manage_api_1.getTag(sxc)).html(newContent);
     };
     cbm.ajaxLoad = function (sxc, alternateTemplateId, justPreview) {
         // ajax-call, then replace
@@ -1042,7 +2330,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
             .then(function (result) {
             return cbm.replaceCb(sxc, result, justPreview);
         })
-            .then($quickE.reset); // reset quick-edit, because the config could have changed
+            .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
     };
     // this one assumes a replace / change has already happened, but now must be finalized...
     cbm.reloadAndReInitialize = function (sxc, forceAjax, preview) {
@@ -1063,16 +2351,20 @@ $2sxc._contentBlock.manipulator = function (sxc) {
             // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
             // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
             // must check for side-effects, which would need the manager to re-build the configuration
-            $2sxc._quickDialog.hide();
+            _2sxc__quickDialog_1.hide();
         });
     };
 })();
 
 
 /***/ }),
-/* 15 */
-/***/ (function(module, exports) {
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc__quickDialog_1 = __webpack_require__(3);
 /*
  * this is part of the content block manager
  */
@@ -1118,7 +2410,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
         // or just reset it, so it picks up the right values again ?
         return updateTemplate(sxc, templateId, forceCreate)
             .then(function () {
-            $2sxc._quickDialog.hide();
+            _2sxc__quickDialog_1.hide();
             // if it didn't have content, then it only has now...
             if (!contentGroup.HasContent)
                 contentGroup.HasContent = forceCreate;
@@ -1150,7 +2442,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 16 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /*
@@ -1225,7 +2517,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 
 
 /***/ }),
-/* 17 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1240,7 +2532,7 @@ exports.default = ContentBlock;
 
 
 /***/ }),
-/* 18 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1255,7 +2547,7 @@ exports.default = ContentGroup;
 
 
 /***/ }),
-/* 19 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1270,7 +2562,7 @@ exports.default = DataEditContext;
 
 
 /***/ }),
-/* 20 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1285,7 +2577,7 @@ exports.default = Environment;
 
 
 /***/ }),
-/* 21 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1300,7 +2592,7 @@ exports.default = Error;
 
 
 /***/ }),
-/* 22 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1315,7 +2607,7 @@ exports.default = Language;
 
 
 /***/ }),
-/* 23 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1330,7 +2622,7 @@ exports.default = ParametersEntity;
 
 
 /***/ }),
-/* 24 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1345,7 +2637,7 @@ exports.default = User;
 
 
 /***/ }),
-/* 25 */
+/* 36 */
 /***/ (function(module, exports) {
 
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -1363,7 +2655,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 26 */
+/* 37 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -1389,9 +2681,13 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 27 */
-/***/ (function(module, exports) {
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = __webpack_require__(2);
 // this enhances the $2sxc client controller with stuff only needed when logged in
 (function () {
     if (window.$2sxc) {
@@ -1400,7 +2696,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
             // delete command - try to really delete a content-item
             "delete": function (sxc, itemId, itemGuid, itemTitle) {
                 // first show main warning / get ok
-                var ok = confirm($2sxc.translate("Delete.Confirm")
+                var ok = confirm(_2sxc_translate_1.translate("Delete.Confirm")
                     .replace("{id}", itemId)
                     .replace("{title}", itemTitle));
                 if (!ok)
@@ -1409,13 +2705,13 @@ var $2sxcActionMenuMapper = function (moduleId) {
                     .success(function () {
                     location.reload();
                 }).error(function (error) {
-                    var msgJs = $2sxc.translate("Delete.ErrCheckConsole");
+                    var msgJs = _2sxc_translate_1.translate("Delete.ErrCheckConsole");
                     console.log(error);
                     // check if it's a permission config problem
                     if (error.status === 401)
-                        alert($2sxc.translate("Delete.ErrPermission") + msgJs);
+                        alert(_2sxc_translate_1.translate("Delete.ErrPermission") + msgJs);
                     if (error.status === 400)
-                        alert($2sxc.translate("Delete.ErrInUse") + msgJs);
+                        alert(_2sxc_translate_1.translate("Delete.ErrInUse") + msgJs);
                 });
             }
         };
@@ -1425,57 +2721,56 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 28 */
+/* 39 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 29 */
+/* 40 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 30 */
-/***/ (function(module, exports) {
-
-// ReSharper restore InconsistentNaming 
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 34 */
+/* 41 */
 /***/ (function(module, exports) {
 
 // ReSharper restore InconsistentNaming 
 
 
 /***/ }),
-/* 35 */
+/* 42 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 36 */
+/* 43 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 47 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -1492,233 +2787,30 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 37 */
-/***/ (function(module, exports) {
-
-// A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
-// all in-page toolbars etc.
-// if loaded, it's found under the $2sxc(module).manage
-// it has commands to
-// - getButton
-// - getToolbar
-// - run(...)
-// - isEditMode
-(function () {
-    $2sxc._manage = {};
-})();
-
-
-/***/ }),
-/* 38 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-(function () {
-    var mngApi = $2sxc._manage;
-    /**
-     * Get a html tag of the current sxc instance
-     * @param {any} sxci
-     * @return {jquery} - resulting html
-     */
-    $2sxc._manage.getTag = function (sxci) {
-        return $("div[data-cb-id='" + sxci.cbid + "']")[0];
-    };
-    /**
-     * get the edit-context object (a json object) of the current tag/sxc-instance
-     * @param {any} htmlTag
-     * @return {any} edit-context object
-     */
-    $2sxc._manage.getEditContextOfTag = function getEditContextOfTag(htmlTag) {
-        var attr = htmlTag.getAttribute("data-edit-context");
-        return JSON.parse(attr || "");
-    };
-    /**
-     * get edit-context info of an sxc-object
-     * @param {any} sxc
-     * @return {any} edit context info
-     */
-    $2sxc._manage.getEditContext = function getEditContext(sxc) {
-        return $2sxc._manage.getEditContextOfTag(mngApi.getTag(sxc));
-    };
-    /**
-     * builds a config object used in the toolbar system
-     * @param {any} editContext
-     * @returns {any} object containing various properties for this current sxc-instance
-     */
-    $2sxc._manage.buildInstanceConfig = function (editContext) {
-        var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
-        return {
-            portalId: ce.WebsiteId,
-            tabId: ce.PageId,
-            moduleId: ce.InstanceId,
-            version: ce.SxcVersion,
-            contentGroupId: cg.Guid,
-            cbIsEntity: cb.IsEntity,
-            cbId: cb.Id,
-            appPath: cg.AppUrl,
-            isList: cg.IsList
-        };
-    };
-    $2sxc._manage.getUserOfEditContext = function getUserOfEditContext(editContext) {
-        return {
-            canDesign: editContext.User.CanDesign,
-            canDevelop: editContext.User.CanDesign
-        };
-    };
-    /**
-     * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
-     * @param {any} editContext
-     * @returns {any}
-     */
-    $2sxc._manage.buildQuickDialogConfig = function buildQuickDialogConfig(editContext) {
-        return {
-            appId: editContext.ContentGroup.AppId,
-            isContent: editContext.ContentGroup.IsContent,
-            hasContent: editContext.ContentGroup.HasContent,
-            isList: editContext.ContentGroup.IsList,
-            templateId: editContext.ContentGroup.TemplateId,
-            contentTypeId: editContext.ContentGroup.ContentTypeName,
-            templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker,
-            user: $2sxc._manage.getUserOfEditContext(editContext),
-            supportsAjax: editContext.ContentGroup.SupportsAjax
-        };
-    };
-    /**
-        * get all parameters needed by NG dialogs from an sxc
-        * @param {any} sxc
-        * @param {any} [editContext]
-        * @return {any} special object containing the ng-dialog parameters
-        */
-    $2sxc._manage.buildNgDialogParams = function buildNgDialogParams(sxc, editContext) {
-        if (!editContext)
-            editContext = mngApi.getEditContext(sxc);
-        return {
-            zoneId: editContext.ContentGroup.ZoneId,
-            appId: editContext.ContentGroup.AppId,
-            tid: editContext.Environment.PageId,
-            mid: editContext.Environment.InstanceId,
-            cbid: sxc.cbid,
-            lang: editContext.Language.Current,
-            langpri: editContext.Language.Primary,
-            langs: JSON.stringify(editContext.Language.All),
-            portalroot: editContext.Environment.WebsiteUrl,
-            websiteroot: editContext.Environment.SxcRootUrl,
-            partOfPage: editContext.ContentBlock.PartOfPage,
-            //versioningRequirements: editContext.ContentBlock.VersioningRequirements,
-            publishing: editContext.ContentBlock.VersioningRequirements,
-            // todo: probably move the user into the dashboard info
-            user: $2sxc._manage.getUserOfEditContext(editContext),
-            approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
-        };
-    };
-})();
+var manage_create_1 = __webpack_require__(15);
+/**
+ * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
+ * all in-page toolbars etc.
+ * if loaded, it's found under the $2sxc(module).manage
+ * it has commands to
+ * - getButton
+ * - getToolbar
+ * - run(...)
+ * - isEditMode
+ */
+$2sxc._manage = {
+    initInstance: manage_create_1.initInstance
+};
 
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports) {
-
-// A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
-// all in-page toolbars etc.
-// if loaded, it's found under the $2sxc(module).manage
-// it has commands to
-// - getButton
-// - getToolbar
-// - run(...)
-// - isEditMode
-(function () {
-    $2sxc._manage.initInstance = function (sxc) {
-        try {
-            initInstance(sxc);
-        }
-        catch (e) {
-            console.error("error in 2sxc - will log but not throw", e);
-        }
-    };
-    var mngApi = $2sxc._manage;
-    function initInstance(sxc) {
-        var editContext = mngApi.getEditContext(sxc);
-        var userInfo = mngApi.getUserOfEditContext(editContext);
-        var cmdEngine = $2sxc._commands.instanceEngine(sxc, editContext);
-        var editManager = sxc.manage = {
-            //#region Official, public properties and commands, which are stable for use from the outside
-            /**
-             * run a command - often used in toolbars and custom buttons
-             */
-            run: cmdEngine.executeAction,
-            /**
-             * Generate a button (an <a>-tag) for one specific toolbar-action.
-             * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
-             * @param {int} groupIndex - number what button-group it's in'
-             * @returns {string} html of a button
-             */
-            getButton: function (actDef, groupIndex) {
-                return $2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
-            },
-            /**
-             * Builds the toolbar and returns it as HTML
-             * @param {Object<any>} tbConfig - general toolbar config
-             * @param {Object<any>} moreSettings - additional / override settings
-             * @returns {string} html of the current toolbar
-             */
-            getToolbar: function (tbConfig, moreSettings) {
-                return $2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
-            },
-            //#endregion official, public properties - everything below this can change at any time
-            // internal method to find out if it's in edit-mode
-            _isEditMode: function () { return editContext.Environment.IsEditable; },
-            _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-            _dialogParameters: mngApi.buildNgDialogParams(sxc, editContext),
-            _instanceConfig: mngApi.buildInstanceConfig(editContext),
-            _editContext: editContext,
-            _quickDialogConfig: mngApi.buildQuickDialogConfig(editContext),
-            _commands: cmdEngine,
-            _user: userInfo,
-            // init this object 
-            init: function init() {
-                // enhance UI in case there are known errors / issues
-                if (editContext.error.type)
-                    editManager._handleErrors(editContext.error.type, $2sxc._manage.getTag(sxc));
-                // todo: move this to dialog-handling
-                // display the dialog
-                var openDialogId = sessionStorage.getItem("dia-cbid");
-                if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
-                    return false;
-                sessionStorage.removeItem("dia-cbid");
-                editManager.run("layout");
-            },
-            // private: show error when the app-data hasn't been installed yet for this imported-module
-            _handleErrors: function (errType, cbTag) {
-                var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
-                var msg = "";
-                var toolbar = $("<ul class='sc-menu'></ul>");
-                if (errType === "DataIsMissing") {
-                    msg = "Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import";
-                    toolbar.attr("data-toolbar", '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
-                }
-                errWrapper.append(msg);
-                errWrapper.append(toolbar);
-                $(cbTag).append(errWrapper);
-            },
-            // change config by replacing the guid, and refreshing dependend sub-objects
-            _updateContentGroupGuid: function (newGuid) {
-                editContext.ContentGroup.Guid = newGuid;
-                editManager._instanceConfig = mngApi.buildInstanceConfig(editContext);
-            },
-            _getCbManipulator: function () {
-                return $2sxc._contentBlock.manipulator(sxc);
-            }
-        };
-        editManager.init();
-        return editManager;
-    }
-})();
-
-
-/***/ }),
-/* 40 */
+/* 49 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -1762,7 +2854,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 41 */
+/* 50 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -1789,868 +2881,71 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports) {
-
-// this is a dialog manager which is in charge of all
-// quick-dialogs. 
-// it always has a reference to the latest dialog created by any module instance
-(function () {
-    var resizeInterval = 200;
-    var scrollTopOffset = 80;
-    var resizeWatcher = null;
-    var diagShowClass = "dia-select";
-    var isFullscreen = false;
-    /**
-     * dialog manager - the currently active dialog object
-     */
-    var diagManager = $2sxc._quickDialog = {
-        current: null,
-        /**
-         * toggle visibility
-         * @param {boolean} [show] true/false optional
-         */
-        toggle: function (show) {
-            var cont = $(diagManager.getContainer());
-            if (show === undefined)
-                show = !cont.hasClass(diagShowClass);
-            // show/hide visually
-            cont.toggleClass(diagShowClass, show);
-            diagManager.current = show ? diagManager.getIFrame() : null;
-        },
-        hide: function () {
-            if (diagManager.current)
-                diagManager.toggle(false);
-        },
-        /**
-         * cancel the current dialog
-         */
-        cancel: function () {
-            if (diagManager.current)
-                diagManager.current.cancel(); // cancel & hide
-        },
-        /**
-         * Remember dialog state across page-reload
-         * @param {Object<any>} sxc - the sxc which is persisted for
-         */
-        persistDialog: function (sxc) {
-            sessionStorage.setItem("dia-cbid", sxc.cbid);
-        },
-        /**
-         * get the current container
-         * @returns {element} html element of the div
-         */
-        getContainer: function () {
-            var container = $(".inpage-frame-wrapper");
-            return container.length > 0 ? container : buildContainerAndIFrame();
-        },
-        /**
-         * find the iframe which hosts the dialog
-         * @param {html} [container] - html-container as jQuery object
-         * @returns {html} iframe object
-         */
-        getIFrame: function (container) {
-            if (!container)
-                container = diagManager.getContainer();
-            return container.find("iframe")[0];
-        },
-        /**
-         * check if the dialog is showing for the current sxc-instance
-         * @param {Object<any>} sxc - sxc object
-         * @param {string} dialogName - name of dialog
-         * @returns {boolean} true if it's currently showing for this sxc-instance
-         */
-        isShowing: function (sxc, dialogName) {
-            return diagManager.current // there is a current dialog
-                &&
-                    diagManager.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
-                &&
-                    diagManager.current.dialogName === dialogName; // the view is the same as previously
-        },
-        /**
-         * show / reset the current iframe to use new url and callback
-         * @param {any} sxc - sxc object
-         * @param {string} url - url to show
-         * @param {function()} closeCallback - callback event
-         * @param {boolean} fullScreen - if it should open full screen
-         * @param {string} [dialogName] - optional name of dialog, to check if it's already open
-         * @returns {any} jquery object of the iframe
-         */
-        showOrToggle: function (sxc, url, closeCallback, fullScreen, dialogName) {
-            setSize(fullScreen);
-            var iFrame = diagManager.getIFrame();
-            // in case it's a toggle
-            if (dialogName && diagManager.isShowing(sxc, dialogName))
-                return diagManager.hide();
-            iFrame.rewire(sxc, closeCallback, dialogName);
-            iFrame.setAttribute("src", rewriteUrl(url));
-            // if the window had already been loaded, re-init
-            if (iFrame.contentWindow && iFrame.contentWindow.reboot)
-                iFrame.contentWindow.reboot();
-            // make sure it's visible'
-            iFrame.toggle(true);
-            return iFrame;
-        }
-    };
-    /**
-     * build the container in the dom w/iframe for re-use
-     * @return {jquery} jquery dom-object
-     */
-    function buildContainerAndIFrame() {
-        var container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
-        var newIFrame = document.createElement("iframe");
-        newIFrame = extendIFrameWithSxcState(newIFrame);
-        container.find(".inpage-frame").html(newIFrame);
-        $("body").append(container);
-        watchForResize();
-        return container;
-    }
-    function setSize(fullScreen) {
-        var container = diagManager.getContainer();
-        // set container height
-        container.css("min-height", fullScreen ? "100%" : "225px");
-        isFullscreen = fullScreen;
-    }
-    function extendIFrameWithSxcState(iFrame) {
-        var hiddenSxc = null;
-        var cbApi = $2sxc._contentBlock;
-        var tagModule = null;
-        /**
-         * get the sxc-object of this iframe
-         * @returns {Object<any>} refreshed sxc-object
-         */
-        function reSxc() {
-            if (!hiddenSxc)
-                throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-            return hiddenSxc.recreate();
-        }
-        var newFrm = Object.assign(iFrame, {
-            closeCallback: null,
-            rewire: function (sxc, callback, dialogName) {
-                hiddenSxc = sxc;
-                tagModule = $($($2sxc._manage.getTag(sxc)).parent().eq(0));
-                newFrm.sxcCacheKey = sxc.cacheKey;
-                newFrm.closeCallback = callback;
-                if (dialogName)
-                    newFrm.dialogName = dialogName;
-            },
-            getManageInfo: function () {
-                return reSxc().manage._dialogParameters;
-            },
-            getAdditionalDashboardConfig: function () {
-                return reSxc().manage._quickDialogConfig;
-            },
-            persistDia: function () {
-                diagManager.persistDialog(reSxc());
-            },
-            scrollToTarget: function () {
-                $("body").animate({
-                    scrollTop: tagModule.offset().top - scrollTopOffset
-                });
-            },
-            toggle: function (show) {
-                diagManager.toggle(show);
-            },
-            cancel: function () {
-                newFrm.toggle(false);
-                //todo: only re-init if something was changed?
-                // return cbApi.reloadAndReInitialize(reSxc());
-                // cancel the dialog
-                localStorage.setItem("cancelled-dialog", "true");
-                return newFrm.closeCallback();
-            },
-            run: function (verb) {
-                reSxc().manage.run(verb);
-            },
-            showMessage: function (message) {
-                cbApi.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
-            },
-            reloadAndReInit: function () {
-                return cbApi.reloadAndReInitialize(reSxc(), true, true);
-            },
-            saveTemplate: function (templateId) {
-                return cbApi.updateTemplateFromDia(reSxc(), templateId, false);
-            },
-            previewTemplate: function (templateId) {
-                return cbApi.ajaxLoad(reSxc(), templateId, true);
-            }
-        });
-        return newFrm;
-    }
-    /**
-     * rewrite the url to fit the quick-dialog situation
-     * optionally with a live-compiled version from ng-serve
-     * @param {string} url - original url pointing to the "wrong" dialog
-     * @returns {string} new url
-     */
-    function rewriteUrl(url) {
-        // change default url-schema from the primary angular-app to the quick-dialog
-        url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
-        // special debug-code when running on local ng-serve
-        // this is only activated if the developer manually sets a value in the localStorage
-        try {
-            var devMode = localStorage.getItem("devMode");
-            if (devMode && ~~devMode)
-                url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
-        }
-        catch (e) {
-            // ignore
-        }
-        return url;
-    }
-    /**
-     * create watcher which monitors the iframe size and adjusts the container as needed
-     * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
-     * @returns {null} nothing
-     */
-    function watchForResize(keepWatching) {
-        if ((keepWatching === null || keepWatching === false) && resizeWatcher) {
-            clearInterval(resizeWatcher);
-            resizeWatcher = null;
-            return null;
-        }
-        var cont = diagManager.getContainer();
-        if (!resizeWatcher)
-            resizeWatcher = setInterval(function () {
-                try {
-                    var frm = diagManager.getIFrame(cont);
-                    if (!frm)
-                        return;
-                    var height = frm.contentDocument.body.offsetHeight;
-                    if (frm.previousHeight === height)
-                        return;
-                    frm.style.minHeight = cont.css("min-height");
-                    frm.style.height = height + "px";
-                    frm.previousHeight = height;
-                    if (isFullscreen) {
-                        frm.style.height = "100%";
-                        frm.style.position = "absolute";
-                    }
-                }
-                catch (e) {
-                    // ignore
-                }
-            }, resizeInterval);
-        return resizeWatcher;
-    }
-})();
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports) {
-
-$(function () {
-    "use strict";
-    // the quick-edit object
-    var $quickE = window.$quickE = {};
-    // selectors used all over the in-page-editing, centralized to ensure consistency
-    $quickE.selectors = {
-        cb: {
-            id: "cb",
-            "class": "sc-content-block",
-            selector: ".sc-content-block",
-            listSelector: ".sc-content-block-list",
-            context: "data-list-context",
-            singleItem: "single-item"
-        },
-        mod: {
-            id: "mod",
-            "class": "DnnModule",
-            selector: ".DnnModule",
-            listSelector: ".DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)",
-            context: null
-        },
-        eitherCbOrMod: ".DnnModule, .sc-content-block",
-        selected: "sc-cb-is-selected"
-    };
-    $quickE.btn = function (action, icon, i18N, invisible, unavailable, classes) {
-        return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + " "
-            + (invisible ? " sc-invisible " : "")
-            + (unavailable ? " sc-unavailable " : "")
-            + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
-    };
-    // the quick-insert object
-    $.extend($quickE, {
-        body: $("body"),
-        win: $(window),
-        main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
-        template: "<a class='sc-content-block-menu-addcontent sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a>"
-            + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
-            + $quickE.btn("select", "ok", "Select", true)
-            + $quickE.btn("paste", "paste", "Paste", true, true),
-        selected: $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-            .append($quickE.btn("delete", "trash-empty", "Delete"), $quickE.btn("sendToPane", "export", "Move", null, null, "sc-cb-mod-only"), "<div id='paneList'></div>"),
-        contentBlocks: null,
-        cachedPanes: null,
-        modules: null,
-        nearestCb: null,
-        nearestMod: null,
-        modManage: null // will be populated later in the module section
-    });
-    // add stuff which dependes on other values to create
-    $.extend($quickE, {
-        cbActions: $($quickE.template),
-        modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, "QuickInsertMenu.AddModule"))
-            .attr("data-context", "module")
-            .addClass("sc-content-block-menu-module")
-    });
-    // build the toolbar (hidden, but ready to show)
-    $quickE.prepareToolbarInDom = function () {
-        $quickE.body.append($quickE.main)
-            .append($quickE.selected);
-        $quickE.main.append($quickE.cbActions)
-            .append($quickE.modActions);
-    };
-});
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports) {
-
-// add a clipboard to the quick edit
-$(function () {
-    // perform copy and paste commands - needs the clipboard
-    $quickE.copyPasteInPage = function (cbAction, list, index, type) {
-        var newClip = $quickE.clipboard.createSpecs(type, list, index);
-        // action!
-        switch (cbAction) {
-            case "select":
-                $quickE.clipboard.mark(newClip);
-                break;
-            case "paste":
-                var from = $quickE.clipboard.data.index, to = newClip.index;
-                // check that we only move block-to-block or module to module
-                if ($quickE.clipboard.data.type !== newClip.type)
-                    return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
-                if (isNaN(from) || isNaN(to) || from === to)
-                    return $quickE.clipboard.clear(); // don't do anything
-                // cb-numbering is a bit different, because the selector is at the bottom
-                // only there we should also skip on +1;
-                if (newClip.type === $quickE.selectors.cb.id && from + 1 === to)
-                    return $quickE.clipboard.clear(); // don't do anything
-                if (type === $quickE.selectors.cb.id) {
-                    $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
-                }
-                else {
-                    $quickE.cmds.mod.move($quickE.clipboard.data, newClip, from, to);
-                }
-                $quickE.clipboard.clear();
-                break;
-            default:
-        }
-        return null;
-    };
-    // clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
-    $quickE.clipboard = {
-        data: {},
-        mark: function (newData) {
-            if (newData) {
-                // if it was already selected with the same thing, then release it
-                if ($quickE.clipboard.data && $quickE.clipboard.data.item === newData.item)
-                    return $quickE.clipboard.clear();
-                $quickE.clipboard.data = newData;
-            }
-            $("." + $quickE.selectors.selected).removeClass($quickE.selectors.selected); // clear previous markings
-            var cb = $($quickE.clipboard.data.item);
-            cb.addClass($quickE.selectors.selected);
-            if (cb.prev().is("iframe"))
-                cb.prev().addClass($quickE.selectors.selected);
-            $quickE.setSecondaryActionsState(true);
-            $quickE.selected.toggle(cb, $quickE.clipboard.data.type);
-        },
-        clear: function () {
-            $("." + $quickE.selectors.selected).removeClass($quickE.selectors.selected);
-            $quickE.clipboard.data = null;
-            $quickE.setSecondaryActionsState(false);
-            $quickE.selected.toggle(false);
-        },
-        createSpecs: function (type, list, index) {
-            var listItems = list.find($quickE.selectors[type].selector);
-            if (index >= listItems.length)
-                index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
-            var currentItem = listItems[index];
-            var editContext = JSON.parse(list.attr($quickE.selectors.cb.context) || null) || { parent: "dnn", field: list.id };
-            return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
-        }
-    };
-    $quickE.setSecondaryActionsState = function (state) {
-        var btns = $("a.sc-content-block-menu-btn");
-        btns = btns.filter(".icon-sxc-paste");
-        btns.toggleClass("sc-unavailable", !state);
-    };
-    $quickE.selected.toggle = function (target) {
-        if (!target)
-            return $quickE.selected.hide();
-        var coords = $quickE.getCoordinates(target);
-        coords.yh = coords.y + 20;
-        $quickE.positionAndAlign($quickE.selected, coords);
-        $quickE.selected.target = target;
-    };
-    // bind clipboard actions 
-    $("a", $quickE.selected).click(function () {
-        var action = $(this).data("action");
-        var clip = $quickE.clipboard.data;
-        switch (action) {
-            case "delete":
-                return $quickE.cmds[clip.type].delete(clip);
-            case "sendToPane":
-                return $quickE.cmds.mod.sendToPane(clip);
-        }
-    });
-});
-
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports) {
-
-// extend the quick edit with the core commands
-$(function () {
-    $quickE.cmds = {
-        cb: {
-            "delete": function (clip) {
-                return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
-            },
-            "create": function (parent, field, index, appOrContent, list, newGuid) {
-                return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
-            }
-        },
-        mod: {
-            "delete": function (clip) {
-                if (!confirm("are you sure?"))
-                    return;
-                var modId = $quickE.modManage.getModuleId(clip.item.className);
-                $quickE.modManage.delete(modId);
-            },
-            // todo: unsure if this is a good place for this bit of code...
-            move: function (oldClip, newClip, from, to) {
-                var modId = $quickE.modManage.getModuleId(oldClip.item.className);
-                var pane = $quickE.modManage.getPaneName(newClip.list);
-                $quickE.modManage.move(modId, pane, to);
-            },
-            sendToPane: function () {
-                var pane = $quickE.main.actionsForModule.closest($quickE.selectors.mod.listSelector);
-                // show the pane-options
-                var pl = $quickE.selected.find("#paneList");
-                if (!pl.is(":empty"))
-                    pl.empty();
-                pl.append($quickE.modManage.getMoveButtons($quickE.modManage.getPaneName(pane)));
-            }
-        }
-    };
-});
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports) {
-
-$(function () {
-    var configAttr = "quick-edit-config";
-    // the initial configuration
-    var conf = $quickE.config = {
-        enable: true,
-        innerBlocks: {
-            enable: null // default: auto-detect
-        },
-        modules: {
-            enable: null // default: auto-detect
-        }
-    };
-    $quickE._readPageConfig = function () {
-        var configs = $("[" + configAttr + "]"), finalConfig = {}, confJ, confO;
-        // any inner blocks found? will currently affect if modules can be inserted...
-        var hasInnerCBs = ($($quickE.selectors.cb.listSelector).length > 0);
-        if (configs.length > 0) {
-            // go through reverse list, as the last is the most important...
-            for (var c = configs.length; c >= 0; c--) {
-                confJ = configs[0].getAttribute(configAttr);
-                try {
-                    confO = JSON.parse(confJ);
-                    $.extend(finalConfig, confO);
-                }
-                catch (e) {
-                    console.warn('had trouble with json', e);
-                }
-            }
-            $.extend(conf, finalConfig);
-        }
-        // re-check "auto" or "null"
-        // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-        if (conf.modules.enable === null || conf.modules.enable === 'auto')
-            conf.modules.enable = !hasInnerCBs;
-        // for now, ContentBlocks are only enabled if they exist on the page
-        if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
-            conf.innerBlocks.enable = hasInnerCBs;
-    };
-});
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports) {
-
-// content-block specific stuff like actions
-$(function () {
-    function onCbButtonClick() {
-        var list = $quickE.main.actionsForCb.closest($quickE.selectors.cb.listSelector), listItems = list.find($quickE.selectors.cb.selector), actionConfig = JSON.parse(list.attr($quickE.selectors.cb.context)), index = 0, newGuid = actionConfig.guid || null;
-        if ($quickE.main.actionsForCb.hasClass($quickE.selectors.cb.class))
-            index = listItems.index($quickE.main.actionsForCb[0]) + 1;
-        // check cut/paste
-        var cbAction = $(this).data("action");
-        if (cbAction)
-            // this is a cut/paste action
-            return $quickE.copyPasteInPage(cbAction, list, index, $quickE.selectors.cb.id);
-        else {
-            var appOrContent = $(this).data("type");
-            return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
-        }
-    }
-    $quickE.cbActions.click(onCbButtonClick);
-});
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports) {
-
-// module specific stuff
-$(function () {
-    "use strict";
-    $quickE.modManage = {
-        "delete": deleteMod,
-        create: createModWithTypeName,
-        move: moveMod,
-        getPaneName: getPaneName,
-        getModuleId: getModuleId,
-        getMoveButtons: generatePaneMoveButtons
-    };
-    function getPaneName(pane) {
-        return $(pane).attr("id").replace("dnn_", "");
-    }
-    // find the correct module id from a list of classes - used on the module-wrapper
-    function getModuleId(classes) {
-        var result = classes.match(/DnnModule-([0-9]+)(?:\W|$)/);
-        return (result && result.length === 2) ? result[1] : null;
-    }
-    // show an error when an xhr error occurs
-    function xhrError(xhr, optionalMessage) {
-        alert(optionalMessage || "Error while talking to server.");
-        console.log(xhr);
-    }
-    // service calls we'll need
-    function createModWithTypeName(paneName, index, type) {
-        return sendDnnAjax(null, "controlbar/GetPortalDesktopModules", {
-            data: "category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=",
-            success: function (desktopModules) {
-                var moduleToFind = type === "Default" ? " Content" : " App";
-                var module = null;
-                desktopModules.forEach(function (e, i) {
-                    if (e.ModuleName === moduleToFind)
-                        module = e;
-                });
-                return (!module)
-                    ? alert(moduleToFind + " module not found.")
-                    : createMod(paneName, index, module.ModuleID);
-            }
-        });
-    }
-    // move a dnn module
-    function moveMod(modId, pane, order) {
-        var service = $.dnnSF(modId);
-        var tabId = service.getTabId();
-        var dataVar = {
-            TabId: tabId,
-            ModuleId: modId,
-            Pane: pane,
-            ModuleOrder: (2 * order + 4) // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
-        };
-        sendDnnAjax(modId, "ModuleService/MoveModule", {
-            type: "POST",
-            data: dataVar,
-            success: function () {
-                window.location.reload();
-            }
-        });
-        //fire window resize to reposition action menus
-        $(window).resize();
-    }
-    // delete a module
-    function deleteMod(modId) {
-        var service = $.dnnSF(modId);
-        var tabId = service.getTabId();
-        return sendDnnAjax(modId, "2sxc/dnn/module/delete", {
-            url: $.dnnSF().getServiceRoot("2sxc") + "dnn/module/delete",
-            type: "GET",
-            data: {
-                tabId: tabId,
-                modId: modId
-            },
-            success: function (d) {
-                window.location.reload();
-            }
-        });
-    }
-    // call an api on dnn
-    function sendDnnAjax(modId, serviceName, options) {
-        var service = $.dnnSF(modId);
-        return $.ajax($.extend({
-            type: "GET",
-            url: service.getServiceRoot("internalservices") + serviceName,
-            beforeSend: service.setModuleHeaders,
-            error: xhrError
-        }, options));
-    }
-    // create / insert a new module
-    function createMod(paneName, position, modId) {
-        var postData = {
-            Module: modId,
-            Page: "",
-            Pane: paneName,
-            Position: -1,
-            Sort: position,
-            Visibility: 0,
-            AddExistingModule: false,
-            CopyModule: false
-        };
-        return sendDnnAjax(null, "controlbar/AddModule", {
-            type: "POST",
-            data: postData,
-            success: function (d) {
-                window.location.reload();
-            }
-        });
-    }
-    function generatePaneMoveButtons(current) {
-        var pns = $quickE.cachedPanes;
-        // generate list of panes as links
-        var targets = $("<div>");
-        for (var p = 0; p < pns.length; p++) {
-            var pName = $quickE.modManage.getPaneName(pns[p]), selected = (current === pName) ? " selected " : "";
-            if (!selected)
-                targets.append("<a data='" + pName + "'>" + pName + "</a>");
-        }
-        // attach click event...
-        targets.find("a").click(function (d) {
-            var link = $(this), clip = $quickE.clipboard.data, modId = $quickE.modManage.getModuleId(clip.item.className), newPane = link.attr("data");
-            $quickE.modManage.move(modId, newPane, 0);
-        });
-        return targets;
-    }
-});
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports) {
-
-// module specific stuff
-$(function () {
-    function onModuleButtonClick() {
-        var type = $(this).data("type"), dnnMod = $quickE.main.actionsForModule, pane = dnnMod.closest($quickE.selectors.mod.listSelector), index = 0;
-        if (dnnMod.hasClass("DnnModule"))
-            index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
-        var cbAction = $(this).data("action");
-        if (cbAction)
-            return $quickE.copyPasteInPage(cbAction, pane, index, $quickE.selectors.mod.id);
-        return $quickE.modManage.create($quickE.modManage.getPaneName(pane), index, type);
-    }
-    // bind module actions click
-    $quickE.modActions.click(onModuleButtonClick);
-});
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports) {
-
-// everything related to positioning the quick-edit in-page editing
-$(function () {
-    // Prepare offset calculation based on body positioning
-    $quickE.getBodyPosition = function () {
-        var bodyPos = $quickE.body.css("position");
-        return bodyPos === "relative" || bodyPos === "absolute"
-            ? { x: $quickE.body.offset().left, y: $quickE.body.offset().top }
-            : { x: 0, y: 0 };
-    };
-    // Refresh content block and modules elements
-    $quickE.refreshDomObjects = function () {
-        $quickE.bodyOffset = $quickE.getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
-        //// Cache the panes (because panes can't change dynamically)
-        //if (!$quickE.cachedPanes)
-        //    $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
-        if ($quickE.config.innerBlocks.enable) {
-            // get all content-block lists which are empty, or which allow multiple child-items
-            var lists = $($quickE.selectors.cb.listSelector)
-                .filter(":not(." + $quickE.selectors.cb.singleItem + "), :empty");
-            $quickE.contentBlocks = lists // $($quickE.selectors.cb.listSelector)
-                .find($quickE.selectors.cb.selector)
-                .add(lists); // $quickE.selectors.cb.listSelector);
-        }
-        if ($quickE.config.modules.enable)
-            $quickE.modules = $quickE.cachedPanes
-                .find($quickE.selectors.mod.selector)
-                .add($quickE.cachedPanes);
-    };
-    // position, align and show a menu linked to another item
-    $quickE.positionAndAlign = function (element, coords) {
-        return element.css({
-            left: coords.x - $quickE.bodyOffset.x,
-            top: coords.yh - $quickE.bodyOffset.y,
-            width: coords.element.width()
-        }).show();
-    };
-    // Refresh positioning / visibility of the quick-insert bar
-    $quickE.refresh = function (e) {
-        var highlightClass = "sc-cb-highlight-for-insert";
-        var newDate = new Date();
-        if (!$quickE.refreshDomObjects.lastCall || (newDate - $quickE.refreshDomObjects.lastCall > 1000)) {
-            // console.log('refreshed contentblock and modules');
-            $quickE.refreshDomObjects.lastCall = newDate;
-            $quickE.refreshDomObjects();
-        }
-        if ($quickE.config.innerBlocks.enable && $quickE.contentBlocks) {
-            $quickE.nearestCb = $quickE.findNearest($quickE.contentBlocks, { x: e.clientX, y: e.clientY }, $quickE.selectors.cb.selector);
-        }
-        if ($quickE.config.modules.enable && $quickE.modules) {
-            $quickE.nearestMod = $quickE.findNearest($quickE.modules, { x: e.clientX, y: e.clientY }, $quickE.selectors.mod.selector);
-        }
-        $quickE.modActions.toggleClass("sc-invisible", $quickE.nearestMod === null);
-        $quickE.cbActions.toggleClass("sc-invisible", $quickE.nearestCb === null);
-        var oldParent = $quickE.main.parentContainer;
-        if ($quickE.nearestCb !== null || $quickE.nearestMod !== null) {
-            var alignTo = $quickE.nearestCb || $quickE.nearestMod;
-            // find parent pane to highlight
-            var parentPane = $(alignTo.element).closest($quickE.selectors.mod.listSelector);
-            var parentCbList = $(alignTo.element).closest($quickE.selectors.cb.listSelector);
-            var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
-            // put part of the pane-name into the button-labels
-            if (parentPane.length > 0) {
-                var paneName = parentPane.attr("id") || "";
-                if (paneName.length > 4)
-                    paneName = paneName.substr(4);
-                $quickE.modActions.filter("[titleTemplate]").each(function () {
-                    var t = $(this);
-                    t.attr("title", t.attr("titleTemplate").replace("{0}", paneName));
-                });
-            }
-            $quickE.positionAndAlign($quickE.main, alignTo, true);
-            // Keep current block as current on menu
-            $quickE.main.actionsForCb = $quickE.nearestCb ? $quickE.nearestCb.element : null;
-            $quickE.main.actionsForModule = $quickE.nearestMod ? $quickE.nearestMod.element : null;
-            $quickE.main.parentContainer = parentContainer;
-            $(parentContainer).addClass(highlightClass);
-        }
-        else {
-            $quickE.main.parentContainer = null;
-            $quickE.main.hide();
-        }
-        // if previously a parent-pane was highlighted, un-highlight it now
-        if (oldParent && oldParent !== $quickE.main.parentContainer)
-            $(oldParent).removeClass(highlightClass);
-    };
-    // Return the nearest element to the mouse cursor from elements (jQuery elements)
-    $quickE.findNearest = function (elements, position) {
-        var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
-        var nearestItem = null;
-        var nearestDistance = maxDistance;
-        var posX = position.x + $quickE.win.scrollLeft();
-        var posY = position.y + $quickE.win.scrollTop();
-        // Find nearest element
-        elements.each(function () {
-            var e = $quickE.getCoordinates($(this));
-            // First check x coordinates - must be within container
-            if (posX < e.x || posX > e.x + e.w)
-                return;
-            // Check if y coordinates are within boundaries
-            var distance = Math.abs(posY - e.yh);
-            if (distance < maxDistance && distance < nearestDistance) {
-                nearestItem = e;
-                nearestDistance = distance;
-            }
-        });
-        return nearestItem;
-    };
-    $quickE.getCoordinates = function (element) {
-        return {
-            element: element,
-            x: element.offset().left,
-            w: element.width(),
-            y: element.offset().top,
-            // For content-block ITEMS, the menu must be visible at the end
-            // For content-block-LISTS, the menu must be at top
-            yh: element.offset().top + (element.is($quickE.selectors.eitherCbOrMod) ? element.height() : 0)
-        };
-    };
-});
-
-
-/***/ }),
 /* 51 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-$(function () {
-    $quickE.enable = function () {
-        // build all toolbar html-elements
-        $quickE.prepareToolbarInDom();
-        // Cache the panes (because panes can't change dynamically)
-        $quickE.initPanes();
-    };
-    // start watching for mouse-move
-    $quickE.watchMouse = function () {
-        var refreshTimeout = null;
-        $("body").on("mousemove", function (e) {
-            if (refreshTimeout === null)
-                refreshTimeout = window.setTimeout(function () {
-                    requestAnimationFrame(function () {
-                        $quickE.refresh(e);
-                        refreshTimeout = null;
-                    });
-                }, 20);
-        });
-    };
-    $quickE.start = function () {
-        try {
-            $quickE._readPageConfig();
-            if ($quickE.config.enable) {
-                // initialize first body-offset
-                $quickE.bodyOffset = $quickE.getBodyPosition();
-                $quickE.enable();
-                $quickE.toggleParts();
-                $quickE.watchMouse();
-            }
-        }
-        catch (e) {
-            console.error("couldn't start quick-edit", e);
-        }
-    };
-    // cache the panes which can contain modules
-    $quickE.initPanes = function () {
-        $quickE.cachedPanes = $($quickE.selectors.mod.listSelector);
-        $quickE.cachedPanes.addClass("sc-cb-pane-glow");
-    };
-    // enable/disable module/content-blocks as configured
-    $quickE.toggleParts = function () {
-        //// content blocks actions
-        //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
-        //// module actions
-        //$quickE.modActions.hide($quickE.config.modules.enable);
-    };
-    // reset the quick-edit
-    // for example after ajax-loading a content-block, which may cause changed configurations
-    $quickE.reset = function () {
-        $quickE._readPageConfig();
-        $quickE.toggleParts();
-    };
-    // run on-load
-    $($quickE.start);
-});
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var _quickE_clipboard_1 = __webpack_require__(4);
+/**
+ * content-block specific stuff like actions
+ */
+function onCbButtonClick() {
+    var list = $quickE.main.actionsForCb.closest(_quickE___1.selectors.cb.listSelector);
+    var listItems = list.find(_quickE___1.selectors.cb.selector);
+    var actionConfig = JSON.parse(list.attr(_quickE___1.selectors.cb.context));
+    var index = 0;
+    var newGuid = actionConfig.guid || null;
+    if ($quickE.main.actionsForCb.hasClass(_quickE___1.selectors.cb.class))
+        index = listItems.index($quickE.main.actionsForCb[0]) + 1;
+    // check cut/paste
+    var cbAction = $(this).data("action");
+    if (cbAction) {
+        // this is a cut/paste action
+        return _quickE_clipboard_1.copyPasteInPage(cbAction, list, index, _quickE___1.selectors.cb.id);
+    }
+    else {
+        var appOrContent = $(this).data("type");
+        return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
+    }
+}
+$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
 /* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = __webpack_require__(0);
+var _quickE_clipboard_1 = __webpack_require__(4);
+var _quickE_modManage_1 = __webpack_require__(9);
+var mm = new _quickE_modManage_1.modManage();
+/**
+ * module specific stuff
+ */
+function onModuleButtonClick() {
+    var type = $(this).data("type"), dnnMod = $quickE.main.actionsForModule, pane = dnnMod.closest(_quickE___1.selectors.mod.listSelector), index = 0;
+    if (dnnMod.hasClass("DnnModule"))
+        index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
+    var cbAction = $(this).data("action");
+    if (cbAction) {
+        return _quickE_clipboard_1.copyPasteInPage(cbAction, pane, index, _quickE___1.selectors.mod.id); // copy/paste
+    }
+    return mm.create(mm.getPaneName(pane), index, type);
+}
+/**
+ * bind module actions click
+ */
+$quickE.modActions.click(onModuleButtonClick);
+
+
+/***/ }),
+/* 53 */
 /***/ (function(module, exports) {
 
 /*
@@ -2751,7 +3046,7 @@ $(function () {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2763,7 +3058,7 @@ $(function () {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -2778,7 +3073,7 @@ $(function () {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -2795,9 +3090,13 @@ $(function () {
 
 
 /***/ }),
-/* 56 */
-/***/ (function(module, exports) {
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var manage_api_1 = __webpack_require__(1);
 (function () {
     // quick debug - set to false if not needed for production
     var dbg = false;
@@ -2878,14 +3177,14 @@ $(function () {
         tag.attr($2sxc._toolbarManager.cDisableAttrName, true);
     }
     function isDisabled(sxc) {
-        var tag = $($2sxc._manage.getTag(sxc));
+        var tag = $(manage_api_1.getTag(sxc));
         return !!tag.attr($2sxc._toolbarManager.cDisableAttrName);
     }
 })();
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2928,7 +3227,7 @@ $(function () {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2965,7 +3264,7 @@ $(function () {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3194,7 +3493,7 @@ $(function () {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3214,7 +3513,7 @@ $(function () {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports) {
 
 // the default / initial buttons in a standard toolbar
@@ -3280,62 +3579,56 @@ $(function () {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var jqueryI18next = __webpack_require__(2);
-window.i18next = __webpack_require__(0);
-window.i18nextXHRBackend = __webpack_require__(1);
-// initialize the translation system; ensure toolbars etc. are translated
-(function () {
-    var initialized = false;
-    $2sxc._translateInit = function (manage) {
-        if (initialized)
-            return;
-        window.i18next
-            .use(window.i18nextXHRBackend)
-            .init({
-            lng: manage._editContext.Language.Current.substr(0, 2),
-            fallbackLng: 'en',
-            whitelist: ['en', 'de', 'fr', 'it', 'uk', 'nl'],
-            preload: ['en'],
-            backend: {
-                loadPath: manage._editContext.Environment.SxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js'
-            }
-        }, function (err, t) {
-            // for options see
-            // https://github.com/i18next/jquery-i18next#initialize-the-plugin
-            jqueryI18next.init(window.i18next, $);
-            // start localizing, details:
-            // https://github.com/i18next/jquery-i18next#usage-of-selector-function
-            $('ul.sc-menu').localize(); // inline toolbars
-            $('.sc-i18n').localize(); // quick-insert menus
-        });
-        initialized = true;
-    };
-})();
-
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports) {
-
-// provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
-(function () {
-    $2sxc.translate = function (key) {
-        // return key;
-        return ($.t && $.t(key)) || key;
-    };
-})();
+var jqueryI18next = __webpack_require__(12);
+window.i18next = __webpack_require__(10);
+window.i18nextXHRBackend = __webpack_require__(11);
+/**
+ * initialize the translation system; ensure toolbars etc. are translated
+ */
+var initialized = false;
+function _translateInit(manage) {
+    if (initialized)
+        return;
+    window.i18next
+        .use(window.i18nextXHRBackend)
+        .init({
+        lng: manage._editContext.Language.Current.substr(0, 2),
+        fallbackLng: 'en',
+        whitelist: ['en', 'de', 'fr', 'it', 'uk', 'nl'],
+        preload: ['en'],
+        backend: {
+            loadPath: manage._editContext.Environment.SxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js'
+        }
+    }, function (err, t) {
+        // for options see
+        // https://github.com/i18next/jquery-i18next#initialize-the-plugin
+        jqueryI18next.init(window.i18next, $);
+        // start localizing, details:
+        // https://github.com/i18next/jquery-i18next#usage-of-selector-function
+        $('ul.sc-menu').localize(); // inline toolbars
+        $('.sc-i18n').localize(); // quick-insert menus
+    });
+    initialized = true;
+}
+exports._translateInit = _translateInit;
+;
 
 
 /***/ }),
 /* 64 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc__quickDialog_1 = __webpack_require__(3);
+var manage_api_1 = __webpack_require__(1);
 // module & toolbar bootstrapping (initialize all toolbars after loading page)
 // this will run onReady...
 $(function () {
@@ -3368,7 +3661,7 @@ $(function () {
         if (cancelledDialog || openedTemplatePickerOnce)
             return false;
         // already showing a dialog
-        if ($2sxc._quickDialog.current !== null)
+        if (_2sxc__quickDialog_1.current !== null)
             return false;
         // not exactly one uninitialized module
         if (uninitializedModules.length !== 1)
@@ -3403,7 +3696,7 @@ $(function () {
         if (sxc.manage._editContext.ContentGroup.TemplateId !== 0)
             return false;
         // already has a glasses button
-        var tag = $($2sxc._manage.getTag(sxc));
+        var tag = $(manage_api_1.getTag(sxc));
         if (tag.find(".sc-uninitialized").length !== 0)
             return false;
         // note: title is added on mouseover, as the translation isn't ready at page-load

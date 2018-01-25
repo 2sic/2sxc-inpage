@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = require("../translate/2sxc.translate");
 // contains commands to create/move/delete a contentBlock in a page
 $2sxc._contentBlock.manipulator = function (sxc) {
     return {
@@ -49,7 +52,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
     }
     // delete a content-block inside a list of content-blocks
     function remove(parentId, field, index) {
-        if (!confirm($2sxc.translate('QuickInsertMenu.ConfirmDelete')))
+        if (!confirm(_2sxc_translate_1.translate('QuickInsertMenu.ConfirmDelete')))
             return null;
         var params = {
             parentId: parentId,

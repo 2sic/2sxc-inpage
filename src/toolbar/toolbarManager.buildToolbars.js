@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var manage_api_1 = require("../manage/manage.api");
 (function () {
     // quick debug - set to false if not needed for production
     var dbg = false;
@@ -78,7 +81,7 @@
         tag.attr($2sxc._toolbarManager.cDisableAttrName, true);
     }
     function isDisabled(sxc) {
-        var tag = $($2sxc._manage.getTag(sxc));
+        var tag = $(manage_api_1.getTag(sxc));
         return !!tag.attr($2sxc._toolbarManager.cDisableAttrName);
     }
 })();

@@ -1,4 +1,6 @@
-﻿/*
+﻿import { translate } from '../translate/2sxc.translate';
+
+/*
  * Actions of 2sxc - mostly used in toolbars
  * 
  * Minimal documentation regarding a button
@@ -15,15 +17,11 @@
  * - params - ...
  */
 
-interface IDefinitions {
-  create(cmdSpecs: ICmdSpec): IAct;
+class Act {
+  [s: string]: Def;
 }
 
-interface IAct {
-  [s: string]: IDef;
-}
-
-interface IDef {
+class Def {
   name?: string;
   title?: string;
   icon?: string;
@@ -41,7 +39,7 @@ interface IDef {
   fullScreen?: boolean; 
 }
 
-interface ICmdSpec {
+class CmdSpec {
   canDesign: boolean;
   isContent: boolean;
   allowPublish: boolean;
@@ -52,12 +50,20 @@ interface ICmdSpec {
   queryId?: number;
 }
 
-// helper function to create the configuration object
-function makeDef(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: IDef): IDef {
+/**
+ * helper function to create the configuration object
+ * @param name
+ * @param translateKey
+ * @param icon
+ * @param uiOnly
+ * @param partOfPage
+ * @param more
+ */
+function makeDef(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Def): Def {
   if (typeof (partOfPage) !== 'boolean')
     throw 'partOfPage in commands not provided, order will be wrong!';
 
-  let newDefinition: IDef = {
+  let newDefinition: Def = {
     name: name,
     title: 'Toolbar.' + translateKey,
     icon: 'icon-sxc-' + icon,
@@ -65,19 +71,16 @@ function makeDef(name: string, translateKey: string, icon: string, uiOnly: boole
     partOfPage: partOfPage
   };
 
-  // TODO: this is not type safe
-  return $2sxc._lib.extend(newDefinition, more) as IDef;
+  return $2sxc._lib.extend(newDefinition, more) as Def;
 }
 
-$2sxc._commands.definitions = {} as IDefinitions;
-
-$2sxc._commands.definitions.create = function (cmdSpecs): IAct {
+export function create(cmdSpecs: CmdSpec): Act {
   let enableTools = cmdSpecs.canDesign;
   let isContent = cmdSpecs.isContent;
-  let act: IAct = {};
+  let act: Act = {};
 
   // quick helper so we can better debug the creation of definitions
-  function addDef(def: IDef) : void {
+  function addDef(def: Def) : void {
     act[def.name] = def;
   };
 
@@ -145,7 +148,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs): IAct {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
     },
     code(settings, event, sxc) {
-      if (confirm($2sxc.translate('Toolbar.ConfirmRemove'))) {
+      if (confirm(translate('Toolbar.ConfirmRemove'))) {
         $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
         //sxc.manage.contentBlock
         //    .removeFromList(settings.sortOrder);
@@ -202,7 +205,7 @@ $2sxc._commands.definitions.create = function (cmdSpecs): IAct {
       return !cmdSpecs.allowPublish;
     },
     code(settings, event, sxc) {
-      if (settings.isPublished) return alert($2sxc.translate('Toolbar.AlreadyPublished'));
+      if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
 
       // if we have an entity-id, publish based on that
       if (settings.entityId) return $2sxc._contentBlock.publishId(sxc, settings.entityId);
