@@ -1,4 +1,4 @@
-﻿import { selectors } from './$quickE.{}';
+﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 import { positionAndAlign, getCoordinates } from './$quickE.positioning';
 import { cb, mod, CmdsStrategyFactory } from './$quickE.cmds';
 
@@ -67,14 +67,14 @@ export namespace clipboard {
     if (cb.prev().is('iframe'))
       cb.prev().addClass(selectors.selected);
     setSecondaryActionsState(true);
-    $quickE.selected.toggle(cb, data.type);
+    quickE.selected.toggle(cb, data.type);
   }
 
   export function clear() {
     $('.' + selectors.selected).removeClass(selectors.selected);
     data = null;
     setSecondaryActionsState(false);
-    $quickE.selected.toggle(false);
+    quickE.selected.toggle(false);
   }
 
   export function createSpecs(type, list, index) {
@@ -94,14 +94,14 @@ function setSecondaryActionsState(state) {
 };
 
 
-$quickE.selected.toggle = function (target) {
+quickE.selected.toggle = function (target) {
   if (!target)
-    return $quickE.selected.hide();
+    return quickE.selected.hide();
 
   var coords = getCoordinates(target);
   coords.yh = coords.y + 20;
-  positionAndAlign($quickE.selected, coords);
-  $quickE.selected.target = target;
+  positionAndAlign(quickE.selected, coords);
+  quickE.selected.target = target;
 };
 
 let cmdsStrategyFactory = new CmdsStrategyFactory();
@@ -109,7 +109,7 @@ let cmdsStrategyFactory = new CmdsStrategyFactory();
 /**
  * bind clipboard actions
  */ 
-$('a', $quickE.selected).click(function () {
+$('a', quickE.selected).click(function () {
   var action = $(this).data('action');
   var clip = clipboard.data;
   switch (action) {

@@ -31,9 +31,9 @@ var mod = /** @class */ (function () {
         mm.move(modId, pane, to);
     };
     mod.sendToPane = function () {
-        var pane = $quickE.main.actionsForModule.closest(_quickE___1.selectors.mod.listSelector);
+        var pane = _quickE___1.$quickE.main.actionsForModule.closest(_quickE___1.selectors.mod.listSelector);
         // show the pane-options
-        var pl = $quickE.selected.find('#paneList');
+        var pl = _quickE___1.$quickE.selected.find('#paneList');
         if (!pl.is(':empty'))
             pl.empty();
         pl.append(mm.getMoveButtons(mm.getPaneName(pane)));

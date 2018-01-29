@@ -65,14 +65,14 @@ var clipboard;
         if (cb.prev().is('iframe'))
             cb.prev().addClass(_quickE___1.selectors.selected);
         setSecondaryActionsState(true);
-        $quickE.selected.toggle(cb, clipboard.data.type);
+        _quickE___1.$quickE.selected.toggle(cb, clipboard.data.type);
     }
     clipboard.mark = mark;
     function clear() {
         $('.' + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected);
         clipboard.data = null;
         setSecondaryActionsState(false);
-        $quickE.selected.toggle(false);
+        _quickE___1.$quickE.selected.toggle(false);
     }
     clipboard.clear = clear;
     function createSpecs(type, list, index) {
@@ -92,19 +92,19 @@ function setSecondaryActionsState(state) {
     btns.toggleClass('sc-unavailable', !state);
 }
 ;
-$quickE.selected.toggle = function (target) {
+_quickE___1.$quickE.selected.toggle = function (target) {
     if (!target)
-        return $quickE.selected.hide();
+        return _quickE___1.$quickE.selected.hide();
     var coords = _quickE_positioning_1.getCoordinates(target);
     coords.yh = coords.y + 20;
-    _quickE_positioning_1.positionAndAlign($quickE.selected, coords);
-    $quickE.selected.target = target;
+    _quickE_positioning_1.positionAndAlign(_quickE___1.$quickE.selected, coords);
+    _quickE___1.$quickE.selected.target = target;
 };
 var cmdsStrategyFactory = new _quickE_cmds_1.CmdsStrategyFactory();
 /**
  * bind clipboard actions
  */
-$('a', $quickE.selected).click(function () {
+$('a', _quickE___1.$quickE.selected).click(function () {
     var action = $(this).data('action');
     var clip = clipboard.data;
     switch (action) {

@@ -1,4 +1,4 @@
-﻿import { selectors } from './$quickE.{}';
+﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 import { modManage } from './$quickE.modManage';
 
 let mm = new modManage();
@@ -37,10 +37,10 @@ export class mod implements ICmds {
   }
 
   static sendToPane(): void {
-    var pane = $quickE.main.actionsForModule.closest(selectors.mod.listSelector);
+    var pane = quickE.main.actionsForModule.closest(selectors.mod.listSelector);
 
     // show the pane-options
-    var pl = $quickE.selected.find('#paneList');
+    var pl = quickE.selected.find('#paneList');
     if (!pl.is(':empty'))
       pl.empty();
     pl.append(mm.getMoveButtons(mm.getPaneName(pane)));
