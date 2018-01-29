@@ -6,12 +6,13 @@ var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 var contentBlock_render_1 = require("../contentBlock/contentBlock.render");
 var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
+var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
 function instanceEngine(sxc, editContext) {
     var engine = {
         commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
-            var settings = module_bootstrapper_1.$2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+            var settings = _2sxc__lib_extend_1.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
             var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
                 "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
                 sxc.manage._editContext.Environment.SxcVersion;
@@ -19,7 +20,7 @@ function instanceEngine(sxc, editContext) {
             var cmd = {
                 settings: settings,
                 items: settings.items || [],
-                params: module_bootstrapper_1.$2sxc._lib.extend({
+                params: _2sxc__lib_extend_1.extend({
                     dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
                 }, settings.params),
                 addSimpleItem: function () {
@@ -66,7 +67,7 @@ function instanceEngine(sxc, editContext) {
                     }
                     cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
                     // clone the params and adjust parts based on partOfPage settings...
-                    var sharedParams = module_bootstrapper_1.$2sxc._lib.extend({}, sxc.manage._dialogParameters);
+                    var sharedParams = _2sxc__lib_extend_1.extend({}, sxc.manage._dialogParameters);
                     if (!cmd.settings.partOfPage) {
                         delete sharedParams.versioningRequirements;
                         delete sharedParams.publishing;
@@ -119,13 +120,13 @@ function instanceEngine(sxc, editContext) {
             var origEvent = event || window.event;
             // check if name is name (string) or object (settings)
             settings = (typeof nameOrSettings === "string") ?
-                module_bootstrapper_1.$2sxc._lib.extend(settings || {}, {
+                _2sxc__lib_extend_1.extend(settings || {}, {
                     "action": nameOrSettings
                 }) // place the name as an action-name into a command-object
                 :
                     nameOrSettings;
             var conf = engine.commands[settings.action];
-            settings = module_bootstrapper_1.$2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+            settings = _2sxc__lib_extend_1.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
             if (!settings.dialog)
                 settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
             if (!settings.code)

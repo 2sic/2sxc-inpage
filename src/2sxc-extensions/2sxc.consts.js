@@ -32,6 +32,5 @@ twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
     return t;
 }, {});
 */
-//})();
 //# sourceMappingURL=2sxc.consts.js.map 
 //# sourceMappingURL=2sxc.consts.js.map

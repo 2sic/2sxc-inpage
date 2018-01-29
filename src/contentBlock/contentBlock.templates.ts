@@ -1,6 +1,5 @@
 ﻿import { hide } from '../quick-dialog/2sxc._quickDialog';
 import { reloadAndReInitialize } from './contentBlock.render';
-import { _contentBlock } from './contentBlock.{}';
 import { saveTemplate } from './contentBlock.webApiPromises';
 /*
  * this is part of the content block manager

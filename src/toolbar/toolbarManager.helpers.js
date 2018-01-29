@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
+var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 // ToDo: refactor to avoid side-effects
@@ -62,7 +63,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
             groups: original.groups || [],
             defaults: original.defaults || {},
             params: original.params || {},
-            settings: module_bootstrapper_1.$2sxc._lib.extend({}, tools.defaultSettings, original.settings, moreSettings)
+            settings: _2sxc__lib_extend_1.extend({}, tools.defaultSettings, original.settings, moreSettings)
         };
     },
     //#endregion inital toolbar object
@@ -80,7 +81,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
                     var btn = btns[b];
                     if (!(actions[btn.command.action]))
                         console.warn("warning: toolbar-button with unknown action-name:", btn.command.action);
-                    module_bootstrapper_1.$2sxc._lib.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
+                    _2sxc__lib_extend_1.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
                     // tools.addCommandParams(fullSet, btn);
                     tools.addDefaultBtnSettings(btn, fullSet.groups[g], fullSet, actions); // ensure all buttons have either own settings, or the fallbacks
                 }

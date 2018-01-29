@@ -1,6 +1,4 @@
-﻿import { _contentBlock } from "./contentBlock.{}";
-
-/* 
+﻿/* 
  * this is a content block in the browser
  * 
  * A Content Block is a standalone unit of content, with it's own definition of

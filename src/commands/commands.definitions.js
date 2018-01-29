@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var contentBlock_actions_1 = require("../contentBlock/contentBlock.actions");
-var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
+var item_commands_1 = require("../entity-manipulation/item-commands");
+var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -53,7 +54,7 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         uiActionOnly: uiOnly,
         partOfPage: partOfPage
     };
-    return module_bootstrapper_1.$2sxc._lib.extend(newDefinition, more);
+    return _2sxc__lib_extend_1.extend(newDefinition, more);
 }
 function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
@@ -85,7 +86,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             // todo - should refactor this to be a toolbarManager.contentBlock command
-            sxc.manage._commands._openNgDialog(module_bootstrapper_1.$2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
+            sxc.manage._commands._openNgDialog(_2sxc__lib_extend_1.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
         }
     }));
     // add brings no dialog, just add an empty item
@@ -112,9 +113,9 @@ function create(cmdSpecs) {
         configureCommand: function (cmd) {
             var itm = {
                 Title: 'EditFormTitle.Metadata',
-                Metadata: module_bootstrapper_1.$2sxc._lib.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+                Metadata: _2sxc__lib_extend_1.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
             };
-            module_bootstrapper_1.$2sxc._lib.extend(cmd.items[0], itm);
+            _2sxc__lib_extend_1.extend(cmd.items[0], itm);
         }
     }));
     // remove an item from the placeholder (usually for lists)
@@ -141,7 +142,7 @@ function create(cmdSpecs) {
             return settings.entityId && settings.entityGuid && settings.entityTitle;
         },
         code: function (settings, event, sxc) {
-            module_bootstrapper_1.$2sxc.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+            item_commands_1.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
         }
     }));
     addDef(makeDef('moveup', 'MoveUp', 'move-up', false, true, {

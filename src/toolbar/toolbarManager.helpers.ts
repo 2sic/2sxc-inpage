@@ -1,4 +1,5 @@
 ﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { extend } from '../lib-helpers/2sxc._lib.extend';
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 
@@ -70,7 +71,7 @@ var tools = twoSxc._toolbarManager.buttonHelpers = {
       groups: original.groups || [], // the groups of buttons
       defaults: original.defaults || {}, // the button defaults like icon, etc.
       params: original.params || {}, // these are the default command parameters
-      settings: twoSxc._lib.extend({}, tools.defaultSettings, original.settings, moreSettings)
+      settings: extend({}, tools.defaultSettings, original.settings, moreSettings)
     };
   },
   //#endregion inital toolbar object
@@ -90,7 +91,7 @@ var tools = twoSxc._toolbarManager.buttonHelpers = {
           var btn = btns[b];
           if (!(actions[btn.command.action]))
             console.warn("warning: toolbar-button with unknown action-name:", btn.command.action);
-          twoSxc._lib.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
+          extend(btn.command, fullSet.params); // enhance the button with settings for this instance
           // tools.addCommandParams(fullSet, btn);
           tools.addDefaultBtnSettings(btn, fullSet.groups[g], fullSet, actions);      // ensure all buttons have either own settings, or the fallbacks
         }

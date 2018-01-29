@@ -4,8 +4,8 @@ import { showOrToggle } from '../quick-dialog/2sxc._quickDialog';
 import { translate } from '../translate/2sxc.translate';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { reloadAndReInitialize } from '../contentBlock/contentBlock.render';
-import { _contentBlock } from '../contentBlock/contentBlock.{}';
 import { prepareToAddContent } from '../contentBlock/contentBlock.templates';
+import { extend } from '../lib-helpers/2sxc._lib.extend';
 
 export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
   var engine: IEngine = {
@@ -13,7 +13,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
 
     // assemble an object which will store the configuration and execute it
     create(specialSettings: any): any {
-      var settings = twoSxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+      var settings = extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
       var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
         "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
         sxc.manage._editContext.Environment.SxcVersion;
@@ -22,7 +22,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
       var cmd = {
         settings: settings,
         items: settings.items || [], // use predefined or create empty array
-        params: twoSxc._lib.extend({
+        params: extend({
           dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
         }, settings.params),
 
@@ -77,7 +77,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
           cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
 
           // clone the params and adjust parts based on partOfPage settings...
-          var sharedParams = twoSxc._lib.extend({}, sxc.manage._dialogParameters);
+          var sharedParams = extend({}, sxc.manage._dialogParameters);
           if (!cmd.settings.partOfPage) {
             delete sharedParams.versioningRequirements;
             delete sharedParams.publishing;
@@ -137,14 +137,14 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
 
       // check if name is name (string) or object (settings)
       settings = (typeof nameOrSettings === "string") ?
-        twoSxc._lib.extend(settings || {}, {
+        extend(settings || {}, {
           "action": nameOrSettings
         }) // place the name as an action-name into a command-object
         :
         nameOrSettings;
 
       var conf = engine.commands[settings.action];
-      settings = twoSxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+      settings = extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 
       if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
       if (!settings.code) settings.code = engine._openNgDialog; // decide what action to perform

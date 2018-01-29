@@ -24,12 +24,12 @@ var sel = twoSxc.c.sel = {};
 Object.keys(twoSxc.c.cls).forEach(function (key, index) {
   sel[key] = "." + twoSxc.c.cls[key];
 });
-    /*
-    ToDo: functional programming
-    twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
-        res[entry[0]] = entry[1];
-        return t;
-    }, {});
-    */
-//})();
+
+/*
+ToDo: functional programming
+twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
+    res[entry[0]] = entry[1];
+    return t;
+}, {});
+*/
 //# sourceMappingURL=2sxc.consts.js.map

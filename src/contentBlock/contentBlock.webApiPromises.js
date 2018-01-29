@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /*
  * this is a content block in the browser
  *
@@ -10,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * it should be able to render itself
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 //#region functions working only with what they are given
 // 2017-08-27 2dm: I'm working on cleaning up this code, and an important part 
 // is to have code which doesn't use old state (like object-properties initialized earlier)
