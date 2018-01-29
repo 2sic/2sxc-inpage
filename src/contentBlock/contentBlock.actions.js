@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 /*
  * this is a content block in the browser
  *
@@ -9,8 +11,7 @@
  *
  * it should be able to render itself
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-var cbm = $2sxc._contentBlock;
+var cbm = module_bootstrapper_1.$2sxc._contentBlock;
 /**
  * internal helper, to do something and reload the content block
  * @param sxc

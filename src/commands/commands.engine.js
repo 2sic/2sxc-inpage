@@ -3,20 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 function instanceEngine(sxc, editContext) {
     var engine = {
         commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
-            var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+            var settings = module_bootstrapper_1.$2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
             var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
                 "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
                 sxc.manage._editContext.Environment.SxcVersion;
-            var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
+            var isDebug = module_bootstrapper_1.$2sxc.urlParams.get("debug") ? "&debug=true" : "";
             var cmd = {
                 settings: settings,
                 items: settings.items || [],
-                params: $2sxc._lib.extend({
+                params: module_bootstrapper_1.$2sxc._lib.extend({
                     dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
                 }, settings.params),
                 addSimpleItem: function () {
@@ -63,7 +64,7 @@ function instanceEngine(sxc, editContext) {
                     }
                     cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
                     // clone the params and adjust parts based on partOfPage settings...
-                    var sharedParams = $2sxc._lib.extend({}, sxc.manage._dialogParameters);
+                    var sharedParams = module_bootstrapper_1.$2sxc._lib.extend({}, sxc.manage._dialogParameters);
                     if (!cmd.settings.partOfPage) {
                         delete sharedParams.versioningRequirements;
                         delete sharedParams.publishing;
@@ -95,7 +96,7 @@ function instanceEngine(sxc, editContext) {
             // the callback will handle events after closing the dialog
             // and reload the in-page view w/ajax or page reload
             var callback = function () {
-                $2sxc._contentBlock.reloadAndReInitialize(sxc);
+                module_bootstrapper_1.$2sxc._contentBlock.reloadAndReInitialize(sxc);
                 // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
             };
             var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
@@ -103,7 +104,7 @@ function instanceEngine(sxc, editContext) {
                 return _2sxc__quickDialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
             if (settings.newWindow || (event && event.shiftKey))
                 return window.open(link);
-            return $2sxc.totalPopup.open(link, callback);
+            return module_bootstrapper_1.$2sxc.totalPopup.open(link, callback);
         },
         // ToDo: remove dead code
         executeAction: function (nameOrSettings, settings, event) {
@@ -116,13 +117,13 @@ function instanceEngine(sxc, editContext) {
             var origEvent = event || window.event;
             // check if name is name (string) or object (settings)
             settings = (typeof nameOrSettings === "string") ?
-                $2sxc._lib.extend(settings || {}, {
+                module_bootstrapper_1.$2sxc._lib.extend(settings || {}, {
                     "action": nameOrSettings
                 }) // place the name as an action-name into a command-object
                 :
                     nameOrSettings;
             var conf = engine.commands[settings.action];
-            settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+            settings = module_bootstrapper_1.$2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
             if (!settings.dialog)
                 settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
             if (!settings.code)
@@ -130,7 +131,7 @@ function instanceEngine(sxc, editContext) {
             if (conf.uiActionOnly)
                 return settings.code(settings, origEvent, sxc);
             // if more than just a UI-action, then it needs to be sure the content-group is created first
-            return $2sxc._contentBlock.prepareToAddContent(sxc, settings.useModuleList)
+            return module_bootstrapper_1.$2sxc._contentBlock.prepareToAddContent(sxc, settings.useModuleList)
                 .then(function () {
                 return settings.code(settings, origEvent, sxc);
             });

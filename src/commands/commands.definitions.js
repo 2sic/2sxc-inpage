@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var contentBlock_actions_1 = require("../contentBlock/contentBlock.actions");
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -52,7 +53,7 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         uiActionOnly: uiOnly,
         partOfPage: partOfPage
     };
-    return $2sxc._lib.extend(newDefinition, more);
+    return module_bootstrapper_1.$2sxc._lib.extend(newDefinition, more);
 }
 function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
@@ -84,7 +85,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             // todo - should refactor this to be a toolbarManager.contentBlock command
-            sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
+            sxc.manage._commands._openNgDialog(module_bootstrapper_1.$2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
         }
     }));
     // add brings no dialog, just add an empty item
@@ -111,9 +112,9 @@ function create(cmdSpecs) {
         configureCommand: function (cmd) {
             var itm = {
                 Title: 'EditFormTitle.Metadata',
-                Metadata: $2sxc._lib.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+                Metadata: module_bootstrapper_1.$2sxc._lib.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
             };
-            $2sxc._lib.extend(cmd.items[0], itm);
+            module_bootstrapper_1.$2sxc._lib.extend(cmd.items[0], itm);
         }
     }));
     // remove an item from the placeholder (usually for lists)
@@ -140,7 +141,7 @@ function create(cmdSpecs) {
             return settings.entityId && settings.entityGuid && settings.entityTitle;
         },
         code: function (settings, event, sxc) {
-            $2sxc.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+            module_bootstrapper_1.$2sxc.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
         }
     }));
     addDef(makeDef('moveup', 'MoveUp', 'move-up', false, true, {

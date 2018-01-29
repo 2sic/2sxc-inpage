@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
 var _quickE_positioning_1 = require("./$quickE.positioning");
 var _quickE_cmds_1 = require("./$quickE.cmds");
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 /**
  * add a clipboard to the quick edit
  */
@@ -33,7 +34,7 @@ function copyPasteInPage(cbAction, list, index, type) {
             if (newClip.type === _quickE___1.selectors.cb.id && from + 1 === to)
                 return clipboard.clear(); // don't do anything
             if (type === _quickE___1.selectors.cb.id) {
-                $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+                module_bootstrapper_1.$2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
             }
             else {
                 _quickE_cmds_1.mod.move(clipboard.data, newClip, from, to);

@@ -1,4 +1,5 @@
 ﻿import { getTag } from '../manage/manage.api';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
@@ -13,7 +14,7 @@ let isFullscreen: boolean = false;
 /**
  * dialog manager - the currently active dialog object
  */
-//var diagManager = $2sxc._quickDialog = {}
+//var diagManager = twoSxc._quickDialog = {}
 
 export var current : any = null;
 
@@ -135,7 +136,7 @@ function setSize(fullScreen) {
 
 function extendIFrameWithSxcState(iFrame) {
   var hiddenSxc = null;
-  var cbApi = $2sxc._contentBlock;
+  var cbApi = twoSxc._contentBlock;
   var tagModule = null;
 
   /**

@@ -1,7 +1,6 @@
-﻿(function () {
-    
-    // prevent propagation of the click (if menu was clicked)
-    $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) {
-        e.stopPropagation();
-    });
-})();
+﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+
+// prevent propagation of the click (if menu was clicked)
+$(twoSxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) {
+  e.stopPropagation();
+});

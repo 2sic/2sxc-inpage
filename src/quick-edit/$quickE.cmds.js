@@ -2,15 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
 var _quickE_modManage_1 = require("./$quickE.modManage");
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 var mm = new _quickE_modManage_1.modManage();
 var cb = /** @class */ (function () {
     function cb() {
     }
     cb.prototype.delete = function (clip) {
-        return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
+        return module_bootstrapper_1.$2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
     };
     cb.create = function (parent, field, index, appOrContent, list, newGuid) {
-        return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
+        return module_bootstrapper_1.$2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
     };
     return cb;
 }());

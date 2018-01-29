@@ -1,6 +1,7 @@
 ﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 import { positionAndAlign, getCoordinates } from './$quickE.positioning';
-import { cb, mod, CmdsStrategyFactory } from './$quickE.cmds';
+import { mod, CmdsStrategyFactory } from './$quickE.cmds';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 /**
  * add a clipboard to the quick edit
@@ -20,6 +21,7 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
   switch (cbAction) {
     case 'select':
       clipboard.mark(newClip);
+
       break;
     case 'paste':
       var from = clipboard.data.index;
@@ -37,7 +39,7 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
         return clipboard.clear(); // don't do anything
 
       if (type === selectors.cb.id) {
-        $2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+        twoSxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
       } else {
         mod.move(clipboard.data, newClip, from, to);
       }

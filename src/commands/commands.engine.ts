@@ -2,6 +2,7 @@
 import DataEditContext from '../data-edit-context/data-edit-context';
 import { showOrToggle } from '../quick-dialog/2sxc._quickDialog';
 import { translate } from '../translate/2sxc.translate';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
   var engine: IEngine = {
@@ -9,16 +10,16 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
 
     // assemble an object which will store the configuration and execute it
     create(specialSettings: any): any {
-      var settings = $2sxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+      var settings = twoSxc._lib.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
       var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
         "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
         sxc.manage._editContext.Environment.SxcVersion;
-      var isDebug = $2sxc.urlParams.get("debug") ? "&debug=true" : "";
+      var isDebug = twoSxc.urlParams.get("debug") ? "&debug=true" : "";
 
       var cmd = {
         settings: settings,
         items: settings.items || [], // use predefined or create empty array
-        params: $2sxc._lib.extend({
+        params: twoSxc._lib.extend({
           dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
         }, settings.params),
 
@@ -73,7 +74,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
           cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
 
           // clone the params and adjust parts based on partOfPage settings...
-          var sharedParams = $2sxc._lib.extend({}, sxc.manage._dialogParameters);
+          var sharedParams = twoSxc._lib.extend({}, sxc.manage._dialogParameters);
           if (!cmd.settings.partOfPage) {
             delete sharedParams.versioningRequirements;
             delete sharedParams.publishing;
@@ -108,7 +109,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
       // the callback will handle events after closing the dialog
       // and reload the in-page view w/ajax or page reload
       var callback = function () {
-        $2sxc._contentBlock.reloadAndReInitialize(sxc);
+        twoSxc._contentBlock.reloadAndReInitialize(sxc);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
       };
       var link: string = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
@@ -116,7 +117,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
         return showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
       if (settings.newWindow || (event && event.shiftKey))
         return window.open(link);
-      return $2sxc.totalPopup.open(link, callback);
+      return twoSxc.totalPopup.open(link, callback);
     },
 
     // ToDo: remove dead code
@@ -133,14 +134,14 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
 
       // check if name is name (string) or object (settings)
       settings = (typeof nameOrSettings === "string") ?
-        $2sxc._lib.extend(settings || {}, {
+        twoSxc._lib.extend(settings || {}, {
           "action": nameOrSettings
         }) // place the name as an action-name into a command-object
         :
         nameOrSettings;
 
       var conf = engine.commands[settings.action];
-      settings = $2sxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+      settings = twoSxc._lib.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 
       if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
       if (!settings.code) settings.code = engine._openNgDialog; // decide what action to perform
@@ -148,7 +149,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
       if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc);
 
       // if more than just a UI-action, then it needs to be sure the content-group is created first
-      return $2sxc._contentBlock.prepareToAddContent(sxc, settings.useModuleList)
+      return twoSxc._contentBlock.prepareToAddContent(sxc, settings.useModuleList)
         .then(function () {
           return settings.code(settings, origEvent, sxc);
         });

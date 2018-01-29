@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 /*
  * this is a content block in the browser
  *
@@ -16,7 +19,7 @@
 /**
  * The main content-block manager
  */
-$2sxc._contentBlock = {
+module_bootstrapper_1.$2sxc._contentBlock = {
     // constants
     cViewWithoutContent: '_LayoutElement',
     cUseExistingTemplate: -1

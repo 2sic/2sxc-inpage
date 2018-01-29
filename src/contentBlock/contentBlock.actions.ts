@@ -1,4 +1,5 @@
-﻿/* 
+﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+/*
  * this is a content block in the browser
  * 
  * A Content Block is a standalone unit of content, with it's own definition of
@@ -9,7 +10,7 @@
  * it should be able to render itself
  */
 
-var cbm = $2sxc._contentBlock;
+var cbm = twoSxc._contentBlock;
 
 /**
  * internal helper, to do something and reload the content block

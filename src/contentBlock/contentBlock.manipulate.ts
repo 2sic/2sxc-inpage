@@ -1,8 +1,9 @@
 ﻿import { translate } from '../translate/2sxc.translate';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 // contains commands to create/move/delete a contentBlock in a page
 
-$2sxc._contentBlock.manipulator = function (sxc) {
+twoSxc._contentBlock.manipulator = function (sxc) {
     return {
         create: create,
         move: move,
@@ -34,8 +35,8 @@ $2sxc._contentBlock.manipulator = function (sxc) {
                 else //...or just at the beginning?
                     listTag.prepend(newTag);
 
-                var sxcNew = $2sxc(newTag);
-                $2sxc._toolbarManager.buildToolbars(newTag);
+                var sxcNew = twoSxc(newTag);
+                twoSxc._toolbarManager.buildToolbars(newTag);
             });
     }
 

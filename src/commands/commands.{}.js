@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var commands_definitions_1 = require("./commands.definitions");
 var commands_engine_1 = require("./commands.engine");
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
-$2sxc._commands = {
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
+module_bootstrapper_1.$2sxc._commands = {
     definitions: {
         create: commands_definitions_1.create,
     },

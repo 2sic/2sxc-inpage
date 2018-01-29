@@ -1,5 +1,6 @@
 ﻿import { instanceEngine } from '../commands/commands.engine';
 import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buildInstanceConfig, buildQuickDialogConfig } from './manage.api';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -22,7 +23,7 @@ export function initInstance(sxc) {
   }
 };
 
-//var mngApi = $2sxc._manage;
+//var mngApi = twoSxc._manage;
 function _initInstance(sxc) {
   var editContext = getEditContext(sxc);
   var userInfo = getUserOfEditContext(editContext);
@@ -43,7 +44,7 @@ function _initInstance(sxc) {
      * @returns {string} html of a button
      */
     getButton: function (actDef, groupIndex) {
-      return $2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
+      return twoSxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
     },
 
     /**
@@ -53,7 +54,7 @@ function _initInstance(sxc) {
      * @returns {string} html of the current toolbar
      */
     getToolbar: function (tbConfig, moreSettings) {
-      return $2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
+      return twoSxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
     },
     //#endregion official, public properties - everything below this can change at any time
 
@@ -102,7 +103,7 @@ function _initInstance(sxc) {
     },
 
     _getCbManipulator: function () {
-      return $2sxc._contentBlock.manipulator(sxc);
+      return twoSxc._contentBlock.manipulator(sxc);
     }
   };
 

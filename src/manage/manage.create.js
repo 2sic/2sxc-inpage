@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_engine_1 = require("../commands/commands.engine");
 var manage_api_1 = require("./manage.api");
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
  * all in-page toolbars etc.
@@ -23,7 +24,7 @@ function initInstance(sxc) {
 }
 exports.initInstance = initInstance;
 ;
-//var mngApi = $2sxc._manage;
+//var mngApi = twoSxc._manage;
 function _initInstance(sxc) {
     var editContext = manage_api_1.getEditContext(sxc);
     var userInfo = manage_api_1.getUserOfEditContext(editContext);
@@ -41,7 +42,7 @@ function _initInstance(sxc) {
          * @returns {string} html of a button
          */
         getButton: function (actDef, groupIndex) {
-            return $2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
+            return module_bootstrapper_1.$2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
         },
         /**
          * Builds the toolbar and returns it as HTML
@@ -50,7 +51,7 @@ function _initInstance(sxc) {
          * @returns {string} html of the current toolbar
          */
         getToolbar: function (tbConfig, moreSettings) {
-            return $2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
+            return module_bootstrapper_1.$2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
         },
         //#endregion official, public properties - everything below this can change at any time
         // internal method to find out if it's in edit-mode
@@ -94,7 +95,7 @@ function _initInstance(sxc) {
             editManager._instanceConfig = manage_api_1.buildInstanceConfig(editContext);
         },
         _getCbManipulator: function () {
-            return $2sxc._contentBlock.manipulator(sxc);
+            return module_bootstrapper_1.$2sxc._contentBlock.manipulator(sxc);
         }
     };
     editManager.init();

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = require("../manage/manage.api");
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
@@ -12,7 +13,7 @@ var isFullscreen = false;
 /**
  * dialog manager - the currently active dialog object
  */
-//var diagManager = $2sxc._quickDialog = {}
+//var diagManager = twoSxc._quickDialog = {}
 exports.current = null;
 /**
  * toggle visibility
@@ -135,7 +136,7 @@ function setSize(fullScreen) {
 }
 function extendIFrameWithSxcState(iFrame) {
     var hiddenSxc = null;
-    var cbApi = $2sxc._contentBlock;
+    var cbApi = module_bootstrapper_1.$2sxc._contentBlock;
     var tagModule = null;
     /**
      * get the sxc-object of this iframe

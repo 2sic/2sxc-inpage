@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 // contains commands to create/move/delete a contentBlock in a page
-$2sxc._contentBlock.manipulator = function (sxc) {
+module_bootstrapper_1.$2sxc._contentBlock.manipulator = function (sxc) {
     return {
         create: create,
         move: move,
@@ -32,8 +33,8 @@ $2sxc._contentBlock.manipulator = function (sxc) {
                     .after(newTag);
             else
                 listTag.prepend(newTag);
-            var sxcNew = $2sxc(newTag);
-            $2sxc._toolbarManager.buildToolbars(newTag);
+            var sxcNew = module_bootstrapper_1.$2sxc(newTag);
+            module_bootstrapper_1.$2sxc._toolbarManager.buildToolbars(newTag);
         });
     }
     function move(parentId, field, indexFrom, indexTo) {
