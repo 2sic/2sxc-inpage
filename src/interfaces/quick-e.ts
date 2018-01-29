@@ -1,5 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
-interface i$quickE {
+interface I$quickE {
   // ReSharper restore InconsistentNaming
   reset: any;
   //copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
@@ -40,7 +40,7 @@ interface i$quickE {
   template: string;
 }
 
-declare var $quickE: i$quickE;
+declare var $quickE: I$quickE;
 
 interface IClipboard {
   data: any;

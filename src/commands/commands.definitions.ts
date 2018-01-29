@@ -1,4 +1,7 @@
 ﻿import { translate } from '../translate/2sxc.translate';
+import { addItem, changeOrder, publish, publishId, removeFromList } from '../contentBlock/contentBlock.actions';
+import { contentItems } from '../entity-manipulation/item-commands';
+import { extend } from '../lib-helpers/2sxc._lib.extend';
 
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -71,7 +74,7 @@ function makeDef(name: string, translateKey: string, icon: string, uiOnly: boole
     partOfPage: partOfPage
   };
 
-  return $2sxc._lib.extend(newDefinition, more) as Def;
+  return extend(newDefinition, more) as Def;
 }
 
 export function create(cmdSpecs: CmdSpec): Act {
@@ -107,7 +110,7 @@ export function create(cmdSpecs: CmdSpec): Act {
     },
     code(settings, event, sxc) {
       // todo - should refactor this to be a toolbarManager.contentBlock command
-      sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
+      sxc.manage._commands._openNgDialog(extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
     }
   }));
 
@@ -117,7 +120,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
     },
     code(settings, event, sxc) {
-      $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
+      addItem(sxc, settings.sortOrder + 1);
     }
   }));
 
@@ -136,9 +139,9 @@ export function create(cmdSpecs: CmdSpec): Act {
     configureCommand(cmd) {
       var itm = {
         Title: 'EditFormTitle.Metadata',
-        Metadata: $2sxc._lib.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+        Metadata: extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
       };
-      $2sxc._lib.extend(cmd.items[0], itm);
+      extend(cmd.items[0], itm);
     }
   }));
 
@@ -149,7 +152,7 @@ export function create(cmdSpecs: CmdSpec): Act {
     },
     code(settings, event, sxc) {
       if (confirm(translate('Toolbar.ConfirmRemove'))) {
-        $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
+        removeFromList(sxc, settings.sortOrder);
         //sxc.manage.contentBlock
         //    .removeFromList(settings.sortOrder);
       }
@@ -168,7 +171,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return settings.entityId && settings.entityGuid && settings.entityTitle;
     },
     code(settings, event, sxc) {
-      $2sxc.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+     contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
     }
   }));
 
@@ -177,7 +180,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
     },
     code(settings, event, sxc) {
-      $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+      changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
     }
   }));
 
@@ -186,7 +189,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
     },
     code(settings, event, sxc) {
-      $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+      changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
     }
   }));
 
@@ -208,11 +211,11 @@ export function create(cmdSpecs: CmdSpec): Act {
       if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
 
       // if we have an entity-id, publish based on that
-      if (settings.entityId) return $2sxc._contentBlock.publishId(sxc, settings.entityId);
+      if (settings.entityId) return publishId(sxc, settings.entityId);
 
       var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
       var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-      return $2sxc._contentBlock.publish(sxc, part, index);
+      return publish(sxc, part, index);
     }
   }));
 

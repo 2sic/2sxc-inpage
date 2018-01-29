@@ -1,4 +1,4 @@
-﻿export default class User {
+﻿export class User {
   // ReSharper disable InconsistentNaming
   CanDesign: boolean;
   CanDevelop: boolean;

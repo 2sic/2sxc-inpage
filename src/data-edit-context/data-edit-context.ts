@@ -1,11 +1,11 @@
-﻿import Environment from './environment';
-import User from './user';
-import Language from './language';
-import ContentBlock from './content-block';
-import ContentGroup from './content-group';
-import Error from './error';
+﻿import { Environment } from './environment';
+import { User } from './user';
+import { Language } from './language';
+import { ContentBlock } from './content-block';
+import { ContentGroup } from './content-group';
+import { Error } from './error';
 
-export default class DataEditContext {
+export class DataEditContext {
   // ReSharper disable InconsistentNaming
   Environment: Environment;
   User: User;

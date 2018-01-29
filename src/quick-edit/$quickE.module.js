@@ -8,7 +8,7 @@ var mm = new _quickE_modManage_1.modManage();
  * module specific stuff
  */
 function onModuleButtonClick() {
-    var type = $(this).data("type"), dnnMod = $quickE.main.actionsForModule, pane = dnnMod.closest(_quickE___1.selectors.mod.listSelector), index = 0;
+    var type = $(this).data("type"), dnnMod = _quickE___1.$quickE.main.actionsForModule, pane = dnnMod.closest(_quickE___1.selectors.mod.listSelector), index = 0;
     if (dnnMod.hasClass("DnnModule"))
         index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
     var cbAction = $(this).data("action");
@@ -20,5 +20,5 @@ function onModuleButtonClick() {
 /**
  * bind module actions click
  */
-$quickE.modActions.click(onModuleButtonClick);
+_quickE___1.$quickE.modActions.click(onModuleButtonClick);
 //# sourceMappingURL=$quickE.module.js.map

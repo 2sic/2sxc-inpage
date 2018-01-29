@@ -1,4 +1,5 @@
-﻿import { clipboard } from './$quickE.clipboard';
+﻿import { $quickE as quickE } from './$quickE.{}';
+import { clipboard } from './$quickE.clipboard';
 
 /**
  * module specific stuff
@@ -124,7 +125,7 @@ function createMod(paneName, position, modId) {
 
 
 function generatePaneMoveButtons(current) {
-  var pns = $quickE.cachedPanes;
+  var pns = quickE.cachedPanes;
   // generate list of panes as links
   var targets = $("<div>");
   for (var p = 0; p < pns.length; p++) {

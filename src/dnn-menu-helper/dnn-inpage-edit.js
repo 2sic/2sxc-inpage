@@ -1,6 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 // Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
 var $2sxcActionMenuMapper = function (moduleId) {
-    var run = $2sxc(moduleId).manage.run;
+    var run = module_bootstrapper_1.$2sxc(moduleId).manage.run;
     return {
         changeLayoutOrContent: function () { run("layout"); },
         addItem: function () { run("add", { useModuleList: true, sortOrder: 0 }); },

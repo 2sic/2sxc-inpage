@@ -1,11 +1,11 @@
-﻿import { selectors } from './$quickE.{}';
+﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 
 const configAttr: string = "quick-edit-config";
 
 /**
  * the initial configuration
  */
-let conf = $quickE.config = {
+let conf = quickE.config = {
   enable: true,
   innerBlocks: {
     enable: null    // default: auto-detect

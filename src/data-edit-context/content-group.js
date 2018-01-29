@@ -5,5 +5,5 @@ var ContentGroup = /** @class */ (function () {
     }
     return ContentGroup;
 }());
-exports.default = ContentGroup;
+exports.ContentGroup = ContentGroup;
 //# sourceMappingURL=content-group.js.map

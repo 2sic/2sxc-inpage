@@ -1,5 +1,6 @@
-﻿import { selectors } from './$quickE.{}';
+﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 import { modManage } from './$quickE.modManage';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 let mm = new modManage();
 
@@ -13,12 +14,12 @@ interface ICmds {
 
 export class cb implements ICmds {
   delete(clip: any): any {
-    return $2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
+    return twoSxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
   }
 
 
   static create(parent, field, index, appOrContent, list, newGuid): any {
-    return $2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
+    return twoSxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
   }
 }
 
@@ -37,10 +38,10 @@ export class mod implements ICmds {
   }
 
   static sendToPane(): void {
-    var pane = $quickE.main.actionsForModule.closest(selectors.mod.listSelector);
+    var pane = quickE.main.actionsForModule.closest(selectors.mod.listSelector);
 
     // show the pane-options
-    var pl = $quickE.selected.find('#paneList');
+    var pl = quickE.selected.find('#paneList');
     if (!pl.is(':empty'))
       pl.empty();
     pl.append(mm.getMoveButtons(mm.getPaneName(pane)));

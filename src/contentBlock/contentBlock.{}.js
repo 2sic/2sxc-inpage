@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var contentBlock_templates_1 = require("./contentBlock.templates");
 /*
  * this is a content block in the browser
  *
@@ -13,14 +16,14 @@
  * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
  *
  */
-(function () {
-    /**
-     * The main content-block manager
-     */
-    $2sxc._contentBlock = {
-        // constants
-        cViewWithoutContent: '_LayoutElement',
-        cUseExistingTemplate: -1
-    };
-})();
+/**
+ * The main content-block manager
+ */
+exports._contentBlock = {
+    // constants
+    cViewWithoutContent: '_LayoutElement',
+    cUseExistingTemplate: -1,
+    prepareToAddContent: contentBlock_templates_1.prepareToAddContent,
+    updateTemplateFromDia: contentBlock_templates_1.updateTemplateFromDia
+};
 //# sourceMappingURL=contentBlock.{}.js.map

@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
+var contentBlock_actions_1 = require("../contentBlock/contentBlock.actions");
+var item_commands_1 = require("../entity-manipulation/item-commands");
+var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -51,7 +54,7 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         uiActionOnly: uiOnly,
         partOfPage: partOfPage
     };
-    return $2sxc._lib.extend(newDefinition, more);
+    return _2sxc__lib_extend_1.extend(newDefinition, more);
 }
 function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
@@ -83,7 +86,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             // todo - should refactor this to be a toolbarManager.contentBlock command
-            sxc.manage._commands._openNgDialog($2sxc._lib.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
+            sxc.manage._commands._openNgDialog(_2sxc__lib_extend_1.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
         }
     }));
     // add brings no dialog, just add an empty item
@@ -92,7 +95,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
+            contentBlock_actions_1.addItem(sxc, settings.sortOrder + 1);
         }
     }));
     // create a metadata toolbar
@@ -110,9 +113,9 @@ function create(cmdSpecs) {
         configureCommand: function (cmd) {
             var itm = {
                 Title: 'EditFormTitle.Metadata',
-                Metadata: $2sxc._lib.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+                Metadata: _2sxc__lib_extend_1.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
             };
-            $2sxc._lib.extend(cmd.items[0], itm);
+            _2sxc__lib_extend_1.extend(cmd.items[0], itm);
         }
     }));
     // remove an item from the placeholder (usually for lists)
@@ -122,7 +125,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
-                $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
+                contentBlock_actions_1.removeFromList(sxc, settings.sortOrder);
                 //sxc.manage.contentBlock
                 //    .removeFromList(settings.sortOrder);
             }
@@ -139,7 +142,7 @@ function create(cmdSpecs) {
             return settings.entityId && settings.entityGuid && settings.entityTitle;
         },
         code: function (settings, event, sxc) {
-            $2sxc.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+            item_commands_1.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
         }
     }));
     addDef(makeDef('moveup', 'MoveUp', 'move-up', false, true, {
@@ -147,7 +150,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+            contentBlock_actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
         }
     }));
     addDef(makeDef('movedown', 'MoveDown', 'move-down', false, true, {
@@ -155,7 +158,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+            contentBlock_actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
         }
     }));
     addDef(makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
@@ -176,10 +179,10 @@ function create(cmdSpecs) {
                 return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
             // if we have an entity-id, publish based on that
             if (settings.entityId)
-                return $2sxc._contentBlock.publishId(sxc, settings.entityId);
+                return contentBlock_actions_1.publishId(sxc, settings.entityId);
             var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
             var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-            return $2sxc._contentBlock.publish(sxc, part, index);
+            return contentBlock_actions_1.publish(sxc, part, index);
         }
     }));
     addDef(makeDef('replace', 'Replace', 'replace', false, true, {

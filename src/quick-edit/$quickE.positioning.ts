@@ -1,4 +1,4 @@
-﻿import { selectors } from './$quickE.{}';
+﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 
 /**
  * Module with everything related to positioning the quick-edit in-page editing
@@ -22,9 +22,9 @@ class Coords {
  * @returns Point 
  */
 export function getBodyPosition(): Coords {
-  var bodyPos = $quickE.body.css('position');
+  var bodyPos = quickE.body.css('position');
   return bodyPos === 'relative' || bodyPos === 'absolute'
-    ? new Coords($quickE.body.offset().left, $quickE.body.offset().top)
+    ? new Coords(quickE.body.offset().left, quickE.body.offset().top)
     : new Coords(0,0);
 };
 
@@ -32,24 +32,24 @@ export function getBodyPosition(): Coords {
  * Refresh content block and modules elements
  */ 
 function refreshDomObjects(): void {
-  $quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
+  quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
 
   //// Cache the panes (because panes can't change dynamically)
-  //if (!$quickE.cachedPanes)
-  //    $quickE.cachedPanes = $(selectors.mod.listSelector);
+  //if (!quickE.cachedPanes)
+  //    quickE.cachedPanes = $(selectors.mod.listSelector);
 
-  if ($quickE.config.innerBlocks.enable) {
+  if (quickE.config.innerBlocks.enable) {
     // get all content-block lists which are empty, or which allow multiple child-items
     var lists = $(selectors.cb.listSelector)
       .filter(':not(.' + selectors.cb.singleItem + '), :empty');
-    $quickE.contentBlocks = lists // $(selectors.cb.listSelector)
+    quickE.contentBlocks = lists // $(selectors.cb.listSelector)
       .find(selectors.cb.selector)
       .add(lists);// selectors.cb.listSelector);
   }
-  if ($quickE.config.modules.enable)
-    $quickE.modules = $quickE.cachedPanes
+  if (quickE.config.modules.enable)
+    quickE.modules = quickE.cachedPanes
       .find(selectors.mod.selector)
-      .add($quickE.cachedPanes);
+      .add(quickE.cachedPanes);
 }
 
 /**
@@ -65,8 +65,8 @@ namespace refreshDomObjects {
  */ 
 export function positionAndAlign(element: any, coords: Coords) {
   return element.css({
-    left: coords.x - $quickE.bodyOffset.x,
-    top: coords.yh - $quickE.bodyOffset.y,
+    left: coords.x - quickE.bodyOffset.x,
+    top: coords.yh - quickE.bodyOffset.y,
     width: coords.element.width()
   }).show();
 };
@@ -84,21 +84,21 @@ export function refresh(e) {
     refreshDomObjects();
   }
 
-  if ($quickE.config.innerBlocks.enable && $quickE.contentBlocks) {
-    $quickE.nearestCb = findNearest($quickE.contentBlocks, new Coords(e.clientX, e.clientY));
+  if (quickE.config.innerBlocks.enable && quickE.contentBlocks) {
+    quickE.nearestCb = findNearest(quickE.contentBlocks, new Coords(e.clientX, e.clientY));
   }
 
-  if ($quickE.config.modules.enable && $quickE.modules) {
-    $quickE.nearestMod = findNearest($quickE.modules, new Coords(e.clientX, e.clientY));
+  if (quickE.config.modules.enable && quickE.modules) {
+    quickE.nearestMod = findNearest(quickE.modules, new Coords(e.clientX, e.clientY));
   }
 
-  $quickE.modActions.toggleClass('sc-invisible', $quickE.nearestMod === null);
-  $quickE.cbActions.toggleClass('sc-invisible', $quickE.nearestCb === null);
+  quickE.modActions.toggleClass('sc-invisible', quickE.nearestMod === null);
+  quickE.cbActions.toggleClass('sc-invisible', quickE.nearestCb === null);
 
-  var oldParent = $quickE.main.parentContainer;
+  var oldParent = quickE.main.parentContainer;
 
-  if ($quickE.nearestCb !== null || $quickE.nearestMod !== null) {
-    var alignTo = $quickE.nearestCb || $quickE.nearestMod;
+  if (quickE.nearestCb !== null || quickE.nearestMod !== null) {
+    var alignTo = quickE.nearestCb || quickE.nearestMod;
 
     // find parent pane to highlight
     var parentPane = $(alignTo.element).closest(selectors.mod.listSelector);
@@ -109,26 +109,26 @@ export function refresh(e) {
     if (parentPane.length > 0) {
       let paneName: string = parentPane.attr('id') || '';
       if (paneName.length > 4) paneName = paneName.substr(4);
-      $quickE.modActions.filter('[titleTemplate]').each(function () {
+      quickE.modActions.filter('[titleTemplate]').each(function () {
         var t = $(this);
         t.attr('title', t.attr('titleTemplate').replace('{0}', paneName));
       });
     }
 
-    positionAndAlign($quickE.main, alignTo);
+    positionAndAlign(quickE.main, alignTo);
 
     // Keep current block as current on menu
-    $quickE.main.actionsForCb = $quickE.nearestCb ? $quickE.nearestCb.element : null;
-    $quickE.main.actionsForModule = $quickE.nearestMod ? $quickE.nearestMod.element : null;
-    $quickE.main.parentContainer = parentContainer;
+    quickE.main.actionsForCb = quickE.nearestCb ? quickE.nearestCb.element : null;
+    quickE.main.actionsForModule = quickE.nearestMod ? quickE.nearestMod.element : null;
+    quickE.main.parentContainer = parentContainer;
     $(parentContainer).addClass(highlightClass);
   } else {
-    $quickE.main.parentContainer = null;
-    $quickE.main.hide();
+    quickE.main.parentContainer = null;
+    quickE.main.hide();
   }
 
   // if previously a parent-pane was highlighted, un-highlight it now
-  if (oldParent && oldParent !== $quickE.main.parentContainer)
+  if (oldParent && oldParent !== quickE.main.parentContainer)
     $(oldParent).removeClass(highlightClass);
 };
 
@@ -143,8 +143,8 @@ function findNearest(elements: any, position: Coords): Coords {
   let nearestItem = null;
   let nearestDistance: number = maxDistance;
 
-  let posX: number = position.x + $quickE.win.scrollLeft();
-  let posY: number = position.y + $quickE.win.scrollTop();
+  let posX: number = position.x + quickE.win.scrollLeft();
+  let posY: number = position.y + quickE.win.scrollTop();
 
   // Find nearest element
   elements.each(function () {

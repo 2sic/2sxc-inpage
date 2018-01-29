@@ -5,5 +5,5 @@ var Environment = /** @class */ (function () {
     }
     return Environment;
 }());
-exports.default = Environment;
+exports.Environment = Environment;
 //# sourceMappingURL=environment.js.map

@@ -1,4 +1,4 @@
-﻿import { selectors, prepareToolbarInDom } from './$quickE.{}';
+﻿import { $quickE as quickE, selectors, prepareToolbarInDom } from './$quickE.{}';
 import { getBodyPosition, refresh } from './$quickE.positioning';
 import { _readPageConfig } from './$quickE.config';
 
@@ -29,9 +29,9 @@ function watchMouse() {
 function start(): void {
   try {
     _readPageConfig();
-    if ($quickE.config.enable) {
+    if (quickE.config.enable) {
       // initialize first body-offset
-      $quickE.bodyOffset = getBodyPosition();
+      quickE.bodyOffset = getBodyPosition();
 
       enable();
 
@@ -48,8 +48,8 @@ function start(): void {
  * cache the panes which can contain modules
  */
 function initPanes(): void {
-  $quickE.cachedPanes = $(selectors.mod.listSelector);
-  $quickE.cachedPanes.addClass('sc-cb-pane-glow');
+  quickE.cachedPanes = $(selectors.mod.listSelector);
+  quickE.cachedPanes.addClass('sc-cb-pane-glow');
 };
 
 /**
@@ -57,10 +57,10 @@ function initPanes(): void {
  */
 function toggleParts(): void {
   //// content blocks actions
-  //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
+  //quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
 
   //// module actions
-  //$quickE.modActions.hide($quickE.config.modules.enable);
+  //quickE.modActions.hide(quickE.config.modules.enable);
 };
 
 /**

@@ -1,12 +1,13 @@
-﻿// the toolbar manager is an internal helper
-// taking care of toolbars, buttons etc.
-(function () {
-    /**
-     * Toolbar manager for the whole page - basically a set of APIs
-     */
-    $2sxc._toolbarManager = {
+﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
-        // internal constants
-        cDisableAttrName: "data-disable-toolbar"
-    };
-})();
+// the toolbar manager is an internal helper
+// taking care of toolbars, buttons etc.
+
+/**
+ * Toolbar manager for the whole page - basically a set of APIs
+ */
+twoSxc._toolbarManager = {
+
+  // internal constants
+  cDisableAttrName: "data-disable-toolbar"
+};

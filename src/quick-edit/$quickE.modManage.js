@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var _quickE___1 = require("./$quickE.{}");
 var _quickE_clipboard_1 = require("./$quickE.clipboard");
 /**
  * module specific stuff
@@ -114,7 +115,7 @@ function createMod(paneName, position, modId) {
     });
 }
 function generatePaneMoveButtons(current) {
-    var pns = $quickE.cachedPanes;
+    var pns = _quickE___1.$quickE.cachedPanes;
     // generate list of panes as links
     var targets = $("<div>");
     for (var p = 0; p < pns.length; p++) {

@@ -1,4 +1,4 @@
-﻿export default class Language {
+﻿export class Language {
   // ReSharper disable InconsistentNaming
   Current: string;
   Primary: string;

@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = require("../manage/manage.api");
+var contentBlock_render_1 = require("../contentBlock/contentBlock.render");
+var contentBlock___1 = require("../contentBlock/contentBlock.{}");
+var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
@@ -12,7 +15,7 @@ var isFullscreen = false;
 /**
  * dialog manager - the currently active dialog object
  */
-//var diagManager = $2sxc._quickDialog = {}
+//var diagManager = twoSxc._quickDialog = {}
 exports.current = null;
 /**
  * toggle visibility
@@ -135,7 +138,7 @@ function setSize(fullScreen) {
 }
 function extendIFrameWithSxcState(iFrame) {
     var hiddenSxc = null;
-    var cbApi = $2sxc._contentBlock;
+    var cbApi = contentBlock___1._contentBlock;
     var tagModule = null;
     /**
      * get the sxc-object of this iframe
@@ -185,16 +188,16 @@ function extendIFrameWithSxcState(iFrame) {
             reSxc().manage.run(verb);
         },
         showMessage: function (message) {
-            cbApi.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
+            contentBlock_render_1.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
         },
         reloadAndReInit: function () {
-            return cbApi.reloadAndReInitialize(reSxc(), true, true);
+            return contentBlock_render_1.reloadAndReInitialize(reSxc(), true, true);
         },
         saveTemplate: function (templateId) {
-            return cbApi.updateTemplateFromDia(reSxc(), templateId, false);
+            return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false);
         },
         previewTemplate: function (templateId) {
-            return cbApi.ajaxLoad(reSxc(), templateId, true);
+            return contentBlock_render_1.ajaxLoad(reSxc(), templateId, true);
         }
     });
     return newFrm;

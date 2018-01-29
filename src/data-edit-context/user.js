@@ -5,5 +5,5 @@ var User = /** @class */ (function () {
     }
     return User;
 }());
-exports.default = User;
+exports.User = User;
 //# sourceMappingURL=user.js.map
