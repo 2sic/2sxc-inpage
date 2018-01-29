@@ -5,7 +5,7 @@ var configAttr = "quick-edit-config";
 /**
  * the initial configuration
  */
-var conf = $quickE.config = {
+var conf = _quickE___1.$quickE.config = {
     enable: true,
     innerBlocks: {
         enable: null // default: auto-detect

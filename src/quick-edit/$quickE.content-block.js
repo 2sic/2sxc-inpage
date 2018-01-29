@@ -6,13 +6,13 @@ var _quickE_clipboard_1 = require("./$quickE.clipboard");
  * content-block specific stuff like actions
  */
 function onCbButtonClick() {
-    var list = $quickE.main.actionsForCb.closest(_quickE___1.selectors.cb.listSelector);
+    var list = _quickE___1.$quickE.main.actionsForCb.closest(_quickE___1.selectors.cb.listSelector);
     var listItems = list.find(_quickE___1.selectors.cb.selector);
     var actionConfig = JSON.parse(list.attr(_quickE___1.selectors.cb.context));
     var index = 0;
     var newGuid = actionConfig.guid || null;
-    if ($quickE.main.actionsForCb.hasClass(_quickE___1.selectors.cb.class))
-        index = listItems.index($quickE.main.actionsForCb[0]) + 1;
+    if (_quickE___1.$quickE.main.actionsForCb.hasClass(_quickE___1.selectors.cb.class))
+        index = listItems.index(_quickE___1.$quickE.main.actionsForCb[0]) + 1;
     // check cut/paste
     var cbAction = $(this).data("action");
     if (cbAction) {
@@ -21,8 +21,8 @@ function onCbButtonClick() {
     }
     else {
         var appOrContent = $(this).data("type");
-        return $quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
+        return _quickE___1.$quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
     }
 }
-$quickE.cbActions.click(onCbButtonClick);
+_quickE___1.$quickE.cbActions.click(onCbButtonClick);
 //# sourceMappingURL=$quickE.content-block.js.map
