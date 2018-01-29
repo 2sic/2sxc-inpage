@@ -23,9 +23,9 @@ var Coords = /** @class */ (function () {
  * @returns Point
  */
 function getBodyPosition() {
-    var bodyPos = $quickE.body.css('position');
+    var bodyPos = _quickE___1.$quickE.body.css('position');
     return bodyPos === 'relative' || bodyPos === 'absolute'
-        ? new Coords($quickE.body.offset().left, $quickE.body.offset().top)
+        ? new Coords(_quickE___1.$quickE.body.offset().left, _quickE___1.$quickE.body.offset().top)
         : new Coords(0, 0);
 }
 exports.getBodyPosition = getBodyPosition;
@@ -34,22 +34,22 @@ exports.getBodyPosition = getBodyPosition;
  * Refresh content block and modules elements
  */
 function refreshDomObjects() {
-    $quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
+    _quickE___1.$quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
     //// Cache the panes (because panes can't change dynamically)
-    //if (!$quickE.cachedPanes)
-    //    $quickE.cachedPanes = $(selectors.mod.listSelector);
-    if ($quickE.config.innerBlocks.enable) {
+    //if (!quickE.cachedPanes)
+    //    quickE.cachedPanes = $(selectors.mod.listSelector);
+    if (_quickE___1.$quickE.config.innerBlocks.enable) {
         // get all content-block lists which are empty, or which allow multiple child-items
         var lists = $(_quickE___1.selectors.cb.listSelector)
             .filter(':not(.' + _quickE___1.selectors.cb.singleItem + '), :empty');
-        $quickE.contentBlocks = lists // $(selectors.cb.listSelector)
+        _quickE___1.$quickE.contentBlocks = lists // $(selectors.cb.listSelector)
             .find(_quickE___1.selectors.cb.selector)
             .add(lists); // selectors.cb.listSelector);
     }
-    if ($quickE.config.modules.enable)
-        $quickE.modules = $quickE.cachedPanes
+    if (_quickE___1.$quickE.config.modules.enable)
+        _quickE___1.$quickE.modules = _quickE___1.$quickE.cachedPanes
             .find(_quickE___1.selectors.mod.selector)
-            .add($quickE.cachedPanes);
+            .add(_quickE___1.$quickE.cachedPanes);
 }
 /**
  * Last time when contentblock and modules are refreshed.
@@ -62,8 +62,8 @@ function refreshDomObjects() {
  */
 function positionAndAlign(element, coords) {
     return element.css({
-        left: coords.x - $quickE.bodyOffset.x,
-        top: coords.yh - $quickE.bodyOffset.y,
+        left: coords.x - _quickE___1.$quickE.bodyOffset.x,
+        top: coords.yh - _quickE___1.$quickE.bodyOffset.y,
         width: coords.element.width()
     }).show();
 }
@@ -81,17 +81,17 @@ function refresh(e) {
         refreshDomObjects.lastCall = newDate;
         refreshDomObjects();
     }
-    if ($quickE.config.innerBlocks.enable && $quickE.contentBlocks) {
-        $quickE.nearestCb = findNearest($quickE.contentBlocks, new Coords(e.clientX, e.clientY));
+    if (_quickE___1.$quickE.config.innerBlocks.enable && _quickE___1.$quickE.contentBlocks) {
+        _quickE___1.$quickE.nearestCb = findNearest(_quickE___1.$quickE.contentBlocks, new Coords(e.clientX, e.clientY));
     }
-    if ($quickE.config.modules.enable && $quickE.modules) {
-        $quickE.nearestMod = findNearest($quickE.modules, new Coords(e.clientX, e.clientY));
+    if (_quickE___1.$quickE.config.modules.enable && _quickE___1.$quickE.modules) {
+        _quickE___1.$quickE.nearestMod = findNearest(_quickE___1.$quickE.modules, new Coords(e.clientX, e.clientY));
     }
-    $quickE.modActions.toggleClass('sc-invisible', $quickE.nearestMod === null);
-    $quickE.cbActions.toggleClass('sc-invisible', $quickE.nearestCb === null);
-    var oldParent = $quickE.main.parentContainer;
-    if ($quickE.nearestCb !== null || $quickE.nearestMod !== null) {
-        var alignTo = $quickE.nearestCb || $quickE.nearestMod;
+    _quickE___1.$quickE.modActions.toggleClass('sc-invisible', _quickE___1.$quickE.nearestMod === null);
+    _quickE___1.$quickE.cbActions.toggleClass('sc-invisible', _quickE___1.$quickE.nearestCb === null);
+    var oldParent = _quickE___1.$quickE.main.parentContainer;
+    if (_quickE___1.$quickE.nearestCb !== null || _quickE___1.$quickE.nearestMod !== null) {
+        var alignTo = _quickE___1.$quickE.nearestCb || _quickE___1.$quickE.nearestMod;
         // find parent pane to highlight
         var parentPane = $(alignTo.element).closest(_quickE___1.selectors.mod.listSelector);
         var parentCbList = $(alignTo.element).closest(_quickE___1.selectors.cb.listSelector);
@@ -101,24 +101,24 @@ function refresh(e) {
             var paneName_1 = parentPane.attr('id') || '';
             if (paneName_1.length > 4)
                 paneName_1 = paneName_1.substr(4);
-            $quickE.modActions.filter('[titleTemplate]').each(function () {
+            _quickE___1.$quickE.modActions.filter('[titleTemplate]').each(function () {
                 var t = $(this);
                 t.attr('title', t.attr('titleTemplate').replace('{0}', paneName_1));
             });
         }
-        positionAndAlign($quickE.main, alignTo);
+        positionAndAlign(_quickE___1.$quickE.main, alignTo);
         // Keep current block as current on menu
-        $quickE.main.actionsForCb = $quickE.nearestCb ? $quickE.nearestCb.element : null;
-        $quickE.main.actionsForModule = $quickE.nearestMod ? $quickE.nearestMod.element : null;
-        $quickE.main.parentContainer = parentContainer;
+        _quickE___1.$quickE.main.actionsForCb = _quickE___1.$quickE.nearestCb ? _quickE___1.$quickE.nearestCb.element : null;
+        _quickE___1.$quickE.main.actionsForModule = _quickE___1.$quickE.nearestMod ? _quickE___1.$quickE.nearestMod.element : null;
+        _quickE___1.$quickE.main.parentContainer = parentContainer;
         $(parentContainer).addClass(highlightClass);
     }
     else {
-        $quickE.main.parentContainer = null;
-        $quickE.main.hide();
+        _quickE___1.$quickE.main.parentContainer = null;
+        _quickE___1.$quickE.main.hide();
     }
     // if previously a parent-pane was highlighted, un-highlight it now
-    if (oldParent && oldParent !== $quickE.main.parentContainer)
+    if (oldParent && oldParent !== _quickE___1.$quickE.main.parentContainer)
         $(oldParent).removeClass(highlightClass);
 }
 exports.refresh = refresh;
@@ -132,8 +132,8 @@ function findNearest(elements, position) {
     var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
     var nearestItem = null;
     var nearestDistance = maxDistance;
-    var posX = position.x + $quickE.win.scrollLeft();
-    var posY = position.y + $quickE.win.scrollTop();
+    var posX = position.x + _quickE___1.$quickE.win.scrollLeft();
+    var posY = position.y + _quickE___1.$quickE.win.scrollTop();
     // Find nearest element
     elements.each(function () {
         var e = getCoordinates($(this));

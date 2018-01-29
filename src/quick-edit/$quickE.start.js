@@ -29,9 +29,9 @@ function watchMouse() {
 function start() {
     try {
         _quickE_config_1._readPageConfig();
-        if ($quickE.config.enable) {
+        if (_quickE___1.$quickE.config.enable) {
             // initialize first body-offset
-            $quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
+            _quickE___1.$quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
             enable();
             toggleParts();
             watchMouse();
@@ -46,8 +46,8 @@ function start() {
  * cache the panes which can contain modules
  */
 function initPanes() {
-    $quickE.cachedPanes = $(_quickE___1.selectors.mod.listSelector);
-    $quickE.cachedPanes.addClass('sc-cb-pane-glow');
+    _quickE___1.$quickE.cachedPanes = $(_quickE___1.selectors.mod.listSelector);
+    _quickE___1.$quickE.cachedPanes.addClass('sc-cb-pane-glow');
 }
 ;
 /**
@@ -55,9 +55,9 @@ function initPanes() {
  */
 function toggleParts() {
     //// content blocks actions
-    //$quickE.cbActions.toggle($quickE.config.innerBlocks.enable);
+    //quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
     //// module actions
-    //$quickE.modActions.hide($quickE.config.modules.enable);
+    //quickE.modActions.hide(quickE.config.modules.enable);
 }
 ;
 /**

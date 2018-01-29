@@ -1,4 +1,4 @@
-﻿import { selectors } from './$quickE.{}';
+﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 import { copyPasteInPage } from './$quickE.clipboard';
 import { modManage } from './$quickE.modManage';
 
@@ -9,7 +9,7 @@ let mm = new modManage();
  */
 function onModuleButtonClick() {
   var type = $(this).data("type"),
-    dnnMod = $quickE.main.actionsForModule,
+    dnnMod = quickE.main.actionsForModule,
     pane = dnnMod.closest(selectors.mod.listSelector),
     index = 0;
 
@@ -26,4 +26,4 @@ function onModuleButtonClick() {
 /**
  * bind module actions click
  */
-$quickE.modActions.click(onModuleButtonClick);
+quickE.modActions.click(onModuleButtonClick);
