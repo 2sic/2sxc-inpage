@@ -1,6 +1,9 @@
 ﻿import { reset } from '../quick-edit/$quickE.start';
 import { hide } from '../quick-dialog/2sxc._quickDialog';
 import { getTag } from '../manage/manage.api';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { _contentBlock } from './contentBlock.{}';
+import { getPreviewWithTemplate } from './contentBlock.webApiPromises';
 /*
  * this is the content block manager in the browser
  * 
@@ -12,7 +15,7 @@ import { getTag } from '../manage/manage.api';
  * it should be able to render itself
  */
 
-var cbm = $2sxc._contentBlock;
+var cbm = _contentBlock;
 
 /**
  * ajax update/replace the content of the content-block
@@ -22,12 +25,12 @@ var cbm = $2sxc._contentBlock;
  * @param {boolean} justPreview 
  * @returns {} 
  */
-cbm.replaceCb = function (sxc, newContent, justPreview) {
+function replaceCb(sxc, newContent, justPreview) {
   try {
     var newStuff = $(newContent);
 
     // Must disable toolbar before we attach to DOM
-    if (justPreview) $2sxc._toolbarManager.disable(newStuff);
+    if (justPreview) twoSxc._toolbarManager.disable(newStuff);
 
     $(getTag(sxc)).replaceWith(newStuff);
 
@@ -44,27 +47,27 @@ cbm.replaceCb = function (sxc, newContent, justPreview) {
  * @param {string} newContent 
  * @returns {} - nothing
  */
-cbm.showMessage = function (sxc, newContent) {
+export function showMessage(sxc, newContent) {
   $(getTag(sxc)).html(newContent);
 };
 
-cbm.ajaxLoad = function (sxc, alternateTemplateId, justPreview) {
+export function ajaxLoad(sxc, alternateTemplateId, justPreview) {
   // ajax-call, then replace
-  return cbm.getPreviewWithTemplate(sxc, alternateTemplateId)
+  return getPreviewWithTemplate(sxc, alternateTemplateId)
     .then(function (result) {
-      return cbm.replaceCb(sxc, result, justPreview);
+      return replaceCb(sxc, result, justPreview);
     })
     .then(reset); // reset quick-edit, because the config could have changed
 };
 
 // this one assumes a replace / change has already happened, but now must be finalized...
-cbm.reloadAndReInitialize = function (sxc, forceAjax, preview) {
+export function reloadAndReInitialize(sxc, forceAjax?, preview?) {
   var manage = sxc.manage;
 
   // if ajax is not supported, we must reload the whole page
   if (!forceAjax && !manage._reloadWithAjax) return window.location.reload();
 
-  return cbm.ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
+  return ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
     .then(function () {
 
       // tell Evoq that page has changed if it has changed (Ajax call)

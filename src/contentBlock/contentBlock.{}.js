@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
+var contentBlock_templates_1 = require("./contentBlock.templates");
 /*
  * this is a content block in the browser
  *
@@ -19,9 +19,11 @@ var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 /**
  * The main content-block manager
  */
-module_bootstrapper_1.$2sxc._contentBlock = {
+exports._contentBlock = {
     // constants
     cViewWithoutContent: '_LayoutElement',
-    cUseExistingTemplate: -1
+    cUseExistingTemplate: -1,
+    prepareToAddContent: contentBlock_templates_1.prepareToAddContent,
+    updateTemplateFromDia: contentBlock_templates_1.updateTemplateFromDia
 };
 //# sourceMappingURL=contentBlock.{}.js.map

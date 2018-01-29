@@ -1,5 +1,7 @@
 ﻿import { getTag } from '../manage/manage.api';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { showMessage, reloadAndReInitialize, ajaxLoad } from '../contentBlock/contentBlock.render';
+import { _contentBlock } from '../contentBlock/contentBlock.{}';
+import { updateTemplateFromDia } from '../contentBlock/contentBlock.templates';
 
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
@@ -16,7 +18,7 @@ let isFullscreen: boolean = false;
  */
 //var diagManager = twoSxc._quickDialog = {}
 
-export var current : any = null;
+export var current: any = null;
 
 /**
  * toggle visibility
@@ -136,7 +138,7 @@ function setSize(fullScreen) {
 
 function extendIFrameWithSxcState(iFrame) {
   var hiddenSxc = null;
-  var cbApi = twoSxc._contentBlock;
+  var cbApi = _contentBlock;
   var tagModule = null;
 
   /**
@@ -187,16 +189,16 @@ function extendIFrameWithSxcState(iFrame) {
       reSxc().manage.run(verb);
     },
     showMessage: function (message) {
-      cbApi.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
+      showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
     },
     reloadAndReInit: function () {
-      return cbApi.reloadAndReInitialize(reSxc(), true, true);
+      return reloadAndReInitialize(reSxc(), true, true);
     },
     saveTemplate: function (templateId) {
-      return cbApi.updateTemplateFromDia(reSxc(), templateId, false);
+      return updateTemplateFromDia(reSxc(), templateId, false);
     },
     previewTemplate: function (templateId) {
-      return cbApi.ajaxLoad(reSxc(), templateId, true);
+      return ajaxLoad(reSxc(), templateId, true);
     }
   });
   return newFrm;

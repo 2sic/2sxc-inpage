@@ -1,6 +1,6 @@
 ﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 import { copyPasteInPage } from './$quickE.clipboard';
-import { cb, CmdsStrategyFactory} from './$quickE.cmds';
+import { cb } from './$quickE.cmds';
 
 /**
  * content-block specific stuff like actions

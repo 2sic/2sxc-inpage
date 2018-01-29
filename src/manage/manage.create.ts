@@ -1,6 +1,7 @@
 ﻿import { instanceEngine } from '../commands/commands.engine';
 import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buildInstanceConfig, buildQuickDialogConfig } from './manage.api';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { manipulator } from '../contentBlock/contentBlock.manipulate';
 
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -103,7 +104,7 @@ function _initInstance(sxc) {
     },
 
     _getCbManipulator: function () {
-      return twoSxc._contentBlock.manipulator(sxc);
+      return manipulator(sxc);
     }
   };
 

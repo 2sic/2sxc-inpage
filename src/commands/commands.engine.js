@@ -4,6 +4,8 @@ var commands_instanceCommands_1 = require("./commands.instanceCommands");
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
+var contentBlock_render_1 = require("../contentBlock/contentBlock.render");
+var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
 function instanceEngine(sxc, editContext) {
     var engine = {
         commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
@@ -96,7 +98,7 @@ function instanceEngine(sxc, editContext) {
             // the callback will handle events after closing the dialog
             // and reload the in-page view w/ajax or page reload
             var callback = function () {
-                module_bootstrapper_1.$2sxc._contentBlock.reloadAndReInitialize(sxc);
+                contentBlock_render_1.reloadAndReInitialize(sxc);
                 // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
             };
             var link = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
@@ -131,7 +133,7 @@ function instanceEngine(sxc, editContext) {
             if (conf.uiActionOnly)
                 return settings.code(settings, origEvent, sxc);
             // if more than just a UI-action, then it needs to be sure the content-group is created first
-            return module_bootstrapper_1.$2sxc._contentBlock.prepareToAddContent(sxc, settings.useModuleList)
+            return contentBlock_templates_1.prepareToAddContent(sxc, settings.useModuleList)
                 .then(function () {
                 return settings.code(settings, origEvent, sxc);
             });

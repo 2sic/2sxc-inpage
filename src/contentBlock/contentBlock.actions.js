@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
+var contentBlock_render_1 = require("./contentBlock.render");
 /*
  * this is a content block in the browser
  *
@@ -11,7 +11,6 @@ var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
  *
  * it should be able to render itself
  */
-var cbm = module_bootstrapper_1.$2sxc._contentBlock;
 /**
  * internal helper, to do something and reload the content block
  * @param sxc
@@ -23,7 +22,7 @@ function getAndReload(sxc, url, params) {
     return sxc.webApi.get({
         url: url,
         params: params
-    }).then(function () { cbm.reloadAndReInitialize(sxc); });
+    }).then(function () { contentBlock_render_1.reloadAndReInitialize(sxc); });
 }
 ;
 /**

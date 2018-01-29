@@ -1,4 +1,5 @@
 ﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { prepareToAddContent, updateTemplateFromDia } from './contentBlock.templates';
 /*
  * this is a content block in the browser
  * 
@@ -18,9 +19,11 @@
 /**
  * The main content-block manager
  */
-twoSxc._contentBlock = {
+export var _contentBlock = {
 
   // constants
   cViewWithoutContent: '_LayoutElement', // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-  cUseExistingTemplate: -1
+  cUseExistingTemplate: -1,
+  prepareToAddContent: prepareToAddContent,
+  updateTemplateFromDia: updateTemplateFromDia
 };

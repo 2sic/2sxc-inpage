@@ -3,6 +3,9 @@ import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { showOrToggle } from '../quick-dialog/2sxc._quickDialog';
 import { translate } from '../translate/2sxc.translate';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { reloadAndReInitialize } from '../contentBlock/contentBlock.render';
+import { _contentBlock } from '../contentBlock/contentBlock.{}';
+import { prepareToAddContent } from '../contentBlock/contentBlock.templates';
 
 export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
   var engine: IEngine = {
@@ -109,7 +112,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
       // the callback will handle events after closing the dialog
       // and reload the in-page view w/ajax or page reload
       var callback = function () {
-        twoSxc._contentBlock.reloadAndReInitialize(sxc);
+        reloadAndReInitialize(sxc);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
       };
       var link: string = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
@@ -149,7 +152,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
       if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc);
 
       // if more than just a UI-action, then it needs to be sure the content-group is created first
-      return twoSxc._contentBlock.prepareToAddContent(sxc, settings.useModuleList)
+      return prepareToAddContent(sxc, settings.useModuleList)
         .then(function () {
           return settings.code(settings, origEvent, sxc);
         });

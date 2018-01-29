@@ -1,4 +1,5 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+﻿import { reloadAndReInitialize } from './contentBlock.render';
+import { _contentBlock } from './contentBlock.{}';
 /*
  * this is a content block in the browser
  * 
@@ -9,8 +10,6 @@
  *
  * it should be able to render itself
  */
-
-var cbm = twoSxc._contentBlock;
 
 /**
  * internal helper, to do something and reload the content block
@@ -23,7 +22,7 @@ function getAndReload(sxc, url, params) {
   return sxc.webApi.get({
     url: url,
     params: params
-  }).then(function () { cbm.reloadAndReInitialize(sxc); });
+  }).then(function () { reloadAndReInitialize(sxc); });
 };
 
 /**
