@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
+var contentBlock_actions_1 = require("../contentBlock/contentBlock.actions");
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -92,7 +93,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
+            contentBlock_actions_1.addItem(sxc, settings.sortOrder + 1);
         }
     }));
     // create a metadata toolbar
@@ -122,7 +123,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
-                $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
+                contentBlock_actions_1.removeFromList(sxc, settings.sortOrder);
                 //sxc.manage.contentBlock
                 //    .removeFromList(settings.sortOrder);
             }
@@ -147,7 +148,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+            contentBlock_actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
         }
     }));
     addDef(makeDef('movedown', 'MoveDown', 'move-down', false, true, {
@@ -155,7 +156,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+            contentBlock_actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
         }
     }));
     addDef(makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
@@ -176,10 +177,10 @@ function create(cmdSpecs) {
                 return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
             // if we have an entity-id, publish based on that
             if (settings.entityId)
-                return $2sxc._contentBlock.publishId(sxc, settings.entityId);
+                return contentBlock_actions_1.publishId(sxc, settings.entityId);
             var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
             var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-            return $2sxc._contentBlock.publish(sxc, part, index);
+            return contentBlock_actions_1.publish(sxc, part, index);
         }
     }));
     addDef(makeDef('replace', 'Replace', 'replace', false, true, {

@@ -1,4 +1,5 @@
 ﻿import { translate } from '../translate/2sxc.translate';
+import { addItem, changeOrder, publish, publishId, removeFromList} from '../contentBlock/contentBlock.actions';
 
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -117,7 +118,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
     },
     code(settings, event, sxc) {
-      $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
+      addItem(sxc, settings.sortOrder + 1);
     }
   }));
 
@@ -149,7 +150,7 @@ export function create(cmdSpecs: CmdSpec): Act {
     },
     code(settings, event, sxc) {
       if (confirm(translate('Toolbar.ConfirmRemove'))) {
-        $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
+        removeFromList(sxc, settings.sortOrder);
         //sxc.manage.contentBlock
         //    .removeFromList(settings.sortOrder);
       }
@@ -177,7 +178,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
     },
     code(settings, event, sxc) {
-      $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+      changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
     }
   }));
 
@@ -186,7 +187,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
     },
     code(settings, event, sxc) {
-      $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+      changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
     }
   }));
 
@@ -208,11 +209,11 @@ export function create(cmdSpecs: CmdSpec): Act {
       if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
 
       // if we have an entity-id, publish based on that
-      if (settings.entityId) return $2sxc._contentBlock.publishId(sxc, settings.entityId);
+      if (settings.entityId) return publishId(sxc, settings.entityId);
 
       var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
       var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-      return $2sxc._contentBlock.publish(sxc, part, index);
+      return publish(sxc, part, index);
     }
   }));
 

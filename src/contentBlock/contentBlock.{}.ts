@@ -13,15 +13,13 @@
  * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
  * 
  */
-(function () {
 
-    /**
-     * The main content-block manager
-     */
-    $2sxc._contentBlock = {
+/**
+ * The main content-block manager
+ */
+$2sxc._contentBlock = {
 
-        // constants
-        cViewWithoutContent: '_LayoutElement', // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-        cUseExistingTemplate: -1
-    };
-})();
+  // constants
+  cViewWithoutContent: '_LayoutElement', // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+  cUseExistingTemplate: -1
+};

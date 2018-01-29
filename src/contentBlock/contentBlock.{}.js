@@ -13,14 +13,12 @@
  * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
  *
  */
-(function () {
-    /**
-     * The main content-block manager
-     */
-    $2sxc._contentBlock = {
-        // constants
-        cViewWithoutContent: '_LayoutElement',
-        cUseExistingTemplate: -1
-    };
-})();
+/**
+ * The main content-block manager
+ */
+$2sxc._contentBlock = {
+    // constants
+    cViewWithoutContent: '_LayoutElement',
+    cUseExistingTemplate: -1
+};
 //# sourceMappingURL=contentBlock.{}.js.map

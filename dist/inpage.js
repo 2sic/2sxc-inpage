@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -82,7 +82,24 @@ var Selectors = /** @class */ (function () {
     return Selectors;
 }());
 // the quick-edit object
-var $quickE = window.$quickE = {};
+// the quick-insert object
+exports.$quickE = window.$quickE = {
+    body: $('body'),
+    win: $(window),
+    main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
+    template: "<a class='sc-content-block-menu-addcontent sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a>"
+        + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
+        + btn('select', 'ok', 'Select', true)
+        + btn('paste', 'paste', 'Paste', true, true),
+    selected: $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
+        .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>"),
+    contentBlocks: null,
+    cachedPanes: null,
+    modules: null,
+    nearestCb: null,
+    nearestMod: null,
+    modManage: null // will be populated later in the module section
+};
 // selectors used all over the in-page-editing, centralized to ensure consistency
 exports.selectors = {
     cb: {
@@ -110,39 +127,19 @@ function btn(action, icon, i18N, invisible, unavailable, classes) {
         + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
 }
 ;
-// the quick-insert object
-$.extend($quickE, {
-    body: $('body'),
-    win: $(window),
-    main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
-    template: "<a class='sc-content-block-menu-addcontent sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a>"
-        + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
-        + btn('select', 'ok', 'Select', true)
-        + btn('paste', 'paste', 'Paste', true, true),
-    selected: $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-        .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>"),
-    contentBlocks: null,
-    cachedPanes: null,
-    modules: null,
-    nearestCb: null,
-    nearestMod: null,
-    modManage: null // will be populated later in the module section
-});
 // add stuff which dependes on other values to create
-$.extend($quickE, {
-    cbActions: $($quickE.template),
-    modActions: $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
-        .attr('data-context', 'module')
-        .addClass('sc-content-block-menu-module')
-});
+exports.$quickE.cbActions = $(exports.$quickE.template);
+exports.$quickE.modActions = $(exports.$quickE.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
+    .attr('data-context', 'module')
+    .addClass('sc-content-block-menu-module');
 /**
  * build the toolbar (hidden, but ready to show)
  */
 function prepareToolbarInDom() {
-    $quickE.body.append($quickE.main)
-        .append($quickE.selected);
-    $quickE.main.append($quickE.cbActions)
-        .append($quickE.modActions);
+    exports.$quickE.body.append(exports.$quickE.main)
+        .append(exports.$quickE.selected);
+    exports.$quickE.main.append(exports.$quickE.cbActions)
+        .append(exports.$quickE.modActions);
 }
 exports.prepareToolbarInDom = prepareToolbarInDom;
 ;
@@ -561,7 +558,7 @@ function watchForResize(keepWatching) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(0);
 var _quickE_positioning_1 = __webpack_require__(8);
-var _quickE_cmds_1 = __webpack_require__(16);
+var _quickE_cmds_1 = __webpack_require__(17);
 /**
  * add a clipboard to the quick edit
  */
@@ -683,6 +680,7 @@ $('a', $quickE.selected).click(function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(2);
+var contentBlock_actions_1 = __webpack_require__(13);
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -774,7 +772,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.addItem(sxc, settings.sortOrder + 1);
+            contentBlock_actions_1.addItem(sxc, settings.sortOrder + 1);
         }
     }));
     // create a metadata toolbar
@@ -804,7 +802,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
-                $2sxc._contentBlock.removeFromList(sxc, settings.sortOrder);
+                contentBlock_actions_1.removeFromList(sxc, settings.sortOrder);
                 //sxc.manage.contentBlock
                 //    .removeFromList(settings.sortOrder);
             }
@@ -829,7 +827,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+            contentBlock_actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
         }
     }));
     addDef(makeDef('movedown', 'MoveDown', 'move-down', false, true, {
@@ -837,7 +835,7 @@ function create(cmdSpecs) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
-            $2sxc._contentBlock.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+            contentBlock_actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
         }
     }));
     addDef(makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
@@ -858,10 +856,10 @@ function create(cmdSpecs) {
                 return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
             // if we have an entity-id, publish based on that
             if (settings.entityId)
-                return $2sxc._contentBlock.publishId(sxc, settings.entityId);
+                return contentBlock_actions_1.publishId(sxc, settings.entityId);
             var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
             var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-            return $2sxc._contentBlock.publish(sxc, part, index);
+            return contentBlock_actions_1.publish(sxc, part, index);
         }
     }));
     addDef(makeDef('replace', 'Replace', 'replace', false, true, {
@@ -1528,10 +1526,101 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 
 "use strict";
 
+/*
+ * this is a content block in the browser
+ *
+ * A Content Block is a standalone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+var cbm = $2sxc._contentBlock;
+/**
+ * internal helper, to do something and reload the content block
+ * @param sxc
+ * @param url
+ * @param params
+ * @returns {}
+ */
+function getAndReload(sxc, url, params) {
+    return sxc.webApi.get({
+        url: url,
+        params: params
+    }).then(function () { cbm.reloadAndReInitialize(sxc); });
+}
+;
+/**
+ * remove an item from a list, then reload
+ * @param {} sxc
+ * @param {} sortOrder
+ * @returns {}
+ */
+function removeFromList(sxc, sortOrder) {
+    return getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder });
+}
+exports.removeFromList = removeFromList;
+;
+/**
+ * change the order of an item in a list, then reload
+ * @param {} sxc
+ * @param {} initOrder
+ * @param {} newOrder
+ * @returns {}
+ */
+function changeOrder(sxc, initOrder, newOrder) {
+    return getAndReload(sxc, "view/module/changeorder", { sortOrder: initOrder, destinationSortOrder: newOrder });
+}
+exports.changeOrder = changeOrder;
+;
+/**
+ * add an item to the list at this position
+ * @param {} sxc
+ * @param {} sortOrder
+ * @returns {}
+ */
+function addItem(sxc, sortOrder) {
+    return getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder });
+}
+exports.addItem = addItem;
+;
+/**
+ * set a content-item in this block to published, then reload
+ * @param {} sxc
+ * @param {} part
+ * @param {} sortOrder
+ * @returns {}
+ */
+function publish(sxc, part, sortOrder) {
+    return getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder });
+}
+exports.publish = publish;
+;
+/**
+ * publish an item using it's ID
+ * @param {} sxc
+ * @param {} entityId
+ * @returns {}
+ */
+function publishId(sxc, entityId) {
+    return getAndReload(sxc, "view/module/publish", { id: entityId });
+}
+exports.publishId = publishId;
+;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(0);
 var _quickE_positioning_1 = __webpack_require__(8);
-var _quickE_config_1 = __webpack_require__(14);
+var _quickE_config_1 = __webpack_require__(15);
 function enable() {
     // build all toolbar html-elements
     _quickE___1.prepareToolbarInDom();
@@ -1606,7 +1695,7 @@ $(start);
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1660,7 +1749,7 @@ exports._readPageConfig = _readPageConfig;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1769,7 +1858,7 @@ function _initInstance(sxc) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1835,21 +1924,21 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(18);
+__webpack_require__(19);
 __webpack_require__(10);
 __webpack_require__(11);
 __webpack_require__(12);
-__webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
+__webpack_require__(22);
 __webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(7);
-__webpack_require__(22);
 __webpack_require__(23);
+__webpack_require__(13);
 __webpack_require__(24);
 __webpack_require__(25);
 __webpack_require__(26);
@@ -1875,21 +1964,21 @@ __webpack_require__(45);
 __webpack_require__(46);
 __webpack_require__(47);
 __webpack_require__(48);
-__webpack_require__(1);
-__webpack_require__(15);
 __webpack_require__(49);
+__webpack_require__(1);
+__webpack_require__(16);
 __webpack_require__(50);
+__webpack_require__(51);
 __webpack_require__(3);
 __webpack_require__(0);
 __webpack_require__(4);
-__webpack_require__(16);
-__webpack_require__(14);
-__webpack_require__(51);
-__webpack_require__(9);
+__webpack_require__(17);
+__webpack_require__(15);
 __webpack_require__(52);
-__webpack_require__(8);
-__webpack_require__(13);
+__webpack_require__(9);
 __webpack_require__(53);
+__webpack_require__(8);
+__webpack_require__(14);
 __webpack_require__(54);
 __webpack_require__(55);
 __webpack_require__(56);
@@ -1900,12 +1989,13 @@ __webpack_require__(60);
 __webpack_require__(61);
 __webpack_require__(62);
 __webpack_require__(63);
+__webpack_require__(64);
 __webpack_require__(2);
-module.exports = __webpack_require__(64);
+module.exports = __webpack_require__(65);
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /*
@@ -2006,7 +2096,7 @@ module.exports = __webpack_require__(64);
 //# sourceMappingURL=shake.js.map
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -2046,7 +2136,7 @@ module.exports = __webpack_require__(64);
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 // this enhances the $2sxc client controller with stuff only needed when logged in
@@ -2074,7 +2164,7 @@ module.exports = __webpack_require__(64);
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2093,7 +2183,7 @@ $2sxc._commands = {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /*
@@ -2111,89 +2201,14 @@ $2sxc._commands = {
  * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
  *
  */
-(function () {
-    /**
-     * The main content-block manager
-     */
-    $2sxc._contentBlock = {
-        // constants
-        cViewWithoutContent: '_LayoutElement',
-        cUseExistingTemplate: -1
-    };
-})();
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports) {
-
-/*
- * this is a content block in the browser
- *
- * A Content Block is a standalone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
+/**
+ * The main content-block manager
  */
-(function () {
-    var cbm = $2sxc._contentBlock;
-    // internal helper, to do something and reload the content block
-    cbm.getAndReload = function (sxc, url, params) {
-        return sxc.webApi.get({
-            url: url,
-            params: params
-        }).then(function () { cbm.reloadAndReInitialize(sxc); });
-    };
-    /**
-     * remove an item from a list, then reload
-     * @param {} sxc
-     * @param {} sortOrder
-     * @returns {}
-     */
-    cbm.removeFromList = function (sxc, sortOrder) {
-        return cbm.getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder });
-    };
-    /**
-     * change the order of an item in a list, then reload
-     * @param {} sxc
-     * @param {} initOrder
-     * @param {} newOrder
-     * @returns {}
-     */
-    cbm.changeOrder = function (sxc, initOrder, newOrder) {
-        return cbm.getAndReload(sxc, "view/module/changeorder", { sortOrder: initOrder, destinationSortOrder: newOrder });
-    };
-    /**
-     * add an item to the list at this position
-     * @param {} sxc
-     * @param {} sortOrder
-     * @returns {}
-     */
-    cbm.addItem = function (sxc, sortOrder) {
-        return cbm.getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder });
-    };
-    /**
-     * set a content-item in this block to published, then reload
-     * @param {} sxc
-     * @param {} part
-     * @param {} sortOrder
-     * @returns {}
-     */
-    cbm.publish = function (sxc, part, sortOrder) {
-        return cbm.getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder });
-    };
-    /**
-     * publish an item using it's ID
-     * @param {} sxc
-     * @param {} entityId
-     * @returns {}
-     */
-    cbm.publishId = function (sxc, entityId) {
-        return cbm.getAndReload(sxc, "view/module/publish", { id: entityId });
-    };
-})();
+$2sxc._contentBlock = {
+    // constants
+    cViewWithoutContent: '_LayoutElement',
+    cUseExistingTemplate: -1
+};
 
 
 /***/ }),
@@ -2278,7 +2293,7 @@ $2sxc._contentBlock.manipulator = function (sxc) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE_start_1 = __webpack_require__(13);
+var _quickE_start_1 = __webpack_require__(14);
 var _2sxc__quickDialog_1 = __webpack_require__(3);
 var manage_api_1 = __webpack_require__(1);
 /*
@@ -2724,6 +2739,29 @@ var _2sxc_translate_1 = __webpack_require__(2);
 /* 39 */
 /***/ (function(module, exports) {
 
+// TODO inpage globals
+window.$2sxc = $2sxc;
+window.$quickE = $quickE;
+//var $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
+// $2sxc.c = $2sxc.consts
+// $2sxc.system
+// $2sxc._commands = {};
+// $2sxc._lib
+// $2sxc._commands.definitions = {};
+//$2sxc._contentBlock
+//$2sxc.translate
+// $2sxc.contentItems
+//$2sxc._commands.instanceEngine
+//? $2sxc.urlParams
+//$2sxc._quickDialog
+//$2sxc.totalPopup
+//$2sxc._commands.definitions
+//$2sxc._toolbarManager
+//$2sxc._manage
+//$2sxc.contentItems
+//var $quickE: i$quickE = window.$quickE = {} as i$quickE;
+// window.i18next
+// window.i18nextXHRBackend
 
 
 /***/ }),
@@ -2736,13 +2774,13 @@ var _2sxc_translate_1 = __webpack_require__(2);
 /* 41 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 42 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -2773,6 +2811,12 @@ var _2sxc_translate_1 = __webpack_require__(2);
 /* 47 */
 /***/ (function(module, exports) {
 
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports) {
+
 (function () {
     $2sxc._lib = {
         extend: function extend() {
@@ -2787,13 +2831,13 @@ var _2sxc_translate_1 = __webpack_require__(2);
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_create_1 = __webpack_require__(15);
+var manage_create_1 = __webpack_require__(16);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
  * all in-page toolbars etc.
@@ -2810,7 +2854,7 @@ $2sxc._manage = {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -2854,7 +2898,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -2881,7 +2925,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2915,7 +2959,7 @@ $quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2945,7 +2989,7 @@ $quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 /*
@@ -3046,7 +3090,7 @@ $quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3058,7 +3102,7 @@ $quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3073,7 +3117,7 @@ $(function () {
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3090,7 +3134,7 @@ $(function () {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3184,7 +3228,7 @@ var manage_api_1 = __webpack_require__(1);
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3227,7 +3271,7 @@ var manage_api_1 = __webpack_require__(1);
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -3264,7 +3308,7 @@ var manage_api_1 = __webpack_require__(1);
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3493,7 +3537,7 @@ var manage_api_1 = __webpack_require__(1);
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports) {
 
 // the toolbar manager is an internal helper
@@ -3513,7 +3557,7 @@ var manage_api_1 = __webpack_require__(1);
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports) {
 
 // the default / initial buttons in a standard toolbar
@@ -3579,7 +3623,7 @@ var manage_api_1 = __webpack_require__(1);
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3621,7 +3665,7 @@ exports._translateInit = _translateInit;
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

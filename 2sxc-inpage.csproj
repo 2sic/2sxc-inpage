@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="src\globals.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="dist\" />
     <Folder Include="src\translate\libs\" />
   </ItemGroup>
