@@ -5,5 +5,5 @@ var ParametersEntity = /** @class */ (function () {
     }
     return ParametersEntity;
 }());
-exports.default = ParametersEntity;
+exports.ParametersEntity = ParametersEntity;
 //# sourceMappingURL=parameters-entity.js.map

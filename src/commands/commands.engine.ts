@@ -1,5 +1,5 @@
 ﻿import { initializeInstanceCommands } from './commands.instanceCommands';
-import DataEditContext from '../data-edit-context/data-edit-context';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { showOrToggle } from '../quick-dialog/2sxc._quickDialog';
 import { translate } from '../translate/2sxc.translate';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';

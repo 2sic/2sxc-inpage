@@ -1,4 +1,4 @@
-﻿export default class ContentGroup {
+﻿export class ContentGroup {
 // ReSharper disable InconsistentNaming
   IsCreated: boolean;
   IsList: boolean;

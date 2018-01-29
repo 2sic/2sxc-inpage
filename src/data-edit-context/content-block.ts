@@ -1,4 +1,4 @@
-﻿export default class ContentBlock {
+﻿export class ContentBlock {
   // ReSharper disable InconsistentNaming
   ShowTemplatePicker: boolean;
   IsEntity: boolean;

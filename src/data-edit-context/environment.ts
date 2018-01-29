@@ -1,6 +1,6 @@
-﻿import ParametersEntity from './parameters-entity';
+﻿import { ParametersEntity } from './parameters-entity';
 
-export default class Environment {
+export class Environment {
   // ReSharper disable InconsistentNaming
   WebsiteId: number;
   WebsiteUrl: string;

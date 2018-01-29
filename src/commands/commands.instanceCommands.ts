@@ -1,5 +1,5 @@
-﻿import DataEditContext from '../data-edit-context/data-edit-context';
-import ContentGroup from '../data-edit-context/content-group';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { ContentGroup } from '../data-edit-context/content-group';
 import { create } from './commands.definitions';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 

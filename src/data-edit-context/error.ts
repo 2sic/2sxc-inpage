@@ -1,3 +1,3 @@
-﻿export default class Error {
+﻿export class Error {
   type: string;
 }
