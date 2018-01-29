@@ -1,5 +1,6 @@
 ﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 import { copyPasteInPage } from './$quickE.clipboard';
+import { cb, CmdsStrategyFactory} from './$quickE.cmds';
 
 /**
  * content-block specific stuff like actions
@@ -21,7 +22,7 @@ function onCbButtonClick() {
     return copyPasteInPage(cbAction, list, index, selectors.cb.id);
   } else {
     var appOrContent = $(this).data("type");
-    return quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
+    return cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
   }
 }
 

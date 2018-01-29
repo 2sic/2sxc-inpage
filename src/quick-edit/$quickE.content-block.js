@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
 var _quickE_clipboard_1 = require("./$quickE.clipboard");
+var _quickE_cmds_1 = require("./$quickE.cmds");
 /**
  * content-block specific stuff like actions
  */
@@ -21,7 +22,7 @@ function onCbButtonClick() {
     }
     else {
         var appOrContent = $(this).data("type");
-        return _quickE___1.$quickE.cmds.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
+        return _quickE_cmds_1.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
     }
 }
 _quickE___1.$quickE.cbActions.click(onCbButtonClick);
