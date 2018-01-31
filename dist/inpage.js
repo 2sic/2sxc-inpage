@@ -735,6 +735,7 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
  * @param key
@@ -745,6 +746,7 @@ function translate(key) {
 }
 exports.translate = translate;
 ;
+module_bootstrapper_1.$2sxc.translate = translate;
 
 
 /***/ }),
