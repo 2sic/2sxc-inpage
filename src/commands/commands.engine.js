@@ -14,9 +14,9 @@ function instanceEngine(sxc, editContext) {
         create: function (specialSettings) {
             var settings = _2sxc__lib_extend_1.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
             var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
-                "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
+                'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
                 sxc.manage._editContext.Environment.SxcVersion;
-            var isDebug = module_bootstrapper_1.$2sxc.urlParams.get("debug") ? "&debug=true" : "";
+            var isDebug = module_bootstrapper_1.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
             var cmd = {
                 settings: settings,
                 items: settings.items || [],
@@ -48,10 +48,10 @@ function instanceEngine(sxc, editContext) {
                 },
                 // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
                 addContentGroupItemSetsToEditList: function (withPresentation) {
-                    var isContentAndNotHeader = (cmd.settings.sortOrder !== -1), index = isContentAndNotHeader ? cmd.settings.sortOrder : 0, prefix = isContentAndNotHeader ? "" : "List", cTerm = prefix + "Content", pTerm = prefix + "Presentation", isAdd = cmd.settings.action === "new", groupId = cmd.settings.contentGroupId;
-                    cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
+                    var isContentAndNotHeader = (cmd.settings.sortOrder !== -1), index = isContentAndNotHeader ? cmd.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = cmd.settings.action === 'new', groupId = cmd.settings.contentGroupId;
+                    cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + cTerm);
                     if (withPresentation)
-                        cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
+                        cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + pTerm);
                 },
                 // build the link, combining specific params with global ones and put all in the url
                 generateLink: function () {
@@ -74,8 +74,8 @@ function instanceEngine(sxc, editContext) {
                         sharedParams.partOfPage = false;
                     }
                     return ngDialogUrl +
-                        "#" + $.param(sharedParams) +
-                        "&" + $.param(cmd.params) +
+                        '#' + $.param(sharedParams) +
+                        '&' + $.param(cmd.params) +
                         isDebug;
                     //#endregion
                 }
@@ -112,14 +112,14 @@ function instanceEngine(sxc, editContext) {
         // ToDo: remove dead code
         executeAction: function (nameOrSettings, settings, event) {
             // cycle parameters, in case it was called with 2 params only
-            if (!event && settings && typeof settings.altKey !== "undefined") {
+            if (!event && settings && typeof settings.altKey !== 'undefined') {
                 event = settings; // move it to the correct variable
                 settings = {}; // clear the settings variable, as none was provided
             }
             // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
             var origEvent = event || window.event;
             // check if name is name (string) or object (settings)
-            settings = (typeof nameOrSettings === "string") ?
+            settings = (typeof nameOrSettings === 'string') ?
                 _2sxc__lib_extend_1.extend(settings || {}, {
                     "action": nameOrSettings
                 }) // place the name as an action-name into a command-object

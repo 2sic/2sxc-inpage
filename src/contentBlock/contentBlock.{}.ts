@@ -1,5 +1,4 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-import { prepareToAddContent, updateTemplateFromDia } from './contentBlock.templates';
+﻿import { prepareToAddContent, updateTemplateFromDia } from './contentBlock.templates';
 /*
  * this is a content block in the browser
  * 
@@ -19,6 +18,7 @@ import { prepareToAddContent, updateTemplateFromDia } from './contentBlock.templ
 /**
  * The main content-block manager
  */
+// ReSharper disable once InconsistentNaming
 export var _contentBlock = {
 
   // constants

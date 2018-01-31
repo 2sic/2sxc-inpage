@@ -1,28 +1,25 @@
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
-//if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
-//    return false;
-//}
 twoSxc.c = twoSxc.consts = {
   // classes
   cls: {
-    scMenu: "sc-menu",
-    scCb: "sc-content-block",
-    scElm: "sc-element"
+    scMenu: 'sc-menu',
+    scCb: 'sc-content-block',
+    scElm: 'sc-element'
   },
   // attribs
   attr: {
-    toolbar: "toolbar",
-    toolbarData: "data-toolbar",
-    settings: "settings",
-    settingsData: "data-settings"
+    toolbar: 'toolbar',
+    toolbarData: 'data-toolbar',
+    settings: 'settings',
+    settingsData: 'data-settings'
   },
-  publishAllowed: "DraftOptional"
+  publishAllowed: 'DraftOptional'
 };
 // selectors
 var sel = twoSxc.c.sel = {};
-Object.keys(twoSxc.c.cls).forEach(function (key, index) {
-  sel[key] = "." + twoSxc.c.cls[key];
+Object.keys(twoSxc.c.cls).forEach((key, index) => {
+  sel[key] = `.${twoSxc.c.cls[key]}`;
 });
 
 /*

@@ -1,11 +1,22 @@
 ﻿import { translate } from '../translate/2sxc.translate';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
-// contains commands to create/move/delete a contentBlock in a page
+/**
+ * contains commands to create/move/delete a contentBlock in a page
+ */
 
 var sxcInstance: SxcInstanceWithInternals;
 
-function create(parentId, fieldName, index, appName, container, newGuid) {
+/**
+ * create content block
+ * @param parentId
+ * @param fieldName
+ * @param index
+ * @param appName
+ * @param container
+ * @param newGuid
+ */
+function create(parentId: any, fieldName: any, index: any, appName: any, container: any, newGuid: any): any {
   // the wrapper, into which this will be placed and the list of pre-existing blocks
   var listTag = container;
   if (listTag.length === 0) return alert('can\'t add content-block as we couldn\'t find the list');
@@ -21,7 +32,7 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
   };
 
   return sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
-    .then(function (result) {
+    .then(result => {
       var newTag = $(result); // prepare tag for inserting
 
       // should I add it to a specific position...
@@ -36,7 +47,14 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
     });
 }
 
-function move(parentId, field, indexFrom, indexTo) {
+/**
+ * move content block
+ * @param parentId
+ * @param field
+ * @param indexFrom
+ * @param indexTo
+ */
+function move(parentId: any, field: any, indexFrom: any, indexTo: any): any{
   var params = {
     parentId: parentId,
     field: field,
@@ -46,14 +64,19 @@ function move(parentId, field, indexFrom, indexTo) {
 
   // todo: need sxc!
   return sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
-    .then(function () {
+    .then(() => {
       console.log("done moving!");
       window.location.reload();
     });
 }
 
-// delete a content-block inside a list of content-blocks
-function remove(parentId, field, index) {
+/**
+ * delete a content-block inside a list of content-blocks
+ * @param parentId
+ * @param field
+ * @param index
+ */
+function remove(parentId: any, field: any, index: any): any {
   if (!confirm(translate('QuickInsertMenu.ConfirmDelete'))) return null;
   var params = {
     parentId: parentId,
@@ -61,13 +84,13 @@ function remove(parentId, field, index) {
     index: index,
   };
   return sxcInstance.webApi.get({ url: 'view/module/RemoveItemInList', params: params })
-    .then(function () {
+    .then(() => {
       console.log('done deleting!');
       window.location.reload();
     });
 }
 
-export function manipulator(sxc: SxcInstanceWithInternals) {
+export function manipulator(sxc: SxcInstanceWithInternals): any {
   sxcInstance = sxc;
   return {
     create: create,

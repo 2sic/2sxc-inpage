@@ -15,9 +15,9 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
     create(specialSettings: any): any {
       var settings = extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
       var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
-        "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
+        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
         sxc.manage._editContext.Environment.SxcVersion;
-      var isDebug = twoSxc.urlParams.get("debug") ? "&debug=true" : "";
+      var isDebug = twoSxc.urlParams.get('debug') ? '&debug=true' : '';
 
       var cmd = {
         settings: settings,
@@ -53,14 +53,14 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
         addContentGroupItemSetsToEditList: function (withPresentation) {
           var isContentAndNotHeader = (cmd.settings.sortOrder !== -1),
             index = isContentAndNotHeader ? cmd.settings.sortOrder : 0,
-            prefix = isContentAndNotHeader ? "" : "List",
-            cTerm = prefix + "Content",
-            pTerm = prefix + "Presentation",
-            isAdd = cmd.settings.action === "new",
+            prefix = isContentAndNotHeader ? '' : 'List',
+            cTerm = prefix + 'Content',
+            pTerm = prefix + 'Presentation',
+            isAdd = cmd.settings.action === 'new',
             groupId = cmd.settings.contentGroupId;
-          cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
+          cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + cTerm);
 
-          if (withPresentation) cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
+          if (withPresentation) cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + pTerm);
         },
 
         // build the link, combining specific params with global ones and put all in the url
@@ -85,8 +85,8 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
           }
 
           return ngDialogUrl +
-            "#" + $.param(sharedParams) +
-            "&" + $.param(cmd.params) +
+            '#' + $.param(sharedParams) +
+            '&' + $.param(cmd.params) +
             isDebug;
           //#endregion
         }
@@ -127,7 +127,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
     executeAction(nameOrSettings, settings, event) {
 
       // cycle parameters, in case it was called with 2 params only
-      if (!event && settings && typeof settings.altKey !== "undefined") { // no event param, but settings contains the event-object
+      if (!event && settings && typeof settings.altKey !== 'undefined') { // no event param, but settings contains the event-object
         event = settings; // move it to the correct variable
         settings = {}; // clear the settings variable, as none was provided
       }
@@ -136,7 +136,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
       var origEvent = event || window.event;
 
       // check if name is name (string) or object (settings)
-      settings = (typeof nameOrSettings === "string") ?
+      settings = (typeof nameOrSettings === 'string') ?
         extend(settings || {}, {
           "action": nameOrSettings
         }) // place the name as an action-name into a command-object

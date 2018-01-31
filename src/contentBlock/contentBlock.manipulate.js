@@ -2,8 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
-// contains commands to create/move/delete a contentBlock in a page
+/**
+ * contains commands to create/move/delete a contentBlock in a page
+ */
 var sxcInstance;
+/**
+ * create content block
+ * @param parentId
+ * @param fieldName
+ * @param index
+ * @param appName
+ * @param container
+ * @param newGuid
+ */
 function create(parentId, fieldName, index, appName, container, newGuid) {
     // the wrapper, into which this will be placed and the list of pre-existing blocks
     var listTag = container;
@@ -32,6 +43,13 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
         module_bootstrapper_1.$2sxc._toolbarManager.buildToolbars(newTag);
     });
 }
+/**
+ * move content block
+ * @param parentId
+ * @param field
+ * @param indexFrom
+ * @param indexTo
+ */
 function move(parentId, field, indexFrom, indexTo) {
     var params = {
         parentId: parentId,
@@ -46,7 +64,12 @@ function move(parentId, field, indexFrom, indexTo) {
         window.location.reload();
     });
 }
-// delete a content-block inside a list of content-blocks
+/**
+ * delete a content-block inside a list of content-blocks
+ * @param parentId
+ * @param field
+ * @param index
+ */
 function remove(parentId, field, index) {
     if (!confirm(_2sxc_translate_1.translate('QuickInsertMenu.ConfirmDelete')))
         return null;

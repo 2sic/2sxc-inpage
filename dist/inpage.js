@@ -669,7 +669,7 @@ function replaceCb(sxc, newContent, justPreview) {
         sxc.recreate(true);
     }
     catch (e) {
-        console.log("Error while rendering template:", e);
+        console.log('Error while rendering template:', e);
     }
 }
 ;
@@ -684,17 +684,25 @@ function showMessage(sxc, newContent) {
 }
 exports.showMessage = showMessage;
 ;
+/**
+ * ajax-call, then replace
+ * @param sxc
+ * @param alternateTemplateId
+ * @param justPreview
+ */
 function ajaxLoad(sxc, alternateTemplateId, justPreview) {
-    // ajax-call, then replace
     return contentBlock_webApiPromises_1.getPreviewWithTemplate(sxc, alternateTemplateId)
-        .then(function (result) {
-        return replaceCb(sxc, result, justPreview);
-    })
+        .then(function (result) { return replaceCb(sxc, result, justPreview); })
         .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
 }
 exports.ajaxLoad = ajaxLoad;
 ;
-// this one assumes a replace / change has already happened, but now must be finalized...
+/**
+ * this one assumes a replace / change has already happened, but now must be finalized...
+ * @param sxc
+ * @param forceAjax
+ * @param preview
+ */
 function reloadAndReInitialize(sxc, forceAjax, preview) {
     var manage = sxc.manage;
     // if ajax is not supported, we must reload the whole page
@@ -727,7 +735,6 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
  * @param key
@@ -738,7 +745,6 @@ function translate(key) {
 }
 exports.translate = translate;
 ;
-module_bootstrapper_1.$2sxc.translate = translate;
 
 
 /***/ }),
@@ -1165,6 +1171,7 @@ var contentBlock_templates_1 = __webpack_require__(6);
 /**
  * The main content-block manager
  */
+// ReSharper disable once InconsistentNaming
 exports._contentBlock = {
     // constants
     cViewWithoutContent: '_LayoutElement',
@@ -1217,7 +1224,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 function saveTemplate(sxc, templateId, forceCreateContentGroup) {
     return sxc.webApi.get({
-        url: "view/module/savetemplateid",
+        url: 'view/module/savetemplateid',
         params: {
             templateId: templateId,
             forceCreateContentGroup: forceCreateContentGroup,
@@ -1237,7 +1244,7 @@ function getPreviewWithTemplate(sxc, templateId) {
     var ec = sxc.manage._editContext;
     templateId = templateId || -1; // fallback, meaning use saved ID
     return sxc.webApi.get({
-        url: "view/module/rendertemplate",
+        url: 'view/module/rendertemplate',
         params: {
             templateId: templateId,
             lang: ec.Language.Current,
@@ -1245,7 +1252,7 @@ function getPreviewWithTemplate(sxc, templateId) {
             cbid: ec.ContentBlock.Id,
             originalparameters: JSON.stringify(ec.Environment.parameters)
         },
-        dataType: "html"
+        dataType: 'html'
     });
 }
 exports.getPreviewWithTemplate = getPreviewWithTemplate;
@@ -1621,9 +1628,9 @@ function instanceEngine(sxc, editContext) {
         create: function (specialSettings) {
             var settings = _2sxc__lib_extend_1.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
             var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
-                "desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=" +
+                'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
                 sxc.manage._editContext.Environment.SxcVersion;
-            var isDebug = module_bootstrapper_1.$2sxc.urlParams.get("debug") ? "&debug=true" : "";
+            var isDebug = module_bootstrapper_1.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
             var cmd = {
                 settings: settings,
                 items: settings.items || [],
@@ -1655,10 +1662,10 @@ function instanceEngine(sxc, editContext) {
                 },
                 // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
                 addContentGroupItemSetsToEditList: function (withPresentation) {
-                    var isContentAndNotHeader = (cmd.settings.sortOrder !== -1), index = isContentAndNotHeader ? cmd.settings.sortOrder : 0, prefix = isContentAndNotHeader ? "" : "List", cTerm = prefix + "Content", pTerm = prefix + "Presentation", isAdd = cmd.settings.action === "new", groupId = cmd.settings.contentGroupId;
-                    cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + cTerm);
+                    var isContentAndNotHeader = (cmd.settings.sortOrder !== -1), index = isContentAndNotHeader ? cmd.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = cmd.settings.action === 'new', groupId = cmd.settings.contentGroupId;
+                    cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + cTerm);
                     if (withPresentation)
-                        cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, "EditFormTitle." + pTerm);
+                        cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + pTerm);
                 },
                 // build the link, combining specific params with global ones and put all in the url
                 generateLink: function () {
@@ -1681,8 +1688,8 @@ function instanceEngine(sxc, editContext) {
                         sharedParams.partOfPage = false;
                     }
                     return ngDialogUrl +
-                        "#" + $.param(sharedParams) +
-                        "&" + $.param(cmd.params) +
+                        '#' + $.param(sharedParams) +
+                        '&' + $.param(cmd.params) +
                         isDebug;
                     //#endregion
                 }
@@ -1719,14 +1726,14 @@ function instanceEngine(sxc, editContext) {
         // ToDo: remove dead code
         executeAction: function (nameOrSettings, settings, event) {
             // cycle parameters, in case it was called with 2 params only
-            if (!event && settings && typeof settings.altKey !== "undefined") {
+            if (!event && settings && typeof settings.altKey !== 'undefined') {
                 event = settings; // move it to the correct variable
                 settings = {}; // clear the settings variable, as none was provided
             }
             // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
             var origEvent = event || window.event;
             // check if name is name (string) or object (settings)
-            settings = (typeof nameOrSettings === "string") ?
+            settings = (typeof nameOrSettings === 'string') ?
                 _2sxc__lib_extend_1.extend(settings || {}, {
                     "action": nameOrSettings
                 }) // place the name as an action-name into a command-object
@@ -2180,7 +2187,7 @@ function getAndReload(sxc, url, params) {
  * @returns {}
  */
 function removeFromList(sxc, sortOrder) {
-    return getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder });
+    return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
 }
 exports.removeFromList = removeFromList;
 ;
@@ -2192,7 +2199,7 @@ exports.removeFromList = removeFromList;
  * @returns {}
  */
 function changeOrder(sxc, initOrder, newOrder) {
-    return getAndReload(sxc, "view/module/changeorder", { sortOrder: initOrder, destinationSortOrder: newOrder });
+    return getAndReload(sxc, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
 }
 exports.changeOrder = changeOrder;
 ;
@@ -2203,7 +2210,7 @@ exports.changeOrder = changeOrder;
  * @returns {}
  */
 function addItem(sxc, sortOrder) {
-    return getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder });
+    return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
 }
 exports.addItem = addItem;
 ;
@@ -2215,7 +2222,7 @@ exports.addItem = addItem;
  * @returns {}
  */
 function publish(sxc, part, sortOrder) {
-    return getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder });
+    return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
 }
 exports.publish = publish;
 ;
@@ -2226,7 +2233,7 @@ exports.publish = publish;
  * @returns {}
  */
 function publishId(sxc, entityId) {
-    return getAndReload(sxc, "view/module/publish", { id: entityId });
+    return getAndReload(sxc, 'view/module/publish', { id: entityId });
 }
 exports.publishId = publishId;
 ;
@@ -2278,8 +2285,19 @@ exports.contentItems = {
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(5);
 var module_bootstrapper_1 = __webpack_require__(0);
-// contains commands to create/move/delete a contentBlock in a page
+/**
+ * contains commands to create/move/delete a contentBlock in a page
+ */
 var sxcInstance;
+/**
+ * create content block
+ * @param parentId
+ * @param fieldName
+ * @param index
+ * @param appName
+ * @param container
+ * @param newGuid
+ */
 function create(parentId, fieldName, index, appName, container, newGuid) {
     // the wrapper, into which this will be placed and the list of pre-existing blocks
     var listTag = container;
@@ -2308,6 +2326,13 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
         module_bootstrapper_1.$2sxc._toolbarManager.buildToolbars(newTag);
     });
 }
+/**
+ * move content block
+ * @param parentId
+ * @param field
+ * @param indexFrom
+ * @param indexTo
+ */
 function move(parentId, field, indexFrom, indexTo) {
     var params = {
         parentId: parentId,
@@ -2322,7 +2347,12 @@ function move(parentId, field, indexFrom, indexTo) {
         window.location.reload();
     });
 }
-// delete a content-block inside a list of content-blocks
+/**
+ * delete a content-block inside a list of content-blocks
+ * @param parentId
+ * @param field
+ * @param index
+ */
 function remove(parentId, field, index) {
     if (!confirm(_2sxc_translate_1.translate('QuickInsertMenu.ConfirmDelete')))
         return null;
@@ -2501,21 +2531,21 @@ __webpack_require__(48);
 __webpack_require__(49);
 __webpack_require__(7);
 __webpack_require__(50);
+__webpack_require__(51);
 __webpack_require__(2);
 __webpack_require__(25);
-__webpack_require__(51);
 __webpack_require__(52);
+__webpack_require__(53);
 __webpack_require__(3);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(15);
 __webpack_require__(21);
-__webpack_require__(53);
-__webpack_require__(16);
 __webpack_require__(54);
+__webpack_require__(16);
+__webpack_require__(55);
 __webpack_require__(9);
 __webpack_require__(20);
-__webpack_require__(55);
 __webpack_require__(56);
 __webpack_require__(57);
 __webpack_require__(58);
@@ -2526,6 +2556,7 @@ __webpack_require__(62);
 __webpack_require__(63);
 __webpack_require__(64);
 __webpack_require__(65);
+__webpack_require__(66);
 __webpack_require__(5);
 module.exports = __webpack_require__(0);
 
@@ -2639,24 +2670,21 @@ module.exports = __webpack_require__(0);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-//if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
-//    return false;
-//}
 module_bootstrapper_1.$2sxc.c = module_bootstrapper_1.$2sxc.consts = {
     // classes
     cls: {
-        scMenu: "sc-menu",
-        scCb: "sc-content-block",
-        scElm: "sc-element"
+        scMenu: 'sc-menu',
+        scCb: 'sc-content-block',
+        scElm: 'sc-element'
     },
     // attribs
     attr: {
-        toolbar: "toolbar",
-        toolbarData: "data-toolbar",
-        settings: "settings",
-        settingsData: "data-settings"
+        toolbar: 'toolbar',
+        toolbarData: 'data-toolbar',
+        settings: 'settings',
+        settingsData: 'data-settings'
     },
-    publishAllowed: "DraftOptional"
+    publishAllowed: 'DraftOptional'
 };
 // selectors
 var sel = module_bootstrapper_1.$2sxc.c.sel = {};
@@ -2685,9 +2713,6 @@ var module_bootstrapper_1 = __webpack_require__(0);
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
 // 
-//if (!(window.$2sxc /*|| window.$2sxc.system*/)) {
-//  return;
-//}
 module_bootstrapper_1.$2sxc.system = {
     finishUpgrade: finishUpgrade
 };
@@ -2695,14 +2720,14 @@ module_bootstrapper_1.$2sxc.system = {
 function finishUpgrade(domElement) {
     var mc = module_bootstrapper_1.$2sxc(domElement);
     $.ajax({
-        type: "get",
-        url: mc.resolveServiceUrl("view/module/finishinstallation"),
+        type: 'get',
+        url: mc.resolveServiceUrl('view/module/finishinstallation'),
         beforeSend: $.ServicesFramework(mc.id).setModuleHeaders
     }).success(function () {
-        alert("Upgrade ok, restarting the CMS and reloading...");
+        alert('Upgrade ok, restarting the CMS and reloading...');
         location.reload();
     });
-    alert("starting upgrade. This could take a few minutes. You'll see an 'ok' when it's done. Please wait...");
+    alert('starting upgrade. This could take a few minutes. You\'ll see an \'ok\' when it\'s done. Please wait...');
 }
 
 
@@ -2881,6 +2906,9 @@ var $2sxcActionMenuMapper = function (moduleId) {
 // 'DnnModule-2sxc DnnModule-xxx' -> DNN thinks the mod id is 2 (false)
 // 'DnnModule-xxx DnnModule-2sxc' -> DNN thinks the mod id is xxx (correct)
 // documented here https://github.com/2sic/2sxc/issues/986
+/**
+ * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
+ */
 (function () {
     var fn = $.fn.attr;
     $.fn.attr = function () {
@@ -2978,6 +3006,12 @@ window.$quickE = _quickE___1.$quickE;
 
 /***/ }),
 /* 50 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3001,7 +3035,7 @@ module_bootstrapper_1.$2sxc._manage = {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3045,7 +3079,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3072,7 +3106,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3107,7 +3141,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3137,7 +3171,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports) {
 
 /*
@@ -3238,7 +3272,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3252,7 +3286,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3267,7 +3301,7 @@ $(function () {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3286,7 +3320,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3379,7 +3413,7 @@ function isDisabled(sxc) {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3424,7 +3458,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3463,7 +3497,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3695,7 +3729,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3717,7 +3751,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3785,24 +3819,27 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/// <reference types="../../typings/2sxc-js/2sxcInterfaces" />
+var i18next = __webpack_require__(17);
+var i18nextXHRBackend = __webpack_require__(18);
 var jqueryI18next = __webpack_require__(19);
-window.i18next = __webpack_require__(17);
-window.i18nextXHRBackend = __webpack_require__(18);
 /**
  * initialize the translation system; ensure toolbars etc. are translated
  */
+window.i18next = i18next;
+window.i18nextXHRBackend = i18nextXHRBackend;
 var initialized = false;
 function _translateInit(manage) {
     if (initialized)
         return;
     window.i18next
-        .use(window.i18nextXHRBackend)
+        .use(i18nextXHRBackend)
         .init({
         lng: manage._editContext.Language.Current.substr(0, 2),
         fallbackLng: 'en',
@@ -3814,7 +3851,7 @@ function _translateInit(manage) {
     }, function (err, t) {
         // for options see
         // https://github.com/i18next/jquery-i18next#initialize-the-plugin
-        jqueryI18next.init(window.i18next, $);
+        jqueryI18next.init(i18next, $);
         // start localizing, details:
         // https://github.com/i18next/jquery-i18next#usage-of-selector-function
         $('ul.sc-menu').localize(); // inline toolbars

@@ -7,6 +7,9 @@
 // 'DnnModule-2sxc DnnModule-xxx' -> DNN thinks the mod id is 2 (false)
 // 'DnnModule-xxx DnnModule-2sxc' -> DNN thinks the mod id is xxx (correct)
 // documented here https://github.com/2sic/2sxc/issues/986
+/**
+ * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
+ */
 (function () {
     var fn = $.fn.attr;
     $.fn.attr = function () {

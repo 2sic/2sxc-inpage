@@ -1,5 +1,4 @@
 ﻿import { reloadAndReInitialize } from './contentBlock.render';
-import { _contentBlock } from './contentBlock.{}';
 /*
  * this is a content block in the browser
  * 
@@ -18,11 +17,11 @@ import { _contentBlock } from './contentBlock.{}';
  * @param params 
  * @returns {} 
  */
-function getAndReload(sxc, url, params) {
+function getAndReload(sxc: any, url: any, params: any): any {
   return sxc.webApi.get({
     url: url,
     params: params
-  }).then(function () { reloadAndReInitialize(sxc); });
+  }).then(() => { reloadAndReInitialize(sxc); });
 };
 
 /**
@@ -31,8 +30,8 @@ function getAndReload(sxc, url, params) {
  * @param {} sortOrder 
  * @returns {} 
  */
-export function removeFromList(sxc, sortOrder) {
-  return getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder });
+export function removeFromList(sxc: any, sortOrder: any): any {
+  return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
 };
 
 /**
@@ -42,8 +41,8 @@ export function removeFromList(sxc, sortOrder) {
  * @param {} newOrder 
  * @returns {} 
  */
-export function changeOrder(sxc, initOrder, newOrder) {
-  return getAndReload(sxc, "view/module/changeorder",
+export function changeOrder(sxc: any, initOrder: any, newOrder: any): any {
+  return getAndReload(sxc, 'view/module/changeorder',
     { sortOrder: initOrder, destinationSortOrder: newOrder });
 };
 
@@ -53,8 +52,8 @@ export function changeOrder(sxc, initOrder, newOrder) {
  * @param {} sortOrder 
  * @returns {} 
  */
-export function addItem(sxc, sortOrder) {
-  return getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder });
+export function addItem(sxc: any, sortOrder: any): any {
+  return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
 };
 
 /**
@@ -64,8 +63,8 @@ export function addItem(sxc, sortOrder) {
  * @param {} sortOrder 
  * @returns {} 
  */
-export function publish(sxc, part, sortOrder) {
-  return getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder });
+export function publish(sxc: any, part:any, sortOrder:any):any {
+  return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
 };
 
 /**
@@ -74,8 +73,8 @@ export function publish(sxc, part, sortOrder) {
  * @param {} entityId 
  * @returns {} 
  */
-export function publishId(sxc, entityId) {
-  return getAndReload(sxc, "view/module/publish", { id: entityId });
+export function publishId(sxc: any, entityId: any): any {
+  return getAndReload(sxc, 'view/module/publish', { id: entityId });
 };
 
 

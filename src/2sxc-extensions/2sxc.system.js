@@ -5,9 +5,6 @@ var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
 // 
-//if (!(window.$2sxc /*|| window.$2sxc.system*/)) {
-//  return;
-//}
 module_bootstrapper_1.$2sxc.system = {
     finishUpgrade: finishUpgrade
 };
@@ -15,13 +12,13 @@ module_bootstrapper_1.$2sxc.system = {
 function finishUpgrade(domElement) {
     var mc = module_bootstrapper_1.$2sxc(domElement);
     $.ajax({
-        type: "get",
-        url: mc.resolveServiceUrl("view/module/finishinstallation"),
+        type: 'get',
+        url: mc.resolveServiceUrl('view/module/finishinstallation'),
         beforeSend: $.ServicesFramework(mc.id).setModuleHeaders
     }).success(function () {
-        alert("Upgrade ok, restarting the CMS and reloading...");
+        alert('Upgrade ok, restarting the CMS and reloading...');
         location.reload();
     });
-    alert("starting upgrade. This could take a few minutes. You'll see an 'ok' when it's done. Please wait...");
+    alert('starting upgrade. This could take a few minutes. You\'ll see an \'ok\' when it\'s done. Please wait...');
 }
 //# sourceMappingURL=2sxc.system.js.map

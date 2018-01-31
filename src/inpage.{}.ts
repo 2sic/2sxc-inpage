@@ -1,4 +1,5 @@
 ﻿import { $quickE as quickE } from './quick-edit/$quickE.{}';
+
 //import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals
 //export var $2sxc = window.$2sxc as SxcControllerWithInternals;

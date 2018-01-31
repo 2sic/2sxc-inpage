@@ -19,6 +19,7 @@ var contentBlock_templates_1 = require("./contentBlock.templates");
 /**
  * The main content-block manager
  */
+// ReSharper disable once InconsistentNaming
 exports._contentBlock = {
     // constants
     cViewWithoutContent: '_LayoutElement',

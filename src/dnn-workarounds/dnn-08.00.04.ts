@@ -11,8 +11,6 @@
 /**
  * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
  */
-declare const $;
-
 (() => {
     var fn = $.fn.attr;
     $.fn.attr = function () {

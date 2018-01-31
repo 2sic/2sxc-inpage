@@ -1,21 +1,22 @@
 ﻿/// <reference types="../../typings/2sxc-js/2sxcInterfaces" />
-import i18next = require('./libs/i18next.min.js');
-import i18nextXHRBackend = require('./libs/i18nextXHRBackend.min.js');
-import jqueryI18next = require('./libs/jquery-i18next.min.js');
-window.i18next = require('./libs/i18next.min.js');
-window.i18nextXHRBackend = require('./libs/i18nextXHRBackend.min.js');
+import * as i18next from './libs/i18next.min';
+import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
+import * as jqueryI18next from './libs/jquery-i18next.min';
 
 /**
  * initialize the translation system; ensure toolbars etc. are translated
  */
 
+window.i18next = i18next;
+window.i18nextXHRBackend = i18nextXHRBackend;
+
 let initialized: boolean = false;
 
-export function _translateInit(manage) {
+export function _translateInit(manage: any): void {
   if (initialized) return;
 
   window.i18next
-    .use(window.i18nextXHRBackend)
+    .use(i18nextXHRBackend)
     .init({
       lng: manage._editContext.Language.Current.substr(0, 2), // "en",
       fallbackLng: 'en',
@@ -27,7 +28,7 @@ export function _translateInit(manage) {
     }, function (err, t) {
       // for options see
       // https://github.com/i18next/jquery-i18next#initialize-the-plugin
-      jqueryI18next.init(window.i18next, $);
+      jqueryI18next.init(i18next, $);
       // start localizing, details:
       // https://github.com/i18next/jquery-i18next#usage-of-selector-function
       $('ul.sc-menu').localize(); // inline toolbars

@@ -1,24 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
-//if (!(window.$2sxc /*|| window.$2sxc.consts*/)) {
-//    return false;
-//}
 module_bootstrapper_1.$2sxc.c = module_bootstrapper_1.$2sxc.consts = {
     // classes
     cls: {
-        scMenu: "sc-menu",
-        scCb: "sc-content-block",
-        scElm: "sc-element"
+        scMenu: 'sc-menu',
+        scCb: 'sc-content-block',
+        scElm: 'sc-element'
     },
     // attribs
     attr: {
-        toolbar: "toolbar",
-        toolbarData: "data-toolbar",
-        settings: "settings",
-        settingsData: "data-settings"
+        toolbar: 'toolbar',
+        toolbarData: 'data-toolbar',
+        settings: 'settings',
+        settingsData: 'data-settings'
     },
-    publishAllowed: "DraftOptional"
+    publishAllowed: 'DraftOptional'
 };
 // selectors
 var sel = module_bootstrapper_1.$2sxc.c.sel = {};

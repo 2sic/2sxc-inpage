@@ -36,7 +36,7 @@ function replaceCb(sxc, newContent, justPreview) {
         sxc.recreate(true);
     }
     catch (e) {
-        console.log("Error while rendering template:", e);
+        console.log('Error while rendering template:', e);
     }
 }
 ;
@@ -51,17 +51,25 @@ function showMessage(sxc, newContent) {
 }
 exports.showMessage = showMessage;
 ;
+/**
+ * ajax-call, then replace
+ * @param sxc
+ * @param alternateTemplateId
+ * @param justPreview
+ */
 function ajaxLoad(sxc, alternateTemplateId, justPreview) {
-    // ajax-call, then replace
     return contentBlock_webApiPromises_1.getPreviewWithTemplate(sxc, alternateTemplateId)
-        .then(function (result) {
-        return replaceCb(sxc, result, justPreview);
-    })
+        .then(function (result) { return replaceCb(sxc, result, justPreview); })
         .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
 }
 exports.ajaxLoad = ajaxLoad;
 ;
-// this one assumes a replace / change has already happened, but now must be finalized...
+/**
+ * this one assumes a replace / change has already happened, but now must be finalized...
+ * @param sxc
+ * @param forceAjax
+ * @param preview
+ */
 function reloadAndReInitialize(sxc, forceAjax, preview) {
     var manage = sxc.manage;
     // if ajax is not supported, we must reload the whole page

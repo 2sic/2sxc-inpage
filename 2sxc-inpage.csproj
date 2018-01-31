@@ -18,11 +18,16 @@
 
   <ItemGroup>
     <None Remove="src\globals.d.ts" />
+    <None Remove="src\lib-helpers\jquery.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="dist\" />
     <Folder Include="src\translate\libs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
   </ItemGroup>
 
   <ItemGroup>

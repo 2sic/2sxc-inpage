@@ -32,7 +32,7 @@ function getAndReload(sxc, url, params) {
  * @returns {}
  */
 function removeFromList(sxc, sortOrder) {
-    return getAndReload(sxc, "view/module/removefromlist", { sortOrder: sortOrder });
+    return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
 }
 exports.removeFromList = removeFromList;
 ;
@@ -44,7 +44,7 @@ exports.removeFromList = removeFromList;
  * @returns {}
  */
 function changeOrder(sxc, initOrder, newOrder) {
-    return getAndReload(sxc, "view/module/changeorder", { sortOrder: initOrder, destinationSortOrder: newOrder });
+    return getAndReload(sxc, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
 }
 exports.changeOrder = changeOrder;
 ;
@@ -55,7 +55,7 @@ exports.changeOrder = changeOrder;
  * @returns {}
  */
 function addItem(sxc, sortOrder) {
-    return getAndReload(sxc, "view/module/additem", { sortOrder: sortOrder });
+    return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
 }
 exports.addItem = addItem;
 ;
@@ -67,7 +67,7 @@ exports.addItem = addItem;
  * @returns {}
  */
 function publish(sxc, part, sortOrder) {
-    return getAndReload(sxc, "view/module/publish", { part: part, sortOrder: sortOrder });
+    return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
 }
 exports.publish = publish;
 ;
@@ -78,7 +78,7 @@ exports.publish = publish;
  * @returns {}
  */
 function publishId(sxc, entityId) {
-    return getAndReload(sxc, "view/module/publish", { id: entityId });
+    return getAndReload(sxc, 'view/module/publish', { id: entityId });
 }
 exports.publishId = publishId;
 ;

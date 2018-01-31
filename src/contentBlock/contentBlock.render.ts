@@ -4,6 +4,7 @@ import { getTag } from '../manage/manage.api';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { _contentBlock } from './contentBlock.{}';
 import { getPreviewWithTemplate } from './contentBlock.webApiPromises';
+
 /*
  * this is the content block manager in the browser
  * 
@@ -25,7 +26,7 @@ var cbm = _contentBlock;
  * @param {boolean} justPreview 
  * @returns {} 
  */
-function replaceCb(sxc, newContent, justPreview) {
+function replaceCb(sxc: any, newContent: any, justPreview: boolean): void {
   try {
     var newStuff = $(newContent);
 
@@ -37,7 +38,7 @@ function replaceCb(sxc, newContent, justPreview) {
     // reset the cache, so the sxc-object is refreshed
     sxc.recreate(true);
   } catch (e) {
-    console.log("Error while rendering template:", e);
+    console.log('Error while rendering template:', e);
   }
 };
 
@@ -47,28 +48,36 @@ function replaceCb(sxc, newContent, justPreview) {
  * @param {string} newContent 
  * @returns {} - nothing
  */
-export function showMessage(sxc, newContent) {
+export function showMessage(sxc: any, newContent: any): void {
   $(getTag(sxc)).html(newContent);
 };
 
-export function ajaxLoad(sxc, alternateTemplateId, justPreview) {
-  // ajax-call, then replace
+/**
+ * ajax-call, then replace
+ * @param sxc
+ * @param alternateTemplateId
+ * @param justPreview
+ */
+export function ajaxLoad(sxc: any, alternateTemplateId: any, justPreview: boolean): any {
   return getPreviewWithTemplate(sxc, alternateTemplateId)
-    .then(function (result) {
-      return replaceCb(sxc, result, justPreview);
-    })
+    .then(result => replaceCb(sxc, result, justPreview))
     .then(reset); // reset quick-edit, because the config could have changed
 };
 
-// this one assumes a replace / change has already happened, but now must be finalized...
-export function reloadAndReInitialize(sxc, forceAjax?, preview?) {
+/**
+ * this one assumes a replace / change has already happened, but now must be finalized...
+ * @param sxc
+ * @param forceAjax
+ * @param preview
+ */
+export function reloadAndReInitialize(sxc: any, forceAjax?: boolean, preview? : boolean): any {
   var manage = sxc.manage;
 
   // if ajax is not supported, we must reload the whole page
   if (!forceAjax && !manage._reloadWithAjax) return window.location.reload();
 
   return ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
-    .then(function () {
+    .then(() => {
 
       // tell Evoq that page has changed if it has changed (Ajax call)
       if (window.dnn_tabVersioningEnabled) // this only exists in evoq or on new DNNs with tabVersioning

@@ -37,7 +37,7 @@
  */
 export function saveTemplate(sxc, templateId, forceCreateContentGroup) {
   return sxc.webApi.get({
-    url: "view/module/savetemplateid",
+    url: 'view/module/savetemplateid',
     params: {
       templateId: templateId,
       forceCreateContentGroup: forceCreateContentGroup,
@@ -56,7 +56,7 @@ export function getPreviewWithTemplate(sxc, templateId) {
   var ec = sxc.manage._editContext;
   templateId = templateId || -1; // fallback, meaning use saved ID
   return sxc.webApi.get({
-    url: "view/module/rendertemplate",
+    url: 'view/module/rendertemplate',
     params: {
       templateId: templateId,
       lang: ec.Language.Current,
@@ -64,7 +64,7 @@ export function getPreviewWithTemplate(sxc, templateId) {
       cbid: ec.ContentBlock.Id,
       originalparameters: JSON.stringify(ec.Environment.parameters)
     },
-    dataType: "html"
+    dataType: 'html'
   });
 };
     //#endregion
