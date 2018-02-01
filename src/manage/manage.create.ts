@@ -2,6 +2,7 @@
 import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buildInstanceConfig, buildQuickDialogConfig } from './manage.api';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { manipulator } from '../contentBlock/contentBlock.manipulate';
+import { LocalStorageHelper } from './local-storage-helper';
 
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -25,7 +26,7 @@ export function initInstance(sxc) {
 };
 
 //var mngApi = twoSxc._manage;
-function _initInstance(sxc) {
+function _initInstance(sxc: SxcInstanceWithInternals) {
   var editContext = getEditContext(sxc);
   var userInfo = getUserOfEditContext(editContext);
 
@@ -77,7 +78,7 @@ function _initInstance(sxc) {
 
       // todo: move this to dialog-handling
       // display the dialog
-      var openDialogId = sessionStorage.getItem("dia-cbid");
+      var openDialogId: number = LocalStorageHelper.getItemValue<number>("dia-cbid");
       if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
       sessionStorage.removeItem("dia-cbid");
       editManager.run("layout");

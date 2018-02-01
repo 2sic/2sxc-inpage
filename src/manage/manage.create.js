@@ -4,6 +4,7 @@ var commands_engine_1 = require("../commands/commands.engine");
 var manage_api_1 = require("./manage.api");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 var contentBlock_manipulate_1 = require("../contentBlock/contentBlock.manipulate");
+var local_storage_helper_1 = require("./local-storage-helper");
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
  * all in-page toolbars etc.
@@ -71,7 +72,7 @@ function _initInstance(sxc) {
                 editManager._handleErrors(editContext.error.type, manage_api_1.getTag(sxc));
             // todo: move this to dialog-handling
             // display the dialog
-            var openDialogId = sessionStorage.getItem("dia-cbid");
+            var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue("dia-cbid");
             if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
                 return false;
             sessionStorage.removeItem("dia-cbid");
