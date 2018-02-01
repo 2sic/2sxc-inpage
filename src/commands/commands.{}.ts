@@ -3,10 +3,11 @@ import { instanceEngine } from './commands.engine';
 import { initializeInstanceCommands } from './commands.instanceCommands';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
+//TEST
 twoSxc._commands = {
   definitions: {
-    create: create,
+    create,
   },
-  instanceEngine: instanceEngine,
-  initializeInstanceCommands: initializeInstanceCommands
+  instanceEngine,
+  initializeInstanceCommands
 };

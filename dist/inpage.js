@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 26);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -734,8 +734,8 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 
 "use strict";
 
+//import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
  * @param key
@@ -746,7 +746,7 @@ function translate(key) {
 }
 exports.translate = translate;
 ;
-module_bootstrapper_1.$2sxc.translate = translate;
+//twoSxc.translate = translate;
 
 
 /***/ }),
@@ -2387,10 +2387,34 @@ exports.manipulator = manipulator;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var LocalStorageHelper = /** @class */ (function () {
+    function LocalStorageHelper() {
+    }
+    LocalStorageHelper.getItemValueString = function (key) {
+        var value = localStorage.getItem(key);
+        return value;
+    };
+    LocalStorageHelper.getItemValue = function (key) {
+        var value = localStorage.getItem(key);
+        return JSON.parse(value);
+    };
+    return LocalStorageHelper;
+}());
+exports.LocalStorageHelper = LocalStorageHelper;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var commands_engine_1 = __webpack_require__(13);
 var manage_api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 var contentBlock_manipulate_1 = __webpack_require__(24);
+var local_storage_helper_1 = __webpack_require__(25);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
  * all in-page toolbars etc.
@@ -2458,7 +2482,7 @@ function _initInstance(sxc) {
                 editManager._handleErrors(editContext.error.type, manage_api_1.getTag(sxc));
             // todo: move this to dialog-handling
             // display the dialog
-            var openDialogId = sessionStorage.getItem("dia-cbid");
+            var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue("dia-cbid");
             if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
                 return false;
             sessionStorage.removeItem("dia-cbid");
@@ -2492,16 +2516,16 @@ function _initInstance(sxc) {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(27);
+__webpack_require__(28);
 __webpack_require__(17);
 __webpack_require__(18);
 __webpack_require__(19);
-__webpack_require__(28);
 __webpack_require__(29);
 __webpack_require__(30);
+__webpack_require__(31);
 __webpack_require__(12);
 __webpack_require__(13);
 __webpack_require__(14);
@@ -2511,7 +2535,6 @@ __webpack_require__(24);
 __webpack_require__(4);
 __webpack_require__(6);
 __webpack_require__(11);
-__webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(33);
 __webpack_require__(34);
@@ -2521,8 +2544,8 @@ __webpack_require__(37);
 __webpack_require__(38);
 __webpack_require__(39);
 __webpack_require__(40);
-__webpack_require__(23);
 __webpack_require__(41);
+__webpack_require__(23);
 __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
@@ -2531,24 +2554,25 @@ __webpack_require__(46);
 __webpack_require__(47);
 __webpack_require__(48);
 __webpack_require__(49);
-__webpack_require__(7);
 __webpack_require__(50);
+__webpack_require__(7);
 __webpack_require__(51);
-__webpack_require__(2);
 __webpack_require__(25);
 __webpack_require__(52);
+__webpack_require__(2);
+__webpack_require__(26);
 __webpack_require__(53);
+__webpack_require__(54);
 __webpack_require__(3);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(15);
 __webpack_require__(21);
-__webpack_require__(54);
-__webpack_require__(16);
 __webpack_require__(55);
+__webpack_require__(16);
+__webpack_require__(56);
 __webpack_require__(9);
 __webpack_require__(20);
-__webpack_require__(56);
 __webpack_require__(57);
 __webpack_require__(58);
 __webpack_require__(59);
@@ -2559,12 +2583,13 @@ __webpack_require__(63);
 __webpack_require__(64);
 __webpack_require__(65);
 __webpack_require__(66);
+__webpack_require__(67);
 __webpack_require__(5);
 module.exports = __webpack_require__(0);
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /*
@@ -2665,7 +2690,7 @@ module.exports = __webpack_require__(0);
 //# sourceMappingURL=shake.js.map
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2704,7 +2729,7 @@ twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2734,7 +2759,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2744,6 +2769,7 @@ var commands_definitions_1 = __webpack_require__(12);
 var commands_engine_1 = __webpack_require__(13);
 var commands_instanceCommands_1 = __webpack_require__(14);
 var module_bootstrapper_1 = __webpack_require__(0);
+//TEST
 module_bootstrapper_1.$2sxc._commands = {
     definitions: {
         create: commands_definitions_1.create,
@@ -2754,7 +2780,7 @@ module_bootstrapper_1.$2sxc._commands = {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2769,7 +2795,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2784,7 +2810,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2799,7 +2825,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2814,7 +2840,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2829,7 +2855,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2844,7 +2870,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2859,7 +2885,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2874,7 +2900,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2896,7 +2922,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -2915,17 +2941,17 @@ var $2sxcActionMenuMapper = function (moduleId) {
     var fn = $.fn.attr;
     $.fn.attr = function () {
         var val = fn.apply(this, arguments);
-        if (arguments[0] !== "class"
-            || typeof val !== "string"
-            || val.search("DnnModule-2sxc ") === -1)
+        if (arguments[0] !== 'class'
+            || typeof val !== 'string'
+            || val.search('DnnModule-2sxc ') === -1)
             return val;
-        return val.replace("DnnModule-2sxc ", "") + " DnnModule-2sxc";
+        return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';
     };
 })();
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2958,12 +2984,6 @@ window.$quickE = _quickE___1.$quickE;
 
 
 /***/ }),
-/* 42 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 43 */
 /***/ (function(module, exports) {
 
@@ -2973,13 +2993,13 @@ window.$quickE = _quickE___1.$quickE;
 /* 44 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 45 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -3014,12 +3034,18 @@ window.$quickE = _quickE___1.$quickE;
 
 /***/ }),
 /* 51 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_create_1 = __webpack_require__(25);
+var manage_create_1 = __webpack_require__(26);
 var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -3037,7 +3063,7 @@ module_bootstrapper_1.$2sxc._manage = {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3081,7 +3107,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3108,7 +3134,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3143,7 +3169,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3173,7 +3199,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports) {
 
 /*
@@ -3274,7 +3300,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3288,7 +3314,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3303,7 +3329,7 @@ $(function () {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3322,7 +3348,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3415,7 +3441,7 @@ function isDisabled(sxc) {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3460,7 +3486,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3499,7 +3525,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3731,7 +3757,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3753,7 +3779,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3821,7 +3847,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

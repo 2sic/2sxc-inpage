@@ -1,4 +1,4 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+﻿//import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 /**
  * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
@@ -9,4 +9,4 @@ export function translate(key) {
   return ($.t && $.t(key)) || key;
 };
 
-twoSxc.translate = translate;
+//twoSxc.translate = translate;

@@ -19,6 +19,7 @@
   <ItemGroup>
     <None Remove="src\globals.d.ts" />
     <None Remove="src\lib-helpers\jquery.ts" />
+    <None Remove="src\manage\local-storage-helper.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
+    <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
   </ItemGroup>
 
   <ItemGroup>

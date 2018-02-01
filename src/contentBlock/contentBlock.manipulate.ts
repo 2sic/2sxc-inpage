@@ -78,7 +78,7 @@ function move(parentId: any, field: any, indexFrom: any, indexTo: any): any{
  */
 function remove(parentId: any, field: any, index: any): any {
   if (!confirm(translate('QuickInsertMenu.ConfirmDelete'))) return null;
-  var params = {
+  let params = {
     parentId: parentId,
     field: field,
     index: index,

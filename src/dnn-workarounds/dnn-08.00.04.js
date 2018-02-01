@@ -14,11 +14,11 @@
     var fn = $.fn.attr;
     $.fn.attr = function () {
         var val = fn.apply(this, arguments);
-        if (arguments[0] !== "class"
-            || typeof val !== "string"
-            || val.search("DnnModule-2sxc ") === -1)
+        if (arguments[0] !== 'class'
+            || typeof val !== 'string'
+            || val.search('DnnModule-2sxc ') === -1)
             return val;
-        return val.replace("DnnModule-2sxc ", "") + " DnnModule-2sxc";
+        return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';
     };
 })();
 //# sourceMappingURL=dnn-08.00.04.js.map
