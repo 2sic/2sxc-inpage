@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
 var manage_api_1 = require("../manage/manage.api");
+var _2sxc_translate_1 = require("../translate/2sxc.translate");
 //import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -17,12 +18,10 @@ if (cancelledDialog)
     localStorage.removeItem('cancelled-dialog');
 initAllModules(true);
 // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-document.body.addEventListener("DOMSubtreeModified", function (event) {
-    initAllModules(false);
-}, false);
+document.body.addEventListener('DOMSubtreeModified', function (event) { return initAllModules(false); }, false);
 //return; // avoid side-effects
 function initAllModules(isFirstRun) {
-    $("div[data-edit-context]").each(function () {
+    $('div[data-edit-context]').each(function () {
         initModule(this, isFirstRun);
     });
     tryShowTemplatePicker();
@@ -51,9 +50,7 @@ function tryShowTemplatePicker() {
 }
 function initModule(module, isFirstRun) {
     // check if module is already in the list of initialized modules
-    if (initializedModules.find(function (m) {
-        return m === module;
-    }))
+    if (initializedModules.find(function (m) { return m === module; }))
         return false;
     // add to modules-list
     initializedModules.push(module);
@@ -75,12 +72,15 @@ function showGlassesButtonIfUninitialized(sxc) {
         return false;
     // already has a glasses button
     var tag = $(manage_api_1.getTag(sxc));
-    if (tag.find(".sc-uninitialized").length !== 0)
+    if (tag.find('.sc-uninitialized').length !== 0)
         return false;
     // note: title is added on mouseover, as the translation isn't ready at page-load
-    var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
-    btn.on("click", function () {
-        sxc.manage.run("layout");
+    var btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+    btn.on('click', function () {
+        sxc.manage.run('layout');
+    });
+    btn.on('mouseover', function () {
+        btn.title = _2sxc_translate_1.translate(btn.title);
     });
     tag.append(btn);
     return true;

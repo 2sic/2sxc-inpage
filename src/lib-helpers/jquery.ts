@@ -1,4 +1,4 @@
 ﻿/**
  * jquery helper
  */
-declare var $: any;
+declare let $: any;

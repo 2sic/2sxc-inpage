@@ -15,13 +15,13 @@ function onCbButtonClick() {
     if (_quickE___1.$quickE.main.actionsForCb.hasClass(_quickE___1.selectors.cb.class))
         index = listItems.index(_quickE___1.$quickE.main.actionsForCb[0]) + 1;
     // check cut/paste
-    var cbAction = $(this).data("action");
+    var cbAction = $(this).data('action');
     if (cbAction) {
         // this is a cut/paste action
         return _quickE_clipboard_1.copyPasteInPage(cbAction, list, index, _quickE___1.selectors.cb.id);
     }
     else {
-        var appOrContent = $(this).data("type");
+        var appOrContent = $(this).data('type');
         return _quickE_cmds_1.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
     }
 }

@@ -12,9 +12,9 @@
  * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
  */
 (() => {
-    var fn = $.fn.attr;
+    let fn = $.fn.attr;
     $.fn.attr = function () {
-        var val = fn.apply(this, arguments);
+        let val = fn.apply(this, arguments);
         if (arguments[0] !== 'class'
             || typeof val !== 'string'
             || val.search('DnnModule-2sxc ') === -1) return val;

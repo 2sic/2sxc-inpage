@@ -9,5 +9,5 @@
 twoSxc._toolbarManager = {
 
   // internal constants
-  cDisableAttrName: "data-disable-toolbar"
+  cDisableAttrName: 'data-disable-toolbar'
 };

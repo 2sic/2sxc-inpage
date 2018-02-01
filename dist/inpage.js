@@ -70,8 +70,9 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc__quickDialog_1 = __webpack_require__(3);
+var _2sxc__quickDialog_1 = __webpack_require__(4);
 var manage_api_1 = __webpack_require__(2);
+var _2sxc_translate_1 = __webpack_require__(3);
 //import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -87,12 +88,10 @@ if (cancelledDialog)
     localStorage.removeItem('cancelled-dialog');
 initAllModules(true);
 // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-document.body.addEventListener("DOMSubtreeModified", function (event) {
-    initAllModules(false);
-}, false);
+document.body.addEventListener('DOMSubtreeModified', function (event) { return initAllModules(false); }, false);
 //return; // avoid side-effects
 function initAllModules(isFirstRun) {
-    $("div[data-edit-context]").each(function () {
+    $('div[data-edit-context]').each(function () {
         initModule(this, isFirstRun);
     });
     tryShowTemplatePicker();
@@ -121,9 +120,7 @@ function tryShowTemplatePicker() {
 }
 function initModule(module, isFirstRun) {
     // check if module is already in the list of initialized modules
-    if (initializedModules.find(function (m) {
-        return m === module;
-    }))
+    if (initializedModules.find(function (m) { return m === module; }))
         return false;
     // add to modules-list
     initializedModules.push(module);
@@ -145,12 +142,15 @@ function showGlassesButtonIfUninitialized(sxc) {
         return false;
     // already has a glasses button
     var tag = $(manage_api_1.getTag(sxc));
-    if (tag.find(".sc-uninitialized").length !== 0)
+    if (tag.find('.sc-uninitialized').length !== 0)
         return false;
     // note: title is added on mouseover, as the translation isn't ready at page-load
-    var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
-    btn.on("click", function () {
-        sxc.manage.run("layout");
+    var btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+    btn.on('click', function () {
+        sxc.manage.run('layout');
+    });
+    btn.on('mouseover', function () {
+        btn.title = _2sxc_translate_1.translate(btn.title);
     });
     tag.append(btn);
     return true;
@@ -246,7 +246,7 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-//var mngApi = $2sxc._manage;
+//let mngApi = $2sxc._manage;
 /**
  * Get a html tag of the current sxc instance
  * @param {any} sxci
@@ -263,8 +263,8 @@ exports.getTag = getTag;
  * @return {any} edit-context object
  */
 function getEditContextOfTag(htmlTag) {
-    var attr = htmlTag.getAttribute("data-edit-context");
-    return JSON.parse(attr || "");
+    var attr = htmlTag.getAttribute('data-edit-context');
+    return JSON.parse(attr || '');
 }
 exports.getEditContextOfTag = getEditContextOfTag;
 ;
@@ -366,8 +366,27 @@ exports.buildNgDialogParams = buildNgDialogParams;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
+ * @param key
+ */
+function translate(key) {
+    // return key;
+    return ($.t && $.t(key)) || key;
+}
+exports.translate = translate;
+;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = __webpack_require__(2);
-var contentBlock_render_1 = __webpack_require__(4);
+var contentBlock_render_1 = __webpack_require__(5);
 var contentBlock___1 = __webpack_require__(10);
 var contentBlock_templates_1 = __webpack_require__(6);
 // this is a dialog manager which is in charge of all
@@ -376,12 +395,12 @@ var contentBlock_templates_1 = __webpack_require__(6);
 var resizeInterval = 200;
 var scrollTopOffset = 80;
 var resizeWatcher = null;
-var diagShowClass = "dia-select";
+var diagShowClass = 'dia-select';
 var isFullscreen = false;
 /**
  * dialog manager - the currently active dialog object
  */
-//var diagManager = twoSxc._quickDialog = {}
+//let diagManager = twoSxc._quickDialog = {}
 exports.current = null;
 /**
  * toggle visibility
@@ -417,7 +436,7 @@ exports.cancel = cancel;
  * @param {Object<any>} sxc - the sxc which is persisted for
  */
 function persistDialog(sxc) {
-    sessionStorage.setItem("dia-cbid", sxc.cbid);
+    sessionStorage.setItem('dia-cbid', sxc.cbid);
 }
 exports.persistDialog = persistDialog;
 ;
@@ -426,7 +445,7 @@ exports.persistDialog = persistDialog;
  * @returns {element} html element of the div
  */
 function getContainer() {
-    var container = $(".inpage-frame-wrapper");
+    var container = $('.inpage-frame-wrapper');
     return container.length > 0 ? container : buildContainerAndIFrame();
 }
 exports.getContainer = getContainer;
@@ -439,7 +458,7 @@ exports.getContainer = getContainer;
 function getIFrame(container) {
     if (!container)
         container = getContainer();
-    return container.find("iframe")[0];
+    return container.find('iframe')[0];
 }
 exports.getIFrame = getIFrame;
 ;
@@ -474,7 +493,7 @@ function showOrToggle(sxc, url, closeCallback, fullScreen, dialogName) {
     if (dialogName && isShowing(sxc, dialogName))
         return hide();
     iFrame.rewire(sxc, closeCallback, dialogName);
-    iFrame.setAttribute("src", rewriteUrl(url));
+    iFrame.setAttribute('src', rewriteUrl(url));
     // if the window had already been loaded, re-init
     if (iFrame.contentWindow && iFrame.contentWindow.reboot)
         iFrame.contentWindow.reboot();
@@ -489,17 +508,17 @@ exports.showOrToggle = showOrToggle;
  */
 function buildContainerAndIFrame() {
     var container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
-    var newIFrame = document.createElement("iframe");
+    var newIFrame = document.createElement('iframe');
     newIFrame = extendIFrameWithSxcState(newIFrame);
-    container.find(".inpage-frame").html(newIFrame);
-    $("body").append(container);
+    container.find('.inpage-frame').html(newIFrame);
+    $('body').append(container);
     watchForResize();
     return container;
 }
 function setSize(fullScreen) {
     var container = getContainer();
     // set container height
-    container.css("min-height", fullScreen ? "100%" : "225px");
+    container.css('min-height', fullScreen ? '100%' : '225px');
     isFullscreen = fullScreen;
 }
 function extendIFrameWithSxcState(iFrame) {
@@ -525,46 +544,28 @@ function extendIFrameWithSxcState(iFrame) {
             if (dialogName)
                 newFrm.dialogName = dialogName;
         },
-        getManageInfo: function () {
-            return reSxc().manage._dialogParameters;
-        },
-        getAdditionalDashboardConfig: function () {
-            return reSxc().manage._quickDialogConfig;
-        },
-        persistDia: function () {
-            persistDialog(reSxc());
-        },
+        getManageInfo: function () { return reSxc().manage._dialogParameters; },
+        getAdditionalDashboardConfig: function () { return reSxc().manage._quickDialogConfig; },
+        persistDia: function () { return persistDialog(reSxc()); },
         scrollToTarget: function () {
-            $("body").animate({
+            $('body').animate({
                 scrollTop: tagModule.offset().top - scrollTopOffset
             });
         },
-        toggle: function (show) {
-            toggle(show);
-        },
+        toggle: function (show) { return toggle(show); },
         cancel: function () {
             newFrm.toggle(false);
             //todo: only re-init if something was changed?
             // return cbApi.reloadAndReInitialize(reSxc());
             // cancel the dialog
-            localStorage.setItem("cancelled-dialog", "true");
+            localStorage.setItem('cancelled-dialog', 'true');
             return newFrm.closeCallback();
         },
-        run: function (verb) {
-            reSxc().manage.run(verb);
-        },
-        showMessage: function (message) {
-            contentBlock_render_1.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
-        },
-        reloadAndReInit: function () {
-            return contentBlock_render_1.reloadAndReInitialize(reSxc(), true, true);
-        },
-        saveTemplate: function (templateId) {
-            return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false);
-        },
-        previewTemplate: function (templateId) {
-            return contentBlock_render_1.ajaxLoad(reSxc(), templateId, true);
-        }
+        run: function (verb) { return reSxc().manage.run(verb); },
+        showMessage: function (message) { return contentBlock_render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
+        reloadAndReInit: function () { return contentBlock_render_1.reloadAndReInitialize(reSxc(), true, true); },
+        saveTemplate: function (templateId) { return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
+        previewTemplate: function (templateId) { return contentBlock_render_1.ajaxLoad(reSxc(), templateId, true); }
     });
     return newFrm;
 }
@@ -576,13 +577,13 @@ function extendIFrameWithSxcState(iFrame) {
  */
 function rewriteUrl(url) {
     // change default url-schema from the primary angular-app to the quick-dialog
-    url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
+    url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
     // special debug-code when running on local ng-serve
     // this is only activated if the developer manually sets a value in the localStorage
     try {
-        var devMode = localStorage.getItem("devMode");
+        var devMode = localStorage.getItem('devMode');
         if (devMode && ~~devMode)
-            url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
+            url = url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
     }
     catch (e) {
         // ignore
@@ -610,12 +611,12 @@ function watchForResize(keepWatching) {
                 var height = frm.contentDocument.body.offsetHeight;
                 if (frm.previousHeight === height)
                     return;
-                frm.style.minHeight = cont.css("min-height");
-                frm.style.height = height + "px";
+                frm.style.minHeight = cont.css('min-height');
+                frm.style.height = height + 'px';
                 frm.previousHeight = height;
                 if (isFullscreen) {
-                    frm.style.height = "100%";
-                    frm.style.position = "absolute";
+                    frm.style.height = '100%';
+                    frm.style.position = 'absolute';
                 }
             }
             catch (e) {
@@ -627,14 +628,14 @@ function watchForResize(keepWatching) {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE_start_1 = __webpack_require__(20);
-var _2sxc__quickDialog_1 = __webpack_require__(3);
+var _2sxc__quickDialog_1 = __webpack_require__(4);
 var manage_api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 var contentBlock___1 = __webpack_require__(10);
@@ -729,35 +730,14 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-//import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
- * @param key
- */
-function translate(key) {
-    // return key;
-    return ($.t && $.t(key)) || key;
-}
-exports.translate = translate;
-;
-//twoSxc.translate = translate;
-
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc__quickDialog_1 = __webpack_require__(3);
-var contentBlock_render_1 = __webpack_require__(4);
+var _2sxc__quickDialog_1 = __webpack_require__(4);
+var contentBlock_render_1 = __webpack_require__(5);
 var contentBlock_webApiPromises_1 = __webpack_require__(11);
 /*
  * this is part of the content block manager
@@ -774,10 +754,10 @@ function prepareToAddContent(sxc, useModuleList) {
     if (isCreated || !useModuleList)
         return $.when(null);
     // return persistTemplate(sxc, null);
-    // var manage = sxc.manage;
-    // var contentGroup = manage._editContext.ContentGroup;
-    // var showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
-    // var groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
+    // let manage = sxc.manage;
+    // let contentGroup = manage._editContext.ContentGroup;
+    // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
+    // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
     var templateId = sxc.manage._editContext.ContentGroup.TemplateId;
     // template has not changed
     // if (groupExistsAndTemplateUnchanged) return $.when(null);
@@ -1269,7 +1249,7 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(3);
 var contentBlock_actions_1 = __webpack_require__(22);
 var item_commands_1 = __webpack_require__(23);
 var _2sxc__lib_extend_1 = __webpack_require__(7);
@@ -1617,10 +1597,10 @@ exports.create = create;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = __webpack_require__(14);
-var _2sxc__quickDialog_1 = __webpack_require__(3);
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc__quickDialog_1 = __webpack_require__(4);
+var _2sxc_translate_1 = __webpack_require__(3);
 var module_bootstrapper_1 = __webpack_require__(0);
-var contentBlock_render_1 = __webpack_require__(4);
+var contentBlock_render_1 = __webpack_require__(5);
 var contentBlock_templates_1 = __webpack_require__(6);
 var _2sxc__lib_extend_1 = __webpack_require__(7);
 function instanceEngine(sxc, editContext) {
@@ -1751,9 +1731,7 @@ function instanceEngine(sxc, editContext) {
                 return settings.code(settings, origEvent, sxc);
             // if more than just a UI-action, then it needs to be sure the content-group is created first
             return contentBlock_templates_1.prepareToAddContent(sxc, settings.useModuleList)
-                .then(function () {
-                return settings.code(settings, origEvent, sxc);
-            });
+                .then(function () { return settings.code(settings, origEvent, sxc); });
         }
     };
     return engine;
@@ -1881,7 +1859,7 @@ var modManage = /** @class */ (function () {
 exports.modManage = modManage;
 ;
 function getPaneName(pane) {
-    return $(pane).attr("id").replace("dnn_", "");
+    return $(pane).attr('id').replace('dnn_', '');
 }
 // find the correct module id from a list of classes - used on the module-wrapper
 function getModuleId(classes) {
@@ -1890,22 +1868,22 @@ function getModuleId(classes) {
 }
 // show an error when an xhr error occurs
 function xhrError(xhr, optionalMessage) {
-    alert(optionalMessage || "Error while talking to server.");
+    alert(optionalMessage || 'Error while talking to server.');
     console.log(xhr);
 }
 // service calls we'll need
 function createModWithTypeName(paneName, index, type) {
-    return sendDnnAjax(null, "controlbar/GetPortalDesktopModules", {
-        data: "category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=",
+    return sendDnnAjax(null, 'controlbar/GetPortalDesktopModules', {
+        data: 'category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=',
         success: function (desktopModules) {
-            var moduleToFind = type === "Default" ? " Content" : " App";
+            var moduleToFind = type === 'Default' ? ' Content' : ' App';
             var module = null;
             desktopModules.forEach(function (e, i) {
                 if (e.ModuleName === moduleToFind)
                     module = e;
             });
             return (!module)
-                ? alert(moduleToFind + " module not found.")
+                ? alert(moduleToFind + ' module not found.')
                 : createMod(paneName, index, module.ModuleID);
         }
     });
@@ -1920,12 +1898,10 @@ function moveMod(modId, pane, order) {
         Pane: pane,
         ModuleOrder: (2 * order + 4) // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
     };
-    sendDnnAjax(modId, "ModuleService/MoveModule", {
-        type: "POST",
+    sendDnnAjax(modId, 'ModuleService/MoveModule', {
+        type: 'POST',
         data: dataVar,
-        success: function () {
-            window.location.reload();
-        }
+        success: function () { return window.location.reload(); }
     });
     //fire window resize to reposition action menus
     $(window).resize();
@@ -1934,24 +1910,22 @@ function moveMod(modId, pane, order) {
 function deleteMod(modId) {
     var service = $.dnnSF(modId);
     var tabId = service.getTabId();
-    return sendDnnAjax(modId, "2sxc/dnn/module/delete", {
-        url: $.dnnSF().getServiceRoot("2sxc") + "dnn/module/delete",
-        type: "GET",
+    return sendDnnAjax(modId, '2sxc/dnn/module/delete', {
+        url: $.dnnSF().getServiceRoot('2sxc') + 'dnn/module/delete',
+        type: 'GET',
         data: {
             tabId: tabId,
             modId: modId
         },
-        success: function (d) {
-            window.location.reload();
-        }
+        success: function (d) { return window.location.reload(); }
     });
 }
 // call an api on dnn
 function sendDnnAjax(modId, serviceName, options) {
     var service = $.dnnSF(modId);
     return $.ajax($.extend({
-        type: "GET",
-        url: service.getServiceRoot("internalservices") + serviceName,
+        type: 'GET',
+        url: service.getServiceRoot('internalservices') + serviceName,
         beforeSend: service.setModuleHeaders,
         error: xhrError
     }, options));
@@ -1960,7 +1934,7 @@ function sendDnnAjax(modId, serviceName, options) {
 function createMod(paneName, position, modId) {
     var postData = {
         Module: modId,
-        Page: "",
+        Page: '',
         Pane: paneName,
         Position: -1,
         Sort: position,
@@ -1968,26 +1942,24 @@ function createMod(paneName, position, modId) {
         AddExistingModule: false,
         CopyModule: false
     };
-    return sendDnnAjax(null, "controlbar/AddModule", {
-        type: "POST",
+    return sendDnnAjax(null, 'controlbar/AddModule', {
+        type: 'POST',
         data: postData,
-        success: function (d) {
-            window.location.reload();
-        }
+        success: function (d) { return window.location.reload(); }
     });
 }
 function generatePaneMoveButtons(current) {
     var pns = _quickE___1.$quickE.cachedPanes;
     // generate list of panes as links
-    var targets = $("<div>");
+    var targets = $('<div>');
     for (var p = 0; p < pns.length; p++) {
-        var pName = getPaneName(pns[p]), selected = (current === pName) ? " selected " : "";
+        var pName = getPaneName(pns[p]), selected = (current === pName) ? ' selected ' : '';
         if (!selected)
-            targets.append("<a data='" + pName + "'>" + pName + "</a>");
+            targets.append("<a data='" + pName + "'>" + pName + '</a>');
     }
     // attach click event...
-    targets.find("a").click(function (d) {
-        var link = $(this), clip = _quickE_clipboard_1.clipboard.data, modId = getModuleId(clip.item.className), newPane = link.attr("data");
+    targets.find('a').click(function (d) {
+        var link = $(this), clip = _quickE_clipboard_1.clipboard.data, modId = getModuleId(clip.item.className), newPane = link.attr('data');
         moveMod(modId, newPane, 0);
     });
     return targets;
@@ -2104,7 +2076,7 @@ $(start);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(1);
-var configAttr = "quick-edit-config";
+var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
  */
@@ -2118,7 +2090,7 @@ var conf = _quickE___1.$quickE.config = {
     }
 };
 function _readPageConfig() {
-    var configs = $("[" + configAttr + "]");
+    var configs = $('[' + configAttr + ']');
     var finalConfig = {};
     var confJ;
     var confO;
@@ -2157,7 +2129,7 @@ exports._readPageConfig = _readPageConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var contentBlock_render_1 = __webpack_require__(4);
+var contentBlock_render_1 = __webpack_require__(5);
 /*
  * this is a content block in the browser
  *
@@ -2248,7 +2220,7 @@ exports.publishId = publishId;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(3);
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
@@ -2257,22 +2229,22 @@ exports.contentItems = {
     // delete command - try to really delete a content-item
     "delete": function (sxc, itemId, itemGuid, itemTitle) {
         // first show main warning / get ok
-        var ok = confirm(_2sxc_translate_1.translate("Delete.Confirm")
-            .replace("{id}", itemId)
-            .replace("{title}", itemTitle));
+        var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
+            .replace('{id}', itemId)
+            .replace('{title}', itemTitle));
         if (!ok)
             return;
-        sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
+        sxc.webApi.delete('app-content/any/' + itemGuid, null, null, true)
             .success(function () {
             location.reload();
         }).error(function (error) {
-            var msgJs = _2sxc_translate_1.translate("Delete.ErrCheckConsole");
+            var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
             console.log(error);
             // check if it's a permission config problem
             if (error.status === 401)
-                alert(_2sxc_translate_1.translate("Delete.ErrPermission") + msgJs);
+                alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
             if (error.status === 400)
-                alert(_2sxc_translate_1.translate("Delete.ErrInUse") + msgJs);
+                alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
         });
     }
 };
@@ -2285,7 +2257,7 @@ exports.contentItems = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(3);
 var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * contains commands to create/move/delete a contentBlock in a page
@@ -2345,7 +2317,7 @@ function move(parentId, field, indexFrom, indexTo) {
     // todo: need sxc!
     return sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
         .then(function () {
-        console.log("done moving!");
+        console.log('done moving!');
         window.location.reload();
     });
 }
@@ -2431,12 +2403,12 @@ function initInstance(sxc) {
         _initInstance(sxc);
     }
     catch (e) {
-        console.error("error in 2sxc - will log but not throw", e);
+        console.error('error in 2sxc - will log but not throw', e);
     }
 }
 exports.initInstance = initInstance;
 ;
-//var mngApi = twoSxc._manage;
+//let mngApi = twoSxc._manage;
 function _initInstance(sxc) {
     var editContext = manage_api_1.getEditContext(sxc);
     var userInfo = manage_api_1.getUserOfEditContext(editContext);
@@ -2453,18 +2425,14 @@ function _initInstance(sxc) {
          * @param {int} groupIndex - number what button-group it's in'
          * @returns {string} html of a button
          */
-        getButton: function (actDef, groupIndex) {
-            return module_bootstrapper_1.$2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
-        },
+        getButton: function (actDef, groupIndex) { return module_bootstrapper_1.$2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex); },
         /**
          * Builds the toolbar and returns it as HTML
          * @param {Object<any>} tbConfig - general toolbar config
          * @param {Object<any>} moreSettings - additional / override settings
          * @returns {string} html of the current toolbar
          */
-        getToolbar: function (tbConfig, moreSettings) {
-            return module_bootstrapper_1.$2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
-        },
+        getToolbar: function (tbConfig, moreSettings) { return module_bootstrapper_1.$2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings); },
         //#endregion official, public properties - everything below this can change at any time
         // internal method to find out if it's in edit-mode
         _isEditMode: function () { return editContext.Environment.IsEditable; },
@@ -2476,26 +2444,26 @@ function _initInstance(sxc) {
         _commands: cmdEngine,
         _user: userInfo,
         // init this object 
-        init: function init() {
+        init: function () {
             // enhance UI in case there are known errors / issues
             if (editContext.error.type)
                 editManager._handleErrors(editContext.error.type, manage_api_1.getTag(sxc));
             // todo: move this to dialog-handling
             // display the dialog
-            var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue("dia-cbid");
+            var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
             if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
                 return false;
-            sessionStorage.removeItem("dia-cbid");
-            editManager.run("layout");
+            sessionStorage.removeItem('dia-cbid');
+            editManager.run('layout');
         },
         // private: show error when the app-data hasn't been installed yet for this imported-module
         _handleErrors: function (errType, cbTag) {
-            var errWrapper = $("<div class=\"dnnFormMessage dnnFormWarning sc-element\"></div>");
-            var msg = "";
+            var errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
+            var msg = '';
             var toolbar = $("<ul class='sc-menu'></ul>");
-            if (errType === "DataIsMissing") {
-                msg = "Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import";
-                toolbar.attr("data-toolbar", '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
+            if (errType === 'DataIsMissing') {
+                msg = 'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
+                toolbar.attr('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
             }
             errWrapper.append(msg);
             errWrapper.append(toolbar);
@@ -2506,9 +2474,7 @@ function _initInstance(sxc) {
             editContext.ContentGroup.Guid = newGuid;
             editManager._instanceConfig = manage_api_1.buildInstanceConfig(editContext);
         },
-        _getCbManipulator: function () {
-            return contentBlock_manipulate_1.manipulator(sxc);
-        }
+        _getCbManipulator: function () { return contentBlock_manipulate_1.manipulator(sxc); }
     };
     editManager.init();
     return editManager;
@@ -2532,7 +2498,7 @@ __webpack_require__(14);
 __webpack_require__(10);
 __webpack_require__(22);
 __webpack_require__(24);
-__webpack_require__(4);
+__webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(11);
 __webpack_require__(32);
@@ -2563,7 +2529,7 @@ __webpack_require__(2);
 __webpack_require__(26);
 __webpack_require__(53);
 __webpack_require__(54);
-__webpack_require__(3);
+__webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(15);
@@ -2584,7 +2550,7 @@ __webpack_require__(64);
 __webpack_require__(65);
 __webpack_require__(66);
 __webpack_require__(67);
-__webpack_require__(5);
+__webpack_require__(3);
 module.exports = __webpack_require__(0);
 
 
@@ -2911,12 +2877,12 @@ var module_bootstrapper_1 = __webpack_require__(0);
 var $2sxcActionMenuMapper = function (moduleId) {
     var run = module_bootstrapper_1.$2sxc(moduleId).manage.run;
     return {
-        changeLayoutOrContent: function () { run("layout"); },
-        addItem: function () { run("add", { useModuleList: true, sortOrder: 0 }); },
-        edit: function () { run("edit", { useModuleList: true, sortOrder: 0 }); },
-        adminApp: function () { run("app"); },
-        adminZone: function () { run("zone"); },
-        develop: function () { run("template-develop"); },
+        changeLayoutOrContent: function () { run('layout'); },
+        addItem: function () { run('add', { useModuleList: true, sortOrder: 0 }); },
+        edit: function () { run('edit', { useModuleList: true, sortOrder: 0 }); },
+        adminApp: function () { run('app'); },
+        adminZone: function () { run('zone'); },
+        develop: function () { run('template-develop'); },
     };
 };
 
@@ -2960,9 +2926,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(1);
 //import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals
-//export var $2sxc = window.$2sxc as SxcControllerWithInternals;
+//export let $2sxc = window.$2sxc as SxcControllerWithInternals;
 window.$quickE = _quickE___1.$quickE;
-//var $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
+//let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
 // $2sxc.c = $2sxc.consts
 // $2sxc.system
 // $2sxc._commands = {};
@@ -3155,13 +3121,13 @@ function onCbButtonClick() {
     if (_quickE___1.$quickE.main.actionsForCb.hasClass(_quickE___1.selectors.cb.class))
         index = listItems.index(_quickE___1.$quickE.main.actionsForCb[0]) + 1;
     // check cut/paste
-    var cbAction = $(this).data("action");
+    var cbAction = $(this).data('action');
     if (cbAction) {
         // this is a cut/paste action
         return _quickE_clipboard_1.copyPasteInPage(cbAction, list, index, _quickE___1.selectors.cb.id);
     }
     else {
-        var appOrContent = $(this).data("type");
+        var appOrContent = $(this).data('type');
         return _quickE_cmds_1.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
     }
 }
@@ -3183,10 +3149,10 @@ var mm = new _quickE_modManage_1.modManage();
  * module specific stuff
  */
 function onModuleButtonClick() {
-    var type = $(this).data("type"), dnnMod = _quickE___1.$quickE.main.actionsForModule, pane = dnnMod.closest(_quickE___1.selectors.mod.listSelector), index = 0;
-    if (dnnMod.hasClass("DnnModule"))
-        index = pane.find(".DnnModule").index(dnnMod[0]) + 1;
-    var cbAction = $(this).data("action");
+    var type = $(this).data('type'), dnnMod = _quickE___1.$quickE.main.actionsForModule, pane = dnnMod.closest(_quickE___1.selectors.mod.listSelector), index = 0;
+    if (dnnMod.hasClass('DnnModule'))
+        index = pane.find('.DnnModule').index(dnnMod[0]) + 1;
+    var cbAction = $(this).data('action');
     if (cbAction) {
         return _quickE_clipboard_1.copyPasteInPage(cbAction, pane, index, _quickE___1.selectors.mod.id); // copy/paste
     }
@@ -3308,9 +3274,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
 // prevent propagation of the click (if menu was clicked)
-$(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) {
-    e.stopPropagation();
-});
+$(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagation(); });
 
 
 /***/ }),
@@ -3343,7 +3307,7 @@ var module_bootstrapper_1 = __webpack_require__(0);
  */
 module_bootstrapper_1.$2sxc._toolbarManager = {
     // internal constants
-    cDisableAttrName: "data-disable-toolbar"
+    cDisableAttrName: 'data-disable-toolbar'
 };
 
 
@@ -3376,32 +3340,30 @@ function generateFallbackToolbar() {
 }
 // find current toolbars inside this wrapper-tag
 function getToolbarTags(parentTag) {
-    var allInner = $(".sc-menu[toolbar],.sc-menu[data-toolbar]", parentTag);
+    var allInner = $('.sc-menu[toolbar],.sc-menu[data-toolbar]', parentTag);
     // return only those, which don't belong to a sub-item
-    var res = allInner.filter(function (i, e) {
-        return $(e).closest(".sc-content-block")[0] === parentTag[0];
-    });
+    var res = allInner.filter(function (i, e) { return $(e).closest('.sc-content-block')[0] === parentTag[0]; });
     if (dbg)
-        console.log("found toolbars for parent", parentTag, res);
+        console.log('found toolbars for parent', parentTag, res);
     return res;
 }
 // create a process-toolbar command to generate toolbars inside a tag
 function buildToolbars(parentTag, optionalId) {
-    parentTag = $(parentTag || ".DnnModule-" + optionalId);
+    parentTag = $(parentTag || '.DnnModule-' + optionalId);
     // if something says the toolbars are disabled, then skip
     if (parentTag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName))
         return;
     // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
     // don't add, if it is has un-initialized content
     // 2017-09-08 2dm disabled this, I believe the bootstrapping should never call this any more, if sc-uninitialized. if ok, then delete this in a few days
-    //var disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
+    //let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
     var toolbars = getToolbarTags(parentTag);
     // no toolbars found, must help a bit because otherwise editing is hard
     if (toolbars.length === 0) {
         if (dbg)
             console.log("didn't find toolbar, so will auto-create", parentTag);
         var outsideCb = !parentTag.hasClass(module_bootstrapper_1.$2sxc.c.cls.scCb); // "sc-content-block");
-        var contentTag = outsideCb ? parentTag.find("div.sc-content-block") : parentTag;
+        var contentTag = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
         contentTag.addClass(module_bootstrapper_1.$2sxc.c.cls.scElm); // "sc-element");
         contentTag.prepend(generateFallbackToolbar());
         toolbars = getToolbarTags(parentTag);
@@ -3409,16 +3371,16 @@ function buildToolbars(parentTag, optionalId) {
     toolbars.each(function initToolbar() {
         var tag = $(this), data = null, toolbarConfig, toolbarSettings, at = module_bootstrapper_1.$2sxc.c.attr;
         try {
-            data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || "{}";
+            data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
             toolbarConfig = JSON.parse(data);
-            data = tag.attr(at.settings) || tag.attr(at.settingsData) || "{}";
+            data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
             toolbarSettings = JSON.parse(data);
             if (toolbarConfig === {} && toolbarSettings === {})
                 toolbarSettings = settingsForEmptyToolbar;
         }
         catch (err) {
             console
-                .error("error in settings JSON - probably invalid - make sure you also quote your properties like \"name\": ...", data, err);
+                .error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
             return;
         }
         try {
@@ -3426,7 +3388,7 @@ function buildToolbars(parentTag, optionalId) {
         }
         catch (err2) {
             // note: errors happen a lot on custom toolbars, amke sure the others are still rendered
-            console.error("error creating toolbar - will skip this one", err2);
+            console.error('error creating toolbar - will skip this one', err2);
         }
     });
 }
@@ -3469,16 +3431,16 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     flattenActionDefinition(actDef);
     // retrieve configuration for this button
-    var showClasses = "group-" + groupIndex + (actDef.disabled ? " disabled" : ""), classesList = (actDef.classes || "").split(","), box = $("<div/>"), symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"), onclick = actDef.disabled ?
-        "" :
-        "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
+    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : ''), classesList = (actDef.classes || '').split(','), box = $('<div/>'), symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>'), onclick = actDef.disabled ?
+        '' :
+        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
     for (var c = 0; c < classesList.length; c++)
-        showClasses += " " + classesList[c];
-    var button = $("<a />", {
-        'class': "sc-" + actDef.action + " " + showClasses +
-            (actDef.dynamicClasses ? " " + actDef.dynamicClasses(actDef) : ""),
+        showClasses += ' ' + classesList[c];
+    var button = $('<a />', {
+        'class': 'sc-' + actDef.action + ' ' + showClasses +
+            (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
         'onclick': onclick,
-        'data-i18n': "[title]" + actDef.title
+        'data-i18n': '[title]' + actDef.title
     });
     button.html(box.html(symbol));
     return button[0].outerHTML;
@@ -3505,21 +3467,21 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     // whatever we had, if more settings were provided, override with these...
     var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
     var btnGroups = tlbDef.groups;
-    var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
+    var behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
     // todo: these settings assume it's not in an array...
-    var tbClasses = "sc-menu group-0 " + behaviourClasses + " " +
-        ((tbConfig.sortOrder === -1) ? " listContent" : "") +
-        (tlbDef.settings.classes ? " " + tlbDef.settings.classes : "");
-    var toolbar = $("<ul />", {
+    var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
+        ((tbConfig.sortOrder === -1) ? ' listContent' : '') +
+        (tlbDef.settings.classes ? ' ' + tlbDef.settings.classes : '');
+    var toolbar = $('<ul />', {
         'class': tbClasses,
-        'onclick': "var e = arguments[0] || window.event; e.stopPropagation();"
+        'onclick': 'let e = arguments[0] || window.event; e.stopPropagation();'
     });
     for (var i = 0; i < btnGroups.length; i++) {
         var btns = btnGroups[i].buttons;
         for (var h = 0; h < btns.length; h++)
-            toolbar.append($("<li />").append($(tbManager.generateButtonHtml(sxc, btns[h], i))));
+            toolbar.append($('<li />').append($(tbManager.generateButtonHtml(sxc, btns[h], i))));
     }
-    toolbar.attr("group-count", btnGroups.length);
+    toolbar.attr('group-count', btnGroups.length);
     return toolbar[0].outerHTML;
 }
 
@@ -3539,8 +3501,8 @@ var _2sxc__lib_extend_1 = __webpack_require__(7);
 var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
     defaultSettings: {
         autoAddMore: null,
-        hover: "right",
-        show: "hover",
+        hover: 'right',
+        show: 'hover',
     },
     // take any common input format and convert it to a full toolbar-structure definition
     // can handle the following input formats (the param unstructuredConfig):
@@ -3554,11 +3516,11 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         var fullConfig = tools.ensureDefinitionTree(unstructuredConfig, moreSettings);
         // ToDo: don't use console.log in production
         if (unstructuredConfig.debug)
-            console.log("toolbar: detailed debug on; start build full Def");
+            console.log('toolbar: detailed debug on; start build full Def');
         tools.expandButtonGroups(fullConfig, allActions);
         tools.removeDisableButtons(fullConfig, instanceConfig);
         if (fullConfig.debug)
-            console.log("after remove: ", fullConfig);
+            console.log('after remove: ', fullConfig);
         tools.customize(fullConfig);
         return fullConfig;
     },
@@ -3589,7 +3551,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         }
         // build an object with this structure
         return {
-            name: original.name || "toolbar",
+            name: original.name || 'toolbar',
             debug: original.debug || false,
             groups: original.groups || [],
             defaults: original.defaults || {},
@@ -3611,7 +3573,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
                 for (var b = 0; b < btns.length; b++) {
                     var btn = btns[b];
                     if (!(actions[btn.command.action]))
-                        console.warn("warning: toolbar-button with unknown action-name:", btn.command.action);
+                        console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
                     _2sxc__lib_extend_1.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
                     // tools.addCommandParams(fullSet, btn);
                     tools.addDefaultBtnSettings(btn, fullSet.groups[g], fullSet, actions); // ensure all buttons have either own settings, or the fallbacks
@@ -3624,15 +3586,15 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
     // - a string like "edit" or multi-value "layout,more"
     // - an array of such strings incl. optional complex objects which are
     expandButtonList: function (root, settings) {
-        // var root = grp; // the root object which has all params of the command
+        // let root = grp; // the root object which has all params of the command
         var btns = [], sharedProperties = null;
         // convert compact buttons (with multi-verb action objects) into own button-objects
         // important because an older syntax allowed {action: "new,edit", entityId: 17}
         if (Array.isArray(root.buttons)) {
             for (var b = 0; b < root.buttons.length; b++) {
                 var btn = root.buttons[b];
-                if (typeof btn.action === "string" && btn.action.indexOf(",") > -1) {
-                    var acts = btn.action.split(",");
+                if (typeof btn.action === 'string' && btn.action.indexOf(',') > -1) {
+                    var acts = btn.action.split(',');
                     for (var a = 0; a < acts.length; a++) {
                         btns.push($.extend(true, {}, btn, { action: acts[a] }));
                     }
@@ -3641,8 +3603,8 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
                     btns.push(btn);
             }
         }
-        else if (typeof root.buttons === "string") {
-            btns = root.buttons.split(",");
+        else if (typeof root.buttons === 'string') {
+            btns = root.buttons.split(',');
             sharedProperties = $.extend({}, root); // inherit all fields used in the button
             delete sharedProperties.buttons; // this one's not needed
             delete sharedProperties.name; // this one's not needed
@@ -3653,10 +3615,10 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         }
         // optionally add a more-button in each group
         if (settings.autoAddMore) {
-            if (settings.autoAddMore === "right")
-                btns.push("more");
+            if (settings.autoAddMore === 'right')
+                btns.push('more');
             else {
-                btns.unshift("more");
+                btns.unshift('more');
             }
         }
         // add each button - check if it's already an object or just the string
@@ -3673,10 +3635,10 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         if (original._expanded || original.command)
             return original;
         // if just a name, turn into a command
-        if (typeof original === "string")
+        if (typeof original === 'string')
             original = { action: original };
         // if it's a command w/action, wrap into command + trim
-        if (typeof original.action === "string") {
+        if (typeof original.action === 'string') {
             original.action = original.action.trim();
             original = { command: original };
         }
@@ -3693,12 +3655,12 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
             removeUnfitButtons(btns, config);
             disableButtons(btns, config);
             // remove the group, if no buttons left, or only "more"
-            if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === "more"))
+            if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
                 btnGroups.splice(g--, 1); // remove, and decrement counter
         }
         function removeUnfitButtons(btns, config) {
             for (var i = 0; i < btns.length; i++) {
-                //var add = btns[i].showCondition;
+                //let add = btns[i].showCondition;
                 //if (add !== undefined)
                 //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
                 if (!tools.evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
@@ -3711,17 +3673,17 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         }
     },
     btnProperties: [
-        "classes",
-        "icon",
-        "title",
-        "dynamicClasses",
-        "showCondition",
-        "disabled"
+        'classes',
+        'icon',
+        'title',
+        'dynamicClasses',
+        'showCondition',
+        'disabled'
     ],
     prvProperties: [
-        "defaults",
-        "params",
-        "name"
+        'defaults',
+        'params',
+        'name'
     ],
     // enhance button-object with default icons, etc.
     addDefaultBtnSettings: function (btn, group, groups, actions) {
@@ -3737,13 +3699,13 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
     },
     customize: function (toolbar) {
         //if (!toolbar.settings) return;
-        //var set = toolbar.settings;
+        //let set = toolbar.settings;
         //if (set.autoAddMore) {
         //    console.log("auto-more");
-        //    var grps = toolbar.groups;
-        //    for (var g = 0; g < grps.length; g++) {
-        //        var btns = grps[g];
-        //        for (var i = 0; i < btns.length; i++) {
+        //    let grps = toolbar.groups;
+        //    for (let g = 0; g < grps.length; g++) {
+        //        let btns = grps[g];
+        //        for (let i = 0; i < btns.length; i++) {
         //        }
         //    }
         //}
@@ -3751,7 +3713,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
     evalPropOrFunction: function (propOrFunction, settings, config, fallback) {
         if (propOrFunction === undefined || propOrFunction === null)
             return fallback;
-        return typeof (propOrFunction) === "function" ? propOrFunction(settings, config) : propOrFunction;
+        return typeof (propOrFunction) === 'function' ? propOrFunction(settings, config) : propOrFunction;
     }
 };
 
@@ -3816,32 +3778,32 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
         //    ]
         //},
         {
-            name: "default",
-            buttons: "edit,new,metadata,publish,layout"
+            name: 'default',
+            buttons: 'edit,new,metadata,publish,layout'
         }, {
-            name: "list",
-            buttons: "add,remove,moveup,movedown,instance-list,replace,item-history"
+            name: 'list',
+            buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history'
         }, {
-            name: "data",
-            buttons: "delete"
+            name: 'data',
+            buttons: 'delete'
         }, {
-            name: "instance",
-            buttons: "template-develop,template-settings,contentitems,template-query,contenttype",
+            name: 'instance',
+            buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
             defaults: {
-                classes: "group-pro"
+                classes: 'group-pro'
             }
         }, {
-            name: "app",
-            buttons: "app,app-settings,app-resources,zone",
+            name: 'app',
+            buttons: 'app,app-settings,app-resources,zone',
             defaults: {
-                classes: "group-pro"
+                classes: 'group-pro'
             }
         }
     ],
     defaults: {},
     params: {},
     settings: {
-        autoAddMore: "right",
+        autoAddMore: 'right',
     }
 };
 

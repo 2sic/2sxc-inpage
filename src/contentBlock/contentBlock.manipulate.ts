@@ -5,7 +5,7 @@ import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
  * contains commands to create/move/delete a contentBlock in a page
  */
 
-var sxcInstance: SxcInstanceWithInternals;
+let sxcInstance: SxcInstanceWithInternals;
 
 /**
  * create content block
@@ -18,12 +18,12 @@ var sxcInstance: SxcInstanceWithInternals;
  */
 function create(parentId: any, fieldName: any, index: any, appName: any, container: any, newGuid: any): any {
   // the wrapper, into which this will be placed and the list of pre-existing blocks
-  var listTag = container;
+  let listTag = container;
   if (listTag.length === 0) return alert('can\'t add content-block as we couldn\'t find the list');
-  var cblockList = listTag.find('div.sc-content-block');
+  let cblockList = listTag.find('div.sc-content-block');
   if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
 
-  var params = {
+  let params = {
     parentId: parentId,
     field: fieldName,
     sortOrder: index,
@@ -33,7 +33,7 @@ function create(parentId: any, fieldName: any, index: any, appName: any, contain
 
   return sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
     .then(result => {
-      var newTag = $(result); // prepare tag for inserting
+      let newTag = $(result); // prepare tag for inserting
 
       // should I add it to a specific position...
       if (cblockList.length > 0 && index > 0)
@@ -42,7 +42,7 @@ function create(parentId: any, fieldName: any, index: any, appName: any, contain
       else //...or just at the beginning?
         listTag.prepend(newTag);
 
-      var sxcNew = twoSxc(newTag);
+      let sxcNew = twoSxc(newTag);
       twoSxc._toolbarManager.buildToolbars(newTag);
     });
 }
@@ -55,7 +55,7 @@ function create(parentId: any, fieldName: any, index: any, appName: any, contain
  * @param indexTo
  */
 function move(parentId: any, field: any, indexFrom: any, indexTo: any): any{
-  var params = {
+  let params = {
     parentId: parentId,
     field: field,
     indexFrom: indexFrom,
@@ -65,7 +65,7 @@ function move(parentId: any, field: any, indexFrom: any, indexTo: any): any{
   // todo: need sxc!
   return sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
     .then(() => {
-      console.log("done moving!");
+      console.log('done moving!');
       window.location.reload();
     });
 }

@@ -16,4 +16,4 @@ interface SxcControllerWithInternals {
 }
 // ReSharper restore InconsistentNaming
 
-declare var $2sxc: SxcControllerWithInternals;
+declare let $2sxc: SxcControllerWithInternals;

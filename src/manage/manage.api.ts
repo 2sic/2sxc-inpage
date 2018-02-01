@@ -1,8 +1,8 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 
-declare var window: any;
+declare let window: any;
 
-//var mngApi = $2sxc._manage;
+//let mngApi = $2sxc._manage;
 
 /**
  * Get a html tag of the current sxc instance
@@ -19,8 +19,8 @@ export function getTag(sxci) {
  * @return {any} edit-context object
  */
 export function getEditContextOfTag(htmlTag) {
-  var attr = htmlTag.getAttribute("data-edit-context");
-  return JSON.parse(attr || "") as DataEditContext;
+  let attr = htmlTag.getAttribute('data-edit-context');
+  return JSON.parse(attr || '') as DataEditContext;
 };
 
 /**
@@ -38,7 +38,7 @@ export function getEditContext(sxc) {
  * @returns {any} object containing various properties for this current sxc-instance
  */
 export function buildInstanceConfig(editContext) {
-  var ce = editContext.Environment,
+  let ce = editContext.Environment,
     cg = editContext.ContentGroup,
     cb = editContext.ContentBlock;
   return {

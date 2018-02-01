@@ -17,7 +17,7 @@ class Selectors {
 
 // the quick-edit object
 // the quick-insert object
-export var $quickE = window.$quickE = {
+export let $quickE = window.$quickE = {
   body: $('body'),
   win: $(window),
   main: $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>"),
@@ -40,7 +40,7 @@ export var $quickE = window.$quickE = {
 } as I$quickE;
 
 // selectors used all over the in-page-editing, centralized to ensure consistency
-export var selectors: Selectors = {
+export let selectors: Selectors = {
   cb: {
     id: 'cb',
     "class": 'sc-content-block',

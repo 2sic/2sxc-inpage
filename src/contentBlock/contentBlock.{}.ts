@@ -19,7 +19,7 @@
  * The main content-block manager
  */
 // ReSharper disable once InconsistentNaming
-export var _contentBlock = {
+export let _contentBlock = {
 
   // constants
   cViewWithoutContent: '_LayoutElement', // needed to differentiate the "select item" from the "empty-is-selected" which are both empty

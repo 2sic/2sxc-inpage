@@ -5,12 +5,12 @@ var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 var $2sxcActionMenuMapper = function (moduleId) {
     var run = module_bootstrapper_1.$2sxc(moduleId).manage.run;
     return {
-        changeLayoutOrContent: function () { run("layout"); },
-        addItem: function () { run("add", { useModuleList: true, sortOrder: 0 }); },
-        edit: function () { run("edit", { useModuleList: true, sortOrder: 0 }); },
-        adminApp: function () { run("app"); },
-        adminZone: function () { run("zone"); },
-        develop: function () { run("template-develop"); },
+        changeLayoutOrContent: function () { run('layout'); },
+        addItem: function () { run('add', { useModuleList: true, sortOrder: 0 }); },
+        edit: function () { run('edit', { useModuleList: true, sortOrder: 0 }); },
+        adminApp: function () { run('app'); },
+        adminZone: function () { run('zone'); },
+        develop: function () { run('template-develop'); },
     };
 };
 //# sourceMappingURL=dnn-inpage-edit.js.map

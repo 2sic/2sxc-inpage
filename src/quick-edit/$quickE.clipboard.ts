@@ -15,7 +15,7 @@ import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
  * @param type
  */
 export function copyPasteInPage(cbAction: string, list: any, index: number, type: any): any {
-  var newClip = clipboard.createSpecs(type, list, index);
+  let newClip = clipboard.createSpecs(type, list, index);
 
   // action!
   switch (cbAction) {
@@ -24,8 +24,8 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
 
       break;
     case 'paste':
-      var from = clipboard.data.index;
-      var to = newClip.index;
+      let from = clipboard.data.index;
+      let to = newClip.index;
       // check that we only move block-to-block or module to module
       if (clipboard.data.type !== newClip.type)
         return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
@@ -54,7 +54,7 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
  * clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
  */
 export namespace clipboard {
-  export var data: any = {};
+  export let data: any = {};
 
   export function mark(newData) {
     if (newData) {
@@ -64,7 +64,7 @@ export namespace clipboard {
       data = newData;
     }
     $('.' + selectors.selected).removeClass(selectors.selected); // clear previous markings
-    var cb = $(data.item);
+    let cb = $(data.item);
     cb.addClass(selectors.selected);
     if (cb.prev().is('iframe'))
       cb.prev().addClass(selectors.selected);
@@ -80,27 +80,27 @@ export namespace clipboard {
   }
 
   export function createSpecs(type, list, index) {
-    var listItems = list.find(selectors[type].selector);
+    let listItems = list.find(selectors[type].selector);
     if (index >= listItems.length) index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
-    var currentItem = listItems[index];
-    var editContext = JSON.parse(list.attr(selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
+    let currentItem = listItems[index];
+    let editContext = JSON.parse(list.attr(selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
     return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
   }
 };
 
 
 function setSecondaryActionsState(state) {
-  var btns = $('a.sc-content-block-menu-btn');
+  let btns = $('a.sc-content-block-menu-btn');
   btns = btns.filter('.icon-sxc-paste');
   btns.toggleClass('sc-unavailable', !state);
 };
 
 
-quickE.selected.toggle = function (target) {
+quickE.selected.toggle = target => {
   if (!target)
     return quickE.selected.hide();
 
-  var coords = getCoordinates(target);
+  let coords = getCoordinates(target);
   coords.yh = coords.y + 20;
   positionAndAlign(quickE.selected, coords);
   quickE.selected.target = target;
@@ -112,8 +112,8 @@ let cmdsStrategyFactory = new CmdsStrategyFactory();
  * bind clipboard actions
  */ 
 $('a', quickE.selected).click(function () {
-  var action = $(this).data('action');
-  var clip = clipboard.data;
+  let action = $(this).data('action');
+  let clip = clipboard.data;
   switch (action) {
     case 'delete':
       return cmdsStrategyFactory.delete(clip);

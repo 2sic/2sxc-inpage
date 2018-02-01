@@ -25,7 +25,7 @@ export function _translateInit(manage: any): void {
       backend: {
         loadPath: manage._editContext.Environment.SxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js'
       }
-    }, function (err, t) {
+    }, (err, t) => {
       // for options see
       // https://github.com/i18next/jquery-i18next#initialize-the-plugin
       jqueryI18next.init(i18next, $);

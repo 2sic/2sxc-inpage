@@ -5,25 +5,25 @@
  */
 
 //#region contentItem Commands
-export var contentItems = {
+export let contentItems = {
   // delete command - try to really delete a content-item
-  "delete": function (sxc, itemId, itemGuid, itemTitle) {
+  "delete": (sxc, itemId, itemGuid, itemTitle) => {
     // first show main warning / get ok
-    var ok = confirm(translate("Delete.Confirm")
-      .replace("{id}", itemId)
-      .replace("{title}", itemTitle));
+    let ok = confirm(translate('Delete.Confirm')
+      .replace('{id}', itemId)
+      .replace('{title}', itemTitle));
     if (!ok) return;
 
-    sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
-      .success(function () {
+    sxc.webApi.delete('app-content/any/' + itemGuid, null, null, true)
+      .success(() => {
         location.reload();
-      }).error(function (error) {
-        var msgJs = translate("Delete.ErrCheckConsole");
+      }).error(error => {
+        let msgJs = translate('Delete.ErrCheckConsole');
         console.log(error);
 
         // check if it's a permission config problem
-        if (error.status === 401) alert(translate("Delete.ErrPermission") + msgJs);
-        if (error.status === 400) alert(translate("Delete.ErrInUse") + msgJs);
+        if (error.status === 401) alert(translate('Delete.ErrPermission') + msgJs);
+        if (error.status === 400) alert(translate('Delete.ErrInUse') + msgJs);
       });
   }
 };

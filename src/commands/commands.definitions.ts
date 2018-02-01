@@ -137,7 +137,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return !!settings.metadata;
     }, // only add a metadata-button if it has metadata-infos
     configureCommand(cmd) {
-      var itm = {
+      let itm = {
         Title: 'EditFormTitle.Metadata',
         Metadata: extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
       };
@@ -213,8 +213,8 @@ export function create(cmdSpecs: CmdSpec): Act {
       // if we have an entity-id, publish based on that
       if (settings.entityId) return publishId(sxc, settings.entityId);
 
-      var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
-      var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+      let part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+      let index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
       return publish(sxc, part, index);
     }
   }));
@@ -294,7 +294,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       // else if (cmdSpecs.contentTypeId)
       //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
       if (cmd.settings.filters) {
-        var enc = JSON.stringify(cmd.settings.filters);
+        let enc = JSON.stringify(cmd.settings.filters);
 
         // special case - if it contains a "+" character, this won't survive 
         // encoding through the hash as it's always replaced with a space, even if it would be preconverted to %2b
@@ -348,7 +348,7 @@ export function create(cmdSpecs: CmdSpec): Act {
   //#region custom code buttons
   addDef(makeDef('custom', 'Custom', 'bomb', true, false, {
     code(settings, event, sxc) {
-      var fn;
+      let fn;
       console.log('custom action with code - BETA feature, may change');
       if (!settings.customCode) {
         console.warn('custom code action, but no onclick found to run', settings);
@@ -370,7 +370,7 @@ export function create(cmdSpecs: CmdSpec): Act {
 
   addDef(makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
     code(settings, event) {
-      var btn = $(event.target),
+      let btn = $(event.target),
         fullMenu = btn.closest('ul.sc-menu'),
         oldState = Number(fullMenu.attr('data-state') || 0),
         max = Number(fullMenu.attr('group-count')),

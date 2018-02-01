@@ -26,22 +26,22 @@ export class cb implements ICmds {
 export class mod implements ICmds {
   delete(clip: any): void {
     if (!confirm('are you sure?')) return;
-    var modId = mm.getModuleId(clip.item.className);
+    let modId = mm.getModuleId(clip.item.className);
     mm.delete(modId);
   }
 
   // todo: unsure if this is a good place for this bit of code...
   static move(oldClip: any, newClip: any, from: any, to: any): void {
-    var modId = mm.getModuleId(oldClip.item.className);
-    var pane = mm.getPaneName(newClip.list);
+    let modId = mm.getModuleId(oldClip.item.className);
+    let pane = mm.getPaneName(newClip.list);
     mm.move(modId, pane, to);
   }
 
   static sendToPane(): void {
-    var pane = quickE.main.actionsForModule.closest(selectors.mod.listSelector);
+    let pane = quickE.main.actionsForModule.closest(selectors.mod.listSelector);
 
     // show the pane-options
-    var pl = quickE.selected.find('#paneList');
+    let pl = quickE.selected.find('#paneList');
     if (!pl.is(':empty'))
       pl.empty();
     pl.append(mm.getMoveButtons(mm.getPaneName(pane)));

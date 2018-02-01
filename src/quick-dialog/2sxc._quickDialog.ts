@@ -10,22 +10,22 @@ import { updateTemplateFromDia } from '../contentBlock/contentBlock.templates';
 const resizeInterval: number = 200;
 const scrollTopOffset: number = 80;
 let resizeWatcher = null;
-const diagShowClass: string = "dia-select";
+const diagShowClass: string = 'dia-select';
 let isFullscreen: boolean = false;
 
 /**
  * dialog manager - the currently active dialog object
  */
-//var diagManager = twoSxc._quickDialog = {}
+//let diagManager = twoSxc._quickDialog = {}
 
-export var current: any = null;
+export let current: any = null;
 
 /**
  * toggle visibility
  * @param {boolean} [show] true/false optional
  */
 export function toggle(show) {
-  var cont = $(getContainer());
+  let cont = $(getContainer());
   if (show === undefined)
     show = !cont.hasClass(diagShowClass);
   // show/hide visually
@@ -49,7 +49,7 @@ export function cancel() {
  * @param {Object<any>} sxc - the sxc which is persisted for
  */
 export function persistDialog(sxc) {
-  sessionStorage.setItem("dia-cbid", sxc.cbid);
+  sessionStorage.setItem('dia-cbid', sxc.cbid);
 };
 
 /**
@@ -57,7 +57,7 @@ export function persistDialog(sxc) {
  * @returns {element} html element of the div
  */
 export function getContainer() {
-  var container = $(".inpage-frame-wrapper");
+  let container = $('.inpage-frame-wrapper');
   return container.length > 0 ? container : buildContainerAndIFrame();
 };
 
@@ -68,7 +68,7 @@ export function getContainer() {
  */
 export function getIFrame(container?) {
   if (!container) container = getContainer();
-  return container.find("iframe")[0];
+  return container.find('iframe')[0];
 };
 
 /**
@@ -96,14 +96,14 @@ export function isShowing(sxc, dialogName) {
  */
 export function showOrToggle(sxc, url, closeCallback, fullScreen, dialogName) {
   setSize(fullScreen);
-  var iFrame = getIFrame();
+  let iFrame = getIFrame();
 
   // in case it's a toggle
   if (dialogName && isShowing(sxc, dialogName))
     return hide();
 
   iFrame.rewire(sxc, closeCallback, dialogName);
-  iFrame.setAttribute("src", rewriteUrl(url));
+  iFrame.setAttribute('src', rewriteUrl(url));
   // if the window had already been loaded, re-init
   if (iFrame.contentWindow && iFrame.contentWindow.reboot)
     iFrame.contentWindow.reboot();
@@ -119,27 +119,27 @@ export function showOrToggle(sxc, url, closeCallback, fullScreen, dialogName) {
  * @return {jquery} jquery dom-object 
  */
 function buildContainerAndIFrame() {
-  var container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
-  var newIFrame: any = document.createElement("iframe");
+  let container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
+  let newIFrame: any = document.createElement('iframe');
   newIFrame = extendIFrameWithSxcState(newIFrame);
-  container.find(".inpage-frame").html(newIFrame);
-  $("body").append(container);
+  container.find('.inpage-frame').html(newIFrame);
+  $('body').append(container);
 
   watchForResize();
   return container;
 }
 
 function setSize(fullScreen) {
-  var container = getContainer();
+  let container = getContainer();
   // set container height
-  container.css("min-height", fullScreen ? "100%" : "225px");
+  container.css('min-height', fullScreen ? '100%' : '225px');
   isFullscreen = fullScreen;
 }
 
 function extendIFrameWithSxcState(iFrame) {
-  var hiddenSxc = null;
-  var cbApi = _contentBlock;
-  var tagModule = null;
+  let hiddenSxc = null;
+  let cbApi = _contentBlock;
+  let tagModule = null;
 
   /**
    * get the sxc-object of this iframe
@@ -150,56 +150,38 @@ function extendIFrameWithSxcState(iFrame) {
     return hiddenSxc.recreate();
   }
 
-  var newFrm = Object.assign(iFrame, {
+  let newFrm = Object.assign(iFrame, {
     closeCallback: null,
-    rewire: function (sxc, callback, dialogName) {
+    rewire: (sxc, callback, dialogName) => {
       hiddenSxc = sxc;
       tagModule = $($(getTag(sxc)).parent().eq(0));
       newFrm.sxcCacheKey = sxc.cacheKey;
       newFrm.closeCallback = callback;
       if (dialogName) newFrm.dialogName = dialogName;
     },
-    getManageInfo: function () {
-      return reSxc().manage._dialogParameters;
-    },
-    getAdditionalDashboardConfig: function () {
-      return reSxc().manage._quickDialogConfig;
-    },
-    persistDia: function () {
-      persistDialog(reSxc());
-    },
-    scrollToTarget: function () {
-      $("body").animate({
+    getManageInfo: () => reSxc().manage._dialogParameters,
+    getAdditionalDashboardConfig: () => reSxc().manage._quickDialogConfig,
+    persistDia: () => persistDialog(reSxc()),
+    scrollToTarget: () => {
+      $('body').animate({
         scrollTop: tagModule.offset().top - scrollTopOffset
       });
     },
-    toggle: function (show) {
-      toggle(show);
-    },
-    cancel: function () {
+    toggle: show => toggle(show),
+    cancel: () => {
       newFrm.toggle(false);
       //todo: only re-init if something was changed?
       // return cbApi.reloadAndReInitialize(reSxc());
 
       // cancel the dialog
-      localStorage.setItem("cancelled-dialog", "true");
+      localStorage.setItem('cancelled-dialog', 'true');
       return newFrm.closeCallback();
     },
-    run: function (verb) {
-      reSxc().manage.run(verb);
-    },
-    showMessage: function (message) {
-      showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
-    },
-    reloadAndReInit: function () {
-      return reloadAndReInitialize(reSxc(), true, true);
-    },
-    saveTemplate: function (templateId) {
-      return updateTemplateFromDia(reSxc(), templateId, false);
-    },
-    previewTemplate: function (templateId) {
-      return ajaxLoad(reSxc(), templateId, true);
-    }
+    run: verb => reSxc().manage.run(verb),
+    showMessage: message => showMessage(reSxc(), `<p class="no-live-preview-available">${message}</p>`),
+    reloadAndReInit: () => reloadAndReInitialize(reSxc(), true, true),
+    saveTemplate: templateId => updateTemplateFromDia(reSxc(), templateId, false),
+    previewTemplate: templateId => ajaxLoad(reSxc(), templateId, true)
   });
   return newFrm;
 }
@@ -212,14 +194,14 @@ function extendIFrameWithSxcState(iFrame) {
  */
 function rewriteUrl(url) {
   // change default url-schema from the primary angular-app to the quick-dialog
-  url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
+  url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
 
   // special debug-code when running on local ng-serve
   // this is only activated if the developer manually sets a value in the localStorage
   try {
-    var devMode = localStorage.getItem("devMode");
+    let devMode = localStorage.getItem('devMode');
     if (devMode && ~~devMode)
-      url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
+      url = url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
   } catch (e) {
     // ignore
   }
@@ -238,20 +220,20 @@ function watchForResize(keepWatching?) {
     return null;
   }
 
-  var cont = getContainer();
+  let cont = getContainer();
   if (!resizeWatcher) // only add a timer if not already running
-    resizeWatcher = setInterval(function () {
+    resizeWatcher = setInterval(() => {
       try {
-        var frm = getIFrame(cont);
+        let frm = getIFrame(cont);
         if (!frm) return;
-        var height = frm.contentDocument.body.offsetHeight;
+        let height = frm.contentDocument.body.offsetHeight;
         if (frm.previousHeight === height) return;
-        frm.style.minHeight = cont.css("min-height");
-        frm.style.height = height + "px";
+        frm.style.minHeight = cont.css('min-height');
+        frm.style.height = height + 'px';
         frm.previousHeight = height;
         if (isFullscreen) {
-          frm.style.height = "100%";
-          frm.style.position = "absolute";
+          frm.style.height = '100%';
+          frm.style.position = 'absolute';
         }
       } catch (e) {
         // ignore

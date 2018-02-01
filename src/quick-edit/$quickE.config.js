@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
-var configAttr = "quick-edit-config";
+var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
  */
@@ -15,7 +15,7 @@ var conf = _quickE___1.$quickE.config = {
     }
 };
 function _readPageConfig() {
-    var configs = $("[" + configAttr + "]");
+    var configs = $('[' + configAttr + ']');
     var finalConfig = {};
     var confJ;
     var confO;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//var mngApi = $2sxc._manage;
+//let mngApi = $2sxc._manage;
 /**
  * Get a html tag of the current sxc instance
  * @param {any} sxci
@@ -17,8 +17,8 @@ exports.getTag = getTag;
  * @return {any} edit-context object
  */
 function getEditContextOfTag(htmlTag) {
-    var attr = htmlTag.getAttribute("data-edit-context");
-    return JSON.parse(attr || "");
+    var attr = htmlTag.getAttribute('data-edit-context');
+    return JSON.parse(attr || '');
 }
 exports.getEditContextOfTag = getEditContextOfTag;
 ;

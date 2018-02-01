@@ -1,5 +1,6 @@
 ﻿import { current } from '../quick-dialog/2sxc._quickDialog';
 import { getTag } from '../manage/manage.api';
+import { translate } from '../translate/2sxc.translate';
 //import '/2sxc-api/js/2sxc.api';
 
 /**
@@ -9,25 +10,23 @@ import { getTag } from '../manage/manage.api';
 // 
 // 
 
-export var $2sxc = window.$2sxc as SxcControllerWithInternals;
+export let $2sxc = window.$2sxc as SxcControllerWithInternals;
 
-var initializedModules = [];
-var openedTemplatePickerOnce = false;
-var cancelledDialog = localStorage.getItem('cancelled-dialog');
+let initializedModules = [];
+let openedTemplatePickerOnce = false;
+let cancelledDialog = localStorage.getItem('cancelled-dialog');
 
 if (cancelledDialog) localStorage.removeItem('cancelled-dialog');
 
 initAllModules(true);
 
 // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-document.body.addEventListener("DOMSubtreeModified", function (event) {
-  initAllModules(false);
-}, false);
+document.body.addEventListener('DOMSubtreeModified', event => initAllModules(false), false);
 
 //return; // avoid side-effects
 
 function initAllModules(isFirstRun) {
-  $("div[data-edit-context]").each(function () {
+  $('div[data-edit-context]').each(function () {
     initModule(this, isFirstRun);
   });
   tryShowTemplatePicker();
@@ -41,7 +40,7 @@ function initAllModules(isFirstRun) {
  * @returns
  */
 function tryShowTemplatePicker() {
-  var uninitializedModules = $('.sc-uninitialized');
+  let uninitializedModules = $('.sc-uninitialized');
 
   if (cancelledDialog || openedTemplatePickerOnce) return false;
 
@@ -52,19 +51,17 @@ function tryShowTemplatePicker() {
   if (uninitializedModules.length !== 1) return false;
 
   // show the template picker of this module
-  var module = uninitializedModules.parent('div[data-edit-context]')[0];
+  let module = uninitializedModules.parent('div[data-edit-context]')[0];
   $2sxc(module).manage.run('layout');
   openedTemplatePickerOnce = true;
 }
 
-export var sxc: SxcInstanceWithInternals;
+export let sxc: SxcInstanceWithInternals;
 
 function initModule(module, isFirstRun) {
 
   // check if module is already in the list of initialized modules
-  if (initializedModules.find(function (m) {
-    return m === module;
-  })) return false;
+  if (initializedModules.find(m => m === module)) return false;
 
   // add to modules-list
   initializedModules.push(module);
@@ -77,7 +74,7 @@ function initModule(module, isFirstRun) {
 
   // check if we must show the glasses
   // this must run even after first-run, because it can be added ajax-style
-  var wasEmpty = showGlassesButtonIfUninitialized(sxc);
+  let wasEmpty = showGlassesButtonIfUninitialized(sxc);
 
   if (isFirstRun || !wasEmpty) $2sxc._toolbarManager.buildToolbars(module);
 
@@ -90,13 +87,18 @@ function showGlassesButtonIfUninitialized(sxc) {
   if (sxc.manage._editContext.ContentGroup.TemplateId !== 0) return false;
 
   // already has a glasses button
-  var tag = $(getTag(sxc));
-  if (tag.find(".sc-uninitialized").length !== 0) return false;
+  let tag = $(getTag(sxc));
+  if (tag.find('.sc-uninitialized').length !== 0) return false;
 
   // note: title is added on mouseover, as the translation isn't ready at page-load
-  var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
-  btn.on("click", function () {
-    sxc.manage.run("layout");
+  let btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+
+  btn.on('click', (): void => {
+    sxc.manage.run('layout');
+  });
+
+  btn.on('mouseover', (): void => {
+    btn.title = translate(btn.title);
   });
 
   tag.append(btn);

@@ -13,15 +13,15 @@ import { saveTemplate } from './contentBlock.webApiPromises';
  * @returns {} 
  */
 export function prepareToAddContent(sxc, useModuleList) {
-  var isCreated = sxc.manage._editContext.ContentGroup.IsCreated;
+  let isCreated = sxc.manage._editContext.ContentGroup.IsCreated;
   if (isCreated || !useModuleList) return $.when(null);
   // return persistTemplate(sxc, null);
-  // var manage = sxc.manage;
-  // var contentGroup = manage._editContext.ContentGroup;
-  // var showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
-  // var groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
+  // let manage = sxc.manage;
+  // let contentGroup = manage._editContext.ContentGroup;
+  // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
+  // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
 
-  var templateId = /* templateId || */ sxc.manage._editContext.ContentGroup.TemplateId;
+  let templateId = /* templateId || */ sxc.manage._editContext.ContentGroup.TemplateId;
 
   // template has not changed
   // if (groupExistsAndTemplateUnchanged) return $.when(null);
@@ -37,13 +37,13 @@ export function prepareToAddContent(sxc, useModuleList) {
  * @param {*} forceCreate 
  */
 export function updateTemplateFromDia(sxc, templateId, forceCreate) {
-  var contentGroup = sxc.manage._editContext.ContentGroup;
-  var showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
+  let contentGroup = sxc.manage._editContext.ContentGroup;
+  let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
   // or just reset it, so it picks up the right values again ?
   return updateTemplate(sxc, templateId, forceCreate)
-    .then(function () {
+    .then(() => {
       hide();
 
       // if it didn't have content, then it only has now...
@@ -60,7 +60,7 @@ export function updateTemplateFromDia(sxc, templateId, forceCreate) {
  */
 export function updateTemplate(sxc, templateId, forceCreate) {
   return saveTemplate(sxc, templateId, forceCreate)
-    .then(function (data, textStatus, xhr) {
+    .then((data, textStatus, xhr) => {
 
       // error handling
       if (xhr.status !== 200) return alert('error - result not ok, was not able to create ContentGroup');

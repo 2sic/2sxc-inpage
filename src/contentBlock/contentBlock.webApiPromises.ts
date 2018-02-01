@@ -53,7 +53,7 @@ export function saveTemplate(sxc, templateId, forceCreateContentGroup) {
  * @returns {promise} promise with the html in the result
  */
 export function getPreviewWithTemplate(sxc, templateId) {
-  var ec = sxc.manage._editContext;
+  let ec = sxc.manage._editContext;
   templateId = templateId || -1; // fallback, meaning use saved ID
   return sxc.webApi.get({
     url: 'view/module/rendertemplate',

@@ -60,7 +60,7 @@ function move(parentId, field, indexFrom, indexTo) {
     // todo: need sxc!
     return sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
         .then(function () {
-        console.log("done moving!");
+        console.log('done moving!');
         window.location.reload();
     });
 }

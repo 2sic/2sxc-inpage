@@ -1,6 +1,6 @@
 ﻿import { $quickE as quickE, selectors } from './$quickE.{}';
 
-const configAttr: string = "quick-edit-config";
+const configAttr: string = 'quick-edit-config';
 
 /**
  * the initial configuration
@@ -16,17 +16,17 @@ let conf = quickE.config = {
 };
 
 export function _readPageConfig() {
-  var configs: IConf[] = $("[" + configAttr + "]");
-  var finalConfig: IConf = {} as IConf;
-  var confJ: string;
-  var confO: IConf;
+  let configs: IConf[] = $('[' + configAttr + ']');
+  let finalConfig: IConf = {} as IConf;
+  let confJ: string;
+  let confO: IConf;
 
   // any inner blocks found? will currently affect if modules can be inserted...
-  var hasInnerCBs: boolean = ($(selectors.cb.listSelector).length > 0);
+  let hasInnerCBs: boolean = ($(selectors.cb.listSelector).length > 0);
 
   if (configs.length > 0) {
     // go through reverse list, as the last is the most important...
-    for (var c = configs.length; c >= 0; c--) {
+    for (let c = configs.length; c >= 0; c--) {
       confJ = configs[0].getAttribute(configAttr);
       try {
         confO = JSON.parse(confJ) as IConf;

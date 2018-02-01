@@ -10,12 +10,12 @@ var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates")
 var resizeInterval = 200;
 var scrollTopOffset = 80;
 var resizeWatcher = null;
-var diagShowClass = "dia-select";
+var diagShowClass = 'dia-select';
 var isFullscreen = false;
 /**
  * dialog manager - the currently active dialog object
  */
-//var diagManager = twoSxc._quickDialog = {}
+//let diagManager = twoSxc._quickDialog = {}
 exports.current = null;
 /**
  * toggle visibility
@@ -51,7 +51,7 @@ exports.cancel = cancel;
  * @param {Object<any>} sxc - the sxc which is persisted for
  */
 function persistDialog(sxc) {
-    sessionStorage.setItem("dia-cbid", sxc.cbid);
+    sessionStorage.setItem('dia-cbid', sxc.cbid);
 }
 exports.persistDialog = persistDialog;
 ;
@@ -60,7 +60,7 @@ exports.persistDialog = persistDialog;
  * @returns {element} html element of the div
  */
 function getContainer() {
-    var container = $(".inpage-frame-wrapper");
+    var container = $('.inpage-frame-wrapper');
     return container.length > 0 ? container : buildContainerAndIFrame();
 }
 exports.getContainer = getContainer;
@@ -73,7 +73,7 @@ exports.getContainer = getContainer;
 function getIFrame(container) {
     if (!container)
         container = getContainer();
-    return container.find("iframe")[0];
+    return container.find('iframe')[0];
 }
 exports.getIFrame = getIFrame;
 ;
@@ -108,7 +108,7 @@ function showOrToggle(sxc, url, closeCallback, fullScreen, dialogName) {
     if (dialogName && isShowing(sxc, dialogName))
         return hide();
     iFrame.rewire(sxc, closeCallback, dialogName);
-    iFrame.setAttribute("src", rewriteUrl(url));
+    iFrame.setAttribute('src', rewriteUrl(url));
     // if the window had already been loaded, re-init
     if (iFrame.contentWindow && iFrame.contentWindow.reboot)
         iFrame.contentWindow.reboot();
@@ -123,17 +123,17 @@ exports.showOrToggle = showOrToggle;
  */
 function buildContainerAndIFrame() {
     var container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
-    var newIFrame = document.createElement("iframe");
+    var newIFrame = document.createElement('iframe');
     newIFrame = extendIFrameWithSxcState(newIFrame);
-    container.find(".inpage-frame").html(newIFrame);
-    $("body").append(container);
+    container.find('.inpage-frame').html(newIFrame);
+    $('body').append(container);
     watchForResize();
     return container;
 }
 function setSize(fullScreen) {
     var container = getContainer();
     // set container height
-    container.css("min-height", fullScreen ? "100%" : "225px");
+    container.css('min-height', fullScreen ? '100%' : '225px');
     isFullscreen = fullScreen;
 }
 function extendIFrameWithSxcState(iFrame) {
@@ -159,46 +159,28 @@ function extendIFrameWithSxcState(iFrame) {
             if (dialogName)
                 newFrm.dialogName = dialogName;
         },
-        getManageInfo: function () {
-            return reSxc().manage._dialogParameters;
-        },
-        getAdditionalDashboardConfig: function () {
-            return reSxc().manage._quickDialogConfig;
-        },
-        persistDia: function () {
-            persistDialog(reSxc());
-        },
+        getManageInfo: function () { return reSxc().manage._dialogParameters; },
+        getAdditionalDashboardConfig: function () { return reSxc().manage._quickDialogConfig; },
+        persistDia: function () { return persistDialog(reSxc()); },
         scrollToTarget: function () {
-            $("body").animate({
+            $('body').animate({
                 scrollTop: tagModule.offset().top - scrollTopOffset
             });
         },
-        toggle: function (show) {
-            toggle(show);
-        },
+        toggle: function (show) { return toggle(show); },
         cancel: function () {
             newFrm.toggle(false);
             //todo: only re-init if something was changed?
             // return cbApi.reloadAndReInitialize(reSxc());
             // cancel the dialog
-            localStorage.setItem("cancelled-dialog", "true");
+            localStorage.setItem('cancelled-dialog', 'true');
             return newFrm.closeCallback();
         },
-        run: function (verb) {
-            reSxc().manage.run(verb);
-        },
-        showMessage: function (message) {
-            contentBlock_render_1.showMessage(reSxc(), '<p class="no-live-preview-available">' + message + "</p>");
-        },
-        reloadAndReInit: function () {
-            return contentBlock_render_1.reloadAndReInitialize(reSxc(), true, true);
-        },
-        saveTemplate: function (templateId) {
-            return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false);
-        },
-        previewTemplate: function (templateId) {
-            return contentBlock_render_1.ajaxLoad(reSxc(), templateId, true);
-        }
+        run: function (verb) { return reSxc().manage.run(verb); },
+        showMessage: function (message) { return contentBlock_render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
+        reloadAndReInit: function () { return contentBlock_render_1.reloadAndReInitialize(reSxc(), true, true); },
+        saveTemplate: function (templateId) { return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
+        previewTemplate: function (templateId) { return contentBlock_render_1.ajaxLoad(reSxc(), templateId, true); }
     });
     return newFrm;
 }
@@ -210,13 +192,13 @@ function extendIFrameWithSxcState(iFrame) {
  */
 function rewriteUrl(url) {
     // change default url-schema from the primary angular-app to the quick-dialog
-    url = url.replace("dist/dnn/ui.html?", "dist/ng/ui.html?");
+    url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
     // special debug-code when running on local ng-serve
     // this is only activated if the developer manually sets a value in the localStorage
     try {
-        var devMode = localStorage.getItem("devMode");
+        var devMode = localStorage.getItem('devMode');
         if (devMode && ~~devMode)
-            url = url.replace("/desktopmodules/tosic_sexycontent/dist/ng/ui.html", "http://localhost:4200");
+            url = url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
     }
     catch (e) {
         // ignore
@@ -244,12 +226,12 @@ function watchForResize(keepWatching) {
                 var height = frm.contentDocument.body.offsetHeight;
                 if (frm.previousHeight === height)
                     return;
-                frm.style.minHeight = cont.css("min-height");
-                frm.style.height = height + "px";
+                frm.style.minHeight = cont.css('min-height');
+                frm.style.height = height + 'px';
                 frm.previousHeight = height;
                 if (isFullscreen) {
-                    frm.style.height = "100%";
-                    frm.style.position = "absolute";
+                    frm.style.height = '100%';
+                    frm.style.position = 'absolute';
                 }
             }
             catch (e) {

@@ -9,7 +9,7 @@ twoSxc._toolbarManager.generateButtonHtml = generateButtonHtml;
 function flattenActionDefinition(actDef) {
   if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
 
-  var editInfo = actDef.entity._2sxcEditInformation;
+  let editInfo = actDef.entity._2sxcEditInformation;
   actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
   if (editInfo.entityId !== undefined) actDef.entityId = editInfo.entityId;
   if (editInfo.sortOrder !== undefined) actDef.sortOrder = editInfo.sortOrder;
@@ -24,21 +24,21 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
   flattenActionDefinition(actDef);
 
   // retrieve configuration for this button
-  var showClasses = "group-" + groupIndex + (actDef.disabled ? " disabled" : ""),
-    classesList = (actDef.classes || "").split(","),
-    box = $("<div/>"),
-    symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"),
+  let showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : ''),
+    classesList = (actDef.classes || '').split(','),
+    box = $('<div/>'),
+    symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>'),
     onclick = actDef.disabled ?
-      "" :
-      "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
+      '' :
+      '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
 
-  for (var c = 0; c < classesList.length; c++) showClasses += " " + classesList[c];
+  for (let c = 0; c < classesList.length; c++) showClasses += ' ' + classesList[c];
 
-  var button = $("<a />", {
-    'class': "sc-" + actDef.action + " " + showClasses +
-    (actDef.dynamicClasses ? " " + actDef.dynamicClasses(actDef) : ""),
+  let button = $('<a />', {
+    'class': 'sc-' + actDef.action + ' ' + showClasses +
+    (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
     'onclick': onclick,
-    'data-i18n': "[title]" + actDef.title
+    'data-i18n': '[title]' + actDef.title
   });
   button.html(box.html(symbol));
   return button[0].outerHTML;

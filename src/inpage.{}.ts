@@ -2,9 +2,9 @@
 
 //import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals
-//export var $2sxc = window.$2sxc as SxcControllerWithInternals;
+//export let $2sxc = window.$2sxc as SxcControllerWithInternals;
 window.$quickE = quickE;
-//var $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
+//let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
 // $2sxc.c = $2sxc.consts
 // $2sxc.system
 // $2sxc._commands = {};

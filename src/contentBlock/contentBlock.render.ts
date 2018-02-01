@@ -16,7 +16,7 @@ import { getPreviewWithTemplate } from './contentBlock.webApiPromises';
  * it should be able to render itself
  */
 
-var cbm = _contentBlock;
+let cbm = _contentBlock;
 
 /**
  * ajax update/replace the content of the content-block
@@ -28,7 +28,7 @@ var cbm = _contentBlock;
  */
 function replaceCb(sxc: any, newContent: any, justPreview: boolean): void {
   try {
-    var newStuff = $(newContent);
+    let newStuff = $(newContent);
 
     // Must disable toolbar before we attach to DOM
     if (justPreview) twoSxc._toolbarManager.disable(newStuff);
@@ -71,7 +71,7 @@ export function ajaxLoad(sxc: any, alternateTemplateId: any, justPreview: boolea
  * @param preview
  */
 export function reloadAndReInitialize(sxc: any, forceAjax?: boolean, preview? : boolean): any {
-  var manage = sxc.manage;
+  let manage = sxc.manage;
 
   // if ajax is not supported, we must reload the whole page
   if (!forceAjax && !manage._reloadWithAjax) return window.location.reload();

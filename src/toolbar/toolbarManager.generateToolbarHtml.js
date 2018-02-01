@@ -13,21 +13,21 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     // whatever we had, if more settings were provided, override with these...
     var tlbDef = tbManager.buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
     var btnGroups = tlbDef.groups;
-    var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
+    var behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
     // todo: these settings assume it's not in an array...
-    var tbClasses = "sc-menu group-0 " + behaviourClasses + " " +
-        ((tbConfig.sortOrder === -1) ? " listContent" : "") +
-        (tlbDef.settings.classes ? " " + tlbDef.settings.classes : "");
-    var toolbar = $("<ul />", {
+    var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
+        ((tbConfig.sortOrder === -1) ? ' listContent' : '') +
+        (tlbDef.settings.classes ? ' ' + tlbDef.settings.classes : '');
+    var toolbar = $('<ul />', {
         'class': tbClasses,
-        'onclick': "var e = arguments[0] || window.event; e.stopPropagation();"
+        'onclick': 'let e = arguments[0] || window.event; e.stopPropagation();'
     });
     for (var i = 0; i < btnGroups.length; i++) {
         var btns = btnGroups[i].buttons;
         for (var h = 0; h < btns.length; h++)
-            toolbar.append($("<li />").append($(tbManager.generateButtonHtml(sxc, btns[h], i))));
+            toolbar.append($('<li />').append($(tbManager.generateButtonHtml(sxc, btns[h], i))));
     }
-    toolbar.attr("group-count", btnGroups.length);
+    toolbar.attr('group-count', btnGroups.length);
     return toolbar[0].outerHTML;
 }
 //# sourceMappingURL=toolbarManager.generateToolbarHtml.js.map

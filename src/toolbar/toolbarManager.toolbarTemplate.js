@@ -31,32 +31,32 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
         //    ]
         //},
         {
-            name: "default",
-            buttons: "edit,new,metadata,publish,layout"
+            name: 'default',
+            buttons: 'edit,new,metadata,publish,layout'
         }, {
-            name: "list",
-            buttons: "add,remove,moveup,movedown,instance-list,replace,item-history"
+            name: 'list',
+            buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history'
         }, {
-            name: "data",
-            buttons: "delete"
+            name: 'data',
+            buttons: 'delete'
         }, {
-            name: "instance",
-            buttons: "template-develop,template-settings,contentitems,template-query,contenttype",
+            name: 'instance',
+            buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
             defaults: {
-                classes: "group-pro"
+                classes: 'group-pro'
             }
         }, {
-            name: "app",
-            buttons: "app,app-settings,app-resources,zone",
+            name: 'app',
+            buttons: 'app,app-settings,app-resources,zone',
             defaults: {
-                classes: "group-pro"
+                classes: 'group-pro'
             }
         }
     ],
     defaults: {},
     params: {},
     settings: {
-        autoAddMore: "right",
+        autoAddMore: 'right',
     }
 };
 //# sourceMappingURL=toolbarManager.toolbarTemplate.js.map

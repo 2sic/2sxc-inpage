@@ -22,7 +22,7 @@ class Coords {
  * @returns Point 
  */
 export function getBodyPosition(): Coords {
-  var bodyPos = quickE.body.css('position');
+  let bodyPos = quickE.body.css('position');
   return bodyPos === 'relative' || bodyPos === 'absolute'
     ? new Coords(quickE.body.offset().left, quickE.body.offset().top)
     : new Coords(0,0);
@@ -40,7 +40,7 @@ function refreshDomObjects(): void {
 
   if (quickE.config.innerBlocks.enable) {
     // get all content-block lists which are empty, or which allow multiple child-items
-    var lists = $(selectors.cb.listSelector)
+    let lists = $(selectors.cb.listSelector)
       .filter(':not(.' + selectors.cb.singleItem + '), :empty');
     quickE.contentBlocks = lists // $(selectors.cb.listSelector)
       .find(selectors.cb.selector)
@@ -57,7 +57,7 @@ function refreshDomObjects(): void {
  * Helps to skip unnecessary calls to refresh(e).
  */
 namespace refreshDomObjects {
-  export var lastCall: Date;
+  export let lastCall: Date;
 }
 
 /**
@@ -95,22 +95,22 @@ export function refresh(e) {
   quickE.modActions.toggleClass('sc-invisible', quickE.nearestMod === null);
   quickE.cbActions.toggleClass('sc-invisible', quickE.nearestCb === null);
 
-  var oldParent = quickE.main.parentContainer;
+  let oldParent = quickE.main.parentContainer;
 
   if (quickE.nearestCb !== null || quickE.nearestMod !== null) {
-    var alignTo = quickE.nearestCb || quickE.nearestMod;
+    let alignTo = quickE.nearestCb || quickE.nearestMod;
 
     // find parent pane to highlight
-    var parentPane = $(alignTo.element).closest(selectors.mod.listSelector);
-    var parentCbList = $(alignTo.element).closest(selectors.cb.listSelector);
-    var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
+    let parentPane = $(alignTo.element).closest(selectors.mod.listSelector);
+    let parentCbList = $(alignTo.element).closest(selectors.cb.listSelector);
+    let parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
 
     // put part of the pane-name into the button-labels
     if (parentPane.length > 0) {
       let paneName: string = parentPane.attr('id') || '';
       if (paneName.length > 4) paneName = paneName.substr(4);
       quickE.modActions.filter('[titleTemplate]').each(function () {
-        var t = $(this);
+        let t = $(this);
         t.attr('title', t.attr('titleTemplate').replace('{0}', paneName));
       });
     }

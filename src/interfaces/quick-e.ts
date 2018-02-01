@@ -40,7 +40,7 @@ interface I$quickE {
   template: string;
 }
 
-declare var $quickE: I$quickE;
+declare let $quickE: I$quickE;
 
 interface IClipboard {
   data: any;

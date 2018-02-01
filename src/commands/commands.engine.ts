@@ -8,25 +8,25 @@ import { prepareToAddContent } from '../contentBlock/contentBlock.templates';
 import { extend } from '../lib-helpers/2sxc._lib.extend';
 
 export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
-  var engine: IEngine = {
+  let engine: IEngine = {
     commands : initializeInstanceCommands(editContext),
 
     // assemble an object which will store the configuration and execute it
     create(specialSettings: any): any {
-      var settings = extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-      var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
+      let settings = extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+      let ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
         'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
         sxc.manage._editContext.Environment.SxcVersion;
-      var isDebug = twoSxc.urlParams.get('debug') ? '&debug=true' : '';
+      let isDebug = twoSxc.urlParams.get('debug') ? '&debug=true' : '';
 
-      var cmd = {
+      let cmd = {
         settings: settings,
         items: settings.items || [], // use predefined or create empty array
         params: extend({
           dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
         }, settings.params),
 
-        addSimpleItem: function () {
+        addSimpleItem: () => {
           let item = {} as Item;
           let ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
           if (cmd.settings.entityId) item.EntityId = cmd.settings.entityId;
@@ -37,7 +37,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
         },
 
         // this adds an item of the content-group, based on the group GUID and the sequence number
-        addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
+        addContentGroupItem: (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) => {
           cmd.items.push({
             Group: {
               Guid: guid,
@@ -50,8 +50,8 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
         },
 
         // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-        addContentGroupItemSetsToEditList: function (withPresentation) {
-          var isContentAndNotHeader = (cmd.settings.sortOrder !== -1),
+        addContentGroupItemSetsToEditList: withPresentation => {
+          let isContentAndNotHeader = (cmd.settings.sortOrder !== -1),
             index = isContentAndNotHeader ? cmd.settings.sortOrder : 0,
             prefix = isContentAndNotHeader ? '' : 'List',
             cTerm = prefix + 'Content',
@@ -64,20 +64,20 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
         },
 
         // build the link, combining specific params with global ones and put all in the url
-        generateLink: function () {
+        generateLink: () => {
           // if there is no items-array, create an empty one (it's required later on)
           if (!cmd.settings.items) cmd.settings.items = [];
           //#region steps for all actions: prefill, serialize, open-dialog
           // when doing new, there may be a prefill in the link to initialize the new item
           if (cmd.settings.prefill) {
-            for (var i = 0; i < cmd.items.length; i++) {
+            for (let i = 0; i < cmd.items.length; i++) {
               cmd.items[i].Prefill = cmd.settings.prefill;
             }
           }
           cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
 
           // clone the params and adjust parts based on partOfPage settings...
-          var sharedParams = extend({}, sxc.manage._dialogParameters);
+          let sharedParams = extend({}, sxc.manage._dialogParameters);
           if (!cmd.settings.partOfPage) {
             delete sharedParams.versioningRequirements;
             delete sharedParams.publishing;
@@ -96,7 +96,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
 
     // create a dialog link
     _linkToNgDialog(specialSettings: any) : string {
-      var cmd = sxc.manage._commands.create(specialSettings);
+      let cmd = sxc.manage._commands.create(specialSettings);
 
       if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
       else cmd.addSimpleItem();
@@ -111,11 +111,11 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
     _openNgDialog(settings: any, event: any, sxc: any) {
       // the callback will handle events after closing the dialog
       // and reload the in-page view w/ajax or page reload
-      var callback = function () {
+      let callback = () => {
         reloadAndReInitialize(sxc);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
       };
-      var link: string = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
+      let link: string = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
       if (settings.inlineWindow)
         return showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
       if (settings.newWindow || (event && event.shiftKey))
@@ -133,7 +133,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
       }
 
       // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-      var origEvent = event || window.event;
+      let origEvent = event || window.event;
 
       // check if name is name (string) or object (settings)
       settings = (typeof nameOrSettings === 'string') ?
@@ -143,7 +143,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
         :
         nameOrSettings;
 
-      var conf = engine.commands[settings.action];
+      let conf = engine.commands[settings.action];
       settings = extend({}, conf, settings); // merge conf & settings, but settings has higher priority
 
       if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
@@ -153,9 +153,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
 
       // if more than just a UI-action, then it needs to be sure the content-group is created first
       return prepareToAddContent(sxc, settings.useModuleList)
-        .then(function () {
-          return settings.code(settings, origEvent, sxc);
-        });
+        .then(() => settings.code(settings, origEvent, sxc));
     }
   };
 

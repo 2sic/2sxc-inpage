@@ -9,22 +9,22 @@ exports.contentItems = {
     // delete command - try to really delete a content-item
     "delete": function (sxc, itemId, itemGuid, itemTitle) {
         // first show main warning / get ok
-        var ok = confirm(_2sxc_translate_1.translate("Delete.Confirm")
-            .replace("{id}", itemId)
-            .replace("{title}", itemTitle));
+        var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
+            .replace('{id}', itemId)
+            .replace('{title}', itemTitle));
         if (!ok)
             return;
-        sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
+        sxc.webApi.delete('app-content/any/' + itemGuid, null, null, true)
             .success(function () {
             location.reload();
         }).error(function (error) {
-            var msgJs = _2sxc_translate_1.translate("Delete.ErrCheckConsole");
+            var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
             console.log(error);
             // check if it's a permission config problem
             if (error.status === 401)
-                alert(_2sxc_translate_1.translate("Delete.ErrPermission") + msgJs);
+                alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
             if (error.status === 400)
-                alert(_2sxc_translate_1.translate("Delete.ErrInUse") + msgJs);
+                alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
         });
     }
 };

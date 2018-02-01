@@ -8,6 +8,6 @@ var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
  */
 module_bootstrapper_1.$2sxc._toolbarManager = {
     // internal constants
-    cDisableAttrName: "data-disable-toolbar"
+    cDisableAttrName: 'data-disable-toolbar'
 };
 //# sourceMappingURL=toolbarManager.{}.js.map

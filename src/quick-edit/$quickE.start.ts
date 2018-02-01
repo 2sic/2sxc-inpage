@@ -15,10 +15,10 @@ function enable(): void {
  */
 function watchMouse() {
   let refreshTimeout: any = null;
-  $('body').on('mousemove', function (e) {
+  $('body').on('mousemove', e => {
     if (refreshTimeout === null)
-      refreshTimeout = window.setTimeout(function () {
-        requestAnimationFrame(function () {
+      refreshTimeout = window.setTimeout(() => {
+        requestAnimationFrame(() => {
           refresh(e);
           refreshTimeout = null;
         });

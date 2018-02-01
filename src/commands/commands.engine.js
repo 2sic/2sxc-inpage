@@ -135,9 +135,7 @@ function instanceEngine(sxc, editContext) {
                 return settings.code(settings, origEvent, sxc);
             // if more than just a UI-action, then it needs to be sure the content-group is created first
             return contentBlock_templates_1.prepareToAddContent(sxc, settings.useModuleList)
-                .then(function () {
-                return settings.code(settings, origEvent, sxc);
-            });
+                .then(function () { return settings.code(settings, origEvent, sxc); });
         }
     };
     return engine;

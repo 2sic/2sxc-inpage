@@ -8,8 +8,8 @@ var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
 var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
     defaultSettings: {
         autoAddMore: null,
-        hover: "right",
-        show: "hover",
+        hover: 'right',
+        show: 'hover',
     },
     // take any common input format and convert it to a full toolbar-structure definition
     // can handle the following input formats (the param unstructuredConfig):
@@ -23,11 +23,11 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         var fullConfig = tools.ensureDefinitionTree(unstructuredConfig, moreSettings);
         // ToDo: don't use console.log in production
         if (unstructuredConfig.debug)
-            console.log("toolbar: detailed debug on; start build full Def");
+            console.log('toolbar: detailed debug on; start build full Def');
         tools.expandButtonGroups(fullConfig, allActions);
         tools.removeDisableButtons(fullConfig, instanceConfig);
         if (fullConfig.debug)
-            console.log("after remove: ", fullConfig);
+            console.log('after remove: ', fullConfig);
         tools.customize(fullConfig);
         return fullConfig;
     },
@@ -58,7 +58,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         }
         // build an object with this structure
         return {
-            name: original.name || "toolbar",
+            name: original.name || 'toolbar',
             debug: original.debug || false,
             groups: original.groups || [],
             defaults: original.defaults || {},
@@ -80,7 +80,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
                 for (var b = 0; b < btns.length; b++) {
                     var btn = btns[b];
                     if (!(actions[btn.command.action]))
-                        console.warn("warning: toolbar-button with unknown action-name:", btn.command.action);
+                        console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
                     _2sxc__lib_extend_1.extend(btn.command, fullSet.params); // enhance the button with settings for this instance
                     // tools.addCommandParams(fullSet, btn);
                     tools.addDefaultBtnSettings(btn, fullSet.groups[g], fullSet, actions); // ensure all buttons have either own settings, or the fallbacks
@@ -93,15 +93,15 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
     // - a string like "edit" or multi-value "layout,more"
     // - an array of such strings incl. optional complex objects which are
     expandButtonList: function (root, settings) {
-        // var root = grp; // the root object which has all params of the command
+        // let root = grp; // the root object which has all params of the command
         var btns = [], sharedProperties = null;
         // convert compact buttons (with multi-verb action objects) into own button-objects
         // important because an older syntax allowed {action: "new,edit", entityId: 17}
         if (Array.isArray(root.buttons)) {
             for (var b = 0; b < root.buttons.length; b++) {
                 var btn = root.buttons[b];
-                if (typeof btn.action === "string" && btn.action.indexOf(",") > -1) {
-                    var acts = btn.action.split(",");
+                if (typeof btn.action === 'string' && btn.action.indexOf(',') > -1) {
+                    var acts = btn.action.split(',');
                     for (var a = 0; a < acts.length; a++) {
                         btns.push($.extend(true, {}, btn, { action: acts[a] }));
                     }
@@ -110,8 +110,8 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
                     btns.push(btn);
             }
         }
-        else if (typeof root.buttons === "string") {
-            btns = root.buttons.split(",");
+        else if (typeof root.buttons === 'string') {
+            btns = root.buttons.split(',');
             sharedProperties = $.extend({}, root); // inherit all fields used in the button
             delete sharedProperties.buttons; // this one's not needed
             delete sharedProperties.name; // this one's not needed
@@ -122,10 +122,10 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         }
         // optionally add a more-button in each group
         if (settings.autoAddMore) {
-            if (settings.autoAddMore === "right")
-                btns.push("more");
+            if (settings.autoAddMore === 'right')
+                btns.push('more');
             else {
-                btns.unshift("more");
+                btns.unshift('more');
             }
         }
         // add each button - check if it's already an object or just the string
@@ -142,10 +142,10 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         if (original._expanded || original.command)
             return original;
         // if just a name, turn into a command
-        if (typeof original === "string")
+        if (typeof original === 'string')
             original = { action: original };
         // if it's a command w/action, wrap into command + trim
-        if (typeof original.action === "string") {
+        if (typeof original.action === 'string') {
             original.action = original.action.trim();
             original = { command: original };
         }
@@ -162,12 +162,12 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
             removeUnfitButtons(btns, config);
             disableButtons(btns, config);
             // remove the group, if no buttons left, or only "more"
-            if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === "more"))
+            if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
                 btnGroups.splice(g--, 1); // remove, and decrement counter
         }
         function removeUnfitButtons(btns, config) {
             for (var i = 0; i < btns.length; i++) {
-                //var add = btns[i].showCondition;
+                //let add = btns[i].showCondition;
                 //if (add !== undefined)
                 //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
                 if (!tools.evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
@@ -180,17 +180,17 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
         }
     },
     btnProperties: [
-        "classes",
-        "icon",
-        "title",
-        "dynamicClasses",
-        "showCondition",
-        "disabled"
+        'classes',
+        'icon',
+        'title',
+        'dynamicClasses',
+        'showCondition',
+        'disabled'
     ],
     prvProperties: [
-        "defaults",
-        "params",
-        "name"
+        'defaults',
+        'params',
+        'name'
     ],
     // enhance button-object with default icons, etc.
     addDefaultBtnSettings: function (btn, group, groups, actions) {
@@ -206,13 +206,13 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
     },
     customize: function (toolbar) {
         //if (!toolbar.settings) return;
-        //var set = toolbar.settings;
+        //let set = toolbar.settings;
         //if (set.autoAddMore) {
         //    console.log("auto-more");
-        //    var grps = toolbar.groups;
-        //    for (var g = 0; g < grps.length; g++) {
-        //        var btns = grps[g];
-        //        for (var i = 0; i < btns.length; i++) {
+        //    let grps = toolbar.groups;
+        //    for (let g = 0; g < grps.length; g++) {
+        //        let btns = grps[g];
+        //        for (let i = 0; i < btns.length; i++) {
         //        }
         //    }
         //}
@@ -220,7 +220,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
     evalPropOrFunction: function (propOrFunction, settings, config, fallback) {
         if (propOrFunction === undefined || propOrFunction === null)
             return fallback;
-        return typeof (propOrFunction) === "function" ? propOrFunction(settings, config) : propOrFunction;
+        return typeof (propOrFunction) === 'function' ? propOrFunction(settings, config) : propOrFunction;
     }
 };
 //# sourceMappingURL=toolbarManager.helpers.js.map

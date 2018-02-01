@@ -8,7 +8,7 @@ twoSxc._toolbarManager.standardButtons = standardButtons;
 
 function standardButtons(canDesign, sharedParameters) {
   // create a deep-copy of the original object
-  var btns = $.extend(true, {}, twoSxc._toolbarManager.toolbarTemplate);
+  let btns = $.extend(true, {}, twoSxc._toolbarManager.toolbarTemplate);
   btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
   if (!canDesign) btns.groups.splice(2, 1); // remove this menu
   return btns;

@@ -17,7 +17,7 @@ twoSxc.c = twoSxc.consts = {
   publishAllowed: 'DraftOptional'
 };
 // selectors
-var sel = twoSxc.c.sel = {};
+let sel = twoSxc.c.sel = {};
 Object.keys(twoSxc.c.cls).forEach((key, index) => {
   sel[key] = `.${twoSxc.c.cls[key]}`;
 });

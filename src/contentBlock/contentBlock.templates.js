@@ -18,10 +18,10 @@ function prepareToAddContent(sxc, useModuleList) {
     if (isCreated || !useModuleList)
         return $.when(null);
     // return persistTemplate(sxc, null);
-    // var manage = sxc.manage;
-    // var contentGroup = manage._editContext.ContentGroup;
-    // var showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
-    // var groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
+    // let manage = sxc.manage;
+    // let contentGroup = manage._editContext.ContentGroup;
+    // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
+    // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
     var templateId = sxc.manage._editContext.ContentGroup.TemplateId;
     // template has not changed
     // if (groupExistsAndTemplateUnchanged) return $.when(null);

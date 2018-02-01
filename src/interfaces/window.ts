@@ -9,4 +9,4 @@ interface Window {
 }
 // ReSharper restore InconsistentNaming
 
-declare var windows: Window;
+declare let windows: Window;

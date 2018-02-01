@@ -10,7 +10,7 @@ twoSxc.system = {
 
 // upgrade command - started when an error contains a link to start this
 function finishUpgrade(domElement: any): void {
-  var mc = twoSxc(domElement);
+  let mc = twoSxc(domElement);
   $.ajax({
     type: 'get',
     url: mc.resolveServiceUrl('view/module/finishinstallation'),

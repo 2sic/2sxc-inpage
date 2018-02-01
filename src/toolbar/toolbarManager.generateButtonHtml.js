@@ -22,16 +22,16 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     flattenActionDefinition(actDef);
     // retrieve configuration for this button
-    var showClasses = "group-" + groupIndex + (actDef.disabled ? " disabled" : ""), classesList = (actDef.classes || "").split(","), box = $("<div/>"), symbol = $("<i class=\"" + actDef.icon + "\" aria-hidden=\"true\"></i>"), onclick = actDef.disabled ?
-        "" :
-        "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(actDef.command) + ", event);";
+    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : ''), classesList = (actDef.classes || '').split(','), box = $('<div/>'), symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>'), onclick = actDef.disabled ?
+        '' :
+        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
     for (var c = 0; c < classesList.length; c++)
-        showClasses += " " + classesList[c];
-    var button = $("<a />", {
-        'class': "sc-" + actDef.action + " " + showClasses +
-            (actDef.dynamicClasses ? " " + actDef.dynamicClasses(actDef) : ""),
+        showClasses += ' ' + classesList[c];
+    var button = $('<a />', {
+        'class': 'sc-' + actDef.action + ' ' + showClasses +
+            (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
         'onclick': onclick,
-        'data-i18n': "[title]" + actDef.title
+        'data-i18n': '[title]' + actDef.title
     });
     button.html(box.html(symbol));
     return button[0].outerHTML;
