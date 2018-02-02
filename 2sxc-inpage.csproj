@@ -4,6 +4,9 @@
     <TargetFramework>net461</TargetFramework>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <Description>description</Description>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
