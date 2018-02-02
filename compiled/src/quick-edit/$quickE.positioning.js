@@ -1,23 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
+var coords_1 = require("./coords");
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
 /**
  * Point is used as return type to store X,Y coordinates
  */
-var Coords = /** @class */ (function () {
-    function Coords(x, y, w, yh, element // TODO: find this type
-    ) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.yh = yh;
-        this.element = element; // TODO: find this type
-    }
-    return Coords;
-}());
 /**
  * Prepare offset calculation based on body positioning
  * @returns Point
@@ -25,8 +15,8 @@ var Coords = /** @class */ (function () {
 function getBodyPosition() {
     var bodyPos = _quickE___1.$quickE.body.css('position');
     return bodyPos === 'relative' || bodyPos === 'absolute'
-        ? new Coords(_quickE___1.$quickE.body.offset().left, _quickE___1.$quickE.body.offset().top)
-        : new Coords(0, 0);
+        ? new coords_1.Coords(_quickE___1.$quickE.body.offset().left, _quickE___1.$quickE.body.offset().top)
+        : new coords_1.Coords(0, 0);
 }
 exports.getBodyPosition = getBodyPosition;
 ;
@@ -82,10 +72,10 @@ function refresh(e) {
         refreshDomObjects();
     }
     if (_quickE___1.$quickE.config.innerBlocks.enable && _quickE___1.$quickE.contentBlocks) {
-        _quickE___1.$quickE.nearestCb = findNearest(_quickE___1.$quickE.contentBlocks, new Coords(e.clientX, e.clientY));
+        _quickE___1.$quickE.nearestCb = findNearest(_quickE___1.$quickE.contentBlocks, new coords_1.Coords(e.clientX, e.clientY));
     }
     if (_quickE___1.$quickE.config.modules.enable && _quickE___1.$quickE.modules) {
-        _quickE___1.$quickE.nearestMod = findNearest(_quickE___1.$quickE.modules, new Coords(e.clientX, e.clientY));
+        _quickE___1.$quickE.nearestMod = findNearest(_quickE___1.$quickE.modules, new coords_1.Coords(e.clientX, e.clientY));
     }
     _quickE___1.$quickE.modActions.toggleClass('sc-invisible', _quickE___1.$quickE.nearestMod === null);
     _quickE___1.$quickE.cbActions.toggleClass('sc-invisible', _quickE___1.$quickE.nearestCb === null);
@@ -149,9 +139,13 @@ function findNearest(elements, position) {
     });
     return nearestItem;
 }
+exports.findNearest = findNearest;
 ;
 function getCoordinates(element) {
-    return {
+    // sometimes element.length === 0 and element.offset() = undefined
+    //console.log("element.offset():", element.offset());
+    //console.log("element.length:", element.length);
+    var coords = {
         element: element,
         x: element.offset().left,
         w: element.width(),
@@ -160,6 +154,7 @@ function getCoordinates(element) {
         // For content-block-LISTS, the menu must be at top
         yh: element.offset().top + (element.is(_quickE___1.selectors.eitherCbOrMod) ? element.height() : 0)
     };
+    return coords;
 }
 exports.getCoordinates = getCoordinates;
 ;

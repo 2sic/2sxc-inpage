@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 28);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -875,6 +875,8 @@ function copyPasteInPage(cbAction, list, index, type) {
                 module_bootstrapper_1.$2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
             }
             else {
+                // sometimes missing oldClip.item
+                //if (clipboard.data.item)
                 _quickE_cmds_1.mod.move(clipboard.data, newClip, from, to);
             }
             clipboard.clear();
@@ -899,6 +901,10 @@ var clipboard;
             clipboard.data = newData;
         }
         $('.' + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected); // clear previous markings
+        // sometimes missing data.item
+        if (!clipboard.data.item) {
+            return;
+        }
         var cb = $(clipboard.data.item);
         cb.addClass(_quickE___1.selectors.selected);
         if (cb.prev().is('iframe'))
@@ -932,7 +938,7 @@ function setSecondaryActionsState(state) {
 }
 ;
 _quickE___1.$quickE.selected.toggle = function (target) {
-    if (!target)
+    if (!target || target.length === 0)
         return _quickE___1.$quickE.selected.hide();
     var coords = _quickE_positioning_1.getCoordinates(target);
     coords.yh = coords.y + 20;
@@ -963,23 +969,13 @@ $('a', _quickE___1.$quickE.selected).click(function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(1);
+var coords_1 = __webpack_require__(21);
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
 /**
  * Point is used as return type to store X,Y coordinates
  */
-var Coords = /** @class */ (function () {
-    function Coords(x, y, w, yh, element // TODO: find this type
-    ) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.yh = yh;
-        this.element = element; // TODO: find this type
-    }
-    return Coords;
-}());
 /**
  * Prepare offset calculation based on body positioning
  * @returns Point
@@ -987,8 +983,8 @@ var Coords = /** @class */ (function () {
 function getBodyPosition() {
     var bodyPos = _quickE___1.$quickE.body.css('position');
     return bodyPos === 'relative' || bodyPos === 'absolute'
-        ? new Coords(_quickE___1.$quickE.body.offset().left, _quickE___1.$quickE.body.offset().top)
-        : new Coords(0, 0);
+        ? new coords_1.Coords(_quickE___1.$quickE.body.offset().left, _quickE___1.$quickE.body.offset().top)
+        : new coords_1.Coords(0, 0);
 }
 exports.getBodyPosition = getBodyPosition;
 ;
@@ -1044,10 +1040,10 @@ function refresh(e) {
         refreshDomObjects();
     }
     if (_quickE___1.$quickE.config.innerBlocks.enable && _quickE___1.$quickE.contentBlocks) {
-        _quickE___1.$quickE.nearestCb = findNearest(_quickE___1.$quickE.contentBlocks, new Coords(e.clientX, e.clientY));
+        _quickE___1.$quickE.nearestCb = findNearest(_quickE___1.$quickE.contentBlocks, new coords_1.Coords(e.clientX, e.clientY));
     }
     if (_quickE___1.$quickE.config.modules.enable && _quickE___1.$quickE.modules) {
-        _quickE___1.$quickE.nearestMod = findNearest(_quickE___1.$quickE.modules, new Coords(e.clientX, e.clientY));
+        _quickE___1.$quickE.nearestMod = findNearest(_quickE___1.$quickE.modules, new coords_1.Coords(e.clientX, e.clientY));
     }
     _quickE___1.$quickE.modActions.toggleClass('sc-invisible', _quickE___1.$quickE.nearestMod === null);
     _quickE___1.$quickE.cbActions.toggleClass('sc-invisible', _quickE___1.$quickE.nearestCb === null);
@@ -1111,9 +1107,13 @@ function findNearest(elements, position) {
     });
     return nearestItem;
 }
+exports.findNearest = findNearest;
 ;
 function getCoordinates(element) {
-    return {
+    // sometimes element.length === 0 and element.offset() = undefined
+    //console.log("element.offset():", element.offset());
+    //console.log("element.length:", element.length);
+    var coords = {
         element: element,
         x: element.offset().left,
         w: element.width(),
@@ -1122,6 +1122,7 @@ function getCoordinates(element) {
         // For content-block-LISTS, the menu must be at top
         yh: element.offset().top + (element.is(_quickE___1.selectors.eitherCbOrMod) ? element.height() : 0)
     };
+    return coords;
 }
 exports.getCoordinates = getCoordinates;
 ;
@@ -1250,8 +1251,8 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(3);
-var contentBlock_actions_1 = __webpack_require__(22);
-var item_commands_1 = __webpack_require__(23);
+var contentBlock_actions_1 = __webpack_require__(23);
+var item_commands_1 = __webpack_require__(24);
 var _2sxc__lib_extend_1 = __webpack_require__(7);
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -1994,7 +1995,7 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(1);
 var _quickE_positioning_1 = __webpack_require__(9);
-var _quickE_config_1 = __webpack_require__(21);
+var _quickE_config_1 = __webpack_require__(22);
 function enable() {
     // build all toolbar html-elements
     _quickE___1.prepareToolbarInDom();
@@ -2075,6 +2076,27 @@ $(start);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var Coords = /** @class */ (function () {
+    function Coords(x, y, w, yh, element // TODO: find this type
+    ) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.yh = yh;
+        this.element = element; // TODO: find this type
+    }
+    return Coords;
+}());
+exports.Coords = Coords;
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(1);
 var configAttr = 'quick-edit-config';
 /**
@@ -2123,7 +2145,7 @@ exports._readPageConfig = _readPageConfig;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2214,7 +2236,7 @@ exports.publishId = publishId;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2251,7 +2273,7 @@ exports.contentItems = {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2353,7 +2375,7 @@ exports.manipulator = manipulator;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2376,7 +2398,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2385,8 +2407,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var commands_engine_1 = __webpack_require__(13);
 var manage_api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
-var contentBlock_manipulate_1 = __webpack_require__(24);
-var local_storage_helper_1 = __webpack_require__(25);
+var contentBlock_manipulate_1 = __webpack_require__(25);
+var local_storage_helper_1 = __webpack_require__(26);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
  * all in-page toolbars etc.
@@ -2482,10 +2504,9 @@ function _initInstance(sxc) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(28);
 __webpack_require__(17);
 __webpack_require__(18);
 __webpack_require__(19);
@@ -2496,8 +2517,8 @@ __webpack_require__(12);
 __webpack_require__(13);
 __webpack_require__(14);
 __webpack_require__(10);
-__webpack_require__(22);
-__webpack_require__(24);
+__webpack_require__(23);
+__webpack_require__(25);
 __webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(11);
@@ -2511,7 +2532,7 @@ __webpack_require__(38);
 __webpack_require__(39);
 __webpack_require__(40);
 __webpack_require__(41);
-__webpack_require__(23);
+__webpack_require__(24);
 __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
@@ -2523,22 +2544,23 @@ __webpack_require__(49);
 __webpack_require__(50);
 __webpack_require__(7);
 __webpack_require__(51);
-__webpack_require__(25);
+__webpack_require__(26);
 __webpack_require__(52);
 __webpack_require__(2);
-__webpack_require__(26);
+__webpack_require__(27);
 __webpack_require__(53);
 __webpack_require__(54);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(15);
-__webpack_require__(21);
+__webpack_require__(22);
 __webpack_require__(55);
 __webpack_require__(16);
 __webpack_require__(56);
 __webpack_require__(9);
 __webpack_require__(20);
+__webpack_require__(21);
 __webpack_require__(57);
 __webpack_require__(58);
 __webpack_require__(59);
@@ -2553,107 +2575,6 @@ __webpack_require__(67);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-/*
- * Author: Alex Gibson
- * https://github.com/alexgibson/shake.js
- * License: MIT license
- */
-(function (global, factory) {
-    global.Shake = factory(global, global.document);
-}(typeof window !== 'undefined' ? window : this, function (window, document) {
-    'use strict';
-    function Shake(options) {
-        //feature detect
-        this.hasDeviceMotion = 'ondevicemotion' in window;
-        this.options = {
-            threshold: 15,
-            timeout: 1000,
-            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
-        };
-        if (typeof options === 'object') {
-            for (var i in options) {
-                if (options.hasOwnProperty(i)) {
-                    this.options[i] = options[i];
-                }
-            }
-        }
-        //use date to prevent multiple shakes firing
-        this.lastTime = new Date();
-        //accelerometer values
-        this.lastX = null;
-        this.lastY = null;
-        this.lastZ = null;
-    }
-    //reset timer values
-    Shake.prototype.reset = function () {
-        this.lastTime = new Date();
-        this.lastX = null;
-        this.lastY = null;
-        this.lastZ = null;
-    };
-    //start listening for devicemotion
-    Shake.prototype.start = function () {
-        this.reset();
-        if (this.hasDeviceMotion) {
-            window.addEventListener('devicemotion', this, false);
-        }
-    };
-    //stop listening for devicemotion
-    Shake.prototype.stop = function () {
-        if (this.hasDeviceMotion) {
-            window.removeEventListener('devicemotion', this, false);
-        }
-        this.reset();
-    };
-    //calculates if shake did occur
-    Shake.prototype.devicemotion = function (e) {
-        var current = e.accelerationIncludingGravity;
-        var currentTime;
-        var timeDifference;
-        var deltaX = 0;
-        var deltaY = 0;
-        var deltaZ = 0;
-        if ((this.lastX === null) && (this.lastY === null) && (this.lastZ === null)) {
-            this.lastX = current.x;
-            this.lastY = current.y;
-            this.lastZ = current.z;
-            return;
-        }
-        deltaX = Math.abs(this.lastX - current.x);
-        deltaY = Math.abs(this.lastY - current.y);
-        deltaZ = Math.abs(this.lastZ - current.z);
-        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
-            //calculate time in milliseconds since last shake registered
-            currentTime = new Date();
-            timeDifference = currentTime.getTime() - this.lastTime.getTime();
-            if (timeDifference > this.options.timeout) {
-                // once triggered, execute  the callback
-                if (typeof this.options.callback === 'function') {
-                    this.options.callback();
-                }
-                else
-                    console.log("shake event without callback detected");
-                this.lastTime = new Date();
-            }
-        }
-        this.lastX = current.x;
-        this.lastY = current.y;
-        this.lastZ = current.z;
-    };
-    //event handler
-    Shake.prototype.handleEvent = function (e) {
-        if (typeof (this[e.type]) === 'function') {
-            return this[e.type](e);
-        }
-    };
-    return Shake;
-}));
-//# sourceMappingURL=shake.js.map
 
 /***/ }),
 /* 29 */
@@ -3011,7 +2932,7 @@ window.$quickE = _quickE___1.$quickE;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_create_1 = __webpack_require__(26);
+var manage_create_1 = __webpack_require__(27);
 var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it

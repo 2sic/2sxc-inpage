@@ -1,4 +1,5 @@
 ﻿import { $quickE as quickE, selectors } from './$quickE.{}';
+import { Coords } from './coords';
 
 /**
  * Module with everything related to positioning the quick-edit in-page editing
@@ -7,15 +8,6 @@
 /**
  * Point is used as return type to store X,Y coordinates
  */
-class Coords {
-  constructor(
-    public x: number,
-    public y: number,
-    public w?: number,
-    public yh?: number,
-    public element?: any // TODO: find this type
-  ) { }
-}
 
 /**
  * Prepare offset calculation based on body positioning
@@ -137,7 +129,7 @@ export function refresh(e) {
  * @param elements
  * @param position
  */
-function findNearest(elements: any, position: Coords): Coords {
+export function findNearest(elements: any, position: Coords): Coords {
   const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
 
   let nearestItem = null;
@@ -167,7 +159,11 @@ function findNearest(elements: any, position: Coords): Coords {
 };
 
 export function getCoordinates(element: any): Coords {
-  return {
+  // sometimes element.length === 0 and element.offset() = undefined
+  //console.log("element.offset():", element.offset());
+  //console.log("element.length:", element.length);
+
+  const coords: Coords = {
     element: element,
     x: element.offset().left,
     w: element.width(),
@@ -176,4 +172,6 @@ export function getCoordinates(element: any): Coords {
     // For content-block-LISTS, the menu must be at top
     yh: element.offset().top + (element.is(selectors.eitherCbOrMod) ? element.height() : 0)
   };
+  
+  return coords;
 };

@@ -2,6 +2,7 @@
 import { positionAndAlign, getCoordinates } from './$quickE.positioning';
 import { mod, CmdsStrategyFactory } from './$quickE.cmds';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { Coords } from './coords';
 
 /**
  * add a clipboard to the quick edit
@@ -38,9 +39,11 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
       if (newClip.type === selectors.cb.id && from + 1 === to)
         return clipboard.clear(); // don't do anything
 
-      if (type === selectors.cb.id) {
+      if (type === selectors.cb.id ) {
         twoSxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
       } else {
+        // sometimes missing oldClip.item
+        // if (clipboard.data.item)
         mod.move(clipboard.data, newClip, from, to);
       }
       clipboard.clear();
@@ -64,6 +67,12 @@ export namespace clipboard {
       data = newData;
     }
     $('.' + selectors.selected).removeClass(selectors.selected); // clear previous markings
+
+    // sometimes missing data.item
+    if (!data.item) {
+       return;
+    }
+
     let cb = $(data.item);
     cb.addClass(selectors.selected);
     if (cb.prev().is('iframe'))
@@ -97,10 +106,10 @@ function setSecondaryActionsState(state) {
 
 
 quickE.selected.toggle = target => {
-  if (!target)
+  if (!target || target.length === 0)
     return quickE.selected.hide();
 
-  let coords = getCoordinates(target);
+  const coords = getCoordinates(target);
   coords.yh = coords.y + 20;
   positionAndAlign(quickE.selected, coords);
   quickE.selected.target = target;

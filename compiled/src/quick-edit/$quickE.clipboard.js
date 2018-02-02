@@ -37,6 +37,8 @@ function copyPasteInPage(cbAction, list, index, type) {
                 module_bootstrapper_1.$2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
             }
             else {
+                // sometimes missing oldClip.item
+                // if (clipboard.data.item)
                 _quickE_cmds_1.mod.move(clipboard.data, newClip, from, to);
             }
             clipboard.clear();
@@ -61,6 +63,10 @@ var clipboard;
             clipboard.data = newData;
         }
         $('.' + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected); // clear previous markings
+        // sometimes missing data.item
+        if (!clipboard.data.item) {
+            return;
+        }
         var cb = $(clipboard.data.item);
         cb.addClass(_quickE___1.selectors.selected);
         if (cb.prev().is('iframe'))
@@ -94,7 +100,7 @@ function setSecondaryActionsState(state) {
 }
 ;
 _quickE___1.$quickE.selected.toggle = function (target) {
-    if (!target)
+    if (!target || target.length === 0)
         return _quickE___1.$quickE.selected.hide();
     var coords = _quickE_positioning_1.getCoordinates(target);
     coords.yh = coords.y + 20;
