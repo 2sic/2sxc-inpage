@@ -10,12 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="compiled\**" />
     <Compile Remove="coverage\**" />
     <Compile Remove="_reports\**" />
+    <Content Remove="compiled\**" />
     <Content Remove="coverage\**" />
     <Content Remove="_reports\**" />
+    <EmbeddedResource Remove="compiled\**" />
     <EmbeddedResource Remove="coverage\**" />
     <EmbeddedResource Remove="_reports\**" />
+    <None Remove="compiled\**" />
     <None Remove="coverage\**" />
     <None Remove="_reports\**" />
   </ItemGroup>
