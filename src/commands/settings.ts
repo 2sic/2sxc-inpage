@@ -15,6 +15,7 @@ export class Settings {
   entityGuid: string;
   entityId: number;
   entityTitle: string;
+  filters: string;
   hasContent: boolean;
   isContent: boolean;
   isList: boolean;
