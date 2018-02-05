@@ -14,7 +14,7 @@ export class Def {
   showCondition?(settings: Settings, modConfig: ModConfig): boolean | number | string;
   code?(settings: Settings, event: ModConfig, sxc: SxcInstanceWithInternals): void;
   dynamicClasses?(settings: Settings): string;
-  disabled?(settings: Settings, modConfig: any): boolean;
+  disabled?(settings: Settings, modConfig: ModConfig): boolean;
   configureCommand?(cmd: Cmd): void;
   newWindow?: boolean;
   inlineWindow?: boolean;

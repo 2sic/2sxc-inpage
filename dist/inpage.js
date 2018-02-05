@@ -389,7 +389,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = __webpack_require__(2);
 var contentBlock_render_1 = __webpack_require__(5);
 var contentBlock___1 = __webpack_require__(10);
-var contentBlock_templates_1 = __webpack_require__(7);
+var contentBlock_templates_1 = __webpack_require__(6);
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
@@ -737,27 +737,6 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function extend() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    for (var i = 1; i < arguments.length; i++)
-        for (var key in arguments[i])
-            if (arguments[i].hasOwnProperty(key))
-                arguments[0][key] = arguments[i][key];
-    return arguments[0];
-}
-exports.extend = extend;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = __webpack_require__(4);
 var contentBlock_render_1 = __webpack_require__(5);
 var contentBlock_webApiPromises_1 = __webpack_require__(11);
@@ -830,6 +809,27 @@ function updateTemplate(sxc, templateId, forceCreate) {
     });
 }
 exports.updateTemplate = updateTemplate;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function extend() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    for (var i = 1; i < arguments.length; i++)
+        for (var key in arguments[i])
+            if (arguments[i].hasOwnProperty(key))
+                arguments[0][key] = arguments[i][key];
+    return arguments[0];
+}
+exports.extend = extend;
 
 
 /***/ }),
@@ -1137,7 +1137,7 @@ exports.getCoordinates = getCoordinates;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var contentBlock_templates_1 = __webpack_require__(7);
+var contentBlock_templates_1 = __webpack_require__(6);
 /*
  * this is a content block in the browser
  *
@@ -1255,7 +1255,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(3);
 var contentBlock_actions_1 = __webpack_require__(23);
 var item_commands_1 = __webpack_require__(24);
-var _2sxc__lib_extend_1 = __webpack_require__(6);
 var make_def_1 = __webpack_require__(25);
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -1303,7 +1302,8 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             // todo - should refactor this to be a toolbarManager.contentBlock command
-            sxc.manage._commands._openNgDialog(_2sxc__lib_extend_1.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
+            var settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 });
+            sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
         }
     }));
     // add brings no dialog, just add an empty item
@@ -1330,9 +1330,9 @@ function create(cmdSpecs) {
         configureCommand: function (cmd) {
             var itm = {
                 Title: 'EditFormTitle.Metadata',
-                Metadata: _2sxc__lib_extend_1.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+                Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
             };
-            _2sxc__lib_extend_1.extend(cmd.items[0], itm);
+            Object.assign(cmd.items[0], itm);
         }
     }));
     // remove an item from the placeholder (usually for lists)
@@ -1540,7 +1540,11 @@ function create(cmdSpecs) {
     }));
     addDef(make_def_1.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
         code: function (settings, event, sxc) {
-            var btn = $(event.target), fullMenu = btn.closest('ul.sc-menu'), oldState = Number(fullMenu.attr('data-state') || 0), max = Number(fullMenu.attr('group-count')), newState = (oldState + 1) % max;
+            var btn = $(event.target);
+            var fullMenu = btn.closest('ul.sc-menu');
+            var oldState = Number(fullMenu.attr('data-state') || 0);
+            var max = Number(fullMenu.attr('group-count'));
+            var newState = (oldState + 1) % max;
             fullMenu.removeClass('group-' + oldState)
                 .addClass('group-' + newState)
                 .attr('data-state', newState);
@@ -1569,8 +1573,8 @@ var _2sxc__quickDialog_1 = __webpack_require__(4);
 var _2sxc_translate_1 = __webpack_require__(3);
 var module_bootstrapper_1 = __webpack_require__(0);
 var contentBlock_render_1 = __webpack_require__(5);
-var contentBlock_templates_1 = __webpack_require__(7);
-var _2sxc__lib_extend_1 = __webpack_require__(6);
+var contentBlock_templates_1 = __webpack_require__(6);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
 function instanceEngine(sxc, editContext) {
     var engine = {
         commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
@@ -2248,7 +2252,7 @@ exports.contentItems = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc__lib_extend_1 = __webpack_require__(6);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
 /**
  * helper function to create the configuration object
  * @param name
@@ -2529,7 +2533,7 @@ __webpack_require__(10);
 __webpack_require__(23);
 __webpack_require__(26);
 __webpack_require__(5);
-__webpack_require__(7);
+__webpack_require__(6);
 __webpack_require__(11);
 __webpack_require__(40);
 __webpack_require__(41);
@@ -2551,7 +2555,7 @@ __webpack_require__(55);
 __webpack_require__(56);
 __webpack_require__(57);
 __webpack_require__(58);
-__webpack_require__(6);
+__webpack_require__(7);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(27);
@@ -3589,7 +3593,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(6);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 // ToDo: refactor to avoid side-effects

@@ -7,7 +7,7 @@
 //#region contentItem Commands
 export let contentItems = {
   // delete command - try to really delete a content-item
-  "delete": (sxc, itemId, itemGuid, itemTitle) => {
+  "delete": (sxc: SxcInstanceWithInternals, itemId: number, itemGuid: string, itemTitle: string) => {
     // first show main warning / get ok
     let ok = confirm(translate('Delete.Confirm')
       .replace('{id}', itemId)
@@ -18,7 +18,7 @@ export let contentItems = {
       .success(() => {
         location.reload();
       }).error(error => {
-        let msgJs = translate('Delete.ErrCheckConsole');
+        const msgJs = translate('Delete.ErrCheckConsole');
         console.log(error);
 
         // check if it's a permission config problem

@@ -59,7 +59,8 @@ export function create(cmdSpecs: CmdSpec): Act {
     },
     code(settings, event, sxc) {
       // todo - should refactor this to be a toolbarManager.contentBlock command
-      sxc.manage._commands._openNgDialog(extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
+      let settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
+      sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
     }
   }));
 
@@ -88,9 +89,9 @@ export function create(cmdSpecs: CmdSpec): Act {
     configureCommand(cmd) {
       let itm = {
         Title: 'EditFormTitle.Metadata',
-        Metadata: extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+        Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
       };
-      extend(cmd.items[0], itm);
+      Object.assign(cmd.items[0], itm);
     }
   }));
 
@@ -319,11 +320,11 @@ export function create(cmdSpecs: CmdSpec): Act {
 
   addDef(makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
     code(settings, event, sxc) {
-      let btn = $(event.target),
-        fullMenu = btn.closest('ul.sc-menu'),
-        oldState = Number(fullMenu.attr('data-state') || 0),
-        max = Number(fullMenu.attr('group-count')),
-        newState = (oldState + 1) % max;
+      let btn: any = $(event.target);
+      let fullMenu: any = btn.closest('ul.sc-menu');
+      let oldState: number = Number(fullMenu.attr('data-state') || 0);
+      let max: number = Number(fullMenu.attr('group-count'));
+      let newState: number = (oldState + 1) % max;
 
       fullMenu.removeClass('group-' + oldState)
         .addClass('group-' + newState)

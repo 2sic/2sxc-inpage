@@ -17,7 +17,7 @@
  * @param params 
  * @returns {} 
  */
-function getAndReload(sxc: any, url: any, params: any): any {
+function getAndReload(sxc: SxcInstanceWithInternals, url: string, params: any): any {
   return sxc.webApi.get({
     url: url,
     params: params
@@ -30,7 +30,7 @@ function getAndReload(sxc: any, url: any, params: any): any {
  * @param {} sortOrder 
  * @returns {} 
  */
-export function removeFromList(sxc: any, sortOrder: any): any {
+export function removeFromList(sxc: SxcInstanceWithInternals, sortOrder: number): any {
   return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
 };
 
@@ -41,7 +41,7 @@ export function removeFromList(sxc: any, sortOrder: any): any {
  * @param {} newOrder 
  * @returns {} 
  */
-export function changeOrder(sxc: any, initOrder: any, newOrder: any): any {
+export function changeOrder(sxc: SxcInstanceWithInternals, initOrder: number, newOrder: number): any {
   return getAndReload(sxc, 'view/module/changeorder',
     { sortOrder: initOrder, destinationSortOrder: newOrder });
 };
@@ -52,7 +52,7 @@ export function changeOrder(sxc: any, initOrder: any, newOrder: any): any {
  * @param {} sortOrder 
  * @returns {} 
  */
-export function addItem(sxc: any, sortOrder: any): any {
+export function addItem(sxc: SxcInstanceWithInternals, sortOrder: number): any {
   return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
 };
 
@@ -63,7 +63,7 @@ export function addItem(sxc: any, sortOrder: any): any {
  * @param {} sortOrder 
  * @returns {} 
  */
-export function publish(sxc: any, part:any, sortOrder:any):any {
+export function publish(sxc: SxcInstanceWithInternals, part:any, sortOrder:number): any {
   return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
 };
 
@@ -73,7 +73,7 @@ export function publish(sxc: any, part:any, sortOrder:any):any {
  * @param {} entityId 
  * @returns {} 
  */
-export function publishId(sxc: any, entityId: any): any {
+export function publishId(sxc: SxcInstanceWithInternals, entityId: number): any {
   return getAndReload(sxc, 'view/module/publish', { id: entityId });
 };
 

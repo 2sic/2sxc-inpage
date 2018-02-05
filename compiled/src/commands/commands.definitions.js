@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var contentBlock_actions_1 = require("../contentBlock/contentBlock.actions");
 var item_commands_1 = require("../entity-manipulation/item-commands");
-var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
 var make_def_1 = require("./make-def");
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -51,7 +50,8 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             // todo - should refactor this to be a toolbarManager.contentBlock command
-            sxc.manage._commands._openNgDialog(_2sxc__lib_extend_1.extend({}, settings, { sortOrder: settings.sortOrder + 1 }), event, sxc);
+            var settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 });
+            sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
         }
     }));
     // add brings no dialog, just add an empty item
@@ -78,9 +78,9 @@ function create(cmdSpecs) {
         configureCommand: function (cmd) {
             var itm = {
                 Title: 'EditFormTitle.Metadata',
-                Metadata: _2sxc__lib_extend_1.extend({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+                Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
             };
-            _2sxc__lib_extend_1.extend(cmd.items[0], itm);
+            Object.assign(cmd.items[0], itm);
         }
     }));
     // remove an item from the placeholder (usually for lists)
@@ -288,7 +288,11 @@ function create(cmdSpecs) {
     }));
     addDef(make_def_1.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
         code: function (settings, event, sxc) {
-            var btn = $(event.target), fullMenu = btn.closest('ul.sc-menu'), oldState = Number(fullMenu.attr('data-state') || 0), max = Number(fullMenu.attr('group-count')), newState = (oldState + 1) % max;
+            var btn = $(event.target);
+            var fullMenu = btn.closest('ul.sc-menu');
+            var oldState = Number(fullMenu.attr('data-state') || 0);
+            var max = Number(fullMenu.attr('group-count'));
+            var newState = (oldState + 1) % max;
             fullMenu.removeClass('group-' + oldState)
                 .addClass('group-' + newState)
                 .attr('data-state', newState);
