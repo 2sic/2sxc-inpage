@@ -8,10 +8,12 @@ var cb = /** @class */ (function () {
     function cb() {
     }
     cb.prototype.delete = function (clip) {
-        return module_bootstrapper_1.$2sxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
+        var sxc = module_bootstrapper_1.$2sxc(clip.list);
+        return sxc.manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
     };
     cb.create = function (parent, field, index, appOrContent, list, newGuid) {
-        return module_bootstrapper_1.$2sxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
+        var sxc = module_bootstrapper_1.$2sxc(list);
+        return sxc.manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
     };
     return cb;
 }());

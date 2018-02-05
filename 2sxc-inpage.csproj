@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="src\commands\make-def.ts" />
+    <None Remove="src\commands\mod-config.ts" />
     <None Remove="src\globals.d.ts" />
     <None Remove="src\lib-helpers\jquery.ts" />
     <None Remove="src\manage\local-storage-helper.ts" />
@@ -36,6 +38,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="src\commands\make-def.ts" />
+    <TypeScriptCompile Include="src\commands\mod-config.ts" />
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
     <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
   </ItemGroup>

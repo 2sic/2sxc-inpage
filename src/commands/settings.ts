@@ -2,26 +2,32 @@
 import {Params } from './params';
 
 export class Settings {
-  partOfPage: boolean;
-  prefill: any;
+  action: any;
+  appId: number;
+  attributeSetName: string;
   cbId: number;
   cbIsEntity: boolean;
   contentGroupId: number;
-  sortOrder: number;
-  entityId: any;
-  attributeSetName: string;
   contentType: string;
-  params: Params;
-  action: any;
-  dialog: any;
-  items: any; //string | string[];
-  appId: number;
-  isContent: boolean;
-  hasContent: boolean;
-  isList: boolean;
-  templateId: number;
   contentTypeId: string;
-  templateChooserVisible: boolean;
-  user: UserOfEditContext;
+  customCode: any;
+  dialog: any;
+  entityGuid: string;
+  entityId: number;
+  entityTitle: string;
+  hasContent: boolean;
+  isContent: boolean;
+  isList: boolean;
+  isPublished: boolean;
+  items: any; //string | string[];
+  metadata: any;
+  params: Params;
+  partOfPage: boolean;
+  prefill: any;
+  sortOrder: number;
   supportsAjax: boolean;
+  templateChooserVisible: boolean;
+  templateId: number;
+  useModuleList: boolean;
+  user: UserOfEditContext;
 }

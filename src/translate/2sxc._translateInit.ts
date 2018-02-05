@@ -1,5 +1,4 @@
-﻿/// <reference types="../../typings/2sxc-js/2sxcInterfaces" />
-import * as i18next from './libs/i18next.min';
+﻿import * as i18next from './libs/i18next.min';
 import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
 import * as jqueryI18next from './libs/jquery-i18next.min';
 
@@ -12,6 +11,7 @@ window.i18nextXHRBackend = i18nextXHRBackend;
 
 let initialized: boolean = false;
 
+// ReSharper disable once InconsistentNaming
 export function _translateInit(manage: any): void {
   if (initialized) return;
 
@@ -28,6 +28,7 @@ export function _translateInit(manage: any): void {
     }, (err, t) => {
       // for options see
       // https://github.com/i18next/jquery-i18next#initialize-the-plugin
+      // ReSharper disable once TsResolvedFromInaccessibleModule
       jqueryI18next.init(i18next, $);
       // start localizing, details:
       // https://github.com/i18next/jquery-i18next#usage-of-selector-function

@@ -80,7 +80,8 @@ function buildToolbars(parentTag, optionalId) {
     }
 
     try {
-      tag.replaceWith(twoSxc(tag).manage.getToolbar(toolbarConfig, toolbarSettings));
+      let sxc: SxcInstanceWithInternals = twoSxc(tag) as SxcInstanceWithInternals;
+      tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
     } catch (err2) {
       // note: errors happen a lot on custom toolbars, amke sure the others are still rendered
       console.error('error creating toolbar - will skip this one', err2);

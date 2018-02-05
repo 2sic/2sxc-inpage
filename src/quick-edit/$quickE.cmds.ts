@@ -14,12 +14,14 @@ interface ICmds {
 
 export class cb implements ICmds {
   delete(clip: any): any {
-    return twoSxc(clip.list).manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
+    let sxc: SxcInstanceWithInternals = twoSxc(clip.list) as SxcInstanceWithInternals;
+    return sxc.manage._getCbManipulator().delete(clip.parent, clip.field, clip.index);
   }
 
 
   static create(parent, field, index, appOrContent, list, newGuid): any {
-    return twoSxc(list).manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
+    let sxc: SxcInstanceWithInternals = twoSxc(list) as SxcInstanceWithInternals;
+    return sxc.manage._getCbManipulator().create(parent, field, index, appOrContent, list, newGuid);
   }
 }
 

@@ -45,7 +45,8 @@ function tryShowTemplatePicker() {
         return false;
     // show the template picker of this module
     var module = uninitializedModules.parent('div[data-edit-context]')[0];
-    exports.$2sxc(module).manage.run('layout');
+    var sxc = exports.$2sxc(module);
+    sxc.manage.run('layout');
     openedTemplatePickerOnce = true;
 }
 function initModule(module, isFirstRun) {

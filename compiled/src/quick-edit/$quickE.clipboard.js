@@ -34,7 +34,8 @@ function copyPasteInPage(cbAction, list, index, type) {
             if (newClip.type === _quickE___1.selectors.cb.id && from + 1 === to)
                 return clipboard.clear(); // don't do anything
             if (type === _quickE___1.selectors.cb.id) {
-                module_bootstrapper_1.$2sxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+                var sxc = module_bootstrapper_1.$2sxc(list);
+                sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
             }
             else {
                 // sometimes missing oldClip.item

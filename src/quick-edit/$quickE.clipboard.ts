@@ -39,8 +39,9 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
       if (newClip.type === selectors.cb.id && from + 1 === to)
         return clipboard.clear(); // don't do anything
 
-      if (type === selectors.cb.id ) {
-        twoSxc(list).manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+      if (type === selectors.cb.id) {
+        let sxc: SxcInstanceWithInternals = twoSxc(list) as SxcInstanceWithInternals;
+        sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
       } else {
         // sometimes missing oldClip.item
         // if (clipboard.data.item)

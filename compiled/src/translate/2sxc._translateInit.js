@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference types="../../typings/2sxc-js/2sxcInterfaces" />
 var i18next = require("./libs/i18next.min");
 var i18nextXHRBackend = require("./libs/i18nextXHRBackend.min");
 var jqueryI18next = require("./libs/jquery-i18next.min");
@@ -10,6 +9,7 @@ var jqueryI18next = require("./libs/jquery-i18next.min");
 window.i18next = i18next;
 window.i18nextXHRBackend = i18nextXHRBackend;
 var initialized = false;
+// ReSharper disable once InconsistentNaming
 function _translateInit(manage) {
     if (initialized)
         return;
@@ -26,6 +26,7 @@ function _translateInit(manage) {
     }, function (err, t) {
         // for options see
         // https://github.com/i18next/jquery-i18next#initialize-the-plugin
+        // ReSharper disable once TsResolvedFromInaccessibleModule
         jqueryI18next.init(i18next, $);
         // start localizing, details:
         // https://github.com/i18next/jquery-i18next#usage-of-selector-function

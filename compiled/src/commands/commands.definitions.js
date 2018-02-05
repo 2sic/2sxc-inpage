@@ -4,6 +4,7 @@ var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var contentBlock_actions_1 = require("../contentBlock/contentBlock.actions");
 var item_commands_1 = require("../entity-manipulation/item-commands");
 var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
+var make_def_1 = require("./make-def");
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -20,55 +21,19 @@ var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
  * - disabled (new!)
  * - params - ...
  */
-var Act = /** @class */ (function () {
-    function Act() {
-    }
-    return Act;
-}());
-var Def = /** @class */ (function () {
-    function Def() {
-    }
-    return Def;
-}());
-var CmdSpec = /** @class */ (function () {
-    function CmdSpec() {
-    }
-    return CmdSpec;
-}());
-/**
- * helper function to create the configuration object
- * @param name
- * @param translateKey
- * @param icon
- * @param uiOnly
- * @param partOfPage
- * @param more
- */
-function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
-    if (typeof (partOfPage) !== 'boolean')
-        throw 'partOfPage in commands not provided, order will be wrong!';
-    var newDefinition = {
-        name: name,
-        title: 'Toolbar.' + translateKey,
-        icon: 'icon-sxc-' + icon,
-        uiActionOnly: uiOnly,
-        partOfPage: partOfPage
-    };
-    return _2sxc__lib_extend_1.extend(newDefinition, more);
+var act = {};
+// quick helper so we can better debug the creation of definitions
+function addDef(def) {
+    act[def.name] = def;
 }
+;
 function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
     var isContent = cmdSpecs.isContent;
-    var act = {};
-    // quick helper so we can better debug the creation of definitions
-    function addDef(def) {
-        act[def.name] = def;
-    }
-    ;
     // open the import dialog
-    addDef(makeDef('app-import', 'Dashboard', '', true, false, {}));
+    addDef(make_def_1.makeDef('app-import', 'Dashboard', '', true, false, {}));
     // open an edit-item dialog
-    addDef(makeDef('edit', 'Edit', 'pencil', false, true, {
+    addDef(make_def_1.makeDef('edit', 'Edit', 'pencil', false, true, {
         params: { mode: 'edit' },
         showCondition: function (settings, modConfig) {
             return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
@@ -78,7 +43,7 @@ function create(cmdSpecs) {
     // new can also be used for mini-toolbars which just add an entity not attached to a module
     // in that case it's essential to add a contentType like 
     // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-    addDef(makeDef('new', 'New', 'plus', false, true, {
+    addDef(make_def_1.makeDef('new', 'New', 'plus', false, true, {
         params: { mode: 'new' },
         dialog: 'edit',
         showCondition: function (settings, modConfig) {
@@ -90,7 +55,7 @@ function create(cmdSpecs) {
         }
     }));
     // add brings no dialog, just add an empty item
-    addDef(makeDef('add', 'AddDemo', 'plus-circled', false, true, {
+    addDef(make_def_1.makeDef('add', 'AddDemo', 'plus-circled', false, true, {
         showCondition: function (settings, modConfig) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
@@ -99,7 +64,7 @@ function create(cmdSpecs) {
         }
     }));
     // create a metadata toolbar
-    addDef(makeDef('metadata', 'Metadata', 'tag', false, false, {
+    addDef(make_def_1.makeDef('metadata', 'Metadata', 'tag', false, false, {
         params: { mode: 'new' },
         dialog: 'edit',
         dynamicClasses: function (settings) {
@@ -119,7 +84,7 @@ function create(cmdSpecs) {
         }
     }));
     // remove an item from the placeholder (usually for lists)
-    addDef(makeDef('remove', 'Remove', 'minus-circled', false, true, {
+    addDef(make_def_1.makeDef('remove', 'Remove', 'minus-circled', false, true, {
         showCondition: function (settings, modConfig) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
@@ -132,7 +97,7 @@ function create(cmdSpecs) {
         }
     }));
     // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
-    addDef(makeDef('delete', 'Delete', 'cancel', true, false, {
+    addDef(make_def_1.makeDef('delete', 'Delete', 'cancel', true, false, {
         // disabled: true,
         showCondition: function (settings, modConfig) {
             // can never be used for a modulelist item, as it is always in use somewhere
@@ -145,7 +110,7 @@ function create(cmdSpecs) {
             item_commands_1.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
         }
     }));
-    addDef(makeDef('moveup', 'MoveUp', 'move-up', false, true, {
+    addDef(make_def_1.makeDef('moveup', 'MoveUp', 'move-up', false, true, {
         showCondition: function (settings, modConfig) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
         },
@@ -153,7 +118,7 @@ function create(cmdSpecs) {
             contentBlock_actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
         }
     }));
-    addDef(makeDef('movedown', 'MoveDown', 'move-down', false, true, {
+    addDef(make_def_1.makeDef('movedown', 'MoveDown', 'move-down', false, true, {
         showCondition: function (settings, modConfig) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
@@ -161,13 +126,13 @@ function create(cmdSpecs) {
             contentBlock_actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
         }
     }));
-    addDef(makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
+    addDef(make_def_1.makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
         showCondition: function (settings, modConfig) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         }
     }));
     // todo: shouldn't be available if changes are not allowed
-    addDef(makeDef('publish', 'Unpublished', 'eye-off', false, false, {
+    addDef(make_def_1.makeDef('publish', 'Unpublished', 'eye-off', false, false, {
         showCondition: function (settings, modConfig) {
             return settings.isPublished === false;
         },
@@ -185,13 +150,13 @@ function create(cmdSpecs) {
             return contentBlock_actions_1.publish(sxc, part, index);
         }
     }));
-    addDef(makeDef('replace', 'Replace', 'replace', false, true, {
+    addDef(make_def_1.makeDef('replace', 'Replace', 'replace', false, true, {
         showCondition: function (settings, modConfig) {
             return settings.useModuleList;
         }
     }));
     //#region app-actions: app-settings, app-resources
-    addDef(makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
+    addDef(make_def_1.makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
         dialog: 'edit',
         disabled: function (settings, modConfig) {
             return cmdSpecs.appSettingsId === null;
@@ -207,7 +172,7 @@ function create(cmdSpecs) {
             return cmdSpecs.appSettingsId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
         }
     }));
-    addDef(makeDef('app-resources', 'AppResources', 'language', true, false, {
+    addDef(make_def_1.makeDef('app-resources', 'AppResources', 'language', true, false, {
         dialog: 'edit',
         disabled: function (settings, modConfig) {
             return cmdSpecs.appResourcesId === null;
@@ -225,24 +190,24 @@ function create(cmdSpecs) {
     }));
     //#endregion
     //#region app & zone
-    addDef(makeDef('app', 'App', 'settings', true, false, {
+    addDef(make_def_1.makeDef('app', 'App', 'settings', true, false, {
         showCondition: function (settings, modConfig) {
             return enableTools;
         }
     }));
-    addDef(makeDef('zone', 'Zone', 'manage', true, false, {
+    addDef(make_def_1.makeDef('zone', 'Zone', 'manage', true, false, {
         showCondition: function (settings, modConfig) {
             return enableTools;
         }
     }));
     //#endregion
     //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
-    addDef(makeDef('contenttype', 'ContentType', 'fields', true, false, {
+    addDef(make_def_1.makeDef('contenttype', 'ContentType', 'fields', true, false, {
         showCondition: function (settings, modConfig) {
             return enableTools;
         }
     }));
-    addDef(makeDef('contentitems', 'ContentItems', 'table', true, false, {
+    addDef(make_def_1.makeDef('contentitems', 'ContentItems', 'table', true, false, {
         params: { contentTypeName: cmdSpecs.contentTypeId },
         showCondition: function (settings, modConfig) {
             return enableTools && (settings.contentType || cmdSpecs.contentTypeId);
@@ -264,7 +229,7 @@ function create(cmdSpecs) {
             }
         }
     }));
-    addDef(makeDef('template-develop', 'Develop', 'code', true, false, {
+    addDef(make_def_1.makeDef('template-develop', 'Develop', 'code', true, false, {
         newWindow: true,
         dialog: 'develop',
         showCondition: function (settings, modConfig) {
@@ -274,7 +239,7 @@ function create(cmdSpecs) {
             cmd.items = [{ EntityId: cmdSpecs.templateId }];
         }
     }));
-    addDef(makeDef('template-query', 'QueryEdit', 'filter', true, false, {
+    addDef(make_def_1.makeDef('template-query', 'QueryEdit', 'filter', true, false, {
         dialog: 'pipeline-designer',
         params: { pipelineId: cmdSpecs.queryId },
         newWindow: true,
@@ -289,7 +254,7 @@ function create(cmdSpecs) {
             return cmdSpecs.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
         }
     }));
-    addDef(makeDef('template-settings', 'TemplateSettings', 'sliders', true, false, {
+    addDef(make_def_1.makeDef('template-settings', 'TemplateSettings', 'sliders', true, false, {
         dialog: 'edit',
         showCondition: function (settings, modConfig) {
             return enableTools && !isContent;
@@ -300,7 +265,7 @@ function create(cmdSpecs) {
     }));
     //#endregion template commands
     //#region custom code buttons
-    addDef(makeDef('custom', 'Custom', 'bomb', true, false, {
+    addDef(make_def_1.makeDef('custom', 'Custom', 'bomb', true, false, {
         code: function (settings, event, sxc) {
             var fn;
             console.log('custom action with code - BETA feature, may change');
@@ -318,11 +283,11 @@ function create(cmdSpecs) {
         }
     }));
     //#endregion
-    addDef(makeDef('layout', 'ChangeLayout', 'glasses', true, true, {
+    addDef(make_def_1.makeDef('layout', 'ChangeLayout', 'glasses', true, true, {
         inlineWindow: true
     }));
-    addDef(makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
-        code: function (settings, event) {
+    addDef(make_def_1.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
+        code: function (settings, event, sxc) {
             var btn = $(event.target), fullMenu = btn.closest('ul.sc-menu'), oldState = Number(fullMenu.attr('data-state') || 0), max = Number(fullMenu.attr('group-count')), newState = (oldState + 1) % max;
             fullMenu.removeClass('group-' + oldState)
                 .addClass('group-' + newState)
@@ -330,7 +295,7 @@ function create(cmdSpecs) {
         }
     }));
     // show the version dialog
-    addDef(makeDef('item-history', 'ItemHistory', 'clock', true, false, {
+    addDef(make_def_1.makeDef('item-history', 'ItemHistory', 'clock', true, false, {
         inlineWindow: true,
         fullScreen: true
     }));

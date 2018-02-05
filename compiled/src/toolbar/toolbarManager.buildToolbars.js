@@ -66,7 +66,8 @@ function buildToolbars(parentTag, optionalId) {
             return;
         }
         try {
-            tag.replaceWith(module_bootstrapper_1.$2sxc(tag).manage.getToolbar(toolbarConfig, toolbarSettings));
+            var sxc = module_bootstrapper_1.$2sxc(tag);
+            tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
         }
         catch (err2) {
             // note: errors happen a lot on custom toolbars, amke sure the others are still rendered

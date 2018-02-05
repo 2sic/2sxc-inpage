@@ -52,7 +52,8 @@ function tryShowTemplatePicker() {
 
   // show the template picker of this module
   let module = uninitializedModules.parent('div[data-edit-context]')[0];
-  $2sxc(module).manage.run('layout');
+  let sxc: SxcInstanceWithInternals = $2sxc(module) as SxcInstanceWithInternals;
+  sxc.manage.run('layout');
   openedTemplatePickerOnce = true;
 }
 
