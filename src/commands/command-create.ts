@@ -12,7 +12,7 @@ import { DataEditContext } from '../data-edit-context/data-edit-context';
  * @param editContext
  * @param specialSettings
  */
-export function create(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): Cmd {
+export function commandCreate(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): Cmd {
   let settings: Settings = Object.assign(sxc.manage._instanceConfig, specialSettings) as Settings; // merge button with general toolbar-settings
   let ngDialogUrl: string = editContext.Environment.SxcRootUrl +
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +

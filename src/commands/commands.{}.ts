@@ -1,7 +1,7 @@
-﻿import { create } from './commands.definitions';
+﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { create } from './commands.definitions';
 import { instanceEngine } from './commands.engine';
-import { initializeInstanceCommands } from './commands.instanceCommands';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
 
 //TEST
 twoSxc._commands = {
@@ -9,5 +9,5 @@ twoSxc._commands = {
     create,
   },
   instanceEngine,
-  initializeInstanceCommands
+  commandInitializeInstanceCommands
 };

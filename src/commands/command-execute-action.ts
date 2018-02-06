@@ -1,8 +1,8 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { Settings } from './settings';
 import { prepareToAddContent } from '../contentBlock/contentBlock.templates';
-import { initializeInstanceCommands } from './commands.instanceCommands';
-import { openNgDialog } from './open-ng-dialog';
+import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
+import { commandOpenNgDialog } from './command-open-ng-dialog';
 
 // ToDo: remove dead code
 export function commandExecuteAction(sxc: SxcInstanceWithInternals, editContext: DataEditContext, nameOrSettings: any, eventOrSettings?: any, event?: any) {
@@ -23,12 +23,12 @@ export function commandExecuteAction(sxc: SxcInstanceWithInternals, editContext:
     :
     nameOrSettings;
 
-  const conf = initializeInstanceCommands(editContext)[settings.action];
+  const conf = commandInitializeInstanceCommands(editContext)[settings.action];
   settings = Object.assign({}, conf, settings) as Settings; // merge conf & settings, but settings has higher priority
 
   if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
   if (!settings.code) settings.code = (settings: Settings, event: any, sxc: SxcInstanceWithInternals) => {
-    return openNgDialog(settings, event, sxc, editContext);
+    return commandOpenNgDialog(settings, event, sxc, editContext);
   }; // decide what action to perform
 
   // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences

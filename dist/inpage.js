@@ -818,32 +818,6 @@ exports.updateTemplate = updateTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_definitions_1 = __webpack_require__(13);
-var module_bootstrapper_1 = __webpack_require__(0);
-function initializeInstanceCommands(editContext) {
-    var cg = editContext.ContentGroup;
-    return commands_definitions_1.create({
-        canDesign: editContext.User.CanDesign,
-        templateId: cg.TemplateId,
-        contentTypeId: cg.ContentTypeName,
-        isContent: cg.IsContent,
-        queryId: cg.QueryId,
-        appResourcesId: cg.AppResourcesId,
-        appSettingsId: cg.AppSettingsId,
-        allowPublish: editContext.ContentBlock.VersioningRequirements === module_bootstrapper_1.$2sxc.c.publishAllowed
-    });
-}
-exports.initializeInstanceCommands = initializeInstanceCommands;
-;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 function extend() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -856,6 +830,32 @@ function extend() {
     return arguments[0];
 }
 exports.extend = extend;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var commands_definitions_1 = __webpack_require__(14);
+var module_bootstrapper_1 = __webpack_require__(0);
+function commandInitializeInstanceCommands(editContext) {
+    var cg = editContext.ContentGroup;
+    return commands_definitions_1.create({
+        canDesign: editContext.User.CanDesign,
+        templateId: cg.TemplateId,
+        contentTypeId: cg.ContentTypeName,
+        isContent: cg.IsContent,
+        queryId: cg.QueryId,
+        appResourcesId: cg.AppResourcesId,
+        appSettingsId: cg.AppSettingsId,
+        allowPublish: editContext.ContentBlock.VersioningRequirements === module_bootstrapper_1.$2sxc.c.publishAllowed
+    });
+}
+exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
+;
 
 
 /***/ }),
@@ -1279,6 +1279,96 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(3);
+var module_bootstrapper_1 = __webpack_require__(0);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
+/**
+ * assemble an object which will store the configuration and execute it
+ * @param sxc
+ * @param editContext
+ * @param specialSettings
+ */
+function commandCreate(sxc, editContext, specialSettings) {
+    var settings = Object.assign(sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+    var ngDialogUrl = editContext.Environment.SxcRootUrl +
+        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
+        editContext.Environment.SxcVersion;
+    var isDebug = module_bootstrapper_1.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+    var cmd = {
+        settings: settings,
+        items: settings.items || [],
+        params: Object.assign({
+            dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
+        }, settings.params),
+        addSimpleItem: function () {
+            var item = {};
+            var ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+            if (cmd.settings.entityId)
+                item.EntityId = cmd.settings.entityId;
+            if (ct)
+                item.ContentTypeName = ct;
+            // only add if there was stuff to add
+            if (item.EntityId || item.ContentTypeName)
+                cmd.items.push(item);
+        },
+        // this adds an item of the content-group, based on the group GUID and the sequence number
+        addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
+            cmd.items.push({
+                Group: {
+                    Guid: guid,
+                    Index: index,
+                    Part: part,
+                    Add: isAdd
+                },
+                Title: _2sxc_translate_1.translate(sectionLanguageKey)
+            });
+        },
+        // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
+        addContentGroupItemSetsToEditList: function (withPresentation) {
+            var isContentAndNotHeader = (cmd.settings.sortOrder !== -1), index = isContentAndNotHeader ? cmd.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = cmd.settings.action === 'new', groupId = cmd.settings.contentGroupId;
+            cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + cTerm);
+            if (withPresentation)
+                cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + pTerm);
+        },
+        // build the link, combining specific params with global ones and put all in the url
+        generateLink: function () {
+            // if there is no items-array, create an empty one (it's required later on)
+            if (!cmd.settings.items)
+                cmd.settings.items = [];
+            //#region steps for all actions: prefill, serialize, open-dialog
+            // when doing new, there may be a prefill in the link to initialize the new item
+            if (cmd.settings.prefill) {
+                for (var i = 0; i < cmd.items.length; i++) {
+                    cmd.items[i].Prefill = cmd.settings.prefill;
+                }
+            }
+            cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
+            // clone the params and adjust parts based on partOfPage settings...
+            var sharedParams = _2sxc__lib_extend_1.extend({}, sxc.manage._dialogParameters);
+            if (!cmd.settings.partOfPage) {
+                delete sharedParams.versioningRequirements;
+                delete sharedParams.publishing;
+                sharedParams.partOfPage = false;
+            }
+            return ngDialogUrl +
+                '#' + $.param(sharedParams) +
+                '&' + $.param(cmd.params) +
+                isDebug;
+            //#endregion
+        }
+    };
+    return cmd;
+}
+exports.commandCreate = commandCreate;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = __webpack_require__(3);
 var contentBlock_actions_1 = __webpack_require__(27);
 var item_commands_1 = __webpack_require__(28);
 var make_def_1 = __webpack_require__(29);
@@ -1588,59 +1678,38 @@ exports.create = create;
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var link_to_ng_dialog_1 = __webpack_require__(15);
-var contentBlock_render_1 = __webpack_require__(5);
-var _2sxc__quickDialog_1 = __webpack_require__(4);
-var module_bootstrapper_1 = __webpack_require__(0);
-// open a new dialog of the angular-ui
-function openNgDialog(settings, event, sxc, editContext) {
-    // the callback will handle events after closing the dialog
-    // and reload the in-page view w/ajax or page reload
-    var callback = function () {
-        contentBlock_render_1.reloadAndReInitialize(sxc);
-        // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
-    };
-    var link = link_to_ng_dialog_1.linkToNgDialog(sxc, editContext, settings); // the link contains everything to open a full dialog (lots of params added)
-    if (settings.inlineWindow)
-        return _2sxc__quickDialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
-    if (settings.newWindow || (event && event.shiftKey))
-        return window.open(link);
-    return module_bootstrapper_1.$2sxc.totalPopup.open(link, callback);
-}
-exports.openNgDialog = openNgDialog;
-
-
-/***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = __webpack_require__(16);
+var command_link_to_ng_dialog_1 = __webpack_require__(16);
+var contentBlock_render_1 = __webpack_require__(5);
+var _2sxc__quickDialog_1 = __webpack_require__(4);
+var module_bootstrapper_1 = __webpack_require__(0);
 /**
- * create a dialog link
+ * open a new dialog of the angular-ui
+ * @param settings
+ * @param event
  * @param sxc
- * @param specialSettings
+ * @param editContext
  */
-function linkToNgDialog(sxc, editContext, specialSettings) {
-    var cmd = create_1.create(sxc, editContext, specialSettings);
-    if (cmd.settings.useModuleList)
-        cmd.addContentGroupItemSetsToEditList(true);
-    else
-        cmd.addSimpleItem();
-    // if the command has own configuration stuff, do that now
-    if (cmd.settings.configureCommand)
-        cmd.settings.configureCommand(cmd);
-    return cmd.generateLink();
+function commandOpenNgDialog(settings, event, sxc, editContext) {
+    // the callback will handle events after closing the dialog
+    // and reload the in-page view w/ajax or page reload
+    var callback = function () {
+        contentBlock_render_1.reloadAndReInitialize(sxc);
+        // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
+    };
+    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(sxc, editContext, settings); // the link contains everything to open a full dialog (lots of params added)
+    if (settings.inlineWindow)
+        return _2sxc__quickDialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+    if (settings.newWindow || (event && event.shiftKey))
+        return window.open(link);
+    return module_bootstrapper_1.$2sxc.totalPopup.open(link, callback);
 }
-exports.linkToNgDialog = linkToNgDialog;
+exports.commandOpenNgDialog = commandOpenNgDialog;
 
 
 /***/ }),
@@ -1650,87 +1719,24 @@ exports.linkToNgDialog = linkToNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(3);
-var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(8);
+var command_create_1 = __webpack_require__(13);
 /**
- * assemble an object which will store the configuration and execute it
+ * create a dialog link
  * @param sxc
- * @param editContext
  * @param specialSettings
  */
-function create(sxc, editContext, specialSettings) {
-    var settings = Object.assign(sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-    var ngDialogUrl = editContext.Environment.SxcRootUrl +
-        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-        editContext.Environment.SxcVersion;
-    var isDebug = module_bootstrapper_1.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-    var cmd = {
-        settings: settings,
-        items: settings.items || [],
-        params: Object.assign({
-            dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-        }, settings.params),
-        addSimpleItem: function () {
-            var item = {};
-            var ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-            if (cmd.settings.entityId)
-                item.EntityId = cmd.settings.entityId;
-            if (ct)
-                item.ContentTypeName = ct;
-            // only add if there was stuff to add
-            if (item.EntityId || item.ContentTypeName)
-                cmd.items.push(item);
-        },
-        // this adds an item of the content-group, based on the group GUID and the sequence number
-        addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
-            cmd.items.push({
-                Group: {
-                    Guid: guid,
-                    Index: index,
-                    Part: part,
-                    Add: isAdd
-                },
-                Title: _2sxc_translate_1.translate(sectionLanguageKey)
-            });
-        },
-        // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-        addContentGroupItemSetsToEditList: function (withPresentation) {
-            var isContentAndNotHeader = (cmd.settings.sortOrder !== -1), index = isContentAndNotHeader ? cmd.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = cmd.settings.action === 'new', groupId = cmd.settings.contentGroupId;
-            cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + cTerm);
-            if (withPresentation)
-                cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + pTerm);
-        },
-        // build the link, combining specific params with global ones and put all in the url
-        generateLink: function () {
-            // if there is no items-array, create an empty one (it's required later on)
-            if (!cmd.settings.items)
-                cmd.settings.items = [];
-            //#region steps for all actions: prefill, serialize, open-dialog
-            // when doing new, there may be a prefill in the link to initialize the new item
-            if (cmd.settings.prefill) {
-                for (var i = 0; i < cmd.items.length; i++) {
-                    cmd.items[i].Prefill = cmd.settings.prefill;
-                }
-            }
-            cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-            // clone the params and adjust parts based on partOfPage settings...
-            var sharedParams = _2sxc__lib_extend_1.extend({}, sxc.manage._dialogParameters);
-            if (!cmd.settings.partOfPage) {
-                delete sharedParams.versioningRequirements;
-                delete sharedParams.publishing;
-                sharedParams.partOfPage = false;
-            }
-            return ngDialogUrl +
-                '#' + $.param(sharedParams) +
-                '&' + $.param(cmd.params) +
-                isDebug;
-            //#endregion
-        }
-    };
-    return cmd;
+function commandLinkToNgDialog(sxc, editContext, specialSettings) {
+    var cmd = command_create_1.commandCreate(sxc, editContext, specialSettings);
+    if (cmd.settings.useModuleList)
+        cmd.addContentGroupItemSetsToEditList(true);
+    else
+        cmd.addSimpleItem();
+    // if the command has own configuration stuff, do that now
+    if (cmd.settings.configureCommand)
+        cmd.settings.configureCommand(cmd);
+    return cmd.generateLink();
 }
-exports.create = create;
+exports.commandLinkToNgDialog = commandLinkToNgDialog;
 
 
 /***/ }),
@@ -1740,25 +1746,25 @@ exports.create = create;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_instanceCommands_1 = __webpack_require__(7);
-var create_1 = __webpack_require__(16);
-var link_to_ng_dialog_1 = __webpack_require__(15);
-var open_ng_dialog_1 = __webpack_require__(14);
+var command_initialize_instance_commands_1 = __webpack_require__(8);
+var command_create_1 = __webpack_require__(13);
+var command_link_to_ng_dialog_1 = __webpack_require__(16);
+var command_open_ng_dialog_1 = __webpack_require__(15);
 var command_execute_action_1 = __webpack_require__(26);
 function instanceEngine(sxc, editContext) {
     var engine = {
-        commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
+        commands: command_initialize_instance_commands_1.commandInitializeInstanceCommands(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
-            return create_1.create(sxc, editContext, specialSettings);
+            return command_create_1.commandCreate(sxc, editContext, specialSettings);
         },
         // create a dialog link
         _linkToNgDialog: function (specialSettings) {
-            return link_to_ng_dialog_1.linkToNgDialog(sxc, editContext, specialSettings);
+            return command_link_to_ng_dialog_1.commandLinkToNgDialog(sxc, editContext, specialSettings);
         },
         // open a new dialog of the angular-ui
         _openNgDialog: function (settings, event, sxc) {
-            return open_ng_dialog_1.openNgDialog(settings, event, sxc, editContext);
+            return command_open_ng_dialog_1.commandOpenNgDialog(settings, event, sxc, editContext);
         },
         executeAction: function (nameOrSettings, eventOrSettings, event) {
             return command_execute_action_1.commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event);
@@ -2157,8 +2163,8 @@ exports._readPageConfig = _readPageConfig;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var contentBlock_templates_1 = __webpack_require__(6);
-var commands_instanceCommands_1 = __webpack_require__(7);
-var open_ng_dialog_1 = __webpack_require__(14);
+var command_initialize_instance_commands_1 = __webpack_require__(8);
+var command_open_ng_dialog_1 = __webpack_require__(15);
 // ToDo: remove dead code
 function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event) {
     var settings = eventOrSettings;
@@ -2174,13 +2180,13 @@ function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings,
         }) // place the name as an action-name into a command-object
         :
             nameOrSettings;
-    var conf = commands_instanceCommands_1.initializeInstanceCommands(editContext)[settings.action];
+    var conf = command_initialize_instance_commands_1.commandInitializeInstanceCommands(editContext)[settings.action];
     settings = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
     if (!settings.dialog)
         settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
     if (!settings.code)
         settings.code = function (settings, event, sxc) {
-            return open_ng_dialog_1.openNgDialog(settings, event, sxc, editContext);
+            return command_open_ng_dialog_1.commandOpenNgDialog(settings, event, sxc, editContext);
         }; // decide what action to perform
     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
     var origEvent = event || window.event;
@@ -2328,7 +2334,7 @@ exports.contentItems = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc__lib_extend_1 = __webpack_require__(8);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
 /**
  * helper function to create the configuration object
  * @param name
@@ -2596,17 +2602,17 @@ __webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
 __webpack_require__(38);
-__webpack_require__(26);
-__webpack_require__(39);
 __webpack_require__(13);
-__webpack_require__(17);
-__webpack_require__(7);
+__webpack_require__(26);
+__webpack_require__(8);
 __webpack_require__(16);
-__webpack_require__(40);
 __webpack_require__(15);
+__webpack_require__(39);
+__webpack_require__(14);
+__webpack_require__(17);
+__webpack_require__(40);
 __webpack_require__(29);
 __webpack_require__(41);
-__webpack_require__(14);
 __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(11);
@@ -2635,7 +2641,7 @@ __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
 __webpack_require__(62);
-__webpack_require__(8);
+__webpack_require__(7);
 __webpack_require__(63);
 __webpack_require__(64);
 __webpack_require__(31);
@@ -2794,17 +2800,17 @@ exports.Cmd = Cmd;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_definitions_1 = __webpack_require__(13);
-var commands_engine_1 = __webpack_require__(17);
-var commands_instanceCommands_1 = __webpack_require__(7);
 var module_bootstrapper_1 = __webpack_require__(0);
+var commands_definitions_1 = __webpack_require__(14);
+var commands_engine_1 = __webpack_require__(17);
+var command_initialize_instance_commands_1 = __webpack_require__(8);
 //TEST
 module_bootstrapper_1.$2sxc._commands = {
     definitions: {
         create: commands_definitions_1.create,
     },
     instanceEngine: commands_engine_1.instanceEngine,
-    initializeInstanceCommands: commands_instanceCommands_1.initializeInstanceCommands
+    commandInitializeInstanceCommands: command_initialize_instance_commands_1.commandInitializeInstanceCommands
 };
 
 
@@ -3676,7 +3682,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(8);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 // ToDo: refactor to avoid side-effects

@@ -25,12 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="src\commands\command-create.ts" />
     <None Remove="src\commands\command-execute-action.ts" />
-    <None Remove="src\commands\create.ts" />
-    <None Remove="src\commands\link-to-ng-dialog.ts" />
+    <None Remove="src\commands\command-link-to-ng-dialog.ts" />
+    <None Remove="src\commands\command-open-ng-dialog.ts" />
     <None Remove="src\commands\make-def.ts" />
     <None Remove="src\commands\mod-config.ts" />
-    <None Remove="src\commands\open-ng-dialog.ts" />
     <None Remove="src\globals.d.ts" />
     <None Remove="src\lib-helpers\jquery.ts" />
     <None Remove="src\manage\local-storage-helper.ts" />
@@ -42,12 +42,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="src\commands\create.ts" />
+    <TypeScriptCompile Include="src\commands\command-create.ts" />
     <TypeScriptCompile Include="src\commands\command-execute-action.ts" />
-    <TypeScriptCompile Include="src\commands\link-to-ng-dialog.ts" />
+    <TypeScriptCompile Include="src\commands\command-link-to-ng-dialog.ts" />
     <TypeScriptCompile Include="src\commands\make-def.ts" />
     <TypeScriptCompile Include="src\commands\mod-config.ts" />
-    <TypeScriptCompile Include="src\commands\open-ng-dialog.ts" />
+    <TypeScriptCompile Include="src\commands\command-open-ng-dialog.ts" />
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
     <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
   </ItemGroup>

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_definitions_1 = require("./commands.definitions");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
-function initializeInstanceCommands(editContext) {
+function commandInitializeInstanceCommands(editContext) {
     var cg = editContext.ContentGroup;
     return commands_definitions_1.create({
         canDesign: editContext.User.CanDesign,
@@ -15,6 +15,6 @@ function initializeInstanceCommands(editContext) {
         allowPublish: editContext.ContentBlock.VersioningRequirements === module_bootstrapper_1.$2sxc.c.publishAllowed
     });
 }
-exports.initializeInstanceCommands = initializeInstanceCommands;
+exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 ;
 //# sourceMappingURL=commands.instanceCommands.js.map

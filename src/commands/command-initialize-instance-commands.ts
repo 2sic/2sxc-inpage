@@ -3,7 +3,7 @@ import { create } from './commands.definitions';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { Act } from './act';
 
-export function initializeInstanceCommands(editContext : DataEditContext) : Act {
+export function commandInitializeInstanceCommands(editContext : DataEditContext) : Act {
   let cg = editContext.ContentGroup;
   return create({
     canDesign: editContext.User.CanDesign,
