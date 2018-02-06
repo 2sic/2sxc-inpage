@@ -2,6 +2,8 @@
 import {Params } from './params';
 
 export class Settings {
+  code: any;
+  //altKey: any;
   newWindow: any;
   fullScreen: any;
   inlineWindow: any;
