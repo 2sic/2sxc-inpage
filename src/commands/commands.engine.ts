@@ -12,35 +12,26 @@ import { Cmd } from './cmd';
 import { Params } from './params';
 import { create } from './create';
 import { linkToNgDialog } from './link-to-ng-dialog';
+import { openNgDialog } from './open-ng-dialog';
 
 export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : Engine {
   let engine: Engine = {
+
     commands: initializeInstanceCommands(editContext),
 
     // assemble an object which will store the configuration and execute it
-    create: (specialSettings) => {
+    create: (specialSettings: Settings) => {
       return create(sxc, editContext, specialSettings);
     },
 
     // create a dialog link
-    _linkToNgDialog: (specialSettings: any) => {
+    _linkToNgDialog: (specialSettings: Settings) => {
       return linkToNgDialog(sxc, editContext, specialSettings);
     },
 
     // open a new dialog of the angular-ui
-    _openNgDialog(settings: any, event: any, sxc: any) {
-      // the callback will handle events after closing the dialog
-      // and reload the in-page view w/ajax or page reload
-      let callback = () => {
-        reloadAndReInitialize(sxc);
-        // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
-      };
-      let link: string = engine._linkToNgDialog(settings); // the link contains everything to open a full dialog (lots of params added)
-      if (settings.inlineWindow)
-        return showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
-      if (settings.newWindow || (event && event.shiftKey))
-        return window.open(link);
-      return twoSxc.totalPopup.open(link, callback);
+    _openNgDialog(settings: Settings, event: any, sxc: SxcInstanceWithInternals) {
+      return openNgDialog(settings, event, sxc, editContext);
     },
 
     // ToDo: remove dead code

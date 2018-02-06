@@ -2,6 +2,9 @@
 import {Params } from './params';
 
 export class Settings {
+  newWindow: any;
+  fullScreen: any;
+  inlineWindow: any;
   action: any;
   appId: number;
   attributeSetName: string;
