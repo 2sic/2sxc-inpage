@@ -18,7 +18,7 @@ function instanceEngine(sxc, editContext) {
         },
         // open a new dialog of the angular-ui
         _openNgDialog: function (settings, event, sxc) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(settings, event, sxc, editContext);
+            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, editContext, settings, event);
         },
         executeAction: function (nameOrSettings, eventOrSettings, event) {
             return command_execute_action_1.commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event);

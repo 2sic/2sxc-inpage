@@ -1695,7 +1695,7 @@ var module_bootstrapper_1 = __webpack_require__(0);
  * @param sxc
  * @param editContext
  */
-function commandOpenNgDialog(settings, event, sxc, editContext) {
+function commandOpenNgDialog(sxc, editContext, settings, event) {
     // the callback will handle events after closing the dialog
     // and reload the in-page view w/ajax or page reload
     var callback = function () {
@@ -1764,7 +1764,7 @@ function instanceEngine(sxc, editContext) {
         },
         // open a new dialog of the angular-ui
         _openNgDialog: function (settings, event, sxc) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(settings, event, sxc, editContext);
+            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, editContext, settings, event);
         },
         executeAction: function (nameOrSettings, eventOrSettings, event) {
             return command_execute_action_1.commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event);
@@ -2186,7 +2186,7 @@ function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings,
         settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
     if (!settings.code)
         settings.code = function (settings, event, sxc) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(settings, event, sxc, editContext);
+            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, editContext, settings, event);
         }; // decide what action to perform
     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
     var origEvent = event || window.event;

@@ -28,7 +28,7 @@ export function commandExecuteAction(sxc: SxcInstanceWithInternals, editContext:
 
   if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
   if (!settings.code) settings.code = (settings: Settings, event: any, sxc: SxcInstanceWithInternals) => {
-    return commandOpenNgDialog(settings, event, sxc, editContext);
+    return commandOpenNgDialog(sxc, editContext, settings, event);
   }; // decide what action to perform
 
   // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences

@@ -12,7 +12,7 @@ import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
  * @param sxc
  * @param editContext
  */
-export function commandOpenNgDialog(settings: Settings, event: any, sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
+export function commandOpenNgDialog(sxc: SxcInstanceWithInternals, editContext: DataEditContext, settings: Settings, event: any) {
   // the callback will handle events after closing the dialog
   // and reload the in-page view w/ajax or page reload
   const callback = () => {
