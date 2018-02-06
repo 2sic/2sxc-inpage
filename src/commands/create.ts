@@ -14,9 +14,9 @@ import { DataEditContext } from '../data-edit-context/data-edit-context';
  */
 export function create(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): any {
   let settings: Settings = Object.assign(sxc.manage._instanceConfig, specialSettings) as Settings; // merge button with general toolbar-settings
-  let ngDialogUrl: string = sxc.manage._editContext.Environment.SxcRootUrl +
+  let ngDialogUrl: string = editContext.Environment.SxcRootUrl +
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-    sxc.manage._editContext.Environment.SxcVersion;
+    editContext.Environment.SxcVersion;
   let isDebug: string = twoSxc.urlParams.get('debug') ? '&debug=true' : '';
 
   let cmd: Cmd = {

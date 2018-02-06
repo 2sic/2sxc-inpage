@@ -2227,9 +2227,9 @@ var _2sxc__lib_extend_1 = __webpack_require__(6);
  */
 function create(sxc, editContext, specialSettings) {
     var settings = Object.assign(sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-    var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
+    var ngDialogUrl = editContext.Environment.SxcRootUrl +
         'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-        sxc.manage._editContext.Environment.SxcVersion;
+        editContext.Environment.SxcVersion;
     var isDebug = module_bootstrapper_1.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
     var cmd = {
         settings: settings,
