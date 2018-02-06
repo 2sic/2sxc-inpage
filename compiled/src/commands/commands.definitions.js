@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var make_def_1 = require("./make-def");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var contentBlock_actions_1 = require("../contentBlock/contentBlock.actions");
 var item_commands_1 = require("../entity-manipulation/item-commands");
-var make_def_1 = require("./make-def");
 /*
  * Actions of 2sxc - mostly used in toolbars
  *

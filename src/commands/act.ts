@@ -1,5 +1,5 @@
-﻿import { Def } from './def';
+﻿import { Definition } from './definition';
 
 export class Act {
-  [s: string]: Def;
+  [s: string]: Definition;
 }

@@ -3,7 +3,7 @@ import { ModConfig } from './mod-config';
 import { Params } from './params';
 import { Cmd } from './cmd';
 
-export class Def {
+export class Definition {
   name?: string;
   title?: string;
   icon?: string;

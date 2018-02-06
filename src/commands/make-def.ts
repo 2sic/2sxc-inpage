@@ -1,5 +1,5 @@
-﻿import { Def } from './def';
-import { extend } from '../lib-helpers/2sxc._lib.extend';
+﻿import { Definition } from './definition';
+
 
 /**
  * helper function to create the configuration object
@@ -11,11 +11,11 @@ import { extend } from '../lib-helpers/2sxc._lib.extend';
  * @param more
  */
 
-export function makeDef(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Def): Def {
+export function makeDef(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Definition): Definition {
   if (typeof (partOfPage) !== 'boolean')
     throw 'partOfPage in commands not provided, order will be wrong!';
 
-  let newDefinition: Def = {
+  let newDefinition: Definition = {
     name: name,
     title: 'Toolbar.' + translateKey,
     icon: 'icon-sxc-' + icon,
@@ -23,5 +23,5 @@ export function makeDef(name: string, translateKey: string, icon: string, uiOnly
     partOfPage: partOfPage
   };
 
-  return extend(newDefinition, more) as Def;
+  return Object.assign(newDefinition, more) as Definition;
 }

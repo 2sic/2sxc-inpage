@@ -1,13 +1,11 @@
-﻿import { translate } from '../translate/2sxc.translate';
+﻿import { Act } from './act';
+import { Definition } from './definition';
+import { CmdSpec } from './cmd-spec';
+import { Settings } from './settings';
+import { makeDef } from './make-def';
+import { translate } from '../translate/2sxc.translate';
 import { addItem, changeOrder, publish, publishId, removeFromList } from '../contentBlock/contentBlock.actions';
 import { contentItems } from '../entity-manipulation/item-commands';
-import { extend } from '../lib-helpers/2sxc._lib.extend';
-import { Act } from './act';
-import { Def } from './def';
-import { CmdSpec } from './cmd-spec';
-import { makeDef } from './make-def';
-import { Settings } from './settings';
-import { ModConfig } from './mod-config';
 
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -28,7 +26,7 @@ import { ModConfig } from './mod-config';
 let act: Act = {};
 
 // quick helper so we can better debug the creation of definitions
-function addDef(def: Def): void {
+function addDef(def: Definition): void {
   act[def.name] = def;
 };
 
@@ -121,7 +119,7 @@ export function create(cmdSpecs: CmdSpec): Act {
       return settings.entityId && settings.entityGuid && settings.entityTitle;
     },
     code(settings, event, sxc) {
-     contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+      contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
     }
   }));
 
@@ -171,7 +169,7 @@ export function create(cmdSpecs: CmdSpec): Act {
 
   addDef(makeDef('replace', 'Replace', 'replace', false, true, {
     showCondition(settings, modConfig) {
-       return settings.useModuleList;
+      return settings.useModuleList;
     }
   }));
 
