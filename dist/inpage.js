@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 33);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1257,8 +1257,8 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(3);
 var module_bootstrapper_1 = __webpack_require__(0);
+var command_1 = __webpack_require__(25);
 /**
  * assemble an object which will store the configuration and execute it
  * @param sxc
@@ -1271,69 +1271,7 @@ function commandCreate(sxc, editContext, specialSettings) {
         'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
         editContext.Environment.SxcVersion;
     var isDebug = module_bootstrapper_1.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-    var cmd = {
-        settings: settings,
-        items: settings.items || [],
-        params: Object.assign({
-            dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-        }, settings.params),
-        addSimpleItem: function () {
-            var item = {};
-            var ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-            if (cmd.settings.entityId)
-                item.EntityId = cmd.settings.entityId;
-            if (ct)
-                item.ContentTypeName = ct;
-            // only add if there was stuff to add
-            if (item.EntityId || item.ContentTypeName)
-                cmd.items.push(item);
-        },
-        // this adds an item of the content-group, based on the group GUID and the sequence number
-        addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
-            cmd.items.push({
-                Group: {
-                    Guid: guid,
-                    Index: index,
-                    Part: part,
-                    Add: isAdd
-                },
-                Title: _2sxc_translate_1.translate(sectionLanguageKey)
-            });
-        },
-        // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-        addContentGroupItemSetsToEditList: function (withPresentation) {
-            var isContentAndNotHeader = (cmd.settings.sortOrder !== -1), index = isContentAndNotHeader ? cmd.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = cmd.settings.action === 'new', groupId = cmd.settings.contentGroupId;
-            cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + cTerm);
-            if (withPresentation)
-                cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + pTerm);
-        },
-        // build the link, combining specific params with global ones and put all in the url
-        generateLink: function () {
-            // if there is no items-array, create an empty one (it's required later on)
-            if (!cmd.settings.items)
-                cmd.settings.items = [];
-            //#region steps for all actions: prefill, serialize, open-dialog
-            // when doing new, there may be a prefill in the link to initialize the new item
-            if (cmd.settings.prefill) {
-                for (var i = 0; i < cmd.items.length; i++) {
-                    cmd.items[i].Prefill = cmd.settings.prefill;
-                }
-            }
-            cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-            // clone the params and adjust parts based on partOfPage settings...
-            var sharedParams = Object.assign({}, sxc.manage._dialogParameters);
-            if (!cmd.settings.partOfPage) {
-                delete sharedParams.versioningRequirements;
-                delete sharedParams.publishing;
-                sharedParams.partOfPage = false;
-            }
-            return ngDialogUrl +
-                '#' + $.param(sharedParams) +
-                '&' + $.param(cmd.params) +
-                isDebug;
-            //#endregion
-        }
-    };
+    var cmd = new command_1.Command(sxc, settings, ngDialogUrl, isDebug);
     return cmd;
 }
 exports.commandCreate = commandCreate;
@@ -1346,10 +1284,10 @@ exports.commandCreate = commandCreate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var make_def_1 = __webpack_require__(26);
+var make_def_1 = __webpack_require__(27);
 var _2sxc_translate_1 = __webpack_require__(3);
-var contentBlock_actions_1 = __webpack_require__(27);
-var item_commands_1 = __webpack_require__(28);
+var contentBlock_actions_1 = __webpack_require__(28);
+var item_commands_1 = __webpack_require__(29);
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -1728,7 +1666,7 @@ var command_initialize_instance_commands_1 = __webpack_require__(7);
 var command_create_1 = __webpack_require__(12);
 var command_link_to_ng_dialog_1 = __webpack_require__(15);
 var command_open_ng_dialog_1 = __webpack_require__(14);
-var command_execute_action_1 = __webpack_require__(25);
+var command_execute_action_1 = __webpack_require__(26);
 var Engine = /** @class */ (function () {
     function Engine(sxc, editContext) {
         var _this = this;
@@ -2147,6 +2085,88 @@ exports._readPageConfig = _readPageConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = __webpack_require__(3);
+var Command = /** @class */ (function () {
+    function Command(sxc, settings, ngDialogUrl, isDebug) {
+        var _this = this;
+        this.sxc = sxc;
+        this.settings = settings;
+        this.ngDialogUrl = ngDialogUrl;
+        this.isDebug = isDebug;
+        this.addSimpleItem = function () {
+            var item = {};
+            var ct = _this.settings.contentType || _this.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+            if (_this.settings.entityId)
+                item.EntityId = _this.settings.entityId;
+            if (ct)
+                item.ContentTypeName = ct;
+            // only add if there was stuff to add
+            if (item.EntityId || item.ContentTypeName)
+                _this.items.push(item);
+        };
+        // this adds an item of the content-group, based on the group GUID and the sequence number
+        this.addContentGroupItem = function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
+            _this.items.push({
+                Group: {
+                    Guid: guid,
+                    Index: index,
+                    Part: part,
+                    Add: isAdd
+                },
+                Title: _2sxc_translate_1.translate(sectionLanguageKey)
+            });
+        };
+        // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
+        this.addContentGroupItemSetsToEditList = function (withPresentation) {
+            var isContentAndNotHeader = (_this.settings.sortOrder !== -1), index = isContentAndNotHeader ? _this.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = _this.settings.action === 'new', groupId = _this.settings.contentGroupId;
+            _this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, 'EditFormTitle.' + cTerm);
+            if (withPresentation)
+                _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, 'EditFormTitle.' + pTerm);
+        };
+        // build the link, combining specific params with global ones and put all in the url
+        this.generateLink = function () {
+            // if there is no items-array, create an empty one (it's required later on)
+            if (!_this.settings.items)
+                _this.settings.items = [];
+            //#region steps for all actions: prefill, serialize, open-dialog
+            // when doing new, there may be a prefill in the link to initialize the new item
+            if (_this.settings.prefill) {
+                for (var i = 0; i < _this.items.length; i++) {
+                    _this.items[i].Prefill = _this.settings.prefill;
+                }
+            }
+            _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
+            // clone the params and adjust parts based on partOfPage settings...
+            var sharedParams = Object.assign({}, _this.sxc.manage._dialogParameters);
+            if (!_this.settings.partOfPage) {
+                delete sharedParams.versioningRequirements;
+                delete sharedParams.publishing;
+                sharedParams.partOfPage = false;
+            }
+            return _this.ngDialogUrl +
+                '#' + $.param(sharedParams) +
+                '&' + $.param(_this.params) +
+                _this.isDebug;
+            //#endregion
+        };
+        this.settings = settings;
+        this.items = settings.items || []; // use predefined or create empty array
+        this.params = Object.assign({
+            dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
+        }, settings.params);
+    }
+    return Command;
+}());
+exports.Command = Command;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var contentBlock_templates_1 = __webpack_require__(6);
 var command_initialize_instance_commands_1 = __webpack_require__(7);
 var command_open_ng_dialog_1 = __webpack_require__(14);
@@ -2185,7 +2205,7 @@ exports.commandExecuteAction = commandExecuteAction;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2216,7 +2236,7 @@ exports.makeDef = makeDef;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2307,7 +2327,7 @@ exports.publishId = publishId;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2344,7 +2364,7 @@ exports.contentItems = {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2446,7 +2466,7 @@ exports.manipulator = manipulator;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2467,7 +2487,7 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2490,7 +2510,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2499,8 +2519,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(16);
 var manage_api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
-var contentBlock_manipulate_1 = __webpack_require__(29);
-var local_storage_helper_1 = __webpack_require__(31);
+var contentBlock_manipulate_1 = __webpack_require__(30);
+var local_storage_helper_1 = __webpack_require__(32);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
  * all in-page toolbars etc.
@@ -2596,33 +2616,33 @@ function _initInstance(sxc) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
-__webpack_require__(34);
 __webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
+__webpack_require__(38);
 __webpack_require__(12);
-__webpack_require__(25);
+__webpack_require__(26);
 __webpack_require__(7);
 __webpack_require__(15);
 __webpack_require__(14);
-__webpack_require__(38);
+__webpack_require__(25);
 __webpack_require__(39);
 __webpack_require__(13);
 __webpack_require__(40);
 __webpack_require__(16);
-__webpack_require__(26);
+__webpack_require__(27);
 __webpack_require__(41);
 __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(10);
-__webpack_require__(27);
-__webpack_require__(29);
+__webpack_require__(28);
+__webpack_require__(30);
 __webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(11);
@@ -2636,7 +2656,7 @@ __webpack_require__(50);
 __webpack_require__(51);
 __webpack_require__(52);
 __webpack_require__(53);
-__webpack_require__(28);
+__webpack_require__(29);
 __webpack_require__(54);
 __webpack_require__(55);
 __webpack_require__(56);
@@ -2645,14 +2665,14 @@ __webpack_require__(58);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
-__webpack_require__(30);
+__webpack_require__(31);
 __webpack_require__(62);
 __webpack_require__(63);
-__webpack_require__(31);
+__webpack_require__(32);
 __webpack_require__(64);
 __webpack_require__(65);
 __webpack_require__(2);
-__webpack_require__(32);
+__webpack_require__(33);
 __webpack_require__(66);
 __webpack_require__(67);
 __webpack_require__(68);
@@ -2684,7 +2704,7 @@ module.exports = __webpack_require__(0);
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2723,7 +2743,7 @@ twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2753,7 +2773,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2768,7 +2788,7 @@ exports.Action = Action;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2780,21 +2800,6 @@ var CmdSpec = /** @class */ (function () {
     return CmdSpec;
 }());
 exports.CmdSpec = CmdSpec;
-
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Command = /** @class */ (function () {
-    function Command() {
-    }
-    return Command;
-}());
-exports.Command = Command;
 
 
 /***/ }),
@@ -3166,7 +3171,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_create_1 = __webpack_require__(32);
+var manage_create_1 = __webpack_require__(33);
 var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -3680,7 +3685,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(30);
+var _2sxc__lib_extend_1 = __webpack_require__(31);
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 // ToDo: refactor to avoid side-effects
