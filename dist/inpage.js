@@ -389,7 +389,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = __webpack_require__(2);
 var contentBlock_render_1 = __webpack_require__(5);
 var contentBlock___1 = __webpack_require__(10);
-var contentBlock_templates_1 = __webpack_require__(7);
+var contentBlock_templates_1 = __webpack_require__(6);
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
@@ -737,27 +737,6 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function extend() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    for (var i = 1; i < arguments.length; i++)
-        for (var key in arguments[i])
-            if (arguments[i].hasOwnProperty(key))
-                arguments[0][key] = arguments[i][key];
-    return arguments[0];
-}
-exports.extend = extend;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = __webpack_require__(4);
 var contentBlock_render_1 = __webpack_require__(5);
 var contentBlock_webApiPromises_1 = __webpack_require__(11);
@@ -830,6 +809,27 @@ function updateTemplate(sxc, templateId, forceCreate) {
     });
 }
 exports.updateTemplate = updateTemplate;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function extend() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    for (var i = 1; i < arguments.length; i++)
+        for (var key in arguments[i])
+            if (arguments[i].hasOwnProperty(key))
+                arguments[0][key] = arguments[i][key];
+    return arguments[0];
+}
+exports.extend = extend;
 
 
 /***/ }),
@@ -1137,7 +1137,7 @@ exports.getCoordinates = getCoordinates;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var contentBlock_templates_1 = __webpack_require__(7);
+var contentBlock_templates_1 = __webpack_require__(6);
 /*
  * this is a content block in the browser
  *
@@ -1569,8 +1569,7 @@ exports.create = create;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = __webpack_require__(14);
-var contentBlock_templates_1 = __webpack_require__(7);
-var _2sxc__lib_extend_1 = __webpack_require__(6);
+var contentBlock_templates_1 = __webpack_require__(6);
 var create_1 = __webpack_require__(15);
 var link_to_ng_dialog_1 = __webpack_require__(16);
 var open_ng_dialog_1 = __webpack_require__(28);
@@ -1596,21 +1595,21 @@ function instanceEngine(sxc, editContext) {
                 event = settings; // move it to the correct variable
                 settings = {}; // clear the settings variable, as none was provided
             }
-            // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-            var origEvent = event || window.event;
             // check if name is name (string) or object (settings)
             settings = (typeof nameOrSettings === 'string') ?
-                _2sxc__lib_extend_1.extend(settings || {}, {
+                Object.assign(settings || {}, {
                     "action": nameOrSettings
                 }) // place the name as an action-name into a command-object
                 :
                     nameOrSettings;
             var conf = engine.commands[settings.action];
-            settings = _2sxc__lib_extend_1.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+            settings = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
             if (!settings.dialog)
                 settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
             if (!settings.code)
                 settings.code = engine._openNgDialog; // decide what action to perform
+            // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+            var origEvent = event || window.event;
             if (conf.uiActionOnly)
                 return settings.code(settings, origEvent, sxc);
             // if more than just a UI-action, then it needs to be sure the content-group is created first
@@ -1659,7 +1658,7 @@ exports.initializeInstanceCommands = initializeInstanceCommands;
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(3);
 var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(6);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
 /**
  * assemble an object which will store the configuration and execute it
  * @param sxc
@@ -2281,7 +2280,7 @@ exports.contentItems = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc__lib_extend_1 = __webpack_require__(6);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
 /**
  * helper function to create the configuration object
  * @param name
@@ -2584,19 +2583,19 @@ __webpack_require__(13);
 __webpack_require__(14);
 __webpack_require__(15);
 __webpack_require__(39);
+__webpack_require__(40);
 __webpack_require__(16);
 __webpack_require__(27);
-__webpack_require__(40);
-__webpack_require__(28);
 __webpack_require__(41);
+__webpack_require__(28);
 __webpack_require__(42);
+__webpack_require__(43);
 __webpack_require__(10);
 __webpack_require__(25);
 __webpack_require__(29);
 __webpack_require__(5);
-__webpack_require__(7);
+__webpack_require__(6);
 __webpack_require__(11);
-__webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(45);
 __webpack_require__(46);
@@ -2606,8 +2605,8 @@ __webpack_require__(49);
 __webpack_require__(50);
 __webpack_require__(51);
 __webpack_require__(52);
-__webpack_require__(26);
 __webpack_require__(53);
+__webpack_require__(26);
 __webpack_require__(54);
 __webpack_require__(55);
 __webpack_require__(56);
@@ -2616,30 +2615,30 @@ __webpack_require__(58);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
-__webpack_require__(6);
 __webpack_require__(62);
+__webpack_require__(7);
 __webpack_require__(63);
-__webpack_require__(30);
 __webpack_require__(64);
+__webpack_require__(30);
 __webpack_require__(65);
+__webpack_require__(66);
 __webpack_require__(2);
 __webpack_require__(31);
-__webpack_require__(66);
 __webpack_require__(67);
 __webpack_require__(68);
 __webpack_require__(69);
+__webpack_require__(70);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(17);
 __webpack_require__(24);
-__webpack_require__(70);
-__webpack_require__(18);
 __webpack_require__(71);
+__webpack_require__(18);
+__webpack_require__(72);
 __webpack_require__(9);
 __webpack_require__(22);
 __webpack_require__(23);
-__webpack_require__(72);
 __webpack_require__(73);
 __webpack_require__(74);
 __webpack_require__(75);
@@ -2650,6 +2649,7 @@ __webpack_require__(79);
 __webpack_require__(80);
 __webpack_require__(81);
 __webpack_require__(82);
+__webpack_require__(83);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
@@ -2811,6 +2811,46 @@ exports.Def = Def;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc__lib_extend_1 = __webpack_require__(7);
+var module_bootstrapper_1 = __webpack_require__(0);
+var contentBlock_templates_1 = __webpack_require__(6);
+function executeAction(nameOrSettings, settings, event, engine) {
+    // cycle parameters, in case it was called with 2 params only
+    if (!event && settings && typeof settings.altKey !== 'undefined') {
+        event = settings; // move it to the correct variable
+        settings = {}; // clear the settings variable, as none was provided
+    }
+    // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+    var origEvent = event || window.event;
+    // check if name is name (string) or object (settings)
+    settings = (typeof nameOrSettings === 'string') ?
+        _2sxc__lib_extend_1.extend(settings || {}, {
+            "action": nameOrSettings
+        }) // place the name as an action-name into a command-object
+        :
+            nameOrSettings;
+    var conf = engine.commands[settings.action];
+    settings = _2sxc__lib_extend_1.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+    if (!settings.dialog)
+        settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
+    if (!settings.code)
+        settings.code = engine._openNgDialog; // decide what action to perform
+    if (conf.uiActionOnly)
+        return settings.code(settings, origEvent, module_bootstrapper_1.sxc);
+    // if more than just a UI-action, then it needs to be sure the content-group is created first
+    return contentBlock_templates_1.prepareToAddContent(module_bootstrapper_1.sxc, settings.useModuleList)
+        .then(function () { return settings.code(settings, origEvent, module_bootstrapper_1.sxc); });
+}
+exports.executeAction = executeAction;
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var ModConfig = /** @class */ (function () {
     function ModConfig() {
     }
@@ -2820,7 +2860,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2835,7 +2875,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2850,7 +2890,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2865,7 +2905,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2880,7 +2920,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2895,7 +2935,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2910,7 +2950,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2925,7 +2965,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2940,7 +2980,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2955,7 +2995,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2970,7 +3010,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2993,7 +3033,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -3022,7 +3062,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3055,13 +3095,13 @@ window.$quickE = _quickE___1.$quickE;
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3070,16 +3110,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 56 */
-/***/ (function(module, exports) {
-
-// ReSharper restore InconsistentNaming 
-
-
-/***/ }),
 /* 57 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -3114,6 +3148,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 63 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3128,7 +3168,7 @@ exports.InstanceConfig = InstanceConfig;
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3137,7 +3177,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3161,7 +3201,7 @@ module_bootstrapper_1.$2sxc._manage = {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3176,7 +3216,7 @@ exports.NgDialogParams = NgDialogParams;
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3191,7 +3231,7 @@ exports.UserOfEditContext = UserOfEditContext;
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3235,7 +3275,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3262,7 +3302,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3297,7 +3337,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3327,7 +3367,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 /*
@@ -3428,7 +3468,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3440,7 +3480,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3455,7 +3495,7 @@ $(function () {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3474,7 +3514,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3566,7 +3606,7 @@ function isDisabled(sxc) {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3611,7 +3651,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3650,14 +3690,14 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(6);
+var _2sxc__lib_extend_1 = __webpack_require__(7);
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 // ToDo: refactor to avoid side-effects
@@ -3882,7 +3922,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3904,7 +3944,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3972,7 +4012,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

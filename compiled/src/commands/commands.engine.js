@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
 var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
-var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
 var create_1 = require("./create");
 var link_to_ng_dialog_1 = require("./link-to-ng-dialog");
 var open_ng_dialog_1 = require("./open-ng-dialog");
@@ -28,21 +27,21 @@ function instanceEngine(sxc, editContext) {
                 event = settings; // move it to the correct variable
                 settings = {}; // clear the settings variable, as none was provided
             }
-            // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-            var origEvent = event || window.event;
             // check if name is name (string) or object (settings)
             settings = (typeof nameOrSettings === 'string') ?
-                _2sxc__lib_extend_1.extend(settings || {}, {
+                Object.assign(settings || {}, {
                     "action": nameOrSettings
                 }) // place the name as an action-name into a command-object
                 :
                     nameOrSettings;
             var conf = engine.commands[settings.action];
-            settings = _2sxc__lib_extend_1.extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+            settings = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
             if (!settings.dialog)
                 settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
             if (!settings.code)
                 settings.code = engine._openNgDialog; // decide what action to perform
+            // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+            var origEvent = event || window.event;
             if (conf.uiActionOnly)
                 return settings.code(settings, origEvent, sxc);
             // if more than just a UI-action, then it needs to be sure the content-group is created first

@@ -5,7 +5,6 @@ import { translate } from '../translate/2sxc.translate';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { reloadAndReInitialize } from '../contentBlock/contentBlock.render';
 import { prepareToAddContent } from '../contentBlock/contentBlock.templates';
-import { extend } from '../lib-helpers/2sxc._lib.extend';
 import { Settings } from './settings';
 import { Engine } from '../interfaces/engine';
 import { Cmd } from './cmd';
@@ -35,7 +34,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
     },
 
     // ToDo: remove dead code
-    executeAction(nameOrSettings, settings, event) {
+    executeAction: (nameOrSettings, settings, event) => {
 
       // cycle parameters, in case it was called with 2 params only
       if (!event && settings && typeof settings.altKey !== 'undefined') { // no event param, but settings contains the event-object
@@ -43,22 +42,22 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
         settings = {}; // clear the settings variable, as none was provided
       }
 
-      // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-      let origEvent = event || window.event;
-
       // check if name is name (string) or object (settings)
       settings = (typeof nameOrSettings === 'string') ?
-        extend(settings || {}, {
+        Object.assign(settings || {}, {
           "action": nameOrSettings
         }) // place the name as an action-name into a command-object
         :
         nameOrSettings;
 
       let conf = engine.commands[settings.action];
-      settings = extend({}, conf, settings); // merge conf & settings, but settings has higher priority
+      settings = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
 
       if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
       if (!settings.code) settings.code = engine._openNgDialog; // decide what action to perform
+
+      // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+      let origEvent = event || window.event;
 
       if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc);
 
