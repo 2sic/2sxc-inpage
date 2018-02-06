@@ -1,7 +1,7 @@
 ﻿import { Settings } from './settings';
 import { ModConfig } from './mod-config';
 import { Params } from './params';
-import { Cmd } from './cmd';
+import { Command } from './command';
 
 export class Definition {
   name?: string;
@@ -15,7 +15,7 @@ export class Definition {
   code?(settings: Settings, event: ModConfig, sxc: SxcInstanceWithInternals): void;
   dynamicClasses?(settings: Settings): string;
   disabled?(settings: Settings, modConfig: ModConfig): boolean;
-  configureCommand?(cmd: Cmd): void;
+  configureCommand?(cmd: Command): void;
   newWindow?: boolean;
   inlineWindow?: boolean;
   fullScreen?: boolean;

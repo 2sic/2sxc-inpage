@@ -2,7 +2,7 @@
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { extend } from '../lib-helpers/2sxc._lib.extend';
 import { Settings } from './settings';
-import { Cmd } from './cmd';
+import { Command } from './command';
 import { Params } from './params';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 
@@ -12,14 +12,14 @@ import { DataEditContext } from '../data-edit-context/data-edit-context';
  * @param editContext
  * @param specialSettings
  */
-export function commandCreate(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): Cmd {
+export function commandCreate(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): Command {
   let settings: Settings = Object.assign(sxc.manage._instanceConfig, specialSettings) as Settings; // merge button with general toolbar-settings
   let ngDialogUrl: string = editContext.Environment.SxcRootUrl +
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
     editContext.Environment.SxcVersion;
   let isDebug: string = twoSxc.urlParams.get('debug') ? '&debug=true' : '';
 
-  let cmd: Cmd = {
+  let cmd: Command = {
     settings: settings,
     items: settings.items || [], // use predefined or create empty array
     params: Object.assign({
@@ -90,6 +90,6 @@ export function commandCreate(sxc: SxcInstanceWithInternals, editContext: DataEd
         isDebug;
       //#endregion
     }
-  } as Cmd;
+  } as Command;
   return cmd;
 }

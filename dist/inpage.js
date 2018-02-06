@@ -2607,12 +2607,12 @@ __webpack_require__(34);
 __webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
-__webpack_require__(38);
 __webpack_require__(12);
 __webpack_require__(26);
 __webpack_require__(7);
 __webpack_require__(16);
 __webpack_require__(15);
+__webpack_require__(38);
 __webpack_require__(39);
 __webpack_require__(14);
 __webpack_require__(40);
@@ -2790,12 +2790,12 @@ exports.CmdSpec = CmdSpec;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cmd = /** @class */ (function () {
-    function Cmd() {
+var Command = /** @class */ (function () {
+    function Command() {
     }
-    return Cmd;
+    return Command;
 }());
-exports.Cmd = Cmd;
+exports.Command = Command;
 
 
 /***/ }),

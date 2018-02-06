@@ -1,12 +1,5 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { showOrToggle } from '../quick-dialog/2sxc._quickDialog';
-import { translate } from '../translate/2sxc.translate';
-import { reloadAndReInitialize } from '../contentBlock/contentBlock.render';
-import { prepareToAddContent } from '../contentBlock/contentBlock.templates';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { Settings } from './settings';
-import { Cmd } from './cmd';
-import { Params } from './params';
 import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
 import { commandCreate } from './command-create';
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';

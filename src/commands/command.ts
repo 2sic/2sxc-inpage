@@ -1,7 +1,7 @@
 ﻿import { Settings } from './settings';
 import { Params } from './params';
 
-export class Cmd {
+export class Command {
   settings: Settings;
   items: any; //string | string[];
   params: Params;
