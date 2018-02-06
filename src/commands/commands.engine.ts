@@ -30,7 +30,7 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
     },
 
     // open a new dialog of the angular-ui
-    _openNgDialog(settings: Settings, event: any, sxc: SxcInstanceWithInternals) {
+    _openNgDialog: (settings: Settings, event: any, sxc: SxcInstanceWithInternals) => {
       return openNgDialog(settings, event, sxc, editContext);
     },
 
