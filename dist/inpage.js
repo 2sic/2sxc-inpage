@@ -2760,12 +2760,12 @@ function finishUpgrade(domElement) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Act = /** @class */ (function () {
-    function Act() {
+var Action = /** @class */ (function () {
+    function Action() {
     }
-    return Act;
+    return Action;
 }());
-exports.Act = Act;
+exports.Action = Action;
 
 
 /***/ }),

@@ -1,4 +1,4 @@
-﻿import { Act } from './act';
+﻿import { Action } from './action';
 import { Definition } from './definition';
 import { CmdSpec } from './cmd-spec';
 import { Settings } from './settings';
@@ -23,14 +23,14 @@ import { contentItems } from '../entity-manipulation/item-commands';
  * - disabled (new!)
  * - params - ...
  */
-let act: Act = {};
+let act: Action = {};
 
 // quick helper so we can better debug the creation of definitions
 function addDef(def: Definition): void {
   act[def.name] = def;
 };
 
-export function create(cmdSpecs: CmdSpec): Act {
+export function create(cmdSpecs: CmdSpec): Action {
   let enableTools = cmdSpecs.canDesign;
   let isContent = cmdSpecs.isContent;
 

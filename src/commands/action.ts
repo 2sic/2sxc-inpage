@@ -1,5 +1,5 @@
 ﻿import { Definition } from './definition';
 
-export class Act {
+export class Action {
   [s: string]: Definition;
 }
