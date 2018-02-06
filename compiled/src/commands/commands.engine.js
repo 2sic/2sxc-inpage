@@ -5,26 +5,33 @@ var command_create_1 = require("./command-create");
 var command_link_to_ng_dialog_1 = require("./command-link-to-ng-dialog");
 var command_open_ng_dialog_1 = require("./command-open-ng-dialog");
 var command_execute_action_1 = require("./command-execute-action");
-function instanceEngine(sxc, editContext) {
-    var engine = {
-        commands: command_initialize_instance_commands_1.commandInitializeInstanceCommands(editContext),
+var Engine2 = /** @class */ (function () {
+    function Engine2(sxc, editContext) {
+        var _this = this;
+        this.sxc = sxc;
+        this.editContext = editContext;
+        this.commands = command_initialize_instance_commands_1.commandInitializeInstanceCommands(this.editContext);
         // assemble an object which will store the configuration and execute it
-        create: function (specialSettings) {
-            return command_create_1.commandCreate(sxc, editContext, specialSettings);
-        },
+        this.create = function (specialSettings) {
+            return command_create_1.commandCreate(_this.sxc, _this.editContext, specialSettings);
+        };
         // create a dialog link
-        _linkToNgDialog: function (specialSettings) {
-            return command_link_to_ng_dialog_1.commandLinkToNgDialog(sxc, editContext, specialSettings);
-        },
+        this._linkToNgDialog = function (specialSettings) {
+            return command_link_to_ng_dialog_1.commandLinkToNgDialog(_this.sxc, _this.editContext, specialSettings);
+        };
         // open a new dialog of the angular-ui
-        _openNgDialog: function (settings, event, sxc) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, editContext, settings, event);
-        },
-        executeAction: function (nameOrSettings, eventOrSettings, event) {
-            return command_execute_action_1.commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event);
-        }
-    };
-    return engine;
+        this._openNgDialog = function (settings, event, sxc) {
+            return command_open_ng_dialog_1.commandOpenNgDialog(_this.sxc, _this.editContext, settings, event);
+        };
+        this.executeAction = function (nameOrSettings, eventOrSettings, event) {
+            return command_execute_action_1.commandExecuteAction(_this.sxc, _this.editContext, nameOrSettings, eventOrSettings, event);
+        };
+    }
+    return Engine2;
+}());
+exports.Engine2 = Engine2;
+function instanceEngine(sxc, editContext) {
+    return new Engine2(sxc, editContext);
 }
 exports.instanceEngine = instanceEngine;
 ;

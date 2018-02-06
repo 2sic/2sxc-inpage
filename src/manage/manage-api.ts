@@ -1,5 +1,4 @@
-﻿import { Engine } from '../interfaces/engine';
-
+﻿import { Engine } from '../commands/engine';
 export type ManageApi = {
   run: (nameOrSettings: any, settings?: any, event?: any) => any;
   getButton: (actDef: any, groupIndex: any) => any;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_engine_1 = require("../commands/commands.engine");
+var engine_1 = require("../commands/engine");
 var manage_api_1 = require("./manage.api");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 var contentBlock_manipulate_1 = require("../contentBlock/contentBlock.manipulate");
@@ -30,7 +30,7 @@ exports.initInstance = initInstance;
 function _initInstance(sxc) {
     var editContext = manage_api_1.getEditContext(sxc);
     var userInfo = manage_api_1.getUserOfEditContext(editContext);
-    var cmdEngine = commands_engine_1.instanceEngine(sxc, editContext);
+    var cmdEngine = engine_1.instanceEngine(sxc, editContext);
     var editManager = sxc.manage = {
         //#region Official, public properties and commands, which are stable for use from the outside
         /**

@@ -1751,26 +1751,33 @@ var command_create_1 = __webpack_require__(13);
 var command_link_to_ng_dialog_1 = __webpack_require__(16);
 var command_open_ng_dialog_1 = __webpack_require__(15);
 var command_execute_action_1 = __webpack_require__(26);
-function instanceEngine(sxc, editContext) {
-    var engine = {
-        commands: command_initialize_instance_commands_1.commandInitializeInstanceCommands(editContext),
+var Engine = /** @class */ (function () {
+    function Engine(sxc, editContext) {
+        var _this = this;
+        this.sxc = sxc;
+        this.editContext = editContext;
+        this.commands = command_initialize_instance_commands_1.commandInitializeInstanceCommands(this.editContext);
         // assemble an object which will store the configuration and execute it
-        create: function (specialSettings) {
-            return command_create_1.commandCreate(sxc, editContext, specialSettings);
-        },
+        this.create = function (specialSettings) {
+            return command_create_1.commandCreate(_this.sxc, _this.editContext, specialSettings);
+        };
         // create a dialog link
-        _linkToNgDialog: function (specialSettings) {
-            return command_link_to_ng_dialog_1.commandLinkToNgDialog(sxc, editContext, specialSettings);
-        },
+        this._linkToNgDialog = function (specialSettings) {
+            return command_link_to_ng_dialog_1.commandLinkToNgDialog(_this.sxc, _this.editContext, specialSettings);
+        };
         // open a new dialog of the angular-ui
-        _openNgDialog: function (settings, event, sxc) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, editContext, settings, event);
-        },
-        executeAction: function (nameOrSettings, eventOrSettings, event) {
-            return command_execute_action_1.commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event);
-        }
-    };
-    return engine;
+        this._openNgDialog = function (settings, event, sxc) {
+            return command_open_ng_dialog_1.commandOpenNgDialog(_this.sxc, _this.editContext, settings, event);
+        };
+        this.executeAction = function (nameOrSettings, eventOrSettings, event) {
+            return command_execute_action_1.commandExecuteAction(_this.sxc, _this.editContext, nameOrSettings, eventOrSettings, event);
+        };
+    }
+    return Engine;
+}());
+exports.Engine = Engine;
+function instanceEngine(sxc, editContext) {
+    return new Engine(sxc, editContext);
 }
 exports.instanceEngine = instanceEngine;
 ;
@@ -2491,7 +2498,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_engine_1 = __webpack_require__(17);
+var engine_1 = __webpack_require__(17);
 var manage_api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 var contentBlock_manipulate_1 = __webpack_require__(30);
@@ -2521,7 +2528,7 @@ exports.initInstance = initInstance;
 function _initInstance(sxc) {
     var editContext = manage_api_1.getEditContext(sxc);
     var userInfo = manage_api_1.getUserOfEditContext(editContext);
-    var cmdEngine = commands_engine_1.instanceEngine(sxc, editContext);
+    var cmdEngine = engine_1.instanceEngine(sxc, editContext);
     var editManager = sxc.manage = {
         //#region Official, public properties and commands, which are stable for use from the outside
         /**
@@ -2609,8 +2616,8 @@ __webpack_require__(16);
 __webpack_require__(15);
 __webpack_require__(39);
 __webpack_require__(14);
-__webpack_require__(17);
 __webpack_require__(40);
+__webpack_require__(17);
 __webpack_require__(29);
 __webpack_require__(41);
 __webpack_require__(42);
@@ -2640,30 +2647,30 @@ __webpack_require__(58);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
-__webpack_require__(62);
 __webpack_require__(7);
+__webpack_require__(62);
 __webpack_require__(63);
-__webpack_require__(64);
 __webpack_require__(31);
+__webpack_require__(64);
 __webpack_require__(65);
-__webpack_require__(66);
 __webpack_require__(2);
 __webpack_require__(32);
+__webpack_require__(66);
 __webpack_require__(67);
 __webpack_require__(68);
 __webpack_require__(69);
-__webpack_require__(70);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(9);
 __webpack_require__(18);
 __webpack_require__(25);
-__webpack_require__(71);
+__webpack_require__(70);
 __webpack_require__(19);
-__webpack_require__(72);
+__webpack_require__(71);
 __webpack_require__(10);
 __webpack_require__(23);
 __webpack_require__(24);
+__webpack_require__(72);
 __webpack_require__(73);
 __webpack_require__(74);
 __webpack_require__(75);
@@ -2674,7 +2681,6 @@ __webpack_require__(79);
 __webpack_require__(80);
 __webpack_require__(81);
 __webpack_require__(82);
-__webpack_require__(83);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
@@ -2802,14 +2808,14 @@ exports.Cmd = Cmd;
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
 var commands_definitions_1 = __webpack_require__(14);
-var commands_engine_1 = __webpack_require__(17);
+var engine_1 = __webpack_require__(17);
 var command_initialize_instance_commands_1 = __webpack_require__(8);
 //TEST
 module_bootstrapper_1.$2sxc._commands = {
     definitions: {
         create: commands_definitions_1.create,
     },
-    instanceEngine: commands_engine_1.instanceEngine,
+    instanceEngine: engine_1.instanceEngine,
     commandInitializeInstanceCommands: command_initialize_instance_commands_1.commandInitializeInstanceCommands
 };
 
@@ -3087,18 +3093,15 @@ window.$quickE = _quickE___1.$quickE;
 
 /***/ }),
 /* 56 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 57 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -3133,12 +3136,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 63 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3153,7 +3150,7 @@ exports.InstanceConfig = InstanceConfig;
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3162,7 +3159,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3186,7 +3183,7 @@ module_bootstrapper_1.$2sxc._manage = {
 
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3201,7 +3198,7 @@ exports.NgDialogParams = NgDialogParams;
 
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3216,7 +3213,7 @@ exports.UserOfEditContext = UserOfEditContext;
 
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3260,7 +3257,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3287,7 +3284,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3322,7 +3319,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3352,7 +3349,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports) {
 
 /*
@@ -3453,7 +3450,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3465,7 +3462,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3480,7 +3477,7 @@ $(function () {
 
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3499,7 +3496,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3591,7 +3588,7 @@ function isDisabled(sxc) {
 
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3636,7 +3633,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3675,7 +3672,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3907,7 +3904,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3929,7 +3926,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3997,7 +3994,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
