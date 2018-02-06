@@ -7,6 +7,7 @@ export class Settings {
   attributeSetName: string;
   cbId: number;
   cbIsEntity: boolean;
+  configureCommand: any;
   contentGroupId: number;
   contentType: string;
   contentTypeId: string;

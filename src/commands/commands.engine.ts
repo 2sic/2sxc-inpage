@@ -11,6 +11,7 @@ import { Engine } from '../interfaces/engine';
 import { Cmd } from './cmd';
 import { Params } from './params';
 import { create } from './create';
+import { linkToNgDialog } from './link-to-ng-dialog';
 
 export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : Engine {
   let engine: Engine = {
@@ -22,16 +23,8 @@ export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataE
     },
 
     // create a dialog link
-    _linkToNgDialog(specialSettings: any) : string {
-      let cmd = sxc.manage._commands.create(specialSettings);
-
-      if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
-      else cmd.addSimpleItem();
-
-      // if the command has own configuration stuff, do that now
-      if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
-
-      return cmd.generateLink();
+    _linkToNgDialog: (specialSettings: any) => {
+      return linkToNgDialog(sxc, editContext, specialSettings);
     },
 
     // open a new dialog of the angular-ui

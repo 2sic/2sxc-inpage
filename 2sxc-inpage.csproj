@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <None Remove="src\commands\create.ts" />
+    <None Remove="src\commands\link-to-ng-dialog.ts" />
     <None Remove="src\commands\make-def.ts" />
     <None Remove="src\commands\mod-config.ts" />
     <None Remove="src\globals.d.ts" />
@@ -40,6 +41,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="src\commands\create.ts" />
+    <TypeScriptCompile Include="src\commands\link-to-ng-dialog.ts" />
     <TypeScriptCompile Include="src\commands\make-def.ts" />
     <TypeScriptCompile Include="src\commands\mod-config.ts" />
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />

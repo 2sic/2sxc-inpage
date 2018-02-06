@@ -7,6 +7,7 @@ var contentBlock_render_1 = require("../contentBlock/contentBlock.render");
 var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
 var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
 var create_1 = require("./create");
+var link_to_ng_dialog_1 = require("./link-to-ng-dialog");
 function instanceEngine(sxc, editContext) {
     var engine = {
         commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
@@ -16,15 +17,7 @@ function instanceEngine(sxc, editContext) {
         },
         // create a dialog link
         _linkToNgDialog: function (specialSettings) {
-            var cmd = sxc.manage._commands.create(specialSettings);
-            if (cmd.settings.useModuleList)
-                cmd.addContentGroupItemSetsToEditList(true);
-            else
-                cmd.addSimpleItem();
-            // if the command has own configuration stuff, do that now
-            if (cmd.settings.configureCommand)
-                cmd.settings.configureCommand(cmd);
-            return cmd.generateLink();
+            return link_to_ng_dialog_1.linkToNgDialog(sxc, editContext, specialSettings);
         },
         // open a new dialog of the angular-ui
         _openNgDialog: function (settings, event, sxc) {
