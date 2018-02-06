@@ -1,6 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 interface Item {
-  EntityId: any,
-  ContentTypeName: any,
+  EntityId: number,
+  ContentTypeName: string,
 }
 // ReSharper restore InconsistentNaming

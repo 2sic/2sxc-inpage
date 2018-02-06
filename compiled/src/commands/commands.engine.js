@@ -2,85 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_instanceCommands_1 = require("./commands.instanceCommands");
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
-var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 var contentBlock_render_1 = require("../contentBlock/contentBlock.render");
 var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
 var _2sxc__lib_extend_1 = require("../lib-helpers/2sxc._lib.extend");
+var create_1 = require("./create");
 function instanceEngine(sxc, editContext) {
     var engine = {
         commands: commands_instanceCommands_1.initializeInstanceCommands(editContext),
         // assemble an object which will store the configuration and execute it
         create: function (specialSettings) {
-            var settings = _2sxc__lib_extend_1.extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-            var ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
-                'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-                sxc.manage._editContext.Environment.SxcVersion;
-            var isDebug = module_bootstrapper_1.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-            var cmd = {
-                settings: settings,
-                items: settings.items || [],
-                params: _2sxc__lib_extend_1.extend({
-                    dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-                }, settings.params),
-                addSimpleItem: function () {
-                    var item = {};
-                    var ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-                    if (cmd.settings.entityId)
-                        item.EntityId = cmd.settings.entityId;
-                    if (ct)
-                        item.ContentTypeName = ct;
-                    // only add if there was stuff to add
-                    if (item.EntityId || item.ContentTypeName)
-                        cmd.items.push(item);
-                },
-                // this adds an item of the content-group, based on the group GUID and the sequence number
-                addContentGroupItem: function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
-                    cmd.items.push({
-                        Group: {
-                            Guid: guid,
-                            Index: index,
-                            Part: part,
-                            Add: isAdd
-                        },
-                        Title: _2sxc_translate_1.translate(sectionLanguageKey)
-                    });
-                },
-                // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-                addContentGroupItemSetsToEditList: function (withPresentation) {
-                    var isContentAndNotHeader = (cmd.settings.sortOrder !== -1), index = isContentAndNotHeader ? cmd.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = cmd.settings.action === 'new', groupId = cmd.settings.contentGroupId;
-                    cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + cTerm);
-                    if (withPresentation)
-                        cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + pTerm);
-                },
-                // build the link, combining specific params with global ones and put all in the url
-                generateLink: function () {
-                    // if there is no items-array, create an empty one (it's required later on)
-                    if (!cmd.settings.items)
-                        cmd.settings.items = [];
-                    //#region steps for all actions: prefill, serialize, open-dialog
-                    // when doing new, there may be a prefill in the link to initialize the new item
-                    if (cmd.settings.prefill) {
-                        for (var i = 0; i < cmd.items.length; i++) {
-                            cmd.items[i].Prefill = cmd.settings.prefill;
-                        }
-                    }
-                    cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-                    // clone the params and adjust parts based on partOfPage settings...
-                    var sharedParams = _2sxc__lib_extend_1.extend({}, sxc.manage._dialogParameters);
-                    if (!cmd.settings.partOfPage) {
-                        delete sharedParams.versioningRequirements;
-                        delete sharedParams.publishing;
-                        sharedParams.partOfPage = false;
-                    }
-                    return ngDialogUrl +
-                        '#' + $.param(sharedParams) +
-                        '&' + $.param(cmd.params) +
-                        isDebug;
-                    //#endregion
-                }
-            };
-            return cmd;
+            return create_1.create(sxc, editContext, specialSettings);
         },
         // create a dialog link
         _linkToNgDialog: function (specialSettings) {

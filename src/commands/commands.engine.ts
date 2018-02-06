@@ -6,92 +6,19 @@ import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { reloadAndReInitialize } from '../contentBlock/contentBlock.render';
 import { prepareToAddContent } from '../contentBlock/contentBlock.templates';
 import { extend } from '../lib-helpers/2sxc._lib.extend';
+import { Settings } from './settings';
+import { Engine } from '../interfaces/engine';
+import { Cmd } from './cmd';
+import { Params } from './params';
+import { create } from './create';
 
-export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : IEngine {
-  let engine: IEngine = {
-    commands : initializeInstanceCommands(editContext),
+export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext) : Engine {
+  let engine: Engine = {
+    commands: initializeInstanceCommands(editContext),
 
     // assemble an object which will store the configuration and execute it
-    create(specialSettings: any): any {
-      let settings = extend({}, sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-      let ngDialogUrl = sxc.manage._editContext.Environment.SxcRootUrl +
-        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-        sxc.manage._editContext.Environment.SxcVersion;
-      let isDebug = twoSxc.urlParams.get('debug') ? '&debug=true' : '';
-
-      let cmd = {
-        settings: settings,
-        items: settings.items || [], // use predefined or create empty array
-        params: extend({
-          dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-        }, settings.params),
-
-        addSimpleItem: () => {
-          let item = {} as Item;
-          let ct = cmd.settings.contentType || cmd.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-          if (cmd.settings.entityId) item.EntityId = cmd.settings.entityId;
-          if (ct) item.ContentTypeName = ct;
-
-          // only add if there was stuff to add
-          if (item.EntityId || item.ContentTypeName) cmd.items.push(item);
-        },
-
-        // this adds an item of the content-group, based on the group GUID and the sequence number
-        addContentGroupItem: (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) => {
-          cmd.items.push({
-            Group: {
-              Guid: guid,
-              Index: index,
-              Part: part,
-              Add: isAdd
-            },
-            Title: translate(sectionLanguageKey)
-          });
-        },
-
-        // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-        addContentGroupItemSetsToEditList: withPresentation => {
-          let isContentAndNotHeader = (cmd.settings.sortOrder !== -1),
-            index = isContentAndNotHeader ? cmd.settings.sortOrder : 0,
-            prefix = isContentAndNotHeader ? '' : 'List',
-            cTerm = prefix + 'Content',
-            pTerm = prefix + 'Presentation',
-            isAdd = cmd.settings.action === 'new',
-            groupId = cmd.settings.contentGroupId;
-          cmd.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + cTerm);
-
-          if (withPresentation) cmd.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, cmd.settings.cbIsEntity, cmd.settings.cbId, 'EditFormTitle.' + pTerm);
-        },
-
-        // build the link, combining specific params with global ones and put all in the url
-        generateLink: () => {
-          // if there is no items-array, create an empty one (it's required later on)
-          if (!cmd.settings.items) cmd.settings.items = [];
-          //#region steps for all actions: prefill, serialize, open-dialog
-          // when doing new, there may be a prefill in the link to initialize the new item
-          if (cmd.settings.prefill) {
-            for (let i = 0; i < cmd.items.length; i++) {
-              cmd.items[i].Prefill = cmd.settings.prefill;
-            }
-          }
-          cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
-
-          // clone the params and adjust parts based on partOfPage settings...
-          let sharedParams = extend({}, sxc.manage._dialogParameters);
-          if (!cmd.settings.partOfPage) {
-            delete sharedParams.versioningRequirements;
-            delete sharedParams.publishing;
-            sharedParams.partOfPage = false;
-          }
-
-          return ngDialogUrl +
-            '#' + $.param(sharedParams) +
-            '&' + $.param(cmd.params) +
-            isDebug;
-          //#endregion
-        }
-      };
-      return cmd;
+    create: (specialSettings) => {
+      return create(sxc, editContext, specialSettings);
     },
 
     // create a dialog link

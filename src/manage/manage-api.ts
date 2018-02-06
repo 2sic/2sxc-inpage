@@ -1,4 +1,6 @@
-﻿export type ManageApi = {
+﻿import { Engine } from '../interfaces/engine';
+
+export type ManageApi = {
   run: (nameOrSettings: any, settings?: any, event?: any) => any;
   getButton: (actDef: any, groupIndex: any) => any;
   getToolbar: (tbConfig: any, moreSettings: any) => any;
@@ -8,7 +10,7 @@
   _instanceConfig;
   _editContext;
   _quickDialogConfig;
-  _commands: IEngine;
+  _commands: Engine;
   _user;
   init: () => boolean;
   _handleErrors: (errType: any, cbTag: any) => void;

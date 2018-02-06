@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="src\commands\create.ts" />
     <None Remove="src\commands\make-def.ts" />
     <None Remove="src\commands\mod-config.ts" />
     <None Remove="src\globals.d.ts" />
@@ -38,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="src\commands\create.ts" />
     <TypeScriptCompile Include="src\commands\make-def.ts" />
     <TypeScriptCompile Include="src\commands\mod-config.ts" />
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
