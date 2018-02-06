@@ -1,10 +1,10 @@
 ﻿import { translate } from '../translate/2sxc.translate';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-import { extend } from '../lib-helpers/2sxc._lib.extend';
 import { Settings } from './settings';
 import { Command } from './command';
 import { Params } from './params';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { NgDialogParams } from '../manage/ng-dialog-params';
 
 /**
  * assemble an object which will store the configuration and execute it
@@ -77,7 +77,7 @@ export function commandCreate(sxc: SxcInstanceWithInternals, editContext: DataEd
       cmd.params.items = JSON.stringify(cmd.items); // Serialize/json-ify the complex items-list
 
       // clone the params and adjust parts based on partOfPage settings...
-      let sharedParams = extend({}, sxc.manage._dialogParameters);
+      let sharedParams = Object.assign({}, sxc.manage._dialogParameters) as NgDialogParams;
       if (!cmd.settings.partOfPage) {
         delete sharedParams.versioningRequirements;
         delete sharedParams.publishing;
