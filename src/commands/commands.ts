@@ -3,11 +3,12 @@ import { create } from './create';
 import { instanceEngine } from './engine';
 import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
 
-//TEST
-twoSxc._commands = {
-  definitions: {
-    create,
-  },
-  instanceEngine,
-  commandInitializeInstanceCommands
-};
+class Commands {
+  definitions = {
+    create
+  }
+  instanceEngine = instanceEngine;
+  initializeInstanceCommands = commandInitializeInstanceCommands;
+}
+
+twoSxc._commands = new Commands();

@@ -2809,14 +2809,17 @@ var module_bootstrapper_1 = __webpack_require__(0);
 var create_1 = __webpack_require__(14);
 var engine_1 = __webpack_require__(17);
 var command_initialize_instance_commands_1 = __webpack_require__(7);
-//TEST
-module_bootstrapper_1.$2sxc._commands = {
-    definitions: {
-        create: create_1.create,
-    },
-    instanceEngine: engine_1.instanceEngine,
-    commandInitializeInstanceCommands: command_initialize_instance_commands_1.commandInitializeInstanceCommands
-};
+var Commands = /** @class */ (function () {
+    function Commands() {
+        this.definitions = {
+            create: create_1.create
+        };
+        this.instanceEngine = engine_1.instanceEngine;
+        this.commandInitializeInstanceCommands = command_initialize_instance_commands_1.commandInitializeInstanceCommands;
+    }
+    return Commands;
+}());
+module_bootstrapper_1.$2sxc._commands = new Commands();
 
 
 /***/ }),
