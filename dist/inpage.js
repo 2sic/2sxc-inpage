@@ -818,11 +818,11 @@ exports.updateTemplate = updateTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_definitions_1 = __webpack_require__(14);
+var create_1 = __webpack_require__(14);
 var module_bootstrapper_1 = __webpack_require__(0);
 function commandInitializeInstanceCommands(editContext) {
     var cg = editContext.ContentGroup;
-    return commands_definitions_1.create({
+    return create_1.create({
         canDesign: editContext.User.CanDesign,
         templateId: cg.TemplateId,
         contentTypeId: cg.ContentTypeName,
@@ -2806,13 +2806,13 @@ exports.Command = Command;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var commands_definitions_1 = __webpack_require__(14);
+var create_1 = __webpack_require__(14);
 var engine_1 = __webpack_require__(17);
 var command_initialize_instance_commands_1 = __webpack_require__(7);
 //TEST
 module_bootstrapper_1.$2sxc._commands = {
     definitions: {
-        create: commands_definitions_1.create,
+        create: create_1.create,
     },
     instanceEngine: engine_1.instanceEngine,
     commandInitializeInstanceCommands: command_initialize_instance_commands_1.commandInitializeInstanceCommands

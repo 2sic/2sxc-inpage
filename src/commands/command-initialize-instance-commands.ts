@@ -1,9 +1,9 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { create } from './commands.definitions';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context'
 import { Action } from './action';
+import { create } from './create';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
-export function commandInitializeInstanceCommands(editContext : DataEditContext) : Action {
+export function commandInitializeInstanceCommands(editContext : DataEditContext): Action {
   let cg = editContext.ContentGroup;
   return create({
     canDesign: editContext.User.CanDesign,
