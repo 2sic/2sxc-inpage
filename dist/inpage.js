@@ -2119,9 +2119,9 @@ var Command = /** @class */ (function () {
         // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
         this.addContentGroupItemSetsToEditList = function (withPresentation) {
             var isContentAndNotHeader = (_this.settings.sortOrder !== -1), index = isContentAndNotHeader ? _this.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = _this.settings.action === 'new', groupId = _this.settings.contentGroupId;
-            _this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, 'EditFormTitle.' + cTerm);
+            _this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, "EditFormTitle." + cTerm);
             if (withPresentation)
-                _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, 'EditFormTitle.' + pTerm);
+                _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, "EditFormTitle." + pTerm);
         };
         // build the link, combining specific params with global ones and put all in the url
         this.generateLink = function () {

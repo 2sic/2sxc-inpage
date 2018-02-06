@@ -27,7 +27,7 @@ export class Command {
   };
 
   // this adds an item of the content-group, based on the group GUID and the sequence number
-  addContentGroupItem = (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) => {
+  addContentGroupItem = (guid: number, index: number, part: string, isAdd: boolean, isEntity: boolean, cbid: number, sectionLanguageKey: string) => {
     this.items.push({
       Group: {
         Guid: guid,
@@ -40,7 +40,7 @@ export class Command {
   };
 
   // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-  addContentGroupItemSetsToEditList = withPresentation => {
+  addContentGroupItemSetsToEditList = (withPresentation: boolean) => {
     let isContentAndNotHeader = (this.settings.sortOrder !== -1),
       index = isContentAndNotHeader ? this.settings.sortOrder : 0,
       prefix = isContentAndNotHeader ? '' : 'List',
@@ -48,9 +48,9 @@ export class Command {
       pTerm = prefix + 'Presentation',
       isAdd = this.settings.action === 'new',
       groupId = this.settings.contentGroupId;
-    this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, this.settings.cbIsEntity, this.settings.cbId, 'EditFormTitle.' + cTerm);
+    this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, this.settings.cbIsEntity, this.settings.cbId, `EditFormTitle.${cTerm}`);
 
-    if (withPresentation) this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, this.settings.cbIsEntity, this.settings.cbId, 'EditFormTitle.' + pTerm);
+    if (withPresentation) this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, this.settings.cbIsEntity, this.settings.cbId, `EditFormTitle.${pTerm}`);
   }
 
   // build the link, combining specific params with global ones and put all in the url
