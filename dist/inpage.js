@@ -640,7 +640,7 @@ var _2sxc__quickDialog_1 = __webpack_require__(4);
 var manage_api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 var main_content_block_1 = __webpack_require__(10);
-var contentBlock_webApiPromises_1 = __webpack_require__(11);
+var web_api_promises_1 = __webpack_require__(11);
 /*
  * this is the content block manager in the browser
  *
@@ -692,7 +692,7 @@ exports.showMessage = showMessage;
  * @param justPreview
  */
 function ajaxLoad(sxc, alternateTemplateId, justPreview) {
-    return contentBlock_webApiPromises_1.getPreviewWithTemplate(sxc, alternateTemplateId)
+    return web_api_promises_1.getPreviewWithTemplate(sxc, alternateTemplateId)
         .then(function (result) { return replaceCb(sxc, result, justPreview); })
         .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
 }
@@ -738,7 +738,7 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = __webpack_require__(4);
 var render_1 = __webpack_require__(5);
-var contentBlock_webApiPromises_1 = __webpack_require__(11);
+var web_api_promises_1 = __webpack_require__(11);
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
@@ -789,7 +789,7 @@ exports.updateTemplateFromDia = updateTemplateFromDia;
  * Update the template.
  */
 function updateTemplate(sxc, templateId, forceCreate) {
-    return contentBlock_webApiPromises_1.saveTemplate(sxc, templateId, forceCreate)
+    return web_api_promises_1.saveTemplate(sxc, templateId, forceCreate)
         .then(function (data, textStatus, xhr) {
         // error handling
         if (xhr.status !== 200)
@@ -1177,6 +1177,7 @@ exports._contentBlock = new MainContentBlock();
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
 /*
  * this is a content block in the browser
  *
@@ -1187,7 +1188,6 @@ exports._contentBlock = new MainContentBlock();
  *
  * it should be able to render itself
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 //#region functions working only with what they are given
 // 2017-08-27 2dm: I'm working on cleaning up this code, and an important part 
 // is to have code which doesn't use old state (like object-properties initialized earlier)
@@ -1213,13 +1213,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @returns {promise}
  */
 function saveTemplate(sxc, templateId, forceCreateContentGroup) {
+    var params = {
+        templateId: templateId,
+        forceCreateContentGroup: forceCreateContentGroup,
+        newTemplateChooserState: false
+    };
     return sxc.webApi.get({
         url: 'view/module/savetemplateid',
-        params: {
-            templateId: templateId,
-            forceCreateContentGroup: forceCreateContentGroup,
-            newTemplateChooserState: false
-        }
+        params: params
     });
 }
 exports.saveTemplate = saveTemplate;
@@ -1233,15 +1234,16 @@ exports.saveTemplate = saveTemplate;
 function getPreviewWithTemplate(sxc, templateId) {
     var ec = sxc.manage._editContext;
     templateId = templateId || -1; // fallback, meaning use saved ID
+    var params = {
+        templateId: templateId,
+        lang: ec.Language.Current,
+        cbisentity: ec.ContentBlock.IsEntity,
+        cbid: ec.ContentBlock.Id,
+        originalparameters: JSON.stringify(ec.Environment.parameters)
+    };
     return sxc.webApi.get({
         url: 'view/module/rendertemplate',
-        params: {
-            templateId: templateId,
-            lang: ec.Language.Current,
-            cbisentity: ec.ContentBlock.IsEntity,
-            cbid: ec.ContentBlock.Id,
-            originalparameters: JSON.stringify(ec.Environment.parameters)
-        },
+        params: params,
         dataType: 'html'
     });
 }
@@ -2644,13 +2646,13 @@ __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(28);
-__webpack_require__(11);
 __webpack_require__(10);
 __webpack_require__(45);
 __webpack_require__(30);
 __webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(46);
+__webpack_require__(11);
 __webpack_require__(47);
 __webpack_require__(48);
 __webpack_require__(49);
@@ -2660,8 +2662,8 @@ __webpack_require__(52);
 __webpack_require__(53);
 __webpack_require__(54);
 __webpack_require__(55);
-__webpack_require__(29);
 __webpack_require__(56);
+__webpack_require__(29);
 __webpack_require__(57);
 __webpack_require__(58);
 __webpack_require__(59);
@@ -2669,30 +2671,30 @@ __webpack_require__(60);
 __webpack_require__(61);
 __webpack_require__(62);
 __webpack_require__(63);
-__webpack_require__(31);
 __webpack_require__(64);
+__webpack_require__(31);
 __webpack_require__(65);
-__webpack_require__(32);
 __webpack_require__(66);
+__webpack_require__(32);
 __webpack_require__(67);
+__webpack_require__(68);
 __webpack_require__(2);
 __webpack_require__(33);
-__webpack_require__(68);
 __webpack_require__(69);
 __webpack_require__(70);
 __webpack_require__(71);
+__webpack_require__(72);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(17);
 __webpack_require__(24);
-__webpack_require__(72);
-__webpack_require__(18);
 __webpack_require__(73);
+__webpack_require__(18);
+__webpack_require__(74);
 __webpack_require__(9);
 __webpack_require__(22);
 __webpack_require__(23);
-__webpack_require__(74);
 __webpack_require__(75);
 __webpack_require__(76);
 __webpack_require__(77);
@@ -2703,6 +2705,7 @@ __webpack_require__(81);
 __webpack_require__(82);
 __webpack_require__(83);
 __webpack_require__(84);
+__webpack_require__(85);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
@@ -2931,6 +2934,21 @@ exports.ManipulateParams = ManipulateParams;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var WebApiParams = /** @class */ (function () {
+    function WebApiParams() {
+    }
+    return WebApiParams;
+}());
+exports.WebApiParams = WebApiParams;
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var ContentBlock = /** @class */ (function () {
     function ContentBlock() {
     }
@@ -2940,7 +2958,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2955,7 +2973,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2970,7 +2988,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2985,7 +3003,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3000,7 +3018,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3015,7 +3033,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3030,7 +3048,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3045,7 +3063,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3068,7 +3086,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -3097,7 +3115,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3130,22 +3148,16 @@ window.$quickE = _quickE___1.$quickE;
 
 
 /***/ }),
-/* 57 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 58 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 59 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -3180,6 +3192,12 @@ window.$quickE = _quickE___1.$quickE;
 
 /***/ }),
 /* 65 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3194,7 +3212,7 @@ exports.InstanceConfig = InstanceConfig;
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3203,7 +3221,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3227,7 +3245,7 @@ module_bootstrapper_1.$2sxc._manage = {
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3242,7 +3260,7 @@ exports.NgDialogParams = NgDialogParams;
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3257,7 +3275,7 @@ exports.UserOfEditContext = UserOfEditContext;
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3301,7 +3319,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3328,7 +3346,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3363,7 +3381,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3393,7 +3411,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports) {
 
 /*
@@ -3494,7 +3512,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3506,7 +3524,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3521,7 +3539,7 @@ $(function () {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3540,7 +3558,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3637,7 +3655,7 @@ Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3682,7 +3700,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3721,7 +3739,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3953,7 +3971,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3975,7 +3993,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4043,7 +4061,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

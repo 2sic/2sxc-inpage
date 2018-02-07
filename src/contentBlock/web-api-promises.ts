@@ -1,4 +1,5 @@
-﻿/* 
+﻿import { WebApiParams } from './web-api-params';
+/*
  * this is a content block in the browser
  * 
  * A Content Block is a standalone unit of content, with it's own definition of
@@ -36,13 +37,14 @@
  * @returns {promise} 
  */
 export function saveTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreateContentGroup: boolean) {
+  const params: WebApiParams = {
+    templateId: templateId,
+    forceCreateContentGroup: forceCreateContentGroup,
+    newTemplateChooserState: false
+  }
   return sxc.webApi.get({
     url: 'view/module/savetemplateid',
-    params: {
-      templateId: templateId,
-      forceCreateContentGroup: forceCreateContentGroup,
-      newTemplateChooserState: false
-    }
+    params: params
   });
 };
 
@@ -53,17 +55,19 @@ export function saveTemplate(sxc: SxcInstanceWithInternals, templateId: number, 
  * @returns {promise} promise with the html in the result
  */
 export function getPreviewWithTemplate(sxc: SxcInstanceWithInternals, templateId: number): any {
-  let ec = sxc.manage._editContext;
+  const ec = sxc.manage._editContext;
   templateId = templateId || -1; // fallback, meaning use saved ID
+  const params: WebApiParams = {
+    templateId: templateId,
+    lang: ec.Language.Current,
+    cbisentity: ec.ContentBlock.IsEntity,
+    cbid: ec.ContentBlock.Id,
+    originalparameters: JSON.stringify(ec.Environment.parameters)
+  };
+
   return sxc.webApi.get({
     url: 'view/module/rendertemplate',
-    params: {
-      templateId: templateId,
-      lang: ec.Language.Current,
-      cbisentity: ec.ContentBlock.IsEntity,
-      cbid: ec.ContentBlock.Id,
-      originalparameters: JSON.stringify(ec.Environment.parameters)
-    },
+    params: params,
     dataType: 'html'
   });
 };
