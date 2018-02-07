@@ -1,7 +1,7 @@
 ﻿import { ContentGroup } from '../data-edit-context/content-group';
 import { hide } from '../quick-dialog/2sxc._quickDialog';
 import { reloadAndReInitialize } from './render';
-import { saveTemplate } from './contentBlock.webApiPromises';
+import { saveTemplate } from './web-api-promises';
 
 /**
  * prepare the instance so content can be added

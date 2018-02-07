@@ -3,7 +3,7 @@ import { hide } from '../quick-dialog/2sxc._quickDialog';
 import { getTag } from '../manage/manage.api';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { _contentBlock } from './main-content-block';
-import { getPreviewWithTemplate } from './contentBlock.webApiPromises';
+import { getPreviewWithTemplate } from './web-api-promises';
 
 /*
  * this is the content block manager in the browser
