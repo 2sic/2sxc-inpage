@@ -1,6 +1,6 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { Settings } from './settings';
-import { prepareToAddContent } from '../contentBlock/contentBlock.templates';
+import { prepareToAddContent } from '../contentBlock/templates';
 import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 

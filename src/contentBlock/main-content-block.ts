@@ -1,4 +1,4 @@
-﻿import { prepareToAddContent, updateTemplateFromDia } from './contentBlock.templates';
+﻿import { prepareToAddContent, updateTemplateFromDia } from './templates';
 /*
  * this is a content block in the browser
  * 
