@@ -4,7 +4,7 @@ import { CmdSpec } from './cmd-spec';
 import { Settings } from './settings';
 import { makeDef } from './make-def';
 import { translate } from '../translate/2sxc.translate';
-import { addItem, changeOrder, publish, publishId, removeFromList } from '../contentBlock/contentBlock.actions';
+import { addItem, changeOrder, publish, publishId, removeFromList } from '../contentBlock/actions';
 import { contentItems } from '../entity-manipulation/item-commands';
 
 /*
@@ -161,7 +161,7 @@ export function create(cmdSpecs: CmdSpec): Action {
       // if we have an entity-id, publish based on that
       if (settings.entityId) return publishId(sxc, settings.entityId);
 
-      const part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+      const part: string = settings.sortOrder === -1 ? 'listcontent' : 'content';
       const index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
       return publish(sxc, part, index);
     }

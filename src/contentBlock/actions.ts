@@ -1,4 +1,5 @@
-﻿import { reloadAndReInitialize } from './contentBlock.render';
+﻿import { Params } from './params';
+import { reloadAndReInitialize } from './contentBlock.render';
 /*
  * this is a content block in the browser
  * 
@@ -17,7 +18,7 @@
  * @param params 
  * @returns {} 
  */
-function getAndReload(sxc: SxcInstanceWithInternals, url: string, params: any): any {
+function getAndReload(sxc: SxcInstanceWithInternals, url: string, params: Params): any {
   return sxc.webApi.get({
     url: url,
     params: params
@@ -31,7 +32,7 @@ function getAndReload(sxc: SxcInstanceWithInternals, url: string, params: any): 
  * @returns {} 
  */
 export function removeFromList(sxc: SxcInstanceWithInternals, sortOrder: number): any {
-  return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
+  return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder } as Params);
 };
 
 /**
@@ -43,7 +44,7 @@ export function removeFromList(sxc: SxcInstanceWithInternals, sortOrder: number)
  */
 export function changeOrder(sxc: SxcInstanceWithInternals, initOrder: number, newOrder: number): any {
   return getAndReload(sxc, 'view/module/changeorder',
-    { sortOrder: initOrder, destinationSortOrder: newOrder });
+    { sortOrder: initOrder, destinationSortOrder: newOrder } as Params);
 };
 
 /**
@@ -53,7 +54,7 @@ export function changeOrder(sxc: SxcInstanceWithInternals, initOrder: number, ne
  * @returns {} 
  */
 export function addItem(sxc: SxcInstanceWithInternals, sortOrder: number): any {
-  return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
+  return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder } as Params);
 };
 
 /**
@@ -63,8 +64,8 @@ export function addItem(sxc: SxcInstanceWithInternals, sortOrder: number): any {
  * @param {} sortOrder 
  * @returns {} 
  */
-export function publish(sxc: SxcInstanceWithInternals, part:any, sortOrder:number): any {
-  return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
+export function publish(sxc: SxcInstanceWithInternals, part:string, sortOrder:number): any {
+  return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder } as Params);
 };
 
 /**
@@ -74,7 +75,5 @@ export function publish(sxc: SxcInstanceWithInternals, part:any, sortOrder:numbe
  * @returns {} 
  */
 export function publishId(sxc: SxcInstanceWithInternals, entityId: number): any {
-  return getAndReload(sxc, 'view/module/publish', { id: entityId });
+  return getAndReload(sxc, 'view/module/publish', { id: entityId } as Params);
 };
-
-

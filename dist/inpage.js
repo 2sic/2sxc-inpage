@@ -2663,8 +2663,8 @@ __webpack_require__(50);
 __webpack_require__(51);
 __webpack_require__(52);
 __webpack_require__(53);
-__webpack_require__(29);
 __webpack_require__(54);
+__webpack_require__(29);
 __webpack_require__(55);
 __webpack_require__(56);
 __webpack_require__(57);
@@ -2672,30 +2672,30 @@ __webpack_require__(58);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
-__webpack_require__(31);
 __webpack_require__(62);
+__webpack_require__(31);
 __webpack_require__(63);
-__webpack_require__(32);
 __webpack_require__(64);
+__webpack_require__(32);
 __webpack_require__(65);
+__webpack_require__(66);
 __webpack_require__(2);
 __webpack_require__(33);
-__webpack_require__(66);
 __webpack_require__(67);
 __webpack_require__(68);
 __webpack_require__(69);
+__webpack_require__(70);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(17);
 __webpack_require__(24);
-__webpack_require__(70);
-__webpack_require__(18);
 __webpack_require__(71);
+__webpack_require__(18);
+__webpack_require__(72);
 __webpack_require__(9);
 __webpack_require__(22);
 __webpack_require__(23);
-__webpack_require__(72);
 __webpack_require__(73);
 __webpack_require__(74);
 __webpack_require__(75);
@@ -2706,6 +2706,7 @@ __webpack_require__(79);
 __webpack_require__(80);
 __webpack_require__(81);
 __webpack_require__(82);
+__webpack_require__(83);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
@@ -2900,6 +2901,24 @@ exports.Settings = Settings;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * params for getAndReload WebAPI
+ */
+var Params = /** @class */ (function () {
+    function Params() {
+    }
+    return Params;
+}());
+exports.Params = Params;
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var ContentBlock = /** @class */ (function () {
     function ContentBlock() {
     }
@@ -2909,7 +2928,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2924,7 +2943,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2939,7 +2958,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2954,7 +2973,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2969,7 +2988,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2984,7 +3003,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2999,7 +3018,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3014,7 +3033,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3037,7 +3056,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -3066,7 +3085,7 @@ var $2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3099,22 +3118,16 @@ window.$quickE = _quickE___1.$quickE;
 
 
 /***/ }),
-/* 55 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 56 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
 /* 57 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -3149,6 +3162,12 @@ window.$quickE = _quickE___1.$quickE;
 
 /***/ }),
 /* 63 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3163,7 +3182,7 @@ exports.InstanceConfig = InstanceConfig;
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3172,7 +3191,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3196,7 +3215,7 @@ module_bootstrapper_1.$2sxc._manage = {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3211,7 +3230,7 @@ exports.NgDialogParams = NgDialogParams;
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3226,7 +3245,7 @@ exports.UserOfEditContext = UserOfEditContext;
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3270,7 +3289,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3297,7 +3316,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3332,7 +3351,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3362,7 +3381,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 /*
@@ -3463,7 +3482,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3475,7 +3494,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3490,7 +3509,7 @@ $(function () {
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3509,7 +3528,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3601,7 +3620,7 @@ function isDisabled(sxc) {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3646,7 +3665,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3685,7 +3704,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3917,7 +3936,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3939,7 +3958,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4007,7 +4026,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
