@@ -4,7 +4,7 @@ import { create } from './create';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 export function commandInitializeInstanceCommands(editContext : DataEditContext): Action {
-  let cg = editContext.ContentGroup;
+  const cg = editContext.ContentGroup;
   return create({
     canDesign: editContext.User.CanDesign,
     templateId: cg.TemplateId,

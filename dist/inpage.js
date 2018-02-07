@@ -1678,12 +1678,14 @@ var Engine = /** @class */ (function () {
             return command_create_1.commandCreate(_this.sxc, _this.editContext, specialSettings);
         };
         // create a dialog link
+        // ReSharper disable once InconsistentNaming
         this._linkToNgDialog = function (specialSettings) {
             return command_link_to_ng_dialog_1.commandLinkToNgDialog(_this.sxc, _this.editContext, specialSettings);
         };
         // open a new dialog of the angular-ui
+        // ReSharper disable once InconsistentNaming
         this._openNgDialog = function (settings, event, sxc) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(_this.sxc, _this.editContext, settings, event);
+            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, _this.editContext, settings, event);
         };
         this.executeAction = function (nameOrSettings, eventOrSettings, event) {
             return command_execute_action_1.commandExecuteAction(_this.sxc, _this.editContext, nameOrSettings, eventOrSettings, event);

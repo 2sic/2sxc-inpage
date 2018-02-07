@@ -57,7 +57,7 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     code(settings, event, sxc) {
       // todo - should refactor this to be a toolbarManager.contentBlock command
-      let settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
+      const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
       sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
     }
   }));
@@ -85,7 +85,7 @@ export function create(cmdSpecs: CmdSpec): Action {
       return !!settings.metadata;
     }, // only add a metadata-button if it has metadata-infos
     configureCommand(cmd) {
-      let itm = {
+      const itm = {
         Title: 'EditFormTitle.Metadata',
         Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
       };
@@ -161,8 +161,8 @@ export function create(cmdSpecs: CmdSpec): Action {
       // if we have an entity-id, publish based on that
       if (settings.entityId) return publishId(sxc, settings.entityId);
 
-      let part = settings.sortOrder === -1 ? 'listcontent' : 'content';
-      let index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+      const part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+      const index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
       return publish(sxc, part, index);
     }
   }));
@@ -318,11 +318,11 @@ export function create(cmdSpecs: CmdSpec): Action {
 
   addDef(makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
     code(settings, event, sxc) {
-      let btn: any = $(event.target);
+      const btn: any = $(event.target);
       let fullMenu: any = btn.closest('ul.sc-menu');
-      let oldState: number = Number(fullMenu.attr('data-state') || 0);
-      let max: number = Number(fullMenu.attr('group-count'));
-      let newState: number = (oldState + 1) % max;
+      const oldState: number = Number(fullMenu.attr('data-state') || 0);
+      const max: number = Number(fullMenu.attr('group-count'));
+      const newState: number = (oldState + 1) % max;
 
       fullMenu.removeClass('group-' + oldState)
         .addClass('group-' + newState)
