@@ -2405,7 +2405,7 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
         field: fieldName,
         sortOrder: index,
         app: appName,
-        guid: newGuid,
+        guid: newGuid
     };
     return sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
         .then(function (result) {
@@ -2416,7 +2416,7 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
                 .after(newTag);
         else
             listTag.prepend(newTag);
-        var sxcNew = module_bootstrapper_1.$2sxc(newTag);
+        //let sxcNew = twoSxc(newTag);
         module_bootstrapper_1.$2sxc._toolbarManager.buildToolbars(newTag);
     });
 }

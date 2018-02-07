@@ -29,12 +29,12 @@ function create(parentId: number, fieldName: string, index: number, appName: str
     field: fieldName,
     sortOrder: index,
     app: appName,
-    guid: newGuid,
-  } as ManipulateParams;
+    guid: newGuid
+  };
 
   return sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
     .then(result => {
-      let newTag = $(result); // prepare tag for inserting
+      const newTag = $(result); // prepare tag for inserting
 
       // should I add it to a specific position...
       if (cblockList.length > 0 && index > 0)
@@ -43,7 +43,7 @@ function create(parentId: number, fieldName: string, index: number, appName: str
       else //...or just at the beginning?
         listTag.prepend(newTag);
 
-      let sxcNew = twoSxc(newTag);
+      //let sxcNew = twoSxc(newTag);
       twoSxc._toolbarManager.buildToolbars(newTag);
     });
 }
