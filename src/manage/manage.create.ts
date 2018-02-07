@@ -1,7 +1,7 @@
 ﻿import { instanceEngine } from '../commands/engine';
 import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buildInstanceConfig, buildQuickDialogConfig } from './manage.api';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-import { manipulator } from '../contentBlock/contentBlock.manipulate';
+import { manipulator } from '../contentBlock/manipulate';
 import { LocalStorageHelper } from './local-storage-helper';
 
 /**
