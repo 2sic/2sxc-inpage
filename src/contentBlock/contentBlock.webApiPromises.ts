@@ -52,7 +52,7 @@ export function saveTemplate(sxc, templateId, forceCreateContentGroup) {
  * @param {int} templateId 
  * @returns {promise} promise with the html in the result
  */
-export function getPreviewWithTemplate(sxc, templateId) {
+export function getPreviewWithTemplate(sxc: SxcInstanceWithInternals, templateId: number): any {
   let ec = sxc.manage._editContext;
   templateId = templateId || -1; // fallback, meaning use saved ID
   return sxc.webApi.get({

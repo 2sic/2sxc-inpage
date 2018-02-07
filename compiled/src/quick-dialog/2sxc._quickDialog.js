@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = require("../manage/manage.api");
-var contentBlock_render_1 = require("../contentBlock/contentBlock.render");
+var render_1 = require("../contentBlock/render");
 var main_content_block_1 = require("../contentBlock/main-content-block");
 var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
 // this is a dialog manager which is in charge of all
@@ -177,10 +177,10 @@ function extendIFrameWithSxcState(iFrame) {
             return newFrm.closeCallback();
         },
         run: function (verb) { return reSxc().manage.run(verb); },
-        showMessage: function (message) { return contentBlock_render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
-        reloadAndReInit: function () { return contentBlock_render_1.reloadAndReInitialize(reSxc(), true, true); },
+        showMessage: function (message) { return render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
+        reloadAndReInit: function () { return render_1.reloadAndReInitialize(reSxc(), true, true); },
         saveTemplate: function (templateId) { return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
-        previewTemplate: function (templateId) { return contentBlock_render_1.ajaxLoad(reSxc(), templateId, true); }
+        previewTemplate: function (templateId) { return render_1.ajaxLoad(reSxc(), templateId, true); }
     });
     return newFrm;
 }

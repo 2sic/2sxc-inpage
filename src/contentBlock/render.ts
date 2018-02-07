@@ -24,9 +24,10 @@ import { getPreviewWithTemplate } from './contentBlock.webApiPromises';
  * @param {boolean} justPreview 
  * @returns {} 
  */
+
 function replaceCb(sxc: SxcInstanceWithInternals, newContent: any, justPreview: boolean): void {
   try {
-    let newStuff = $(newContent);
+    const newStuff = $(newContent);
 
     // Must disable toolbar before we attach to DOM
     if (justPreview) twoSxc._toolbarManager.disable(newStuff);
@@ -46,7 +47,7 @@ function replaceCb(sxc: SxcInstanceWithInternals, newContent: any, justPreview: 
  * @param {string} newContent 
  * @returns {} - nothing
  */
-export function showMessage(sxc: any, newContent: any): void {
+export function showMessage(sxc: SxcInstanceWithInternals, newContent: any): void {
   $(getTag(sxc)).html(newContent);
 };
 
@@ -56,7 +57,7 @@ export function showMessage(sxc: any, newContent: any): void {
  * @param alternateTemplateId
  * @param justPreview
  */
-export function ajaxLoad(sxc: any, alternateTemplateId: any, justPreview: boolean): any {
+export function ajaxLoad(sxc: SxcInstanceWithInternals, alternateTemplateId: number, justPreview: boolean): any {
   return getPreviewWithTemplate(sxc, alternateTemplateId)
     .then(result => replaceCb(sxc, result, justPreview))
     .then(reset); // reset quick-edit, because the config could have changed
@@ -68,12 +69,11 @@ export function ajaxLoad(sxc: any, alternateTemplateId: any, justPreview: boolea
  * @param forceAjax
  * @param preview
  */
-export function reloadAndReInitialize(sxc: any, forceAjax?: boolean, preview? : boolean): any {
-  let manage = sxc.manage;
-
+export function reloadAndReInitialize(sxc: SxcInstanceWithInternals, forceAjax?: boolean, preview?: boolean): any {
   // if ajax is not supported, we must reload the whole page
-  if (!forceAjax && !manage._reloadWithAjax) return window.location.reload();
+  if (!forceAjax && !sxc.manage._reloadWithAjax) return window.location.reload();
 
+  // ReSharper disable once DoubleNegationOfBoolean
   return ajaxLoad(sxc, _contentBlock.cUseExistingTemplate, !!preview)
     .then(() => {
 

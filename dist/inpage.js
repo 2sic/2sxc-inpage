@@ -705,9 +705,8 @@ exports.ajaxLoad = ajaxLoad;
  * @param preview
  */
 function reloadAndReInitialize(sxc, forceAjax, preview) {
-    var manage = sxc.manage;
     // if ajax is not supported, we must reload the whole page
-    if (!forceAjax && !manage._reloadWithAjax)
+    if (!forceAjax && !sxc.manage._reloadWithAjax)
         return window.location.reload();
     return ajaxLoad(sxc, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
         .then(function () {

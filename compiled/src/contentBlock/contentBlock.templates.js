@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
-var contentBlock_render_1 = require("./contentBlock.render");
+var render_1 = require("./render");
 var contentBlock_webApiPromises_1 = require("./contentBlock.webApiPromises");
 /*
  * this is part of the content block manager
@@ -49,7 +49,7 @@ function updateTemplateFromDia(sxc, templateId, forceCreate) {
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
         if (showingAjaxPreview)
-            contentBlock_render_1.reloadAndReInitialize(sxc);
+            render_1.reloadAndReInitialize(sxc);
     });
 }
 exports.updateTemplateFromDia = updateTemplateFromDia;
