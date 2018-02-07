@@ -145,7 +145,7 @@ function extendIFrameWithSxcState(iFrame) {
    * get the sxc-object of this iframe
    * @returns {Object<any>} refreshed sxc-object
    */
-  function reSxc() {
+  function reSxc(): SxcInstanceWithInternals {
     if (!hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
     return hiddenSxc.recreate();
   }
@@ -180,7 +180,7 @@ function extendIFrameWithSxcState(iFrame) {
     run: verb => reSxc().manage.run(verb),
     showMessage: message => showMessage(reSxc(), `<p class="no-live-preview-available">${message}</p>`),
     reloadAndReInit: () => reloadAndReInitialize(reSxc(), true, true),
-    saveTemplate: templateId => updateTemplateFromDia(reSxc(), templateId, false),
+    saveTemplate: (templateId: number) => updateTemplateFromDia(reSxc(), templateId, false),
     previewTemplate: templateId => ajaxLoad(reSxc(), templateId, true)
   });
   return newFrm;

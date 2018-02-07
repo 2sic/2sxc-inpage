@@ -389,7 +389,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = __webpack_require__(2);
 var render_1 = __webpack_require__(5);
 var main_content_block_1 = __webpack_require__(10);
-var contentBlock_templates_1 = __webpack_require__(6);
+var templates_1 = __webpack_require__(6);
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
@@ -565,7 +565,7 @@ function extendIFrameWithSxcState(iFrame) {
         run: function (verb) { return reSxc().manage.run(verb); },
         showMessage: function (message) { return render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
         reloadAndReInit: function () { return render_1.reloadAndReInitialize(reSxc(), true, true); },
-        saveTemplate: function (templateId) { return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
+        saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
         previewTemplate: function (templateId) { return render_1.ajaxLoad(reSxc(), templateId, true); }
     });
     return newFrm;
@@ -708,6 +708,7 @@ function reloadAndReInitialize(sxc, forceAjax, preview) {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !sxc.manage._reloadWithAjax)
         return window.location.reload();
+    // ReSharper disable once DoubleNegationOfBoolean
     return ajaxLoad(sxc, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
         .then(function () {
         // tell Evoq that page has changed if it has changed (Ajax call)
@@ -738,10 +739,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = __webpack_require__(4);
 var render_1 = __webpack_require__(5);
 var contentBlock_webApiPromises_1 = __webpack_require__(11);
-/*
- * this is part of the content block manager
- */
-//return;
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
@@ -1140,7 +1137,7 @@ exports.getCoordinates = getCoordinates;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var contentBlock_templates_1 = __webpack_require__(6);
+var templates_1 = __webpack_require__(6);
 /*
  * this is a content block in the browser
  *
@@ -1161,8 +1158,8 @@ var MainContentBlock = /** @class */ (function () {
         // constants
         this.cViewWithoutContent = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
         this.cUseExistingTemplate = -1;
-        this.prepareToAddContent = contentBlock_templates_1.prepareToAddContent;
-        this.updateTemplateFromDia = contentBlock_templates_1.updateTemplateFromDia;
+        this.prepareToAddContent = templates_1.prepareToAddContent;
+        this.updateTemplateFromDia = templates_1.updateTemplateFromDia;
     }
     return MainContentBlock;
 }());
@@ -2172,7 +2169,7 @@ exports.Command = Command;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var contentBlock_templates_1 = __webpack_require__(6);
+var templates_1 = __webpack_require__(6);
 var command_initialize_instance_commands_1 = __webpack_require__(7);
 var command_open_ng_dialog_1 = __webpack_require__(14);
 // ToDo: remove dead code
@@ -2203,7 +2200,7 @@ function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings,
     if (conf.uiActionOnly)
         return settings.code(settings, origEvent, sxc);
     // if more than just a UI-action, then it needs to be sure the content-group is created first
-    return contentBlock_templates_1.prepareToAddContent(sxc, settings.useModuleList)
+    return templates_1.prepareToAddContent(sxc, settings.useModuleList)
         .then(function () { return settings.code(settings, origEvent, sxc); });
 }
 exports.commandExecuteAction = commandExecuteAction;
@@ -2647,12 +2644,12 @@ __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(28);
-__webpack_require__(6);
 __webpack_require__(11);
 __webpack_require__(10);
 __webpack_require__(45);
 __webpack_require__(30);
 __webpack_require__(5);
+__webpack_require__(6);
 __webpack_require__(46);
 __webpack_require__(47);
 __webpack_require__(48);

@@ -86,7 +86,7 @@ function disable(tag) {
   tag.attr(twoSxc._toolbarManager.cDisableAttrName, true);
 }
 
-function isDisabled(sxc) {
+function isDisabled(sxc: SxcInstanceWithInternals): boolean {
   let tag = $(getTag(sxc));
   return !!tag.attr(twoSxc._toolbarManager.cDisableAttrName);
 }

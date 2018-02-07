@@ -1,10 +1,7 @@
-﻿import { hide } from '../quick-dialog/2sxc._quickDialog';
+﻿import { ContentGroup } from '../data-edit-context/content-group';
+import { hide } from '../quick-dialog/2sxc._quickDialog';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './contentBlock.webApiPromises';
-/*
- * this is part of the content block manager
- */
-//return;
 
 /**
  * prepare the instance so content can be added
@@ -12,8 +9,8 @@ import { saveTemplate } from './contentBlock.webApiPromises';
  * @param {} sxc 
  * @returns {} 
  */
-export function prepareToAddContent(sxc, useModuleList) {
-  let isCreated = sxc.manage._editContext.ContentGroup.IsCreated;
+export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList: boolean) {
+  const isCreated: boolean = sxc.manage._editContext.ContentGroup.IsCreated;
   if (isCreated || !useModuleList) return $.when(null);
   // return persistTemplate(sxc, null);
   // let manage = sxc.manage;
@@ -21,7 +18,7 @@ export function prepareToAddContent(sxc, useModuleList) {
   // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
   // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
 
-  let templateId = /* templateId || */ sxc.manage._editContext.ContentGroup.TemplateId;
+  const templateId: number = sxc.manage._editContext.ContentGroup.TemplateId;
 
   // template has not changed
   // if (groupExistsAndTemplateUnchanged) return $.when(null);
@@ -36,9 +33,9 @@ export function prepareToAddContent(sxc, useModuleList) {
  * @param {*} templateId 
  * @param {*} forceCreate 
  */
-export function updateTemplateFromDia(sxc, templateId, forceCreate) {
-  let contentGroup = sxc.manage._editContext.ContentGroup;
-  let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
+export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean) {
+  let contentGroup: ContentGroup = sxc.manage._editContext.ContentGroup;
+  const showingAjaxPreview: boolean = $2sxc._toolbarManager.isDisabled(sxc);
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
   // or just reset it, so it picks up the right values again ?
@@ -58,7 +55,7 @@ export function updateTemplateFromDia(sxc, templateId, forceCreate) {
 /**
  * Update the template.
  */
-export function updateTemplate(sxc, templateId, forceCreate) {
+export function updateTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean) {
   return saveTemplate(sxc, templateId, forceCreate)
     .then((data, textStatus, xhr) => {
 
@@ -68,7 +65,7 @@ export function updateTemplate(sxc, templateId, forceCreate) {
       if (!data) return;
 
       // fixes a special case where the guid is given with quotes (dependes on version of angularjs) issue #532
-      let newGuid: string = data.replace(/[\",\']/g, '');
+      const newGuid: string = data.replace(/[\",\']/g, '');
 
       if (console) console.log('created content group {' + newGuid + '}');
       sxc.manage._updateContentGroupGuid(newGuid);

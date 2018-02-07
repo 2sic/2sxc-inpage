@@ -35,7 +35,7 @@
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise} 
  */
-export function saveTemplate(sxc, templateId, forceCreateContentGroup) {
+export function saveTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreateContentGroup: boolean) {
   return sxc.webApi.get({
     url: 'view/module/savetemplateid',
     params: {

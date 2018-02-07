@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = require("../manage/manage.api");
 var render_1 = require("../contentBlock/render");
 var main_content_block_1 = require("../contentBlock/main-content-block");
-var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
+var templates_1 = require("../contentBlock/templates");
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
 // it always has a reference to the latest dialog created by any module instance
@@ -179,7 +179,7 @@ function extendIFrameWithSxcState(iFrame) {
         run: function (verb) { return reSxc().manage.run(verb); },
         showMessage: function (message) { return render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
         reloadAndReInit: function () { return render_1.reloadAndReInitialize(reSxc(), true, true); },
-        saveTemplate: function (templateId) { return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
+        saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
         previewTemplate: function (templateId) { return render_1.ajaxLoad(reSxc(), templateId, true); }
     });
     return newFrm;
