@@ -4,7 +4,7 @@ var _quickE_start_1 = require("../quick-edit/$quickE.start");
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
 var manage_api_1 = require("../manage/manage.api");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
-var contentBlock___1 = require("./contentBlock.{}");
+var main_content_block_1 = require("./main-content-block");
 var contentBlock_webApiPromises_1 = require("./contentBlock.webApiPromises");
 /*
  * this is the content block manager in the browser
@@ -16,7 +16,7 @@ var contentBlock_webApiPromises_1 = require("./contentBlock.webApiPromises");
  *
  * it should be able to render itself
  */
-var cbm = contentBlock___1._contentBlock;
+var cbm = main_content_block_1._contentBlock;
 /**
  * ajax update/replace the content of the content-block
  * optionally also initialze the toolbar (if not just preview)

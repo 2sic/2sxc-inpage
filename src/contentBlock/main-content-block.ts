@@ -14,16 +14,16 @@
  * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
  * 
  */
+export class MainContentBlock {
+  // constants
+  cViewWithoutContent: string= '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+  cUseExistingTemplate: number = -1;
+  prepareToAddContent: any = prepareToAddContent;
+  updateTemplateFromDia: any = updateTemplateFromDia;
+}
 
 /**
  * The main content-block manager
  */
 // ReSharper disable once InconsistentNaming
-export let _contentBlock = {
-
-  // constants
-  cViewWithoutContent: '_LayoutElement', // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-  cUseExistingTemplate: -1,
-  prepareToAddContent: prepareToAddContent,
-  updateTemplateFromDia: updateTemplateFromDia
-};
+export let _contentBlock = new MainContentBlock();

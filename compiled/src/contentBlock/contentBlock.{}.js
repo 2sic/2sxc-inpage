@@ -16,15 +16,20 @@ var contentBlock_templates_1 = require("./contentBlock.templates");
  * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
  *
  */
+var ContentBlockMain = /** @class */ (function () {
+    function ContentBlockMain() {
+        // constants
+        this.cViewWithoutContent = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+        this.cUseExistingTemplate = -1;
+        this.prepareToAddContent = contentBlock_templates_1.prepareToAddContent;
+        this.updateTemplateFromDia = contentBlock_templates_1.updateTemplateFromDia;
+    }
+    return ContentBlockMain;
+}());
+exports.ContentBlockMain = ContentBlockMain;
 /**
  * The main content-block manager
  */
 // ReSharper disable once InconsistentNaming
-exports._contentBlock = {
-    // constants
-    cViewWithoutContent: '_LayoutElement',
-    cUseExistingTemplate: -1,
-    prepareToAddContent: contentBlock_templates_1.prepareToAddContent,
-    updateTemplateFromDia: contentBlock_templates_1.updateTemplateFromDia
-};
+exports._contentBlock = new ContentBlockMain();
 //# sourceMappingURL=contentBlock.{}.js.map

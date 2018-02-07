@@ -388,7 +388,7 @@ exports.translate = translate;
 Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = __webpack_require__(2);
 var contentBlock_render_1 = __webpack_require__(5);
-var contentBlock___1 = __webpack_require__(10);
+var main_content_block_1 = __webpack_require__(10);
 var contentBlock_templates_1 = __webpack_require__(6);
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
@@ -524,7 +524,7 @@ function setSize(fullScreen) {
 }
 function extendIFrameWithSxcState(iFrame) {
     var hiddenSxc = null;
-    var cbApi = contentBlock___1._contentBlock;
+    var cbApi = main_content_block_1._contentBlock;
     var tagModule = null;
     /**
      * get the sxc-object of this iframe
@@ -639,7 +639,7 @@ var _quickE_start_1 = __webpack_require__(22);
 var _2sxc__quickDialog_1 = __webpack_require__(4);
 var manage_api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
-var contentBlock___1 = __webpack_require__(10);
+var main_content_block_1 = __webpack_require__(10);
 var contentBlock_webApiPromises_1 = __webpack_require__(11);
 /*
  * this is the content block manager in the browser
@@ -651,7 +651,7 @@ var contentBlock_webApiPromises_1 = __webpack_require__(11);
  *
  * it should be able to render itself
  */
-var cbm = contentBlock___1._contentBlock;
+var cbm = main_content_block_1._contentBlock;
 /**
  * ajax update/replace the content of the content-block
  * optionally also initialze the toolbar (if not just preview)
@@ -1158,17 +1158,22 @@ var contentBlock_templates_1 = __webpack_require__(6);
  * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
  *
  */
+var MainContentBlock = /** @class */ (function () {
+    function MainContentBlock() {
+        // constants
+        this.cViewWithoutContent = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+        this.cUseExistingTemplate = -1;
+        this.prepareToAddContent = contentBlock_templates_1.prepareToAddContent;
+        this.updateTemplateFromDia = contentBlock_templates_1.updateTemplateFromDia;
+    }
+    return MainContentBlock;
+}());
+exports.MainContentBlock = MainContentBlock;
 /**
  * The main content-block manager
  */
 // ReSharper disable once InconsistentNaming
-exports._contentBlock = {
-    // constants
-    cViewWithoutContent: '_LayoutElement',
-    cUseExistingTemplate: -1,
-    prepareToAddContent: contentBlock_templates_1.prepareToAddContent,
-    updateTemplateFromDia: contentBlock_templates_1.updateTemplateFromDia
-};
+exports._contentBlock = new MainContentBlock();
 
 
 /***/ }),
@@ -2642,12 +2647,12 @@ __webpack_require__(27);
 __webpack_require__(41);
 __webpack_require__(42);
 __webpack_require__(43);
-__webpack_require__(10);
 __webpack_require__(28);
 __webpack_require__(30);
 __webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(11);
+__webpack_require__(10);
 __webpack_require__(44);
 __webpack_require__(45);
 __webpack_require__(46);

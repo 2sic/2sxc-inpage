@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = require("../manage/manage.api");
 var contentBlock_render_1 = require("../contentBlock/contentBlock.render");
-var contentBlock___1 = require("../contentBlock/contentBlock.{}");
+var main_content_block_1 = require("../contentBlock/main-content-block");
 var contentBlock_templates_1 = require("../contentBlock/contentBlock.templates");
 // this is a dialog manager which is in charge of all
 // quick-dialogs. 
@@ -138,7 +138,7 @@ function setSize(fullScreen) {
 }
 function extendIFrameWithSxcState(iFrame) {
     var hiddenSxc = null;
-    var cbApi = contentBlock___1._contentBlock;
+    var cbApi = main_content_block_1._contentBlock;
     var tagModule = null;
     /**
      * get the sxc-object of this iframe

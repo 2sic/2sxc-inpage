@@ -1,6 +1,6 @@
 ﻿import { getTag } from '../manage/manage.api';
 import { showMessage, reloadAndReInitialize, ajaxLoad } from '../contentBlock/contentBlock.render';
-import { _contentBlock } from '../contentBlock/contentBlock.{}';
+import { _contentBlock } from '../contentBlock/main-content-block';
 import { updateTemplateFromDia } from '../contentBlock/contentBlock.templates';
 
 // this is a dialog manager which is in charge of all
