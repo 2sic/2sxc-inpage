@@ -11,14 +11,6 @@ let settingsForEmptyToolbar = {
   autoAddMore: 'left'
 };
 
-Object.assign(twoSxc._toolbarManager, {
-  buildToolbars: buildToolbars,
-  disable: disable,
-  isDisabled: isDisabled
-});
-
-//return;
-
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar() {
   let settingsString = JSON.stringify(settingsForEmptyToolbar);
@@ -36,7 +28,7 @@ function getToolbarTags(parentTag) {
 }
 
 // create a process-toolbar command to generate toolbars inside a tag
-function buildToolbars(parentTag, optionalId) {
+function buildToolbars(parentTag: any, optionalId?: number) {
   parentTag = $(parentTag || '.DnnModule-' + optionalId);
 
   // if something says the toolbars are disabled, then skip
@@ -98,3 +90,18 @@ function isDisabled(sxc) {
   let tag = $(getTag(sxc));
   return !!tag.attr(twoSxc._toolbarManager.cDisableAttrName);
 }
+
+let toolbarManager = {
+  buildToolbars: buildToolbars,
+  disable: disable,
+  isDisabled: isDisabled
+};
+
+Object.assign(twoSxc._toolbarManager, toolbarManager);
+
+//Object.assign(twoSxc._toolbarManager, {
+//  buildToolbars: buildToolbars,
+//  disable: disable,
+//  isDisabled: isDisabled
+//});
+

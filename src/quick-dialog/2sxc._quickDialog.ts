@@ -1,5 +1,5 @@
 ﻿import { getTag } from '../manage/manage.api';
-import { showMessage, reloadAndReInitialize, ajaxLoad } from '../contentBlock/contentBlock.render';
+import { showMessage, reloadAndReInitialize, ajaxLoad } from '../contentBlock/render';
 import { _contentBlock } from '../contentBlock/main-content-block';
 import { updateTemplateFromDia } from '../contentBlock/contentBlock.templates';
 

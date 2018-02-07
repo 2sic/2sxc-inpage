@@ -1,5 +1,5 @@
 ﻿import { ActionParams } from './action-params';
-import { reloadAndReInitialize } from './contentBlock.render';
+import { reloadAndReInitialize } from './render';
 /*
  * this is a content block in the browser
  * 

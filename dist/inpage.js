@@ -387,7 +387,7 @@ exports.translate = translate;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var manage_api_1 = __webpack_require__(2);
-var contentBlock_render_1 = __webpack_require__(5);
+var render_1 = __webpack_require__(5);
 var main_content_block_1 = __webpack_require__(10);
 var contentBlock_templates_1 = __webpack_require__(6);
 // this is a dialog manager which is in charge of all
@@ -563,10 +563,10 @@ function extendIFrameWithSxcState(iFrame) {
             return newFrm.closeCallback();
         },
         run: function (verb) { return reSxc().manage.run(verb); },
-        showMessage: function (message) { return contentBlock_render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
-        reloadAndReInit: function () { return contentBlock_render_1.reloadAndReInitialize(reSxc(), true, true); },
+        showMessage: function (message) { return render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
+        reloadAndReInit: function () { return render_1.reloadAndReInitialize(reSxc(), true, true); },
         saveTemplate: function (templateId) { return contentBlock_templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
-        previewTemplate: function (templateId) { return contentBlock_render_1.ajaxLoad(reSxc(), templateId, true); }
+        previewTemplate: function (templateId) { return render_1.ajaxLoad(reSxc(), templateId, true); }
     });
     return newFrm;
 }
@@ -651,7 +651,6 @@ var contentBlock_webApiPromises_1 = __webpack_require__(11);
  *
  * it should be able to render itself
  */
-var cbm = main_content_block_1._contentBlock;
 /**
  * ajax update/replace the content of the content-block
  * optionally also initialze the toolbar (if not just preview)
@@ -710,7 +709,7 @@ function reloadAndReInitialize(sxc, forceAjax, preview) {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !manage._reloadWithAjax)
         return window.location.reload();
-    return ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
+    return ajaxLoad(sxc, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
         .then(function () {
         // tell Evoq that page has changed if it has changed (Ajax call)
         if (window.dnn_tabVersioningEnabled)
@@ -738,7 +737,7 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = __webpack_require__(4);
-var contentBlock_render_1 = __webpack_require__(5);
+var render_1 = __webpack_require__(5);
 var contentBlock_webApiPromises_1 = __webpack_require__(11);
 /*
  * this is part of the content block manager
@@ -786,7 +785,7 @@ function updateTemplateFromDia(sxc, templateId, forceCreate) {
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
         if (showingAjaxPreview)
-            contentBlock_render_1.reloadAndReInitialize(sxc);
+            render_1.reloadAndReInitialize(sxc);
     });
 }
 exports.updateTemplateFromDia = updateTemplateFromDia;
@@ -1606,7 +1605,7 @@ exports.create = create;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_link_to_ng_dialog_1 = __webpack_require__(15);
-var contentBlock_render_1 = __webpack_require__(5);
+var render_1 = __webpack_require__(5);
 var _2sxc__quickDialog_1 = __webpack_require__(4);
 var module_bootstrapper_1 = __webpack_require__(0);
 /**
@@ -1620,7 +1619,7 @@ function commandOpenNgDialog(sxc, editContext, settings, event) {
     // the callback will handle events after closing the dialog
     // and reload the in-page view w/ajax or page reload
     var callback = function () {
-        contentBlock_render_1.reloadAndReInitialize(sxc);
+        render_1.reloadAndReInitialize(sxc);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
     };
     var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(sxc, editContext, settings); // the link contains everything to open a full dialog (lots of params added)
@@ -2249,7 +2248,7 @@ exports.makeDef = makeDef;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var contentBlock_render_1 = __webpack_require__(5);
+var render_1 = __webpack_require__(5);
 /*
  * this is a content block in the browser
  *
@@ -2271,7 +2270,7 @@ function getAndReload(sxc, url, params) {
     return sxc.webApi.get({
         url: url,
         params: params
-    }).then(function () { contentBlock_render_1.reloadAndReInitialize(sxc); });
+    }).then(function () { render_1.reloadAndReInitialize(sxc); });
 }
 ;
 /**
@@ -2649,12 +2648,12 @@ __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(28);
-__webpack_require__(5);
 __webpack_require__(6);
 __webpack_require__(11);
 __webpack_require__(10);
 __webpack_require__(45);
 __webpack_require__(30);
+__webpack_require__(5);
 __webpack_require__(46);
 __webpack_require__(47);
 __webpack_require__(48);
@@ -3560,12 +3559,6 @@ var settingsForEmptyToolbar = {
     hover: 'left',
     autoAddMore: 'left'
 };
-Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, {
-    buildToolbars: buildToolbars,
-    disable: disable,
-    isDisabled: isDisabled
-});
-//return;
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar() {
     var settingsString = JSON.stringify(settingsForEmptyToolbar);
@@ -3634,6 +3627,17 @@ function isDisabled(sxc) {
     var tag = $(manage_api_1.getTag(sxc));
     return !!tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName);
 }
+var toolbarManager = {
+    buildToolbars: buildToolbars,
+    disable: disable,
+    isDisabled: isDisabled
+};
+Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
+//Object.assign(twoSxc._toolbarManager, {
+//  buildToolbars: buildToolbars,
+//  disable: disable,
+//  isDisabled: isDisabled
+//});
 
 
 /***/ }),

@@ -16,8 +16,6 @@ import { getPreviewWithTemplate } from './contentBlock.webApiPromises';
  * it should be able to render itself
  */
 
-let cbm = _contentBlock;
-
 /**
  * ajax update/replace the content of the content-block
  * optionally also initialze the toolbar (if not just preview)
@@ -26,7 +24,7 @@ let cbm = _contentBlock;
  * @param {boolean} justPreview 
  * @returns {} 
  */
-function replaceCb(sxc: any, newContent: any, justPreview: boolean): void {
+function replaceCb(sxc: SxcInstanceWithInternals, newContent: any, justPreview: boolean): void {
   try {
     let newStuff = $(newContent);
 
@@ -76,7 +74,7 @@ export function reloadAndReInitialize(sxc: any, forceAjax?: boolean, preview? : 
   // if ajax is not supported, we must reload the whole page
   if (!forceAjax && !manage._reloadWithAjax) return window.location.reload();
 
-  return ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
+  return ajaxLoad(sxc, _contentBlock.cUseExistingTemplate, !!preview)
     .then(() => {
 
       // tell Evoq that page has changed if it has changed (Ajax call)

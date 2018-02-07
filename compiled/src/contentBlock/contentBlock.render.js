@@ -16,7 +16,6 @@ var contentBlock_webApiPromises_1 = require("./contentBlock.webApiPromises");
  *
  * it should be able to render itself
  */
-var cbm = main_content_block_1._contentBlock;
 /**
  * ajax update/replace the content of the content-block
  * optionally also initialze the toolbar (if not just preview)
@@ -75,7 +74,7 @@ function reloadAndReInitialize(sxc, forceAjax, preview) {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !manage._reloadWithAjax)
         return window.location.reload();
-    return ajaxLoad(sxc, cbm.cUseExistingTemplate, !!preview)
+    return ajaxLoad(sxc, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
         .then(function () {
         // tell Evoq that page has changed if it has changed (Ajax call)
         if (window.dnn_tabVersioningEnabled)

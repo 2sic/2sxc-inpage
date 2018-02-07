@@ -9,12 +9,6 @@ var settingsForEmptyToolbar = {
     hover: 'left',
     autoAddMore: 'left'
 };
-Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, {
-    buildToolbars: buildToolbars,
-    disable: disable,
-    isDisabled: isDisabled
-});
-//return;
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar() {
     var settingsString = JSON.stringify(settingsForEmptyToolbar);
@@ -83,4 +77,15 @@ function isDisabled(sxc) {
     var tag = $(manage_api_1.getTag(sxc));
     return !!tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName);
 }
+var toolbarManager = {
+    buildToolbars: buildToolbars,
+    disable: disable,
+    isDisabled: isDisabled
+};
+Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
+//Object.assign(twoSxc._toolbarManager, {
+//  buildToolbars: buildToolbars,
+//  disable: disable,
+//  isDisabled: isDisabled
+//});
 //# sourceMappingURL=toolbarManager.buildToolbars.js.map
