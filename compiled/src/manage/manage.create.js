@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = require("../commands/engine");
 var manage_api_1 = require("./manage.api");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
-var contentBlock_manipulate_1 = require("../contentBlock/contentBlock.manipulate");
+var manipulate_1 = require("../contentBlock/manipulate");
 var local_storage_helper_1 = require("./local-storage-helper");
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -92,7 +92,7 @@ function _initInstance(sxc) {
             editContext.ContentGroup.Guid = newGuid;
             editManager._instanceConfig = manage_api_1.buildInstanceConfig(editContext);
         },
-        _getCbManipulator: function () { return contentBlock_manipulate_1.manipulator(sxc); }
+        _getCbManipulator: function () { return manipulate_1.manipulator(sxc); }
     };
     editManager.init();
     return editManager;

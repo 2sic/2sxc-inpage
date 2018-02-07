@@ -1,4 +1,4 @@
-﻿import { Params } from './params';
+﻿import { ActionParams } from './action-params';
 import { reloadAndReInitialize } from './contentBlock.render';
 /*
  * this is a content block in the browser
@@ -18,7 +18,7 @@ import { reloadAndReInitialize } from './contentBlock.render';
  * @param params 
  * @returns {} 
  */
-function getAndReload(sxc: SxcInstanceWithInternals, url: string, params: Params): any {
+function getAndReload(sxc: SxcInstanceWithInternals, url: string, params: ActionParams): any {
   return sxc.webApi.get({
     url: url,
     params: params
@@ -32,7 +32,7 @@ function getAndReload(sxc: SxcInstanceWithInternals, url: string, params: Params
  * @returns {} 
  */
 export function removeFromList(sxc: SxcInstanceWithInternals, sortOrder: number): any {
-  return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder } as Params);
+  return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder } as ActionParams);
 };
 
 /**
@@ -44,7 +44,7 @@ export function removeFromList(sxc: SxcInstanceWithInternals, sortOrder: number)
  */
 export function changeOrder(sxc: SxcInstanceWithInternals, initOrder: number, newOrder: number): any {
   return getAndReload(sxc, 'view/module/changeorder',
-    { sortOrder: initOrder, destinationSortOrder: newOrder } as Params);
+    { sortOrder: initOrder, destinationSortOrder: newOrder } as ActionParams);
 };
 
 /**
@@ -54,7 +54,7 @@ export function changeOrder(sxc: SxcInstanceWithInternals, initOrder: number, ne
  * @returns {} 
  */
 export function addItem(sxc: SxcInstanceWithInternals, sortOrder: number): any {
-  return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder } as Params);
+  return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder } as ActionParams);
 };
 
 /**
@@ -65,7 +65,7 @@ export function addItem(sxc: SxcInstanceWithInternals, sortOrder: number): any {
  * @returns {} 
  */
 export function publish(sxc: SxcInstanceWithInternals, part:string, sortOrder:number): any {
-  return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder } as Params);
+  return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder } as ActionParams);
 };
 
 /**
@@ -75,5 +75,5 @@ export function publish(sxc: SxcInstanceWithInternals, part:string, sortOrder:nu
  * @returns {} 
  */
 export function publishId(sxc: SxcInstanceWithInternals, entityId: number): any {
-  return getAndReload(sxc, 'view/module/publish', { id: entityId } as Params);
+  return getAndReload(sxc, 'view/module/publish', { id: entityId } as ActionParams);
 };

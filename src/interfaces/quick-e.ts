@@ -74,5 +74,5 @@ interface IConf {
     enable: boolean | string | null;
   };
   getAttribute?(configAttr: string): any;
-  guid?: any;
+  guid?: string;
 }

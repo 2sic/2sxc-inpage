@@ -1,7 +1,7 @@
 ﻿/**
  * params for getAndReload WebAPI
  */
-export class Params {
+export class ActionParams {
   id: number;
   part: string;
   sortOrder: number;

@@ -95,7 +95,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
     },
 
     // change config by replacing the guid, and refreshing dependend sub-objects
-    _updateContentGroupGuid: newGuid => {
+    _updateContentGroupGuid: (newGuid: string) => {
       editContext.ContentGroup.Guid = newGuid;
       editManager._instanceConfig = buildInstanceConfig(editContext);
     },

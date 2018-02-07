@@ -10,7 +10,7 @@ function onCbButtonClick() {
   let listItems: any = list.find(selectors.cb.selector);
   let actionConfig: any = JSON.parse(list.attr(selectors.cb.context));
   let index: number = 0;
-  let newGuid: any  = actionConfig.guid || null;
+  let newGuid: string | null  = actionConfig.guid || null;
 
   if (quickE.main.actionsForCb.hasClass(selectors.cb.class))
     index = listItems.index(quickE.main.actionsForCb[0]) + 1;

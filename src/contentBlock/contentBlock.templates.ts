@@ -68,7 +68,7 @@ export function updateTemplate(sxc, templateId, forceCreate) {
       if (!data) return;
 
       // fixes a special case where the guid is given with quotes (dependes on version of angularjs) issue #532
-      let newGuid = data.replace(/[\",\']/g, '');
+      let newGuid: string = data.replace(/[\",\']/g, '');
 
       if (console) console.log('created content group {' + newGuid + '}');
       sxc.manage._updateContentGroupGuid(newGuid);

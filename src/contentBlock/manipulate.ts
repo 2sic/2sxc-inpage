@@ -1,4 +1,5 @@
-﻿import { translate } from '../translate/2sxc.translate';
+﻿import { ManipulateParams } from './manipulate-params';
+import { translate } from '../translate/2sxc.translate';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 /**
@@ -16,20 +17,20 @@ let sxcInstance: SxcInstanceWithInternals;
  * @param container
  * @param newGuid
  */
-function create(parentId: any, fieldName: any, index: any, appName: any, container: any, newGuid: any): any {
+function create(parentId: number, fieldName: string, index: number, appName: string, container: any, newGuid: string): any {
   // the wrapper, into which this will be placed and the list of pre-existing blocks
   let listTag = container;
   if (listTag.length === 0) return alert('can\'t add content-block as we couldn\'t find the list');
   let cblockList = listTag.find('div.sc-content-block');
   if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
 
-  let params = {
+  let params: ManipulateParams = {
     parentId: parentId,
     field: fieldName,
     sortOrder: index,
     app: appName,
     guid: newGuid,
-  };
+  } as ManipulateParams;
 
   return sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
     .then(result => {

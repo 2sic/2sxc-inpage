@@ -31,7 +31,8 @@
     <None Remove="src\commands\command-open-ng-dialog.ts" />
     <None Remove="src\commands\make-def.ts" />
     <None Remove="src\commands\mod-config.ts" />
-    <None Remove="src\contentBlock\params.ts" />
+    <None Remove="src\contentBlock\action-params.ts" />
+    <None Remove="src\contentBlock\manipulate-params.ts" />
     <None Remove="src\globals.d.ts" />
     <None Remove="src\lib-helpers\jquery.ts" />
     <None Remove="src\manage\local-storage-helper.ts" />
@@ -49,7 +50,8 @@
     <TypeScriptCompile Include="src\commands\make-def.ts" />
     <TypeScriptCompile Include="src\commands\mod-config.ts" />
     <TypeScriptCompile Include="src\commands\command-open-ng-dialog.ts" />
-    <TypeScriptCompile Include="src\contentBlock\params.ts" />
+    <TypeScriptCompile Include="src\contentBlock\action-params.ts" />
+    <TypeScriptCompile Include="src\contentBlock\manipulate-params.ts" />
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
     <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
   </ItemGroup>
