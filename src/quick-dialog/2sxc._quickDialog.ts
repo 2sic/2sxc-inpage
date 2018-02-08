@@ -1,4 +1,4 @@
-﻿import { getTag } from '../manage/manage.api';
+﻿import { getTag } from '../manage/api';
 import { showMessage, reloadAndReInitialize, ajaxLoad } from '../contentBlock/render';
 import { _contentBlock } from '../contentBlock/main-content-block';
 import { updateTemplateFromDia } from '../contentBlock/templates';

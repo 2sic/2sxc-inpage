@@ -71,7 +71,7 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = __webpack_require__(4);
-var manage_api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(2);
 var _2sxc_translate_1 = __webpack_require__(3);
 //import '/2sxc-api/js/2sxc.api';
 /**
@@ -142,7 +142,7 @@ function showGlassesButtonIfUninitialized(sxc) {
     if (sxc.manage._editContext.ContentGroup.TemplateId !== 0)
         return false;
     // already has a glasses button
-    var tag = $(manage_api_1.getTag(sxc));
+    var tag = $(api_1.getTag(sxc));
     if (tag.find('.sc-uninitialized').length !== 0)
         return false;
     // note: title is added on mouseover, as the translation isn't ready at page-load
@@ -386,7 +386,7 @@ exports.translate = translate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(2);
 var render_1 = __webpack_require__(5);
 var main_content_block_1 = __webpack_require__(10);
 var templates_1 = __webpack_require__(6);
@@ -539,7 +539,7 @@ function extendIFrameWithSxcState(iFrame) {
         closeCallback: null,
         rewire: function (sxc, callback, dialogName) {
             hiddenSxc = sxc;
-            tagModule = $($(manage_api_1.getTag(sxc)).parent().eq(0));
+            tagModule = $($(api_1.getTag(sxc)).parent().eq(0));
             newFrm.sxcCacheKey = sxc.cacheKey;
             newFrm.closeCallback = callback;
             if (dialogName)
@@ -637,7 +637,7 @@ function watchForResize(keepWatching) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE_start_1 = __webpack_require__(22);
 var _2sxc__quickDialog_1 = __webpack_require__(4);
-var manage_api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 var main_content_block_1 = __webpack_require__(10);
 var web_api_promises_1 = __webpack_require__(11);
@@ -665,7 +665,7 @@ function replaceCb(sxc, newContent, justPreview) {
         // Must disable toolbar before we attach to DOM
         if (justPreview)
             module_bootstrapper_1.$2sxc._toolbarManager.disable(newStuff);
-        $(manage_api_1.getTag(sxc)).replaceWith(newStuff);
+        $(api_1.getTag(sxc)).replaceWith(newStuff);
         // reset the cache, so the sxc-object is refreshed
         sxc.recreate(true);
     }
@@ -681,7 +681,7 @@ function replaceCb(sxc, newContent, justPreview) {
  * @returns {} - nothing
  */
 function showMessage(sxc, newContent) {
-    $(manage_api_1.getTag(sxc)).html(newContent);
+    $(api_1.getTag(sxc)).html(newContent);
 }
 exports.showMessage = showMessage;
 ;
@@ -2526,7 +2526,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(16);
-var manage_api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 var manipulate_1 = __webpack_require__(30);
 var local_storage_helper_1 = __webpack_require__(32);
@@ -2553,8 +2553,8 @@ exports.initInstance = initInstance;
 ;
 //let mngApi = twoSxc._manage;
 function _initInstance(sxc) {
-    var editContext = manage_api_1.getEditContext(sxc);
-    var userInfo = manage_api_1.getUserOfEditContext(editContext);
+    var editContext = api_1.getEditContext(sxc);
+    var userInfo = api_1.getUserOfEditContext(editContext);
     var cmdEngine = engine_1.instanceEngine(sxc, editContext);
     var editManager = sxc.manage = {
         //#region Official, public properties and commands, which are stable for use from the outside
@@ -2580,17 +2580,17 @@ function _initInstance(sxc) {
         // internal method to find out if it's in edit-mode
         _isEditMode: function () { return editContext.Environment.IsEditable; },
         _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-        _dialogParameters: manage_api_1.buildNgDialogParams(sxc, editContext),
-        _instanceConfig: manage_api_1.buildInstanceConfig(editContext),
+        _dialogParameters: api_1.buildNgDialogParams(sxc, editContext),
+        _instanceConfig: api_1.buildInstanceConfig(editContext),
         _editContext: editContext,
-        _quickDialogConfig: manage_api_1.buildQuickDialogConfig(editContext),
+        _quickDialogConfig: api_1.buildQuickDialogConfig(editContext),
         _commands: cmdEngine,
         _user: userInfo,
         // init this object 
         init: function () {
             // enhance UI in case there are known errors / issues
             if (editContext.error.type)
-                editManager._handleErrors(editContext.error.type, manage_api_1.getTag(sxc));
+                editManager._handleErrors(editContext.error.type, api_1.getTag(sxc));
             // todo: move this to dialog-handling
             // display the dialog
             var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
@@ -2615,7 +2615,7 @@ function _initInstance(sxc) {
         // change config by replacing the guid, and refreshing dependend sub-objects
         _updateContentGroupGuid: function (newGuid) {
             editContext.ContentGroup.Guid = newGuid;
-            editManager._instanceConfig = manage_api_1.buildInstanceConfig(editContext);
+            editManager._instanceConfig = api_1.buildInstanceConfig(editContext);
         },
         _getCbManipulator: function () { return manipulate_1.manipulator(sxc); }
     };
@@ -2679,10 +2679,10 @@ __webpack_require__(63);
 __webpack_require__(64);
 __webpack_require__(31);
 __webpack_require__(65);
+__webpack_require__(2);
 __webpack_require__(66);
 __webpack_require__(32);
 __webpack_require__(67);
-__webpack_require__(2);
 __webpack_require__(33);
 __webpack_require__(68);
 __webpack_require__(69);
@@ -3581,7 +3581,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 // quick debug - set to false if not needed for production
 var dbg = false;
@@ -3655,7 +3655,7 @@ function disable(tag) {
     tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName, true);
 }
 function isDisabled(sxc) {
-    var tag = $(manage_api_1.getTag(sxc));
+    var tag = $(api_1.getTag(sxc));
     return !!tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName);
 }
 var toolbarManager = {

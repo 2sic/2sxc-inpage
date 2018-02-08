@@ -1,5 +1,5 @@
 ﻿import { current } from '../quick-dialog/2sxc._quickDialog';
-import { getTag } from '../manage/manage.api';
+import { getTag } from '../manage/api';
 import { translate } from '../translate/2sxc.translate';
 //import '/2sxc-api/js/2sxc.api';
 

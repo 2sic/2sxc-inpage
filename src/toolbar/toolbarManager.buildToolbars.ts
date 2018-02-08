@@ -1,4 +1,4 @@
-﻿import { getTag } from '../manage/manage.api';
+﻿import { getTag } from '../manage/api';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 
