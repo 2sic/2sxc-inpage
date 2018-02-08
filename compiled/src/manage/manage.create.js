@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = require("../commands/engine");
-var manage_api_1 = require("./manage.api");
+var api_1 = require("./api");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 var manipulate_1 = require("../contentBlock/manipulate");
 var local_storage_helper_1 = require("./local-storage-helper");
@@ -28,8 +28,8 @@ exports.initInstance = initInstance;
 ;
 //let mngApi = twoSxc._manage;
 function _initInstance(sxc) {
-    var editContext = manage_api_1.getEditContext(sxc);
-    var userInfo = manage_api_1.getUserOfEditContext(editContext);
+    var editContext = api_1.getEditContext(sxc);
+    var userInfo = api_1.getUserOfEditContext(editContext);
     var cmdEngine = engine_1.instanceEngine(sxc, editContext);
     var editManager = sxc.manage = {
         //#region Official, public properties and commands, which are stable for use from the outside
@@ -55,17 +55,17 @@ function _initInstance(sxc) {
         // internal method to find out if it's in edit-mode
         _isEditMode: function () { return editContext.Environment.IsEditable; },
         _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-        _dialogParameters: manage_api_1.buildNgDialogParams(sxc, editContext),
-        _instanceConfig: manage_api_1.buildInstanceConfig(editContext),
+        _dialogParameters: api_1.buildNgDialogParams(sxc, editContext),
+        _instanceConfig: api_1.buildInstanceConfig(editContext),
         _editContext: editContext,
-        _quickDialogConfig: manage_api_1.buildQuickDialogConfig(editContext),
+        _quickDialogConfig: api_1.buildQuickDialogConfig(editContext),
         _commands: cmdEngine,
         _user: userInfo,
         // init this object 
         init: function () {
             // enhance UI in case there are known errors / issues
             if (editContext.error.type)
-                editManager._handleErrors(editContext.error.type, manage_api_1.getTag(sxc));
+                editManager._handleErrors(editContext.error.type, api_1.getTag(sxc));
             // todo: move this to dialog-handling
             // display the dialog
             var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
@@ -90,7 +90,7 @@ function _initInstance(sxc) {
         // change config by replacing the guid, and refreshing dependend sub-objects
         _updateContentGroupGuid: function (newGuid) {
             editContext.ContentGroup.Guid = newGuid;
-            editManager._instanceConfig = manage_api_1.buildInstanceConfig(editContext);
+            editManager._instanceConfig = api_1.buildInstanceConfig(editContext);
         },
         _getCbManipulator: function () { return manipulate_1.manipulator(sxc); }
     };

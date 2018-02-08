@@ -247,10 +247,11 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+//declare let window: Window;
 //let mngApi = $2sxc._manage;
 /**
  * Get a html tag of the current sxc instance
- * @param {any} sxci
+ * @param {SxcInstanceWithInternals} sxci
  * @return {jquery} - resulting html
  */
 function getTag(sxci) {
@@ -261,7 +262,7 @@ exports.getTag = getTag;
 /**
  * get the edit-context object (a json object) of the current tag/sxc-instance
  * @param {any} htmlTag
- * @return {any} edit-context object
+ * @return {DataEditContext} edit-context object
  */
 function getEditContextOfTag(htmlTag) {
     var attr = htmlTag.getAttribute('data-edit-context');
@@ -271,8 +272,8 @@ exports.getEditContextOfTag = getEditContextOfTag;
 ;
 /**
  * get edit-context info of an sxc-object
- * @param {any} sxc
- * @return {any} edit context info
+ * @param {SxcInstanceWithInternals} sxc
+ * @return {DataEditContext} edit context info
  */
 function getEditContext(sxc) {
     return getEditContextOfTag(getTag(sxc));
@@ -281,11 +282,13 @@ exports.getEditContext = getEditContext;
 ;
 /**
  * builds a config object used in the toolbar system
- * @param {any} editContext
+ * @param {DataEditContext} editContext
  * @returns {any} object containing various properties for this current sxc-instance
  */
 function buildInstanceConfig(editContext) {
-    var ce = editContext.Environment, cg = editContext.ContentGroup, cb = editContext.ContentBlock;
+    var ce = editContext.Environment;
+    var cg = editContext.ContentGroup;
+    var cb = editContext.ContentBlock;
     return {
         portalId: ce.WebsiteId,
         tabId: ce.PageId,
@@ -300,6 +303,10 @@ function buildInstanceConfig(editContext) {
 }
 exports.buildInstanceConfig = buildInstanceConfig;
 ;
+/**
+ * builds UserOfEditcontext object
+ * @param {DataEditContext} editContext
+ */
 function getUserOfEditContext(editContext) {
     return {
         canDesign: editContext.User.CanDesign,
@@ -310,7 +317,7 @@ exports.getUserOfEditContext = getUserOfEditContext;
 ;
 /**
  * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
- * @param {any} editContext
+ * @param {DataEditContext} editContext
  * @returns {any}
  */
 function buildQuickDialogConfig(editContext) {
@@ -330,8 +337,8 @@ exports.buildQuickDialogConfig = buildQuickDialogConfig;
 ;
 /**
  * get all parameters needed by NG dialogs from an sxc
- * @param {any} sxc
- * @param {any} [editContext]
+ * @param {SxcInstanceWithInternals} sxc
+ * @param {DataEditContext} [editContext]
  * @return {any} special object containing the ng-dialog parameters
  */
 function buildNgDialogParams(sxc, editContext) {

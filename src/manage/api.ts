@@ -1,46 +1,47 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 
-declare let window: any;
+//declare let window: Window;
 
 //let mngApi = $2sxc._manage;
 
 /**
  * Get a html tag of the current sxc instance
- * @param {any} sxci
+ * @param {SxcInstanceWithInternals} sxci
  * @return {jquery} - resulting html
  */
-export function getTag(sxci) {
-  return $("div[data-cb-id='" + sxci.cbid + "']")[0];
+export function getTag(sxci: SxcInstanceWithInternals): any {
+  return $(`div[data-cb-id='${sxci.cbid}']`)[0];
 };
 
 /**
  * get the edit-context object (a json object) of the current tag/sxc-instance
  * @param {any} htmlTag
- * @return {any} edit-context object
+ * @return {DataEditContext} edit-context object
  */
-export function getEditContextOfTag(htmlTag) {
+export function getEditContextOfTag(htmlTag: any): DataEditContext {
   let attr = htmlTag.getAttribute('data-edit-context');
   return JSON.parse(attr || '') as DataEditContext;
 };
 
 /**
  * get edit-context info of an sxc-object
- * @param {any} sxc
- * @return {any} edit context info
+ * @param {SxcInstanceWithInternals} sxc
+ * @return {DataEditContext} edit context info
  */
-export function getEditContext(sxc) {
+export function getEditContext(sxc: SxcInstanceWithInternals): DataEditContext {
   return getEditContextOfTag(getTag(sxc));
 };
 
 /**
  * builds a config object used in the toolbar system
- * @param {any} editContext 
+ * @param {DataEditContext} editContext
  * @returns {any} object containing various properties for this current sxc-instance
  */
-export function buildInstanceConfig(editContext) {
-  let ce = editContext.Environment,
-    cg = editContext.ContentGroup,
-    cb = editContext.ContentBlock;
+export function buildInstanceConfig(editContext: DataEditContext) {
+  let ce = editContext.Environment;
+  let cg = editContext.ContentGroup;
+  let cb = editContext.ContentBlock;
+
   return {
     portalId: ce.WebsiteId,
     tabId: ce.PageId,
@@ -55,7 +56,11 @@ export function buildInstanceConfig(editContext) {
   };
 };
 
-export function getUserOfEditContext(editContext) {
+/**
+ * builds UserOfEditcontext object
+ * @param {DataEditContext} editContext
+ */
+export function getUserOfEditContext(editContext: DataEditContext) {
   return {
     canDesign: editContext.User.CanDesign,
     canDevelop: editContext.User.CanDesign
@@ -64,10 +69,10 @@ export function getUserOfEditContext(editContext) {
 
 /**
  * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
- * @param {any} editContext
+ * @param {DataEditContext} editContext
  * @returns {any} 
  */
-export function buildQuickDialogConfig(editContext) {
+export function buildQuickDialogConfig(editContext: DataEditContext) {
   return {
     appId: editContext.ContentGroup.AppId,
     isContent: editContext.ContentGroup.IsContent,
@@ -83,11 +88,11 @@ export function buildQuickDialogConfig(editContext) {
 
 /**
  * get all parameters needed by NG dialogs from an sxc
- * @param {any} sxc
- * @param {any} [editContext]
+ * @param {SxcInstanceWithInternals} sxc
+ * @param {DataEditContext} [editContext]
  * @return {any} special object containing the ng-dialog parameters
  */
-export function buildNgDialogParams(sxc, editContext) {
+export function buildNgDialogParams(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
   if (!editContext) editContext = getEditContext(sxc);
   return {
     zoneId: editContext.ContentGroup.ZoneId,

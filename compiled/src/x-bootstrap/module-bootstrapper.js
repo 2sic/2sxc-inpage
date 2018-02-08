@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
-var manage_api_1 = require("../manage/manage.api");
+var api_1 = require("../manage/api");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 //import '/2sxc-api/js/2sxc.api';
 /**
@@ -72,7 +72,7 @@ function showGlassesButtonIfUninitialized(sxc) {
     if (sxc.manage._editContext.ContentGroup.TemplateId !== 0)
         return false;
     // already has a glasses button
-    var tag = $(manage_api_1.getTag(sxc));
+    var tag = $(api_1.getTag(sxc));
     if (tag.find('.sc-uninitialized').length !== 0)
         return false;
     // note: title is added on mouseover, as the translation isn't ready at page-load

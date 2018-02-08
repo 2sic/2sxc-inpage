@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_api_1 = require("../manage/manage.api");
+var api_1 = require("../manage/api");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
 // quick debug - set to false if not needed for production
 var dbg = false;
@@ -74,7 +74,7 @@ function disable(tag) {
     tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName, true);
 }
 function isDisabled(sxc) {
-    var tag = $(manage_api_1.getTag(sxc));
+    var tag = $(api_1.getTag(sxc));
     return !!tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName);
 }
 var toolbarManager = {

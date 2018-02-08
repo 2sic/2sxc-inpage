@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_api_1 = require("../manage/manage.api");
+var api_1 = require("../manage/api");
 var render_1 = require("../contentBlock/render");
 var main_content_block_1 = require("../contentBlock/main-content-block");
 var templates_1 = require("../contentBlock/templates");
@@ -153,7 +153,7 @@ function extendIFrameWithSxcState(iFrame) {
         closeCallback: null,
         rewire: function (sxc, callback, dialogName) {
             hiddenSxc = sxc;
-            tagModule = $($(manage_api_1.getTag(sxc)).parent().eq(0));
+            tagModule = $($(api_1.getTag(sxc)).parent().eq(0));
             newFrm.sxcCacheKey = sxc.cacheKey;
             newFrm.closeCallback = callback;
             if (dialogName)
