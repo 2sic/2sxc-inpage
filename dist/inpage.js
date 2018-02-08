@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 34);
+/******/ 	return __webpack_require__(__webpack_require__.s = 38);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -247,6 +247,10 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var instance_config_1 = __webpack_require__(22);
+var user_of_edit_context_1 = __webpack_require__(23);
+var qucik_dialog_config_1 = __webpack_require__(24);
+var ng_dialog_params_1 = __webpack_require__(25);
 //declare let window: Window;
 //let mngApi = $2sxc._manage;
 /**
@@ -283,55 +287,30 @@ exports.getEditContext = getEditContext;
 /**
  * builds a config object used in the toolbar system
  * @param {DataEditContext} editContext
- * @returns {any} object containing various properties for this current sxc-instance
+ * @returns {InstanceConfig} object containing various properties for this current sxc-instance
  */
 function buildInstanceConfig(editContext) {
-    var ce = editContext.Environment;
-    var cg = editContext.ContentGroup;
-    var cb = editContext.ContentBlock;
-    return {
-        portalId: ce.WebsiteId,
-        tabId: ce.PageId,
-        moduleId: ce.InstanceId,
-        version: ce.SxcVersion,
-        contentGroupId: cg.Guid,
-        cbIsEntity: cb.IsEntity,
-        cbId: cb.Id,
-        appPath: cg.AppUrl,
-        isList: cg.IsList
-    };
+    return new instance_config_1.InstanceConfig(editContext);
 }
 exports.buildInstanceConfig = buildInstanceConfig;
 ;
 /**
  * builds UserOfEditcontext object
  * @param {DataEditContext} editContext
+ * @returns {UserOfEditContext} object containing user of edit context
  */
 function getUserOfEditContext(editContext) {
-    return {
-        canDesign: editContext.User.CanDesign,
-        canDevelop: editContext.User.CanDesign
-    };
+    return new user_of_edit_context_1.UserOfEditContext(editContext);
 }
 exports.getUserOfEditContext = getUserOfEditContext;
 ;
 /**
  * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
  * @param {DataEditContext} editContext
- * @returns {any}
+ * @returns {QucikDialogConfig} object containing the quick dialog config
  */
 function buildQuickDialogConfig(editContext) {
-    return {
-        appId: editContext.ContentGroup.AppId,
-        isContent: editContext.ContentGroup.IsContent,
-        hasContent: editContext.ContentGroup.HasContent,
-        isList: editContext.ContentGroup.IsList,
-        templateId: editContext.ContentGroup.TemplateId,
-        contentTypeId: editContext.ContentGroup.ContentTypeName,
-        templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker,
-        user: getUserOfEditContext(editContext),
-        supportsAjax: editContext.ContentGroup.SupportsAjax
-    };
+    return new qucik_dialog_config_1.QucikDialogConfig(editContext);
 }
 exports.buildQuickDialogConfig = buildQuickDialogConfig;
 ;
@@ -339,29 +318,12 @@ exports.buildQuickDialogConfig = buildQuickDialogConfig;
  * get all parameters needed by NG dialogs from an sxc
  * @param {SxcInstanceWithInternals} sxc
  * @param {DataEditContext} [editContext]
- * @return {any} special object containing the ng-dialog parameters
+ * @return {NgDialogParams} special object containing the ng-dialog parameters
  */
 function buildNgDialogParams(sxc, editContext) {
     if (!editContext)
         editContext = getEditContext(sxc);
-    return {
-        zoneId: editContext.ContentGroup.ZoneId,
-        appId: editContext.ContentGroup.AppId,
-        tid: editContext.Environment.PageId,
-        mid: editContext.Environment.InstanceId,
-        cbid: sxc.cbid,
-        lang: editContext.Language.Current,
-        langpri: editContext.Language.Primary,
-        langs: JSON.stringify(editContext.Language.All),
-        portalroot: editContext.Environment.WebsiteUrl,
-        websiteroot: editContext.Environment.SxcRootUrl,
-        partOfPage: editContext.ContentBlock.PartOfPage,
-        //versioningRequirements: editContext.ContentBlock.VersioningRequirements,
-        publishing: editContext.ContentBlock.VersioningRequirements,
-        // todo: probably move the user into the dashboard info
-        user: getUserOfEditContext(editContext),
-        approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
-    };
+    return new ng_dialog_params_1.NgDialogParams(sxc, editContext);
 }
 exports.buildNgDialogParams = buildNgDialogParams;
 ;
@@ -642,7 +604,7 @@ function watchForResize(keepWatching) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE_start_1 = __webpack_require__(22);
+var _quickE_start_1 = __webpack_require__(26);
 var _2sxc__quickDialog_1 = __webpack_require__(4);
 var api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
@@ -978,7 +940,7 @@ $('a', _quickE___1.$quickE.selected).click(function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(1);
-var coords_1 = __webpack_require__(23);
+var coords_1 = __webpack_require__(27);
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
@@ -1267,7 +1229,7 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var command_1 = __webpack_require__(25);
+var command_1 = __webpack_require__(29);
 /**
  * assemble an object which will store the configuration and execute it
  * @param sxc
@@ -1293,10 +1255,10 @@ exports.commandCreate = commandCreate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var make_def_1 = __webpack_require__(27);
+var make_def_1 = __webpack_require__(31);
 var _2sxc_translate_1 = __webpack_require__(3);
-var actions_1 = __webpack_require__(28);
-var item_commands_1 = __webpack_require__(29);
+var actions_1 = __webpack_require__(32);
+var item_commands_1 = __webpack_require__(33);
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -1677,7 +1639,7 @@ var command_initialize_instance_commands_1 = __webpack_require__(7);
 var command_create_1 = __webpack_require__(12);
 var command_link_to_ng_dialog_1 = __webpack_require__(15);
 var command_open_ng_dialog_1 = __webpack_require__(14);
-var command_execute_action_1 = __webpack_require__(26);
+var command_execute_action_1 = __webpack_require__(30);
 var Engine = /** @class */ (function () {
     function Engine(sxc, editContext) {
         var _this = this;
@@ -1940,9 +1902,113 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * used to build instance config
+ */
+var InstanceConfig = /** @class */ (function () {
+    function InstanceConfig(editContext) {
+        var ce = editContext.Environment;
+        var cg = editContext.ContentGroup;
+        var cb = editContext.ContentBlock;
+        this.portalId = ce.WebsiteId;
+        this.tabId = ce.PageId;
+        this.moduleId = ce.InstanceId;
+        this.version = ce.SxcVersion;
+        this.contentGroupId = cg.Guid;
+        this.cbIsEntity = cb.IsEntity;
+        this.cbId = cb.Id;
+        this.appPath = cg.AppUrl;
+        this.isList = cg.IsList;
+    }
+    return InstanceConfig;
+}());
+exports.InstanceConfig = InstanceConfig;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var UserOfEditContext = /** @class */ (function () {
+    function UserOfEditContext(editContext) {
+        this.canDesign = editContext.User.CanDesign;
+        this.canDevelop = editContext.User.CanDesign;
+    }
+    return UserOfEditContext;
+}());
+exports.UserOfEditContext = UserOfEditContext;
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(2);
+var QucikDialogConfig = /** @class */ (function () {
+    function QucikDialogConfig(editContext) {
+        this.appId = editContext.ContentGroup.AppId;
+        this.isContent = editContext.ContentGroup.IsContent;
+        this.hasContent = editContext.ContentGroup.HasContent;
+        this.isList = editContext.ContentGroup.IsList;
+        this.templateId = editContext.ContentGroup.TemplateId;
+        this.contentTypeId = editContext.ContentGroup.ContentTypeName;
+        this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-goup
+        this.user = api_1.getUserOfEditContext(editContext);
+        this.supportsAjax = editContext.ContentGroup.SupportsAjax;
+    }
+    return QucikDialogConfig;
+}());
+exports.QucikDialogConfig = QucikDialogConfig;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(2);
+var NgDialogParams = /** @class */ (function () {
+    function NgDialogParams(sxc, editContext) {
+        this.zoneId = editContext.ContentGroup.ZoneId;
+        this.appId = editContext.ContentGroup.AppId;
+        this.tid = editContext.Environment.PageId;
+        this.mid = editContext.Environment.InstanceId;
+        this.cbid = sxc.cbid;
+        this.lang = editContext.Language.Current;
+        this.langpri = editContext.Language.Primary;
+        this.langs = JSON.stringify(editContext.Language.All);
+        this.portalroot = editContext.Environment.WebsiteUrl;
+        this.websiteroot = editContext.Environment.SxcRootUrl;
+        this.partOfPage = editContext.ContentBlock.PartOfPage;
+        //versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+        this.publishing = editContext.ContentBlock.VersioningRequirements;
+        // todo= probably move the user into the dashboard info
+        this.user = api_1.getUserOfEditContext(editContext);
+        this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
+    }
+    return NgDialogParams;
+}());
+exports.NgDialogParams = NgDialogParams;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(1);
 var _quickE_positioning_1 = __webpack_require__(9);
-var _quickE_config_1 = __webpack_require__(24);
+var _quickE_config_1 = __webpack_require__(28);
 function enable() {
     // build all toolbar html-elements
     _quickE___1.prepareToolbarInDom();
@@ -2017,7 +2083,7 @@ $(start);
 
 
 /***/ }),
-/* 23 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2038,7 +2104,7 @@ exports.Coords = Coords;
 
 
 /***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2092,7 +2158,7 @@ exports._readPageConfig = _readPageConfig;
 
 
 /***/ }),
-/* 25 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2174,7 +2240,7 @@ exports.Command = Command;
 
 
 /***/ }),
-/* 26 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2218,7 +2284,7 @@ exports.commandExecuteAction = commandExecuteAction;
 
 
 /***/ }),
-/* 27 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2249,7 +2315,7 @@ exports.makeDef = makeDef;
 
 
 /***/ }),
-/* 28 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2340,7 +2406,7 @@ exports.publishId = publishId;
 
 
 /***/ }),
-/* 29 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2377,7 +2443,7 @@ exports.contentItems = {
 
 
 /***/ }),
-/* 30 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2479,7 +2545,7 @@ exports.manipulator = manipulator;
 
 
 /***/ }),
-/* 31 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2500,7 +2566,7 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 32 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2526,7 +2592,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 
 /***/ }),
-/* 33 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2535,8 +2601,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(16);
 var api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
-var manipulate_1 = __webpack_require__(30);
-var local_storage_helper_1 = __webpack_require__(32);
+var manipulate_1 = __webpack_require__(34);
+var local_storage_helper_1 = __webpack_require__(36);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
  * all in-page toolbars etc.
@@ -2632,82 +2698,82 @@ function _initInstance(sxc) {
 
 
 /***/ }),
-/* 34 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
-__webpack_require__(35);
-__webpack_require__(36);
-__webpack_require__(37);
-__webpack_require__(38);
+__webpack_require__(39);
+__webpack_require__(40);
+__webpack_require__(41);
+__webpack_require__(42);
 __webpack_require__(12);
-__webpack_require__(26);
+__webpack_require__(30);
 __webpack_require__(7);
 __webpack_require__(15);
 __webpack_require__(14);
-__webpack_require__(25);
-__webpack_require__(39);
-__webpack_require__(13);
-__webpack_require__(40);
-__webpack_require__(16);
-__webpack_require__(27);
-__webpack_require__(41);
-__webpack_require__(42);
+__webpack_require__(29);
 __webpack_require__(43);
+__webpack_require__(13);
 __webpack_require__(44);
-__webpack_require__(28);
-__webpack_require__(10);
+__webpack_require__(16);
+__webpack_require__(31);
 __webpack_require__(45);
-__webpack_require__(30);
-__webpack_require__(5);
-__webpack_require__(6);
 __webpack_require__(46);
-__webpack_require__(11);
 __webpack_require__(47);
 __webpack_require__(48);
+__webpack_require__(32);
+__webpack_require__(10);
 __webpack_require__(49);
+__webpack_require__(34);
+__webpack_require__(5);
+__webpack_require__(6);
 __webpack_require__(50);
+__webpack_require__(11);
 __webpack_require__(51);
 __webpack_require__(52);
 __webpack_require__(53);
 __webpack_require__(54);
 __webpack_require__(55);
 __webpack_require__(56);
-__webpack_require__(29);
 __webpack_require__(57);
 __webpack_require__(58);
 __webpack_require__(59);
 __webpack_require__(60);
+__webpack_require__(33);
 __webpack_require__(61);
 __webpack_require__(62);
 __webpack_require__(63);
 __webpack_require__(64);
-__webpack_require__(31);
 __webpack_require__(65);
-__webpack_require__(2);
 __webpack_require__(66);
-__webpack_require__(32);
 __webpack_require__(67);
-__webpack_require__(33);
 __webpack_require__(68);
+__webpack_require__(35);
 __webpack_require__(69);
+__webpack_require__(2);
+__webpack_require__(22);
+__webpack_require__(36);
 __webpack_require__(70);
+__webpack_require__(37);
 __webpack_require__(71);
+__webpack_require__(25);
+__webpack_require__(24);
+__webpack_require__(23);
 __webpack_require__(72);
+__webpack_require__(73);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(17);
-__webpack_require__(24);
-__webpack_require__(73);
-__webpack_require__(18);
+__webpack_require__(28);
 __webpack_require__(74);
-__webpack_require__(9);
-__webpack_require__(22);
-__webpack_require__(23);
+__webpack_require__(18);
 __webpack_require__(75);
+__webpack_require__(9);
+__webpack_require__(26);
+__webpack_require__(27);
 __webpack_require__(76);
 __webpack_require__(77);
 __webpack_require__(78);
@@ -2718,12 +2784,13 @@ __webpack_require__(82);
 __webpack_require__(83);
 __webpack_require__(84);
 __webpack_require__(85);
+__webpack_require__(86);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
 
 /***/ }),
-/* 35 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2762,7 +2829,7 @@ twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
 
 
 /***/ }),
-/* 36 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2792,7 +2859,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 37 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2807,7 +2874,7 @@ exports.Action = Action;
 
 
 /***/ }),
-/* 38 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2822,7 +2889,7 @@ exports.CmdSpec = CmdSpec;
 
 
 /***/ }),
-/* 39 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2846,7 +2913,7 @@ module_bootstrapper_1.$2sxc._commands = new Commands();
 
 
 /***/ }),
-/* 40 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2861,7 +2928,7 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 41 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2876,7 +2943,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 42 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2891,7 +2958,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 43 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2906,7 +2973,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 44 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2924,7 +2991,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 45 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2940,7 +3007,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 46 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2955,7 +3022,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 47 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2970,7 +3037,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 48 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2985,7 +3052,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 49 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3000,7 +3067,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 50 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3015,7 +3082,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 51 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3030,7 +3097,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 52 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3045,7 +3112,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 53 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3060,7 +3127,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 54 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3075,7 +3142,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 55 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3106,7 +3173,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 56 */
+/* 60 */
 /***/ (function(module, exports) {
 
 // The following script fixes a bug in DNN 08.00.04
@@ -3135,7 +3202,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3168,31 +3235,6 @@ window.$quickE = _quickE___1.$quickE;
 
 
 /***/ }),
-/* 58 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports) {
-
-// ReSharper restore InconsistentNaming 
-
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 62 */
 /***/ (function(module, exports) {
 
@@ -3202,6 +3244,7 @@ window.$quickE = _quickE___1.$quickE;
 /* 63 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming 
 
 
 /***/ }),
@@ -3218,21 +3261,30 @@ window.$quickE = _quickE___1.$quickE;
 
 /***/ }),
 /* 66 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var InstanceConfig = /** @class */ (function () {
-    function InstanceConfig() {
-    }
-    return InstanceConfig;
-}());
-exports.InstanceConfig = InstanceConfig;
 
 
 /***/ }),
 /* 67 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3241,13 +3293,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_create_1 = __webpack_require__(33);
+var manage_create_1 = __webpack_require__(37);
 var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -3269,37 +3321,7 @@ module_bootstrapper_1.$2sxc._manage = new Manage();
 
 
 /***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var NgDialogParams = /** @class */ (function () {
-    function NgDialogParams() {
-    }
-    return NgDialogParams;
-}());
-exports.NgDialogParams = NgDialogParams;
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var UserOfEditContext = /** @class */ (function () {
-    function UserOfEditContext() {
-    }
-    return UserOfEditContext;
-}());
-exports.UserOfEditContext = UserOfEditContext;
-
-
-/***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3343,7 +3365,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3370,7 +3392,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3405,7 +3427,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3435,7 +3457,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports) {
 
 /*
@@ -3536,7 +3558,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3548,7 +3570,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3563,7 +3585,7 @@ $(function () {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3582,7 +3604,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3679,7 +3701,7 @@ Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3724,7 +3746,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3763,14 +3785,14 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(31);
+var _2sxc__lib_extend_1 = __webpack_require__(35);
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 // ToDo: refactor to avoid side-effects
@@ -3995,7 +4017,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4017,7 +4039,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4085,7 +4107,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

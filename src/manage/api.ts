@@ -1,4 +1,8 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { InstanceConfig } from './instance-config';
+import { UserOfEditContext } from './user-of-edit-context';
+import { QucikDialogConfig } from './qucik-dialog-config';
+import { NgDialogParams } from './ng-dialog-params';
 
 //declare let window: Window;
 
@@ -35,82 +39,37 @@ export function getEditContext(sxc: SxcInstanceWithInternals): DataEditContext {
 /**
  * builds a config object used in the toolbar system
  * @param {DataEditContext} editContext
- * @returns {any} object containing various properties for this current sxc-instance
+ * @returns {InstanceConfig} object containing various properties for this current sxc-instance
  */
-export function buildInstanceConfig(editContext: DataEditContext) {
-  let ce = editContext.Environment;
-  let cg = editContext.ContentGroup;
-  let cb = editContext.ContentBlock;
-
-  return {
-    portalId: ce.WebsiteId,
-    tabId: ce.PageId,
-    moduleId: ce.InstanceId,
-    version: ce.SxcVersion,
-
-    contentGroupId: cg.Guid,
-    cbIsEntity: cb.IsEntity,
-    cbId: cb.Id,
-    appPath: cg.AppUrl,
-    isList: cg.IsList
-  };
+export function buildInstanceConfig(editContext: DataEditContext): InstanceConfig {
+  return new InstanceConfig(editContext);
 };
 
 /**
  * builds UserOfEditcontext object
  * @param {DataEditContext} editContext
+ * @returns {UserOfEditContext} object containing user of edit context
  */
-export function getUserOfEditContext(editContext: DataEditContext) {
-  return {
-    canDesign: editContext.User.CanDesign,
-    canDevelop: editContext.User.CanDesign
-  };
+export function getUserOfEditContext(editContext: DataEditContext): UserOfEditContext {
+  return new UserOfEditContext(editContext);
 };
 
 /**
  * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
  * @param {DataEditContext} editContext
- * @returns {any} 
+ * @returns {QucikDialogConfig} object containing the quick dialog config
  */
-export function buildQuickDialogConfig(editContext: DataEditContext) {
-  return {
-    appId: editContext.ContentGroup.AppId,
-    isContent: editContext.ContentGroup.IsContent,
-    hasContent: editContext.ContentGroup.HasContent,
-    isList: editContext.ContentGroup.IsList,
-    templateId: editContext.ContentGroup.TemplateId,
-    contentTypeId: editContext.ContentGroup.ContentTypeName,
-    templateChooserVisible: editContext.ContentBlock.ShowTemplatePicker, // todo: maybe move to content-goup
-    user: getUserOfEditContext(editContext),
-    supportsAjax: editContext.ContentGroup.SupportsAjax
-  };
+export function buildQuickDialogConfig(editContext: DataEditContext): QucikDialogConfig {
+  return new QucikDialogConfig(editContext);
 };
 
 /**
  * get all parameters needed by NG dialogs from an sxc
  * @param {SxcInstanceWithInternals} sxc
  * @param {DataEditContext} [editContext]
- * @return {any} special object containing the ng-dialog parameters
+ * @return {NgDialogParams} special object containing the ng-dialog parameters
  */
-export function buildNgDialogParams(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
+export function buildNgDialogParams(sxc: SxcInstanceWithInternals, editContext: DataEditContext): NgDialogParams {
   if (!editContext) editContext = getEditContext(sxc);
-  return {
-    zoneId: editContext.ContentGroup.ZoneId,
-    appId: editContext.ContentGroup.AppId,
-    tid: editContext.Environment.PageId,
-    mid: editContext.Environment.InstanceId,
-    cbid: sxc.cbid,
-    lang: editContext.Language.Current,
-    langpri: editContext.Language.Primary,
-    langs: JSON.stringify(editContext.Language.All),
-    portalroot: editContext.Environment.WebsiteUrl,
-    websiteroot: editContext.Environment.SxcRootUrl,
-    partOfPage: editContext.ContentBlock.PartOfPage,
-    //versioningRequirements: editContext.ContentBlock.VersioningRequirements,
-    publishing: editContext.ContentBlock.VersioningRequirements,
-
-    // todo: probably move the user into the dashboard info
-    user: getUserOfEditContext(editContext),
-    approot: editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
-  };
+  return new NgDialogParams(sxc, editContext);
 };
