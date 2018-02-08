@@ -1406,9 +1406,11 @@ function create(cmdSpecs) {
     }));
     addDef(make_def_1.makeDef('movedown', 'MoveDown', 'move-down', false, true, {
         showCondition: function (settings, modConfig) {
+            // TODO: do not display if is last item in list
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
         code: function (settings, event, sxc) {
+            // TODO: make sure index is never greater than the amount of items
             actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
         }
     }));
@@ -2429,8 +2431,9 @@ function move(parentId, field, indexFrom, indexTo) {
         parentId: parentId,
         field: field,
         indexFrom: indexFrom,
-        indexTo: indexTo,
+        indexTo: indexTo
     };
+    console.log("move item in list:", params);
     // todo: need sxc!
     return sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
         .then(function () {

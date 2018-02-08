@@ -19,9 +19,9 @@ let sxcInstance: SxcInstanceWithInternals;
  */
 function create(parentId: number, fieldName: string, index: number, appName: string, container: any, newGuid: string): any {
   // the wrapper, into which this will be placed and the list of pre-existing blocks
-  let listTag = container;
+  const listTag = container;
   if (listTag.length === 0) return alert('can\'t add content-block as we couldn\'t find the list');
-  let cblockList = listTag.find('div.sc-content-block');
+  const cblockList = listTag.find('div.sc-content-block');
   if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
 
   let params: ManipulateParams = {
@@ -55,12 +55,13 @@ function create(parentId: number, fieldName: string, index: number, appName: str
  * @param indexFrom
  * @param indexTo
  */
-function move(parentId: any, field: any, indexFrom: any, indexTo: any): any{
-  let params = {
+function move(parentId: number, field: string, indexFrom: number, indexTo: number): any {
+
+  const params: ManipulateParams = {
     parentId: parentId,
     field: field,
     indexFrom: indexFrom,
-    indexTo: indexTo,
+    indexTo: indexTo
   };
 
   // todo: need sxc!
@@ -77,9 +78,9 @@ function move(parentId: any, field: any, indexFrom: any, indexTo: any): any{
  * @param field
  * @param index
  */
-function remove(parentId: any, field: any, index: any): any {
+function remove(parentId: number, field: string, index: number): any {
   if (!confirm(translate('QuickInsertMenu.ConfirmDelete'))) return null;
-  let params = {
+  const params: ManipulateParams = {
     parentId: parentId,
     field: field,
     index: index,
