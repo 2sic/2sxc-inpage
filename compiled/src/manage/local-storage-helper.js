@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * local storage helper to get typed values from it
+ */
 var LocalStorageHelper = /** @class */ (function () {
     function LocalStorageHelper() {
     }
