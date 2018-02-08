@@ -2572,37 +2572,11 @@ exports.extend = extend;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * local storage helper to get typed values from it
- */
-var LocalStorageHelper = /** @class */ (function () {
-    function LocalStorageHelper() {
-    }
-    LocalStorageHelper.getItemValueString = function (key) {
-        var value = localStorage.getItem(key);
-        return value;
-    };
-    LocalStorageHelper.getItemValue = function (key) {
-        var value = localStorage.getItem(key);
-        return JSON.parse(value);
-    };
-    return LocalStorageHelper;
-}());
-exports.LocalStorageHelper = LocalStorageHelper;
-
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(16);
 var api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 var manipulate_1 = __webpack_require__(34);
-var local_storage_helper_1 = __webpack_require__(36);
+var local_storage_helper_1 = __webpack_require__(37);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
  * all in-page toolbars etc.
@@ -2698,6 +2672,32 @@ function _initInstance(sxc) {
 
 
 /***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * local storage helper to get typed values from it
+ */
+var LocalStorageHelper = /** @class */ (function () {
+    function LocalStorageHelper() {
+    }
+    LocalStorageHelper.getItemValueString = function (key) {
+        var value = localStorage.getItem(key);
+        return value;
+    };
+    LocalStorageHelper.getItemValue = function (key) {
+        var value = localStorage.getItem(key);
+        return JSON.parse(value);
+    };
+    return LocalStorageHelper;
+}());
+exports.LocalStorageHelper = LocalStorageHelper;
+
+
+/***/ }),
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2753,10 +2753,10 @@ __webpack_require__(68);
 __webpack_require__(35);
 __webpack_require__(69);
 __webpack_require__(2);
-__webpack_require__(22);
 __webpack_require__(36);
-__webpack_require__(70);
+__webpack_require__(22);
 __webpack_require__(37);
+__webpack_require__(70);
 __webpack_require__(71);
 __webpack_require__(25);
 __webpack_require__(24);
@@ -3299,7 +3299,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var manage_create_1 = __webpack_require__(37);
+var create_1 = __webpack_require__(36);
 var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -3313,7 +3313,7 @@ var module_bootstrapper_1 = __webpack_require__(0);
  */
 var Manage = /** @class */ (function () {
     function Manage() {
-        this.initInstance = manage_create_1.initInstance;
+        this.initInstance = create_1.initInstance;
     }
     return Manage;
 }());

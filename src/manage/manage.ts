@@ -1,4 +1,4 @@
-﻿import { initInstance } from './manage.create';
+﻿import { initInstance } from './create';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 /**
