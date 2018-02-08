@@ -2679,9 +2679,9 @@ __webpack_require__(65);
 __webpack_require__(66);
 __webpack_require__(32);
 __webpack_require__(67);
-__webpack_require__(68);
 __webpack_require__(2);
 __webpack_require__(33);
+__webpack_require__(68);
 __webpack_require__(69);
 __webpack_require__(70);
 __webpack_require__(71);
@@ -3249,9 +3249,13 @@ var module_bootstrapper_1 = __webpack_require__(0);
  * - run(...)
  * - isEditMode
  */
-module_bootstrapper_1.$2sxc._manage = {
-    initInstance: manage_create_1.initInstance
-};
+var Manage = /** @class */ (function () {
+    function Manage() {
+        this.initInstance = manage_create_1.initInstance;
+    }
+    return Manage;
+}());
+module_bootstrapper_1.$2sxc._manage = new Manage();
 
 
 /***/ }),

@@ -11,7 +11,8 @@ import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
  * - run(...)
  * - isEditMode
  */
+class Manage {
+  initInstance = initInstance;
+}
 
-twoSxc._manage = {
-  initInstance: initInstance
-};
+twoSxc._manage = new Manage();

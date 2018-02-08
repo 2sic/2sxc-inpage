@@ -12,7 +12,11 @@ var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
  * - run(...)
  * - isEditMode
  */
-module_bootstrapper_1.$2sxc._manage = {
-    initInstance: manage_create_1.initInstance
-};
+var Manage = /** @class */ (function () {
+    function Manage() {
+        this.initInstance = manage_create_1.initInstance;
+    }
+    return Manage;
+}());
+module_bootstrapper_1.$2sxc._manage = new Manage();
 //# sourceMappingURL=manage.{}.js.map
