@@ -115,8 +115,8 @@ function tryShowTemplatePicker() {
         return false;
     // show the template picker of this module
     var module = uninitializedModules.parent('div[data-edit-context]')[0];
-    var sxc = exports.$2sxc(module);
-    sxc.manage.run('layout');
+    exports.sxc = exports.$2sxc(module);
+    exports.sxc.manage.run('layout');
     openedTemplatePickerOnce = true;
 }
 function initModule(module, isFirstRun) {
@@ -2420,7 +2420,7 @@ exports.contentItems = {
     "delete": function (sxc, itemId, itemGuid, itemTitle) {
         // first show main warning / get ok
         var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
-            .replace('{id}', itemId)
+            .replace('{id}', itemId.toString())
             .replace('{title}', itemTitle));
         if (!ok)
             return;
@@ -2612,22 +2612,6 @@ function _initInstance(sxc) {
     var EditManager = /** @class */ (function () {
         function EditManager() {
             var _this = this;
-            /**
-             * init this object
-             */
-            this.init = function () {
-                // enhance UI in case there are known errors / issues
-                if (editContext.error.type)
-                    _this._handleErrors(editContext.error.type, api_1.getTag(sxc));
-                // todo: move this to dialog-handling
-                // display the dialog
-                var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
-                if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
-                    return false;
-                sessionStorage.removeItem('dia-cbid');
-                _this.run('layout');
-                return true;
-            };
             //#region Official, public properties and commands, which are stable for use from the outside
             /**
              * run a command - often used in toolbars and custom buttons
@@ -2699,12 +2683,29 @@ function _initInstance(sxc) {
             };
             this._getCbManipulator = function () { return manipulate_1.manipulator(sxc); };
             // ReSharper restore InconsistentNaming
+            /**
+            * init this object
+            */
+            this.init = function () {
+                // enhance UI in case there are known errors / issues
+                if (editContext.error.type)
+                    _this._handleErrors(editContext.error.type, api_1.getTag(sxc));
+                // todo: move this to dialog-handling
+                // display the dialog
+                var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
+                if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
+                    return false;
+                sessionStorage.removeItem('dia-cbid');
+                _this.run('layout');
+                return true;
+            };
         }
         return EditManager;
     }());
     ;
-    var editManager = sxc.manage = new EditManager();
+    var editManager = new EditManager();
     editManager.init();
+    sxc.manage = editManager;
     return editManager;
 }
 

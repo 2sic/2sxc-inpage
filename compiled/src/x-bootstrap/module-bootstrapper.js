@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc__quickDialog_1 = require("../quick-dialog/2sxc._quickDialog");
+var quick_dialog_1 = require("../quick-dialog/quick-dialog");
 var api_1 = require("../manage/api");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 //import '/2sxc-api/js/2sxc.api';
@@ -38,15 +38,15 @@ function tryShowTemplatePicker() {
     if (cancelledDialog || openedTemplatePickerOnce)
         return false;
     // already showing a dialog
-    if (_2sxc__quickDialog_1.current !== null)
+    if (quick_dialog_1.current !== null)
         return false;
     // not exactly one uninitialized module
     if (uninitializedModules.length !== 1)
         return false;
     // show the template picker of this module
     var module = uninitializedModules.parent('div[data-edit-context]')[0];
-    var sxc = exports.$2sxc(module);
-    sxc.manage.run('layout');
+    exports.sxc = exports.$2sxc(module);
+    exports.sxc.manage.run('layout');
     openedTemplatePickerOnce = true;
 }
 function initModule(module, isFirstRun) {

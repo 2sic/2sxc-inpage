@@ -10,7 +10,7 @@ export let contentItems = {
   "delete": (sxc: SxcInstanceWithInternals, itemId: number, itemGuid: string, itemTitle: string) => {
     // first show main warning / get ok
     let ok = confirm(translate('Delete.Confirm')
-      .replace('{id}', itemId)
+      .replace('{id}', itemId.toString())
       .replace('{title}', itemTitle));
     if (!ok) return;
 

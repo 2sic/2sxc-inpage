@@ -9,7 +9,6 @@ import { translate } from '../translate/2sxc.translate';
  */
 // 
 // 
-
 export let $2sxc = window.$2sxc as SxcControllerWithInternals;
 
 let initializedModules = [];
@@ -52,7 +51,7 @@ function tryShowTemplatePicker() {
 
   // show the template picker of this module
   let module = uninitializedModules.parent('div[data-edit-context]')[0];
-  let sxc: SxcInstanceWithInternals = $2sxc(module) as SxcInstanceWithInternals;
+  sxc = $2sxc(module) as SxcInstanceWithInternals;
   sxc.manage.run('layout');
   openedTemplatePickerOnce = true;
 }

@@ -15,7 +15,7 @@ import { LocalStorageHelper } from './local-storage-helper';
  * - isEditMode
  * @param sxc
  */
-export function initInstance(sxc) {
+export function initInstance(sxc: SxcInstanceWithInternals) {
   try {
     _initInstance(sxc);
   } catch (e) {
@@ -27,29 +27,12 @@ export function initInstance(sxc) {
 function _initInstance(sxc: SxcInstanceWithInternals) {
 
   const editContext = getEditContext(sxc);
-// ReSharper disable AssignedValueIsNeverUsed
+  // ReSharper disable AssignedValueIsNeverUsed
   const userInfo = getUserOfEditContext(editContext);
   const cmdEngine = instanceEngine(sxc, editContext);
   // ReSharper restore AssignedValueIsNeverUsed
 
   class EditManager {
-
-    /**
-     * init this object
-     */
-    init = () => {
-      // enhance UI in case there are known errors / issues
-      if (editContext.error.type)
-        this._handleErrors(editContext.error.type, getTag(sxc));
-
-      // todo: move this to dialog-handling
-      // display the dialog
-      let openDialogId: number = LocalStorageHelper.getItemValue<number>('dia-cbid');
-      if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
-      sessionStorage.removeItem('dia-cbid');
-      this.run('layout');
-      return true;
-    };
 
     //#region Official, public properties and commands, which are stable for use from the outside
     /**
@@ -136,10 +119,27 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
     _getCbManipulator = () => manipulator(sxc);
     // ReSharper restore InconsistentNaming
 
+    /**
+    * init this object
+    */
+    init = () => {
+      // enhance UI in case there are known errors / issues
+      if (editContext.error.type)
+        this._handleErrors(editContext.error.type, getTag(sxc));
+
+      // todo: move this to dialog-handling
+      // display the dialog
+      let openDialogId: number = LocalStorageHelper.getItemValue<number>('dia-cbid');
+      if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
+      sessionStorage.removeItem('dia-cbid');
+      this.run('layout');
+      return true;
+    };
+
   };
 
-  let editManager = sxc.manage = new EditManager();
-
+  let editManager = new EditManager();
   editManager.init();
+  sxc.manage = editManager;
   return editManager;
 }
