@@ -2531,13 +2531,19 @@ function remove(parentId, field, index) {
         window.location.reload();
     });
 }
+var Manipulator = /** @class */ (function () {
+    function Manipulator() {
+        this.create = create;
+        this.move = move;
+        this.delete = remove;
+    }
+    return Manipulator;
+}());
+exports.Manipulator = Manipulator;
+;
 function manipulator(sxc) {
     sxcInstance = sxc;
-    return {
-        create: create,
-        move: move,
-        delete: remove
-    };
+    return new Manipulator();
 }
 exports.manipulator = manipulator;
 
@@ -2601,69 +2607,75 @@ function _initInstance(sxc) {
     var editContext = api_1.getEditContext(sxc);
     var userInfo = api_1.getUserOfEditContext(editContext);
     var cmdEngine = engine_1.instanceEngine(sxc, editContext);
-    var editManager = sxc.manage = {
-        //#region Official, public properties and commands, which are stable for use from the outside
-        /**
-         * run a command - often used in toolbars and custom buttons
-         */
-        run: cmdEngine.executeAction,
-        /**
-         * Generate a button (an <a>-tag) for one specific toolbar-action.
-         * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
-         * @param {int} groupIndex - number what button-group it's in'
-         * @returns {string} html of a button
-         */
-        getButton: function (actDef, groupIndex) { return module_bootstrapper_1.$2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex); },
-        /**
-         * Builds the toolbar and returns it as HTML
-         * @param {Object<any>} tbConfig - general toolbar config
-         * @param {Object<any>} moreSettings - additional / override settings
-         * @returns {string} html of the current toolbar
-         */
-        getToolbar: function (tbConfig, moreSettings) { return module_bootstrapper_1.$2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings); },
-        //#endregion official, public properties - everything below this can change at any time
-        // internal method to find out if it's in edit-mode
-        _isEditMode: function () { return editContext.Environment.IsEditable; },
-        _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-        _dialogParameters: api_1.buildNgDialogParams(sxc, editContext),
-        _instanceConfig: api_1.buildInstanceConfig(editContext),
-        _editContext: editContext,
-        _quickDialogConfig: api_1.buildQuickDialogConfig(editContext),
-        _commands: cmdEngine,
-        _user: userInfo,
-        // init this object 
-        init: function () {
-            // enhance UI in case there are known errors / issues
-            if (editContext.error.type)
-                editManager._handleErrors(editContext.error.type, api_1.getTag(sxc));
-            // todo: move this to dialog-handling
-            // display the dialog
-            var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
-            if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
-                return false;
-            sessionStorage.removeItem('dia-cbid');
-            editManager.run('layout');
-        },
-        // private: show error when the app-data hasn't been installed yet for this imported-module
-        _handleErrors: function (errType, cbTag) {
-            var errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
-            var msg = '';
-            var toolbar = $("<ul class='sc-menu'></ul>");
-            if (errType === 'DataIsMissing') {
-                msg = 'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
-                toolbar.attr('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
-            }
-            errWrapper.append(msg);
-            errWrapper.append(toolbar);
-            $(cbTag).append(errWrapper);
-        },
-        // change config by replacing the guid, and refreshing dependend sub-objects
-        _updateContentGroupGuid: function (newGuid) {
-            editContext.ContentGroup.Guid = newGuid;
-            editManager._instanceConfig = api_1.buildInstanceConfig(editContext);
-        },
-        _getCbManipulator: function () { return manipulate_1.manipulator(sxc); }
-    };
+    var EditManager = /** @class */ (function () {
+        function EditManager() {
+            var _this = this;
+            //#region Official, public properties and commands, which are stable for use from the outside
+            /**
+             * run a command - often used in toolbars and custom buttons
+             */
+            this.run = cmdEngine.executeAction;
+            /**
+             * Generate a button (an <a>-tag) for one specific toolbar-action.
+             * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
+             * @param {int} groupIndex - number what button-group it's in'
+             * @returns {string} html of a button
+             */
+            this.getButton = function (actDef, groupIndex) { return module_bootstrapper_1.$2sxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex); };
+            /**
+             * Builds the toolbar and returns it as HTML
+             * @param {Object<any>} tbConfig - general toolbar config
+             * @param {Object<any>} moreSettings - additional / override settings
+             * @returns {string} html of the current toolbar
+             */
+            this.getToolbar = function (tbConfig, moreSettings) { return module_bootstrapper_1.$2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings); };
+            //#endregion official, public properties - everything below this can change at any time
+            // internal method to find out if it's in edit-mode
+            this._isEditMode = function () { return editContext.Environment.IsEditable; };
+            this._reloadWithAjax = editContext.ContentGroup.SupportsAjax;
+            this._dialogParameters = api_1.buildNgDialogParams(sxc, editContext); // used for various dialogs
+            this._instanceConfig = api_1.buildInstanceConfig(editContext); // used to configure buttons / toolbars
+            this._editContext = editContext; // metadata necessary to know what/how to edit
+            this._quickDialogConfig = api_1.buildQuickDialogConfig(editContext); // used for in-page dialogs
+            this._commands = cmdEngine; // used to handle the commands for this content-block
+            this._user = userInfo;
+            // init this object 
+            this.init = function () {
+                // enhance UI in case there are known errors / issues
+                if (editContext.error.type)
+                    _this._handleErrors(editContext.error.type, api_1.getTag(sxc));
+                // todo: move this to dialog-handling
+                // display the dialog
+                var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
+                if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
+                    return false;
+                sessionStorage.removeItem('dia-cbid');
+                _this.run('layout');
+            };
+            // private: show error when the app-data hasn't been installed yet for this imported-module
+            this._handleErrors = function (errType, cbTag) {
+                var errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
+                var msg = '';
+                var toolbar = $("<ul class='sc-menu'></ul>");
+                if (errType === 'DataIsMissing') {
+                    msg = 'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
+                    toolbar.attr('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
+                }
+                errWrapper.append(msg);
+                errWrapper.append(toolbar);
+                $(cbTag).append(errWrapper);
+            };
+            // change config by replacing the guid, and refreshing dependend sub-objects
+            this._updateContentGroupGuid = function (newGuid) {
+                editContext.ContentGroup.Guid = newGuid;
+                _this._instanceConfig = api_1.buildInstanceConfig(editContext);
+            };
+            this._getCbManipulator = function () { return manipulate_1.manipulator(sxc); };
+        }
+        return EditManager;
+    }());
+    ;
+    var editManager = sxc.manage = new EditManager();
     editManager.init();
     return editManager;
 }
@@ -2752,27 +2764,27 @@ __webpack_require__(35);
 __webpack_require__(69);
 __webpack_require__(2);
 __webpack_require__(36);
-__webpack_require__(70);
 __webpack_require__(22);
 __webpack_require__(37);
+__webpack_require__(70);
 __webpack_require__(71);
-__webpack_require__(72);
 __webpack_require__(25);
 __webpack_require__(24);
 __webpack_require__(23);
+__webpack_require__(72);
 __webpack_require__(73);
-__webpack_require__(74);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(17);
 __webpack_require__(28);
-__webpack_require__(75);
+__webpack_require__(74);
 __webpack_require__(18);
-__webpack_require__(76);
+__webpack_require__(75);
 __webpack_require__(9);
 __webpack_require__(26);
 __webpack_require__(27);
+__webpack_require__(76);
 __webpack_require__(77);
 __webpack_require__(78);
 __webpack_require__(79);
@@ -2783,7 +2795,6 @@ __webpack_require__(83);
 __webpack_require__(84);
 __webpack_require__(85);
 __webpack_require__(86);
-__webpack_require__(87);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
@@ -3288,29 +3299,11 @@ window.$quickE = _quickE___1.$quickE;
 
 "use strict";
 
-//import { getEditContext, getUserOfEditContext } from "./api";
-//import { instanceEngine, Engine } from "../commands/engine";
-//import { DataEditContext } from "../data-edit-context/data-edit-context";
-//import { UserOfEditContext } from "./user-of-edit-context";
-//import { instanceEngine } from '../commands/engine';
-//import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buildInstanceConfig, buildQuickDialogConfig } from './api';
-//import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-//import { manipulator } from '../contentBlock/manipulate';
-//import { LocalStorageHelper } from './local-storage-helper';
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
 /* 71 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-/***/ }),
-/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3338,7 +3331,7 @@ module_bootstrapper_1.$2sxc._manage = new Manage();
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3382,7 +3375,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3409,7 +3402,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3444,7 +3437,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3474,7 +3467,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports) {
 
 /*
@@ -3575,7 +3568,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3587,7 +3580,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3602,7 +3595,7 @@ $(function () {
 
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3621,7 +3614,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3718,7 +3711,7 @@ Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
 
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3763,7 +3756,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3802,7 +3795,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4034,7 +4027,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4056,7 +4049,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4124,7 +4117,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

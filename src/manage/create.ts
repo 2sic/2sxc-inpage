@@ -3,7 +3,6 @@ import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buil
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { manipulator } from '../contentBlock/manipulate';
 import { LocalStorageHelper } from './local-storage-helper';
-import { EditManager } from './edit-manager';
 
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -27,16 +26,17 @@ export function initInstance(sxc) {
 
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc: SxcInstanceWithInternals) {
+
   let editContext = getEditContext(sxc);
   let userInfo = getUserOfEditContext(editContext);
   let cmdEngine = instanceEngine(sxc, editContext);
 
-  let editManager: EditManager = sxc.manage = {
+  class EditManager {
     //#region Official, public properties and commands, which are stable for use from the outside
     /**
      * run a command - often used in toolbars and custom buttons
      */
-    run: cmdEngine.executeAction,
+    run= cmdEngine.executeAction;
 
     /**
      * Generate a button (an <a>-tag) for one specific toolbar-action.
@@ -44,7 +44,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
      * @param {int} groupIndex - number what button-group it's in'
      * @returns {string} html of a button
      */
-    getButton: (actDef, groupIndex) => twoSxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex),
+    getButton= (actDef, groupIndex) => twoSxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
 
     /**
      * Builds the toolbar and returns it as HTML
@@ -52,35 +52,35 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
      * @param {Object<any>} moreSettings - additional / override settings
      * @returns {string} html of the current toolbar
      */
-    getToolbar: (tbConfig, moreSettings) => twoSxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings),
+    getToolbar= (tbConfig, moreSettings) => twoSxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
     //#endregion official, public properties - everything below this can change at any time
 
     // internal method to find out if it's in edit-mode
-    _isEditMode: () => editContext.Environment.IsEditable,
-    _reloadWithAjax: editContext.ContentGroup.SupportsAjax,
-    _dialogParameters: buildNgDialogParams(sxc, editContext),      // used for various dialogs
-    _instanceConfig: buildInstanceConfig(editContext), // used to configure buttons / toolbars
-    _editContext: editContext,              // metadata necessary to know what/how to edit
-    _quickDialogConfig: buildQuickDialogConfig(editContext),           // used for in-page dialogs
-    _commands: cmdEngine,                        // used to handle the commands for this content-block
-    _user: userInfo,
+    _isEditMode= () => editContext.Environment.IsEditable;
+    _reloadWithAjax= editContext.ContentGroup.SupportsAjax;
+    _dialogParameters= buildNgDialogParams(sxc, editContext);      // used for various dialogs
+    _instanceConfig= buildInstanceConfig(editContext); // used to configure buttons / toolbars
+    _editContext= editContext;              // metadata necessary to know what/how to edit
+    _quickDialogConfig= buildQuickDialogConfig(editContext);           // used for in-page dialogs
+    _commands= cmdEngine;                        // used to handle the commands for this content-block
+    _user= userInfo;
 
     // init this object 
-    init: () => {
+    init= () => {
       // enhance UI in case there are known errors / issues
       if (editContext.error.type)
-        editManager._handleErrors(editContext.error.type, getTag(sxc));
+        this._handleErrors(editContext.error.type, getTag(sxc));
 
       // todo: move this to dialog-handling
       // display the dialog
       let openDialogId: number = LocalStorageHelper.getItemValue<number>('dia-cbid');
       if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
       sessionStorage.removeItem('dia-cbid');
-      editManager.run('layout');
-    },
+      this.run('layout');
+    };
 
     // private: show error when the app-data hasn't been installed yet for this imported-module
-    _handleErrors: (errType, cbTag) => {
+    _handleErrors= (errType, cbTag) => {
       let errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
       let msg = '';
       let toolbar = $("<ul class='sc-menu'></ul>");
@@ -91,16 +91,19 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
       errWrapper.append(msg);
       errWrapper.append(toolbar);
       $(cbTag).append(errWrapper);
-    },
+    };
 
     // change config by replacing the guid, and refreshing dependend sub-objects
-    _updateContentGroupGuid: (newGuid: string) => {
+    _updateContentGroupGuid= (newGuid: string) => {
       editContext.ContentGroup.Guid = newGuid;
-      editManager._instanceConfig = buildInstanceConfig(editContext);
-    },
+      this._instanceConfig = buildInstanceConfig(editContext);
+    };
 
-    _getCbManipulator: () => manipulator(sxc)
+    _getCbManipulator = () => manipulator(sxc);
+
   };
+
+  let editManager = sxc.manage = new EditManager();
 
   editManager.init();
   return editManager;

@@ -92,11 +92,13 @@ function remove(parentId: number, field: string, index: number): any {
     });
 }
 
-export function manipulator(sxc: SxcInstanceWithInternals): any {
+export class Manipulator {
+  create = create;
+  move = move;
+  delete = remove;
+};
+
+export function manipulator(sxc: SxcInstanceWithInternals): Manipulator {
   sxcInstance = sxc;
-  return {
-    create: create,
-    move: move,
-    delete: remove
-  };
+  return new Manipulator();
 }
