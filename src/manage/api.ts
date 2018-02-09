@@ -1,8 +1,8 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { InstanceConfig } from './instance-config';
-import { UserOfEditContext } from './user-of-edit-context';
-import { QucikDialogConfig } from './qucik-dialog-config';
 import { NgDialogParams } from './ng-dialog-params';
+import { QucikDialogConfig } from './qucik-dialog-config';
+import { UserOfEditContext } from './user-of-edit-context';
 
 /**
  * Get a html tag of the current sxc instance
@@ -11,7 +11,7 @@ import { NgDialogParams } from './ng-dialog-params';
  */
 export function getTag(sxci: SxcInstanceWithInternals): any {
   return $(`div[data-cb-id='${sxci.cbid}']`)[0];
-};
+}
 
 /**
  * get the edit-context object (a json object) of the current tag/sxc-instance
@@ -19,9 +19,9 @@ export function getTag(sxci: SxcInstanceWithInternals): any {
  * @return {DataEditContext} edit-context object
  */
 export function getEditContextOfTag(htmlTag: any): DataEditContext {
-  let attr = htmlTag.getAttribute('data-edit-context');
+  const attr = htmlTag.getAttribute('data-edit-context');
   return JSON.parse(attr || '') as DataEditContext;
-};
+}
 
 /**
  * get edit-context info of an sxc-object
@@ -30,7 +30,7 @@ export function getEditContextOfTag(htmlTag: any): DataEditContext {
  */
 export function getEditContext(sxc: SxcInstanceWithInternals): DataEditContext {
   return getEditContextOfTag(getTag(sxc));
-};
+}
 
 /**
  * builds a config object used in the toolbar system
@@ -39,7 +39,7 @@ export function getEditContext(sxc: SxcInstanceWithInternals): DataEditContext {
  */
 export function buildInstanceConfig(editContext: DataEditContext): InstanceConfig {
   return new InstanceConfig(editContext);
-};
+}
 
 /**
  * builds UserOfEditcontext object
@@ -48,7 +48,7 @@ export function buildInstanceConfig(editContext: DataEditContext): InstanceConfi
  */
 export function getUserOfEditContext(editContext: DataEditContext): UserOfEditContext {
   return new UserOfEditContext(editContext);
-};
+}
 
 /**
  * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
@@ -57,10 +57,10 @@ export function getUserOfEditContext(editContext: DataEditContext): UserOfEditCo
  */
 export function buildQuickDialogConfig(editContext: DataEditContext): QucikDialogConfig {
   return new QucikDialogConfig(editContext);
-};
+}
 
 /**
- * get all parameters needed by NG dialogs from an sxc
+ * get all parameters needed by NG dialogues from an sxc
  * @param {SxcInstanceWithInternals} sxc
  * @param {DataEditContext} [editContext]
  * @return {NgDialogParams} special object containing the ng-dialog parameters
@@ -68,4 +68,4 @@ export function buildQuickDialogConfig(editContext: DataEditContext): QucikDialo
 export function buildNgDialogParams(sxc: SxcInstanceWithInternals, editContext: DataEditContext): NgDialogParams {
   if (!editContext) editContext = getEditContext(sxc);
   return new NgDialogParams(sxc, editContext);
-};
+}

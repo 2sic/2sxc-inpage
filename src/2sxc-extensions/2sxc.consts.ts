@@ -12,9 +12,9 @@ twoSxc.c = twoSxc.consts = {
     toolbar: 'toolbar',
     toolbarData: 'data-toolbar',
     settings: 'settings',
-    settingsData: 'data-settings'
+    settingsData: 'data-settings',
   },
-  publishAllowed: 'DraftOptional'
+  publishAllowed: 'DraftOptional',
 };
 // selectors
 let sel = twoSxc.c.sel = {};

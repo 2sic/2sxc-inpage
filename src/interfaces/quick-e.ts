@@ -2,9 +2,9 @@
 interface I$quickE {
   // ReSharper restore InconsistentNaming
   reset: any;
-  //copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
+  // copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
   clipboard: IClipboard;
-  //selectors: Selectors;
+  // selectors: Selectors;
   cmds: any;
   setSecondaryActionsState(state: boolean): void;
   selected: ISelected;
@@ -31,12 +31,12 @@ interface I$quickE {
   nearestMod: any;
   win: any;
   enable: any;
-  //prepareToolbarInDom: Function;
+  // prepareToolbarInDom: Function;
   initPanes: any;
   watchMouse: any;
   start: any;
   toggleParts: any;
-  //btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?:boolean, classes?: string): string;
+  // btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?:boolean, classes?: string): string;
   template: string;
 }
 
@@ -69,7 +69,7 @@ interface IConf {
   enable: boolean;
   innerBlocks: {
     enable: boolean | string | null;
-  },
+  };
   modules: {
     enable: boolean | string | null;
   };

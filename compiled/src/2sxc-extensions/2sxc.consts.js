@@ -13,9 +13,9 @@ module_bootstrapper_1.$2sxc.c = module_bootstrapper_1.$2sxc.consts = {
         toolbar: 'toolbar',
         toolbarData: 'data-toolbar',
         settings: 'settings',
-        settingsData: 'data-settings'
+        settingsData: 'data-settings',
     },
-    publishAllowed: 'DraftOptional'
+    publishAllowed: 'DraftOptional',
 };
 // selectors
 var sel = module_bootstrapper_1.$2sxc.c.sel = {};
@@ -29,5 +29,5 @@ twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
     return t;
 }, {});
 */
-//# sourceMappingURL=2sxc.consts.js.map 
+//# sourceMappingURL=2sxc.consts.js.map
 //# sourceMappingURL=2sxc.consts.js.map

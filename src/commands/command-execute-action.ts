@@ -1,8 +1,8 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { Settings } from './settings';
-import { prepareToAddContent } from '../contentBlock/templates';
+﻿import { prepareToAddContent } from '../contentBlock/templates';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
+import { Settings } from './settings';
 
 // ToDo: remove dead code
 export function commandExecuteAction(sxc: SxcInstanceWithInternals, editContext: DataEditContext, nameOrSettings: any, eventOrSettings?: any, event?: any) {
@@ -18,7 +18,7 @@ export function commandExecuteAction(sxc: SxcInstanceWithInternals, editContext:
   // check if name is name (string) or object (settings)
   settings = (typeof nameOrSettings === 'string') ?
     Object.assign(settings || {}, {
-      "action": nameOrSettings
+      action: nameOrSettings,
     }) // place the name as an action-name into a command-object
     :
     nameOrSettings;
@@ -27,8 +27,8 @@ export function commandExecuteAction(sxc: SxcInstanceWithInternals, editContext:
   settings = Object.assign({}, conf, settings) as Settings; // merge conf & settings, but settings has higher priority
 
   if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
-  if (!settings.code) settings.code = (settings: Settings, event: any, sxc: SxcInstanceWithInternals) => {
-    return commandOpenNgDialog(sxc, editContext, settings, event);
+  if (!settings.code) settings.code = (settingsParam: Settings, eventParam: any, sxcParam: SxcInstanceWithInternals) => {
+    return commandOpenNgDialog(sxcParam, editContext, settingsParam, eventParam);
   }; // decide what action to perform
 
   // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences

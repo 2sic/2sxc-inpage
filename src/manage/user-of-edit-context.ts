@@ -1,4 +1,4 @@
-﻿import { DataEditContext } from "../data-edit-context/data-edit-context";
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 
 export class UserOfEditContext {
   canDesign: boolean;

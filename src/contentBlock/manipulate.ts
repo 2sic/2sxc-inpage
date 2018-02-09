@@ -1,6 +1,6 @@
-﻿import { ManipulateParams } from './manipulate-params';
-import { translate } from '../translate/2sxc.translate';
+﻿import { translate } from '../translate/2sxc.translate';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { ManipulateParams } from './manipulate-params';
 
 /**
  * contains commands to create/move/delete a contentBlock in a page
@@ -24,26 +24,26 @@ function create(parentId: number, fieldName: string, index: number, appName: str
   const cblockList = listTag.find('div.sc-content-block');
   if (index > cblockList.length) index = cblockList.length; // make sure index is never greater than the amount of items
 
-  let params: ManipulateParams = {
+  const params: ManipulateParams = {
     parentId: parentId,
     field: fieldName,
     sortOrder: index,
     app: appName,
-    guid: newGuid
+    guid: newGuid,
   };
 
   return sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
-    .then(result => {
+    .then((result) => {
       const newTag = $(result); // prepare tag for inserting
 
       // should I add it to a specific position...
       if (cblockList.length > 0 && index > 0)
         $(cblockList[cblockList.length > index - 1 ? index - 1 : cblockList.length - 1])
           .after(newTag);
-      else //...or just at the beginning?
+      else // ...or just at the beginning?
         listTag.prepend(newTag);
 
-      //let sxcNew = twoSxc(newTag);
+      // let sxcNew = twoSxc(newTag);
       twoSxc._toolbarManager.buildToolbars(newTag);
     });
 }
@@ -61,7 +61,7 @@ function move(parentId: number, field: string, indexFrom: number, indexTo: numbe
     parentId: parentId,
     field: field,
     indexFrom: indexFrom,
-    indexTo: indexTo
+    indexTo: indexTo,
   };
 
   // todo: need sxc!
@@ -96,7 +96,7 @@ export class Manipulator {
   create = create;
   move = move;
   delete = remove;
-};
+}
 
 export function manipulator(sxc: SxcInstanceWithInternals): Manipulator {
   sxcInstance = sxc;

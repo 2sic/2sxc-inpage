@@ -6,8 +6,8 @@ import { saveTemplate } from './web-api-promises';
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
- * @param {} sxc 
- * @returns {} 
+ * @param {} sxc
+ * @returns {}
  */
 export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList: boolean) {
   const isCreated: boolean = sxc.manage._editContext.ContentGroup.IsCreated;
@@ -29,12 +29,12 @@ export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList
 
 /**
  * Update the template and adjust UI accordingly.
- * @param {*} sxc 
- * @param {*} templateId 
- * @param {*} forceCreate 
+ * @param {*} sxc
+ * @param {*} templateId
+ * @param {*} forceCreate
  */
 export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean) {
-  let contentGroup: ContentGroup = sxc.manage._editContext.ContentGroup;
+  const contentGroup: ContentGroup = sxc.manage._editContext.ContentGroup;
   const showingAjaxPreview: boolean = $2sxc._toolbarManager.isDisabled(sxc);
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
@@ -64,10 +64,10 @@ export function updateTemplate(sxc: SxcInstanceWithInternals, templateId: number
 
       if (!data) return;
 
-      // fixes a special case where the guid is given with quotes (dependes on version of angularjs) issue #532
+      // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
       const newGuid: string = data.replace(/[\",\']/g, '');
 
-      if (console) console.log('created content group {' + newGuid + '}');
+      if (console) console.log(`created content group {${newGuid}}`);
       sxc.manage._updateContentGroupGuid(newGuid);
     });
 }

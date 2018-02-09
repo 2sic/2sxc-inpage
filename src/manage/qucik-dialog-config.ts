@@ -1,6 +1,7 @@
-﻿import { DataEditContext } from "../data-edit-context/data-edit-context";
-import { UserOfEditContext } from "./user-of-edit-context";
-import { getUserOfEditContext } from "./api";
+﻿import { getUserOfEditContext } from './api';
+import { UserOfEditContext } from './user-of-edit-context';
+
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 
 export class QucikDialogConfig {
   appId: number;
@@ -20,8 +21,8 @@ export class QucikDialogConfig {
     this.isList = editContext.ContentGroup.IsList;
     this.templateId = editContext.ContentGroup.TemplateId;
     this.contentTypeId = editContext.ContentGroup.ContentTypeName;
-    this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-goup
+    this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
     this.user = getUserOfEditContext(editContext);
-    this.supportsAjax = editContext.ContentGroup.SupportsAjax
+    this.supportsAjax = editContext.ContentGroup.SupportsAjax;
   }
 }

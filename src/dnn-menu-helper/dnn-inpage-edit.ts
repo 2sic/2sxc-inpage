@@ -24,6 +24,6 @@ export class ActionMenuMapper {
   develop = () => { this.run('template-develop'); };
 }
 
-window.$2sxcActionMenuMapper = (moduleId:number) => {
+window.$2sxcActionMenuMapper = (moduleId: number) => {
   return new ActionMenuMapper(moduleId);
 };

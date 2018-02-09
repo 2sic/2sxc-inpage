@@ -20,7 +20,7 @@ export function makeDef(name: string, translateKey: string, icon: string, uiOnly
     title: 'Toolbar.' + translateKey,
     icon: 'icon-sxc-' + icon,
     uiActionOnly: uiOnly,
-    partOfPage: partOfPage
+    partOfPage: partOfPage,
   };
 
   return Object.assign(newDefinition, more) as Definition;

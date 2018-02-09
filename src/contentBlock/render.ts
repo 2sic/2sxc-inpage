@@ -1,14 +1,14 @@
-﻿import { reset } from '../quick-edit/$quickE.start';
+﻿import { getTag } from '../manage/api';
 import { hide } from '../quick-dialog/quick-dialog';
-import { getTag } from '../manage/api';
+import { reset } from '../quick-edit/$quickE.start';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { _contentBlock } from './main-content-block';
 import { getPreviewWithTemplate } from './web-api-promises';
 
 /*
  * this is the content block manager in the browser
- * 
- * A Content Block is a standalone unit of content, with it's own definition of
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
  * 1. content items
  * 2. template
  * + some other stuff
@@ -18,11 +18,11 @@ import { getPreviewWithTemplate } from './web-api-promises';
 
 /**
  * ajax update/replace the content of the content-block
- * optionally also initialze the toolbar (if not just preview)
- * @param {Object<>} sxc 
- * @param {string} newContent 
- * @param {boolean} justPreview 
- * @returns {} 
+ * optionally also initialize the toolbar (if not just preview)
+ * @param {Object<>} sxc
+ * @param {string} newContent
+ * @param {boolean} justPreview
+ * @returns {}
  */
 
 function replaceCb(sxc: SxcInstanceWithInternals, newContent: any, justPreview: boolean): void {
@@ -39,17 +39,17 @@ function replaceCb(sxc: SxcInstanceWithInternals, newContent: any, justPreview: 
   } catch (e) {
     console.log('Error while rendering template:', e);
   }
-};
+}
 
 /**
  * Show a message where the content of a module should be - usually as placeholder till something else happens
- * @param {object} sxc 
- * @param {string} newContent 
+ * @param {object} sxc
+ * @param {string} newContent
  * @returns {} - nothing
  */
 export function showMessage(sxc: SxcInstanceWithInternals, newContent: any): void {
   $(getTag(sxc)).html(newContent);
-};
+}
 
 /**
  * ajax-call, then replace
@@ -59,9 +59,9 @@ export function showMessage(sxc: SxcInstanceWithInternals, newContent: any): voi
  */
 export function ajaxLoad(sxc: SxcInstanceWithInternals, alternateTemplateId: number, justPreview: boolean): any {
   return getPreviewWithTemplate(sxc, alternateTemplateId)
-    .then(result => replaceCb(sxc, result, justPreview))
+    .then((result) => replaceCb(sxc, result, justPreview))
     .then(reset); // reset quick-edit, because the config could have changed
-};
+}
 
 /**
  * this one assumes a replace / change has already happened, but now must be finalized...
@@ -81,8 +81,9 @@ export function reloadAndReInitialize(sxc: SxcInstanceWithInternals, forceAjax?:
       if (window.dnn_tabVersioningEnabled) // this only exists in evoq or on new DNNs with tabVersioning
         try {
           window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
+        } catch (e) {
+          // sink
         }
-        catch (e) { }
 
       // maybe check if already publish
       // compare to HTML module
@@ -92,4 +93,4 @@ export function reloadAndReInitialize(sxc: SxcInstanceWithInternals, forceAjax?:
       // must check for side-effects, which would need the manager to re-build the configuration
       hide();
     });
-};
+}

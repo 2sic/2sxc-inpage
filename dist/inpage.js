@@ -248,9 +248,9 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var instance_config_1 = __webpack_require__(22);
-var user_of_edit_context_1 = __webpack_require__(23);
+var ng_dialog_params_1 = __webpack_require__(23);
 var qucik_dialog_config_1 = __webpack_require__(24);
-var ng_dialog_params_1 = __webpack_require__(25);
+var user_of_edit_context_1 = __webpack_require__(25);
 /**
  * Get a html tag of the current sxc instance
  * @param {SxcInstanceWithInternals} sxci
@@ -260,7 +260,6 @@ function getTag(sxci) {
     return $("div[data-cb-id='" + sxci.cbid + "']")[0];
 }
 exports.getTag = getTag;
-;
 /**
  * get the edit-context object (a json object) of the current tag/sxc-instance
  * @param {any} htmlTag
@@ -271,7 +270,6 @@ function getEditContextOfTag(htmlTag) {
     return JSON.parse(attr || '');
 }
 exports.getEditContextOfTag = getEditContextOfTag;
-;
 /**
  * get edit-context info of an sxc-object
  * @param {SxcInstanceWithInternals} sxc
@@ -281,7 +279,6 @@ function getEditContext(sxc) {
     return getEditContextOfTag(getTag(sxc));
 }
 exports.getEditContext = getEditContext;
-;
 /**
  * builds a config object used in the toolbar system
  * @param {DataEditContext} editContext
@@ -291,7 +288,6 @@ function buildInstanceConfig(editContext) {
     return new instance_config_1.InstanceConfig(editContext);
 }
 exports.buildInstanceConfig = buildInstanceConfig;
-;
 /**
  * builds UserOfEditcontext object
  * @param {DataEditContext} editContext
@@ -301,7 +297,6 @@ function getUserOfEditContext(editContext) {
     return new user_of_edit_context_1.UserOfEditContext(editContext);
 }
 exports.getUserOfEditContext = getUserOfEditContext;
-;
 /**
  * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
  * @param {DataEditContext} editContext
@@ -311,9 +306,8 @@ function buildQuickDialogConfig(editContext) {
     return new qucik_dialog_config_1.QucikDialogConfig(editContext);
 }
 exports.buildQuickDialogConfig = buildQuickDialogConfig;
-;
 /**
- * get all parameters needed by NG dialogs from an sxc
+ * get all parameters needed by NG dialogues from an sxc
  * @param {SxcInstanceWithInternals} sxc
  * @param {DataEditContext} [editContext]
  * @return {NgDialogParams} special object containing the ng-dialog parameters
@@ -324,7 +318,6 @@ function buildNgDialogParams(sxc, editContext) {
     return new ng_dialog_params_1.NgDialogParams(sxc, editContext);
 }
 exports.buildNgDialogParams = buildNgDialogParams;
-;
 
 
 /***/ }),
@@ -602,16 +595,16 @@ function watchForResize(keepWatching) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE_start_1 = __webpack_require__(26);
-var quick_dialog_1 = __webpack_require__(4);
 var api_1 = __webpack_require__(2);
+var quick_dialog_1 = __webpack_require__(4);
+var _quickE_start_1 = __webpack_require__(26);
 var module_bootstrapper_1 = __webpack_require__(0);
 var main_content_block_1 = __webpack_require__(10);
 var web_api_promises_1 = __webpack_require__(11);
 /*
  * this is the content block manager in the browser
  *
- * A Content Block is a standalone unit of content, with it's own definition of
+ * A Content Block is a stand alone unit of content, with it's own definition of
  * 1. content items
  * 2. template
  * + some other stuff
@@ -620,7 +613,7 @@ var web_api_promises_1 = __webpack_require__(11);
  */
 /**
  * ajax update/replace the content of the content-block
- * optionally also initialze the toolbar (if not just preview)
+ * optionally also initialize the toolbar (if not just preview)
  * @param {Object<>} sxc
  * @param {string} newContent
  * @param {boolean} justPreview
@@ -640,7 +633,6 @@ function replaceCb(sxc, newContent, justPreview) {
         console.log('Error while rendering template:', e);
     }
 }
-;
 /**
  * Show a message where the content of a module should be - usually as placeholder till something else happens
  * @param {object} sxc
@@ -651,7 +643,6 @@ function showMessage(sxc, newContent) {
     $(api_1.getTag(sxc)).html(newContent);
 }
 exports.showMessage = showMessage;
-;
 /**
  * ajax-call, then replace
  * @param sxc
@@ -664,7 +655,6 @@ function ajaxLoad(sxc, alternateTemplateId, justPreview) {
         .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
 }
 exports.ajaxLoad = ajaxLoad;
-;
 /**
  * this one assumes a replace / change has already happened, but now must be finalized...
  * @param sxc
@@ -683,7 +673,9 @@ function reloadAndReInitialize(sxc, forceAjax, preview) {
             try {
                 window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
             }
-            catch (e) { }
+            catch (e) {
+                // sink
+            }
         // maybe check if already publish
         // compare to HTML module
         // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
@@ -693,7 +685,6 @@ function reloadAndReInitialize(sxc, forceAjax, preview) {
     });
 }
 exports.reloadAndReInitialize = reloadAndReInitialize;
-;
 
 
 /***/ }),
@@ -763,10 +754,10 @@ function updateTemplate(sxc, templateId, forceCreate) {
             return alert('error - result not ok, was not able to create ContentGroup');
         if (!data)
             return;
-        // fixes a special case where the guid is given with quotes (dependes on version of angularjs) issue #532
+        // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
         var newGuid = data.replace(/[\",\']/g, '');
         if (console)
-            console.log('created content group {' + newGuid + '}');
+            console.log("created content group {" + newGuid + "}");
         sxc.manage._updateContentGroupGuid(newGuid);
     });
 }
@@ -780,8 +771,8 @@ exports.updateTemplate = updateTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = __webpack_require__(13);
 var module_bootstrapper_1 = __webpack_require__(0);
+var create_1 = __webpack_require__(13);
 function commandInitializeInstanceCommands(editContext) {
     var cg = editContext.ContentGroup;
     return create_1.create({
@@ -792,11 +783,10 @@ function commandInitializeInstanceCommands(editContext) {
         queryId: cg.QueryId,
         appResourcesId: cg.AppResourcesId,
         appSettingsId: cg.AppSettingsId,
-        allowPublish: editContext.ContentBlock.VersioningRequirements === module_bootstrapper_1.$2sxc.c.publishAllowed
+        allowPublish: editContext.ContentBlock.VersioningRequirements === module_bootstrapper_1.$2sxc.c.publishAllowed,
     });
 }
 exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
-;
 
 
 /***/ }),
@@ -1108,7 +1098,7 @@ var templates_1 = __webpack_require__(6);
 /*
  * this is a content block in the browser
  *
- * A Content Block is a standalone unit of content, with it's own definition of
+ * A Content Block is a stand alone unit of content, with it's own definition of
  * 1. content items
  * 2. template
  * + some other stuff
@@ -1148,7 +1138,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /*
  * this is a content block in the browser
  *
- * A Content Block is a standalone unit of content, with it's own definition of
+ * A Content Block is a stand alone unit of content, with it's own definition of
  * 1. content items
  * 2. template
  * + some other stuff
@@ -1156,7 +1146,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * it should be able to render itself
  */
 //#region functions working only with what they are given
-// 2017-08-27 2dm: I'm working on cleaning up this code, and an important part 
+// 2017-08-27 2dm: I'm working on cleaning up this code, and an important part
 // is to have code which doesn't use old state (like object-properties initialized earlier)
 // extracting these methods is part of the work
 /**
@@ -1166,12 +1156,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @returns {promise}
  */
 // 2017-09-02 2dm removed, deprecated, it's not stored on the server any more
-//cbm.setTemplateChooserState = function(sxc, state) {
+// cbm.setTemplateChooserState = function(sxc, state) {
 //    return sxc.webApi.get({
 //        url: "view/module/SetTemplateChooserState",
 //        params: { state: state }
 //    });
-//};
+// };
 /**
  * Save the template configuration for this instance
  * @param {object} sxc
@@ -1183,15 +1173,14 @@ function saveTemplate(sxc, templateId, forceCreateContentGroup) {
     var params = {
         templateId: templateId,
         forceCreateContentGroup: forceCreateContentGroup,
-        newTemplateChooserState: false
+        newTemplateChooserState: false,
     };
     return sxc.webApi.get({
         url: 'view/module/savetemplateid',
-        params: params
+        params: params,
     });
 }
 exports.saveTemplate = saveTemplate;
-;
 /**
  * Retrieve the preview from the web-api
  * @param {object} sxc
@@ -1206,16 +1195,15 @@ function getPreviewWithTemplate(sxc, templateId) {
         lang: ec.Language.Current,
         cbisentity: ec.ContentBlock.IsEntity,
         cbid: ec.ContentBlock.Id,
-        originalparameters: JSON.stringify(ec.Environment.parameters)
+        originalparameters: JSON.stringify(ec.Environment.parameters),
     };
     return sxc.webApi.get({
         url: 'view/module/rendertemplate',
         params: params,
-        dataType: 'html'
+        dataType: 'html',
     });
 }
 exports.getPreviewWithTemplate = getPreviewWithTemplate;
-;
 //#endregion
 
 
@@ -1253,10 +1241,10 @@ exports.commandCreate = commandCreate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var make_def_1 = __webpack_require__(31);
+var actions_1 = __webpack_require__(31);
+var item_commands_1 = __webpack_require__(32);
 var _2sxc_translate_1 = __webpack_require__(3);
-var actions_1 = __webpack_require__(32);
-var item_commands_1 = __webpack_require__(33);
+var make_def_1 = __webpack_require__(33);
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -1278,7 +1266,6 @@ var act = {};
 function addDef(def) {
     act[def.name] = def;
 }
-;
 function create(cmdSpecs) {
     var enableTools = cmdSpecs.canDesign;
     var isContent = cmdSpecs.isContent;
@@ -1289,11 +1276,11 @@ function create(cmdSpecs) {
         params: { mode: 'edit' },
         showCondition: function (settings, modConfig) {
             return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
-        }
+        },
     }));
     // new is a dialog to add something, and will not add if cancelled
     // new can also be used for mini-toolbars which just add an entity not attached to a module
-    // in that case it's essential to add a contentType like 
+    // in that case it's essential to add a contentType like
     // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
     addDef(make_def_1.makeDef('new', 'New', 'plus', false, true, {
         params: { mode: 'new' },
@@ -1305,7 +1292,7 @@ function create(cmdSpecs) {
             // todo - should refactor this to be a toolbarManager.contentBlock command
             var settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 });
             sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
-        }
+        },
     }));
     // add brings no dialog, just add an empty item
     addDef(make_def_1.makeDef('add', 'AddDemo', 'plus-circled', false, true, {
@@ -1314,7 +1301,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             actions_1.addItem(sxc, settings.sortOrder + 1);
-        }
+        },
     }));
     // create a metadata toolbar
     addDef(make_def_1.makeDef('metadata', 'Metadata', 'tag', false, false, {
@@ -1331,10 +1318,10 @@ function create(cmdSpecs) {
         configureCommand: function (cmd) {
             var itm = {
                 Title: 'EditFormTitle.Metadata',
-                Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+                Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata),
             };
             Object.assign(cmd.items[0], itm);
-        }
+        },
     }));
     // remove an item from the placeholder (usually for lists)
     addDef(make_def_1.makeDef('remove', 'Remove', 'minus-circled', false, true, {
@@ -1344,10 +1331,10 @@ function create(cmdSpecs) {
         code: function (settings, event, sxc) {
             if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
                 actions_1.removeFromList(sxc, settings.sortOrder);
-                //sxc.manage.contentBlock
+                // sxc.manage.contentBlock
                 //    .removeFromList(settings.sortOrder);
             }
-        }
+        },
     }));
     // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
     addDef(make_def_1.makeDef('delete', 'Delete', 'cancel', true, false, {
@@ -1361,7 +1348,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             item_commands_1.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
-        }
+        },
     }));
     addDef(make_def_1.makeDef('moveup', 'MoveUp', 'move-up', false, true, {
         showCondition: function (settings, modConfig) {
@@ -1369,7 +1356,7 @@ function create(cmdSpecs) {
         },
         code: function (settings, event, sxc) {
             actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
-        }
+        },
     }));
     addDef(make_def_1.makeDef('movedown', 'MoveDown', 'move-down', false, true, {
         showCondition: function (settings, modConfig) {
@@ -1379,12 +1366,12 @@ function create(cmdSpecs) {
         code: function (settings, event, sxc) {
             // TODO: make sure index is never greater than the amount of items
             actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
-        }
+        },
     }));
     addDef(make_def_1.makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
         showCondition: function (settings, modConfig) {
             return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-        }
+        },
     }));
     // todo: shouldn't be available if changes are not allowed
     addDef(make_def_1.makeDef('publish', 'Unpublished', 'eye-off', false, false, {
@@ -1403,12 +1390,12 @@ function create(cmdSpecs) {
             var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
             var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
             return actions_1.publish(sxc, part, index);
-        }
+        },
     }));
     addDef(make_def_1.makeDef('replace', 'Replace', 'replace', false, true, {
         showCondition: function (settings, modConfig) {
             return settings.useModuleList;
-        }
+        },
     }));
     //#region app-actions: app-settings, app-resources
     addDef(make_def_1.makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
@@ -1425,7 +1412,7 @@ function create(cmdSpecs) {
         },
         dynamicClasses: function (settings) {
             return cmdSpecs.appSettingsId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
-        }
+        },
     }));
     addDef(make_def_1.makeDef('app-resources', 'AppResources', 'language', true, false, {
         dialog: 'edit',
@@ -1441,26 +1428,26 @@ function create(cmdSpecs) {
         },
         dynamicClasses: function (settings) {
             return cmdSpecs.appResourcesId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
-        }
+        },
     }));
     //#endregion
     //#region app & zone
     addDef(make_def_1.makeDef('app', 'App', 'settings', true, false, {
         showCondition: function (settings, modConfig) {
             return enableTools;
-        }
+        },
     }));
     addDef(make_def_1.makeDef('zone', 'Zone', 'manage', true, false, {
         showCondition: function (settings, modConfig) {
             return enableTools;
-        }
+        },
     }));
     //#endregion
     //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
     addDef(make_def_1.makeDef('contenttype', 'ContentType', 'fields', true, false, {
         showCondition: function (settings, modConfig) {
             return enableTools;
-        }
+        },
     }));
     addDef(make_def_1.makeDef('contentitems', 'ContentItems', 'table', true, false, {
         params: { contentTypeName: cmdSpecs.contentTypeId },
@@ -1475,14 +1462,14 @@ function create(cmdSpecs) {
             //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
             if (cmd.settings.filters) {
                 var enc = JSON.stringify(cmd.settings.filters);
-                // special case - if it contains a "+" character, this won't survive 
-                // encoding through the hash as it's always replaced with a space, even if it would be preconverted to %2b
+                // special case - if it contains a "+" character, this won't survive
+                // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b
                 // so we're base64 encoding it - see https://github.com/2sic/2sxc/issues/1061
                 if (enc.indexOf('+') > -1)
                     enc = btoa(enc);
                 cmd.params.filters = enc;
             }
-        }
+        },
     }));
     addDef(make_def_1.makeDef('template-develop', 'Develop', 'code', true, false, {
         newWindow: true,
@@ -1492,7 +1479,7 @@ function create(cmdSpecs) {
         },
         configureCommand: function (cmd) {
             cmd.items = [{ EntityId: cmdSpecs.templateId }];
-        }
+        },
     }));
     addDef(make_def_1.makeDef('template-query', 'QueryEdit', 'filter', true, false, {
         dialog: 'pipeline-designer',
@@ -1507,7 +1494,7 @@ function create(cmdSpecs) {
         },
         dynamicClasses: function (settings) {
             return cmdSpecs.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
-        }
+        },
     }));
     addDef(make_def_1.makeDef('template-settings', 'TemplateSettings', 'sliders', true, false, {
         dialog: 'edit',
@@ -1516,30 +1503,29 @@ function create(cmdSpecs) {
         },
         configureCommand: function (cmd) {
             cmd.items = [{ EntityId: cmdSpecs.templateId }];
-        }
+        },
     }));
     //#endregion template commands
     //#region custom code buttons
     addDef(make_def_1.makeDef('custom', 'Custom', 'bomb', true, false, {
         code: function (settings, event, sxc) {
-            var fn;
             console.log('custom action with code - BETA feature, may change');
             if (!settings.customCode) {
                 console.warn('custom code action, but no onclick found to run', settings);
                 return;
             }
             try {
-                fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
+                var fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
                 fn(settings, event, sxc);
             }
             catch (err) {
                 console.error('error in custom button-code: ', settings);
             }
-        }
+        },
     }));
     //#endregion
     addDef(make_def_1.makeDef('layout', 'ChangeLayout', 'glasses', true, true, {
-        inlineWindow: true
+        inlineWindow: true,
     }));
     addDef(make_def_1.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
         code: function (settings, event, sxc) {
@@ -1551,17 +1537,16 @@ function create(cmdSpecs) {
             fullMenu.removeClass('group-' + oldState)
                 .addClass('group-' + newState)
                 .attr('data-state', newState);
-        }
+        },
     }));
     // show the version dialog
     addDef(make_def_1.makeDef('item-history', 'ItemHistory', 'clock', true, false, {
         inlineWindow: true,
-        fullScreen: true
+        fullScreen: true,
     }));
     return act;
 }
 exports.create = create;
-;
 
 
 /***/ }),
@@ -1571,10 +1556,10 @@ exports.create = create;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_link_to_ng_dialog_1 = __webpack_require__(15);
 var render_1 = __webpack_require__(5);
 var quick_dialog_1 = __webpack_require__(4);
 var module_bootstrapper_1 = __webpack_require__(0);
+var command_link_to_ng_dialog_1 = __webpack_require__(15);
 /**
  * open a new dialog of the angular-ui
  * @param settings
@@ -1633,11 +1618,11 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_initialize_instance_commands_1 = __webpack_require__(7);
 var command_create_1 = __webpack_require__(12);
+var command_execute_action_1 = __webpack_require__(30);
+var command_initialize_instance_commands_1 = __webpack_require__(7);
 var command_link_to_ng_dialog_1 = __webpack_require__(15);
 var command_open_ng_dialog_1 = __webpack_require__(14);
-var command_execute_action_1 = __webpack_require__(30);
 var Engine = /** @class */ (function () {
     function Engine(sxc, editContext) {
         var _this = this;
@@ -1669,7 +1654,6 @@ function instanceEngine(sxc, editContext) {
     return new Engine(sxc, editContext);
 }
 exports.instanceEngine = instanceEngine;
-;
 
 
 /***/ }),
@@ -1930,14 +1914,29 @@ exports.InstanceConfig = InstanceConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var UserOfEditContext = /** @class */ (function () {
-    function UserOfEditContext(editContext) {
-        this.canDesign = editContext.User.CanDesign;
-        this.canDevelop = editContext.User.CanDesign;
+var api_1 = __webpack_require__(2);
+var NgDialogParams = /** @class */ (function () {
+    function NgDialogParams(sxc, editContext) {
+        this.zoneId = editContext.ContentGroup.ZoneId;
+        this.appId = editContext.ContentGroup.AppId;
+        this.tid = editContext.Environment.PageId;
+        this.mid = editContext.Environment.InstanceId;
+        this.cbid = sxc.cbid;
+        this.lang = editContext.Language.Current;
+        this.langpri = editContext.Language.Primary;
+        this.langs = JSON.stringify(editContext.Language.All);
+        this.portalroot = editContext.Environment.WebsiteUrl;
+        this.websiteroot = editContext.Environment.SxcRootUrl;
+        this.partOfPage = editContext.ContentBlock.PartOfPage;
+        // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+        this.publishing = editContext.ContentBlock.VersioningRequirements;
+        // todo= probably move the user into the dashboard info
+        this.user = api_1.getUserOfEditContext(editContext);
+        this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
     }
-    return UserOfEditContext;
+    return NgDialogParams;
 }());
-exports.UserOfEditContext = UserOfEditContext;
+exports.NgDialogParams = NgDialogParams;
 
 
 /***/ }),
@@ -1956,7 +1955,7 @@ var QucikDialogConfig = /** @class */ (function () {
         this.isList = editContext.ContentGroup.IsList;
         this.templateId = editContext.ContentGroup.TemplateId;
         this.contentTypeId = editContext.ContentGroup.ContentTypeName;
-        this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-goup
+        this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
         this.user = api_1.getUserOfEditContext(editContext);
         this.supportsAjax = editContext.ContentGroup.SupportsAjax;
     }
@@ -1972,29 +1971,14 @@ exports.QucikDialogConfig = QucikDialogConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(2);
-var NgDialogParams = /** @class */ (function () {
-    function NgDialogParams(sxc, editContext) {
-        this.zoneId = editContext.ContentGroup.ZoneId;
-        this.appId = editContext.ContentGroup.AppId;
-        this.tid = editContext.Environment.PageId;
-        this.mid = editContext.Environment.InstanceId;
-        this.cbid = sxc.cbid;
-        this.lang = editContext.Language.Current;
-        this.langpri = editContext.Language.Primary;
-        this.langs = JSON.stringify(editContext.Language.All);
-        this.portalroot = editContext.Environment.WebsiteUrl;
-        this.websiteroot = editContext.Environment.SxcRootUrl;
-        this.partOfPage = editContext.ContentBlock.PartOfPage;
-        //versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-        this.publishing = editContext.ContentBlock.VersioningRequirements;
-        // todo= probably move the user into the dashboard info
-        this.user = api_1.getUserOfEditContext(editContext);
-        this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
+var UserOfEditContext = /** @class */ (function () {
+    function UserOfEditContext(editContext) {
+        this.canDesign = editContext.User.CanDesign;
+        this.canDevelop = editContext.User.CanDesign;
     }
-    return NgDialogParams;
+    return UserOfEditContext;
 }());
-exports.NgDialogParams = NgDialogParams;
+exports.UserOfEditContext = UserOfEditContext;
 
 
 /***/ }),
@@ -2188,14 +2172,20 @@ var Command = /** @class */ (function () {
                     Guid: guid,
                     Index: index,
                     Part: part,
-                    Add: isAdd
+                    Add: isAdd,
                 },
-                Title: _2sxc_translate_1.translate(sectionLanguageKey)
+                Title: _2sxc_translate_1.translate(sectionLanguageKey),
             });
         };
         // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
         this.addContentGroupItemSetsToEditList = function (withPresentation) {
-            var isContentAndNotHeader = (_this.settings.sortOrder !== -1), index = isContentAndNotHeader ? _this.settings.sortOrder : 0, prefix = isContentAndNotHeader ? '' : 'List', cTerm = prefix + 'Content', pTerm = prefix + 'Presentation', isAdd = _this.settings.action === 'new', groupId = _this.settings.contentGroupId;
+            var isContentAndNotHeader = (_this.settings.sortOrder !== -1);
+            var index = isContentAndNotHeader ? _this.settings.sortOrder : 0;
+            var prefix = isContentAndNotHeader ? '' : 'List';
+            var cTerm = prefix + 'Content';
+            var pTerm = prefix + 'Presentation';
+            var isAdd = _this.settings.action === 'new';
+            var groupId = _this.settings.contentGroupId;
             _this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, "EditFormTitle." + cTerm);
             if (withPresentation)
                 _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, "EditFormTitle." + pTerm);
@@ -2208,7 +2198,8 @@ var Command = /** @class */ (function () {
             //#region steps for all actions: prefill, serialize, open-dialog
             // when doing new, there may be a prefill in the link to initialize the new item
             if (_this.settings.prefill) {
-                for (var i = 0; i < _this.items.length; i++) {
+                for (var _i = 0, _a = _this.items.length; _i < _a.length; _i++) {
+                    var i = _a[_i];
                     _this.items[i].Prefill = _this.settings.prefill;
                 }
             }
@@ -2229,7 +2220,7 @@ var Command = /** @class */ (function () {
         this.settings = settings;
         this.items = settings.items || []; // use predefined or create empty array
         this.params = Object.assign({
-            dialog: settings.dialog || settings.action // the variable used to name the dialog changed in the history of 2sxc from action to dialog
+            dialog: settings.dialog || settings.action,
         }, settings.params);
     }
     return Command;
@@ -2258,7 +2249,7 @@ function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings,
     // check if name is name (string) or object (settings)
     settings = (typeof nameOrSettings === 'string') ?
         Object.assign(settings || {}, {
-            "action": nameOrSettings
+            action: nameOrSettings,
         }) // place the name as an action-name into a command-object
         :
             nameOrSettings;
@@ -2267,8 +2258,8 @@ function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings,
     if (!settings.dialog)
         settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
     if (!settings.code)
-        settings.code = function (settings, event, sxc) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, editContext, settings, event);
+        settings.code = function (settingsParam, eventParam, sxcParam) {
+            return command_open_ng_dialog_1.commandOpenNgDialog(sxcParam, editContext, settingsParam, eventParam);
         }; // decide what action to perform
     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
     var origEvent = event || window.event;
@@ -2283,6 +2274,128 @@ exports.commandExecuteAction = commandExecuteAction;
 
 /***/ }),
 /* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var render_1 = __webpack_require__(5);
+/*
+ * this is a content block in the browser
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ */
+/**
+ * internal helper, to do something and reload the content block
+ * @param sxc
+ * @param url
+ * @param params
+ * @returns {}
+ */
+function getAndReload(sxc, url, params) {
+    return sxc.webApi.get({
+        url: url,
+        params: params,
+    }).then(function () { render_1.reloadAndReInitialize(sxc); });
+}
+/**
+ * remove an item from a list, then reload
+ * @param {} sxc
+ * @param {} sortOrder
+ * @returns {}
+ */
+function removeFromList(sxc, sortOrder) {
+    return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
+}
+exports.removeFromList = removeFromList;
+/**
+ * change the order of an item in a list, then reload
+ * @param {} sxc
+ * @param {} initOrder
+ * @param {} newOrder
+ * @returns {}
+ */
+function changeOrder(sxc, initOrder, newOrder) {
+    return getAndReload(sxc, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
+}
+exports.changeOrder = changeOrder;
+/**
+ * add an item to the list at this position
+ * @param {} sxc
+ * @param {} sortOrder
+ * @returns {}
+ */
+function addItem(sxc, sortOrder) {
+    return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
+}
+exports.addItem = addItem;
+/**
+ * set a content-item in this block to published, then reload
+ * @param {} sxc
+ * @param {} part
+ * @param {} sortOrder
+ * @returns {}
+ */
+function publish(sxc, part, sortOrder) {
+    return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
+}
+exports.publish = publish;
+/**
+ * publish an item using it's ID
+ * @param {} sxc
+ * @param {} entityId
+ * @returns {}
+ */
+function publishId(sxc, entityId) {
+    return getAndReload(sxc, 'view/module/publish', { id: entityId });
+}
+exports.publishId = publishId;
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = __webpack_require__(3);
+/**
+ * this enhances the $2sxc client controller with stuff only needed when logged in
+ */
+// #region contentItem Commands
+exports.contentItems = {
+    // delete command - try to really delete a content-item
+    delete: function (sxc, itemId, itemGuid, itemTitle) {
+        // first show main warning / get ok
+        var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
+            .replace('{id}', itemId.toString())
+            .replace('{title}', itemTitle));
+        if (!ok)
+            return;
+        sxc.webApi.delete('app-content/any/' + itemGuid, null, null, true)
+            .success(function () {
+            location.reload();
+        }).error(function (error) {
+            var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
+            console.log(error);
+            // check if it's a permission config problem
+            if (error.status === 401)
+                alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
+            if (error.status === 400)
+                alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
+        });
+    },
+};
+
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2305,139 +2418,11 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         title: 'Toolbar.' + translateKey,
         icon: 'icon-sxc-' + icon,
         uiActionOnly: uiOnly,
-        partOfPage: partOfPage
+        partOfPage: partOfPage,
     };
     return Object.assign(newDefinition, more);
 }
 exports.makeDef = makeDef;
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(5);
-/*
- * this is a content block in the browser
- *
- * A Content Block is a standalone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
- */
-/**
- * internal helper, to do something and reload the content block
- * @param sxc
- * @param url
- * @param params
- * @returns {}
- */
-function getAndReload(sxc, url, params) {
-    return sxc.webApi.get({
-        url: url,
-        params: params
-    }).then(function () { render_1.reloadAndReInitialize(sxc); });
-}
-;
-/**
- * remove an item from a list, then reload
- * @param {} sxc
- * @param {} sortOrder
- * @returns {}
- */
-function removeFromList(sxc, sortOrder) {
-    return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
-}
-exports.removeFromList = removeFromList;
-;
-/**
- * change the order of an item in a list, then reload
- * @param {} sxc
- * @param {} initOrder
- * @param {} newOrder
- * @returns {}
- */
-function changeOrder(sxc, initOrder, newOrder) {
-    return getAndReload(sxc, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
-}
-exports.changeOrder = changeOrder;
-;
-/**
- * add an item to the list at this position
- * @param {} sxc
- * @param {} sortOrder
- * @returns {}
- */
-function addItem(sxc, sortOrder) {
-    return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
-}
-exports.addItem = addItem;
-;
-/**
- * set a content-item in this block to published, then reload
- * @param {} sxc
- * @param {} part
- * @param {} sortOrder
- * @returns {}
- */
-function publish(sxc, part, sortOrder) {
-    return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
-}
-exports.publish = publish;
-;
-/**
- * publish an item using it's ID
- * @param {} sxc
- * @param {} entityId
- * @returns {}
- */
-function publishId(sxc, entityId) {
-    return getAndReload(sxc, 'view/module/publish', { id: entityId });
-}
-exports.publishId = publishId;
-;
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(3);
-/**
- * this enhances the $2sxc client controller with stuff only needed when logged in
- */
-//#region contentItem Commands
-exports.contentItems = {
-    // delete command - try to really delete a content-item
-    "delete": function (sxc, itemId, itemGuid, itemTitle) {
-        // first show main warning / get ok
-        var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
-            .replace('{id}', itemId.toString())
-            .replace('{title}', itemTitle));
-        if (!ok)
-            return;
-        sxc.webApi.delete('app-content/any/' + itemGuid, null, null, true)
-            .success(function () {
-            location.reload();
-        }).error(function (error) {
-            var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
-            console.log(error);
-            // check if it's a permission config problem
-            if (error.status === 401)
-                alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
-            if (error.status === 400)
-                alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
-        });
-    }
-};
 
 
 /***/ }),
@@ -2475,7 +2460,7 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
         field: fieldName,
         sortOrder: index,
         app: appName,
-        guid: newGuid
+        guid: newGuid,
     };
     return sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
         .then(function (result) {
@@ -2486,7 +2471,7 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
                 .after(newTag);
         else
             listTag.prepend(newTag);
-        //let sxcNew = twoSxc(newTag);
+        // let sxcNew = twoSxc(newTag);
         module_bootstrapper_1.$2sxc._toolbarManager.buildToolbars(newTag);
     });
 }
@@ -2502,7 +2487,7 @@ function move(parentId, field, indexFrom, indexTo) {
         parentId: parentId,
         field: field,
         indexFrom: indexFrom,
-        indexTo: indexTo
+        indexTo: indexTo,
     };
     // todo: need sxc!
     return sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
@@ -2540,7 +2525,6 @@ var Manipulator = /** @class */ (function () {
     return Manipulator;
 }());
 exports.Manipulator = Manipulator;
-;
 function manipulator(sxc) {
     sxcInstance = sxc;
     return new Manipulator();
@@ -2577,12 +2561,12 @@ exports.extend = extend;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(16);
-var api_1 = __webpack_require__(2);
-var module_bootstrapper_1 = __webpack_require__(0);
 var manipulate_1 = __webpack_require__(34);
+var module_bootstrapper_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(2);
 var local_storage_helper_1 = __webpack_require__(37);
 /**
- * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
+ * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
  * if loaded, it's found under the $2sxc(module).manage
  * it has commands to
@@ -2601,7 +2585,6 @@ function initInstance(sxc) {
     }
 }
 exports.initInstance = initInstance;
-;
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc) {
     var editContext = api_1.getEditContext(sxc);
@@ -2619,7 +2602,7 @@ function _initInstance(sxc) {
             this.run = cmdEngine.executeAction;
             /**
              * Generate a button (an <a>-tag) for one specific toolbar-action.
-             * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
+             * @param {Object<any>} actDef - settings, an object containing the spec for the expected button
              * @param {int} groupIndex - number what button-group it's in'
              * @returns {string} html of a button
              */
@@ -2638,7 +2621,7 @@ function _initInstance(sxc) {
              */
             this._isEditMode = function () { return editContext.Environment.IsEditable; };
             /**
-             * used for various dialogs
+             * used for various dialogues
              */
             this._reloadWithAjax = editContext.ContentGroup.SupportsAjax;
             this._dialogParameters = api_1.buildNgDialogParams(sxc, editContext);
@@ -2651,7 +2634,7 @@ function _initInstance(sxc) {
              */
             this._editContext = editContext;
             /**
-             * used for in-page dialogs
+             * used for in-page dialogues
              */
             this._quickDialogConfig = api_1.buildQuickDialogConfig(editContext);
             /**
@@ -2667,7 +2650,8 @@ function _initInstance(sxc) {
                 var msg = '';
                 var toolbar = $("<ul class='sc-menu'></ul>");
                 if (errType === 'DataIsMissing') {
-                    msg = 'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
+                    msg =
+                        'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
                     toolbar.attr('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
                 }
                 errWrapper.append(msg);
@@ -2675,7 +2659,7 @@ function _initInstance(sxc) {
                 $(cbTag).append(errWrapper);
             };
             /**
-             * change config by replacing the guid, and refreshing dependend sub-objects
+             * change config by replacing the guid, and refreshing dependent sub-objects
              */
             this._updateContentGroupGuid = function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
@@ -2684,8 +2668,8 @@ function _initInstance(sxc) {
             this._getCbManipulator = function () { return manipulate_1.manipulator(sxc); };
             // ReSharper restore InconsistentNaming
             /**
-            * init this object
-            */
+             * init this object
+             */
             this.init = function () {
                 // enhance UI in case there are known errors / issues
                 if (editContext.error.type)
@@ -2702,7 +2686,6 @@ function _initInstance(sxc) {
         }
         return EditManager;
     }());
-    ;
     var editManager = new EditManager();
     editManager.init();
     sxc.manage = editManager;
@@ -2757,12 +2740,12 @@ __webpack_require__(43);
 __webpack_require__(13);
 __webpack_require__(44);
 __webpack_require__(16);
-__webpack_require__(31);
+__webpack_require__(33);
 __webpack_require__(45);
 __webpack_require__(46);
 __webpack_require__(47);
 __webpack_require__(48);
-__webpack_require__(32);
+__webpack_require__(31);
 __webpack_require__(10);
 __webpack_require__(49);
 __webpack_require__(34);
@@ -2780,7 +2763,7 @@ __webpack_require__(57);
 __webpack_require__(58);
 __webpack_require__(59);
 __webpack_require__(60);
-__webpack_require__(33);
+__webpack_require__(32);
 __webpack_require__(61);
 __webpack_require__(62);
 __webpack_require__(63);
@@ -2797,9 +2780,9 @@ __webpack_require__(22);
 __webpack_require__(37);
 __webpack_require__(70);
 __webpack_require__(71);
-__webpack_require__(25);
-__webpack_require__(24);
 __webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(25);
 __webpack_require__(72);
 __webpack_require__(73);
 __webpack_require__(4);
@@ -2848,9 +2831,9 @@ module_bootstrapper_1.$2sxc.c = module_bootstrapper_1.$2sxc.consts = {
         toolbar: 'toolbar',
         toolbarData: 'data-toolbar',
         settings: 'settings',
-        settingsData: 'data-settings'
+        settingsData: 'data-settings',
     },
-    publishAllowed: 'DraftOptional'
+    publishAllowed: 'DraftOptional',
 };
 // selectors
 var sel = module_bootstrapper_1.$2sxc.c.sel = {};
@@ -2935,13 +2918,13 @@ exports.CmdSpec = CmdSpec;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
+var command_initialize_instance_commands_1 = __webpack_require__(7);
 var create_1 = __webpack_require__(13);
 var engine_1 = __webpack_require__(16);
-var command_initialize_instance_commands_1 = __webpack_require__(7);
 var Commands = /** @class */ (function () {
     function Commands() {
         this.definitions = {
-            create: create_1.create
+            create: create_1.create,
         };
         this.instanceEngine = engine_1.instanceEngine;
         this.initializeInstanceCommands = command_initialize_instance_commands_1.commandInitializeInstanceCommands;
@@ -3042,7 +3025,6 @@ var ManipulateParams = /** @class */ (function () {
     return ManipulateParams;
 }());
 exports.ManipulateParams = ManipulateParams;
-;
 
 
 /***/ }),
@@ -3213,11 +3195,12 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 /***/ }),
 /* 60 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
 // The following script fixes a bug in DNN 08.00.04
-// the bug tries to detect a module-ID based on classes in a tag, 
-// but uses a bad regex and captures the number 2 on all 2sxc-modules 
+// the bug tries to detect a module-ID based on classes in a tag,
+// but uses a bad regex and captures the number 2 on all 2sxc-modules
 // instead of the real id
 // this patch changes the order of the className of 2sxc modules when
 // they are accessed through '$.fn.attr'
@@ -3227,6 +3210,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 /**
  * Fix drag-drop functionality in dnn 08.00.04 - it has an incorrect regex
  */
+
 (function () {
     var fn = $.fn.attr;
     $.fn.attr = function () {
@@ -3283,7 +3267,7 @@ window.$quickE = _quickE___1.$quickE;
 /* 63 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -3338,10 +3322,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = __webpack_require__(36);
 var module_bootstrapper_1 = __webpack_require__(0);
+var create_1 = __webpack_require__(36);
 /**
- * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
+ * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
  * if loaded, it's found under the $2sxc(module).manage
  * it has commands to

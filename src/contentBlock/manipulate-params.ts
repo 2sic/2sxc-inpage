@@ -7,4 +7,4 @@
   indexTo?: number;
   app?: string;
   guid?: string;
-};
+}

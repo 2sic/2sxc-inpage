@@ -4,10 +4,10 @@ var _2sxc_translate_1 = require("../translate/2sxc.translate");
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
-//#region contentItem Commands
+// #region contentItem Commands
 exports.contentItems = {
     // delete command - try to really delete a content-item
-    "delete": function (sxc, itemId, itemGuid, itemTitle) {
+    delete: function (sxc, itemId, itemGuid, itemTitle) {
         // first show main warning / get ok
         var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
             .replace('{id}', itemId.toString())
@@ -26,6 +26,6 @@ exports.contentItems = {
             if (error.status === 400)
                 alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
         });
-    }
+    },
 };
 //# sourceMappingURL=item-commands.js.map

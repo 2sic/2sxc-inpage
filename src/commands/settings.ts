@@ -4,7 +4,7 @@ import {Params } from './params';
 export class Settings {
   code: any;
   configureCommand: any;
-  items: any; //string | string[];
+  items: any; // string | string[];
   metadata: any;
   prefill: any;
   //

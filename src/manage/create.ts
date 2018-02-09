@@ -1,11 +1,10 @@
 ﻿import { instanceEngine } from '../commands/engine';
-import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buildInstanceConfig, buildQuickDialogConfig } from './api';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { manipulator } from '../contentBlock/manipulate';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
-
 /**
- * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
+ * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
  * if loaded, it's found under the $2sxc(module).manage
  * it has commands to
@@ -21,7 +20,7 @@ export function initInstance(sxc: SxcInstanceWithInternals) {
   } catch (e) {
     console.error('error in 2sxc - will log but not throw', e);
   }
-};
+}
 
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc: SxcInstanceWithInternals) {
@@ -42,7 +41,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
 
     /**
      * Generate a button (an <a>-tag) for one specific toolbar-action.
-     * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
+     * @param {Object<any>} actDef - settings, an object containing the spec for the expected button
      * @param {int} groupIndex - number what button-group it's in'
      * @returns {string} html of a button
      */
@@ -64,7 +63,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
     _isEditMode = () => editContext.Environment.IsEditable;
 
     /**
-     * used for various dialogs
+     * used for various dialogues
      */
     _reloadWithAjax = editContext.ContentGroup.SupportsAjax;
 
@@ -81,7 +80,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
     _editContext = editContext;
 
     /**
-     * used for in-page dialogs
+     * used for in-page dialogues
      */
     _quickDialogConfig = buildQuickDialogConfig(editContext);
 
@@ -96,32 +95,33 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
      * private: show error when the app-data hasn't been installed yet for this imported-module
      */
     _handleErrors = (errType, cbTag) => {
-      let errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
+      const errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
       let msg = '';
-      let toolbar = $("<ul class='sc-menu'></ul>");
+      const toolbar = $("<ul class='sc-menu'></ul>");
       if (errType === 'DataIsMissing') {
-        msg = 'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
+        msg =
+          'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
         toolbar.attr('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
       }
       errWrapper.append(msg);
       errWrapper.append(toolbar);
       $(cbTag).append(errWrapper);
-    };
+    }
 
     /**
-     * change config by replacing the guid, and refreshing dependend sub-objects
+     * change config by replacing the guid, and refreshing dependent sub-objects
      */
     _updateContentGroupGuid = (newGuid: string) => {
       editContext.ContentGroup.Guid = newGuid;
       this._instanceConfig = buildInstanceConfig(editContext);
-    };
+    }
 
     _getCbManipulator = () => manipulator(sxc);
     // ReSharper restore InconsistentNaming
 
     /**
-    * init this object
-    */
+     * init this object
+     */
     init = () => {
       // enhance UI in case there are known errors / issues
       if (editContext.error.type)
@@ -129,16 +129,16 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
 
       // todo: move this to dialog-handling
       // display the dialog
-      let openDialogId: number = LocalStorageHelper.getItemValue<number>('dia-cbid');
+      const openDialogId = LocalStorageHelper.getItemValue<number>('dia-cbid');
       if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
       sessionStorage.removeItem('dia-cbid');
       this.run('layout');
       return true;
-    };
+    }
 
-  };
+  }
 
-  let editManager = new EditManager();
+  const editManager = new EditManager();
   editManager.init();
   sxc.manage = editManager;
   return editManager;

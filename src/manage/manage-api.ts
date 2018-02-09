@@ -1,6 +1,6 @@
 ﻿import { Engine } from '../commands/engine';
 
-export type ManageApi = {
+export interface ManageApi {
   init: () => boolean;
   run: (nameOrSettings: any, settings?: any, event?: any) => any;
   getButton: (actDef: any, groupIndex: any) => any;
@@ -18,4 +18,4 @@ export type ManageApi = {
   _updateContentGroupGuid: (newGuid: any) => void;
   _getCbManipulator: () => any;
   // ReSharper restore InconsistentNaming
-};
+}

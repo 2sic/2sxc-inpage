@@ -1,8 +1,8 @@
 ﻿import { WebApiParams } from './web-api-params';
 /*
  * this is a content block in the browser
- * 
- * A Content Block is a standalone unit of content, with it's own definition of
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
  * 1. content items
  * 2. template
  * + some other stuff
@@ -11,47 +11,47 @@
  */
 
 //#region functions working only with what they are given
-// 2017-08-27 2dm: I'm working on cleaning up this code, and an important part 
+// 2017-08-27 2dm: I'm working on cleaning up this code, and an important part
 // is to have code which doesn't use old state (like object-properties initialized earlier)
 // extracting these methods is part of the work
 
 /**
  * TODO - unclear if still in use
- * @param {object} sxc 
- * @param {boolean} state 
- * @returns {promise} 
+ * @param {object} sxc
+ * @param {boolean} state
+ * @returns {promise}
  */
 // 2017-09-02 2dm removed, deprecated, it's not stored on the server any more
-//cbm.setTemplateChooserState = function(sxc, state) {
+// cbm.setTemplateChooserState = function(sxc, state) {
 //    return sxc.webApi.get({
 //        url: "view/module/SetTemplateChooserState",
 //        params: { state: state }
 //    });
-//};
+// };
 
 /**
  * Save the template configuration for this instance
- * @param {object} sxc 
- * @param {int} templateId 
+ * @param {object} sxc
+ * @param {int} templateId
  * @param {boolean} [forceCreateContentGroup]
- * @returns {promise} 
+ * @returns {promise}
  */
-export function saveTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreateContentGroup: boolean) {
+export function saveTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreateContentGroup: boolean): any {
   const params: WebApiParams = {
     templateId: templateId,
     forceCreateContentGroup: forceCreateContentGroup,
-    newTemplateChooserState: false
-  }
+    newTemplateChooserState: false,
+  };
   return sxc.webApi.get({
     url: 'view/module/savetemplateid',
-    params: params
+    params: params,
   });
-};
+}
 
 /**
  * Retrieve the preview from the web-api
- * @param {object} sxc 
- * @param {int} templateId 
+ * @param {object} sxc
+ * @param {int} templateId
  * @returns {promise} promise with the html in the result
  */
 export function getPreviewWithTemplate(sxc: SxcInstanceWithInternals, templateId: number): any {
@@ -62,13 +62,12 @@ export function getPreviewWithTemplate(sxc: SxcInstanceWithInternals, templateId
     lang: ec.Language.Current,
     cbisentity: ec.ContentBlock.IsEntity,
     cbid: ec.ContentBlock.Id,
-    originalparameters: JSON.stringify(ec.Environment.parameters)
+    originalparameters: JSON.stringify(ec.Environment.parameters),
   };
-
   return sxc.webApi.get({
     url: 'view/module/rendertemplate',
     params: params,
-    dataType: 'html'
+    dataType: 'html',
   });
-};
-    //#endregion
+}
+//#endregion

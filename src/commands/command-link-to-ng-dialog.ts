@@ -1,13 +1,13 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { Settings } from './settings';
 import { commandCreate } from './command-create';
+import { Settings } from './settings';
 
 /**
  * create a dialog link
  * @param sxc
  * @param specialSettings
  */
-export function commandLinkToNgDialog(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings) : string {
+export function commandLinkToNgDialog(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): string {
   const cmd = commandCreate(sxc, editContext, specialSettings);
 
   if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);

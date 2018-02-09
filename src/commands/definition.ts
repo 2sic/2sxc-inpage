@@ -1,7 +1,7 @@
-﻿import { Settings } from './settings';
+﻿import { Command } from './command';
 import { ModConfig } from './mod-config';
 import { Params } from './params';
-import { Command } from './command';
+import { Settings } from './settings';
 
 export class Definition {
   name?: string;

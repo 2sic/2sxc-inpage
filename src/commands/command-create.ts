@@ -1,7 +1,7 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-import { Settings } from './settings';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { Command } from './command';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { Settings } from './settings';
 
 /**
  * assemble an object which will store the configuration and execute it
@@ -20,6 +20,6 @@ export function commandCreate(sxc: SxcInstanceWithInternals, editContext: DataEd
   const isDebug: string = twoSxc.urlParams.get('debug') ? '&debug=true' : '';
 
   const cmd = new Command(sxc, settings, ngDialogUrl, isDebug);
-  
+
   return cmd;
 }

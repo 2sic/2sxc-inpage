@@ -1,6 +1,6 @@
-﻿import { UserOfEditContext } from './user-of-edit-context';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { getUserOfEditContext } from './api';
+import { UserOfEditContext } from './user-of-edit-context';
 
 export class NgDialogParams {
   zoneId: number;
@@ -10,7 +10,7 @@ export class NgDialogParams {
   cbid: number;
   lang: string;
   langpri: string;
-  langs: any; //string[] | null;
+  langs: any; // string[] | null;
   portalroot: string;
   websiteroot: string;
   partOfPage: boolean;
@@ -31,10 +31,10 @@ export class NgDialogParams {
     this.portalroot = editContext.Environment.WebsiteUrl;
     this.websiteroot = editContext.Environment.SxcRootUrl;
     this.partOfPage = editContext.ContentBlock.PartOfPage;
-    //versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+    // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
     this.publishing = editContext.ContentBlock.VersioningRequirements;
     // todo= probably move the user into the dashboard info
     this.user = getUserOfEditContext(editContext);
-    this.approot = editContext.ContentGroup.AppUrl || null // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
+    this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
   }
 }

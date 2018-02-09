@@ -1,9 +1,9 @@
-﻿import { Environment } from './environment';
-import { User } from './user';
-import { Language } from './language';
-import { ContentBlock } from './content-block';
+﻿import { ContentBlock } from './content-block';
 import { ContentGroup } from './content-group';
+import { Environment } from './environment';
 import { Error } from './error';
+import { Language } from './language';
+import { User } from './user';
 
 export class DataEditContext {
   // ReSharper disable InconsistentNaming

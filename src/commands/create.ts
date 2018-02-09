@@ -1,15 +1,15 @@
-﻿import { Action } from './action';
-import { Definition } from './definition';
-import { CmdSpec } from './cmd-spec';
-import { Settings } from './settings';
-import { makeDef } from './make-def';
-import { translate } from '../translate/2sxc.translate';
-import { addItem, changeOrder, publish, publishId, removeFromList } from '../contentBlock/actions';
+﻿import { addItem, changeOrder, publish, publishId, removeFromList } from '../contentBlock/actions';
 import { contentItems } from '../entity-manipulation/item-commands';
+import { translate } from '../translate/2sxc.translate';
+import { Action } from './action';
+import { CmdSpec } from './cmd-spec';
+import { Definition } from './definition';
+import { makeDef } from './make-def';
+import { Settings } from './settings';
 
 /*
  * Actions of 2sxc - mostly used in toolbars
- * 
+ *
  * Minimal documentation regarding a button
  * the button can have the following properties / methods
  * - the indexer in the array (usually the same as the name)
@@ -28,11 +28,11 @@ let act: Action = {};
 // quick helper so we can better debug the creation of definitions
 function addDef(def: Definition): void {
   act[def.name] = def;
-};
+}
 
 export function create(cmdSpecs: CmdSpec): Action {
-  let enableTools = cmdSpecs.canDesign;
-  let isContent = cmdSpecs.isContent;
+  const enableTools = cmdSpecs.canDesign;
+  const isContent = cmdSpecs.isContent;
 
   // open the import dialog
   addDef(makeDef('app-import', 'Dashboard', '', true, false, {}));
@@ -42,12 +42,12 @@ export function create(cmdSpecs: CmdSpec): Action {
     params: { mode: 'edit' },
     showCondition(settings, modConfig) {
       return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
-    }
+    },
   }));
 
   // new is a dialog to add something, and will not add if cancelled
   // new can also be used for mini-toolbars which just add an entity not attached to a module
-  // in that case it's essential to add a contentType like 
+  // in that case it's essential to add a contentType like
   // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
   addDef(makeDef('new', 'New', 'plus', false, true, {
     params: { mode: 'new' },
@@ -59,7 +59,7 @@ export function create(cmdSpecs: CmdSpec): Action {
       // todo - should refactor this to be a toolbarManager.contentBlock command
       const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
       sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
-    }
+    },
   }));
 
   // add brings no dialog, just add an empty item
@@ -69,7 +69,7 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     code(settings, event, sxc) {
       addItem(sxc, settings.sortOrder + 1);
-    }
+    },
   }));
 
   // create a metadata toolbar
@@ -87,10 +87,10 @@ export function create(cmdSpecs: CmdSpec): Action {
     configureCommand(cmd) {
       const itm = {
         Title: 'EditFormTitle.Metadata',
-        Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata)
+        Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata),
       };
       Object.assign(cmd.items[0], itm);
-    }
+    },
   }));
 
   // remove an item from the placeholder (usually for lists)
@@ -101,10 +101,10 @@ export function create(cmdSpecs: CmdSpec): Action {
     code(settings, event, sxc) {
       if (confirm(translate('Toolbar.ConfirmRemove'))) {
         removeFromList(sxc, settings.sortOrder);
-        //sxc.manage.contentBlock
+        // sxc.manage.contentBlock
         //    .removeFromList(settings.sortOrder);
       }
-    }
+    },
   }));
 
   // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
@@ -120,7 +120,7 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     code(settings, event, sxc) {
       contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
-    }
+    },
   }));
 
   addDef(makeDef('moveup', 'MoveUp', 'move-up', false, true, {
@@ -129,7 +129,7 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     code(settings, event, sxc) {
       changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
-    }
+    },
   }));
 
   addDef(makeDef('movedown', 'MoveDown', 'move-down', false, true, {
@@ -140,13 +140,13 @@ export function create(cmdSpecs: CmdSpec): Action {
     code(settings, event, sxc) {
       // TODO: make sure index is never greater than the amount of items
       changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
-    }
+    },
   }));
 
   addDef(makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
     showCondition(settings, modConfig) {
       return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-    }
+    },
   }));
 
   // todo: shouldn't be available if changes are not allowed
@@ -166,13 +166,13 @@ export function create(cmdSpecs: CmdSpec): Action {
       const part: string = settings.sortOrder === -1 ? 'listcontent' : 'content';
       const index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
       return publish(sxc, part, index);
-    }
+    },
   }));
 
   addDef(makeDef('replace', 'Replace', 'replace', false, true, {
     showCondition(settings, modConfig) {
       return settings.useModuleList;
-    }
+    },
   }));
 
   //#region app-actions: app-settings, app-resources
@@ -190,7 +190,7 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     dynamicClasses(settings) {
       return cmdSpecs.appSettingsId !== null ? '' : 'empty';  // if it doesn't have a query, make it less strong
-    }
+    },
   }));
 
   addDef(makeDef('app-resources', 'AppResources', 'language', true, false, {
@@ -207,7 +207,7 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     dynamicClasses(settings) {
       return cmdSpecs.appResourcesId !== null ? '' : 'empty';  // if it doesn't have a query, make it less strong
-    }
+    },
   }));
   //#endregion
 
@@ -215,13 +215,13 @@ export function create(cmdSpecs: CmdSpec): Action {
   addDef(makeDef('app', 'App', 'settings', true, false, {
     showCondition(settings, modConfig) {
       return enableTools;
-    }
+    },
   }));
 
   addDef(makeDef('zone', 'Zone', 'manage', true, false, {
     showCondition(settings, modConfig) {
       return enableTools;
-    }
+    },
   }));
   //#endregion
 
@@ -229,7 +229,7 @@ export function create(cmdSpecs: CmdSpec): Action {
   addDef(makeDef('contenttype', 'ContentType', 'fields', true, false, {
     showCondition(settings, modConfig) {
       return enableTools;
-    }
+    },
   }));
 
   addDef(makeDef('contentitems', 'ContentItems', 'table', true, false, {
@@ -246,14 +246,14 @@ export function create(cmdSpecs: CmdSpec): Action {
       if (cmd.settings.filters) {
         let enc = JSON.stringify(cmd.settings.filters);
 
-        // special case - if it contains a "+" character, this won't survive 
-        // encoding through the hash as it's always replaced with a space, even if it would be preconverted to %2b
+        // special case - if it contains a "+" character, this won't survive
+        // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b
         // so we're base64 encoding it - see https://github.com/2sic/2sxc/issues/1061
         if (enc.indexOf('+') > -1)
           enc = btoa(enc);
         cmd.params.filters = enc;
       }
-    }
+    },
   }));
 
   addDef(makeDef('template-develop', 'Develop', 'code', true, false, {
@@ -264,7 +264,7 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     configureCommand(cmd) {
       cmd.items = [{ EntityId: cmdSpecs.templateId }];
-    }
+    },
   }));
 
   addDef(makeDef('template-query', 'QueryEdit', 'filter', true, false, {
@@ -280,7 +280,7 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     dynamicClasses(settings) {
       return cmdSpecs.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
-    }
+    },
   }));
 
   addDef(makeDef('template-settings', 'TemplateSettings', 'sliders', true, false, {
@@ -290,38 +290,36 @@ export function create(cmdSpecs: CmdSpec): Action {
     },
     configureCommand(cmd) {
       cmd.items = [{ EntityId: cmdSpecs.templateId }];
-    }
-
+    },
   }));
   //#endregion template commands
 
   //#region custom code buttons
   addDef(makeDef('custom', 'Custom', 'bomb', true, false, {
     code(settings, event, sxc) {
-      let fn;
       console.log('custom action with code - BETA feature, may change');
       if (!settings.customCode) {
         console.warn('custom code action, but no onclick found to run', settings);
         return;
       }
       try {
-        fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
+        const fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
         fn(settings, event, sxc);
       } catch (err) {
         console.error('error in custom button-code: ', settings);
       }
-    }
+    },
   }));
   //#endregion
 
   addDef(makeDef('layout', 'ChangeLayout', 'glasses', true, true, {
-    inlineWindow: true
+    inlineWindow: true,
   }));
 
   addDef(makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
     code(settings, event, sxc) {
       const btn: any = $(event.target);
-      let fullMenu: any = btn.closest('ul.sc-menu');
+      const fullMenu: any = btn.closest('ul.sc-menu');
       const oldState: number = Number(fullMenu.attr('data-state') || 0);
       const max: number = Number(fullMenu.attr('group-count'));
       const newState: number = (oldState + 1) % max;
@@ -329,15 +327,14 @@ export function create(cmdSpecs: CmdSpec): Action {
       fullMenu.removeClass('group-' + oldState)
         .addClass('group-' + newState)
         .attr('data-state', newState);
-    }
+    },
   }));
 
   // show the version dialog
   addDef(makeDef('item-history', 'ItemHistory', 'clock', true, false, {
     inlineWindow: true,
-    fullScreen: true
+    fullScreen: true,
   }));
 
   return act;
-};
-
+}
