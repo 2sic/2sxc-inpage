@@ -23,50 +23,21 @@ export function initInstance(sxc) {
   }
 };
 
-
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc: SxcInstanceWithInternals) {
 
-  let editContext = getEditContext(sxc);
-  let userInfo = getUserOfEditContext(editContext);
-  let cmdEngine = instanceEngine(sxc, editContext);
+  const editContext = getEditContext(sxc);
+// ReSharper disable AssignedValueIsNeverUsed
+  const userInfo = getUserOfEditContext(editContext);
+  const cmdEngine = instanceEngine(sxc, editContext);
+  // ReSharper restore AssignedValueIsNeverUsed
 
   class EditManager {
-    //#region Official, public properties and commands, which are stable for use from the outside
-    /**
-     * run a command - often used in toolbars and custom buttons
-     */
-    run= cmdEngine.executeAction;
 
     /**
-     * Generate a button (an <a>-tag) for one specific toolbar-action.
-     * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
-     * @param {int} groupIndex - number what button-group it's in'
-     * @returns {string} html of a button
+     * init this object
      */
-    getButton= (actDef, groupIndex) => twoSxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
-
-    /**
-     * Builds the toolbar and returns it as HTML
-     * @param {Object<any>} tbConfig - general toolbar config
-     * @param {Object<any>} moreSettings - additional / override settings
-     * @returns {string} html of the current toolbar
-     */
-    getToolbar= (tbConfig, moreSettings) => twoSxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
-    //#endregion official, public properties - everything below this can change at any time
-
-    // internal method to find out if it's in edit-mode
-    _isEditMode= () => editContext.Environment.IsEditable;
-    _reloadWithAjax= editContext.ContentGroup.SupportsAjax;
-    _dialogParameters= buildNgDialogParams(sxc, editContext);      // used for various dialogs
-    _instanceConfig= buildInstanceConfig(editContext); // used to configure buttons / toolbars
-    _editContext= editContext;              // metadata necessary to know what/how to edit
-    _quickDialogConfig= buildQuickDialogConfig(editContext);           // used for in-page dialogs
-    _commands= cmdEngine;                        // used to handle the commands for this content-block
-    _user= userInfo;
-
-    // init this object 
-    init= () => {
+    init = () => {
       // enhance UI in case there are known errors / issues
       if (editContext.error.type)
         this._handleErrors(editContext.error.type, getTag(sxc));
@@ -77,10 +48,71 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
       if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid) return false;
       sessionStorage.removeItem('dia-cbid');
       this.run('layout');
+      return true;
     };
 
-    // private: show error when the app-data hasn't been installed yet for this imported-module
-    _handleErrors= (errType, cbTag) => {
+    //#region Official, public properties and commands, which are stable for use from the outside
+    /**
+     * run a command - often used in toolbars and custom buttons
+     */
+    run = cmdEngine.executeAction;
+
+    /**
+     * Generate a button (an <a>-tag) for one specific toolbar-action.
+     * @param {Object<any>} actDef - settings, an object containing the specs for the expected buton
+     * @param {int} groupIndex - number what button-group it's in'
+     * @returns {string} html of a button
+     */
+    getButton = (actDef, groupIndex) => twoSxc._toolbarManager.generateButtonHtml(sxc, actDef, groupIndex);
+
+    /**
+     * Builds the toolbar and returns it as HTML
+     * @param {Object<any>} tbConfig - general toolbar config
+     * @param {Object<any>} moreSettings - additional / override settings
+     * @returns {string} html of the current toolbar
+     */
+    getToolbar = (tbConfig, moreSettings) => twoSxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings);
+    //#endregion official, public properties - everything below this can change at any time
+
+    // ReSharper disable InconsistentNaming
+    /**
+     * internal method to find out if it's in edit-mode
+     */
+    _isEditMode = () => editContext.Environment.IsEditable;
+
+    /**
+     * used for various dialogs
+     */
+    _reloadWithAjax = editContext.ContentGroup.SupportsAjax;
+
+    _dialogParameters = buildNgDialogParams(sxc, editContext);
+
+    /**
+     * used to configure buttons / toolbars
+     */
+    _instanceConfig = buildInstanceConfig(editContext);
+
+    /**
+     * metadata necessary to know what/how to edit
+     */
+    _editContext = editContext;
+
+    /**
+     * used for in-page dialogs
+     */
+    _quickDialogConfig = buildQuickDialogConfig(editContext);
+
+    /**
+     * used to handle the commands for this content-block
+     */
+    _commands = cmdEngine;
+
+    _user = userInfo;
+
+    /**
+     * private: show error when the app-data hasn't been installed yet for this imported-module
+     */
+    _handleErrors = (errType, cbTag) => {
       let errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
       let msg = '';
       let toolbar = $("<ul class='sc-menu'></ul>");
@@ -93,13 +125,16 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
       $(cbTag).append(errWrapper);
     };
 
-    // change config by replacing the guid, and refreshing dependend sub-objects
-    _updateContentGroupGuid= (newGuid: string) => {
+    /**
+     * change config by replacing the guid, and refreshing dependend sub-objects
+     */
+    _updateContentGroupGuid = (newGuid: string) => {
       editContext.ContentGroup.Guid = newGuid;
       this._instanceConfig = buildInstanceConfig(editContext);
     };
 
     _getCbManipulator = () => manipulator(sxc);
+    // ReSharper restore InconsistentNaming
 
   };
 

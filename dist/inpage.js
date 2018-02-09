@@ -2610,6 +2610,22 @@ function _initInstance(sxc) {
     var EditManager = /** @class */ (function () {
         function EditManager() {
             var _this = this;
+            /**
+             * init this object
+             */
+            this.init = function () {
+                // enhance UI in case there are known errors / issues
+                if (editContext.error.type)
+                    _this._handleErrors(editContext.error.type, api_1.getTag(sxc));
+                // todo: move this to dialog-handling
+                // display the dialog
+                var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
+                if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
+                    return false;
+                sessionStorage.removeItem('dia-cbid');
+                _this.run('layout');
+                return true;
+            };
             //#region Official, public properties and commands, which are stable for use from the outside
             /**
              * run a command - often used in toolbars and custom buttons
@@ -2630,29 +2646,36 @@ function _initInstance(sxc) {
              */
             this.getToolbar = function (tbConfig, moreSettings) { return module_bootstrapper_1.$2sxc._toolbarManager.generateToolbarHtml(sxc, tbConfig, moreSettings); };
             //#endregion official, public properties - everything below this can change at any time
-            // internal method to find out if it's in edit-mode
+            // ReSharper disable InconsistentNaming
+            /**
+             * internal method to find out if it's in edit-mode
+             */
             this._isEditMode = function () { return editContext.Environment.IsEditable; };
+            /**
+             * used for various dialogs
+             */
             this._reloadWithAjax = editContext.ContentGroup.SupportsAjax;
-            this._dialogParameters = api_1.buildNgDialogParams(sxc, editContext); // used for various dialogs
-            this._instanceConfig = api_1.buildInstanceConfig(editContext); // used to configure buttons / toolbars
-            this._editContext = editContext; // metadata necessary to know what/how to edit
-            this._quickDialogConfig = api_1.buildQuickDialogConfig(editContext); // used for in-page dialogs
-            this._commands = cmdEngine; // used to handle the commands for this content-block
+            this._dialogParameters = api_1.buildNgDialogParams(sxc, editContext);
+            /**
+             * used to configure buttons / toolbars
+             */
+            this._instanceConfig = api_1.buildInstanceConfig(editContext);
+            /**
+             * metadata necessary to know what/how to edit
+             */
+            this._editContext = editContext;
+            /**
+             * used for in-page dialogs
+             */
+            this._quickDialogConfig = api_1.buildQuickDialogConfig(editContext);
+            /**
+             * used to handle the commands for this content-block
+             */
+            this._commands = cmdEngine;
             this._user = userInfo;
-            // init this object 
-            this.init = function () {
-                // enhance UI in case there are known errors / issues
-                if (editContext.error.type)
-                    _this._handleErrors(editContext.error.type, api_1.getTag(sxc));
-                // todo: move this to dialog-handling
-                // display the dialog
-                var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
-                if (editContext.error.type || !openDialogId || openDialogId !== sxc.cbid)
-                    return false;
-                sessionStorage.removeItem('dia-cbid');
-                _this.run('layout');
-            };
-            // private: show error when the app-data hasn't been installed yet for this imported-module
+            /**
+             * private: show error when the app-data hasn't been installed yet for this imported-module
+             */
             this._handleErrors = function (errType, cbTag) {
                 var errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
                 var msg = '';
@@ -2665,12 +2688,15 @@ function _initInstance(sxc) {
                 errWrapper.append(toolbar);
                 $(cbTag).append(errWrapper);
             };
-            // change config by replacing the guid, and refreshing dependend sub-objects
+            /**
+             * change config by replacing the guid, and refreshing dependend sub-objects
+             */
             this._updateContentGroupGuid = function (newGuid) {
                 editContext.ContentGroup.Guid = newGuid;
                 _this._instanceConfig = api_1.buildInstanceConfig(editContext);
             };
             this._getCbManipulator = function () { return manipulate_1.manipulator(sxc); };
+            // ReSharper restore InconsistentNaming
         }
         return EditManager;
     }());
