@@ -251,8 +251,6 @@ var instance_config_1 = __webpack_require__(22);
 var user_of_edit_context_1 = __webpack_require__(23);
 var qucik_dialog_config_1 = __webpack_require__(24);
 var ng_dialog_params_1 = __webpack_require__(25);
-//declare let window: Window;
-//let mngApi = $2sxc._manage;
 /**
  * Get a html tag of the current sxc instance
  * @param {SxcInstanceWithInternals} sxci
@@ -2598,7 +2596,7 @@ function initInstance(sxc) {
 }
 exports.initInstance = initInstance;
 ;
-//let mngApi = twoSxc._manage;
+// ReSharper disable once InconsistentNaming
 function _initInstance(sxc) {
     var editContext = api_1.getEditContext(sxc);
     var userInfo = api_1.getUserOfEditContext(editContext);
@@ -2754,27 +2752,27 @@ __webpack_require__(35);
 __webpack_require__(69);
 __webpack_require__(2);
 __webpack_require__(36);
+__webpack_require__(70);
 __webpack_require__(22);
 __webpack_require__(37);
-__webpack_require__(70);
 __webpack_require__(71);
+__webpack_require__(72);
 __webpack_require__(25);
 __webpack_require__(24);
 __webpack_require__(23);
-__webpack_require__(72);
 __webpack_require__(73);
+__webpack_require__(74);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(17);
 __webpack_require__(28);
-__webpack_require__(74);
-__webpack_require__(18);
 __webpack_require__(75);
+__webpack_require__(18);
+__webpack_require__(76);
 __webpack_require__(9);
 __webpack_require__(26);
 __webpack_require__(27);
-__webpack_require__(76);
 __webpack_require__(77);
 __webpack_require__(78);
 __webpack_require__(79);
@@ -2785,6 +2783,7 @@ __webpack_require__(83);
 __webpack_require__(84);
 __webpack_require__(85);
 __webpack_require__(86);
+__webpack_require__(87);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
@@ -3289,11 +3288,29 @@ window.$quickE = _quickE___1.$quickE;
 
 "use strict";
 
+//import { getEditContext, getUserOfEditContext } from "./api";
+//import { instanceEngine, Engine } from "../commands/engine";
+//import { DataEditContext } from "../data-edit-context/data-edit-context";
+//import { UserOfEditContext } from "./user-of-edit-context";
+//import { instanceEngine } from '../commands/engine';
+//import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buildInstanceConfig, buildQuickDialogConfig } from './api';
+//import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+//import { manipulator } from '../contentBlock/manipulate';
+//import { LocalStorageHelper } from './local-storage-helper';
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
 /* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3321,7 +3338,7 @@ module_bootstrapper_1.$2sxc._manage = new Manage();
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3365,7 +3382,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3392,7 +3409,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3427,7 +3444,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3457,7 +3474,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports) {
 
 /*
@@ -3558,7 +3575,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3570,7 +3587,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3585,7 +3602,7 @@ $(function () {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3604,7 +3621,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3701,7 +3718,7 @@ Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3746,7 +3763,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3785,7 +3802,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4017,7 +4034,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4039,7 +4056,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4107,7 +4124,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

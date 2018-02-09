@@ -3,6 +3,7 @@ import { getTag, getEditContext, getUserOfEditContext, buildNgDialogParams, buil
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { manipulator } from '../contentBlock/manipulate';
 import { LocalStorageHelper } from './local-storage-helper';
+import { EditManager } from './edit-manager';
 
 /**
  * A helper-controller in charge of opening edit-dialogs + creating the toolbars for it
@@ -15,8 +16,6 @@ import { LocalStorageHelper } from './local-storage-helper';
  * - isEditMode
  * @param sxc
  */
-
-
 export function initInstance(sxc) {
   try {
     _initInstance(sxc);
@@ -25,14 +24,14 @@ export function initInstance(sxc) {
   }
 };
 
-//let mngApi = twoSxc._manage;
+
+// ReSharper disable once InconsistentNaming
 function _initInstance(sxc: SxcInstanceWithInternals) {
   let editContext = getEditContext(sxc);
   let userInfo = getUserOfEditContext(editContext);
-
   let cmdEngine = instanceEngine(sxc, editContext);
 
-  let editManager = sxc.manage = {
+  let editManager: EditManager = sxc.manage = {
     //#region Official, public properties and commands, which are stable for use from the outside
     /**
      * run a command - often used in toolbars and custom buttons

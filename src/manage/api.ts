@@ -4,10 +4,6 @@ import { UserOfEditContext } from './user-of-edit-context';
 import { QucikDialogConfig } from './qucik-dialog-config';
 import { NgDialogParams } from './ng-dialog-params';
 
-//declare let window: Window;
-
-//let mngApi = $2sxc._manage;
-
 /**
  * Get a html tag of the current sxc instance
  * @param {SxcInstanceWithInternals} sxci
