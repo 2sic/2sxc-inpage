@@ -1,4 +1,4 @@
-﻿import { current } from '../quick-dialog/2sxc._quickDialog';
+﻿import { current } from '../quick-dialog/quick-dialog';
 import { getTag } from '../manage/api';
 import { translate } from '../translate/2sxc.translate';
 //import '/2sxc-api/js/2sxc.api';

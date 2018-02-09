@@ -1,5 +1,5 @@
 ﻿import { ContentGroup } from '../data-edit-context/content-group';
-import { hide } from '../quick-dialog/2sxc._quickDialog';
+import { hide } from '../quick-dialog/quick-dialog';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
 

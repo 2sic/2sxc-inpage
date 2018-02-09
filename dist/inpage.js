@@ -70,7 +70,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc__quickDialog_1 = __webpack_require__(4);
+var quick_dialog_1 = __webpack_require__(4);
 var api_1 = __webpack_require__(2);
 var _2sxc_translate_1 = __webpack_require__(3);
 //import '/2sxc-api/js/2sxc.api';
@@ -108,7 +108,7 @@ function tryShowTemplatePicker() {
     if (cancelledDialog || openedTemplatePickerOnce)
         return false;
     // already showing a dialog
-    if (_2sxc__quickDialog_1.current !== null)
+    if (quick_dialog_1.current !== null)
         return false;
     // not exactly one uninitialized module
     if (uninitializedModules.length !== 1)
@@ -603,7 +603,7 @@ function watchForResize(keepWatching) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE_start_1 = __webpack_require__(26);
-var _2sxc__quickDialog_1 = __webpack_require__(4);
+var quick_dialog_1 = __webpack_require__(4);
 var api_1 = __webpack_require__(2);
 var module_bootstrapper_1 = __webpack_require__(0);
 var main_content_block_1 = __webpack_require__(10);
@@ -689,7 +689,7 @@ function reloadAndReInitialize(sxc, forceAjax, preview) {
         // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
         // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
         // must check for side-effects, which would need the manager to re-build the configuration
-        _2sxc__quickDialog_1.hide();
+        quick_dialog_1.hide();
     });
 }
 exports.reloadAndReInitialize = reloadAndReInitialize;
@@ -703,7 +703,7 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc__quickDialog_1 = __webpack_require__(4);
+var quick_dialog_1 = __webpack_require__(4);
 var render_1 = __webpack_require__(5);
 var web_api_promises_1 = __webpack_require__(11);
 /**
@@ -741,7 +741,7 @@ function updateTemplateFromDia(sxc, templateId, forceCreate) {
     // or just reset it, so it picks up the right values again ?
     return updateTemplate(sxc, templateId, forceCreate)
         .then(function () {
-        _2sxc__quickDialog_1.hide();
+        quick_dialog_1.hide();
         // if it didn't have content, then it only has now...
         if (!contentGroup.HasContent)
             contentGroup.HasContent = forceCreate;
@@ -1573,7 +1573,7 @@ exports.create = create;
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_link_to_ng_dialog_1 = __webpack_require__(15);
 var render_1 = __webpack_require__(5);
-var _2sxc__quickDialog_1 = __webpack_require__(4);
+var quick_dialog_1 = __webpack_require__(4);
 var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * open a new dialog of the angular-ui
@@ -1591,7 +1591,7 @@ function commandOpenNgDialog(sxc, editContext, settings, event) {
     };
     var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(sxc, editContext, settings); // the link contains everything to open a full dialog (lots of params added)
     if (settings.inlineWindow)
-        return _2sxc__quickDialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+        return quick_dialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
     if (settings.newWindow || (event && event.shiftKey))
         return window.open(link);
     return module_bootstrapper_1.$2sxc.totalPopup.open(link, callback);
@@ -2605,8 +2605,10 @@ exports.initInstance = initInstance;
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc) {
     var editContext = api_1.getEditContext(sxc);
+    // ReSharper disable AssignedValueIsNeverUsed
     var userInfo = api_1.getUserOfEditContext(editContext);
     var cmdEngine = engine_1.instanceEngine(sxc, editContext);
+    // ReSharper restore AssignedValueIsNeverUsed
     var EditManager = /** @class */ (function () {
         function EditManager() {
             var _this = this;
