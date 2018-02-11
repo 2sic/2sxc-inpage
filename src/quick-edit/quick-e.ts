@@ -1,5 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
-interface I$quickE {
+﻿interface I$quickE {
   // ReSharper restore InconsistentNaming
   reset: any;
   // copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
@@ -38,41 +37,4 @@ interface I$quickE {
   toggleParts: any;
   // btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?:boolean, classes?: string): string;
   template: string;
-}
-
-declare let $quickE: I$quickE;
-
-interface IClipboard {
-  data: any;
-  mark(newData: any): any;
-  clear(): void;
-  createSpecs(type: string, list: any, index: number): ISpecs;
-}
-
-interface ISpecs {
-  parent: any;
-  field: any;
-  list: any;
-  item: any;
-  index: number;
-  type: any;
-}
-
-interface ISelected {
-  toggle(target: any, type?: any): any;
-  hide(): void;
-  target: any;
-  find(selector: string): any;
-}
-
-interface IConf {
-  enable: boolean;
-  innerBlocks: {
-    enable: boolean | string | null;
-  };
-  modules: {
-    enable: boolean | string | null;
-  };
-  getAttribute?(configAttr: string): any;
-  guid?: string;
 }

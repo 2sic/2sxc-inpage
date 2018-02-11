@@ -165,17 +165,6 @@ function showGlassesButtonIfUninitialized(sxc) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var CbOrMod = /** @class */ (function () {
-    function CbOrMod() {
-    }
-    return CbOrMod;
-}());
-;
-var Selectors = /** @class */ (function () {
-    function Selectors() {
-    }
-    return Selectors;
-}());
 // the quick-edit object
 // the quick-insert object
 exports.$quickE = window.$quickE = {
@@ -193,7 +182,7 @@ exports.$quickE = window.$quickE = {
     modules: null,
     nearestCb: null,
     nearestMod: null,
-    modManage: null // will be populated later in the module section
+    modManage: null,
 };
 // selectors used all over the in-page-editing, centralized to ensure consistency
 exports.selectors = {
@@ -2771,33 +2760,33 @@ __webpack_require__(64);
 __webpack_require__(65);
 __webpack_require__(66);
 __webpack_require__(67);
-__webpack_require__(68);
 __webpack_require__(35);
-__webpack_require__(69);
+__webpack_require__(68);
 __webpack_require__(2);
 __webpack_require__(36);
 __webpack_require__(22);
 __webpack_require__(37);
+__webpack_require__(69);
 __webpack_require__(70);
-__webpack_require__(71);
 __webpack_require__(23);
 __webpack_require__(24);
 __webpack_require__(25);
+__webpack_require__(71);
 __webpack_require__(72);
-__webpack_require__(73);
 __webpack_require__(4);
 __webpack_require__(1);
 __webpack_require__(8);
 __webpack_require__(17);
 __webpack_require__(28);
-__webpack_require__(74);
+__webpack_require__(73);
 __webpack_require__(18);
-__webpack_require__(75);
+__webpack_require__(74);
 __webpack_require__(9);
 __webpack_require__(26);
-__webpack_require__(27);
+__webpack_require__(75);
 __webpack_require__(76);
 __webpack_require__(77);
+__webpack_require__(27);
 __webpack_require__(78);
 __webpack_require__(79);
 __webpack_require__(80);
@@ -2807,6 +2796,12 @@ __webpack_require__(83);
 __webpack_require__(84);
 __webpack_require__(85);
 __webpack_require__(86);
+__webpack_require__(87);
+__webpack_require__(88);
+__webpack_require__(89);
+__webpack_require__(90);
+__webpack_require__(91);
+__webpack_require__(92);
 __webpack_require__(3);
 module.exports = __webpack_require__(0);
 
@@ -3232,27 +3227,27 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = __webpack_require__(1);
-//import '/2sxc-api/js/2sxc.api';
+// import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals
-//export let $2sxc = window.$2sxc as SxcControllerWithInternals;
+// export let $2sxc = window.$2sxc as SxcControllerWithInternals;
 window.$quickE = _quickE___1.$quickE;
-//let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
+// let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
 // $2sxc.c = $2sxc.consts
 // $2sxc.system
 // $2sxc._commands = {};
 // $2sxc._lib
 // $2sxc._commands.definitions = {};
-//$2sxc._contentBlock
-//$2sxc.translate
+// $2sxc._contentBlock
+// $2sxc.translate
 // $2sxc.contentItems
-//$2sxc._commands.instanceEngine
-//? $2sxc.urlParams
-//$2sxc._quickDialog
-//$2sxc.totalPopup
-//$2sxc._commands.definitions
-//$2sxc._toolbarManager
-//$2sxc._manage
-//$2sxc.contentItems
+// $2sxc._commands.instanceEngine
+// ? $2sxc.urlParams
+// $2sxc._quickDialog
+// $2sxc.totalPopup
+// $2sxc._commands.definitions
+// $2sxc._toolbarManager
+// $2sxc._manage
+// $2sxc.contentItems
 // window.i18next
 // window.i18nextXHRBackend
 
@@ -3302,12 +3297,6 @@ window.$quickE = _quickE___1.$quickE;
 
 /***/ }),
 /* 69 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3316,7 +3305,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3344,7 +3333,7 @@ module_bootstrapper_1.$2sxc._manage = new Manage();
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3388,7 +3377,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3415,7 +3404,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3450,7 +3439,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3480,7 +3469,68 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CbOrMod = /** @class */ (function () {
+    function CbOrMod() {
+    }
+    return CbOrMod;
+}());
+exports.CbOrMod = CbOrMod;
+
+
+/***/ }),
 /* 76 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports) {
+
+// ReSharper disable InconsistentNaming
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Selectors = /** @class */ (function () {
+    function Selectors() {
+    }
+    return Selectors;
+}());
+exports.Selectors = Selectors;
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 82 */
 /***/ (function(module, exports) {
 
 /*
@@ -3581,7 +3631,7 @@ _quickE___1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 77 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3593,7 +3643,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 78 */
+/* 84 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3608,7 +3658,7 @@ $(function () {
 
 
 /***/ }),
-/* 79 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3627,7 +3677,7 @@ module_bootstrapper_1.$2sxc._toolbarManager = {
 
 
 /***/ }),
-/* 80 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3724,7 +3774,7 @@ Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
 
 
 /***/ }),
-/* 81 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3769,7 +3819,7 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
 
 
 /***/ }),
-/* 82 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3808,7 +3858,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 83 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4040,7 +4090,7 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 84 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4062,7 +4112,7 @@ function standardButtons(canDesign, sharedParameters) {
 
 
 /***/ }),
-/* 85 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4130,7 +4180,7 @@ module_bootstrapper_1.$2sxc._toolbarManager.toolbarTemplate = {
 
 
 /***/ }),
-/* 86 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

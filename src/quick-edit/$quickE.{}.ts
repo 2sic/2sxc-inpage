@@ -1,19 +1,4 @@
-﻿
-class CbOrMod {
-  id: string;
-  class: string;
-  selector: string;
-  listSelector: string;
-  context: string;
-  singleItem?: string;
-};
-
-class Selectors {
-  cb: CbOrMod;
-  mod: CbOrMod;
-  eitherCbOrMod: string;
-  selected: string;
-}
+﻿import { Selectors } from './selectors';
 
 // the quick-edit object
 // the quick-insert object
@@ -29,14 +14,14 @@ export let $quickE = window.$quickE = {
     .append(
     btn('delete', 'trash-empty', 'Delete'),
     btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'),
-    "<div id='paneList'></div>"
+    "<div id='paneList'></div>",
     ),
   contentBlocks: null,
   cachedPanes: null,
   modules: null,
   nearestCb: null,
   nearestMod: null,
-  modManage: null // will be populated later in the module section
+  modManage: null, // will be populated later in the module section
 } as I$quickE;
 
 // selectors used all over the in-page-editing, centralized to ensure consistency

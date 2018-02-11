@@ -1,16 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CbOrMod = /** @class */ (function () {
-    function CbOrMod() {
-    }
-    return CbOrMod;
-}());
-;
-var Selectors = /** @class */ (function () {
-    function Selectors() {
-    }
-    return Selectors;
-}());
 // the quick-edit object
 // the quick-insert object
 exports.$quickE = window.$quickE = {
@@ -28,7 +17,7 @@ exports.$quickE = window.$quickE = {
     modules: null,
     nearestCb: null,
     nearestMod: null,
-    modManage: null // will be populated later in the module section
+    modManage: null,
 };
 // selectors used all over the in-page-editing, centralized to ensure consistency
 exports.selectors = {
