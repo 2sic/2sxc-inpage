@@ -1,4 +1,4 @@
-﻿import { $quickE as quickE } from './$quickE.{}';
+﻿import { $quickE as quickE } from './quick-e';
 import { clipboard } from './$quickE.clipboard';
 
 /**

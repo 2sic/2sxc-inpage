@@ -1,4 +1,4 @@
-﻿import { $quickE as quickE } from './$quickE.{}';
+﻿import { $quickE as quickE } from './quick-e';
 import { Conf } from './conf';
 import { selectors } from './selectors-instance';
 

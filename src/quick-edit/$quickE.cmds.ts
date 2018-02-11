@@ -1,4 +1,4 @@
-﻿import { $quickE as quickE } from './$quickE.{}';
+﻿import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 import { modManage } from './$quickE.modManage';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';

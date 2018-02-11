@@ -1,4 +1,4 @@
-﻿import { $quickE as quickE } from './quick-edit/$quickE.{}';
+﻿import { $quickE as quickE } from './quick-edit/quick-e';
 
 // import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals

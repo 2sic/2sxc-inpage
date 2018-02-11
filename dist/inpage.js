@@ -801,7 +801,7 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 var _quickE_positioning_1 = __webpack_require__(10);
 var _quickE_cmds_1 = __webpack_require__(18);
@@ -875,14 +875,14 @@ var clipboard;
         if (cb.prev().is('iframe'))
             cb.prev().addClass(selectors_instance_1.selectors.selected);
         setSecondaryActionsState(true);
-        _quickE___1.$quickE.selected.toggle(cb, clipboard.data.type);
+        quick_e_1.$quickE.selected.toggle(cb, clipboard.data.type);
     }
     clipboard.mark = mark;
     function clear() {
         $('.' + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected);
         clipboard.data = null;
         setSecondaryActionsState(false);
-        _quickE___1.$quickE.selected.toggle(false);
+        quick_e_1.$quickE.selected.toggle(false);
     }
     clipboard.clear = clear;
     function createSpecs(type, list, index) {
@@ -902,19 +902,19 @@ function setSecondaryActionsState(state) {
     btns.toggleClass('sc-unavailable', !state);
 }
 ;
-_quickE___1.$quickE.selected.toggle = function (target) {
+quick_e_1.$quickE.selected.toggle = function (target) {
     if (!target || target.length === 0)
-        return _quickE___1.$quickE.selected.hide();
+        return quick_e_1.$quickE.selected.hide();
     var coords = _quickE_positioning_1.getCoordinates(target);
     coords.yh = coords.y + 20;
-    _quickE_positioning_1.positionAndAlign(_quickE___1.$quickE.selected, coords);
-    _quickE___1.$quickE.selected.target = target;
+    _quickE_positioning_1.positionAndAlign(quick_e_1.$quickE.selected, coords);
+    quick_e_1.$quickE.selected.target = target;
 };
 var cmdsStrategyFactory = new _quickE_cmds_1.CmdsStrategyFactory();
 /**
  * bind clipboard actions
  */
-$('a', _quickE___1.$quickE.selected).click(function () {
+$('a', quick_e_1.$quickE.selected).click(function () {
     var action = $(this).data('action');
     var clip = clipboard.data;
     switch (action) {
@@ -933,7 +933,7 @@ $('a', _quickE___1.$quickE.selected).click(function () {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 var coords_1 = __webpack_require__(29);
 var selectors_instance_1 = __webpack_require__(3);
 /**
@@ -947,9 +947,9 @@ var selectors_instance_1 = __webpack_require__(3);
  * @returns Point
  */
 function getBodyPosition() {
-    var bodyPos = _quickE___1.$quickE.body.css('position');
+    var bodyPos = quick_e_1.$quickE.body.css('position');
     return bodyPos === 'relative' || bodyPos === 'absolute'
-        ? new coords_1.Coords(_quickE___1.$quickE.body.offset().left, _quickE___1.$quickE.body.offset().top)
+        ? new coords_1.Coords(quick_e_1.$quickE.body.offset().left, quick_e_1.$quickE.body.offset().top)
         : new coords_1.Coords(0, 0);
 }
 exports.getBodyPosition = getBodyPosition;
@@ -958,22 +958,22 @@ exports.getBodyPosition = getBodyPosition;
  * Refresh content block and modules elements
  */
 function refreshDomObjects() {
-    _quickE___1.$quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
+    quick_e_1.$quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
     //// Cache the panes (because panes can't change dynamically)
     //if (!quickE.cachedPanes)
     //    quickE.cachedPanes = $(selectors.mod.listSelector);
-    if (_quickE___1.$quickE.config.innerBlocks.enable) {
+    if (quick_e_1.$quickE.config.innerBlocks.enable) {
         // get all content-block lists which are empty, or which allow multiple child-items
         var lists = $(selectors_instance_1.selectors.cb.listSelector)
             .filter(':not(.' + selectors_instance_1.selectors.cb.singleItem + '), :empty');
-        _quickE___1.$quickE.contentBlocks = lists // $(selectors.cb.listSelector)
+        quick_e_1.$quickE.contentBlocks = lists // $(selectors.cb.listSelector)
             .find(selectors_instance_1.selectors.cb.selector)
             .add(lists); // selectors.cb.listSelector);
     }
-    if (_quickE___1.$quickE.config.modules.enable)
-        _quickE___1.$quickE.modules = _quickE___1.$quickE.cachedPanes
+    if (quick_e_1.$quickE.config.modules.enable)
+        quick_e_1.$quickE.modules = quick_e_1.$quickE.cachedPanes
             .find(selectors_instance_1.selectors.mod.selector)
-            .add(_quickE___1.$quickE.cachedPanes);
+            .add(quick_e_1.$quickE.cachedPanes);
 }
 /**
  * Last time when contentblock and modules are refreshed.
@@ -986,8 +986,8 @@ function refreshDomObjects() {
  */
 function positionAndAlign(element, coords) {
     return element.css({
-        left: coords.x - _quickE___1.$quickE.bodyOffset.x,
-        top: coords.yh - _quickE___1.$quickE.bodyOffset.y,
+        left: coords.x - quick_e_1.$quickE.bodyOffset.x,
+        top: coords.yh - quick_e_1.$quickE.bodyOffset.y,
         width: coords.element.width()
     }).show();
 }
@@ -1005,17 +1005,17 @@ function refresh(e) {
         refreshDomObjects.lastCall = newDate;
         refreshDomObjects();
     }
-    if (_quickE___1.$quickE.config.innerBlocks.enable && _quickE___1.$quickE.contentBlocks) {
-        _quickE___1.$quickE.nearestCb = findNearest(_quickE___1.$quickE.contentBlocks, new coords_1.Coords(e.clientX, e.clientY));
+    if (quick_e_1.$quickE.config.innerBlocks.enable && quick_e_1.$quickE.contentBlocks) {
+        quick_e_1.$quickE.nearestCb = findNearest(quick_e_1.$quickE.contentBlocks, new coords_1.Coords(e.clientX, e.clientY));
     }
-    if (_quickE___1.$quickE.config.modules.enable && _quickE___1.$quickE.modules) {
-        _quickE___1.$quickE.nearestMod = findNearest(_quickE___1.$quickE.modules, new coords_1.Coords(e.clientX, e.clientY));
+    if (quick_e_1.$quickE.config.modules.enable && quick_e_1.$quickE.modules) {
+        quick_e_1.$quickE.nearestMod = findNearest(quick_e_1.$quickE.modules, new coords_1.Coords(e.clientX, e.clientY));
     }
-    _quickE___1.$quickE.modActions.toggleClass('sc-invisible', _quickE___1.$quickE.nearestMod === null);
-    _quickE___1.$quickE.cbActions.toggleClass('sc-invisible', _quickE___1.$quickE.nearestCb === null);
-    var oldParent = _quickE___1.$quickE.main.parentContainer;
-    if (_quickE___1.$quickE.nearestCb !== null || _quickE___1.$quickE.nearestMod !== null) {
-        var alignTo = _quickE___1.$quickE.nearestCb || _quickE___1.$quickE.nearestMod;
+    quick_e_1.$quickE.modActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestMod === null);
+    quick_e_1.$quickE.cbActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestCb === null);
+    var oldParent = quick_e_1.$quickE.main.parentContainer;
+    if (quick_e_1.$quickE.nearestCb !== null || quick_e_1.$quickE.nearestMod !== null) {
+        var alignTo = quick_e_1.$quickE.nearestCb || quick_e_1.$quickE.nearestMod;
         // find parent pane to highlight
         var parentPane = $(alignTo.element).closest(selectors_instance_1.selectors.mod.listSelector);
         var parentCbList = $(alignTo.element).closest(selectors_instance_1.selectors.cb.listSelector);
@@ -1025,24 +1025,24 @@ function refresh(e) {
             var paneName_1 = parentPane.attr('id') || '';
             if (paneName_1.length > 4)
                 paneName_1 = paneName_1.substr(4);
-            _quickE___1.$quickE.modActions.filter('[titleTemplate]').each(function () {
+            quick_e_1.$quickE.modActions.filter('[titleTemplate]').each(function () {
                 var t = $(this);
                 t.attr('title', t.attr('titleTemplate').replace('{0}', paneName_1));
             });
         }
-        positionAndAlign(_quickE___1.$quickE.main, alignTo);
+        positionAndAlign(quick_e_1.$quickE.main, alignTo);
         // Keep current block as current on menu
-        _quickE___1.$quickE.main.actionsForCb = _quickE___1.$quickE.nearestCb ? _quickE___1.$quickE.nearestCb.element : null;
-        _quickE___1.$quickE.main.actionsForModule = _quickE___1.$quickE.nearestMod ? _quickE___1.$quickE.nearestMod.element : null;
-        _quickE___1.$quickE.main.parentContainer = parentContainer;
+        quick_e_1.$quickE.main.actionsForCb = quick_e_1.$quickE.nearestCb ? quick_e_1.$quickE.nearestCb.element : null;
+        quick_e_1.$quickE.main.actionsForModule = quick_e_1.$quickE.nearestMod ? quick_e_1.$quickE.nearestMod.element : null;
+        quick_e_1.$quickE.main.parentContainer = parentContainer;
         $(parentContainer).addClass(highlightClass);
     }
     else {
-        _quickE___1.$quickE.main.parentContainer = null;
-        _quickE___1.$quickE.main.hide();
+        quick_e_1.$quickE.main.parentContainer = null;
+        quick_e_1.$quickE.main.hide();
     }
     // if previously a parent-pane was highlighted, un-highlight it now
-    if (oldParent && oldParent !== _quickE___1.$quickE.main.parentContainer)
+    if (oldParent && oldParent !== quick_e_1.$quickE.main.parentContainer)
         $(oldParent).removeClass(highlightClass);
 }
 exports.refresh = refresh;
@@ -1056,8 +1056,8 @@ function findNearest(elements, position) {
     var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
     var nearestItem = null;
     var nearestDistance = maxDistance;
-    var posX = position.x + _quickE___1.$quickE.win.scrollLeft();
-    var posY = position.y + _quickE___1.$quickE.win.scrollTop();
+    var posX = position.x + quick_e_1.$quickE.win.scrollLeft();
+    var posY = position.y + quick_e_1.$quickE.win.scrollTop();
     // Find nearest element
     elements.each(function () {
         var e = getCoordinates($(this));
@@ -1670,7 +1670,7 @@ exports.instanceEngine = instanceEngine;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 var _quickE_modManage_1 = __webpack_require__(19);
 var module_bootstrapper_1 = __webpack_require__(0);
@@ -1705,9 +1705,9 @@ var mod = /** @class */ (function () {
         mm.move(modId, pane, to);
     };
     mod.sendToPane = function () {
-        var pane = _quickE___1.$quickE.main.actionsForModule.closest(selectors_instance_1.selectors.mod.listSelector);
+        var pane = quick_e_1.$quickE.main.actionsForModule.closest(selectors_instance_1.selectors.mod.listSelector);
         // show the pane-options
-        var pl = _quickE___1.$quickE.selected.find('#paneList');
+        var pl = quick_e_1.$quickE.selected.find('#paneList');
         if (!pl.is(':empty'))
             pl.empty();
         pl.append(mm.getMoveButtons(mm.getPaneName(pane)));
@@ -1740,7 +1740,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 var _quickE_clipboard_1 = __webpack_require__(9);
 /**
  * module specific stuff
@@ -1849,7 +1849,7 @@ function createMod(paneName, position, modId) {
     });
 }
 function generatePaneMoveButtons(current) {
-    var pns = _quickE___1.$quickE.cachedPanes;
+    var pns = quick_e_1.$quickE.cachedPanes;
     // generate list of panes as links
     var targets = $('<div>');
     for (var p = 0; p < pns.length; p++) {
@@ -1996,13 +1996,13 @@ exports.UserOfEditContext = UserOfEditContext;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 var _quickE_config_1 = __webpack_require__(28);
 var _quickE_positioning_1 = __webpack_require__(10);
 var selectors_instance_1 = __webpack_require__(3);
 function enable() {
     // build all toolbar html-elements
-    _quickE___1.prepareToolbarInDom();
+    quick_e_1.prepareToolbarInDom();
     // Cache the panes (because panes can't change dynamically)
     initPanes();
 }
@@ -2026,9 +2026,9 @@ function watchMouse() {
 function start() {
     try {
         _quickE_config_1._readPageConfig();
-        if (_quickE___1.$quickE.config.enable) {
+        if (quick_e_1.$quickE.config.enable) {
             // initialize first body-offset
-            _quickE___1.$quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
+            quick_e_1.$quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
             enable();
             toggleParts();
             watchMouse();
@@ -2043,8 +2043,8 @@ function start() {
  * cache the panes which can contain modules
  */
 function initPanes() {
-    _quickE___1.$quickE.cachedPanes = $(selectors_instance_1.selectors.mod.listSelector);
-    _quickE___1.$quickE.cachedPanes.addClass('sc-cb-pane-glow');
+    quick_e_1.$quickE.cachedPanes = $(selectors_instance_1.selectors.mod.listSelector);
+    quick_e_1.$quickE.cachedPanes.addClass('sc-cb-pane-glow');
 }
 ;
 /**
@@ -2080,13 +2080,13 @@ $(start);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
  */
-var conf = _quickE___1.$quickE.config = {
+var conf = quick_e_1.$quickE.config = {
     enable: true,
     innerBlocks: {
         enable: null,
@@ -2793,7 +2793,6 @@ __webpack_require__(26);
 __webpack_require__(72);
 __webpack_require__(73);
 __webpack_require__(5);
-__webpack_require__(1);
 __webpack_require__(9);
 __webpack_require__(18);
 __webpack_require__(28);
@@ -2807,6 +2806,7 @@ __webpack_require__(77);
 __webpack_require__(78);
 __webpack_require__(29);
 __webpack_require__(79);
+__webpack_require__(1);
 __webpack_require__(80);
 __webpack_require__(3);
 __webpack_require__(81);
@@ -3246,11 +3246,11 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 // import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals
 // export let $2sxc = window.$2sxc as SxcControllerWithInternals;
-window.$quickE = _quickE___1.$quickE;
+window.$quickE = quick_e_1.$quickE;
 // let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
 // $2sxc.c = $2sxc.consts
 // $2sxc.system
@@ -3430,7 +3430,7 @@ if (typeof Object.assign != 'function') {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 var _quickE_clipboard_1 = __webpack_require__(9);
 var _quickE_cmds_1 = __webpack_require__(18);
 var selectors_instance_1 = __webpack_require__(3);
@@ -3438,13 +3438,13 @@ var selectors_instance_1 = __webpack_require__(3);
  * content-block specific stuff like actions
  */
 function onCbButtonClick() {
-    var list = _quickE___1.$quickE.main.actionsForCb.closest(selectors_instance_1.selectors.cb.listSelector);
+    var list = quick_e_1.$quickE.main.actionsForCb.closest(selectors_instance_1.selectors.cb.listSelector);
     var listItems = list.find(selectors_instance_1.selectors.cb.selector);
     var actionConfig = JSON.parse(list.attr(selectors_instance_1.selectors.cb.context));
     var index = 0;
     var newGuid = actionConfig.guid || null;
-    if (_quickE___1.$quickE.main.actionsForCb.hasClass(selectors_instance_1.selectors.cb.class))
-        index = listItems.index(_quickE___1.$quickE.main.actionsForCb[0]) + 1;
+    if (quick_e_1.$quickE.main.actionsForCb.hasClass(selectors_instance_1.selectors.cb.class))
+        index = listItems.index(quick_e_1.$quickE.main.actionsForCb[0]) + 1;
     // check cut/paste
     var cbAction = $(this).data('action');
     if (cbAction) {
@@ -3456,7 +3456,7 @@ function onCbButtonClick() {
         return _quickE_cmds_1.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
     }
 }
-_quickE___1.$quickE.cbActions.click(onCbButtonClick);
+quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
@@ -3466,7 +3466,7 @@ _quickE___1.$quickE.cbActions.click(onCbButtonClick);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(1);
 var _quickE_clipboard_1 = __webpack_require__(9);
 var _quickE_modManage_1 = __webpack_require__(19);
 var selectors_instance_1 = __webpack_require__(3);
@@ -3475,7 +3475,7 @@ var mm = new _quickE_modManage_1.modManage();
  * module specific stuff
  */
 function onModuleButtonClick() {
-    var type = $(this).data('type'), dnnMod = _quickE___1.$quickE.main.actionsForModule, pane = dnnMod.closest(selectors_instance_1.selectors.mod.listSelector), index = 0;
+    var type = $(this).data('type'), dnnMod = quick_e_1.$quickE.main.actionsForModule, pane = dnnMod.closest(selectors_instance_1.selectors.mod.listSelector), index = 0;
     if (dnnMod.hasClass('DnnModule'))
         index = pane.find('.DnnModule').index(dnnMod[0]) + 1;
     var cbAction = $(this).data('action');
@@ -3487,7 +3487,7 @@ function onModuleButtonClick() {
 /**
  * bind module actions click
  */
-_quickE___1.$quickE.modActions.click(onModuleButtonClick);
+quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),

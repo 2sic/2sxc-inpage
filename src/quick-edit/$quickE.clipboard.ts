@@ -1,4 +1,4 @@
-﻿import { $quickE as quickE } from './$quickE.{}';
+﻿import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 import { positionAndAlign, getCoordinates } from './$quickE.positioning';
 import { mod, CmdsStrategyFactory } from './$quickE.cmds';

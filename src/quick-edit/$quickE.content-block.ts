@@ -1,4 +1,4 @@
-﻿import { $quickE as quickE } from './$quickE.{}';
+﻿import { $quickE as quickE } from './quick-e';
 import { copyPasteInPage } from './$quickE.clipboard';
 import { cb } from './$quickE.cmds';
 import { selectors } from './selectors-instance';

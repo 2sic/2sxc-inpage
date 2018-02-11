@@ -1,4 +1,4 @@
-﻿import { $quickE as quickE, prepareToolbarInDom } from './$quickE.{}';
+﻿import { $quickE as quickE, prepareToolbarInDom } from './quick-e';
 import { _readPageConfig } from './$quickE.config';
 import { getBodyPosition, refresh } from './$quickE.positioning';
 import { selectors } from './selectors-instance';

@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = require("./$quickE.{}");
+var quick_e_1 = require("./quick-e");
 var selectors_instance_1 = require("./selectors-instance");
 var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
  */
-var conf = _quickE___1.$quickE.config = {
+var conf = quick_e_1.$quickE.config = {
     enable: true,
     innerBlocks: {
         enable: null,
