@@ -1,5 +1,6 @@
-﻿import { $quickE as quickE, selectors } from './$quickE.{}';
+﻿import { $quickE as quickE } from './$quickE.{}';
 import { Conf } from './conf';
+import { selectors } from './selectors-instance';
 
 const configAttr: string = 'quick-edit-config';
 

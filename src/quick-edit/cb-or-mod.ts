@@ -1,4 +1,7 @@
-﻿export class CbOrMod {
+﻿/**
+ * used in Selectors class
+ */
+export class CbOrMod {
   id: string;
   class: string;
   selector: string;

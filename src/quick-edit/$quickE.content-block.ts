@@ -1,6 +1,7 @@
-﻿import { $quickE as quickE, selectors } from './$quickE.{}';
+﻿import { $quickE as quickE } from './$quickE.{}';
 import { copyPasteInPage } from './$quickE.clipboard';
 import { cb } from './$quickE.cmds';
+import { selectors } from './selectors-instance';
 
 /**
  * content-block specific stuff like actions

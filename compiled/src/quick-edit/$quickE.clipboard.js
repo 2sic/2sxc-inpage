@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
+var selectors_instance_1 = require("./selectors-instance");
 var _quickE_positioning_1 = require("./$quickE.positioning");
 var _quickE_cmds_1 = require("./$quickE.cmds");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
@@ -31,9 +32,9 @@ function copyPasteInPage(cbAction, list, index, type) {
                 return clipboard.clear(); // don't do anything
             // cb-numbering is a bit different, because the selector is at the bottom
             // only there we should also skip on +1;
-            if (newClip.type === _quickE___1.selectors.cb.id && from + 1 === to)
+            if (newClip.type === selectors_instance_1.selectors.cb.id && from + 1 === to)
                 return clipboard.clear(); // don't do anything
-            if (type === _quickE___1.selectors.cb.id) {
+            if (type === selectors_instance_1.selectors.cb.id) {
                 var sxc = module_bootstrapper_1.$2sxc(list);
                 sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
             }
@@ -63,32 +64,32 @@ var clipboard;
                 return clear();
             clipboard.data = newData;
         }
-        $('.' + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected); // clear previous markings
+        $('.' + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected); // clear previous markings
         // sometimes missing data.item
         if (!clipboard.data.item) {
             return;
         }
         var cb = $(clipboard.data.item);
-        cb.addClass(_quickE___1.selectors.selected);
+        cb.addClass(selectors_instance_1.selectors.selected);
         if (cb.prev().is('iframe'))
-            cb.prev().addClass(_quickE___1.selectors.selected);
+            cb.prev().addClass(selectors_instance_1.selectors.selected);
         setSecondaryActionsState(true);
         _quickE___1.$quickE.selected.toggle(cb, clipboard.data.type);
     }
     clipboard.mark = mark;
     function clear() {
-        $('.' + _quickE___1.selectors.selected).removeClass(_quickE___1.selectors.selected);
+        $('.' + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected);
         clipboard.data = null;
         setSecondaryActionsState(false);
         _quickE___1.$quickE.selected.toggle(false);
     }
     clipboard.clear = clear;
     function createSpecs(type, list, index) {
-        var listItems = list.find(_quickE___1.selectors[type].selector);
+        var listItems = list.find(selectors_instance_1.selectors[type].selector);
         if (index >= listItems.length)
             index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
         var currentItem = listItems[index];
-        var editContext = JSON.parse(list.attr(_quickE___1.selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
+        var editContext = JSON.parse(list.attr(selectors_instance_1.selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
         return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
     }
     clipboard.createSpecs = createSpecs;

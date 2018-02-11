@@ -1,4 +1,5 @@
-﻿import { $quickE as quickE, selectors } from './$quickE.{}';
+﻿import { $quickE as quickE } from './$quickE.{}';
+import { selectors } from './selectors-instance';
 import { positionAndAlign, getCoordinates } from './$quickE.positioning';
 import { mod, CmdsStrategyFactory } from './$quickE.cmds';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';

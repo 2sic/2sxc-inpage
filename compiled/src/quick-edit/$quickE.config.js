@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
+var selectors_instance_1 = require("./selectors-instance");
 var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
@@ -20,7 +21,7 @@ function _readPageConfig() {
     var confJ;
     var confO;
     // any inner blocks found? will currently affect if modules can be inserted...
-    var hasInnerCBs = ($(_quickE___1.selectors.cb.listSelector).length > 0);
+    var hasInnerCBs = ($(selectors_instance_1.selectors.cb.listSelector).length > 0);
     if (configs.length > 0) {
         // go through reverse list, as the last is the most important...
         for (var c = configs.length; c >= 0; c--) {

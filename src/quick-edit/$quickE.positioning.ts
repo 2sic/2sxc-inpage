@@ -1,5 +1,6 @@
-﻿import { $quickE as quickE, selectors } from './$quickE.{}';
+﻿import { $quickE as quickE } from './$quickE.{}';
 import { Coords } from './coords';
+import { selectors } from './selectors-instance';
 
 /**
  * Module with everything related to positioning the quick-edit in-page editing

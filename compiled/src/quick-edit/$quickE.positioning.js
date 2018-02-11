@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var _quickE___1 = require("./$quickE.{}");
 var coords_1 = require("./coords");
+var selectors_instance_1 = require("./selectors-instance");
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
@@ -30,15 +31,15 @@ function refreshDomObjects() {
     //    quickE.cachedPanes = $(selectors.mod.listSelector);
     if (_quickE___1.$quickE.config.innerBlocks.enable) {
         // get all content-block lists which are empty, or which allow multiple child-items
-        var lists = $(_quickE___1.selectors.cb.listSelector)
-            .filter(':not(.' + _quickE___1.selectors.cb.singleItem + '), :empty');
+        var lists = $(selectors_instance_1.selectors.cb.listSelector)
+            .filter(':not(.' + selectors_instance_1.selectors.cb.singleItem + '), :empty');
         _quickE___1.$quickE.contentBlocks = lists // $(selectors.cb.listSelector)
-            .find(_quickE___1.selectors.cb.selector)
+            .find(selectors_instance_1.selectors.cb.selector)
             .add(lists); // selectors.cb.listSelector);
     }
     if (_quickE___1.$quickE.config.modules.enable)
         _quickE___1.$quickE.modules = _quickE___1.$quickE.cachedPanes
-            .find(_quickE___1.selectors.mod.selector)
+            .find(selectors_instance_1.selectors.mod.selector)
             .add(_quickE___1.$quickE.cachedPanes);
 }
 /**
@@ -83,8 +84,8 @@ function refresh(e) {
     if (_quickE___1.$quickE.nearestCb !== null || _quickE___1.$quickE.nearestMod !== null) {
         var alignTo = _quickE___1.$quickE.nearestCb || _quickE___1.$quickE.nearestMod;
         // find parent pane to highlight
-        var parentPane = $(alignTo.element).closest(_quickE___1.selectors.mod.listSelector);
-        var parentCbList = $(alignTo.element).closest(_quickE___1.selectors.cb.listSelector);
+        var parentPane = $(alignTo.element).closest(selectors_instance_1.selectors.mod.listSelector);
+        var parentCbList = $(alignTo.element).closest(selectors_instance_1.selectors.cb.listSelector);
         var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
         // put part of the pane-name into the button-labels
         if (parentPane.length > 0) {
@@ -152,7 +153,7 @@ function getCoordinates(element) {
         y: element.offset().top,
         // For content-block ITEMS, the menu must be visible at the end
         // For content-block-LISTS, the menu must be at top
-        yh: element.offset().top + (element.is(_quickE___1.selectors.eitherCbOrMod) ? element.height() : 0)
+        yh: element.offset().top + (element.is(selectors_instance_1.selectors.eitherCbOrMod) ? element.height() : 0)
     };
     return coords;
 }

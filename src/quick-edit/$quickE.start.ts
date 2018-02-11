@@ -1,6 +1,7 @@
-﻿import { $quickE as quickE, selectors, prepareToolbarInDom } from './$quickE.{}';
-import { getBodyPosition, refresh } from './$quickE.positioning';
+﻿import { $quickE as quickE, prepareToolbarInDom } from './$quickE.{}';
 import { _readPageConfig } from './$quickE.config';
+import { getBodyPosition, refresh } from './$quickE.positioning';
+import { selectors } from './selectors-instance';
 
 function enable(): void {
   // build all toolbar html-elements
