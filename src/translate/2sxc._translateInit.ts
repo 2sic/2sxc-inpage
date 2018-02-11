@@ -23,8 +23,8 @@ export function _translateInit(manage: any): void {
       whitelist: ['en', 'de', 'fr', 'it', 'uk', 'nl'],
       preload: ['en'],
       backend: {
-        loadPath: manage._editContext.Environment.SxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js'
-      }
+        loadPath: manage._editContext.Environment.SxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js',
+      },
     }, (err, t) => {
       // for options see
       // https://github.com/i18next/jquery-i18next#initialize-the-plugin
@@ -36,5 +36,4 @@ export function _translateInit(manage: any): void {
       $('.sc-i18n').localize();   // quick-insert menus
     });
   initialized = true;
-};
-
+}
