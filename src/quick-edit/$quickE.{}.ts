@@ -1,4 +1,5 @@
-﻿import { Selectors } from './selectors';
+﻿import { QuickE } from './quick-e';
+import { Selectors } from './selectors';
 
 // the quick-edit object
 // the quick-insert object
@@ -22,7 +23,7 @@ export let $quickE = window.$quickE = {
   nearestCb: null,
   nearestMod: null,
   modManage: null, // will be populated later in the module section
-} as I$quickE;
+} as QuickE;
 
 // selectors used all over the in-page-editing, centralized to ensure consistency
 export let selectors: Selectors = {
@@ -39,10 +40,10 @@ export let selectors: Selectors = {
     "class": 'DnnModule',
     selector: '.DnnModule',
     listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)', // Found no better way to get all panes - the hidden variable does not exist when not in edit page mode
-    context: null
+    context: null,
   },
   eitherCbOrMod: '.DnnModule, .sc-content-block',
-  selected: 'sc-cb-is-selected'
+  selected: 'sc-cb-is-selected',
 };
 
 function btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?: boolean, classes?: string): string {
@@ -52,7 +53,7 @@ function btn(action: string, icon: string, i18N: string, invisible?: boolean, un
     + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
 };
 
-// add stuff which dependes on other values to create
+// add stuff which depends on other values to create
 $quickE.cbActions = $($quickE.template);
 $quickE.modActions = $($quickE.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
   .attr('data-context', 'module')
@@ -66,4 +67,5 @@ export function prepareToolbarInDom(): void {
     .append($quickE.selected);
   $quickE.main.append($quickE.cbActions)
     .append($quickE.modActions);
-};
+}
+

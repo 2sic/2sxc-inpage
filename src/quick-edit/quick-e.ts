@@ -1,17 +1,21 @@
-﻿interface I$quickE {
+﻿import { Clipboard } from './clipboard';
+import { Conf } from './conf';
+import { Selected } from './selected';
+
+export interface QuickE {
   // ReSharper restore InconsistentNaming
   reset: any;
   // copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
-  clipboard: IClipboard;
+  clipboard: Clipboard;
   // selectors: Selectors;
   cmds: any;
   setSecondaryActionsState(state: boolean): void;
-  selected: ISelected;
+  selected: Selected;
   getCoordinates: any;
   positionAndAlign: any;
   modManage: any;
   main: any;
-  config: IConf;
+  config: Conf;
   // ReSharper disable InconsistentNaming
   _readPageConfig: any;
   // ReSharper restore InconsistentNaming

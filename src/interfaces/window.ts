@@ -3,7 +3,7 @@ interface Window {
   $2sxc: SxcControllerWithInternals;
   dnn_tabVersioningEnabled: boolean;
   dnn: any;
-  $quickE: I$quickE;
+  $quickE: any;
   i18next: any;
   i18nextXHRBackend: any;
   $2sxcActionMenuMapper: any; // (moduleId: number) => ActionMenuMapper,

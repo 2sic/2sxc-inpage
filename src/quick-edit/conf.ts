@@ -1,8 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
-
-declare let $quickE: I$quickE;
-
-interface IConf {
+﻿export class Conf {
   enable: boolean;
   innerBlocks: {
     enable: boolean | string | null;

@@ -199,10 +199,10 @@ exports.selectors = {
         "class": 'DnnModule',
         selector: '.DnnModule',
         listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)',
-        context: null
+        context: null,
     },
     eitherCbOrMod: '.DnnModule, .sc-content-block',
-    selected: 'sc-cb-is-selected'
+    selected: 'sc-cb-is-selected',
 };
 function btn(action, icon, i18N, invisible, unavailable, classes) {
     return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + ' '
@@ -211,7 +211,7 @@ function btn(action, icon, i18N, invisible, unavailable, classes) {
         + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
 }
 ;
-// add stuff which dependes on other values to create
+// add stuff which depends on other values to create
 exports.$quickE.cbActions = $(exports.$quickE.template);
 exports.$quickE.modActions = $(exports.$quickE.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
     .attr('data-context', 'module')
@@ -226,7 +226,6 @@ function prepareToolbarInDom() {
         .append(exports.$quickE.modActions);
 }
 exports.prepareToolbarInDom = prepareToolbarInDom;
-;
 
 
 /***/ }),
@@ -2061,13 +2060,12 @@ $(start);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var Coords = /** @class */ (function () {
-    function Coords(x, y, w, yh, element // TODO: find this type
-    ) {
+    function Coords(x, y, w, yh, element) {
         this.x = x;
         this.y = y;
         this.w = w;
         this.yh = yh;
-        this.element = element; // TODO: find this type
+        this.element = element;
     }
     return Coords;
 }());
@@ -2089,14 +2087,14 @@ var configAttr = 'quick-edit-config';
 var conf = _quickE___1.$quickE.config = {
     enable: true,
     innerBlocks: {
-        enable: null // default: auto-detect
+        enable: null,
     },
     modules: {
-        enable: null // default: auto-detect
+        enable: null,
     }
 };
 function _readPageConfig() {
-    var configs = $('[' + configAttr + ']');
+    var configs = $("[" + configAttr + "]");
     var finalConfig = {};
     var confJ;
     var confO;
@@ -2125,7 +2123,6 @@ function _readPageConfig() {
         conf.innerBlocks.enable = hasInnerCBs;
 }
 exports._readPageConfig = _readPageConfig;
-;
 
 
 /***/ }),
@@ -3485,27 +3482,44 @@ exports.CbOrMod = CbOrMod;
 
 /***/ }),
 /* 76 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
 /* 77 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-// ReSharper disable InconsistentNaming
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Conf = /** @class */ (function () {
+    function Conf() {
+    }
+    return Conf;
+}());
+exports.Conf = Conf;
 
 
 /***/ }),
 /* 78 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
 /* 79 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
@@ -3525,8 +3539,17 @@ exports.Selectors = Selectors;
 
 /***/ }),
 /* 81 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Specs = /** @class */ (function () {
+    function Specs() {
+    }
+    return Specs;
+}());
+exports.Specs = Specs;
 
 
 /***/ }),

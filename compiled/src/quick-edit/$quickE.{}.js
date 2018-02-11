@@ -34,10 +34,10 @@ exports.selectors = {
         "class": 'DnnModule',
         selector: '.DnnModule',
         listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)',
-        context: null
+        context: null,
     },
     eitherCbOrMod: '.DnnModule, .sc-content-block',
-    selected: 'sc-cb-is-selected'
+    selected: 'sc-cb-is-selected',
 };
 function btn(action, icon, i18N, invisible, unavailable, classes) {
     return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + ' '
@@ -46,7 +46,7 @@ function btn(action, icon, i18N, invisible, unavailable, classes) {
         + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
 }
 ;
-// add stuff which dependes on other values to create
+// add stuff which depends on other values to create
 exports.$quickE.cbActions = $(exports.$quickE.template);
 exports.$quickE.modActions = $(exports.$quickE.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
     .attr('data-context', 'module')
@@ -61,5 +61,4 @@ function prepareToolbarInDom() {
         .append(exports.$quickE.modActions);
 }
 exports.prepareToolbarInDom = prepareToolbarInDom;
-;
 //# sourceMappingURL=$quickE.{}.js.map

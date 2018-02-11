@@ -1,4 +1,4 @@
-﻿interface ISpecs {
+﻿export class Specs {
   parent: any;
   field: any;
   list: any;

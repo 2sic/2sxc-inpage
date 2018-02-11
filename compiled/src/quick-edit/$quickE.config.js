@@ -8,14 +8,14 @@ var configAttr = 'quick-edit-config';
 var conf = _quickE___1.$quickE.config = {
     enable: true,
     innerBlocks: {
-        enable: null // default: auto-detect
+        enable: null,
     },
     modules: {
-        enable: null // default: auto-detect
+        enable: null,
     }
 };
 function _readPageConfig() {
-    var configs = $('[' + configAttr + ']');
+    var configs = $("[" + configAttr + "]");
     var finalConfig = {};
     var confJ;
     var confO;
@@ -44,5 +44,4 @@ function _readPageConfig() {
         conf.innerBlocks.enable = hasInnerCBs;
 }
 exports._readPageConfig = _readPageConfig;
-;
 //# sourceMappingURL=$quickE.config.js.map
