@@ -801,11 +801,11 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var module_bootstrapper_1 = __webpack_require__(0);
+var _quickE_cmds_1 = __webpack_require__(18);
+var _quickE_positioning_1 = __webpack_require__(10);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
-var _quickE_positioning_1 = __webpack_require__(10);
-var _quickE_cmds_1 = __webpack_require__(18);
-var module_bootstrapper_1 = __webpack_require__(0);
 /**
  * add a clipboard to the quick edit
  */
@@ -865,7 +865,7 @@ var clipboard;
                 return clear();
             clipboard.data = newData;
         }
-        $('.' + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected); // clear previous markings
+        $("." + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected); // clear previous markings
         // sometimes missing data.item
         if (!clipboard.data.item) {
             return;
@@ -879,7 +879,7 @@ var clipboard;
     }
     clipboard.mark = mark;
     function clear() {
-        $('.' + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected);
+        $("." + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected);
         clipboard.data = null;
         setSecondaryActionsState(false);
         quick_e_1.$quickE.selected.toggle(false);

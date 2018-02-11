@@ -1,8 +1,8 @@
 ﻿export class Specs {
   parent: any;
-  field: any;
+  field: string;
   list: any;
   item: any;
   index: number;
-  type: any;
+  type: string;
 }

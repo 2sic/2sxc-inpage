@@ -1,9 +1,10 @@
-﻿import { $quickE as quickE } from './quick-e';
-import { selectors } from './selectors-instance';
-import { positionAndAlign, getCoordinates } from './$quickE.positioning';
-import { mod, CmdsStrategyFactory } from './$quickE.cmds';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { CmdsStrategyFactory, mod } from './$quickE.cmds';
+import { getCoordinates, positionAndAlign } from './$quickE.positioning';
 import { Coords } from './coords';
+import { $quickE as quickE } from './quick-e';
+import { selectors } from './selectors-instance';
+import { Specs } from './specs';
 
 /**
  * add a clipboard to the quick edit
@@ -68,7 +69,7 @@ export namespace clipboard {
         return clear();
       data = newData;
     }
-    $('.' + selectors.selected).removeClass(selectors.selected); // clear previous markings
+    $(`.${selectors.selected}`).removeClass(selectors.selected); // clear previous markings
 
     // sometimes missing data.item
     if (!data.item) {
@@ -84,17 +85,17 @@ export namespace clipboard {
   }
 
   export function clear() {
-    $('.' + selectors.selected).removeClass(selectors.selected);
+    $(`.${selectors.selected}`).removeClass(selectors.selected);
     data = null;
     setSecondaryActionsState(false);
     quickE.selected.toggle(false);
   }
 
-  export function createSpecs(type, list, index) {
-    let listItems = list.find(selectors[type].selector);
+  export function createSpecs(type: string, list: any, index: number): Specs {
+    const listItems: any = list.find(selectors[type].selector);
     if (index >= listItems.length) index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
-    let currentItem = listItems[index];
-    let editContext = JSON.parse(list.attr(selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
+    const currentItem: any = listItems[index];
+    const editContext = JSON.parse(list.attr(selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
     return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
   }
 };

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = require("./$quickE.{}");
+var quick_e_1 = require("./quick-e");
 var _quickE_clipboard_1 = require("./$quickE.clipboard");
 var _quickE_cmds_1 = require("./$quickE.cmds");
 var selectors_instance_1 = require("./selectors-instance");
@@ -8,13 +8,13 @@ var selectors_instance_1 = require("./selectors-instance");
  * content-block specific stuff like actions
  */
 function onCbButtonClick() {
-    var list = _quickE___1.$quickE.main.actionsForCb.closest(selectors_instance_1.selectors.cb.listSelector);
+    var list = quick_e_1.$quickE.main.actionsForCb.closest(selectors_instance_1.selectors.cb.listSelector);
     var listItems = list.find(selectors_instance_1.selectors.cb.selector);
     var actionConfig = JSON.parse(list.attr(selectors_instance_1.selectors.cb.context));
     var index = 0;
     var newGuid = actionConfig.guid || null;
-    if (_quickE___1.$quickE.main.actionsForCb.hasClass(selectors_instance_1.selectors.cb.class))
-        index = listItems.index(_quickE___1.$quickE.main.actionsForCb[0]) + 1;
+    if (quick_e_1.$quickE.main.actionsForCb.hasClass(selectors_instance_1.selectors.cb.class))
+        index = listItems.index(quick_e_1.$quickE.main.actionsForCb[0]) + 1;
     // check cut/paste
     var cbAction = $(this).data('action');
     if (cbAction) {
@@ -26,5 +26,5 @@ function onCbButtonClick() {
         return _quickE_cmds_1.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
     }
 }
-_quickE___1.$quickE.cbActions.click(onCbButtonClick);
+quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 //# sourceMappingURL=$quickE.content-block.js.map

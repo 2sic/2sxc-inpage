@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = require("./$quickE.{}");
-var selectors_instance_1 = require("./selectors-instance");
-var _quickE_positioning_1 = require("./$quickE.positioning");
-var _quickE_cmds_1 = require("./$quickE.cmds");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
+var _quickE_cmds_1 = require("./$quickE.cmds");
+var _quickE_positioning_1 = require("./$quickE.positioning");
+var quick_e_1 = require("./quick-e");
+var selectors_instance_1 = require("./selectors-instance");
 /**
  * add a clipboard to the quick edit
  */
@@ -64,7 +64,7 @@ var clipboard;
                 return clear();
             clipboard.data = newData;
         }
-        $('.' + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected); // clear previous markings
+        $("." + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected); // clear previous markings
         // sometimes missing data.item
         if (!clipboard.data.item) {
             return;
@@ -74,14 +74,14 @@ var clipboard;
         if (cb.prev().is('iframe'))
             cb.prev().addClass(selectors_instance_1.selectors.selected);
         setSecondaryActionsState(true);
-        _quickE___1.$quickE.selected.toggle(cb, clipboard.data.type);
+        quick_e_1.$quickE.selected.toggle(cb, clipboard.data.type);
     }
     clipboard.mark = mark;
     function clear() {
-        $('.' + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected);
+        $("." + selectors_instance_1.selectors.selected).removeClass(selectors_instance_1.selectors.selected);
         clipboard.data = null;
         setSecondaryActionsState(false);
-        _quickE___1.$quickE.selected.toggle(false);
+        quick_e_1.$quickE.selected.toggle(false);
     }
     clipboard.clear = clear;
     function createSpecs(type, list, index) {
@@ -101,19 +101,19 @@ function setSecondaryActionsState(state) {
     btns.toggleClass('sc-unavailable', !state);
 }
 ;
-_quickE___1.$quickE.selected.toggle = function (target) {
+quick_e_1.$quickE.selected.toggle = function (target) {
     if (!target || target.length === 0)
-        return _quickE___1.$quickE.selected.hide();
+        return quick_e_1.$quickE.selected.hide();
     var coords = _quickE_positioning_1.getCoordinates(target);
     coords.yh = coords.y + 20;
-    _quickE_positioning_1.positionAndAlign(_quickE___1.$quickE.selected, coords);
-    _quickE___1.$quickE.selected.target = target;
+    _quickE_positioning_1.positionAndAlign(quick_e_1.$quickE.selected, coords);
+    quick_e_1.$quickE.selected.target = target;
 };
 var cmdsStrategyFactory = new _quickE_cmds_1.CmdsStrategyFactory();
 /**
  * bind clipboard actions
  */
-$('a', _quickE___1.$quickE.selected).click(function () {
+$('a', quick_e_1.$quickE.selected).click(function () {
     var action = $(this).data('action');
     var clip = clipboard.data;
     switch (action) {
