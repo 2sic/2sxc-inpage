@@ -1,7 +1,5 @@
 ﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-import { CmdsStrategyFactory, mod } from './$quickE.cmds';
-import { getCoordinates, positionAndAlign } from './$quickE.positioning';
-import { Coords } from './coords';
+import { CmdsStrategyFactory, mod } from './cmds';
 import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 import { Specs } from './specs';

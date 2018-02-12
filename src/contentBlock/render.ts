@@ -1,6 +1,6 @@
 ﻿import { getTag } from '../manage/api';
 import { hide } from '../quick-dialog/quick-dialog';
-import { reset } from '../quick-edit/$quickE.start';
+import { reset } from '../quick-edit/start';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { _contentBlock } from './main-content-block';
 import { getPreviewWithTemplate } from './web-api-promises';

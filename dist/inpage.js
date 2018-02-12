@@ -165,7 +165,7 @@ function showGlassesButtonIfUninitialized(sxc) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE_positioning_1 = __webpack_require__(10);
+var positioning_1 = __webpack_require__(10);
 /**
  * the quick-edit object
  * the quick-insert object
@@ -199,9 +199,9 @@ var QuickE = /** @class */ (function () {
                 _this.selected.hide();
             }
             else {
-                var coords = _quickE_positioning_1.getCoordinates(target);
+                var coords = positioning_1.getCoordinates(target);
                 coords.yh = coords.y + 20;
-                _quickE_positioning_1.positionAndAlign(_this.selected, coords);
+                positioning_1.positionAndAlign(_this.selected, coords);
                 _this.selected.target = target;
             }
         };
@@ -615,7 +615,7 @@ function watchForResize(keepWatching) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(2);
 var quick_dialog_1 = __webpack_require__(5);
-var _quickE_start_1 = __webpack_require__(27);
+var start_1 = __webpack_require__(27);
 var module_bootstrapper_1 = __webpack_require__(0);
 var main_content_block_1 = __webpack_require__(11);
 var web_api_promises_1 = __webpack_require__(12);
@@ -670,7 +670,7 @@ exports.showMessage = showMessage;
 function ajaxLoad(sxc, alternateTemplateId, justPreview) {
     return web_api_promises_1.getPreviewWithTemplate(sxc, alternateTemplateId)
         .then(function (result) { return replaceCb(sxc, result, justPreview); })
-        .then(_quickE_start_1.reset); // reset quick-edit, because the config could have changed
+        .then(start_1.reset); // reset quick-edit, because the config could have changed
 }
 exports.ajaxLoad = ajaxLoad;
 /**
@@ -815,7 +815,7 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var _quickE_cmds_1 = __webpack_require__(18);
+var cmds_1 = __webpack_require__(18);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /**
@@ -854,7 +854,7 @@ function copyPasteInPage(cbAction, list, index, type) {
             else {
                 // sometimes missing oldClip.item
                 // if (clipboard.data.item)
-                _quickE_cmds_1.mod.move(exports.data, newClip, from, to);
+                cmds_1.mod.move(exports.data, newClip, from, to);
             }
             clear();
             break;
@@ -909,7 +909,7 @@ function setSecondaryActionsState(state) {
     btns = btns.filter('.icon-sxc-paste');
     btns.toggleClass('sc-unavailable', !state);
 }
-var cmdsStrategyFactory = new _quickE_cmds_1.CmdsStrategyFactory();
+var cmdsStrategyFactory = new cmds_1.CmdsStrategyFactory();
 /**
  * bind clipboard actions
  */
@@ -920,7 +920,7 @@ $('a', quick_e_1.$quickE.selected).click(function () {
         case 'delete':
             return cmdsStrategyFactory.delete(clip);
         case 'sendToPane':
-            return _quickE_cmds_1.mod.sendToPane();
+            return cmds_1.mod.sendToPane();
     }
 });
 
@@ -1671,9 +1671,9 @@ exports.instanceEngine = instanceEngine;
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
-var _quickE_modManage_1 = __webpack_require__(19);
+var mod_manage_1 = __webpack_require__(19);
 var module_bootstrapper_1 = __webpack_require__(0);
-var mm = new _quickE_modManage_1.modManage();
+var mm = new mod_manage_1.modManage();
 var cb = /** @class */ (function () {
     function cb() {
     }
@@ -1740,7 +1740,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = __webpack_require__(1);
-var _quickE_clipboard_1 = __webpack_require__(9);
+var clipboard_1 = __webpack_require__(9);
 /**
  * module specific stuff
  */
@@ -1859,7 +1859,7 @@ function generatePaneMoveButtons(current) {
     // attach click event...
     targets.find('a').click(function (d) {
         var link = $(this);
-        var clip = _quickE_clipboard_1.data;
+        var clip = clipboard_1.data;
         var modId = getModuleId(clip.item.className);
         var newPane = link.attr('data');
         moveMod(modId, newPane, 0);
@@ -1999,8 +1999,8 @@ exports.UserOfEditContext = UserOfEditContext;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = __webpack_require__(1);
-var _quickE_config_1 = __webpack_require__(29);
-var _quickE_positioning_1 = __webpack_require__(10);
+var config_1 = __webpack_require__(29);
+var positioning_1 = __webpack_require__(10);
 var selectors_instance_1 = __webpack_require__(3);
 function enable() {
     // build all toolbar html-elements
@@ -2018,7 +2018,7 @@ function watchMouse() {
         if (refreshTimeout === null)
             refreshTimeout = window.setTimeout(function () {
                 requestAnimationFrame(function () {
-                    _quickE_positioning_1.refresh(e);
+                    positioning_1.refresh(e);
                     refreshTimeout = null;
                 });
             }, 20);
@@ -2027,10 +2027,10 @@ function watchMouse() {
 ;
 function start() {
     try {
-        _quickE_config_1._readPageConfig();
+        config_1._readPageConfig();
         if (quick_e_1.$quickE.config.enable) {
             // initialize first body-offset
-            quick_e_1.$quickE.bodyOffset = _quickE_positioning_1.getBodyPosition();
+            quick_e_1.$quickE.bodyOffset = positioning_1.getBodyPosition();
             enable();
             toggleParts();
             watchMouse();
@@ -2064,7 +2064,7 @@ function toggleParts() {
  * for example after ajax-loading a content-block, which may cause changed configurations
  */
 function reset() {
-    _quickE_config_1._readPageConfig();
+    config_1._readPageConfig();
     toggleParts();
 }
 exports.reset = reset;
@@ -2795,22 +2795,22 @@ __webpack_require__(26);
 __webpack_require__(72);
 __webpack_require__(73);
 __webpack_require__(5);
+__webpack_require__(74);
 __webpack_require__(9);
 __webpack_require__(18);
-__webpack_require__(29);
-__webpack_require__(74);
-__webpack_require__(19);
 __webpack_require__(75);
-__webpack_require__(10);
-__webpack_require__(27);
+__webpack_require__(29);
 __webpack_require__(76);
-__webpack_require__(77);
 __webpack_require__(28);
+__webpack_require__(19);
+__webpack_require__(77);
+__webpack_require__(10);
 __webpack_require__(78);
 __webpack_require__(1);
 __webpack_require__(3);
 __webpack_require__(79);
 __webpack_require__(80);
+__webpack_require__(27);
 __webpack_require__(81);
 __webpack_require__(82);
 __webpack_require__(83);
@@ -3430,9 +3430,42 @@ if (typeof Object.assign != 'function') {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * used in Selectors class
+ */
+var CbOrMod = /** @class */ (function () {
+    function CbOrMod() {
+    }
+    return CbOrMod;
+}());
+exports.CbOrMod = CbOrMod;
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Conf = /** @class */ (function () {
+    function Conf() {
+    }
+    return Conf;
+}());
+exports.Conf = Conf;
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = __webpack_require__(1);
-var _quickE_clipboard_1 = __webpack_require__(9);
-var _quickE_cmds_1 = __webpack_require__(18);
+var clipboard_1 = __webpack_require__(9);
+var cmds_1 = __webpack_require__(18);
 var selectors_instance_1 = __webpack_require__(3);
 /**
  * content-block specific stuff like actions
@@ -3449,63 +3482,14 @@ function onCbButtonClick() {
     var cbAction = $(this).data('action');
     if (cbAction) {
         // this is a cut/paste action
-        return _quickE_clipboard_1.copyPasteInPage(cbAction, list, index, selectors_instance_1.selectors.cb.id);
+        return clipboard_1.copyPasteInPage(cbAction, list, index, selectors_instance_1.selectors.cb.id);
     }
     else {
         var appOrContent = $(this).data('type');
-        return _quickE_cmds_1.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
+        return cmds_1.cb.create(actionConfig.parent, actionConfig.field, index, appOrContent, list, newGuid);
     }
 }
 quick_e_1.$quickE.cbActions.click(onCbButtonClick);
-
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var quick_e_1 = __webpack_require__(1);
-var _quickE_clipboard_1 = __webpack_require__(9);
-var _quickE_modManage_1 = __webpack_require__(19);
-var selectors_instance_1 = __webpack_require__(3);
-var mm = new _quickE_modManage_1.modManage();
-/**
- * module specific stuff
- */
-function onModuleButtonClick() {
-    var type = $(this).data('type'), dnnMod = quick_e_1.$quickE.main.actionsForModule, pane = dnnMod.closest(selectors_instance_1.selectors.mod.listSelector), index = 0;
-    if (dnnMod.hasClass('DnnModule'))
-        index = pane.find('.DnnModule').index(dnnMod[0]) + 1;
-    var cbAction = $(this).data('action');
-    if (cbAction) {
-        return _quickE_clipboard_1.copyPasteInPage(cbAction, pane, index, selectors_instance_1.selectors.mod.id); // copy/paste
-    }
-    return mm.create(mm.getPaneName(pane), index, type);
-}
-/**
- * bind module actions click
- */
-quick_e_1.$quickE.modActions.click(onModuleButtonClick);
-
-
-/***/ }),
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * used in Selectors class
- */
-var CbOrMod = /** @class */ (function () {
-    function CbOrMod() {
-    }
-    return CbOrMod;
-}());
-exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
@@ -3515,12 +3499,28 @@ exports.CbOrMod = CbOrMod;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Conf = /** @class */ (function () {
-    function Conf() {
+var quick_e_1 = __webpack_require__(1);
+var clipboard_1 = __webpack_require__(9);
+var mod_manage_1 = __webpack_require__(19);
+var selectors_instance_1 = __webpack_require__(3);
+var mm = new mod_manage_1.modManage();
+/**
+ * module specific stuff
+ */
+function onModuleButtonClick() {
+    var type = $(this).data('type'), dnnMod = quick_e_1.$quickE.main.actionsForModule, pane = dnnMod.closest(selectors_instance_1.selectors.mod.listSelector), index = 0;
+    if (dnnMod.hasClass('DnnModule'))
+        index = pane.find('.DnnModule').index(dnnMod[0]) + 1;
+    var cbAction = $(this).data('action');
+    if (cbAction) {
+        return clipboard_1.copyPasteInPage(cbAction, pane, index, selectors_instance_1.selectors.mod.id); // copy/paste
     }
-    return Conf;
-}());
-exports.Conf = Conf;
+    return mm.create(mm.getPaneName(pane), index, type);
+}
+/**
+ * bind module actions click
+ */
+quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),

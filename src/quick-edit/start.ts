@@ -1,6 +1,6 @@
 ﻿import { $quickE as quickE, prepareToolbarInDom } from './quick-e';
-import { _readPageConfig } from './$quickE.config';
-import { getBodyPosition, refresh } from './$quickE.positioning';
+import { _readPageConfig } from './config';
+import { getBodyPosition, refresh } from './positioning';
 import { selectors } from './selectors-instance';
 
 function enable(): void {

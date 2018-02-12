@@ -1,4 +1,4 @@
-﻿import { getCoordinates, positionAndAlign } from './$quickE.positioning';
+﻿import { getCoordinates, positionAndAlign } from './positioning';
 import { Conf } from './conf';
 import { Coords } from './coords';
 

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = require("./quick-e");
-var _quickE_clipboard_1 = require("./$quickE.clipboard");
+var clipboard_1 = require("./clipboard");
 var _quickE_cmds_1 = require("./$quickE.cmds");
 var selectors_instance_1 = require("./selectors-instance");
 /**
@@ -19,7 +19,7 @@ function onCbButtonClick() {
     var cbAction = $(this).data('action');
     if (cbAction) {
         // this is a cut/paste action
-        return _quickE_clipboard_1.copyPasteInPage(cbAction, list, index, selectors_instance_1.selectors.cb.id);
+        return clipboard_1.copyPasteInPage(cbAction, list, index, selectors_instance_1.selectors.cb.id);
     }
     else {
         var appOrContent = $(this).data('type');

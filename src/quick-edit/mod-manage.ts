@@ -1,5 +1,5 @@
 ﻿import { $quickE as quickE } from './quick-e';
-import { data } from './$quickE.clipboard';
+import { data } from './clipboard';
 
 /**
  * module specific stuff

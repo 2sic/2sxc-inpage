@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = require("./quick-e");
-var _quickE_clipboard_1 = require("./$quickE.clipboard");
+var clipboard_1 = require("./clipboard");
 /**
  * module specific stuff
  */
@@ -120,7 +120,7 @@ function generatePaneMoveButtons(current) {
     // attach click event...
     targets.find('a').click(function (d) {
         var link = $(this);
-        var clip = _quickE_clipboard_1.data;
+        var clip = clipboard_1.data;
         var modId = getModuleId(clip.item.className);
         var newPane = link.attr('data');
         moveMod(modId, newPane, 0);

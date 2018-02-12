@@ -1,6 +1,6 @@
 ﻿import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
-import { modManage } from './$quickE.modManage';
+import { modManage } from './mod-manage';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
 let mm = new modManage();

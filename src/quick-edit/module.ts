@@ -1,6 +1,6 @@
 ﻿import { $quickE as quickE } from './quick-e';
-import { copyPasteInPage } from './$quickE.clipboard';
-import { modManage } from './$quickE.modManage';
+import { copyPasteInPage } from './clipboard';
+import { modManage } from './mod-manage';
 import { selectors } from './selectors-instance';
 
 let mm = new modManage();
