@@ -1,7 +1,6 @@
 ﻿import { getTag } from '../manage/api';
 import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 
-
 // quick debug - set to false if not needed for production
 const dbg = true;
 
@@ -12,8 +11,8 @@ const settingsForEmptyToolbar = {
 };
 
 // generate an empty / fallback toolbar tag
-function generateFallbackToolbar() {
-  const settingsString = JSON.stringify(settingsForEmptyToolbar);
+function generateFallbackToolbar(): any {
+  const settingsString: string = JSON.stringify(settingsForEmptyToolbar);
   return $(`<ul class='sc-menu' toolbar='' settings='${settingsString}'/>`);
 }
 
@@ -28,7 +27,7 @@ function getToolbarTags(parentTag: any): any {
 }
 
 // create a process-toolbar command to generate toolbars inside a tag
-export function buildToolbars(parentTag: any, optionalId?: number) {
+export function buildToolbars(parentTag: any, optionalId?: number): void {
   parentTag = $(parentTag || '.DnnModule-' + optionalId);
 
   // if something says the toolbars are disabled, then skip
