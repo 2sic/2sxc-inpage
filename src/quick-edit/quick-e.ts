@@ -1,4 +1,5 @@
-﻿import { Conf } from './conf';
+﻿import { getCoordinates, positionAndAlign } from './$quickE.positioning';
+import { Conf } from './conf';
 import { Coords } from './coords';
 
 /**
@@ -34,6 +35,21 @@ class QuickE {
   //
   config: Conf;
   bodyOffset: Coords;
+
+  constructor() {
+
+    this.selected.toggle = (target) => {
+      if (!target || target.length === 0) {
+        this.selected.hide();
+      } else {
+        const coords = getCoordinates(target);
+        coords.yh = coords.y + 20;
+        positionAndAlign(this.selected, coords);
+        this.selected.target = target;
+      }
+    };
+
+  }
 }
 
 export let $quickE = window.$quickE = new QuickE();

@@ -1,5 +1,5 @@
 ﻿import { $quickE as quickE } from './quick-e';
-import { clipboard } from './$quickE.clipboard';
+import { data } from './$quickE.clipboard';
 
 /**
  * module specific stuff
@@ -130,11 +130,11 @@ function generatePaneMoveButtons(current) {
   }
 
   // attach click event...
-  targets.find('a').click(function (d) {
-    let link = $(this),
-      clip = clipboard.data,
-      modId = getModuleId(clip.item.className),
-      newPane = link.attr('data');
+  targets.find('a').click(function(d) {
+    let link = $(this);
+    let clip = data;
+    let modId = getModuleId(clip.item.className);
+    let newPane = link.attr('data');
 
     moveMod(modId, newPane, 0);
   });

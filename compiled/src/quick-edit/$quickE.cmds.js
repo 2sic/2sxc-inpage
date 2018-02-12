@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = require("./$quickE.{}");
+var quick_e_1 = require("./quick-e");
 var selectors_instance_1 = require("./selectors-instance");
 var _quickE_modManage_1 = require("./$quickE.modManage");
 var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
@@ -35,9 +35,9 @@ var mod = /** @class */ (function () {
         mm.move(modId, pane, to);
     };
     mod.sendToPane = function () {
-        var pane = _quickE___1.$quickE.main.actionsForModule.closest(selectors_instance_1.selectors.mod.listSelector);
+        var pane = quick_e_1.$quickE.main.actionsForModule.closest(selectors_instance_1.selectors.mod.listSelector);
         // show the pane-options
-        var pl = _quickE___1.$quickE.selected.find('#paneList');
+        var pl = quick_e_1.$quickE.selected.find('#paneList');
         if (!pl.is(':empty'))
             pl.empty();
         pl.append(mm.getMoveButtons(mm.getPaneName(pane)));

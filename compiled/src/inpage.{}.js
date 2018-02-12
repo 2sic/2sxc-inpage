@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _quickE___1 = require("./quick-edit/$quickE.{}");
+var quick_e_1 = require("./quick-edit/quick-e");
 // import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals
 // export let $2sxc = window.$2sxc as SxcControllerWithInternals;
-window.$quickE = _quickE___1.$quickE;
+window.$quickE = quick_e_1.$quickE;
 // let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
 // $2sxc.c = $2sxc.consts
 // $2sxc.system

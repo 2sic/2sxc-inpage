@@ -1,16 +1,15 @@
-﻿import { Clipboard } from './clipboard';
-import { Conf } from './conf';
-import { Selected } from './selected';
+﻿import { Conf } from './conf';
+
 
 export interface QuickE {
   // ReSharper restore InconsistentNaming
   reset: any;
   // copyPasteInPage(cbAction: string, list: any, index: number, type: any): any;
-  clipboard: Clipboard;
+  // clipboard: Clipboard;
   // selectors: Selectors;
   cmds: any;
   setSecondaryActionsState(state: boolean): void;
-  selected: Selected;
+  // selected: Selected;
   getCoordinates: any;
   positionAndAlign: any;
   modManage: any;

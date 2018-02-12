@@ -119,7 +119,10 @@ function generatePaneMoveButtons(current) {
     }
     // attach click event...
     targets.find('a').click(function (d) {
-        var link = $(this), clip = _quickE_clipboard_1.clipboard.data, modId = getModuleId(clip.item.className), newPane = link.attr('data');
+        var link = $(this);
+        var clip = _quickE_clipboard_1.data;
+        var modId = getModuleId(clip.item.className);
+        var newPane = link.attr('data');
         moveMod(modId, newPane, 0);
     });
     return targets;
