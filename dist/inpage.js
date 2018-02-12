@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 44);
+/******/ 	return __webpack_require__(__webpack_require__.s = 45);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -807,8 +807,8 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var cmds_strategy_factory_1 = __webpack_require__(42);
-var mod_1 = __webpack_require__(43);
+var cmds_strategy_factory_1 = __webpack_require__(43);
+var mod_1 = __webpack_require__(44);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(2);
 /**
@@ -2656,6 +2656,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(39);
+var generate_button_html_1 = __webpack_require__(40);
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
@@ -2664,12 +2665,17 @@ var ToolbarManager = /** @class */ (function () {
     function ToolbarManager() {
         // internal constants
         this.cDisableAttrName = 'data-disable-toolbar';
+        // build toolbars
+        this.buildToolbars = build_toolbars_1.buildToolbars;
+        this.disable = build_toolbars_1.disable;
+        this.isDisabled = build_toolbars_1.isDisabled;
+        // generate button html
+        this.generateButtonHtml = generate_button_html_1.generateButtonHtml;
     }
     return ToolbarManager;
 }());
 exports.ToolbarManager = ToolbarManager;
 exports._toolbarManager = new ToolbarManager();
-Object.assign(exports._toolbarManager, build_toolbars_1.toolbarManager);
 
 
 /***/ }),
@@ -2682,11 +2688,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(3);
 var module_bootstrapper_1 = __webpack_require__(0);
 // quick debug - set to false if not needed for production
-var dbg = false;
+var dbg = true;
 // default / fallback settings for toolbars when nothings is specified
 var settingsForEmptyToolbar = {
     hover: 'left',
-    autoAddMore: 'left'
+    autoAddMore: 'left',
 };
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar() {
@@ -2711,7 +2717,7 @@ function buildToolbars(parentTag, optionalId) {
     // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
     // don't add, if it is has un-initialized content
     // 2017-09-08 2dm disabled this, I believe the bootstrapping should never call this any more, if sc-uninitialized. if ok, then delete this in a few days
-    //let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
+    // let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
     var toolbars = getToolbarTags(parentTag);
     // no toolbars found, must help a bit because otherwise editing is hard
     if (toolbars.length === 0) {
@@ -2724,7 +2730,11 @@ function buildToolbars(parentTag, optionalId) {
         toolbars = getToolbarTags(parentTag);
     }
     toolbars.each(function initToolbar() {
-        var tag = $(this), data = null, toolbarConfig, toolbarSettings, at = module_bootstrapper_1.$2sxc.c.attr;
+        var tag = $(this);
+        var data = null;
+        var toolbarConfig;
+        var toolbarSettings;
+        var at = module_bootstrapper_1.$2sxc.c.attr;
         try {
             data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
             toolbarConfig = JSON.parse(data);
@@ -2734,8 +2744,7 @@ function buildToolbars(parentTag, optionalId) {
                 toolbarSettings = settingsForEmptyToolbar;
         }
         catch (err) {
-            console
-                .error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
+            console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
             return;
         }
         try {
@@ -2743,33 +2752,73 @@ function buildToolbars(parentTag, optionalId) {
             tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
         }
         catch (err2) {
-            // note: errors happen a lot on custom toolbars, amke sure the others are still rendered
+            // note: errors happen a lot on custom toolbars, make sure the others are still rendered
             console.error('error creating toolbar - will skip this one', err2);
         }
     });
 }
+exports.buildToolbars = buildToolbars;
 function disable(tag) {
     tag = $(tag);
     tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName, true);
 }
+exports.disable = disable;
 function isDisabled(sxc) {
     var tag = $(api_1.getTag(sxc));
     return !!tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName);
 }
-exports.toolbarManager = {
-    buildToolbars: buildToolbars,
-    disable: disable,
-    isDisabled: isDisabled,
-};
-//Object.assign(twoSxc._toolbarManager, {
-//  buildToolbars: buildToolbars,
-//  disable: disable,
-//  isDisabled: isDisabled
-//});
+exports.isDisabled = isDisabled;
 
 
 /***/ }),
 /* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+// does some clean-up work on a button-definition object
+// because the target item could be specified directly, or in a complex internal object called entity
+function flattenActionDefinition(actDef) {
+    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
+        return;
+    var editInfo = actDef.entity._2sxcEditInformation;
+    actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
+    if (editInfo.entityId !== undefined)
+        actDef.entityId = editInfo.entityId;
+    if (editInfo.sortOrder !== undefined)
+        actDef.sortOrder = editInfo.sortOrder;
+    delete actDef.entity; // clean up edit-info
+}
+// generate the html for a button
+// Expects: instance sxc, action-definition, + group-index in which the button is shown
+function generateButtonHtml(sxc, actDef, groupIndex) {
+    // if the button belongs to a content-item, move the specs up to the item into the settings-object
+    flattenActionDefinition(actDef);
+    // retrieve configuration for this button
+    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : '');
+    var classesList = (actDef.classes || '').split(',');
+    var box = $('<div/>');
+    var symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
+    var onclick = actDef.disabled ?
+        '' :
+        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
+    for (var c = 0; c < classesList.length; c++)
+        showClasses += ' ' + classesList[c];
+    var button = $('<a />', {
+        'class': 'sc-' + actDef.action + ' ' + showClasses +
+            (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
+        'onclick': onclick,
+        'data-i18n': '[title]' + actDef.title
+    });
+    button.html(box.html(symbol));
+    return button[0].outerHTML;
+}
+exports.generateButtonHtml = generateButtonHtml;
+
+
+/***/ }),
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2790,7 +2839,7 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2817,14 +2866,14 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var cb_1 = __webpack_require__(41);
-var Mod_1 = __webpack_require__(79);
+var cb_1 = __webpack_require__(42);
+var Mod_1 = __webpack_require__(80);
 var CmdsStrategyFactory = /** @class */ (function () {
     function CmdsStrategyFactory() {
         this.cmds = {};
@@ -2843,7 +2892,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2882,40 +2931,39 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(22);
-__webpack_require__(45);
 __webpack_require__(46);
 __webpack_require__(47);
 __webpack_require__(48);
+__webpack_require__(49);
 __webpack_require__(15);
 __webpack_require__(30);
 __webpack_require__(8);
 __webpack_require__(18);
 __webpack_require__(17);
 __webpack_require__(29);
-__webpack_require__(49);
-__webpack_require__(16);
 __webpack_require__(50);
+__webpack_require__(16);
+__webpack_require__(51);
 __webpack_require__(19);
 __webpack_require__(33);
-__webpack_require__(51);
 __webpack_require__(52);
 __webpack_require__(53);
 __webpack_require__(54);
+__webpack_require__(55);
 __webpack_require__(31);
 __webpack_require__(11);
-__webpack_require__(55);
+__webpack_require__(56);
 __webpack_require__(34);
 __webpack_require__(6);
 __webpack_require__(7);
-__webpack_require__(56);
-__webpack_require__(14);
 __webpack_require__(57);
+__webpack_require__(14);
 __webpack_require__(58);
 __webpack_require__(59);
 __webpack_require__(60);
@@ -2925,52 +2973,53 @@ __webpack_require__(63);
 __webpack_require__(64);
 __webpack_require__(65);
 __webpack_require__(66);
-__webpack_require__(32);
 __webpack_require__(67);
+__webpack_require__(32);
 __webpack_require__(68);
 __webpack_require__(69);
 __webpack_require__(70);
 __webpack_require__(71);
 __webpack_require__(72);
 __webpack_require__(73);
-__webpack_require__(40);
 __webpack_require__(74);
+__webpack_require__(41);
+__webpack_require__(75);
 __webpack_require__(3);
 __webpack_require__(36);
 __webpack_require__(23);
 __webpack_require__(37);
-__webpack_require__(75);
+__webpack_require__(76);
 __webpack_require__(35);
 __webpack_require__(24);
 __webpack_require__(25);
 __webpack_require__(26);
-__webpack_require__(76);
 __webpack_require__(77);
-__webpack_require__(5);
 __webpack_require__(78);
-__webpack_require__(41);
-__webpack_require__(9);
+__webpack_require__(5);
+__webpack_require__(79);
 __webpack_require__(42);
-__webpack_require__(80);
-__webpack_require__(27);
-__webpack_require__(81);
-__webpack_require__(28);
-__webpack_require__(83);
-__webpack_require__(84);
-__webpack_require__(10);
+__webpack_require__(9);
 __webpack_require__(43);
+__webpack_require__(81);
+__webpack_require__(27);
+__webpack_require__(82);
+__webpack_require__(28);
+__webpack_require__(84);
 __webpack_require__(85);
+__webpack_require__(10);
+__webpack_require__(44);
+__webpack_require__(86);
 __webpack_require__(13);
 __webpack_require__(1);
 __webpack_require__(2);
-__webpack_require__(86);
 __webpack_require__(87);
+__webpack_require__(88);
 __webpack_require__(12);
 __webpack_require__(39);
-__webpack_require__(88);
+__webpack_require__(40);
 __webpack_require__(89);
-__webpack_require__(38);
 __webpack_require__(90);
+__webpack_require__(38);
 __webpack_require__(91);
 __webpack_require__(92);
 __webpack_require__(93);
@@ -2982,7 +3031,7 @@ module.exports = __webpack_require__(0);
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3021,7 +3070,7 @@ twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3051,7 +3100,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3066,7 +3115,7 @@ exports.Action = Action;
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3081,7 +3130,7 @@ exports.CmdSpec = CmdSpec;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3105,7 +3154,7 @@ module_bootstrapper_1.$2sxc._commands = new Commands();
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3120,7 +3169,7 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3135,7 +3184,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3150,7 +3199,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3165,7 +3214,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3183,7 +3232,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3198,7 +3247,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3213,7 +3262,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3228,7 +3277,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3243,7 +3292,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3258,7 +3307,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3273,7 +3322,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3288,7 +3337,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3303,7 +3352,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3318,7 +3367,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3333,7 +3382,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3364,7 +3413,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3395,7 +3444,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3435,22 +3484,16 @@ $(start_1.start); // run on-load
 
 
 /***/ }),
-/* 68 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 69 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming
 
 
 /***/ }),
 /* 70 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -3479,6 +3522,12 @@ $(start_1.start); // run on-load
 
 /***/ }),
 /* 75 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3487,7 +3536,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3531,7 +3580,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3558,7 +3607,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3576,7 +3625,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3615,7 +3664,7 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3630,13 +3679,13 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cb_1 = __webpack_require__(82);
+var Cb_1 = __webpack_require__(83);
 var clipboard_1 = __webpack_require__(9);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(2);
@@ -3666,7 +3715,7 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3693,12 +3742,6 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 83 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 84 */
 /***/ (function(module, exports) {
 
@@ -3706,6 +3749,12 @@ exports.Cb = Cb;
 
 /***/ }),
 /* 85 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3738,7 +3787,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3756,7 +3805,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3771,7 +3820,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports) {
 
 /*
@@ -3872,7 +3921,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3884,7 +3933,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3896,51 +3945,6 @@ $(function () {
     // start shake-event monitoring, which will then generate a window-event
     (new Shake({ callback: toggleAllToolbars })).start();
 });
-
-
-/***/ }),
-/* 91 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = __webpack_require__(0);
-module_bootstrapper_1.$2sxc._toolbarManager.generateButtonHtml = generateButtonHtml;
-//return;
-// does some clean-up work on a button-definition object
-// because the target item could be specified directly, or in a complex internal object called entity
-function flattenActionDefinition(actDef) {
-    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
-        return;
-    var editInfo = actDef.entity._2sxcEditInformation;
-    actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-    if (editInfo.entityId !== undefined)
-        actDef.entityId = editInfo.entityId;
-    if (editInfo.sortOrder !== undefined)
-        actDef.sortOrder = editInfo.sortOrder;
-    delete actDef.entity; // clean up edit-info
-}
-// generate the html for a button
-// Expects: instance sxc, action-definition, + group-index in which the button is shown
-function generateButtonHtml(sxc, actDef, groupIndex) {
-    // if the button belongs to a content-item, move the specs up to the item into the settings-object
-    flattenActionDefinition(actDef);
-    // retrieve configuration for this button
-    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : ''), classesList = (actDef.classes || '').split(','), box = $('<div/>'), symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>'), onclick = actDef.disabled ?
-        '' :
-        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
-    for (var c = 0; c < classesList.length; c++)
-        showClasses += ' ' + classesList[c];
-    var button = $('<a />', {
-        'class': 'sc-' + actDef.action + ' ' + showClasses +
-            (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
-        'onclick': onclick,
-        'data-i18n': '[title]' + actDef.title
-    });
-    button.html(box.html(symbol));
-    return button[0].outerHTML;
-}
 
 
 /***/ }),
@@ -3990,7 +3994,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(40);
+var _2sxc__lib_extend_1 = __webpack_require__(41);
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 // ToDo: refactor to avoid side-effects

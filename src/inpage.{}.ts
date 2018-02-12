@@ -22,7 +22,6 @@ import { $2sxc } from './x-bootstrap/module-bootstrapper';
 // $2sxc.totalPopup
 // $2sxc._commands.definitions
 $2sxc._toolbarManager = _toolbarManager;
-debugger;
 $2sxc._manage = _manage;
 // $2sxc.contentItems
 // window.i18next

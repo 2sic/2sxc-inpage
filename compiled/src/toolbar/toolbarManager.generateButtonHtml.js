@@ -1,8 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
-module_bootstrapper_1.$2sxc._toolbarManager.generateButtonHtml = generateButtonHtml;
-//return;
 // does some clean-up work on a button-definition object
 // because the target item could be specified directly, or in a complex internal object called entity
 function flattenActionDefinition(actDef) {
@@ -22,7 +19,11 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     flattenActionDefinition(actDef);
     // retrieve configuration for this button
-    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : ''), classesList = (actDef.classes || '').split(','), box = $('<div/>'), symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>'), onclick = actDef.disabled ?
+    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : '');
+    var classesList = (actDef.classes || '').split(',');
+    var box = $('<div/>');
+    var symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
+    var onclick = actDef.disabled ?
         '' :
         '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
     for (var c = 0; c < classesList.length; c++)
@@ -36,4 +37,5 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
     button.html(box.html(symbol));
     return button[0].outerHTML;
 }
+exports.generateButtonHtml = generateButtonHtml;
 //# sourceMappingURL=toolbarManager.generateButtonHtml.js.map

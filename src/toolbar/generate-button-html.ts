@@ -1,10 +1,4 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-
-
-twoSxc._toolbarManager.generateButtonHtml = generateButtonHtml;
-//return;
-
-// does some clean-up work on a button-definition object
+﻿// does some clean-up work on a button-definition object
 // because the target item could be specified directly, or in a complex internal object called entity
 function flattenActionDefinition(actDef) {
   if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
@@ -18,17 +12,17 @@ function flattenActionDefinition(actDef) {
 
 // generate the html for a button
 // Expects: instance sxc, action-definition, + group-index in which the button is shown
-function generateButtonHtml(sxc, actDef, groupIndex) {
+export function generateButtonHtml(sxc, actDef, groupIndex: number): any {
 
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(actDef);
 
   // retrieve configuration for this button
-  let showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : ''),
-    classesList = (actDef.classes || '').split(','),
-    box = $('<div/>'),
-    symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>'),
-    onclick = actDef.disabled ?
+  let showClasses: string = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : '');
+  const classesList = (actDef.classes || '').split(',');
+  const box: any = $('<div/>');
+  const symbol: any = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
+  const onclick: string = actDef.disabled ?
       '' :
       '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
 

@@ -23,7 +23,6 @@ var module_bootstrapper_1 = require("./x-bootstrap/module-bootstrapper");
 // $2sxc.totalPopup
 // $2sxc._commands.definitions
 module_bootstrapper_1.$2sxc._toolbarManager = toolbar_manager_1._toolbarManager;
-debugger;
 module_bootstrapper_1.$2sxc._manage = manage_1._manage;
 // $2sxc.contentItems
 // window.i18next
