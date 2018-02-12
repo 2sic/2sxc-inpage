@@ -91,13 +91,11 @@ function isDisabled(sxc: SxcInstanceWithInternals): boolean {
   return !!tag.attr(twoSxc._toolbarManager.cDisableAttrName);
 }
 
-let toolbarManager = {
+export const toolbarManager = {
   buildToolbars: buildToolbars,
   disable: disable,
-  isDisabled: isDisabled
+  isDisabled: isDisabled,
 };
-
-Object.assign(twoSxc._toolbarManager, toolbarManager);
 
 //Object.assign(twoSxc._toolbarManager, {
 //  buildToolbars: buildToolbars,

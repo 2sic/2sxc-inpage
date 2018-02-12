@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 41);
+/******/ 	return __webpack_require__(__webpack_require__.s = 43);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -814,8 +814,8 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var cmds_strategy_factory_1 = __webpack_require__(39);
-var mod_1 = __webpack_require__(40);
+var cmds_strategy_factory_1 = __webpack_require__(41);
+var mod_1 = __webpack_require__(42);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(2);
 /**
@@ -2472,6 +2472,127 @@ exports.manipulator = manipulator;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var build_toolbars_1 = __webpack_require__(36);
+/**
+ * Toolbar manager for the whole page - basically a set of APIs
+ * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
+ */
+var ToolbarManager = /** @class */ (function () {
+    function ToolbarManager() {
+        // internal constants
+        this.cDisableAttrName = 'data-disable-toolbar';
+    }
+    return ToolbarManager;
+}());
+exports.ToolbarManager = ToolbarManager;
+exports._toolbarManager = new ToolbarManager();
+debugger;
+Object.assign(exports._toolbarManager, build_toolbars_1.toolbarManager);
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(3);
+var module_bootstrapper_1 = __webpack_require__(0);
+// quick debug - set to false if not needed for production
+var dbg = false;
+// default / fallback settings for toolbars when nothings is specified
+var settingsForEmptyToolbar = {
+    hover: 'left',
+    autoAddMore: 'left'
+};
+// generate an empty / fallback toolbar tag
+function generateFallbackToolbar() {
+    var settingsString = JSON.stringify(settingsForEmptyToolbar);
+    return $("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>");
+}
+// find current toolbars inside this wrapper-tag
+function getToolbarTags(parentTag) {
+    var allInner = $('.sc-menu[toolbar],.sc-menu[data-toolbar]', parentTag);
+    // return only those, which don't belong to a sub-item
+    var res = allInner.filter(function (i, e) { return $(e).closest('.sc-content-block')[0] === parentTag[0]; });
+    if (dbg)
+        console.log('found toolbars for parent', parentTag, res);
+    return res;
+}
+// create a process-toolbar command to generate toolbars inside a tag
+function buildToolbars(parentTag, optionalId) {
+    parentTag = $(parentTag || '.DnnModule-' + optionalId);
+    // if something says the toolbars are disabled, then skip
+    if (parentTag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName))
+        return;
+    // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
+    // don't add, if it is has un-initialized content
+    // 2017-09-08 2dm disabled this, I believe the bootstrapping should never call this any more, if sc-uninitialized. if ok, then delete this in a few days
+    //let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
+    var toolbars = getToolbarTags(parentTag);
+    // no toolbars found, must help a bit because otherwise editing is hard
+    if (toolbars.length === 0) {
+        if (dbg)
+            console.log("didn't find toolbar, so will auto-create", parentTag);
+        var outsideCb = !parentTag.hasClass(module_bootstrapper_1.$2sxc.c.cls.scCb); // "sc-content-block");
+        var contentTag = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
+        contentTag.addClass(module_bootstrapper_1.$2sxc.c.cls.scElm); // "sc-element");
+        contentTag.prepend(generateFallbackToolbar());
+        toolbars = getToolbarTags(parentTag);
+    }
+    toolbars.each(function initToolbar() {
+        var tag = $(this), data = null, toolbarConfig, toolbarSettings, at = module_bootstrapper_1.$2sxc.c.attr;
+        try {
+            data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
+            toolbarConfig = JSON.parse(data);
+            data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
+            toolbarSettings = JSON.parse(data);
+            if (toolbarConfig === {} && toolbarSettings === {})
+                toolbarSettings = settingsForEmptyToolbar;
+        }
+        catch (err) {
+            console
+                .error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
+            return;
+        }
+        try {
+            var sxc = module_bootstrapper_1.$2sxc(tag);
+            tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
+        }
+        catch (err2) {
+            // note: errors happen a lot on custom toolbars, amke sure the others are still rendered
+            console.error('error creating toolbar - will skip this one', err2);
+        }
+    });
+}
+function disable(tag) {
+    tag = $(tag);
+    tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName, true);
+}
+function isDisabled(sxc) {
+    var tag = $(api_1.getTag(sxc));
+    return !!tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName);
+}
+exports.toolbarManager = {
+    buildToolbars: buildToolbars,
+    disable: disable,
+    isDisabled: isDisabled,
+};
+//Object.assign(twoSxc._toolbarManager, {
+//  buildToolbars: buildToolbars,
+//  disable: disable,
+//  isDisabled: isDisabled
+//});
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 function extend() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -2487,7 +2608,7 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2497,7 +2618,7 @@ var engine_1 = __webpack_require__(18);
 var manipulate_1 = __webpack_require__(34);
 var module_bootstrapper_1 = __webpack_require__(0);
 var api_1 = __webpack_require__(3);
-var local_storage_helper_1 = __webpack_require__(37);
+var local_storage_helper_1 = __webpack_require__(39);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -2627,7 +2748,7 @@ function _initInstance(sxc) {
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2653,7 +2774,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2680,14 +2801,14 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var cb_1 = __webpack_require__(38);
-var Mod_1 = __webpack_require__(77);
+var cb_1 = __webpack_require__(40);
+var Mod_1 = __webpack_require__(79);
 var CmdsStrategyFactory = /** @class */ (function () {
     function CmdsStrategyFactory() {
         this.cmds = {};
@@ -2706,7 +2827,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2745,41 +2866,39 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(19);
 __webpack_require__(20);
 __webpack_require__(21);
-__webpack_require__(42);
-__webpack_require__(43);
 __webpack_require__(44);
 __webpack_require__(45);
+__webpack_require__(46);
+__webpack_require__(47);
 __webpack_require__(14);
 __webpack_require__(30);
 __webpack_require__(8);
 __webpack_require__(17);
 __webpack_require__(16);
 __webpack_require__(29);
-__webpack_require__(46);
+__webpack_require__(48);
 __webpack_require__(15);
-__webpack_require__(47);
+__webpack_require__(49);
 __webpack_require__(18);
 __webpack_require__(33);
-__webpack_require__(48);
-__webpack_require__(49);
 __webpack_require__(50);
 __webpack_require__(51);
+__webpack_require__(52);
+__webpack_require__(53);
 __webpack_require__(31);
 __webpack_require__(12);
-__webpack_require__(52);
+__webpack_require__(54);
 __webpack_require__(34);
 __webpack_require__(6);
 __webpack_require__(7);
-__webpack_require__(53);
-__webpack_require__(13);
-__webpack_require__(54);
 __webpack_require__(55);
+__webpack_require__(13);
 __webpack_require__(56);
 __webpack_require__(57);
 __webpack_require__(58);
@@ -2788,51 +2907,53 @@ __webpack_require__(60);
 __webpack_require__(61);
 __webpack_require__(62);
 __webpack_require__(63);
-__webpack_require__(32);
 __webpack_require__(64);
 __webpack_require__(65);
+__webpack_require__(32);
 __webpack_require__(66);
 __webpack_require__(67);
 __webpack_require__(68);
 __webpack_require__(69);
 __webpack_require__(70);
-__webpack_require__(35);
 __webpack_require__(71);
-__webpack_require__(3);
-__webpack_require__(36);
-__webpack_require__(22);
-__webpack_require__(37);
 __webpack_require__(72);
+__webpack_require__(37);
 __webpack_require__(73);
+__webpack_require__(3);
+__webpack_require__(38);
+__webpack_require__(22);
+__webpack_require__(39);
+__webpack_require__(74);
+__webpack_require__(75);
 __webpack_require__(23);
 __webpack_require__(24);
 __webpack_require__(25);
-__webpack_require__(74);
-__webpack_require__(75);
-__webpack_require__(5);
 __webpack_require__(76);
-__webpack_require__(38);
-__webpack_require__(9);
-__webpack_require__(39);
+__webpack_require__(77);
+__webpack_require__(5);
 __webpack_require__(78);
-__webpack_require__(27);
-__webpack_require__(79);
-__webpack_require__(28);
-__webpack_require__(81);
-__webpack_require__(82);
-__webpack_require__(10);
 __webpack_require__(40);
+__webpack_require__(9);
+__webpack_require__(41);
+__webpack_require__(80);
+__webpack_require__(27);
+__webpack_require__(81);
+__webpack_require__(28);
 __webpack_require__(83);
+__webpack_require__(84);
+__webpack_require__(10);
+__webpack_require__(42);
+__webpack_require__(85);
 __webpack_require__(11);
 __webpack_require__(1);
 __webpack_require__(2);
-__webpack_require__(84);
-__webpack_require__(85);
-__webpack_require__(26);
 __webpack_require__(86);
 __webpack_require__(87);
+__webpack_require__(26);
+__webpack_require__(36);
 __webpack_require__(88);
 __webpack_require__(89);
+__webpack_require__(35);
 __webpack_require__(90);
 __webpack_require__(91);
 __webpack_require__(92);
@@ -2845,7 +2966,7 @@ module.exports = __webpack_require__(0);
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2884,7 +3005,7 @@ twoSxc.c.sel = Object.entries(twoSxc.c.cls).reduce((res, current) => {
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2914,7 +3035,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2929,7 +3050,7 @@ exports.Action = Action;
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2944,7 +3065,7 @@ exports.CmdSpec = CmdSpec;
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2968,7 +3089,7 @@ module_bootstrapper_1.$2sxc._commands = new Commands();
 
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2983,7 +3104,7 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2998,7 +3119,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3013,7 +3134,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3028,7 +3149,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3046,7 +3167,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3061,7 +3182,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3076,7 +3197,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3091,7 +3212,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3106,7 +3227,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3121,7 +3242,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3136,7 +3257,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3151,7 +3272,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3166,7 +3287,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3181,7 +3302,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3196,7 +3317,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3227,7 +3348,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3258,17 +3379,18 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = __webpack_require__(1);
+var toolbar_manager_1 = __webpack_require__(35);
+var module_bootstrapper_1 = __webpack_require__(0);
 // import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals
 // export let $2sxc = window.$2sxc as SxcControllerWithInternals;
-window.$quickE = quick_e_1.$quickE;
 // let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
 // $2sxc.c = $2sxc.consts
 // $2sxc.system
@@ -3283,24 +3405,14 @@ window.$quickE = quick_e_1.$quickE;
 // $2sxc._quickDialog
 // $2sxc.totalPopup
 // $2sxc._commands.definitions
-// $2sxc._toolbarManager
+debugger;
+module_bootstrapper_1.$2sxc._toolbarManager = toolbar_manager_1._toolbarManager;
 // $2sxc._manage
 // $2sxc.contentItems
 // window.i18next
 // window.i18nextXHRBackend
-
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 66 */
-/***/ (function(module, exports) {
-
-// ReSharper restore InconsistentNaming
+window.$2sxc = module_bootstrapper_1.$2sxc;
+window.$quickE = quick_e_1.$quickE;
 
 
 /***/ }),
@@ -3313,6 +3425,7 @@ window.$quickE = quick_e_1.$quickE;
 /* 68 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -3335,6 +3448,18 @@ window.$quickE = quick_e_1.$quickE;
 
 /***/ }),
 /* 72 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3343,14 +3468,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var create_1 = __webpack_require__(36);
+var create_1 = __webpack_require__(38);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -3371,7 +3496,7 @@ module_bootstrapper_1.$2sxc._manage = new Manage();
 
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3415,7 +3540,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3442,7 +3567,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3460,7 +3585,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3499,7 +3624,7 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3514,13 +3639,13 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cb_1 = __webpack_require__(80);
+var Cb_1 = __webpack_require__(82);
 var clipboard_1 = __webpack_require__(9);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(2);
@@ -3550,7 +3675,7 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3577,19 +3702,19 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 81 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 83 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3622,7 +3747,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3640,7 +3765,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3655,7 +3780,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 86 */
+/* 88 */
 /***/ (function(module, exports) {
 
 /*
@@ -3756,7 +3881,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 87 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3768,7 +3893,7 @@ $(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { 
 
 
 /***/ }),
-/* 88 */
+/* 90 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -3780,122 +3905,6 @@ $(function () {
     // start shake-event monitoring, which will then generate a window-event
     (new Shake({ callback: toggleAllToolbars })).start();
 });
-
-
-/***/ }),
-/* 89 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = __webpack_require__(0);
-// the toolbar manager is an internal helper
-// taking care of toolbars, buttons etc.
-/**
- * Toolbar manager for the whole page - basically a set of APIs
- */
-module_bootstrapper_1.$2sxc._toolbarManager = {
-    // internal constants
-    cDisableAttrName: 'data-disable-toolbar'
-};
-
-
-/***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(3);
-var module_bootstrapper_1 = __webpack_require__(0);
-// quick debug - set to false if not needed for production
-var dbg = false;
-// default / fallback settings for toolbars when nothings is specified
-var settingsForEmptyToolbar = {
-    hover: 'left',
-    autoAddMore: 'left'
-};
-// generate an empty / fallback toolbar tag
-function generateFallbackToolbar() {
-    var settingsString = JSON.stringify(settingsForEmptyToolbar);
-    return $("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>");
-}
-// find current toolbars inside this wrapper-tag
-function getToolbarTags(parentTag) {
-    var allInner = $('.sc-menu[toolbar],.sc-menu[data-toolbar]', parentTag);
-    // return only those, which don't belong to a sub-item
-    var res = allInner.filter(function (i, e) { return $(e).closest('.sc-content-block')[0] === parentTag[0]; });
-    if (dbg)
-        console.log('found toolbars for parent', parentTag, res);
-    return res;
-}
-// create a process-toolbar command to generate toolbars inside a tag
-function buildToolbars(parentTag, optionalId) {
-    parentTag = $(parentTag || '.DnnModule-' + optionalId);
-    // if something says the toolbars are disabled, then skip
-    if (parentTag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName))
-        return;
-    // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
-    // don't add, if it is has un-initialized content
-    // 2017-09-08 2dm disabled this, I believe the bootstrapping should never call this any more, if sc-uninitialized. if ok, then delete this in a few days
-    //let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
-    var toolbars = getToolbarTags(parentTag);
-    // no toolbars found, must help a bit because otherwise editing is hard
-    if (toolbars.length === 0) {
-        if (dbg)
-            console.log("didn't find toolbar, so will auto-create", parentTag);
-        var outsideCb = !parentTag.hasClass(module_bootstrapper_1.$2sxc.c.cls.scCb); // "sc-content-block");
-        var contentTag = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
-        contentTag.addClass(module_bootstrapper_1.$2sxc.c.cls.scElm); // "sc-element");
-        contentTag.prepend(generateFallbackToolbar());
-        toolbars = getToolbarTags(parentTag);
-    }
-    toolbars.each(function initToolbar() {
-        var tag = $(this), data = null, toolbarConfig, toolbarSettings, at = module_bootstrapper_1.$2sxc.c.attr;
-        try {
-            data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
-            toolbarConfig = JSON.parse(data);
-            data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
-            toolbarSettings = JSON.parse(data);
-            if (toolbarConfig === {} && toolbarSettings === {})
-                toolbarSettings = settingsForEmptyToolbar;
-        }
-        catch (err) {
-            console
-                .error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
-            return;
-        }
-        try {
-            var sxc = module_bootstrapper_1.$2sxc(tag);
-            tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
-        }
-        catch (err2) {
-            // note: errors happen a lot on custom toolbars, amke sure the others are still rendered
-            console.error('error creating toolbar - will skip this one', err2);
-        }
-    });
-}
-function disable(tag) {
-    tag = $(tag);
-    tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName, true);
-}
-function isDisabled(sxc) {
-    var tag = $(api_1.getTag(sxc));
-    return !!tag.attr(module_bootstrapper_1.$2sxc._toolbarManager.cDisableAttrName);
-}
-var toolbarManager = {
-    buildToolbars: buildToolbars,
-    disable: disable,
-    isDisabled: isDisabled
-};
-Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
-//Object.assign(twoSxc._toolbarManager, {
-//  buildToolbars: buildToolbars,
-//  disable: disable,
-//  isDisabled: isDisabled
-//});
 
 
 /***/ }),
@@ -3990,7 +3999,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var module_bootstrapper_1 = __webpack_require__(0);
-var _2sxc__lib_extend_1 = __webpack_require__(35);
+var _2sxc__lib_extend_1 = __webpack_require__(37);
 // the toolbar manager is an internal helper
 // taking care of toolbars, buttons etc.
 // ToDo: refactor to avoid side-effects

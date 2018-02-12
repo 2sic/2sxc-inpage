@@ -82,6 +82,7 @@ var toolbarManager = {
     disable: disable,
     isDisabled: isDisabled
 };
+debugger;
 Object.assign(module_bootstrapper_1.$2sxc._toolbarManager, toolbarManager);
 //Object.assign(twoSxc._toolbarManager, {
 //  buildToolbars: buildToolbars,

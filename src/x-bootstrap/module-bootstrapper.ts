@@ -1,13 +1,14 @@
 ﻿import { getTag } from '../manage/api';
 import { current } from '../quick-dialog/quick-dialog';
 import { translate } from '../translate/2sxc.translate';
+
 // import '/2sxc-api/js/2sxc.api';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
  */
-export let $2sxc = window.$2sxc as SxcControllerWithInternals;
+export const $2sxc = window.$2sxc as SxcControllerWithInternals;
 
 const initializedModules: any[] = [];
 let openedTemplatePickerOnce = false;
