@@ -1,4 +1,5 @@
-﻿import { $quickE } from './quick-edit/quick-e';
+﻿import { _manage } from './manage/manage';
+import { $quickE } from './quick-edit/quick-e';
 import { _toolbarManager } from './toolbar/toolbar-manager';
 import { $2sxc } from './x-bootstrap/module-bootstrapper';
 
@@ -19,9 +20,9 @@ import { $2sxc } from './x-bootstrap/module-bootstrapper';
 // $2sxc._quickDialog
 // $2sxc.totalPopup
 // $2sxc._commands.definitions
-debugger;
 $2sxc._toolbarManager = _toolbarManager;
-// $2sxc._manage
+debugger;
+$2sxc._manage = _manage;
 // $2sxc.contentItems
 // window.i18next
 // window.i18nextXHRBackend

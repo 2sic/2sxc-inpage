@@ -1,5 +1,4 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-import { initInstance } from './create';
+﻿import { initInstance } from './create';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -15,4 +14,4 @@ class Manage {
   initInstance = initInstance;
 }
 
-twoSxc._manage = new Manage();
+export const _manage = new Manage();

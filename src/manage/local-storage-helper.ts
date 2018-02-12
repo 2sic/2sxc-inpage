@@ -11,4 +11,4 @@ export class LocalStorageHelper {
     const value: string = localStorage.getItem(key);
     return JSON.parse(value) as T;
   }
-} 
+}

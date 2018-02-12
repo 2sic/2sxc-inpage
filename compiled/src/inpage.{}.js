@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var manage_1 = require("./manage/manage");
 var quick_e_1 = require("./quick-edit/quick-e");
 var toolbar_manager_1 = require("./toolbar/toolbar-manager");
 var module_bootstrapper_1 = require("./x-bootstrap/module-bootstrapper");
@@ -20,9 +21,9 @@ var module_bootstrapper_1 = require("./x-bootstrap/module-bootstrapper");
 // $2sxc._quickDialog
 // $2sxc.totalPopup
 // $2sxc._commands.definitions
-debugger;
 module_bootstrapper_1.$2sxc._toolbarManager = toolbar_manager_1._toolbarManager;
-// $2sxc._manage
+debugger;
+module_bootstrapper_1.$2sxc._manage = manage_1._manage;
 // $2sxc.contentItems
 // window.i18next
 // window.i18nextXHRBackend
