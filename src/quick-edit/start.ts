@@ -28,7 +28,7 @@ function watchMouse() {
   });
 }
 
-function start(): void {
+export function start(): void {
   try {
     _readPageConfig();
     if (quickE.config.enable) {
@@ -73,8 +73,3 @@ export function reset(): void {
   _readPageConfig();
   toggleParts();
 }
-
-/**
- * run on-load
- */
-$(start);

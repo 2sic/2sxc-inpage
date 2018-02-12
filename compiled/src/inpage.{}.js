@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var manage_1 = require("./manage/manage");
 var quick_e_1 = require("./quick-edit/quick-e");
+var start_1 = require("./quick-edit/start");
 var toolbar_manager_1 = require("./toolbar/toolbar-manager");
 var module_bootstrapper_1 = require("./x-bootstrap/module-bootstrapper");
 // import '/2sxc-api/js/2sxc.api';
@@ -29,4 +30,5 @@ module_bootstrapper_1.$2sxc._manage = manage_1._manage;
 // window.i18nextXHRBackend
 window.$2sxc = module_bootstrapper_1.$2sxc;
 window.$quickE = quick_e_1.$quickE;
+$(start_1.start); // run on-load
 //# sourceMappingURL=inpage.{}.js.map

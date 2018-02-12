@@ -4,7 +4,7 @@ import { Selectors } from './selectors';
 /**
  * selectors used all over the in-page-editing, centralized to ensure consistency
  */
-export let selectors = {
+export const selectors = {
   cb: {
     id: 'cb',
     'class': 'sc-content-block',

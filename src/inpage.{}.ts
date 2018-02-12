@@ -1,5 +1,6 @@
 ﻿import { _manage } from './manage/manage';
 import { $quickE } from './quick-edit/quick-e';
+import { start } from './quick-edit/start';
 import { _toolbarManager } from './toolbar/toolbar-manager';
 import { $2sxc } from './x-bootstrap/module-bootstrapper';
 
@@ -28,3 +29,4 @@ $2sxc._manage = _manage;
 // window.i18nextXHRBackend
 window.$2sxc = $2sxc;
 window.$quickE = $quickE;
+$(start); // run on-load

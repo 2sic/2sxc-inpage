@@ -52,7 +52,7 @@ class QuickE {
   }
 }
 
-export let $quickE = window.$quickE = new QuickE();
+export const $quickE = new QuickE();
 
 function btn(action: string, icon: string, i18N: string, invisible?: boolean, unavailable?: boolean, classes?: string): string {
   return '<a class=\'sc-content-block-menu-btn sc-cb-action icon-sxc-' + icon + ' '
