@@ -2777,8 +2777,11 @@ exports.isDisabled = isDisabled;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-// does some clean-up work on a button-definition object
-// because the target item could be specified directly, or in a complex internal object called entity
+/**
+ * does some clean-up work on a button-definition object
+ * because the target item could be specified directly, or in a complex internal object called entity
+ * @param actDef
+ */
 function flattenActionDefinition(actDef) {
     if (!actDef.entity || !actDef.entity._2sxcEditInformation)
         return;
@@ -3019,10 +3022,10 @@ __webpack_require__(39);
 __webpack_require__(40);
 __webpack_require__(89);
 __webpack_require__(90);
-__webpack_require__(38);
 __webpack_require__(91);
 __webpack_require__(92);
 __webpack_require__(93);
+__webpack_require__(38);
 __webpack_require__(94);
 __webpack_require__(95);
 __webpack_require__(96);
@@ -3473,7 +3476,6 @@ var module_bootstrapper_1 = __webpack_require__(0);
 // $2sxc.totalPopup
 // $2sxc._commands.definitions
 module_bootstrapper_1.$2sxc._toolbarManager = toolbar_manager_1._toolbarManager;
-debugger;
 module_bootstrapper_1.$2sxc._manage = manage_1._manage;
 // $2sxc.contentItems
 // window.i18next
@@ -3821,134 +3823,6 @@ exports.Specs = Specs;
 
 /***/ }),
 /* 89 */
-/***/ (function(module, exports) {
-
-/*
- * Author: Alex Gibson
- * https://github.com/alexgibson/shake.js
- * License: MIT license
- */
-(function (global, factory) {
-    global.Shake = factory(global, global.document);
-}(typeof window !== 'undefined' ? window : this, function (window, document) {
-    'use strict';
-    function Shake(options) {
-        //feature detect
-        this.hasDeviceMotion = 'ondevicemotion' in window;
-        this.options = {
-            threshold: 15,
-            timeout: 1000,
-            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
-        };
-        if (typeof options === 'object') {
-            for (var i in options) {
-                if (options.hasOwnProperty(i)) {
-                    this.options[i] = options[i];
-                }
-            }
-        }
-        //use date to prevent multiple shakes firing
-        this.lastTime = new Date();
-        //accelerometer values
-        this.lastX = null;
-        this.lastY = null;
-        this.lastZ = null;
-    }
-    //reset timer values
-    Shake.prototype.reset = function () {
-        this.lastTime = new Date();
-        this.lastX = null;
-        this.lastY = null;
-        this.lastZ = null;
-    };
-    //start listening for devicemotion
-    Shake.prototype.start = function () {
-        this.reset();
-        if (this.hasDeviceMotion) {
-            window.addEventListener('devicemotion', this, false);
-        }
-    };
-    //stop listening for devicemotion
-    Shake.prototype.stop = function () {
-        if (this.hasDeviceMotion) {
-            window.removeEventListener('devicemotion', this, false);
-        }
-        this.reset();
-    };
-    //calculates if shake did occur
-    Shake.prototype.devicemotion = function (e) {
-        var current = e.accelerationIncludingGravity;
-        var currentTime;
-        var timeDifference;
-        var deltaX = 0;
-        var deltaY = 0;
-        var deltaZ = 0;
-        if ((this.lastX === null) && (this.lastY === null) && (this.lastZ === null)) {
-            this.lastX = current.x;
-            this.lastY = current.y;
-            this.lastZ = current.z;
-            return;
-        }
-        deltaX = Math.abs(this.lastX - current.x);
-        deltaY = Math.abs(this.lastY - current.y);
-        deltaZ = Math.abs(this.lastZ - current.z);
-        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
-            //calculate time in milliseconds since last shake registered
-            currentTime = new Date();
-            timeDifference = currentTime.getTime() - this.lastTime.getTime();
-            if (timeDifference > this.options.timeout) {
-                // once triggered, execute  the callback
-                if (typeof this.options.callback === 'function') {
-                    this.options.callback();
-                }
-                else
-                    console.log("shake event without callback detected");
-                this.lastTime = new Date();
-            }
-        }
-        this.lastX = current.x;
-        this.lastY = current.y;
-        this.lastZ = current.z;
-    };
-    //event handler
-    Shake.prototype.handleEvent = function (e) {
-        if (typeof (this[e.type]) === 'function') {
-            return this[e.type](e);
-        }
-    };
-    return Shake;
-}));
-
-
-/***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = __webpack_require__(0);
-// prevent propagation of the click (if menu was clicked)
-$(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagation(); });
-
-
-/***/ }),
-/* 91 */
-/***/ (function(module, exports) {
-
-// enable shake detection on all toolbars
-$(function () {
-    // this will add a css-class to auto-show all toolbars (or remove it again)
-    function toggleAllToolbars() {
-        $(document.body).toggleClass('sc-tb-show-all');
-    }
-    // start shake-event monitoring, which will then generate a window-event
-    (new Shake({ callback: toggleAllToolbars })).start();
-});
-
-
-/***/ }),
-/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3987,7 +3861,7 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
 /***/ }),
-/* 93 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4219,7 +4093,108 @@ var tools = module_bootstrapper_1.$2sxc._toolbarManager.buttonHelpers = {
 
 
 /***/ }),
-/* 94 */
+/* 91 */
+/***/ (function(module, exports) {
+
+/*
+ * Author: Alex Gibson
+ * https://github.com/alexgibson/shake.js
+ * License: MIT license
+ */
+(function (global, factory) {
+    global.Shake = factory(global, global.document);
+}(typeof window !== 'undefined' ? window : this, function (window, document) {
+    'use strict';
+    function Shake(options) {
+        //feature detect
+        this.hasDeviceMotion = 'ondevicemotion' in window;
+        this.options = {
+            threshold: 15,
+            timeout: 1000,
+            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
+        };
+        if (typeof options === 'object') {
+            for (var i in options) {
+                if (options.hasOwnProperty(i)) {
+                    this.options[i] = options[i];
+                }
+            }
+        }
+        //use date to prevent multiple shakes firing
+        this.lastTime = new Date();
+        //accelerometer values
+        this.lastX = null;
+        this.lastY = null;
+        this.lastZ = null;
+    }
+    //reset timer values
+    Shake.prototype.reset = function () {
+        this.lastTime = new Date();
+        this.lastX = null;
+        this.lastY = null;
+        this.lastZ = null;
+    };
+    //start listening for devicemotion
+    Shake.prototype.start = function () {
+        this.reset();
+        if (this.hasDeviceMotion) {
+            window.addEventListener('devicemotion', this, false);
+        }
+    };
+    //stop listening for devicemotion
+    Shake.prototype.stop = function () {
+        if (this.hasDeviceMotion) {
+            window.removeEventListener('devicemotion', this, false);
+        }
+        this.reset();
+    };
+    //calculates if shake did occur
+    Shake.prototype.devicemotion = function (e) {
+        var current = e.accelerationIncludingGravity;
+        var currentTime;
+        var timeDifference;
+        var deltaX = 0;
+        var deltaY = 0;
+        var deltaZ = 0;
+        if ((this.lastX === null) && (this.lastY === null) && (this.lastZ === null)) {
+            this.lastX = current.x;
+            this.lastY = current.y;
+            this.lastZ = current.z;
+            return;
+        }
+        deltaX = Math.abs(this.lastX - current.x);
+        deltaY = Math.abs(this.lastY - current.y);
+        deltaZ = Math.abs(this.lastZ - current.z);
+        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
+            //calculate time in milliseconds since last shake registered
+            currentTime = new Date();
+            timeDifference = currentTime.getTime() - this.lastTime.getTime();
+            if (timeDifference > this.options.timeout) {
+                // once triggered, execute  the callback
+                if (typeof this.options.callback === 'function') {
+                    this.options.callback();
+                }
+                else
+                    console.log("shake event without callback detected");
+                this.lastTime = new Date();
+            }
+        }
+        this.lastX = current.x;
+        this.lastY = current.y;
+        this.lastZ = current.z;
+    };
+    //event handler
+    Shake.prototype.handleEvent = function (e) {
+        if (typeof (this[e.type]) === 'function') {
+            return this[e.type](e);
+        }
+    };
+    return Shake;
+}));
+
+
+/***/ }),
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4238,6 +4213,33 @@ function standardButtons(canDesign, sharedParameters) {
         btns.groups.splice(2, 1); // remove this menu
     return btns;
 }
+
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var module_bootstrapper_1 = __webpack_require__(0);
+// prevent propagation of the click (if menu was clicked)
+$(module_bootstrapper_1.$2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagation(); });
+
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports) {
+
+// enable shake detection on all toolbars
+$(function () {
+    // this will add a css-class to auto-show all toolbars (or remove it again)
+    function toggleAllToolbars() {
+        $(document.body).toggleClass('sc-tb-show-all');
+    }
+    // start shake-event monitoring, which will then generate a window-event
+    (new Shake({ callback: toggleAllToolbars })).start();
+});
 
 
 /***/ }),

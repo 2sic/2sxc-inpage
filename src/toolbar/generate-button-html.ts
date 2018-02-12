@@ -1,5 +1,8 @@
-﻿// does some clean-up work on a button-definition object
-// because the target item could be specified directly, or in a complex internal object called entity
+﻿/**
+ * does some clean-up work on a button-definition object
+ * because the target item could be specified directly, or in a complex internal object called entity
+ * @param actDef
+ */
 function flattenActionDefinition(actDef) {
   if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
 
