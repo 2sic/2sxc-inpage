@@ -1,10 +1,6 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-
-// the default / initial buttons in a standard toolbar
-
-
+﻿// the default / initial buttons in a standard toolbar
 // ToDo: refactor to avoid side-effects
-twoSxc._toolbarManager.toolbarTemplate = {
+export const toolbarTemplate = {
   groups: [
     // ToDo: remove dead code
     //{
