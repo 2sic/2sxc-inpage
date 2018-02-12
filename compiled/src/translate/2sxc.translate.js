@@ -9,5 +9,4 @@ function translate(key) {
     return ($.t && $.t(key)) || key;
 }
 exports.translate = translate;
-;
 //# sourceMappingURL=2sxc.translate.js.map

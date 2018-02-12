@@ -1,6 +1,6 @@
-﻿import { $quickE as quickE, prepareToolbarInDom } from './quick-e';
-import { _readPageConfig } from './config';
+﻿import { _readPageConfig } from './config';
 import { getBodyPosition, refresh } from './positioning';
+import { $quickE as quickE, prepareToolbarInDom } from './quick-e';
 import { selectors } from './selectors-instance';
 
 function enable(): void {
@@ -9,14 +9,15 @@ function enable(): void {
 
   // Cache the panes (because panes can't change dynamically)
   initPanes();
-};
+}
 
 /**
  * start watching for mouse-move
  */
 function watchMouse() {
   let refreshTimeout: any = null;
-  $('body').on('mousemove', e => {
+  $('body').on('mousemove',
+    (e) => {
     if (refreshTimeout === null)
       refreshTimeout = window.setTimeout(() => {
         requestAnimationFrame(() => {
@@ -25,7 +26,7 @@ function watchMouse() {
         });
       }, 20);
   });
-};
+}
 
 function start(): void {
   try {
@@ -43,7 +44,7 @@ function start(): void {
   } catch (e) {
     console.error("couldn't start quick-edit", e);
   }
-};
+}
 
 /**
  * cache the panes which can contain modules
@@ -51,18 +52,18 @@ function start(): void {
 function initPanes(): void {
   quickE.cachedPanes = $(selectors.mod.listSelector);
   quickE.cachedPanes.addClass('sc-cb-pane-glow');
-};
+}
 
 /**
  * enable/disable module/content-blocks as configured
  */
 function toggleParts(): void {
   //// content blocks actions
-  //quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
+  // quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
 
   //// module actions
-  //quickE.modActions.hide(quickE.config.modules.enable);
-};
+  // quickE.modActions.hide(quickE.config.modules.enable);
+}
 
 /**
  * reset the quick-edit
@@ -71,7 +72,7 @@ function toggleParts(): void {
 export function reset(): void {
   _readPageConfig();
   toggleParts();
-};
+}
 
 /**
  * run on-load

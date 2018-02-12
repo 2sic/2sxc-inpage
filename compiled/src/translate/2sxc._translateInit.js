@@ -24,6 +24,7 @@ function _translateInit(manage) {
             loadPath: manage._editContext.Environment.SxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js',
         },
     }, function (err, t) {
+        // ReSharper restore UnusedParameter
         // for options see
         // https://github.com/i18next/jquery-i18next#initialize-the-plugin
         // ReSharper disable once TsResolvedFromInaccessibleModule

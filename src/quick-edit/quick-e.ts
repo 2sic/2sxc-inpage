@@ -1,6 +1,6 @@
-﻿import { getCoordinates, positionAndAlign } from './positioning';
-import { Conf } from './conf';
+﻿import { Conf } from './conf';
 import { Coords } from './coords';
+import { getCoordinates, positionAndAlign } from './positioning';
 
 /**
  * the quick-edit object

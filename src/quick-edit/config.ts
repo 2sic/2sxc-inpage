@@ -1,5 +1,5 @@
-﻿import { $quickE as quickE } from './quick-e';
-import { Conf } from './conf';
+﻿import { Conf } from './conf';
+import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 
 const configAttr: string = 'quick-edit-config';
@@ -7,24 +7,24 @@ const configAttr: string = 'quick-edit-config';
 /**
  * the initial configuration
  */
-let conf = quickE.config = {
+const conf: Conf = quickE.config = {
   enable: true,
   innerBlocks: {
     enable: null, // default: auto-detect
   },
   modules: {
     enable: null, // default: auto-detect
-  }
-};
+  },
+} as Conf;
 
 export function _readPageConfig() {
-  let configs: Conf[] = $(`[${configAttr}]`);
-  let finalConfig: Conf = {} as Conf;
+  const configs: Conf[] = $(`[${configAttr}]`);
+  const finalConfig: Conf = {} as Conf;
   let confJ: string;
   let confO: Conf;
 
   // any inner blocks found? will currently affect if modules can be inserted...
-  let hasInnerCBs: boolean = ($(selectors.cb.listSelector).length > 0);
+  const hasInnerCBs: boolean = ($(selectors.cb.listSelector).length > 0);
 
   if (configs.length > 0) {
     // go through reverse list, as the last is the most important...
@@ -32,12 +32,12 @@ export function _readPageConfig() {
       confJ = configs[0].getAttribute(configAttr);
       try {
         confO = JSON.parse(confJ) as Conf;
-        $.extend(finalConfig, confO);
+        Object.assign(finalConfig, confO);
       } catch (e) {
         console.warn('had trouble with json', e);
       }
     }
-    $.extend(conf, finalConfig);
+    Object.assign(conf, finalConfig);
   }
 
   // re-check "auto" or "null"
@@ -47,4 +47,3 @@ export function _readPageConfig() {
   // for now, ContentBlocks are only enabled if they exist on the page
   if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto') conf.innerBlocks.enable = hasInnerCBs;
 }
-

@@ -1,5 +1,6 @@
 ﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
-import { CmdsStrategyFactory, mod } from './cmds';
+import { CmdsStrategyFactory } from './cmds-strategy-factory';
+import { Mod } from './mod';
 import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 import { Specs } from './specs';
@@ -25,8 +26,8 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
 
       break;
     case 'paste':
-      let from = data.index;
-      let to = newClip.index;
+      const from = data.index;
+      const to = newClip.index;
       // check that we only move block-to-block or module to module
       if (data.type !== newClip.type)
         return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
@@ -40,27 +41,26 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
         return clear(); // don't do anything
 
       if (type === selectors.cb.id) {
-        let sxc: SxcInstanceWithInternals = twoSxc(list) as SxcInstanceWithInternals;
+        const sxc: SxcInstanceWithInternals = twoSxc(list) as SxcInstanceWithInternals;
         sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
       } else {
         // sometimes missing oldClip.item
         // if (clipboard.data.item)
-        mod.move(data, newClip, from, to);
+        Mod.move(data, newClip, from, to);
       }
       clear();
       break;
     default:
   }
   return null;
-};
+}
 
 /**
  * clipboard object - remembers what module (or content-block) was previously copied / needs to be pasted
  */
-
 export let data: any = {};
 
-export function mark(newData: Specs) {
+export function mark(newData: Specs): void {
   if (newData) {
     // if it was already selected with the same thing, then release it
     if (data && data.item === newData.item)
@@ -74,7 +74,7 @@ export function mark(newData: Specs) {
     return;
   }
 
-  let cb: any = $(data.item);
+  const cb: any = $(data.item);
   cb.addClass(selectors.selected);
   if (cb.prev().is('iframe'))
     cb.prev().addClass(selectors.selected);
@@ -82,7 +82,7 @@ export function mark(newData: Specs) {
   quickE.selected.toggle(cb, data.type);
 }
 
-export function clear() {
+export function clear(): void {
   $(`.${selectors.selected}`).removeClass(selectors.selected);
   data = null;
   setSecondaryActionsState(false);
@@ -98,7 +98,7 @@ export function createSpecs(type: string, list: any, index: number): Specs {
 }
 
 
-function setSecondaryActionsState(state: boolean) {
+function setSecondaryActionsState(state: boolean): any {
   let btns = $('a.sc-content-block-menu-btn');
   btns = btns.filter('.icon-sxc-paste');
   btns.toggleClass('sc-unavailable', !state);
@@ -109,13 +109,15 @@ const cmdsStrategyFactory = new CmdsStrategyFactory();
 /**
  * bind clipboard actions
  */
-$('a', quickE.selected).click(function () {
+$('a', quickE.selected).click(function() {
   const action: string = $(this).data('action');
   const clip: any = data;
   switch (action) {
     case 'delete':
       return cmdsStrategyFactory.delete(clip);
     case 'sendToPane':
-      return mod.sendToPane();
+      return Mod.sendToPane();
+    default:
+      throw new Error(`unexpected action: ${action}`);
   }
 });

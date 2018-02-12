@@ -1,5 +1,5 @@
-﻿import { $quickE as quickE } from './quick-e';
-import { Coords } from './coords';
+﻿import { Coords } from './coords';
+import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 
 /**
@@ -12,32 +12,31 @@ import { selectors } from './selectors-instance';
 
 /**
  * Prepare offset calculation based on body positioning
- * @returns Point 
+ * @returns Point
  */
 export function getBodyPosition(): Coords {
-  let bodyPos = quickE.body.css('position');
+  const bodyPos = quickE.body.css('position');
   return bodyPos === 'relative' || bodyPos === 'absolute'
     ? new Coords(quickE.body.offset().left, quickE.body.offset().top)
-    : new Coords(0,0);
-};
+    : new Coords(0, 0);
+}
 
 /**
  * Refresh content block and modules elements
- */ 
+ */
 function refreshDomObjects(): void {
   quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
 
   //// Cache the panes (because panes can't change dynamically)
-  //if (!quickE.cachedPanes)
+  // if (!quickE.cachedPanes)
   //    quickE.cachedPanes = $(selectors.mod.listSelector);
 
   if (quickE.config.innerBlocks.enable) {
     // get all content-block lists which are empty, or which allow multiple child-items
-    let lists = $(selectors.cb.listSelector)
-      .filter(':not(.' + selectors.cb.singleItem + '), :empty');
+    const lists: any = $(selectors.cb.listSelector).filter(`:not(.${selectors.cb.singleItem}), :empty`);
     quickE.contentBlocks = lists // $(selectors.cb.listSelector)
       .find(selectors.cb.selector)
-      .add(lists);// selectors.cb.listSelector);
+      .add(lists); // selectors.cb.listSelector);
   }
   if (quickE.config.modules.enable)
     quickE.modules = quickE.cachedPanes
@@ -55,22 +54,22 @@ namespace refreshDomObjects {
 
 /**
  * position, align and show a menu linked to another item
- */ 
+ */
 export function positionAndAlign(element: any, coords: Coords) {
   return element.css({
     left: coords.x - quickE.bodyOffset.x,
     top: coords.yh - quickE.bodyOffset.y,
-    width: coords.element.width()
+    width: coords.element.width(),
   }).show();
-};
+}
 
 /**
  * Refresh positioning / visibility of the quick-insert bar
  * @param e
  */
 export function refresh(e) {
-  let highlightClass: string = 'sc-cb-highlight-for-insert';
-  let newDate: Date = new Date();
+  const highlightClass: string = 'sc-cb-highlight-for-insert';
+  const newDate: Date = new Date();
   if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
     // console.log('refreshed contentblock and modules');
     refreshDomObjects.lastCall = newDate;
@@ -88,22 +87,22 @@ export function refresh(e) {
   quickE.modActions.toggleClass('sc-invisible', quickE.nearestMod === null);
   quickE.cbActions.toggleClass('sc-invisible', quickE.nearestCb === null);
 
-  let oldParent = quickE.main.parentContainer;
+  const oldParent = quickE.main.parentContainer;
 
   if (quickE.nearestCb !== null || quickE.nearestMod !== null) {
-    let alignTo = quickE.nearestCb || quickE.nearestMod;
+    const alignTo = quickE.nearestCb || quickE.nearestMod;
 
     // find parent pane to highlight
-    let parentPane = $(alignTo.element).closest(selectors.mod.listSelector);
-    let parentCbList = $(alignTo.element).closest(selectors.cb.listSelector);
-    let parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
+    const parentPane = $(alignTo.element).closest(selectors.mod.listSelector);
+    const parentCbList = $(alignTo.element).closest(selectors.cb.listSelector);
+    const parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
 
     // put part of the pane-name into the button-labels
     if (parentPane.length > 0) {
       let paneName: string = parentPane.attr('id') || '';
       if (paneName.length > 4) paneName = paneName.substr(4);
-      quickE.modActions.filter('[titleTemplate]').each(function () {
-        let t = $(this);
+      quickE.modActions.filter('[titleTemplate]').each(function() {
+        const t = $(this);
         t.attr('title', t.attr('titleTemplate').replace('{0}', paneName));
       });
     }
@@ -123,7 +122,7 @@ export function refresh(e) {
   // if previously a parent-pane was highlighted, un-highlight it now
   if (oldParent && oldParent !== quickE.main.parentContainer)
     $(oldParent).removeClass(highlightClass);
-};
+}
 
 /**
  * Return the nearest element to the mouse cursor from elements (jQuery elements)
@@ -136,19 +135,19 @@ export function findNearest(elements: any, position: Coords): Coords {
   let nearestItem = null;
   let nearestDistance: number = maxDistance;
 
-  let posX: number = position.x + quickE.win.scrollLeft();
-  let posY: number = position.y + quickE.win.scrollTop();
+  const posX: number = position.x + quickE.win.scrollLeft();
+  const posY: number = position.y + quickE.win.scrollTop();
 
   // Find nearest element
-  elements.each(function () {
-    let e: Coords = getCoordinates($(this));
+  elements.each(function() {
+    const e: Coords = getCoordinates($(this));
 
     // First check x coordinates - must be within container
     if (posX < e.x || posX > e.x + e.w)
       return;
 
     // Check if y coordinates are within boundaries
-    let distance: number = Math.abs(posY - e.yh);
+    const distance: number = Math.abs(posY - e.yh);
 
     if (distance < maxDistance && distance < nearestDistance) {
       nearestItem = e;
@@ -157,12 +156,12 @@ export function findNearest(elements: any, position: Coords): Coords {
   });
 
   return nearestItem;
-};
+}
 
 export function getCoordinates(element: any): Coords {
   // sometimes element.length === 0 and element.offset() = undefined
-  //console.log("element.offset():", element.offset());
-  //console.log("element.length:", element.length);
+  // console.log("element.offset():", element.offset());
+  // console.log("element.length:", element.length);
 
   const coords: Coords = {
     element: element,
@@ -171,8 +170,8 @@ export function getCoordinates(element: any): Coords {
     y: element.offset().top,
     // For content-block ITEMS, the menu must be visible at the end
     // For content-block-LISTS, the menu must be at top
-    yh: element.offset().top + (element.is(selectors.eitherCbOrMod) ? element.height() : 0)
+    yh: element.offset().top + (element.is(selectors.eitherCbOrMod) ? element.height() : 0),
   };
-  
+
   return coords;
-};
+}
