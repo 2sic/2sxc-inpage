@@ -1,5 +1,6 @@
 ﻿import { ContentGroup } from '../data-edit-context/content-group';
 import { hide } from '../quick-dialog/quick-dialog';
+import { isDisabled } from '../toolbar/build-toolbars';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
 
@@ -35,7 +36,7 @@ export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList
  */
 export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean) {
   const contentGroup: ContentGroup = sxc.manage._editContext.ContentGroup;
-  const showingAjaxPreview: boolean = $2sxc._toolbarManager.isDisabled(sxc);
+  const showingAjaxPreview: boolean = isDisabled(sxc);
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
   // or just reset it, so it picks up the right values again ?

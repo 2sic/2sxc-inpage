@@ -7,7 +7,6 @@ import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Settings } from './settings';
 
 export class Engine {
-
   constructor(public sxc: SxcInstanceWithInternals, public editContext: DataEditContext) { }
 
   commands = commandInitializeInstanceCommands(this.editContext);

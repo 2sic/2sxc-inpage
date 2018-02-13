@@ -1,5 +1,4 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { Command } from './command';
 import { Settings } from './settings';
 
@@ -17,7 +16,7 @@ export function commandCreate(sxc: SxcInstanceWithInternals, editContext: DataEd
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
     editContext.Environment.SxcVersion;
 
-  const isDebug: string = twoSxc.urlParams.get('debug') ? '&debug=true' : '';
+  const isDebug: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
 
   const cmd = new Command(sxc, settings, ngDialogUrl, isDebug);
 

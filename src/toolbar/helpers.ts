@@ -33,6 +33,8 @@ export const buildFullDefinition = (unstructuredConfig, allActions, instanceConf
   removeDisableButtons(fullConfig, instanceConfig);
   if (fullConfig.debug) console.log('after remove: ', fullConfig);
 
+  console.log('TV#2: ', fullConfig);
+
   customize(fullConfig);
 
   return fullConfig;

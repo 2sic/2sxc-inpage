@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var module_bootstrapper_1 = require("../x-bootstrap/module-bootstrapper");
+var sxc_1 = require("../x-bootstrap/sxc");
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
@@ -13,7 +13,7 @@ var ActionMenuMapper = /** @class */ (function () {
         this.adminApp = function () { _this.run('app'); };
         this.adminZone = function () { _this.run('zone'); };
         this.develop = function () { _this.run('template-develop'); };
-        var sxc = module_bootstrapper_1.$2sxc(moduleId);
+        var sxc = sxc_1.getSxcInstance(moduleId);
         this.run = sxc.manage.run;
     }
     return ActionMenuMapper;

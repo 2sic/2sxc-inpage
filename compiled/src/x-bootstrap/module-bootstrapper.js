@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = require("../manage/api");
+var sxc_1 = require("./sxc");
 var quick_dialog_1 = require("../quick-dialog/quick-dialog");
+var build_toolbars_1 = require("../toolbar/build-toolbars");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
  */
-exports.$2sxc = window.$2sxc;
 var initializedModules = [];
 var openedTemplatePickerOnce = false;
 var cancelledDialog = localStorage.getItem('cancelled-dialog');
@@ -44,8 +45,8 @@ function tryShowTemplatePicker() {
         return false;
     // show the template picker of this module
     var module = uninitializedModules.parent('div[data-edit-context]')[0];
-    exports.sxc = exports.$2sxc(module);
-    exports.sxc.manage.run('layout');
+    var sxc = sxc_1.getSxcInstance(module);
+    sxc.manage.run('layout');
     openedTemplatePickerOnce = true;
     return true;
 }
@@ -55,16 +56,16 @@ function initModule(module, isFirstRun) {
         return false;
     // add to modules-list
     initializedModules.push(module);
-    exports.sxc = exports.$2sxc(module);
+    var sxc = sxc_1.getSxcInstance(module);
     // check if the sxc must be re-created. This is necessary when modules are dynamically changed
     // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
     if (!isFirstRun)
-        exports.sxc = exports.sxc.recreate(true);
+        sxc = sxc.recreate(true);
     // check if we must show the glasses
     // this must run even after first-run, because it can be added ajax-style
-    var wasEmpty = showGlassesButtonIfUninitialized(exports.sxc);
+    var wasEmpty = showGlassesButtonIfUninitialized(sxc);
     if (isFirstRun || !wasEmpty)
-        exports.$2sxc._toolbarManager.buildToolbars(module);
+        build_toolbars_1.buildToolbars(module);
     return true;
 }
 function showGlassesButtonIfUninitialized(sxci) {

@@ -1,9 +1,10 @@
 ﻿import { getTag } from '../manage/api';
 import { hide } from '../quick-dialog/quick-dialog';
 import { reset } from '../quick-edit/start';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { disable } from '../toolbar/build-toolbars';
 import { _contentBlock } from './main-content-block';
 import { getPreviewWithTemplate } from './web-api-promises';
+
 
 /*
  * this is the content block manager in the browser
@@ -30,7 +31,7 @@ function replaceCb(sxc: SxcInstanceWithInternals, newContent: any, justPreview: 
     const newStuff = $(newContent);
 
     // Must disable toolbar before we attach to DOM
-    if (justPreview) twoSxc._toolbarManager.disable(newStuff);
+    if (justPreview) disable(newStuff);
 
     $(getTag(sxc)).replaceWith(newStuff);
 

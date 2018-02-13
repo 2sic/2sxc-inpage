@@ -1,4 +1,4 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+﻿import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -7,7 +7,7 @@ export class ActionMenuMapper {
   private run: any;
 
   constructor(moduleId: number) {
-    const sxc: SxcInstanceWithInternals = twoSxc(moduleId) as SxcInstanceWithInternals;
+    const sxc: SxcInstanceWithInternals = getSxcInstance(moduleId) as SxcInstanceWithInternals;
     this.run = sxc.manage.run;
   }
 

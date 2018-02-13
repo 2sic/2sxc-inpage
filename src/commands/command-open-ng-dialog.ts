@@ -1,7 +1,6 @@
 ﻿import { reloadAndReInitialize } from '../contentBlock/render';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { showOrToggle } from '../quick-dialog/quick-dialog';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
 import { Settings } from './settings';
 
@@ -27,5 +26,5 @@ export function commandOpenNgDialog(sxc: SxcInstanceWithInternals, editContext: 
   if (settings.newWindow || (event && event.shiftKey))
     return window.open(link);
 
-  return twoSxc.totalPopup.open(link, callback);
+  return $2sxc.totalPopup.open(link, callback);
 }

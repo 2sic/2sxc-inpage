@@ -1,13 +1,11 @@
-﻿import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+﻿import { getSxcInstance } from '../x-bootstrap/sxc';
 import { CmdsStrategyFactory } from './cmds-strategy-factory';
 import { Mod } from './mod';
 import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 import { Specs } from './specs';
 
-/**
- * add a clipboard to the quick edit
- */
+/** add a clipboard to the quick edit */
 
 /**
  * perform copy and paste commands - needs the clipboard
@@ -41,7 +39,7 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
         return clear(); // don't do anything
 
       if (type === selectors.cb.id) {
-        const sxc: SxcInstanceWithInternals = twoSxc(list) as SxcInstanceWithInternals;
+        const sxc: SxcInstanceWithInternals = getSxcInstance(list) as SxcInstanceWithInternals;
         sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
       } else {
         // sometimes missing oldClip.item

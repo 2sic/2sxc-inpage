@@ -3,6 +3,9 @@ import * as buttonHelpers from './helpers';
 import { standardButtons } from './standard-buttons';
 
 export function generateToolbarHtml(sxc, tbConfig, moreSettings) {
+
+  console.log("TV#1: ", sxc, tbConfig, moreSettings);
+
   // if it has an action or is an array, keep that. Otherwise get standard buttons
   tbConfig = tbConfig || {}; // if null/undefined, use empty object
   let btnList = tbConfig;

@@ -1,6 +1,9 @@
 ﻿import { getTag } from '../manage/api';
+import { getSxcInstance } from './sxc';
 import { current } from '../quick-dialog/quick-dialog';
+import { buildToolbars } from '../toolbar/build-toolbars';
 import { translate } from '../translate/2sxc.translate';
+
 
 // import '/2sxc-api/js/2sxc.api';
 
@@ -8,8 +11,6 @@ import { translate } from '../translate/2sxc.translate';
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
  */
-export const $2sxc = window.$2sxc as SxcControllerWithInternals;
-
 const initializedModules: any[] = [];
 let openedTemplatePickerOnce = false;
 const cancelledDialog = localStorage.getItem('cancelled-dialog');
@@ -51,13 +52,11 @@ function tryShowTemplatePicker(): boolean {
 
   // show the template picker of this module
   const module = uninitializedModules.parent('div[data-edit-context]')[0];
-  sxc = $2sxc(module) as SxcInstanceWithInternals;
+  const sxc = getSxcInstance(module);
   sxc.manage.run('layout');
   openedTemplatePickerOnce = true;
   return true;
 }
-
-export let sxc: SxcInstanceWithInternals;
 
 function initModule(module: any, isFirstRun: boolean) {
 
@@ -67,7 +66,7 @@ function initModule(module: any, isFirstRun: boolean) {
   // add to modules-list
   initializedModules.push(module);
 
-  sxc = $2sxc(module) as SxcInstanceWithInternals;
+  let sxc = getSxcInstance(module);
 
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
@@ -75,9 +74,9 @@ function initModule(module: any, isFirstRun: boolean) {
 
   // check if we must show the glasses
   // this must run even after first-run, because it can be added ajax-style
-  const  wasEmpty = showGlassesButtonIfUninitialized(sxc);
+  const wasEmpty = showGlassesButtonIfUninitialized(sxc);
 
-  if (isFirstRun || !wasEmpty) $2sxc._toolbarManager.buildToolbars(module);
+  if (isFirstRun || !wasEmpty) buildToolbars(module);
 
   return true;
 }

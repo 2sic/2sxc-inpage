@@ -61,7 +61,7 @@ export class Command {
     //#region steps for all actions: prefill, serialize, open-dialog
     // when doing new, there may be a prefill in the link to initialize the new item
     if (this.settings.prefill) {
-      for (let i of this.items.length) {
+      for (let i = 0; i < this.items.length; i++) {
         this.items[i].Prefill = this.settings.prefill;
       }
     }

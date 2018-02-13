@@ -1,5 +1,6 @@
 ﻿import { getTag } from '../manage/api';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+import { getSxcInstance } from '../x-bootstrap/sxc';
+import { _toolbarManager } from './toolbar-manager';
 
 // quick debug - set to false if not needed for production
 const dbg = true;
@@ -31,7 +32,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
   parentTag = $(parentTag || '.DnnModule-' + optionalId);
 
   // if something says the toolbars are disabled, then skip
-  if (parentTag.attr(twoSxc._toolbarManager.cDisableAttrName)) return;
+  if (parentTag.attr(_toolbarManager.cDisableAttrName)) return;
 
   // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
   // don't add, if it is has un-initialized content
@@ -44,9 +45,9 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
   if (toolbars.length === 0) { // && !disableAutoAdd) {
     if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
 
-    const outsideCb: boolean = !parentTag.hasClass(twoSxc.c.cls.scCb); // "sc-content-block");
+    const outsideCb: boolean = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
     const contentTag: any = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
-    contentTag.addClass(twoSxc.c.cls.scElm); // "sc-element");
+    contentTag.addClass($2sxc.c.cls.scElm); // "sc-element");
 
     contentTag.prepend(generateFallbackToolbar());
     toolbars = getToolbarTags(parentTag);
@@ -57,7 +58,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     let data: any = null;
     let toolbarConfig: any;
     let toolbarSettings: any;
-    const at = twoSxc.c.attr;
+    const at = $2sxc.c.attr;
 
     try {
       data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
@@ -72,7 +73,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     }
 
     try {
-      const sxc: SxcInstanceWithInternals = twoSxc(tag) as SxcInstanceWithInternals;
+      const sxc: SxcInstanceWithInternals = getSxcInstance(tag) as SxcInstanceWithInternals;
       tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
     } catch (err2) {
       // note: errors happen a lot on custom toolbars, make sure the others are still rendered
@@ -83,10 +84,10 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
 
 export function disable(tag: any): void {
   tag = $(tag);
-  tag.attr(twoSxc._toolbarManager.cDisableAttrName, true);
+  tag.attr(_toolbarManager.cDisableAttrName, true);
 }
 
 export function isDisabled(sxc: SxcInstanceWithInternals): boolean {
   const tag: any = $(getTag(sxc));
-  return !!tag.attr(twoSxc._toolbarManager.cDisableAttrName);
+  return !!tag.attr(_toolbarManager.cDisableAttrName);
 }

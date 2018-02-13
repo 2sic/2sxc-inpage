@@ -40,6 +40,7 @@
     <None Remove="src\quick-edit\cb-or-mod.ts" />
     <None Remove="src\quick-edit\selectors-instance.ts" />
     <None Remove="src\quick-edit\selectors.ts" />
+    <None Remove="src\x-bootstrap\sxc.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,6 +63,7 @@
     <TypeScriptCompile Include="src\quick-edit\cb-or-mod.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors-instance.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors.ts" />
+    <TypeScriptCompile Include="src\x-bootstrap\sxc.ts" />
   </ItemGroup>
 
   <ItemGroup>

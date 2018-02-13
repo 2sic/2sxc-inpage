@@ -1,11 +1,9 @@
-﻿import { translate } from '../translate/2sxc.translate';
-import { $2sxc as twoSxc } from '../x-bootstrap/module-bootstrapper';
+﻿import { _toolbarManager } from '../toolbar/toolbar-manager';
+import { translate } from '../translate/2sxc.translate';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 import { ManipulateParams } from './manipulate-params';
 
-/**
- * contains commands to create/move/delete a contentBlock in a page
- */
-
+/** contains commands to create/move/delete a contentBlock in a page */
 let sxcInstance: SxcInstanceWithInternals;
 
 /**
@@ -43,8 +41,8 @@ function create(parentId: number, fieldName: string, index: number, appName: str
       else // ...or just at the beginning?
         listTag.prepend(newTag);
 
-      // let sxcNew = twoSxc(newTag);
-      twoSxc._toolbarManager.buildToolbars(newTag);
+      let sxcNew = getSxcInstance(newTag);
+      _toolbarManager.buildToolbars(newTag);
     });
 }
 
