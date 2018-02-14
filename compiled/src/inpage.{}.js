@@ -4,6 +4,7 @@ var commands_1 = require("./commands/commands");
 var manage_1 = require("./manage/manage");
 var quick_e_1 = require("./quick-edit/quick-e");
 var start_1 = require("./quick-edit/start");
+require("./x-bootstrap/module-bootstrapper");
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';

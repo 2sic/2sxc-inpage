@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 58);
+/******/ 	return __webpack_require__(__webpack_require__.s = 59);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -850,8 +850,8 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(2);
-var cmds_strategy_factory_1 = __webpack_require__(56);
-var mod_1 = __webpack_require__(57);
+var cmds_strategy_factory_1 = __webpack_require__(57);
+var mod_1 = __webpack_require__(58);
 var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 /** add a clipboard to the quick edit */
@@ -2458,7 +2458,7 @@ var ABTest;
     ABTest[ABTest["B"] = 1] = "B";
 })(ABTest || (ABTest = {}));
 /** config A or B */
-var testing = ABTest.A;
+var testing = ABTest.B;
 exports.isA = (testing < ABTest.B);
 
 
@@ -3797,6 +3797,102 @@ exports.LocalStorageHelper = LocalStorageHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(1);
+var quick_dialog_1 = __webpack_require__(6);
+var toolbar_feature_1 = __webpack_require__(4);
+var _2sxc_translate_1 = __webpack_require__(5);
+var sxc_1 = __webpack_require__(2);
+// import '/2sxc-api/js/2sxc.api';
+/**
+ * module & toolbar bootstrapping (initialize all toolbars after loading page)
+ * this will run onReady...
+ */
+var initializedModules = [];
+var openedTemplatePickerOnce = false;
+var cancelledDialog = localStorage.getItem('cancelled-dialog');
+if (cancelledDialog)
+    localStorage.removeItem('cancelled-dialog');
+initAllModules(true);
+// watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
+// ReSharper disable once UnusedParameter
+document.body.addEventListener('DOMSubtreeModified', function (event) { return initAllModules(false); }, false);
+// return; // avoid side-effects
+function initAllModules(isFirstRun) {
+    $('div[data-edit-context]').each(function () {
+        initModule(this, isFirstRun);
+    });
+    tryShowTemplatePicker();
+}
+/**
+ * Show the template picker if
+ * - template picker has not yet been opened
+ * - dialog has not been cancelled
+ * - only one uninitialized module on page
+ * @returns
+ */
+function tryShowTemplatePicker() {
+    var uninitializedModules = $('.sc-uninitialized');
+    if (cancelledDialog || openedTemplatePickerOnce)
+        return false;
+    // already showing a dialog
+    if (quick_dialog_1.current !== null)
+        return false;
+    // not exactly one uninitialized module
+    if (uninitializedModules.length !== 1)
+        return false;
+    // show the template picker of this module
+    var module = uninitializedModules.parent('div[data-edit-context]')[0];
+    var sxc = sxc_1.getSxcInstance(module);
+    sxc.manage.run('layout');
+    openedTemplatePickerOnce = true;
+    return true;
+}
+function initModule(module, isFirstRun) {
+    // check if module is already in the list of initialized modules
+    if (initializedModules.find(function (m) { return m === module; }))
+        return false;
+    // add to modules-list
+    initializedModules.push(module);
+    var sxc = sxc_1.getSxcInstance(module);
+    // check if the sxc must be re-created. This is necessary when modules are dynamically changed
+    // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
+    if (!isFirstRun)
+        sxc = sxc.recreate(true);
+    // check if we must show the glasses
+    // this must run even after first-run, because it can be added ajax-style
+    var wasEmpty = showGlassesButtonIfUninitialized(sxc);
+    if (isFirstRun || !wasEmpty)
+        toolbar_feature_1.buildToolbars(module);
+    return true;
+}
+function showGlassesButtonIfUninitialized(sxci) {
+    // already initialized
+    if (sxci.manage._editContext.ContentGroup.TemplateId !== 0)
+        return false;
+    // already has a glasses button
+    var tag = $(api_1.getTag(sxci));
+    if (tag.find('.sc-uninitialized').length !== 0)
+        return false;
+    // note: title is added on mouseover, as the translation isn't ready at page-load
+    var btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+    btn.on('click', function () {
+        sxci.manage.run('layout');
+    });
+    btn.on('mouseover', function () {
+        btn.title = _2sxc_translate_1.translate(btn.title);
+    });
+    tag.append(btn);
+    return true;
+}
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(2);
 /**
  * extend the quick edit with the core commands
@@ -3818,14 +3914,14 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var cb_1 = __webpack_require__(55);
-var Mod_1 = __webpack_require__(92);
+var cb_1 = __webpack_require__(56);
+var Mod_1 = __webpack_require__(93);
 var CmdsStrategyFactory = /** @class */ (function () {
     function CmdsStrategyFactory() {
         this.cmds = {};
@@ -3844,7 +3940,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3883,18 +3979,18 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
-__webpack_require__(59);
 __webpack_require__(60);
+__webpack_require__(61);
 __webpack_require__(36);
 __webpack_require__(4);
-__webpack_require__(61);
 __webpack_require__(62);
+__webpack_require__(63);
 __webpack_require__(24);
 __webpack_require__(44);
 __webpack_require__(11);
@@ -3903,22 +3999,21 @@ __webpack_require__(30);
 __webpack_require__(43);
 __webpack_require__(50);
 __webpack_require__(29);
-__webpack_require__(63);
+__webpack_require__(64);
 __webpack_require__(32);
 __webpack_require__(49);
-__webpack_require__(64);
 __webpack_require__(65);
 __webpack_require__(66);
 __webpack_require__(67);
+__webpack_require__(68);
 __webpack_require__(47);
 __webpack_require__(25);
-__webpack_require__(68);
+__webpack_require__(69);
 __webpack_require__(51);
 __webpack_require__(7);
 __webpack_require__(10);
-__webpack_require__(69);
-__webpack_require__(28);
 __webpack_require__(70);
+__webpack_require__(28);
 __webpack_require__(71);
 __webpack_require__(72);
 __webpack_require__(73);
@@ -3928,8 +4023,8 @@ __webpack_require__(76);
 __webpack_require__(77);
 __webpack_require__(78);
 __webpack_require__(79);
-__webpack_require__(48);
 __webpack_require__(80);
+__webpack_require__(48);
 __webpack_require__(81);
 __webpack_require__(82);
 __webpack_require__(83);
@@ -3938,6 +4033,7 @@ __webpack_require__(85);
 __webpack_require__(86);
 __webpack_require__(87);
 __webpack_require__(88);
+__webpack_require__(89);
 __webpack_require__(1);
 __webpack_require__(53);
 __webpack_require__(37);
@@ -3946,54 +4042,54 @@ __webpack_require__(52);
 __webpack_require__(38);
 __webpack_require__(39);
 __webpack_require__(40);
-__webpack_require__(89);
 __webpack_require__(90);
-__webpack_require__(6);
 __webpack_require__(91);
-__webpack_require__(55);
-__webpack_require__(12);
+__webpack_require__(6);
+__webpack_require__(92);
 __webpack_require__(56);
-__webpack_require__(93);
-__webpack_require__(45);
-__webpack_require__(94);
-__webpack_require__(46);
-__webpack_require__(96);
-__webpack_require__(97);
-__webpack_require__(13);
+__webpack_require__(12);
 __webpack_require__(57);
+__webpack_require__(94);
+__webpack_require__(45);
+__webpack_require__(95);
+__webpack_require__(46);
+__webpack_require__(97);
 __webpack_require__(98);
+__webpack_require__(13);
+__webpack_require__(58);
+__webpack_require__(99);
 __webpack_require__(27);
 __webpack_require__(0);
 __webpack_require__(3);
-__webpack_require__(99);
 __webpack_require__(100);
+__webpack_require__(101);
 __webpack_require__(26);
 __webpack_require__(14);
 __webpack_require__(8);
 __webpack_require__(16);
 __webpack_require__(41);
-__webpack_require__(101);
-__webpack_require__(17);
 __webpack_require__(102);
-__webpack_require__(15);
+__webpack_require__(17);
 __webpack_require__(103);
+__webpack_require__(15);
+__webpack_require__(104);
 __webpack_require__(18);
 __webpack_require__(19);
 __webpack_require__(9);
 __webpack_require__(21);
 __webpack_require__(42);
 __webpack_require__(22);
-__webpack_require__(104);
+__webpack_require__(105);
 __webpack_require__(20);
 __webpack_require__(23);
-__webpack_require__(105);
-__webpack_require__(5);
 __webpack_require__(106);
+__webpack_require__(5);
+__webpack_require__(55);
 module.exports = __webpack_require__(2);
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 if (window.$2sxc && !window.$2sxc.consts) {
@@ -4029,7 +4125,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports) {
 
 /** this enhances the $2sxc client controller with stuff only needed when logged in */
@@ -4054,7 +4150,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4069,7 +4165,7 @@ exports.Action = Action;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4084,7 +4180,7 @@ exports.CmdSpec = CmdSpec;
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4099,7 +4195,7 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4114,7 +4210,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4129,7 +4225,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4144,7 +4240,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4162,7 +4258,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4177,7 +4273,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4192,7 +4288,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4207,7 +4303,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4222,7 +4318,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4237,7 +4333,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4252,7 +4348,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4267,7 +4363,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4282,7 +4378,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4297,7 +4393,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4312,7 +4408,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4343,7 +4439,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4374,7 +4470,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4384,6 +4480,7 @@ var commands_1 = __webpack_require__(50);
 var manage_1 = __webpack_require__(52);
 var quick_e_1 = __webpack_require__(0);
 var start_1 = __webpack_require__(26);
+__webpack_require__(55);
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';
@@ -4414,22 +4511,16 @@ $(start_1.start); // run on-load
 
 
 /***/ }),
-/* 81 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 82 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming
 
 
 /***/ }),
 /* 83 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -4452,6 +4543,12 @@ $(start_1.start); // run on-load
 
 /***/ }),
 /* 87 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4472,13 +4569,13 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -4522,7 +4619,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -4549,7 +4646,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4567,7 +4664,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4606,7 +4703,7 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4621,13 +4718,13 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cb_1 = __webpack_require__(95);
+var Cb_1 = __webpack_require__(96);
 var clipboard_1 = __webpack_require__(12);
 var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
@@ -4657,7 +4754,7 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4684,12 +4781,6 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 96 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 97 */
 /***/ (function(module, exports) {
 
@@ -4697,6 +4788,12 @@ exports.Cb = Cb;
 
 /***/ }),
 /* 98 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4729,7 +4826,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4747,7 +4844,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4762,7 +4859,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports) {
 
 /*
@@ -4863,7 +4960,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -4871,7 +4968,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -4886,7 +4983,7 @@ $(function () {
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -4894,7 +4991,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4937,102 +5034,6 @@ function _translateInit(manage) {
     initialized = true;
 }
 exports._translateInit = _translateInit;
-
-
-/***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
-var quick_dialog_1 = __webpack_require__(6);
-var toolbar_feature_1 = __webpack_require__(4);
-var _2sxc_translate_1 = __webpack_require__(5);
-var sxc_1 = __webpack_require__(2);
-// import '/2sxc-api/js/2sxc.api';
-/**
- * module & toolbar bootstrapping (initialize all toolbars after loading page)
- * this will run onReady...
- */
-var initializedModules = [];
-var openedTemplatePickerOnce = false;
-var cancelledDialog = localStorage.getItem('cancelled-dialog');
-if (cancelledDialog)
-    localStorage.removeItem('cancelled-dialog');
-initAllModules(true);
-// watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-// ReSharper disable once UnusedParameter
-document.body.addEventListener('DOMSubtreeModified', function (event) { return initAllModules(false); }, false);
-// return; // avoid side-effects
-function initAllModules(isFirstRun) {
-    $('div[data-edit-context]').each(function () {
-        initModule(this, isFirstRun);
-    });
-    tryShowTemplatePicker();
-}
-/**
- * Show the template picker if
- * - template picker has not yet been opened
- * - dialog has not been cancelled
- * - only one uninitialized module on page
- * @returns
- */
-function tryShowTemplatePicker() {
-    var uninitializedModules = $('.sc-uninitialized');
-    if (cancelledDialog || openedTemplatePickerOnce)
-        return false;
-    // already showing a dialog
-    if (quick_dialog_1.current !== null)
-        return false;
-    // not exactly one uninitialized module
-    if (uninitializedModules.length !== 1)
-        return false;
-    // show the template picker of this module
-    var module = uninitializedModules.parent('div[data-edit-context]')[0];
-    var sxc = sxc_1.getSxcInstance(module);
-    sxc.manage.run('layout');
-    openedTemplatePickerOnce = true;
-    return true;
-}
-function initModule(module, isFirstRun) {
-    // check if module is already in the list of initialized modules
-    if (initializedModules.find(function (m) { return m === module; }))
-        return false;
-    // add to modules-list
-    initializedModules.push(module);
-    var sxc = sxc_1.getSxcInstance(module);
-    // check if the sxc must be re-created. This is necessary when modules are dynamically changed
-    // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-    if (!isFirstRun)
-        sxc = sxc.recreate(true);
-    // check if we must show the glasses
-    // this must run even after first-run, because it can be added ajax-style
-    var wasEmpty = showGlassesButtonIfUninitialized(sxc);
-    if (isFirstRun || !wasEmpty)
-        toolbar_feature_1.buildToolbars(module);
-    return true;
-}
-function showGlassesButtonIfUninitialized(sxci) {
-    // already initialized
-    if (sxci.manage._editContext.ContentGroup.TemplateId !== 0)
-        return false;
-    // already has a glasses button
-    var tag = $(api_1.getTag(sxci));
-    if (tag.find('.sc-uninitialized').length !== 0)
-        return false;
-    // note: title is added on mouseover, as the translation isn't ready at page-load
-    var btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
-    btn.on('click', function () {
-        sxci.manage.run('layout');
-    });
-    btn.on('mouseover', function () {
-        btn.title = _2sxc_translate_1.translate(btn.title);
-    });
-    tag.append(btn);
-    return true;
-}
 
 
 /***/ })

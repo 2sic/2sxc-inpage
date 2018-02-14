@@ -2,8 +2,7 @@
 import { _manage } from './manage/manage';
 import { $quickE } from './quick-edit/quick-e';
 import { start } from './quick-edit/start';
-import { _toolbarManager } from './toolbar/toolbar-manager';
-import * as modulebootstrap from './x-bootstrap/module-bootstrapper';
+import './x-bootstrap/module-bootstrapper';
 
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
