@@ -1,8 +1,8 @@
 ﻿import { Engine, instanceEngine } from '../commands/engine';
 import { manipulator } from '../contentBlock/manipulate';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { generateButtonHtml } from '../toolbar/generate-button-html';
-import { generateToolbarHtml } from '../toolbar/generate-toolbar-html';
+import { generateButtonHtml } from '../abtesting/toolbar-feature';
+import { generateToolbarHtml } from '../abtesting/toolbar-feature';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';

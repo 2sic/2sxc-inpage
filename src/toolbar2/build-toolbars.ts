@@ -3,7 +3,7 @@ import { getSxcInstance } from '../x-bootstrap/sxc';
 import { _toolbarManager } from './toolbar-manager';
 
 // quick debug - set to false if not needed for production
-const dbg = false;
+const dbg = true;
 
 // default / fallback settings for toolbars when nothings is specified
 const settingsForEmptyToolbar = {

@@ -1,4 +1,4 @@
-﻿import { _toolbarManager } from '../toolbar/toolbar-manager';
+﻿import { _toolbarManager } from '../abtesting/toolbar-feature';
 import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { ManipulateParams } from './manipulate-params';
