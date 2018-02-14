@@ -4,6 +4,15 @@ import { $quickE } from './quick-edit/quick-e';
 import { start } from './quick-edit/start';
 import './x-bootstrap/module-bootstrapper';
 
+
+// stv simulation start
+import { ItemConfig } from './toolbar2/button/item-config';
+const bc = new ItemConfig();
+console.log('TV: ItemConfig ', bc);
+// stv simulation end
+
+
+
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';

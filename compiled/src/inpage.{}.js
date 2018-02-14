@@ -5,6 +5,11 @@ var manage_1 = require("./manage/manage");
 var quick_e_1 = require("./quick-edit/quick-e");
 var start_1 = require("./quick-edit/start");
 require("./x-bootstrap/module-bootstrapper");
+// stv simulation start
+var item_config_1 = require("./toolbar2/button/item-config");
+var bc = new item_config_1.ItemConfig();
+console.log('TV: ItemConfig ', bc);
+// stv simulation end
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';
