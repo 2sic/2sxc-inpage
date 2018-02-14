@@ -42,6 +42,11 @@
     <None Remove="src\quick-edit\cb-or-mod.ts" />
     <None Remove="src\quick-edit\selectors-instance.ts" />
     <None Remove="src\quick-edit\selectors.ts" />
+    <None Remove="src\toolbar2\group-config.ts" />
+    <None Remove="src\toolbar2\item-action.ts" />
+    <None Remove="src\toolbar2\item-base-config.ts" />
+    <None Remove="src\toolbar2\item-config.ts" />
+    <None Remove="src\toolbar2\item.ts" />
     <None Remove="src\x-bootstrap\sxc.ts" />
   </ItemGroup>
 
@@ -67,6 +72,11 @@
     <TypeScriptCompile Include="src\quick-edit\cb-or-mod.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors-instance.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors.ts" />
+    <TypeScriptCompile Include="src\toolbar2\item-action.ts" />
+    <TypeScriptCompile Include="src\toolbar2\item-base-config.ts" />
+    <TypeScriptCompile Include="src\toolbar2\item-config.ts" />
+    <TypeScriptCompile Include="src\toolbar2\group-config.ts" />
+    <TypeScriptCompile Include="src\toolbar2\item.ts" />
     <TypeScriptCompile Include="src\x-bootstrap\sxc.ts" />
   </ItemGroup>
 
