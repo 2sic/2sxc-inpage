@@ -43,15 +43,22 @@
     <None Remove="src\quick-edit\selectors-instance.ts" />
     <None Remove="src\quick-edit\selectors.ts" />
     <None Remove="src\toolbar2\button.ts" />
-    <None Remove="src\toolbar2\command\command-definition.ts" />
+    <None Remove="src\toolbar2\button\expand-config.ts" />
+    <None Remove="src\toolbar2\button\expand-group-config.ts" />
     <None Remove="src\toolbar2\command\commands.ts" />
+    <None Remove="src\toolbar2\command\definition.ts" />
+    <None Remove="src\toolbar2\item\render.ts" />
+    <None Remove="src\toolbar2\toolbar\config-template.ts" />
+    <None Remove="src\toolbar2\toolbar\config-templates.ts" />
+    <None Remove="src\toolbar2\toolbar\config.ts" />
+    <None Remove="src\toolbar2\toolbar\expand-config.ts" />
+    <None Remove="src\toolbar2\toolbar\parameters.ts" />
+    <None Remove="src\toolbar2\toolbar\settings.ts" />
     <None Remove="src\x-bootstrap\sxc.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="dist\" />
-    <Folder Include="src\toolbar2\item\" />
-    <Folder Include="src\toolbar2\toolbar\" />
     <Folder Include="src\translate\libs\" />
   </ItemGroup>
 
@@ -72,13 +79,22 @@
     <TypeScriptCompile Include="src\quick-edit\cb-or-mod.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors-instance.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors.ts" />
-    <TypeScriptCompile Include="src\toolbar2\button\item-action.ts" />
-    <TypeScriptCompile Include="src\toolbar2\button\item-base-config.ts" />
-    <TypeScriptCompile Include="src\toolbar2\button\item-config.ts" />
+    <TypeScriptCompile Include="src\toolbar2\button\action.ts" />
+    <TypeScriptCompile Include="src\toolbar2\button\base-config.ts" />
+    <TypeScriptCompile Include="src\toolbar2\button\config.ts" />
+    <TypeScriptCompile Include="src\toolbar2\button\expand-config.ts" />
+    <TypeScriptCompile Include="src\toolbar2\button\expand-group-config.ts" />
     <TypeScriptCompile Include="src\toolbar2\button\group-config.ts" />
-    <TypeScriptCompile Include="src\toolbar2\button\item.ts" />
-    <TypeScriptCompile Include="src\toolbar2\command\command-definition.ts" />
+    <TypeScriptCompile Include="src\toolbar2\button\button.ts" />
+    <TypeScriptCompile Include="src\toolbar2\command\definition.ts" />
     <TypeScriptCompile Include="src\toolbar2\command\commands.ts" />
+    <TypeScriptCompile Include="src\toolbar2\item\render.ts" />
+    <TypeScriptCompile Include="src\toolbar2\toolbar\config-template.ts" />
+    <TypeScriptCompile Include="src\toolbar2\toolbar\expand-config.ts" />
+    <TypeScriptCompile Include="src\toolbar2\toolbar\parameters.ts" />
+    <TypeScriptCompile Include="src\toolbar2\toolbar\settings.ts" />
+    <TypeScriptCompile Include="src\toolbar2\toolbar\config-templates.ts" />
+    <TypeScriptCompile Include="src\toolbar2\toolbar\config.ts" />
     <TypeScriptCompile Include="src\x-bootstrap\sxc.ts" />
   </ItemGroup>
 

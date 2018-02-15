@@ -1,4 +1,4 @@
-﻿import { ItemConfig } from './item-config';
+﻿import { ButtonConfig as ItemConfig } from './config';
 
 export class GroupConfig {
   items: Item[];

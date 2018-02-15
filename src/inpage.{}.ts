@@ -6,9 +6,9 @@ import './x-bootstrap/module-bootstrapper';
 
 
 // stv simulation start
-import { ItemConfig } from './toolbar2/button/item-config';
-const bc = new ItemConfig();
-console.log('TV: ItemConfig ', bc);
+import { ButtonConfig } from './toolbar2/button/config';
+const bc = new ButtonConfig();
+console.log('TV: ButtonConfig ', bc);
 // stv simulation end
 
 

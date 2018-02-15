@@ -1,4 +1,4 @@
-﻿export class ItemBaseConfig {
+﻿export class ButtonBaseConfig {
   classes: string;
   icon: string;
   title: string;
@@ -20,7 +20,7 @@
     this.dynamicDisabled = null;
   }
 
-  setConfig(config: ItemBaseConfig) {
+  setConfig(config: ButtonBaseConfig) {
     this.classes = config.classes;
     this.icon = config.icon;
     this.title = config.title;

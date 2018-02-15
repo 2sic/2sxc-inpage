@@ -3903,10 +3903,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_base_config_1 = __webpack_require__(57);
-var ItemConfig = /** @class */ (function (_super) {
-    __extends(ItemConfig, _super);
-    function ItemConfig(action, config) {
+var base_config_1 = __webpack_require__(57);
+var ButtonConfig = /** @class */ (function (_super) {
+    __extends(ButtonConfig, _super);
+    function ButtonConfig(action, config) {
         var _this = _super.call(this) || this;
         if (action) {
             _this.action = action;
@@ -3915,17 +3915,17 @@ var ItemConfig = /** @class */ (function (_super) {
             _this.setConfig(config);
         return _this;
     }
-    ItemConfig.fromNameAndParams = function (name, params, config) {
-        var itemConfig = new ItemConfig();
-        itemConfig.name = name;
-        itemConfig.params = params;
+    ButtonConfig.fromNameAndParams = function (name, params, config) {
+        var buttonConfig = new ButtonConfig();
+        buttonConfig.name = name;
+        buttonConfig.params = params;
         if (config)
-            itemConfig.setConfig(config);
-        return itemConfig;
+            buttonConfig.setConfig(config);
+        return buttonConfig;
     };
-    return ItemConfig;
-}(item_base_config_1.ItemBaseConfig));
-exports.ItemConfig = ItemConfig;
+    return ButtonConfig;
+}(base_config_1.ButtonBaseConfig));
+exports.ButtonConfig = ButtonConfig;
 
 
 /***/ }),
@@ -3935,8 +3935,8 @@ exports.ItemConfig = ItemConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ItemBaseConfig = /** @class */ (function () {
-    function ItemBaseConfig() {
+var ButtonBaseConfig = /** @class */ (function () {
+    function ButtonBaseConfig() {
         // have all values / properties null, this is to create a type-safe ButtonConfig which doesn't work, but has the correct property-names
         this.classes = null;
         this.icon = null;
@@ -3947,7 +3947,7 @@ var ItemBaseConfig = /** @class */ (function () {
         this.disabled = null;
         this.dynamicDisabled = null;
     }
-    ItemBaseConfig.prototype.setConfig = function (config) {
+    ButtonBaseConfig.prototype.setConfig = function (config) {
         this.classes = config.classes;
         this.icon = config.icon;
         this.title = config.title;
@@ -3957,9 +3957,9 @@ var ItemBaseConfig = /** @class */ (function () {
         this.disabled = config.disabled;
         this.dynamicDisabled = config.dynamicDisabled;
     };
-    return ItemBaseConfig;
+    return ButtonBaseConfig;
 }());
-exports.ItemBaseConfig = ItemBaseConfig;
+exports.ButtonBaseConfig = ButtonBaseConfig;
 
 
 /***/ }),
@@ -4152,20 +4152,29 @@ __webpack_require__(106);
 __webpack_require__(18);
 __webpack_require__(19);
 __webpack_require__(107);
-__webpack_require__(108);
 __webpack_require__(57);
+__webpack_require__(108);
 __webpack_require__(56);
 __webpack_require__(109);
 __webpack_require__(110);
 __webpack_require__(111);
+__webpack_require__(112);
+__webpack_require__(113);
 __webpack_require__(9);
 __webpack_require__(21);
 __webpack_require__(42);
+__webpack_require__(114);
 __webpack_require__(22);
-__webpack_require__(112);
+__webpack_require__(115);
 __webpack_require__(20);
 __webpack_require__(23);
-__webpack_require__(113);
+__webpack_require__(116);
+__webpack_require__(117);
+__webpack_require__(118);
+__webpack_require__(119);
+__webpack_require__(120);
+__webpack_require__(121);
+__webpack_require__(122);
 __webpack_require__(5);
 __webpack_require__(55);
 module.exports = __webpack_require__(2);
@@ -4565,9 +4574,9 @@ var quick_e_1 = __webpack_require__(0);
 var start_1 = __webpack_require__(26);
 __webpack_require__(55);
 // stv simulation start
-var item_config_1 = __webpack_require__(56);
-var bc = new item_config_1.ItemConfig();
-console.log('TV: ItemConfig ', bc);
+var config_1 = __webpack_require__(56);
+var bc = new config_1.ButtonConfig();
+console.log('TV: ButtonConfig ', bc);
 // stv simulation end
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
@@ -5077,6 +5086,66 @@ $(function () {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var ButtonAction = /** @class */ (function () {
+    function ButtonAction(name, params) {
+        this.name = name; // will auto - lookup the action and use the defaults
+        this.params = params; // same, but use custom params
+    }
+    return ButtonAction;
+}());
+exports.ButtonAction = ButtonAction;
+
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Button = /** @class */ (function () {
+    function Button() {
+    }
+    return Button;
+}());
+exports.Button = Button;
+
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function ExpandButtonConfig(context, partialConfig) {
+    // todo
+    return partialConfig;
+}
+exports.ExpandButtonConfig = ExpandButtonConfig;
+
+
+/***/ }),
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function ExpandGroupConfig(context, partialConfig) {
+    // todo
+    return partialConfig;
+}
+exports.ExpandGroupConfig = ExpandGroupConfig;
+
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var GroupConfig = /** @class */ (function () {
     function GroupConfig() {
     }
@@ -5094,55 +5163,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ItemAction = /** @class */ (function () {
-    function ItemAction(name, params) {
-        this.name = name; // will auto - lookup the action and use the defaults
-        this.params = params; // same, but use custom params
-    }
-    return ItemAction;
-}());
-exports.ItemAction = ItemAction;
-
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/** Item (aka Button) */
-var Item = /** @class */ (function () {
-    function Item() {
-    }
-    return Item;
-}());
-exports.Item = Item;
-
-
-/***/ }),
-/* 110 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var CommandDefinition = /** @class */ (function () {
-    function CommandDefinition() {
-    }
-    return CommandDefinition;
-}());
-exports.CommandDefinition = CommandDefinition;
-
-
-/***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5157,7 +5178,37 @@ exports.Commands = Commands;
 
 
 /***/ }),
-/* 112 */
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CommandDefinition = /** @class */ (function () {
+    function CommandDefinition() {
+    }
+    return CommandDefinition;
+}());
+exports.CommandDefinition = CommandDefinition;
+
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ItemRender = /** @class */ (function () {
+    function ItemRender() {
+    }
+    return ItemRender;
+}());
+exports.ItemRender = ItemRender;
+
+
+/***/ }),
+/* 115 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -5165,7 +5216,102 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 113 */
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ToolbarConfigTemplate = /** @class */ (function () {
+    function ToolbarConfigTemplate() {
+    }
+    return ToolbarConfigTemplate;
+}());
+exports.ToolbarConfigTemplate = ToolbarConfigTemplate;
+
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ToolbarConfigTemplates = /** @class */ (function () {
+    function ToolbarConfigTemplates() {
+    }
+    return ToolbarConfigTemplates;
+}());
+exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
+
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/** contains a toolbar config + settings + many groups */
+var ToolbarConfig = /** @class */ (function () {
+    function ToolbarConfig() {
+    }
+    return ToolbarConfig;
+}());
+exports.ToolbarConfig = ToolbarConfig;
+
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function ExpandToolbarConfig(context, partialConfig) {
+    // todo
+    return partialConfig;
+}
+exports.ExpandToolbarConfig = ExpandToolbarConfig;
+
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/** contains toolbar params like entity Ids, etc. */
+var ToolbarParameters = /** @class */ (function () {
+    function ToolbarParameters() {
+    }
+    return ToolbarParameters;
+}());
+exports.ToolbarParameters = ToolbarParameters;
+
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/** contains toolbar behaviour settings like float, etc. */
+var ToolbarSettings = /** @class */ (function () {
+    function ToolbarSettings() {
+        this.autoAddMore = null; //  [true: used to be right/start]
+        this.hover = 'right';
+        this.show = 'hover';
+    }
+    return ToolbarSettings;
+}());
+exports.ToolbarSettings = ToolbarSettings;
+
+
+/***/ }),
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

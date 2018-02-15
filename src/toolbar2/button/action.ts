@@ -1,4 +1,4 @@
-﻿export class ItemAction {
+﻿export class ButtonAction {
   name: string; // the command name from the action list
   code: string; // custom code if used
   params: any[]; // custom parameters if used or if these override other params
