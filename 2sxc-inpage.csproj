@@ -45,10 +45,6 @@
     <None Remove="src\toolbar2\button.ts" />
     <None Remove="src\toolbar2\command\command-definition.ts" />
     <None Remove="src\toolbar2\command\commands.ts" />
-    <None Remove="src\toolbar2\group-config.ts" />
-    <None Remove="src\toolbar2\item-action.ts" />
-    <None Remove="src\toolbar2\item-base-config.ts" />
-    <None Remove="src\toolbar2\item-config.ts" />
     <None Remove="src\x-bootstrap\sxc.ts" />
   </ItemGroup>
 
