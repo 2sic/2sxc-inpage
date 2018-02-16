@@ -70,75 +70,6 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var positioning_1 = __webpack_require__(21);
-/**
- * the quick-edit object
- * the quick-insert object
- */
-var QuickE = /** @class */ (function () {
-    function QuickE() {
-        var _this = this;
-        this.body = $('body');
-        this.win = $(window);
-        this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
-        this.template = '<a class=\'sc-content-block-menu-addcontent sc-invisible\' data-type=\'Default\' data-i18n=\'[titleTemplate]QuickInsertMenu.AddBlockContent\'>x</a>'
-            + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
-            + btn('select', 'ok', 'Select', true)
-            + btn('paste', 'paste', 'Paste', true, true);
-        this.selected = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-            .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>");
-        // will be populated later in the module section
-        this.contentBlocks = null;
-        this.cachedPanes = null;
-        this.modules = null;
-        this.nearestCb = null;
-        this.nearestMod = null;
-        this.modManage = null;
-        // add stuff which depends on other values to create
-        this.cbActions = $(this.template);
-        this.modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
-            .attr('data-context', 'module')
-            .addClass('sc-content-block-menu-module');
-        this.selected.toggle = function (target) {
-            if (!target || target.length === 0) {
-                _this.selected.hide();
-            }
-            else {
-                var coords = positioning_1.getCoordinates(target);
-                coords.yh = coords.y + 20;
-                positioning_1.positionAndAlign(_this.selected, coords);
-                _this.selected.target = target;
-            }
-        };
-    }
-    return QuickE;
-}());
-exports.$quickE = new QuickE();
-function btn(action, icon, i18N, invisible, unavailable, classes) {
-    return '<a class=\'sc-content-block-menu-btn sc-cb-action icon-sxc-' + icon + ' '
-        + (invisible ? ' sc-invisible ' : '')
-        + (unavailable ? ' sc-unavailable ' : '')
-        + classes + '\' data-action=\'' + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
-}
-/**
- * build the toolbar (hidden, but ready to show)
- */
-function prepareToolbarInDom() {
-    exports.$quickE.body.append(exports.$quickE.main)
-        .append(exports.$quickE.selected);
-    exports.$quickE.main.append(exports.$quickE.cbActions)
-        .append(exports.$quickE.modActions);
-}
-exports.prepareToolbarInDom = prepareToolbarInDom;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var instance_config_1 = __webpack_require__(37);
 var ng_dialog_params_1 = __webpack_require__(38);
 var qucik_dialog_config_1 = __webpack_require__(39);
@@ -210,6 +141,75 @@ function buildNgDialogParams(sxc, editContext) {
     return new ng_dialog_params_1.NgDialogParams(sxc, editContext);
 }
 exports.buildNgDialogParams = buildNgDialogParams;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var positioning_1 = __webpack_require__(21);
+/**
+ * the quick-edit object
+ * the quick-insert object
+ */
+var QuickE = /** @class */ (function () {
+    function QuickE() {
+        var _this = this;
+        this.body = $('body');
+        this.win = $(window);
+        this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
+        this.template = '<a class=\'sc-content-block-menu-addcontent sc-invisible\' data-type=\'Default\' data-i18n=\'[titleTemplate]QuickInsertMenu.AddBlockContent\'>x</a>'
+            + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
+            + btn('select', 'ok', 'Select', true)
+            + btn('paste', 'paste', 'Paste', true, true);
+        this.selected = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
+            .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>");
+        // will be populated later in the module section
+        this.contentBlocks = null;
+        this.cachedPanes = null;
+        this.modules = null;
+        this.nearestCb = null;
+        this.nearestMod = null;
+        this.modManage = null;
+        // add stuff which depends on other values to create
+        this.cbActions = $(this.template);
+        this.modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
+            .attr('data-context', 'module')
+            .addClass('sc-content-block-menu-module');
+        this.selected.toggle = function (target) {
+            if (!target || target.length === 0) {
+                _this.selected.hide();
+            }
+            else {
+                var coords = positioning_1.getCoordinates(target);
+                coords.yh = coords.y + 20;
+                positioning_1.positionAndAlign(_this.selected, coords);
+                _this.selected.target = target;
+            }
+        };
+    }
+    return QuickE;
+}());
+exports.$quickE = new QuickE();
+function btn(action, icon, i18N, invisible, unavailable, classes) {
+    return '<a class=\'sc-content-block-menu-btn sc-cb-action icon-sxc-' + icon + ' '
+        + (invisible ? ' sc-invisible ' : '')
+        + (unavailable ? ' sc-unavailable ' : '')
+        + classes + '\' data-action=\'' + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
+}
+/**
+ * build the toolbar (hidden, but ready to show)
+ */
+function prepareToolbarInDom() {
+    exports.$quickE.body.append(exports.$quickE.main)
+        .append(exports.$quickE.selected);
+    exports.$quickE.main.append(exports.$quickE.cbActions)
+        .append(exports.$quickE.modActions);
+}
+exports.prepareToolbarInDom = prepareToolbarInDom;
 
 
 /***/ }),
@@ -288,24 +288,6 @@ exports.generateToolbarHtml = (ab_testing_config_1.isA) ? A_GenerateToolbarHtml.
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
- * @param key
- */
-function translate(key) {
-    // return key;
-    return ($.t && $.t(key)) || key;
-}
-exports.translate = translate;
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var create_1 = __webpack_require__(17);
 function commandInitializeInstanceCommands(editContext) {
     var cg = editContext.ContentGroup;
@@ -324,13 +306,31 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
+ * @param key
+ */
+function translate(key) {
+    // return key;
+    return ($.t && $.t(key)) || key;
+}
+exports.translate = translate;
+
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 var quick_dialog_1 = __webpack_require__(8);
 var start_1 = __webpack_require__(20);
 var toolbar_feature_1 = __webpack_require__(4);
@@ -432,7 +432,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var main_content_block_1 = __webpack_require__(18);
 var render_1 = __webpack_require__(7);
 var templates_1 = __webpack_require__(10);
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -852,7 +852,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(2);
 var cmds_strategy_factory_1 = __webpack_require__(59);
 var mod_1 = __webpack_require__(60);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /** add a clipboard to the quick edit */
 /**
@@ -968,7 +968,7 @@ $('a', quick_e_1.$quickE.selected).click(function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(12);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 /**
  * module specific stuff
  */
@@ -1107,7 +1107,7 @@ function generatePaneMoveButtons(current) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 var sxc_1 = __webpack_require__(2);
 var toolbar_manager_1 = __webpack_require__(15);
 // quick debug - set to false if not needed for production
@@ -1236,11 +1236,11 @@ exports._toolbarManager = new ToolbarManager();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_initialize_instance_commands_1 = __webpack_require__(6);
+var command_initialize_instance_commands_1 = __webpack_require__(5);
 var generate_button_html_1 = __webpack_require__(9);
 var buttonHelpers = __webpack_require__(46);
 var standard_buttons_1 = __webpack_require__(22);
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     // console.log("TV#1: ", sxc, tbConfig, moreSettings);
     // if it has an action or is an array, keep that. Otherwise get standard buttons
@@ -1282,7 +1282,7 @@ exports.generateToolbarHtml = generateToolbarHtml;
 Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(41);
 var item_commands_1 = __webpack_require__(44);
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(6);
 var make_def_1 = __webpack_require__(45);
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -1717,7 +1717,7 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = __webpack_require__(42);
 var positioning_1 = __webpack_require__(21);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 function enable() {
     // build all toolbar html-elements
@@ -1791,7 +1791,7 @@ exports.reset = reset;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var coords_1 = __webpack_require__(43);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /**
  * Module with everything related to positioning the quick-edit in-page editing
@@ -2044,7 +2044,7 @@ exports.toolbarTemplate = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 var sxc_1 = __webpack_require__(2);
 var toolbar_manager_1 = __webpack_require__(25);
 // quick debug - set to false if not needed for production
@@ -2176,6 +2176,8 @@ exports._toolbarManager = new ToolbarManager();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var command_initialize_instance_commands_1 = __webpack_require__(5);
+var api_1 = __webpack_require__(0);
 var generate_button_html_1 = __webpack_require__(11);
 var buttonHelpers = __webpack_require__(47);
 var standard_buttons_1 = __webpack_require__(27);
@@ -2186,8 +2188,10 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     var btnList = tbConfig;
     if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
         btnList = standard_buttons_1.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
+    var editContext = api_1.getEditContext(sxc);
+    var commands = command_initialize_instance_commands_1.commandInitializeInstanceCommands(editContext);
     // whatever we had, if more settings were provided, override with these...
-    var tlbDef = buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
+    var tlbDef = buttonHelpers.buildFullDefinition(btnList, /*sxc.manage._commands.*/ commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
     var btnGroups = tlbDef.groups;
     var behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
     // todo: these settings assume it's not in an array...
@@ -2397,7 +2401,7 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_create_1 = __webpack_require__(29);
 var command_execute_action_1 = __webpack_require__(49);
-var command_initialize_instance_commands_1 = __webpack_require__(6);
+var command_initialize_instance_commands_1 = __webpack_require__(5);
 var command_link_to_ng_dialog_1 = __webpack_require__(31);
 var command_open_ng_dialog_1 = __webpack_require__(30);
 var Engine = /** @class */ (function () {
@@ -2465,7 +2469,7 @@ var ABTest;
     ABTest[ABTest["B"] = 1] = "B";
 })(ABTest || (ABTest = {}));
 /** config A or B */
-var testing = ABTest.A;
+var testing = ABTest.B;
 exports.isA = (testing < ABTest.B);
 
 
@@ -2506,7 +2510,7 @@ exports.InstanceConfig = InstanceConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 var NgDialogParams = /** @class */ (function () {
     function NgDialogParams(sxc, editContext) {
         this.zoneId = editContext.ContentGroup.ZoneId;
@@ -2538,7 +2542,7 @@ exports.NgDialogParams = NgDialogParams;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 var QucikDialogConfig = /** @class */ (function () {
     function QucikDialogConfig(editContext) {
         this.appId = editContext.ContentGroup.AppId;
@@ -2665,7 +2669,7 @@ exports.publishId = publishId;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 var configAttr = 'quick-edit-config';
 /**
@@ -2739,7 +2743,7 @@ exports.Coords = Coords;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(6);
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
@@ -3357,7 +3361,7 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(6);
 var Command = /** @class */ (function () {
     function Command(sxc, settings, ngDialogUrl, isDebug) {
         var _this = this;
@@ -3446,7 +3450,7 @@ exports.Command = Command;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var templates_1 = __webpack_require__(10);
-var command_initialize_instance_commands_1 = __webpack_require__(6);
+var command_initialize_instance_commands_1 = __webpack_require__(5);
 var command_open_ng_dialog_1 = __webpack_require__(30);
 // ToDo: remove dead code
 function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event) {
@@ -3489,7 +3493,7 @@ exports.commandExecuteAction = commandExecuteAction;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_initialize_instance_commands_1 = __webpack_require__(6);
+var command_initialize_instance_commands_1 = __webpack_require__(5);
 var create_1 = __webpack_require__(17);
 var engine_1 = __webpack_require__(32);
 var Commands = /** @class */ (function () {
@@ -3513,7 +3517,7 @@ exports._commands = new Commands();
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var toolbar_feature_1 = __webpack_require__(4);
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(6);
 var sxc_1 = __webpack_require__(2);
 /** contains commands to create/move/delete a contentBlock in a page */
 var sxcInstance;
@@ -3649,7 +3653,7 @@ var toolbar_feature_1 = __webpack_require__(4);
 var toolbar_feature_2 = __webpack_require__(4);
 var engine_1 = __webpack_require__(32);
 var manipulate_1 = __webpack_require__(51);
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 var local_storage_helper_1 = __webpack_require__(54);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -3816,10 +3820,10 @@ exports.LocalStorageHelper = LocalStorageHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(0);
 var quick_dialog_1 = __webpack_require__(8);
 var toolbar_feature_1 = __webpack_require__(4);
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(6);
 var sxc_1 = __webpack_require__(2);
 // import '/2sxc-api/js/2sxc.api';
 /**
@@ -4055,7 +4059,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(13);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 var Mod = /** @class */ (function () {
     function Mod() {
@@ -4101,7 +4105,7 @@ __webpack_require__(64);
 __webpack_require__(65);
 __webpack_require__(29);
 __webpack_require__(49);
-__webpack_require__(6);
+__webpack_require__(5);
 __webpack_require__(31);
 __webpack_require__(30);
 __webpack_require__(48);
@@ -4142,7 +4146,7 @@ __webpack_require__(88);
 __webpack_require__(89);
 __webpack_require__(90);
 __webpack_require__(91);
-__webpack_require__(1);
+__webpack_require__(0);
 __webpack_require__(53);
 __webpack_require__(37);
 __webpack_require__(54);
@@ -4167,7 +4171,7 @@ __webpack_require__(13);
 __webpack_require__(60);
 __webpack_require__(101);
 __webpack_require__(21);
-__webpack_require__(0);
+__webpack_require__(1);
 __webpack_require__(3);
 __webpack_require__(102);
 __webpack_require__(103);
@@ -4207,7 +4211,7 @@ __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(121);
 __webpack_require__(122);
-__webpack_require__(5);
+__webpack_require__(6);
 __webpack_require__(55);
 module.exports = __webpack_require__(2);
 
@@ -4602,7 +4606,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_1 = __webpack_require__(50);
 var manage_1 = __webpack_require__(52);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var start_1 = __webpack_require__(20);
 __webpack_require__(55);
 // stv simulation start
@@ -4800,7 +4804,7 @@ exports.CbOrMod = CbOrMod;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(13);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 var Mod = /** @class */ (function () {
     function Mod() {
@@ -4855,7 +4859,7 @@ exports.Conf = Conf;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Cb_1 = __webpack_require__(98);
 var clipboard_1 = __webpack_require__(12);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /**
  * content-block specific stuff like actions
@@ -4930,7 +4934,7 @@ exports.Cb = Cb;
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(12);
 var mod_manage_1 = __webpack_require__(13);
-var quick_e_1 = __webpack_require__(0);
+var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /**
  * module specific stuff
