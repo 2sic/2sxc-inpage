@@ -6,7 +6,7 @@ import './x-bootstrap/module-bootstrapper';
 
 
 // stv simulation start
-import { ButtonConfig } from './toolbar2/button/config';
+import { ButtonConfig } from './toolbar2/button/button-config';
 const bc = new ButtonConfig();
 console.log('TV: ButtonConfig ', bc);
 // stv simulation end

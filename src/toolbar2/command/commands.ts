@@ -1,4 +1,4 @@
-﻿import { CommandDefinition } from './definition';
+﻿import { CommandDefinition } from './command-definition';
 
 export class Commands {
   commandList: CommandDefinition[];

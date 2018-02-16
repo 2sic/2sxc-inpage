@@ -1,5 +1,5 @@
-﻿import { ToolbarParameters } from './parameters';
-import { ToolbarSettings } from './settings';
+﻿import { ToolbarParameters } from './toolbar-parameters';
+import { ToolbarSettings } from './toolbar-settings';
 
 /** contains a toolbar config + settings + many groups */
 export class ToolbarConfig {

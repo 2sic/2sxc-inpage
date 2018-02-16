@@ -1,4 +1,4 @@
-﻿import { ToolbarConfigTemplate } from './config-template';
+﻿import { ToolbarConfigTemplate } from './toolbar-config-template';
 
 export class ToolbarConfigTemplates {
   configTemplateList: ToolbarConfigTemplate[];

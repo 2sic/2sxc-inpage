@@ -1,9 +1,9 @@
-﻿import { ButtonConfig as ItemConfig } from './config';
+﻿import { ButtonConfig} from './button-config';
 
 export class GroupConfig {
   items: Item[];
 
-  constructors(buttons: ItemConfig[]) {
+  constructors(buttons: ButtonConfig[]) {
     // adds these to the items
   }
 

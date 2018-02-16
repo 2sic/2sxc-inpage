@@ -1,6 +1,6 @@
-﻿import { CommandDefinition } from '../command/definition';
-import { ButtonAction } from './action';
-import { ButtonBaseConfig } from './base-config';
+﻿import { CommandDefinition } from '../command/command-definition';
+import { ButtonAction } from './button-action';
+import { ButtonBaseConfig } from './button-base-config';
 
 export class ButtonConfig extends ButtonBaseConfig {
   //action: ButtonAction;

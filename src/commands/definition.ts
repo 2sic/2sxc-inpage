@@ -1,4 +1,4 @@
-﻿import { ButtonConfig } from '../toolbar2/button/config';
+﻿import { ButtonConfig } from '../toolbar2/button/button-config';
 import { Command } from './command';
 import { ModConfig } from './mod-config';
 import { Params } from './params';

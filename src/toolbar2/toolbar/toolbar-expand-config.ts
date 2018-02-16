@@ -1,4 +1,4 @@
-﻿import { ToolbarConfig } from './config';
+﻿import { ToolbarConfig } from './toolbar-config';
 
 export function ExpandToolbarConfig(context, partialConfig: ToolbarConfig): ToolbarConfig {
   // todo

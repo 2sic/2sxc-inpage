@@ -3926,7 +3926,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var base_config_1 = __webpack_require__(57);
+var button_base_config_1 = __webpack_require__(57);
 var ButtonConfig = /** @class */ (function (_super) {
     __extends(ButtonConfig, _super);
     function ButtonConfig(action, config) {
@@ -3952,7 +3952,7 @@ var ButtonConfig = /** @class */ (function (_super) {
         return buttonConfig;
     };
     return ButtonConfig;
-}(base_config_1.ButtonBaseConfig));
+}(button_base_config_1.ButtonBaseConfig));
 exports.ButtonConfig = ButtonConfig;
 
 
@@ -4189,8 +4189,8 @@ __webpack_require__(23);
 __webpack_require__(24);
 __webpack_require__(107);
 __webpack_require__(57);
-__webpack_require__(108);
 __webpack_require__(56);
+__webpack_require__(108);
 __webpack_require__(109);
 __webpack_require__(110);
 __webpack_require__(111);
@@ -4610,8 +4610,8 @@ var quick_e_1 = __webpack_require__(1);
 var start_1 = __webpack_require__(20);
 __webpack_require__(55);
 // stv simulation start
-var config_1 = __webpack_require__(56);
-var bc = new config_1.ButtonConfig();
+var button_config_1 = __webpack_require__(56);
+var bc = new button_config_1.ButtonConfig();
 console.log('TV: ButtonConfig ', bc);
 // stv simulation end
 // debugger;
@@ -5206,12 +5206,12 @@ exports.GroupConfig = GroupConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Commands = /** @class */ (function () {
-    function Commands() {
+var CommandDefinition = /** @class */ (function () {
+    function CommandDefinition() {
     }
-    return Commands;
+    return CommandDefinition;
 }());
-exports.Commands = Commands;
+exports.CommandDefinition = CommandDefinition;
 
 
 /***/ }),
@@ -5221,12 +5221,12 @@ exports.Commands = Commands;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var CommandDefinition = /** @class */ (function () {
-    function CommandDefinition() {
+var Commands = /** @class */ (function () {
+    function Commands() {
     }
-    return CommandDefinition;
+    return Commands;
 }());
-exports.CommandDefinition = CommandDefinition;
+exports.Commands = Commands;
 
 
 /***/ }),
