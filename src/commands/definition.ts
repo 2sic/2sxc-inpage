@@ -1,7 +1,7 @@
 ﻿import { ButtonConfig } from '../toolbar2/button/button-config';
 import { Command } from './command';
 import { ModConfig } from './mod-config';
-import { Params } from './params';
+// import { Params } from './params';
 import { Settings } from './settings';
 
 export class Definition {
@@ -10,7 +10,7 @@ export class Definition {
   icon?: string;
   uiActionOnly?: boolean;
   partOfPage?: boolean;
-  params?: Params;
+  params?: any; // stv: Params;
   dialog?: string;
   showCondition?(settings: Settings, modConfig: ModConfig): boolean | number | string;
   code?(settings: Settings, event: ModConfig, sxc: SxcInstanceWithInternals): void;

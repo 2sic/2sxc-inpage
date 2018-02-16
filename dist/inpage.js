@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 60);
+/******/ 	return __webpack_require__(__webpack_require__.s = 62);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -850,8 +850,8 @@ exports.generateButtonHtml = generateButtonHtml;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(2);
-var cmds_strategy_factory_1 = __webpack_require__(58);
-var mod_1 = __webpack_require__(59);
+var cmds_strategy_factory_1 = __webpack_require__(60);
+var mod_1 = __webpack_require__(61);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /** add a clipboard to the quick edit */
@@ -2296,10 +2296,10 @@ exports._toolbarManager = new ToolbarManager();
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_initialize_instance_commands_1 = __webpack_require__(6);
 var api_1 = __webpack_require__(0);
+var commands_1 = __webpack_require__(47);
 var generate_button_html_1 = __webpack_require__(11);
-var buttonHelpers = __webpack_require__(47);
+var buttonHelpers = __webpack_require__(50);
 var standard_buttons_1 = __webpack_require__(29);
-var commands_1 = __webpack_require__(48);
 function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     // if it has an action or is an array, keep that. Otherwise get standard buttons
     tbConfig = tbConfig || {}; // if null/undefined, use empty object
@@ -2308,7 +2308,11 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
         btnList = standard_buttons_1.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
     var editContext = api_1.getEditContext(sxc);
     var commands = command_initialize_instance_commands_1.commandInitializeInstanceCommands(editContext);
-    var tmpCommands = new commands_1.Commands(editContext);
+    // stv: temp start
+    var newCommands = new commands_1.Commands(editContext);
+    console.log('stv: new Command JSON', JSON.stringify(newCommands));
+    console.log('stv: new Command', newCommands);
+    // stv: temp end
     // whatever we had, if more settings were provided, override with these...
     var tlbDef = buttonHelpers.buildFullDefinition(btnList, /*sxc.manage._commands.*/ commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
     var btnGroups = tlbDef.groups;
@@ -2431,7 +2435,7 @@ exports.toolbarTemplate = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_1 = __webpack_require__(49);
+var command_1 = __webpack_require__(51);
 /**
  * assemble an object which will store the configuration and execute it
  * @param sxc
@@ -2519,7 +2523,7 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_create_1 = __webpack_require__(31);
-var command_execute_action_1 = __webpack_require__(50);
+var command_execute_action_1 = __webpack_require__(52);
 var command_initialize_instance_commands_1 = __webpack_require__(6);
 var command_link_to_ng_dialog_1 = __webpack_require__(33);
 var command_open_ng_dialog_1 = __webpack_require__(32);
@@ -3083,6 +3087,416 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var actions_1 = __webpack_require__(18);
+var item_commands_1 = __webpack_require__(23);
+var _2sxc_translate_1 = __webpack_require__(5);
+var button_action_1 = __webpack_require__(48);
+var button_config_1 = __webpack_require__(49);
+var Commands = /** @class */ (function () {
+    function Commands(editContext) {
+        var _this = this;
+        this.editContext = editContext;
+        this.commandList = [];
+        this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
+        this.get = function (name) { return _this.list[name]; }; // a specific action definition
+        this.addDef = function (def) {
+            _this.commandList.push(def);
+            _this.list[def.name] = def;
+        };
+        // quick helper so we can better debug the creation of definitions
+        this.makeDef = function (name, translateKey, icon, uiOnly, partOfPage, more) {
+            if (typeof (partOfPage) !== 'boolean')
+                throw 'partOfPage in commands not provided, order will be wrong!';
+            var newButtonAction = new button_action_1.ButtonAction(name, more.params);
+            newButtonAction.code = more.code;
+            var newButtonConfig = _this.getButtonConfig(icon, translateKey, uiOnly, partOfPage, more);
+            newButtonConfig.action = newButtonAction;
+            var newDefinition = {
+                name: name,
+                buttonConfig: newButtonConfig,
+            };
+            // stv: check this???
+            // Object.assign(newDefinition, more);
+            return newDefinition;
+        };
+        this.create = function (cmdSpecs) {
+            var enableTools = cmdSpecs.canDesign;
+            var isContent = cmdSpecs.isContent;
+            // open the import dialog
+            _this.addDef(_this.makeDef('app-import', 'Dashboard', '', true, false, {}));
+            // open an edit-item dialog
+            _this.addDef(_this.makeDef('edit', 'Edit', 'pencil', false, true, {
+                params: { mode: 'edit' },
+                showCondition: function (settings, modConfig) {
+                    return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
+                },
+            }));
+            // new is a dialog to add something, and will not add if cancelled
+            // new can also be used for mini-toolbars which just add an entity not attached to a module
+            // in that case it's essential to add a contentType like
+            // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
+            _this.addDef(_this.makeDef('new', 'New', 'plus', false, true, {
+                params: { mode: 'new' },
+                dialog: 'edit',
+                showCondition: function (settings, modConfig) {
+                    return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
+                },
+                code: function (settings, event, sxc) {
+                    // todo - should refactor this to be a toolbarManager.contentBlock command
+                    var settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 });
+                    sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
+                },
+            }));
+            // add brings no dialog, just add an empty item
+            _this.addDef(_this.makeDef('add', 'AddDemo', 'plus-circled', false, true, {
+                showCondition: function (settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
+                code: function (settings, event, sxc) {
+                    actions_1.addItem(sxc, settings.sortOrder + 1);
+                },
+            }));
+            // create a metadata toolbar
+            _this.addDef(_this.makeDef('metadata', 'Metadata', 'tag', false, false, {
+                params: { mode: 'new' },
+                dialog: 'edit',
+                dynamicClasses: function (settings) {
+                    // if it doesn't have data yet, make it less strong
+                    return settings.entityId ? '' : 'empty';
+                    // return settings.items && settings.items[0].entityId ? "" : "empty";
+                },
+                showCondition: function (settings, modConfig) {
+                    return !!settings.metadata;
+                },
+                configureCommand: function (cmd) {
+                    var itm = {
+                        Title: 'EditFormTitle.Metadata',
+                        Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata),
+                    };
+                    Object.assign(cmd.items[0], itm);
+                },
+            }));
+            // remove an item from the placeholder (usually for lists)
+            _this.addDef(_this.makeDef('remove', 'Remove', 'minus-circled', false, true, {
+                showCondition: function (settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
+                code: function (settings, event, sxc) {
+                    if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
+                        actions_1.removeFromList(sxc, settings.sortOrder);
+                        // sxc.manage.contentBlock
+                        //    .removeFromList(settings.sortOrder);
+                    }
+                },
+            }));
+            // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
+            _this.addDef(_this.makeDef('delete', 'Delete', 'cancel', true, false, {
+                // disabled: true,
+                showCondition: function (settings, modConfig) {
+                    // can never be used for a modulelist item, as it is always in use somewhere
+                    if (settings.useModuleList)
+                        return false;
+                    // check if all data exists required for deleting
+                    return settings.entityId && settings.entityGuid && settings.entityTitle;
+                },
+                code: function (settings, event, sxc) {
+                    item_commands_1.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+                },
+            }));
+            _this.addDef(_this.makeDef('moveup', 'MoveUp', 'move-up', false, true, {
+                showCondition: function (settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
+                },
+                code: function (settings, event, sxc) {
+                    actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+                },
+            }));
+            _this.addDef(_this.makeDef('movedown', 'MoveDown', 'move-down', false, true, {
+                showCondition: function (settings, modConfig) {
+                    // TODO: do not display if is last item in list
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
+                code: function (settings, event, sxc) {
+                    // TODO: make sure index is never greater than the amount of items
+                    actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+                },
+            }));
+            _this.addDef(_this.makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
+                showCondition: function (settings, modConfig) {
+                    return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                },
+            }));
+            // todo: shouldn't be available if changes are not allowed
+            _this.addDef(_this.makeDef('publish', 'Unpublished', 'eye-off', false, false, {
+                showCondition: function (settings, modConfig) {
+                    return settings.isPublished === false;
+                },
+                disabled: function (settings, modConfig) {
+                    return !cmdSpecs.allowPublish;
+                },
+                code: function (settings, event, sxc) {
+                    if (settings.isPublished)
+                        return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
+                    // if we have an entity-id, publish based on that
+                    if (settings.entityId)
+                        return actions_1.publishId(sxc, settings.entityId);
+                    var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
+                    var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+                    return actions_1.publish(sxc, part, index);
+                },
+            }));
+            _this.addDef(_this.makeDef('replace', 'Replace', 'replace', false, true, {
+                showCondition: function (settings, modConfig) {
+                    return settings.useModuleList;
+                },
+            }));
+            //#region app-actions: app-settings, app-resources
+            _this.addDef(_this.makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
+                dialog: 'edit',
+                disabled: function (settings, modConfig) {
+                    return cmdSpecs.appSettingsId === null;
+                },
+                title: 'Toolbar.AppSettings' + (cmdSpecs.appSettingsId === null ? 'Disabled' : ''),
+                showCondition: function (settings, modConfig) {
+                    return enableTools && !isContent; // only if settings exist, or are 0 (to be created)
+                },
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: cmdSpecs.appSettingsId }];
+                },
+                dynamicClasses: function (settings) {
+                    return cmdSpecs.appSettingsId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
+                },
+            }));
+            _this.addDef(_this.makeDef('app-resources', 'AppResources', 'language', true, false, {
+                dialog: 'edit',
+                disabled: function (settings, modConfig) {
+                    return cmdSpecs.appResourcesId === null;
+                },
+                title: 'Toolbar.AppResources' + (cmdSpecs.appResourcesId === null ? 'Disabled' : ''),
+                showCondition: function (settings, modConfig) {
+                    return enableTools && !isContent; // only if resources exist or are 0 (to be created)...
+                },
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: cmdSpecs.appResourcesId }];
+                },
+                dynamicClasses: function (settings) {
+                    return cmdSpecs.appResourcesId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
+                },
+            }));
+            //#endregion
+            //#region app & zone
+            _this.addDef(_this.makeDef('app', 'App', 'settings', true, false, {
+                showCondition: function (settings, modConfig) {
+                    return enableTools;
+                },
+            }));
+            _this.addDef(_this.makeDef('zone', 'Zone', 'manage', true, false, {
+                showCondition: function (settings, modConfig) {
+                    return enableTools;
+                },
+            }));
+            //#endregion
+            //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
+            _this.addDef(_this.makeDef('contenttype', 'ContentType', 'fields', true, false, {
+                showCondition: function (settings, modConfig) {
+                    return enableTools;
+                },
+            }));
+            _this.addDef(_this.makeDef('contentitems', 'ContentItems', 'table', true, false, {
+                params: { contentTypeName: cmdSpecs.contentTypeId },
+                showCondition: function (settings, modConfig) {
+                    return enableTools && (settings.contentType || cmdSpecs.contentTypeId);
+                },
+                configureCommand: function (cmd) {
+                    if (cmd.settings.contentType)
+                        cmd.params.contentTypeName = cmd.settings.contentType;
+                    // maybe: if item doesn't have a type, use that of template
+                    // else if (cmdSpecs.contentTypeId)
+                    //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
+                    if (cmd.settings.filters) {
+                        var enc = JSON.stringify(cmd.settings.filters);
+                        // special case - if it contains a "+" character, this won't survive
+                        // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b
+                        // so we're base64 encoding it - see https://github.com/2sic/2sxc/issues/1061
+                        if (enc.indexOf('+') > -1)
+                            enc = btoa(enc);
+                        cmd.params.filters = enc;
+                    }
+                },
+            }));
+            _this.addDef(_this.makeDef('template-develop', 'Develop', 'code', true, false, {
+                newWindow: true,
+                dialog: 'develop',
+                showCondition: function (settings, modConfig) {
+                    return enableTools;
+                },
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: cmdSpecs.templateId }];
+                },
+            }));
+            _this.addDef(_this.makeDef('template-query', 'QueryEdit', 'filter', true, false, {
+                dialog: 'pipeline-designer',
+                params: { pipelineId: cmdSpecs.queryId },
+                newWindow: true,
+                disabled: function (settings, modConfig) {
+                    return cmdSpecs.appSettingsId === null;
+                },
+                title: 'Toolbar.QueryEdit' + (cmdSpecs.queryId === null ? 'Disabled' : ''),
+                showCondition: function (settings, modConfig) {
+                    return enableTools && !isContent;
+                },
+                dynamicClasses: function (settings) {
+                    return cmdSpecs.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
+                },
+            }));
+            _this.addDef(_this.makeDef('template-settings', 'TemplateSettings', 'sliders', true, false, {
+                dialog: 'edit',
+                showCondition: function (settings, modConfig) {
+                    return enableTools && !isContent;
+                },
+                configureCommand: function (cmd) {
+                    cmd.items = [{ EntityId: cmdSpecs.templateId }];
+                },
+            }));
+            //#endregion template commands
+            //#region custom code buttons
+            _this.addDef(_this.makeDef('custom', 'Custom', 'bomb', true, false, {
+                code: function (settings, event, sxc) {
+                    console.log('custom action with code - BETA feature, may change');
+                    if (!settings.customCode) {
+                        console.warn('custom code action, but no onclick found to run', settings);
+                        return;
+                    }
+                    try {
+                        var fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
+                        fn(settings, event, sxc);
+                    }
+                    catch (err) {
+                        console.error('error in custom button-code: ', settings);
+                    }
+                },
+            }));
+            //#endregion
+            _this.addDef(_this.makeDef('layout', 'ChangeLayout', 'glasses', true, true, {
+                inlineWindow: true,
+            }));
+            _this.addDef(_this.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
+                code: function (settings, event, sxc) {
+                    var btn = $(event.target);
+                    var fullMenu = btn.closest('ul.sc-menu');
+                    var oldState = Number(fullMenu.attr('data-state') || 0);
+                    var max = Number(fullMenu.attr('group-count'));
+                    var newState = (oldState + 1) % max;
+                    fullMenu.removeClass('group-' + oldState)
+                        .addClass('group-' + newState)
+                        .attr('data-state', newState);
+                },
+            }));
+            // show the version dialog
+            _this.addDef(_this.makeDef('item-history', 'ItemHistory', 'clock', true, false, {
+                inlineWindow: true,
+                fullScreen: true,
+            }));
+        };
+        var cmdSpec = {
+            canDesign: editContext.User.CanDesign,
+            templateId: editContext.ContentGroup.TemplateId,
+            contentTypeId: editContext.ContentGroup.ContentTypeName,
+            isContent: editContext.ContentGroup.IsContent,
+            queryId: editContext.ContentGroup.QueryId,
+            appResourcesId: editContext.ContentGroup.AppResourcesId,
+            appSettingsId: editContext.ContentGroup.AppSettingsId,
+            allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed,
+        };
+        this.create(cmdSpec);
+    }
+    Commands.prototype.getButtonConfig = function (icon, translateKey, uiOnly, partOfPage, more) {
+        var partialButtonConfig = {
+            icon: 'icon-sxc-' + icon,
+            title: 'Toolbar.' + translateKey,
+            uiActionOnly: uiOnly,
+            partOfPage: partOfPage,
+        };
+        Object.assign(partialButtonConfig, more);
+        return button_config_1.ButtonConfig.fromNameAndParams(name, more.params, partialButtonConfig);
+    };
+    return Commands;
+}());
+exports.Commands = Commands;
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ButtonAction = /** @class */ (function () {
+    function ButtonAction(name, params) {
+        this.name = name;
+        this.params = params;
+    }
+    return ButtonAction;
+}());
+exports.ButtonAction = ButtonAction;
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ButtonConfig = /** @class */ (function () {
+    function ButtonConfig(action, partialConfig, commands) {
+        this.action = action;
+        this.name = '';
+        this.params = [];
+        this.classes = '';
+        this.dialog = '';
+        this.fullScreen = null;
+        this.icon = '';
+        this.inlineWindow = null;
+        this.newWindow = null;
+        this.partOfPage = null;
+        this.show = null; // maybe
+        this.title = '';
+        this.uiActionOnly = null;
+        this.dynamicDisabled = function () { return false; }; // maybe
+        if (action) {
+            this.action = action;
+        }
+        if (partialConfig)
+            Object.assign(this, partialConfig);
+    }
+    ButtonConfig.fromNameAndParams = function (name, params, partialConfig, commands) {
+        var buttonConfig = new ButtonConfig();
+        buttonConfig.name = name;
+        buttonConfig.params = params;
+        // todo: look up command with this name
+        // const tmpCommandDefinition: CommandDefinition = commands[name];
+        console.log('stv: code in ButtonConfig: ', name, commands);
+        // todo create an action for that command
+        // todo: use the commands tmpButtonDefaults as the initial value
+        // use the config? to override anything
+        if (partialConfig)
+            Object.assign(buttonConfig, partialConfig);
+        return buttonConfig;
+    };
+    return ButtonConfig;
+}());
+exports.ButtonConfig = ButtonConfig;
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
@@ -3345,345 +3759,7 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 
 
 /***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var actions_1 = __webpack_require__(18);
-var _2sxc_translate_1 = __webpack_require__(5);
-var item_commands_1 = __webpack_require__(23);
-var Commands = /** @class */ (function () {
-    function Commands(editContext) {
-        this.editContext = editContext;
-        this.commandList = cmds;
-        this.list = getList(this.editContext); // hash - table of action definitions, to be used a list()["action - name"]
-    }
-    return Commands;
-}());
-exports.Commands = Commands;
-function getList(editContext) {
-    var cmdSpec = {
-        canDesign: editContext.User.CanDesign,
-        templateId: editContext.ContentGroup.TemplateId,
-        contentTypeId: editContext.ContentGroup.ContentTypeName,
-        isContent: editContext.ContentGroup.IsContent,
-        queryId: editContext.ContentGroup.QueryId,
-        appResourcesId: editContext.ContentGroup.AppResourcesId,
-        appSettingsId: editContext.ContentGroup.AppSettingsId,
-        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed,
-    };
-    create(cmdSpec);
-    console.log("stv: cmds", cmds);
-    return cmds;
-}
-exports.getList = getList;
-var cmds = {};
-function create(cmdSpecs) {
-    var enableTools = cmdSpecs.canDesign;
-    var isContent = cmdSpecs.isContent;
-    // open the import dialog
-    addDef(makeDef('app-import', 'Dashboard', '', true, false, {}));
-    // open an edit-item dialog
-    addDef(makeDef('edit', 'Edit', 'pencil', false, true, {
-        params: { mode: 'edit' },
-        showCondition: function (settings, modConfig) {
-            return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
-        },
-    }));
-    // new is a dialog to add something, and will not add if cancelled
-    // new can also be used for mini-toolbars which just add an entity not attached to a module
-    // in that case it's essential to add a contentType like
-    // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-    addDef(makeDef('new', 'New', 'plus', false, true, {
-        params: { mode: 'new' },
-        dialog: 'edit',
-        showCondition: function (settings, modConfig) {
-            return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
-        },
-        code: function (settings, event, sxc) {
-            // todo - should refactor this to be a toolbarManager.contentBlock command
-            var settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 });
-            sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
-        },
-    }));
-    // add brings no dialog, just add an empty item
-    addDef(makeDef('add', 'AddDemo', 'plus-circled', false, true, {
-        showCondition: function (settings, modConfig) {
-            return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-        },
-        code: function (settings, event, sxc) {
-            actions_1.addItem(sxc, settings.sortOrder + 1);
-        },
-    }));
-    // create a metadata toolbar
-    addDef(makeDef('metadata', 'Metadata', 'tag', false, false, {
-        params: { mode: 'new' },
-        dialog: 'edit',
-        dynamicClasses: function (settings) {
-            // if it doesn't have data yet, make it less strong
-            return settings.entityId ? '' : 'empty';
-            // return settings.items && settings.items[0].entityId ? "" : "empty";
-        },
-        showCondition: function (settings, modConfig) {
-            return !!settings.metadata;
-        },
-        configureCommand: function (cmd) {
-            var itm = {
-                Title: 'EditFormTitle.Metadata',
-                Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata),
-            };
-            Object.assign(cmd.items[0], itm);
-        },
-    }));
-    // remove an item from the placeholder (usually for lists)
-    addDef(makeDef('remove', 'Remove', 'minus-circled', false, true, {
-        showCondition: function (settings, modConfig) {
-            return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-        },
-        code: function (settings, event, sxc) {
-            if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
-                actions_1.removeFromList(sxc, settings.sortOrder);
-                // sxc.manage.contentBlock
-                //    .removeFromList(settings.sortOrder);
-            }
-        },
-    }));
-    // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
-    addDef(makeDef('delete', 'Delete', 'cancel', true, false, {
-        // disabled: true,
-        showCondition: function (settings, modConfig) {
-            // can never be used for a modulelist item, as it is always in use somewhere
-            if (settings.useModuleList)
-                return false;
-            // check if all data exists required for deleting
-            return settings.entityId && settings.entityGuid && settings.entityTitle;
-        },
-        code: function (settings, event, sxc) {
-            item_commands_1.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
-        },
-    }));
-    addDef(makeDef('moveup', 'MoveUp', 'move-up', false, true, {
-        showCondition: function (settings, modConfig) {
-            return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
-        },
-        code: function (settings, event, sxc) {
-            actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
-        },
-    }));
-    addDef(makeDef('movedown', 'MoveDown', 'move-down', false, true, {
-        showCondition: function (settings, modConfig) {
-            // TODO: do not display if is last item in list
-            return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-        },
-        code: function (settings, event, sxc) {
-            // TODO: make sure index is never greater than the amount of items
-            actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
-        },
-    }));
-    addDef(makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
-        showCondition: function (settings, modConfig) {
-            return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-        },
-    }));
-    // todo: shouldn't be available if changes are not allowed
-    addDef(makeDef('publish', 'Unpublished', 'eye-off', false, false, {
-        showCondition: function (settings, modConfig) {
-            return settings.isPublished === false;
-        },
-        disabled: function (settings, modConfig) {
-            return !cmdSpecs.allowPublish;
-        },
-        code: function (settings, event, sxc) {
-            if (settings.isPublished)
-                return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
-            // if we have an entity-id, publish based on that
-            if (settings.entityId)
-                return actions_1.publishId(sxc, settings.entityId);
-            var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
-            var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-            return actions_1.publish(sxc, part, index);
-        },
-    }));
-    addDef(makeDef('replace', 'Replace', 'replace', false, true, {
-        showCondition: function (settings, modConfig) {
-            return settings.useModuleList;
-        },
-    }));
-    //#region app-actions: app-settings, app-resources
-    addDef(makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
-        dialog: 'edit',
-        disabled: function (settings, modConfig) {
-            return cmdSpecs.appSettingsId === null;
-        },
-        title: 'Toolbar.AppSettings' + (cmdSpecs.appSettingsId === null ? 'Disabled' : ''),
-        showCondition: function (settings, modConfig) {
-            return enableTools && !isContent; // only if settings exist, or are 0 (to be created)
-        },
-        configureCommand: function (cmd) {
-            cmd.items = [{ EntityId: cmdSpecs.appSettingsId }];
-        },
-        dynamicClasses: function (settings) {
-            return cmdSpecs.appSettingsId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
-        },
-    }));
-    addDef(makeDef('app-resources', 'AppResources', 'language', true, false, {
-        dialog: 'edit',
-        disabled: function (settings, modConfig) {
-            return cmdSpecs.appResourcesId === null;
-        },
-        title: 'Toolbar.AppResources' + (cmdSpecs.appResourcesId === null ? 'Disabled' : ''),
-        showCondition: function (settings, modConfig) {
-            return enableTools && !isContent; // only if resources exist or are 0 (to be created)...
-        },
-        configureCommand: function (cmd) {
-            cmd.items = [{ EntityId: cmdSpecs.appResourcesId }];
-        },
-        dynamicClasses: function (settings) {
-            return cmdSpecs.appResourcesId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
-        },
-    }));
-    //#endregion
-    //#region app & zone
-    addDef(makeDef('app', 'App', 'settings', true, false, {
-        showCondition: function (settings, modConfig) {
-            return enableTools;
-        },
-    }));
-    addDef(makeDef('zone', 'Zone', 'manage', true, false, {
-        showCondition: function (settings, modConfig) {
-            return enableTools;
-        },
-    }));
-    //#endregion
-    //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
-    addDef(makeDef('contenttype', 'ContentType', 'fields', true, false, {
-        showCondition: function (settings, modConfig) {
-            return enableTools;
-        },
-    }));
-    addDef(makeDef('contentitems', 'ContentItems', 'table', true, false, {
-        params: { contentTypeName: cmdSpecs.contentTypeId },
-        showCondition: function (settings, modConfig) {
-            return enableTools && (settings.contentType || cmdSpecs.contentTypeId);
-        },
-        configureCommand: function (cmd) {
-            if (cmd.settings.contentType)
-                cmd.params.contentTypeName = cmd.settings.contentType;
-            // maybe: if item doesn't have a type, use that of template
-            // else if (cmdSpecs.contentTypeId)
-            //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
-            if (cmd.settings.filters) {
-                var enc = JSON.stringify(cmd.settings.filters);
-                // special case - if it contains a "+" character, this won't survive
-                // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b
-                // so we're base64 encoding it - see https://github.com/2sic/2sxc/issues/1061
-                if (enc.indexOf('+') > -1)
-                    enc = btoa(enc);
-                cmd.params.filters = enc;
-            }
-        },
-    }));
-    addDef(makeDef('template-develop', 'Develop', 'code', true, false, {
-        newWindow: true,
-        dialog: 'develop',
-        showCondition: function (settings, modConfig) {
-            return enableTools;
-        },
-        configureCommand: function (cmd) {
-            cmd.items = [{ EntityId: cmdSpecs.templateId }];
-        },
-    }));
-    addDef(makeDef('template-query', 'QueryEdit', 'filter', true, false, {
-        dialog: 'pipeline-designer',
-        params: { pipelineId: cmdSpecs.queryId },
-        newWindow: true,
-        disabled: function (settings, modConfig) {
-            return cmdSpecs.appSettingsId === null;
-        },
-        title: 'Toolbar.QueryEdit' + (cmdSpecs.queryId === null ? 'Disabled' : ''),
-        showCondition: function (settings, modConfig) {
-            return enableTools && !isContent;
-        },
-        dynamicClasses: function (settings) {
-            return cmdSpecs.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
-        },
-    }));
-    addDef(makeDef('template-settings', 'TemplateSettings', 'sliders', true, false, {
-        dialog: 'edit',
-        showCondition: function (settings, modConfig) {
-            return enableTools && !isContent;
-        },
-        configureCommand: function (cmd) {
-            cmd.items = [{ EntityId: cmdSpecs.templateId }];
-        },
-    }));
-    //#endregion template commands
-    //#region custom code buttons
-    addDef(makeDef('custom', 'Custom', 'bomb', true, false, {
-        code: function (settings, event, sxc) {
-            console.log('custom action with code - BETA feature, may change');
-            if (!settings.customCode) {
-                console.warn('custom code action, but no onclick found to run', settings);
-                return;
-            }
-            try {
-                var fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
-                fn(settings, event, sxc);
-            }
-            catch (err) {
-                console.error('error in custom button-code: ', settings);
-            }
-        },
-    }));
-    //#endregion
-    addDef(makeDef('layout', 'ChangeLayout', 'glasses', true, true, {
-        inlineWindow: true,
-    }));
-    addDef(makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
-        code: function (settings, event, sxc) {
-            var btn = $(event.target);
-            var fullMenu = btn.closest('ul.sc-menu');
-            var oldState = Number(fullMenu.attr('data-state') || 0);
-            var max = Number(fullMenu.attr('group-count'));
-            var newState = (oldState + 1) % max;
-            fullMenu.removeClass('group-' + oldState)
-                .addClass('group-' + newState)
-                .attr('data-state', newState);
-        },
-    }));
-    // show the version dialog
-    addDef(makeDef('item-history', 'ItemHistory', 'clock', true, false, {
-        inlineWindow: true,
-        fullScreen: true,
-    }));
-}
-function addDef(def) {
-    cmds[def.name] = def;
-}
-// quick helper so we can better debug the creation of definitions
-function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
-    if (typeof (partOfPage) !== 'boolean')
-        throw 'partOfPage in commands not provided, order will be wrong!';
-    var btnConfig = {
-        icon: 'icon-sxc-' + icon,
-        title: 'Toolbar.' + translateKey,
-    };
-    btnConfig = Object.assign(btnConfig, more);
-    // stv: todo expand button config....
-    var newDefinition = {
-        name: name,
-        buttonConfig: btnConfig,
-    };
-    // stv: check this???
-    Object.assign(newDefinition, more);
-    return newDefinition;
-}
-
-
-/***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3771,7 +3847,7 @@ exports.Command = Command;
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3815,7 +3891,7 @@ exports.commandExecuteAction = commandExecuteAction;
 
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3838,7 +3914,7 @@ exports._commands = new Commands();
 
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3944,13 +4020,13 @@ exports.manipulator = manipulator;
 
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = __webpack_require__(54);
+var create_1 = __webpack_require__(56);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -3971,7 +4047,7 @@ exports._manage = new Manage();
 
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3980,9 +4056,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var toolbar_feature_1 = __webpack_require__(4);
 var toolbar_feature_2 = __webpack_require__(4);
 var engine_1 = __webpack_require__(34);
-var manipulate_1 = __webpack_require__(52);
+var manipulate_1 = __webpack_require__(54);
 var api_1 = __webpack_require__(0);
-var local_storage_helper_1 = __webpack_require__(55);
+var local_storage_helper_1 = __webpack_require__(57);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -4116,7 +4192,7 @@ var EditManager = /** @class */ (function () {
 
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4142,7 +4218,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4238,7 +4314,7 @@ function showGlassesButtonIfUninitialized(sxci) {
 
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4265,14 +4341,14 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var cb_1 = __webpack_require__(57);
-var Mod_1 = __webpack_require__(94);
+var cb_1 = __webpack_require__(59);
+var Mod_1 = __webpack_require__(97);
 var CmdsStrategyFactory = /** @class */ (function () {
     function CmdsStrategyFactory() {
         this.cmds = {};
@@ -4291,7 +4367,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4330,43 +4406,41 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
-__webpack_require__(61);
-__webpack_require__(62);
+__webpack_require__(63);
+__webpack_require__(64);
 __webpack_require__(38);
 __webpack_require__(4);
 __webpack_require__(17);
-__webpack_require__(63);
-__webpack_require__(64);
+__webpack_require__(65);
+__webpack_require__(66);
 __webpack_require__(31);
-__webpack_require__(50);
+__webpack_require__(52);
 __webpack_require__(6);
 __webpack_require__(33);
 __webpack_require__(32);
-__webpack_require__(49);
 __webpack_require__(51);
-__webpack_require__(65);
+__webpack_require__(53);
+__webpack_require__(67);
 __webpack_require__(34);
 __webpack_require__(45);
-__webpack_require__(66);
-__webpack_require__(67);
 __webpack_require__(68);
 __webpack_require__(69);
+__webpack_require__(70);
+__webpack_require__(71);
 __webpack_require__(18);
 __webpack_require__(19);
-__webpack_require__(70);
-__webpack_require__(52);
+__webpack_require__(72);
+__webpack_require__(54);
 __webpack_require__(7);
 __webpack_require__(10);
-__webpack_require__(71);
-__webpack_require__(20);
-__webpack_require__(72);
 __webpack_require__(73);
+__webpack_require__(20);
 __webpack_require__(74);
 __webpack_require__(75);
 __webpack_require__(76);
@@ -4375,9 +4449,9 @@ __webpack_require__(78);
 __webpack_require__(79);
 __webpack_require__(80);
 __webpack_require__(81);
-__webpack_require__(23);
 __webpack_require__(82);
 __webpack_require__(83);
+__webpack_require__(23);
 __webpack_require__(84);
 __webpack_require__(85);
 __webpack_require__(86);
@@ -4385,78 +4459,81 @@ __webpack_require__(87);
 __webpack_require__(88);
 __webpack_require__(89);
 __webpack_require__(90);
+__webpack_require__(91);
+__webpack_require__(92);
+__webpack_require__(93);
 __webpack_require__(0);
-__webpack_require__(54);
+__webpack_require__(56);
 __webpack_require__(39);
+__webpack_require__(57);
 __webpack_require__(55);
-__webpack_require__(53);
 __webpack_require__(40);
 __webpack_require__(41);
 __webpack_require__(42);
-__webpack_require__(91);
-__webpack_require__(92);
-__webpack_require__(8);
-__webpack_require__(93);
-__webpack_require__(57);
-__webpack_require__(12);
-__webpack_require__(58);
+__webpack_require__(94);
 __webpack_require__(95);
-__webpack_require__(43);
+__webpack_require__(8);
 __webpack_require__(96);
-__webpack_require__(44);
-__webpack_require__(98);
-__webpack_require__(99);
-__webpack_require__(13);
 __webpack_require__(59);
-__webpack_require__(100);
+__webpack_require__(12);
+__webpack_require__(60);
+__webpack_require__(98);
+__webpack_require__(43);
+__webpack_require__(99);
+__webpack_require__(44);
+__webpack_require__(101);
+__webpack_require__(102);
+__webpack_require__(13);
+__webpack_require__(61);
+__webpack_require__(103);
 __webpack_require__(22);
 __webpack_require__(1);
 __webpack_require__(3);
-__webpack_require__(101);
-__webpack_require__(102);
+__webpack_require__(104);
+__webpack_require__(105);
 __webpack_require__(21);
 __webpack_require__(14);
 __webpack_require__(9);
 __webpack_require__(16);
 __webpack_require__(46);
-__webpack_require__(103);
+__webpack_require__(106);
 __webpack_require__(24);
-__webpack_require__(104);
+__webpack_require__(107);
 __webpack_require__(15);
-__webpack_require__(105);
+__webpack_require__(108);
 __webpack_require__(25);
 __webpack_require__(26);
-__webpack_require__(106);
-__webpack_require__(107);
-__webpack_require__(108);
+__webpack_require__(48);
 __webpack_require__(109);
+__webpack_require__(49);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
 __webpack_require__(113);
-__webpack_require__(48);
+__webpack_require__(114);
+__webpack_require__(47);
 __webpack_require__(11);
 __webpack_require__(28);
-__webpack_require__(47);
-__webpack_require__(114);
-__webpack_require__(29);
+__webpack_require__(50);
 __webpack_require__(115);
+__webpack_require__(29);
+__webpack_require__(116);
 __webpack_require__(27);
 __webpack_require__(30);
-__webpack_require__(116);
 __webpack_require__(117);
 __webpack_require__(118);
 __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(121);
 __webpack_require__(122);
+__webpack_require__(123);
 __webpack_require__(5);
-__webpack_require__(56);
+__webpack_require__(58);
 module.exports = __webpack_require__(2);
 
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports) {
 
 if (window.$2sxc && !window.$2sxc.consts) {
@@ -4492,7 +4569,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
 
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports) {
 
 /** this enhances the $2sxc client controller with stuff only needed when logged in */
@@ -4517,7 +4594,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4532,7 +4609,7 @@ exports.Action = Action;
 
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4547,7 +4624,7 @@ exports.CmdSpec = CmdSpec;
 
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4562,7 +4639,7 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4577,7 +4654,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4592,7 +4669,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4607,7 +4684,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4625,7 +4702,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4640,7 +4717,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4655,7 +4732,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4670,7 +4747,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4685,7 +4762,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4700,7 +4777,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4715,7 +4792,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4730,7 +4807,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4745,7 +4822,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4760,7 +4837,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4775,7 +4852,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4806,7 +4883,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4837,17 +4914,17 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(51);
-var manage_1 = __webpack_require__(53);
+var commands_1 = __webpack_require__(53);
+var manage_1 = __webpack_require__(55);
 var quick_e_1 = __webpack_require__(1);
 var start_1 = __webpack_require__(21);
-__webpack_require__(56);
+__webpack_require__(58);
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';
@@ -4878,19 +4955,6 @@ $(start_1.start); // run on-load
 
 
 /***/ }),
-/* 83 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 84 */
-/***/ (function(module, exports) {
-
-// ReSharper restore InconsistentNaming
-
-
-/***/ }),
 /* 85 */
 /***/ (function(module, exports) {
 
@@ -4906,6 +4970,7 @@ $(start_1.start); // run on-load
 /* 87 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -4916,6 +4981,24 @@ $(start_1.start); // run on-load
 
 /***/ }),
 /* 89 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4936,13 +5019,13 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 90 */
+/* 93 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 91 */
+/* 94 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -4986,7 +5069,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 92 */
+/* 95 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -5013,7 +5096,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 93 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5031,7 +5114,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 94 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5070,7 +5153,7 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5085,13 +5168,13 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 96 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cb_1 = __webpack_require__(97);
+var Cb_1 = __webpack_require__(100);
 var clipboard_1 = __webpack_require__(12);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
@@ -5121,7 +5204,7 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 97 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5148,19 +5231,19 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 98 */
+/* 101 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 99 */
+/* 102 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 100 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5193,7 +5276,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 101 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5211,7 +5294,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 102 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5226,7 +5309,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 103 */
+/* 106 */
 /***/ (function(module, exports) {
 
 /*
@@ -5327,7 +5410,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 104 */
+/* 107 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -5335,7 +5418,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 105 */
+/* 108 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -5350,25 +5433,7 @@ $(function () {
 
 
 /***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ButtonAction = /** @class */ (function () {
-    function ButtonAction(name, params) {
-        this.name = name;
-        //this.name = name; // will auto - lookup the action and use the defaults
-        this.params = params; // same, but use custom params
-    }
-    return ButtonAction;
-}());
-exports.ButtonAction = ButtonAction;
-
-
-/***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5398,46 +5463,7 @@ exports.ButtonBaseConfig = ButtonBaseConfig;
 
 
 /***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ButtonConfig = /** @class */ (function () {
-    function ButtonConfig(action, partialConfig, commands) {
-        this.action = action;
-        this.icon = '';
-        this.title = '';
-        this.show = true; // maybe
-        this.showCondition = true;
-        this.disabled = false;
-        this.dynamicDisabled = function () { return false; }; // maybe
-        if (action) {
-            this.action = action;
-        }
-        if (partialConfig)
-            Object.assign(this, partialConfig);
-    }
-    ButtonConfig.fromNameAndParams = function (name, params, partialConfig, commands) {
-        var buttonConfig = new ButtonConfig();
-        buttonConfig.name = name;
-        buttonConfig.params = params;
-        // todo: look up command with this name
-        // todo create an action for that command
-        // todo: use the commands tmpButtonDefaults as the initial value
-        // use the config? to override anything
-        if (partialConfig)
-            Object.assign(this, partialConfig);
-        return buttonConfig;
-    };
-    return ButtonConfig;
-}());
-exports.ButtonConfig = ButtonConfig;
-
-
-/***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5452,7 +5478,7 @@ exports.Button = Button;
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5466,7 +5492,7 @@ exports.ExpandButtonConfig = ExpandButtonConfig;
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5480,7 +5506,7 @@ exports.ExpandGroupConfig = ExpandGroupConfig;
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5503,7 +5529,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5518,7 +5544,7 @@ exports.CommandDefinition = CommandDefinition;
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5533,7 +5559,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -5541,7 +5567,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5556,7 +5582,7 @@ exports.ToolbarConfigTemplate = ToolbarConfigTemplate;
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5571,7 +5597,7 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5587,7 +5613,7 @@ exports.ToolbarConfig = ToolbarConfig;
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5601,7 +5627,7 @@ exports.ExpandToolbarConfig = ExpandToolbarConfig;
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5617,7 +5643,7 @@ exports.ToolbarParameters = ToolbarParameters;
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5636,7 +5662,7 @@ exports.ToolbarSettings = ToolbarSettings;
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

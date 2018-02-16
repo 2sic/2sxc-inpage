@@ -1,9 +1,11 @@
-﻿export class ButtonAction {
-  //name: string; // the command name from the action list
-  code: string; // custom code if used
-  params: any[]; // custom parameters if used or if these override other params
-  constructor(public name: string, params?: any[]) {
-    //this.name = name; // will auto - lookup the action and use the defaults
-    this.params = params; // same, but use custom params
-  }
+﻿import { ModConfig } from '../../commands/mod-config';
+import { Settings } from '../../commands/settings';
+
+export class ButtonAction {
+  // name: string; // the command name from the action list
+  // params: any[]; // custom parameters if used or if these override other params
+  // code: string; // custom code if used
+  code?(settings: Settings, event: ModConfig, sxc: SxcInstanceWithInternals): void;
+
+  constructor(public name: string, public params?: any[]) { }
 }

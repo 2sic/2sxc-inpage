@@ -1,10 +1,9 @@
 ﻿import { commandInitializeInstanceCommands } from '../commands/command-initialize-instance-commands';
 import { getEditContext } from '../manage/api';
+import { Commands } from './command/commands';
 import { generateButtonHtml } from './generate-button-html';
 import * as buttonHelpers from './helpers';
 import { standardButtons } from './standard-buttons';
-import { Commands } from './command/commands';
-
 
 export function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
@@ -16,10 +15,12 @@ export function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
 
   const editContext = getEditContext(sxc);
-  let commands = commandInitializeInstanceCommands(editContext);
+  const commands = commandInitializeInstanceCommands(editContext);
 
   // stv: temp start
-  let tmpCommands = new Commands(editContext);
+  const newCommands = new Commands(editContext);
+  console.log('stv: new Command JSON', JSON.stringify(newCommands));
+  console.log('stv: new Command', newCommands);
   // stv: temp end
 
   // whatever we had, if more settings were provided, override with these...
