@@ -3108,7 +3108,8 @@ var Commands = /** @class */ (function () {
             if (typeof (partOfPage) !== 'boolean')
                 throw 'partOfPage in commands not provided, order will be wrong!';
             var newButtonAction = new button_action_1.ButtonAction(name, more.params);
-            newButtonAction.code = more.code;
+            newButtonAction.codeFunctionTemp = more.code; // todo stv: find what with this
+            newButtonAction.code = ''; // todo stv: find where is 'code'
             var newButtonConfig = _this.getButtonConfig(icon, translateKey, uiOnly, partOfPage, more);
             newButtonConfig.action = newButtonAction;
             var newDefinition = {

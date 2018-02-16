@@ -44,7 +44,8 @@ export class Commands {
       throw 'partOfPage in commands not provided, order will be wrong!';
 
     const newButtonAction: ButtonAction = new ButtonAction(name, more.params);
-    newButtonAction.code = more.code;
+    newButtonAction.codeFunctionTemp = more.code; // todo stv: find what with this
+    newButtonAction.code = ''; // todo stv: find where is 'code'
 
     const newButtonConfig: ButtonConfig = this.getButtonConfig(icon, translateKey, uiOnly, partOfPage, more);
     newButtonConfig.action = newButtonAction;
