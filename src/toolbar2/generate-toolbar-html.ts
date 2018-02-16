@@ -3,11 +3,10 @@ import { getEditContext } from '../manage/api';
 import { generateButtonHtml } from './generate-button-html';
 import * as buttonHelpers from './helpers';
 import { standardButtons } from './standard-buttons';
+import { Commands } from './command/commands';
 
 
 export function generateToolbarHtml(sxc, tbConfig, moreSettings) {
-
-  console.log("TV#1: ", sxc, tbConfig, moreSettings);
 
   // if it has an action or is an array, keep that. Otherwise get standard buttons
   tbConfig = tbConfig || {}; // if null/undefined, use empty object
@@ -18,6 +17,11 @@ export function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
   const editContext = getEditContext(sxc);
   let commands = commandInitializeInstanceCommands(editContext);
+
+  // stv: temp start
+  let tmpCommands = new Commands(editContext);
+  // stv: temp end
+
   // whatever we had, if more settings were provided, override with these...
   let tlbDef = buttonHelpers.buildFullDefinition(btnList, /*sxc.manage._commands.*/commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
   let btnGroups = tlbDef.groups;

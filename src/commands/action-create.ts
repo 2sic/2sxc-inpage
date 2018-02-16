@@ -1,12 +1,13 @@
 ﻿import { addItem, changeOrder, publish, publishId, removeFromList } from '../contentBlock/actions';
 import { contentItems } from '../entity-manipulation/item-commands';
 import { translate } from '../translate/2sxc.translate';
+import { Commands } from '../toolbar2/command/commands';
+import { CommandDefinition } from '../toolbar2/command/command-definition';
 import { Action } from './action';
 import { CmdSpec } from './cmd-spec';
 import { Definition } from './definition';
 import { makeDef } from './make-def';
 import { Settings } from './settings';
-import { ButtonConfig } from '../toolbar2/button/button-config';
 
 /*
  * Actions of 2sxc - mostly used in toolbars

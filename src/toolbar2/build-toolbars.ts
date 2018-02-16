@@ -61,13 +61,10 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     const at = $2sxc.c.attr;
 
     try {
-      //debugger;
       data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
       toolbarConfig = JSON.parse(data);
-      console.log("TV#3: toolbarConfig", toolbarConfig);
       data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
       toolbarSettings = JSON.parse(data);
-      console.log("TV#4: toolbarSettings", toolbarSettings);
       if (toolbarConfig === {} && toolbarSettings === {})
         toolbarSettings = settingsForEmptyToolbar;
     } catch (err) {

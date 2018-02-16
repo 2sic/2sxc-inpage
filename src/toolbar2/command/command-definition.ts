@@ -4,3 +4,4 @@ export class CommandDefinition {
   name: string;
   buttonConfig: ButtonConfig;
 }
+

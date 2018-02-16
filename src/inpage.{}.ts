@@ -4,15 +4,6 @@ import { $quickE } from './quick-edit/quick-e';
 import { start } from './quick-edit/start';
 import './x-bootstrap/module-bootstrapper';
 
-
-// stv simulation start
-import { ButtonConfig } from './toolbar2/button/button-config';
-const bc = new ButtonConfig();
-console.log('TV: ButtonConfig ', bc);
-// stv simulation end
-
-
-
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';
