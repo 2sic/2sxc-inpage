@@ -70,7 +70,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var positioning_1 = __webpack_require__(27);
+var positioning_1 = __webpack_require__(21);
 /**
  * the quick-edit object
  * the quick-insert object
@@ -265,13 +265,13 @@ exports.selectors = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var A_BuildToolbars = __webpack_require__(14);
-var A_GenerateButtonHtml = __webpack_require__(8);
+var A_GenerateButtonHtml = __webpack_require__(9);
 var A_GenerateToolbarHtml = __webpack_require__(16);
 var A_ToolbarManager = __webpack_require__(15);
-var B_BuildToolbars = __webpack_require__(19);
-var B_GenerateButtonHtml = __webpack_require__(9);
-var B_GenerateToolbarHtml = __webpack_require__(21);
-var B_ToolbarManager = __webpack_require__(20);
+var B_BuildToolbars = __webpack_require__(24);
+var B_GenerateButtonHtml = __webpack_require__(11);
+var B_GenerateToolbarHtml = __webpack_require__(26);
+var B_ToolbarManager = __webpack_require__(25);
 var ab_testing_config_1 = __webpack_require__(36);
 exports._toolbarManager = (ab_testing_config_1.isA) ? A_ToolbarManager._toolbarManager : B_ToolbarManager._toolbarManager;
 exports.disable = (ab_testing_config_1.isA) ? A_BuildToolbars.disable : B_BuildToolbars.disable;
@@ -306,7 +306,130 @@ exports.translate = translate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var main_content_block_1 = __webpack_require__(25);
+var create_1 = __webpack_require__(17);
+function commandInitializeInstanceCommands(editContext) {
+    var cg = editContext.ContentGroup;
+    return create_1.create({
+        canDesign: editContext.User.CanDesign,
+        templateId: cg.TemplateId,
+        contentTypeId: cg.ContentTypeName,
+        isContent: cg.IsContent,
+        queryId: cg.QueryId,
+        appResourcesId: cg.AppResourcesId,
+        appSettingsId: cg.AppSettingsId,
+        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed,
+    });
+}
+exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(1);
+var quick_dialog_1 = __webpack_require__(8);
+var start_1 = __webpack_require__(20);
+var toolbar_feature_1 = __webpack_require__(4);
+var main_content_block_1 = __webpack_require__(18);
+var web_api_promises_1 = __webpack_require__(19);
+/*
+ * this is the content block manager in the browser
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ */
+/**
+ * ajax update/replace the content of the content-block
+ * optionally also initialize the toolbar (if not just preview)
+ * @param {Object<>} sxc
+ * @param {string} newContent
+ * @param {boolean} justPreview
+ * @returns {}
+ */
+function replaceCb(sxc, newContent, justPreview) {
+    try {
+        var newStuff = $(newContent);
+        // Must disable toolbar before we attach to DOM
+        if (justPreview)
+            toolbar_feature_1.disable(newStuff);
+        $(api_1.getTag(sxc)).replaceWith(newStuff);
+        // reset the cache, so the sxc-object is refreshed
+        sxc.recreate(true);
+    }
+    catch (e) {
+        console.log('Error while rendering template:', e);
+    }
+}
+/**
+ * Show a message where the content of a module should be - usually as placeholder till something else happens
+ * @param {object} sxc
+ * @param {string} newContent
+ * @returns {} - nothing
+ */
+function showMessage(sxc, newContent) {
+    $(api_1.getTag(sxc)).html(newContent);
+}
+exports.showMessage = showMessage;
+/**
+ * ajax-call, then replace
+ * @param sxc
+ * @param alternateTemplateId
+ * @param justPreview
+ */
+function ajaxLoad(sxc, alternateTemplateId, justPreview) {
+    return web_api_promises_1.getPreviewWithTemplate(sxc, alternateTemplateId)
+        .then(function (result) { return replaceCb(sxc, result, justPreview); })
+        .then(start_1.reset); // reset quick-edit, because the config could have changed
+}
+exports.ajaxLoad = ajaxLoad;
+/**
+ * this one assumes a replace / change has already happened, but now must be finalized...
+ * @param sxc
+ * @param forceAjax
+ * @param preview
+ */
+function reloadAndReInitialize(sxc, forceAjax, preview) {
+    // if ajax is not supported, we must reload the whole page
+    if (!forceAjax && !sxc.manage._reloadWithAjax)
+        return window.location.reload();
+    // ReSharper disable once DoubleNegationOfBoolean
+    return ajaxLoad(sxc, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
+        .then(function () {
+        // tell Evoq that page has changed if it has changed (Ajax call)
+        if (window.dnn_tabVersioningEnabled)
+            try {
+                window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
+            }
+            catch (e) {
+                // sink
+            }
+        // maybe check if already publish
+        // compare to HTML module
+        // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
+        // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
+        // must check for side-effects, which would need the manager to re-build the configuration
+        quick_dialog_1.hide();
+    });
+}
+exports.reloadAndReInitialize = reloadAndReInitialize;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var main_content_block_1 = __webpack_require__(18);
 var render_1 = __webpack_require__(7);
 var templates_1 = __webpack_require__(10);
 var api_1 = __webpack_require__(1);
@@ -542,155 +665,6 @@ function watchForResize(keepWatching) {
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
-var quick_dialog_1 = __webpack_require__(6);
-var start_1 = __webpack_require__(26);
-var toolbar_feature_1 = __webpack_require__(4);
-var main_content_block_1 = __webpack_require__(25);
-var web_api_promises_1 = __webpack_require__(28);
-/*
- * this is the content block manager in the browser
- *
- * A Content Block is a stand alone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
- */
-/**
- * ajax update/replace the content of the content-block
- * optionally also initialize the toolbar (if not just preview)
- * @param {Object<>} sxc
- * @param {string} newContent
- * @param {boolean} justPreview
- * @returns {}
- */
-function replaceCb(sxc, newContent, justPreview) {
-    try {
-        var newStuff = $(newContent);
-        // Must disable toolbar before we attach to DOM
-        if (justPreview)
-            toolbar_feature_1.disable(newStuff);
-        $(api_1.getTag(sxc)).replaceWith(newStuff);
-        // reset the cache, so the sxc-object is refreshed
-        sxc.recreate(true);
-    }
-    catch (e) {
-        console.log('Error while rendering template:', e);
-    }
-}
-/**
- * Show a message where the content of a module should be - usually as placeholder till something else happens
- * @param {object} sxc
- * @param {string} newContent
- * @returns {} - nothing
- */
-function showMessage(sxc, newContent) {
-    $(api_1.getTag(sxc)).html(newContent);
-}
-exports.showMessage = showMessage;
-/**
- * ajax-call, then replace
- * @param sxc
- * @param alternateTemplateId
- * @param justPreview
- */
-function ajaxLoad(sxc, alternateTemplateId, justPreview) {
-    return web_api_promises_1.getPreviewWithTemplate(sxc, alternateTemplateId)
-        .then(function (result) { return replaceCb(sxc, result, justPreview); })
-        .then(start_1.reset); // reset quick-edit, because the config could have changed
-}
-exports.ajaxLoad = ajaxLoad;
-/**
- * this one assumes a replace / change has already happened, but now must be finalized...
- * @param sxc
- * @param forceAjax
- * @param preview
- */
-function reloadAndReInitialize(sxc, forceAjax, preview) {
-    // if ajax is not supported, we must reload the whole page
-    if (!forceAjax && !sxc.manage._reloadWithAjax)
-        return window.location.reload();
-    // ReSharper disable once DoubleNegationOfBoolean
-    return ajaxLoad(sxc, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
-        .then(function () {
-        // tell Evoq that page has changed if it has changed (Ajax call)
-        if (window.dnn_tabVersioningEnabled)
-            try {
-                window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
-            }
-            catch (e) {
-                // sink
-            }
-        // maybe check if already publish
-        // compare to HTML module
-        // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
-        // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
-        // must check for side-effects, which would need the manager to re-build the configuration
-        quick_dialog_1.hide();
-    });
-}
-exports.reloadAndReInitialize = reloadAndReInitialize;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * does some clean-up work on a button-definition object
- * because the target item could be specified directly, or in a complex internal object called entity
- * @param actDef
- */
-function flattenActionDefinition(actDef) {
-    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
-        return;
-    var editInfo = actDef.entity._2sxcEditInformation;
-    actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-    if (editInfo.entityId !== undefined)
-        actDef.entityId = editInfo.entityId;
-    if (editInfo.sortOrder !== undefined)
-        actDef.sortOrder = editInfo.sortOrder;
-    delete actDef.entity; // clean up edit-info
-}
-// generate the html for a button
-// Expects: instance sxc, action-definition, + group-index in which the button is shown
-function generateButtonHtml(sxc, actDef, groupIndex) {
-    // if the button belongs to a content-item, move the specs up to the item into the settings-object
-    flattenActionDefinition(actDef);
-    // retrieve configuration for this button
-    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : '');
-    var classesList = (actDef.classes || '').split(',');
-    var box = $('<div/>');
-    var symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
-    var onclick = actDef.disabled ?
-        '' :
-        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
-    for (var c = 0; c < classesList.length; c++)
-        showClasses += ' ' + classesList[c];
-    var button = $('<a />', {
-        'class': 'sc-' + actDef.action + ' ' + showClasses +
-            (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
-        'onclick': onclick,
-        'data-i18n': '[title]' + actDef.title
-    });
-    button.html(box.html(symbol));
-    return button[0].outerHTML;
-}
-exports.generateButtonHtml = generateButtonHtml;
-
-
-/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -747,10 +721,10 @@ exports.generateButtonHtml = generateButtonHtml;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var quick_dialog_1 = __webpack_require__(6);
+var quick_dialog_1 = __webpack_require__(8);
 var toolbar_feature_1 = __webpack_require__(4);
 var render_1 = __webpack_require__(7);
-var web_api_promises_1 = __webpack_require__(28);
+var web_api_promises_1 = __webpack_require__(19);
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
@@ -825,21 +799,47 @@ exports.updateTemplate = updateTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = __webpack_require__(29);
-function commandInitializeInstanceCommands(editContext) {
-    var cg = editContext.ContentGroup;
-    return create_1.create({
-        canDesign: editContext.User.CanDesign,
-        templateId: cg.TemplateId,
-        contentTypeId: cg.ContentTypeName,
-        isContent: cg.IsContent,
-        queryId: cg.QueryId,
-        appResourcesId: cg.AppResourcesId,
-        appSettingsId: cg.AppSettingsId,
-        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed,
-    });
+/**
+ * does some clean-up work on a button-definition object
+ * because the target item could be specified directly, or in a complex internal object called entity
+ * @param actDef
+ */
+function flattenActionDefinition(actDef) {
+    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
+        return;
+    var editInfo = actDef.entity._2sxcEditInformation;
+    actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
+    if (editInfo.entityId !== undefined)
+        actDef.entityId = editInfo.entityId;
+    if (editInfo.sortOrder !== undefined)
+        actDef.sortOrder = editInfo.sortOrder;
+    delete actDef.entity; // clean up edit-info
 }
-exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
+// generate the html for a button
+// Expects: instance sxc, action-definition, + group-index in which the button is shown
+function generateButtonHtml(sxc, actDef, groupIndex) {
+    // if the button belongs to a content-item, move the specs up to the item into the settings-object
+    flattenActionDefinition(actDef);
+    // retrieve configuration for this button
+    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : '');
+    var classesList = (actDef.classes || '').split(',');
+    var box = $('<div/>');
+    var symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
+    var onclick = actDef.disabled ?
+        '' :
+        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
+    for (var c = 0; c < classesList.length; c++)
+        showClasses += ' ' + classesList[c];
+    var button = $('<a />', {
+        'class': 'sc-' + actDef.action + ' ' + showClasses +
+            (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
+        'onclick': onclick,
+        'data-i18n': '[title]' + actDef.title
+    });
+    button.html(box.html(symbol));
+    return button[0].outerHTML;
+}
+exports.generateButtonHtml = generateButtonHtml;
 
 
 /***/ }),
@@ -1201,10 +1201,10 @@ exports.isDisabled = isDisabled;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(14);
-var generate_button_html_1 = __webpack_require__(8);
+var generate_button_html_1 = __webpack_require__(9);
 var generate_toolbar_html_1 = __webpack_require__(16);
-var standard_buttons_1 = __webpack_require__(17);
-var toolbar_template_1 = __webpack_require__(18);
+var standard_buttons_1 = __webpack_require__(22);
+var toolbar_template_1 = __webpack_require__(23);
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
@@ -1236,9 +1236,11 @@ exports._toolbarManager = new ToolbarManager();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var generate_button_html_1 = __webpack_require__(8);
-var buttonHelpers = __webpack_require__(41);
-var standard_buttons_1 = __webpack_require__(17);
+var command_initialize_instance_commands_1 = __webpack_require__(6);
+var generate_button_html_1 = __webpack_require__(9);
+var buttonHelpers = __webpack_require__(46);
+var standard_buttons_1 = __webpack_require__(22);
+var api_1 = __webpack_require__(1);
 function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     // console.log("TV#1: ", sxc, tbConfig, moreSettings);
     // if it has an action or is an array, keep that. Otherwise get standard buttons
@@ -1247,7 +1249,9 @@ function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
         btnList = standard_buttons_1.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
     // whatever we had, if more settings were provided, override with these...
-    var tlbDef = buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
+    var editContext = api_1.getEditContext(sxc);
+    var commands = command_initialize_instance_commands_1.commandInitializeInstanceCommands(editContext);
+    var tlbDef = buttonHelpers.buildFullDefinition(btnList, /*sxc.manage._commands.*/ commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
     var btnGroups = tlbDef.groups;
     var behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
     // todo: these settings assume it's not in an array...
@@ -1276,746 +1280,10 @@ exports.generateToolbarHtml = generateToolbarHtml;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_template_1 = __webpack_require__(18);
-/**
- * the toolbar manager is an internal helper
- * taking care of toolbars, buttons etc.
- * @param canDesign
- * @param sharedParameters
- */
-function standardButtons(canDesign, sharedParameters) {
-    // create a deep-copy of the original object
-    var btns = $.extend(true, {}, toolbar_template_1.toolbarTemplate);
-    btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
-    if (!canDesign)
-        btns.groups.splice(2, 1); // remove this menu
-    return btns;
-}
-exports.standardButtons = standardButtons;
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-// the default / initial buttons in a standard toolbar
-// ToDo: refactor to avoid side-effects
-exports.toolbarTemplate = {
-    groups: [
-        // ToDo: remove dead code
-        //{
-        //    name: "test",
-        //    buttons: [
-        //        {
-        //            action: "edit",
-        //            icon: "icon-sxc-code",
-        //            title: "just quick edit!"
-        //        },
-        //        "inexisting-action",
-        //        "edit",
-        //        {
-        //            action: "publish",
-        //            showCondition: true,
-        //            title: "forced publish button"
-        //        },
-        //        {
-        //            command: {
-        //                action: "custom",
-        //                customCode: "alert('custom button!')"
-        //            }
-        //        },
-        //        "more"
-        //    ]
-        //},
-        {
-            name: 'default',
-            buttons: 'edit,new,metadata,publish,layout'
-        }, {
-            name: 'list',
-            buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history'
-        }, {
-            name: 'data',
-            buttons: 'delete'
-        }, {
-            name: 'instance',
-            buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
-            defaults: {
-                classes: 'group-pro'
-            }
-        }, {
-            name: 'app',
-            buttons: 'app,app-settings,app-resources,zone',
-            defaults: {
-                classes: 'group-pro'
-            }
-        }
-    ],
-    defaults: {},
-    params: {},
-    settings: {
-        autoAddMore: 'right',
-    }
-};
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
-var sxc_1 = __webpack_require__(2);
-var toolbar_manager_1 = __webpack_require__(20);
-// quick debug - set to false if not needed for production
-var dbg = true;
-// default / fallback settings for toolbars when nothings is specified
-var settingsForEmptyToolbar = {
-    hover: 'left',
-    autoAddMore: 'left',
-};
-// generate an empty / fallback toolbar tag
-function generateFallbackToolbar() {
-    var settingsString = JSON.stringify(settingsForEmptyToolbar);
-    return $("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>");
-}
-// find current toolbars inside this wrapper-tag
-function getToolbarTags(parentTag) {
-    var allInner = $('.sc-menu[toolbar],.sc-menu[data-toolbar]', parentTag);
-    // return only those, which don't belong to a sub-item
-    var res = allInner.filter(function (i, e) { return $(e).closest('.sc-content-block')[0] === parentTag[0]; });
-    if (dbg)
-        console.log('found toolbars for parent', parentTag, res);
-    return res;
-}
-// create a process-toolbar command to generate toolbars inside a tag
-function buildToolbars(parentTag, optionalId) {
-    parentTag = $(parentTag || '.DnnModule-' + optionalId);
-    // if something says the toolbars are disabled, then skip
-    if (parentTag.attr(toolbar_manager_1._toolbarManager.cDisableAttrName))
-        return;
-    // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
-    // don't add, if it is has un-initialized content
-    // 2017-09-08 2dm disabled this, I believe the bootstrapping should never call this any more, if sc-uninitialized. if ok, then delete this in a few days
-    // let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
-    var toolbars = getToolbarTags(parentTag);
-    // no toolbars found, must help a bit because otherwise editing is hard
-    if (toolbars.length === 0) {
-        if (dbg)
-            console.log("didn't find toolbar, so will auto-create", parentTag);
-        var outsideCb = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
-        var contentTag = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
-        contentTag.addClass($2sxc.c.cls.scElm); // "sc-element");
-        contentTag.prepend(generateFallbackToolbar());
-        toolbars = getToolbarTags(parentTag);
-    }
-    toolbars.each(function initToolbar() {
-        var tag = $(this);
-        var data = null;
-        var toolbarConfig;
-        var toolbarSettings;
-        var at = $2sxc.c.attr;
-        try {
-            data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
-            toolbarConfig = JSON.parse(data);
-            data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
-            toolbarSettings = JSON.parse(data);
-            if (toolbarConfig === {} && toolbarSettings === {})
-                toolbarSettings = settingsForEmptyToolbar;
-        }
-        catch (err) {
-            console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
-            return;
-        }
-        try {
-            var sxc = sxc_1.getSxcInstance(tag);
-            tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
-        }
-        catch (err2) {
-            // note: errors happen a lot on custom toolbars, make sure the others are still rendered
-            console.error('error creating toolbar - will skip this one', err2);
-        }
-    });
-}
-exports.buildToolbars = buildToolbars;
-function disable(tag) {
-    tag = $(tag);
-    tag.attr(toolbar_manager_1._toolbarManager.cDisableAttrName, true);
-}
-exports.disable = disable;
-function isDisabled(sxc) {
-    var tag = $(api_1.getTag(sxc));
-    return !!tag.attr(toolbar_manager_1._toolbarManager.cDisableAttrName);
-}
-exports.isDisabled = isDisabled;
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var build_toolbars_1 = __webpack_require__(19);
-var generate_button_html_1 = __webpack_require__(9);
-var generate_toolbar_html_1 = __webpack_require__(21);
-var standard_buttons_1 = __webpack_require__(22);
-var toolbar_template_1 = __webpack_require__(23);
-/**
- * Toolbar manager for the whole page - basically a set of APIs
- * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
- */
-var ToolbarManager = /** @class */ (function () {
-    function ToolbarManager() {
-        // internal constants
-        this.cDisableAttrName = 'data-disable-toolbar';
-        // build toolbars
-        this.buildToolbars = build_toolbars_1.buildToolbars;
-        this.disable = build_toolbars_1.disable;
-        this.isDisabled = build_toolbars_1.isDisabled;
-        // generate button html
-        this.generateButtonHtml = generate_button_html_1.generateButtonHtml;
-        this.generateToolbarHtml = generate_toolbar_html_1.generateToolbarHtml;
-        this.standardButtons = standard_buttons_1.standardButtons;
-        this.toolbarTemplate = toolbar_template_1.toolbarTemplate;
-    }
-    return ToolbarManager;
-}());
-exports.ToolbarManager = ToolbarManager;
-exports._toolbarManager = new ToolbarManager();
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var generate_button_html_1 = __webpack_require__(9);
-var buttonHelpers = __webpack_require__(42);
-var standard_buttons_1 = __webpack_require__(22);
-function generateToolbarHtml(sxc, tbConfig, moreSettings) {
-    console.log("TV#1: ", sxc, tbConfig, moreSettings);
-    // if it has an action or is an array, keep that. Otherwise get standard buttons
-    tbConfig = tbConfig || {}; // if null/undefined, use empty object
-    var btnList = tbConfig;
-    if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
-        btnList = standard_buttons_1.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
-    // whatever we had, if more settings were provided, override with these...
-    var tlbDef = buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
-    var btnGroups = tlbDef.groups;
-    var behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
-    // todo: these settings assume it's not in an array...
-    var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
-        ((tbConfig.sortOrder === -1) ? ' listContent' : '') +
-        (tlbDef.settings.classes ? ' ' + tlbDef.settings.classes : '');
-    var toolbar = $('<ul />', {
-        'class': tbClasses,
-        'onclick': 'let e = arguments[0] || window.event; e.stopPropagation();'
-    });
-    for (var i = 0; i < btnGroups.length; i++) {
-        var btns = btnGroups[i].buttons;
-        for (var h = 0; h < btns.length; h++)
-            toolbar.append($('<li />').append($(generate_button_html_1.generateButtonHtml(sxc, btns[h], i))));
-    }
-    toolbar.attr('group-count', btnGroups.length);
-    return toolbar[0].outerHTML;
-}
-exports.generateToolbarHtml = generateToolbarHtml;
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_template_1 = __webpack_require__(23);
-/**
- * the toolbar manager is an internal helper
- * taking care of toolbars, buttons etc.
- * @param canDesign
- * @param sharedParameters
- */
-function standardButtons(canDesign, sharedParameters) {
-    // create a deep-copy of the original object
-    var btns = $.extend(true, {}, toolbar_template_1.toolbarTemplate);
-    btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
-    if (!canDesign)
-        btns.groups.splice(2, 1); // remove this menu
-    return btns;
-}
-exports.standardButtons = standardButtons;
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-// the default / initial buttons in a standard toolbar
-// ToDo: refactor to avoid side-effects
-exports.toolbarTemplate = {
-    groups: [
-        // ToDo: remove dead code
-        //{
-        //    name: "test",
-        //    buttons: [
-        //        {
-        //            action: "edit",
-        //            icon: "icon-sxc-code",
-        //            title: "just quick edit!"
-        //        },
-        //        "inexisting-action",
-        //        "edit",
-        //        {
-        //            action: "publish",
-        //            showCondition: true,
-        //            title: "forced publish button"
-        //        },
-        //        {
-        //            command: {
-        //                action: "custom",
-        //                customCode: "alert('custom button!')"
-        //            }
-        //        },
-        //        "more"
-        //    ]
-        //},
-        {
-            name: 'default',
-            buttons: 'edit,new,metadata,publish,layout'
-        }, {
-            name: 'list',
-            buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history'
-        }, {
-            name: 'data',
-            buttons: 'delete'
-        }, {
-            name: 'instance',
-            buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
-            defaults: {
-                classes: 'group-pro'
-            }
-        }, {
-            name: 'app',
-            buttons: 'app,app-settings,app-resources,zone',
-            defaults: {
-                classes: 'group-pro'
-            }
-        }
-    ],
-    defaults: {},
-    params: {},
-    settings: {
-        autoAddMore: 'right',
-    }
-};
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var command_1 = __webpack_require__(43);
-/**
- * assemble an object which will store the configuration and execute it
- * @param sxc
- * @param editContext
- * @param specialSettings
- */
-function commandCreate(sxc, editContext, specialSettings) {
-    var settings = Object.assign(sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-    var ngDialogUrl = editContext.Environment.SxcRootUrl +
-        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-        editContext.Environment.SxcVersion;
-    var isDebug = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-    var cmd = new command_1.Command(sxc, settings, ngDialogUrl, isDebug);
-    return cmd;
-}
-exports.commandCreate = commandCreate;
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(10);
-/*
- * this is a content block in the browser
- *
- * A Content Block is a stand alone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
- *
- * Maybe ToDo 2cb:
- * 2sxc should have one entry point (interface to browser context) only.
- * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
- *
- */
-var MainContentBlock = /** @class */ (function () {
-    function MainContentBlock() {
-        // constants
-        this.cViewWithoutContent = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-        this.cUseExistingTemplate = -1;
-        this.prepareToAddContent = templates_1.prepareToAddContent;
-        this.updateTemplateFromDia = templates_1.updateTemplateFromDia;
-    }
-    return MainContentBlock;
-}());
-exports.MainContentBlock = MainContentBlock;
-/**
- * The main content-block manager
- */
-// ReSharper disable once InconsistentNaming
-exports._contentBlock = new MainContentBlock();
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var config_1 = __webpack_require__(45);
-var positioning_1 = __webpack_require__(27);
-var quick_e_1 = __webpack_require__(0);
-var selectors_instance_1 = __webpack_require__(3);
-function enable() {
-    // build all toolbar html-elements
-    quick_e_1.prepareToolbarInDom();
-    // Cache the panes (because panes can't change dynamically)
-    initPanes();
-}
-/**
- * start watching for mouse-move
- */
-function watchMouse() {
-    var refreshTimeout = null;
-    $('body').on('mousemove', function (e) {
-        if (refreshTimeout === null)
-            refreshTimeout = window.setTimeout(function () {
-                requestAnimationFrame(function () {
-                    positioning_1.refresh(e);
-                    refreshTimeout = null;
-                });
-            }, 20);
-    });
-}
-function start() {
-    try {
-        config_1._readPageConfig();
-        if (quick_e_1.$quickE.config.enable) {
-            // initialize first body-offset
-            quick_e_1.$quickE.bodyOffset = positioning_1.getBodyPosition();
-            enable();
-            toggleParts();
-            watchMouse();
-        }
-    }
-    catch (e) {
-        console.error("couldn't start quick-edit", e);
-    }
-}
-exports.start = start;
-/**
- * cache the panes which can contain modules
- */
-function initPanes() {
-    quick_e_1.$quickE.cachedPanes = $(selectors_instance_1.selectors.mod.listSelector);
-    quick_e_1.$quickE.cachedPanes.addClass('sc-cb-pane-glow');
-}
-/**
- * enable/disable module/content-blocks as configured
- */
-function toggleParts() {
-    //// content blocks actions
-    // quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
-    //// module actions
-    // quickE.modActions.hide(quickE.config.modules.enable);
-}
-/**
- * reset the quick-edit
- * for example after ajax-loading a content-block, which may cause changed configurations
- */
-function reset() {
-    config_1._readPageConfig();
-    toggleParts();
-}
-exports.reset = reset;
-
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var coords_1 = __webpack_require__(46);
-var quick_e_1 = __webpack_require__(0);
-var selectors_instance_1 = __webpack_require__(3);
-/**
- * Module with everything related to positioning the quick-edit in-page editing
- */
-/**
- * Point is used as return type to store X,Y coordinates
- */
-/**
- * Prepare offset calculation based on body positioning
- * @returns Point
- */
-function getBodyPosition() {
-    var bodyPos = quick_e_1.$quickE.body.css('position');
-    return bodyPos === 'relative' || bodyPos === 'absolute'
-        ? new coords_1.Coords(quick_e_1.$quickE.body.offset().left, quick_e_1.$quickE.body.offset().top)
-        : new coords_1.Coords(0, 0);
-}
-exports.getBodyPosition = getBodyPosition;
-/**
- * Refresh content block and modules elements
- */
-function refreshDomObjects() {
-    quick_e_1.$quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
-    //// Cache the panes (because panes can't change dynamically)
-    // if (!quickE.cachedPanes)
-    //    quickE.cachedPanes = $(selectors.mod.listSelector);
-    if (quick_e_1.$quickE.config.innerBlocks.enable) {
-        // get all content-block lists which are empty, or which allow multiple child-items
-        var lists = $(selectors_instance_1.selectors.cb.listSelector).filter(":not(." + selectors_instance_1.selectors.cb.singleItem + "), :empty");
-        quick_e_1.$quickE.contentBlocks = lists // $(selectors.cb.listSelector)
-            .find(selectors_instance_1.selectors.cb.selector)
-            .add(lists); // selectors.cb.listSelector);
-    }
-    if (quick_e_1.$quickE.config.modules.enable)
-        quick_e_1.$quickE.modules = quick_e_1.$quickE.cachedPanes
-            .find(selectors_instance_1.selectors.mod.selector)
-            .add(quick_e_1.$quickE.cachedPanes);
-}
-/**
- * Last time when contentblock and modules are refreshed.
- * Helps to skip unnecessary calls to refresh(e).
- */
-(function (refreshDomObjects) {
-})(refreshDomObjects || (refreshDomObjects = {}));
-/**
- * position, align and show a menu linked to another item
- */
-function positionAndAlign(element, coords) {
-    return element.css({
-        left: coords.x - quick_e_1.$quickE.bodyOffset.x,
-        top: coords.yh - quick_e_1.$quickE.bodyOffset.y,
-        width: coords.element.width(),
-    }).show();
-}
-exports.positionAndAlign = positionAndAlign;
-/**
- * Refresh positioning / visibility of the quick-insert bar
- * @param e
- */
-function refresh(e) {
-    var highlightClass = 'sc-cb-highlight-for-insert';
-    var newDate = new Date();
-    if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
-        // console.log('refreshed contentblock and modules');
-        refreshDomObjects.lastCall = newDate;
-        refreshDomObjects();
-    }
-    if (quick_e_1.$quickE.config.innerBlocks.enable && quick_e_1.$quickE.contentBlocks) {
-        quick_e_1.$quickE.nearestCb = findNearest(quick_e_1.$quickE.contentBlocks, new coords_1.Coords(e.clientX, e.clientY));
-    }
-    if (quick_e_1.$quickE.config.modules.enable && quick_e_1.$quickE.modules) {
-        quick_e_1.$quickE.nearestMod = findNearest(quick_e_1.$quickE.modules, new coords_1.Coords(e.clientX, e.clientY));
-    }
-    quick_e_1.$quickE.modActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestMod === null);
-    quick_e_1.$quickE.cbActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestCb === null);
-    var oldParent = quick_e_1.$quickE.main.parentContainer;
-    if (quick_e_1.$quickE.nearestCb !== null || quick_e_1.$quickE.nearestMod !== null) {
-        var alignTo = quick_e_1.$quickE.nearestCb || quick_e_1.$quickE.nearestMod;
-        // find parent pane to highlight
-        var parentPane = $(alignTo.element).closest(selectors_instance_1.selectors.mod.listSelector);
-        var parentCbList = $(alignTo.element).closest(selectors_instance_1.selectors.cb.listSelector);
-        var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
-        // put part of the pane-name into the button-labels
-        if (parentPane.length > 0) {
-            var paneName_1 = parentPane.attr('id') || '';
-            if (paneName_1.length > 4)
-                paneName_1 = paneName_1.substr(4);
-            quick_e_1.$quickE.modActions.filter('[titleTemplate]').each(function () {
-                var t = $(this);
-                t.attr('title', t.attr('titleTemplate').replace('{0}', paneName_1));
-            });
-        }
-        positionAndAlign(quick_e_1.$quickE.main, alignTo);
-        // Keep current block as current on menu
-        quick_e_1.$quickE.main.actionsForCb = quick_e_1.$quickE.nearestCb ? quick_e_1.$quickE.nearestCb.element : null;
-        quick_e_1.$quickE.main.actionsForModule = quick_e_1.$quickE.nearestMod ? quick_e_1.$quickE.nearestMod.element : null;
-        quick_e_1.$quickE.main.parentContainer = parentContainer;
-        $(parentContainer).addClass(highlightClass);
-    }
-    else {
-        quick_e_1.$quickE.main.parentContainer = null;
-        quick_e_1.$quickE.main.hide();
-    }
-    // if previously a parent-pane was highlighted, un-highlight it now
-    if (oldParent && oldParent !== quick_e_1.$quickE.main.parentContainer)
-        $(oldParent).removeClass(highlightClass);
-}
-exports.refresh = refresh;
-/**
- * Return the nearest element to the mouse cursor from elements (jQuery elements)
- * @param elements
- * @param position
- */
-function findNearest(elements, position) {
-    var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
-    var nearestItem = null;
-    var nearestDistance = maxDistance;
-    var posX = position.x + quick_e_1.$quickE.win.scrollLeft();
-    var posY = position.y + quick_e_1.$quickE.win.scrollTop();
-    // Find nearest element
-    elements.each(function () {
-        var e = getCoordinates($(this));
-        // First check x coordinates - must be within container
-        if (posX < e.x || posX > e.x + e.w)
-            return;
-        // Check if y coordinates are within boundaries
-        var distance = Math.abs(posY - e.yh);
-        if (distance < maxDistance && distance < nearestDistance) {
-            nearestItem = e;
-            nearestDistance = distance;
-        }
-    });
-    return nearestItem;
-}
-exports.findNearest = findNearest;
-function getCoordinates(element) {
-    // sometimes element.length === 0 and element.offset() = undefined
-    // console.log("element.offset():", element.offset());
-    // console.log("element.length:", element.length);
-    var coords = {
-        element: element,
-        x: element.offset().left,
-        w: element.width(),
-        y: element.offset().top,
-        // For content-block ITEMS, the menu must be visible at the end
-        // For content-block-LISTS, the menu must be at top
-        yh: element.offset().top + (element.is(selectors_instance_1.selectors.eitherCbOrMod) ? element.height() : 0),
-    };
-    return coords;
-}
-exports.getCoordinates = getCoordinates;
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/*
- * this is a content block in the browser
- *
- * A Content Block is a stand alone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
- */
-//#region functions working only with what they are given
-// 2017-08-27 2dm: I'm working on cleaning up this code, and an important part
-// is to have code which doesn't use old state (like object-properties initialized earlier)
-// extracting these methods is part of the work
-/**
- * TODO - unclear if still in use
- * @param {object} sxc
- * @param {boolean} state
- * @returns {promise}
- */
-// 2017-09-02 2dm removed, deprecated, it's not stored on the server any more
-// cbm.setTemplateChooserState = function(sxc, state) {
-//    return sxc.webApi.get({
-//        url: "view/module/SetTemplateChooserState",
-//        params: { state: state }
-//    });
-// };
-/**
- * Save the template configuration for this instance
- * @param {object} sxc
- * @param {int} templateId
- * @param {boolean} [forceCreateContentGroup]
- * @returns {promise}
- */
-function saveTemplate(sxc, templateId, forceCreateContentGroup) {
-    var params = {
-        templateId: templateId,
-        forceCreateContentGroup: forceCreateContentGroup,
-        newTemplateChooserState: false,
-    };
-    return sxc.webApi.get({
-        url: 'view/module/savetemplateid',
-        params: params,
-    });
-}
-exports.saveTemplate = saveTemplate;
-/**
- * Retrieve the preview from the web-api
- * @param {object} sxc
- * @param {int} templateId
- * @returns {promise} promise with the html in the result
- */
-function getPreviewWithTemplate(sxc, templateId) {
-    var ec = sxc.manage._editContext;
-    templateId = templateId || -1; // fallback, meaning use saved ID
-    var params = {
-        templateId: templateId,
-        lang: ec.Language.Current,
-        cbisentity: ec.ContentBlock.IsEntity,
-        cbid: ec.ContentBlock.Id,
-        originalparameters: JSON.stringify(ec.Environment.parameters),
-    };
-    return sxc.webApi.get({
-        url: 'view/module/rendertemplate',
-        params: params,
-        dataType: 'html',
-    });
-}
-exports.getPreviewWithTemplate = getPreviewWithTemplate;
-//#endregion
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var actions_1 = __webpack_require__(47);
-var item_commands_1 = __webpack_require__(48);
+var actions_1 = __webpack_require__(41);
+var item_commands_1 = __webpack_require__(44);
 var _2sxc_translate_1 = __webpack_require__(5);
-var make_def_1 = __webpack_require__(49);
+var make_def_1 = __webpack_require__(45);
 /*
  * Actions of 2sxc - mostly used in toolbars
  *
@@ -2321,6 +1589,745 @@ exports.create = create;
 
 
 /***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var templates_1 = __webpack_require__(10);
+/*
+ * this is a content block in the browser
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ *
+ * Maybe ToDo 2cb:
+ * 2sxc should have one entry point (interface to browser context) only.
+ * Otherwise, we cannot know, when which part will be executed and debugging becomes very difficult.
+ *
+ */
+var MainContentBlock = /** @class */ (function () {
+    function MainContentBlock() {
+        // constants
+        this.cViewWithoutContent = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+        this.cUseExistingTemplate = -1;
+        this.prepareToAddContent = templates_1.prepareToAddContent;
+        this.updateTemplateFromDia = templates_1.updateTemplateFromDia;
+    }
+    return MainContentBlock;
+}());
+exports.MainContentBlock = MainContentBlock;
+/**
+ * The main content-block manager
+ */
+// ReSharper disable once InconsistentNaming
+exports._contentBlock = new MainContentBlock();
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ * this is a content block in the browser
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ */
+//#region functions working only with what they are given
+// 2017-08-27 2dm: I'm working on cleaning up this code, and an important part
+// is to have code which doesn't use old state (like object-properties initialized earlier)
+// extracting these methods is part of the work
+/**
+ * TODO - unclear if still in use
+ * @param {object} sxc
+ * @param {boolean} state
+ * @returns {promise}
+ */
+// 2017-09-02 2dm removed, deprecated, it's not stored on the server any more
+// cbm.setTemplateChooserState = function(sxc, state) {
+//    return sxc.webApi.get({
+//        url: "view/module/SetTemplateChooserState",
+//        params: { state: state }
+//    });
+// };
+/**
+ * Save the template configuration for this instance
+ * @param {object} sxc
+ * @param {int} templateId
+ * @param {boolean} [forceCreateContentGroup]
+ * @returns {promise}
+ */
+function saveTemplate(sxc, templateId, forceCreateContentGroup) {
+    var params = {
+        templateId: templateId,
+        forceCreateContentGroup: forceCreateContentGroup,
+        newTemplateChooserState: false,
+    };
+    return sxc.webApi.get({
+        url: 'view/module/savetemplateid',
+        params: params,
+    });
+}
+exports.saveTemplate = saveTemplate;
+/**
+ * Retrieve the preview from the web-api
+ * @param {object} sxc
+ * @param {int} templateId
+ * @returns {promise} promise with the html in the result
+ */
+function getPreviewWithTemplate(sxc, templateId) {
+    var ec = sxc.manage._editContext;
+    templateId = templateId || -1; // fallback, meaning use saved ID
+    var params = {
+        templateId: templateId,
+        lang: ec.Language.Current,
+        cbisentity: ec.ContentBlock.IsEntity,
+        cbid: ec.ContentBlock.Id,
+        originalparameters: JSON.stringify(ec.Environment.parameters),
+    };
+    return sxc.webApi.get({
+        url: 'view/module/rendertemplate',
+        params: params,
+        dataType: 'html',
+    });
+}
+exports.getPreviewWithTemplate = getPreviewWithTemplate;
+//#endregion
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var config_1 = __webpack_require__(42);
+var positioning_1 = __webpack_require__(21);
+var quick_e_1 = __webpack_require__(0);
+var selectors_instance_1 = __webpack_require__(3);
+function enable() {
+    // build all toolbar html-elements
+    quick_e_1.prepareToolbarInDom();
+    // Cache the panes (because panes can't change dynamically)
+    initPanes();
+}
+/**
+ * start watching for mouse-move
+ */
+function watchMouse() {
+    var refreshTimeout = null;
+    $('body').on('mousemove', function (e) {
+        if (refreshTimeout === null)
+            refreshTimeout = window.setTimeout(function () {
+                requestAnimationFrame(function () {
+                    positioning_1.refresh(e);
+                    refreshTimeout = null;
+                });
+            }, 20);
+    });
+}
+function start() {
+    try {
+        config_1._readPageConfig();
+        if (quick_e_1.$quickE.config.enable) {
+            // initialize first body-offset
+            quick_e_1.$quickE.bodyOffset = positioning_1.getBodyPosition();
+            enable();
+            toggleParts();
+            watchMouse();
+        }
+    }
+    catch (e) {
+        console.error("couldn't start quick-edit", e);
+    }
+}
+exports.start = start;
+/**
+ * cache the panes which can contain modules
+ */
+function initPanes() {
+    quick_e_1.$quickE.cachedPanes = $(selectors_instance_1.selectors.mod.listSelector);
+    quick_e_1.$quickE.cachedPanes.addClass('sc-cb-pane-glow');
+}
+/**
+ * enable/disable module/content-blocks as configured
+ */
+function toggleParts() {
+    //// content blocks actions
+    // quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
+    //// module actions
+    // quickE.modActions.hide(quickE.config.modules.enable);
+}
+/**
+ * reset the quick-edit
+ * for example after ajax-loading a content-block, which may cause changed configurations
+ */
+function reset() {
+    config_1._readPageConfig();
+    toggleParts();
+}
+exports.reset = reset;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var coords_1 = __webpack_require__(43);
+var quick_e_1 = __webpack_require__(0);
+var selectors_instance_1 = __webpack_require__(3);
+/**
+ * Module with everything related to positioning the quick-edit in-page editing
+ */
+/**
+ * Point is used as return type to store X,Y coordinates
+ */
+/**
+ * Prepare offset calculation based on body positioning
+ * @returns Point
+ */
+function getBodyPosition() {
+    var bodyPos = quick_e_1.$quickE.body.css('position');
+    return bodyPos === 'relative' || bodyPos === 'absolute'
+        ? new coords_1.Coords(quick_e_1.$quickE.body.offset().left, quick_e_1.$quickE.body.offset().top)
+        : new coords_1.Coords(0, 0);
+}
+exports.getBodyPosition = getBodyPosition;
+/**
+ * Refresh content block and modules elements
+ */
+function refreshDomObjects() {
+    quick_e_1.$quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
+    //// Cache the panes (because panes can't change dynamically)
+    // if (!quickE.cachedPanes)
+    //    quickE.cachedPanes = $(selectors.mod.listSelector);
+    if (quick_e_1.$quickE.config.innerBlocks.enable) {
+        // get all content-block lists which are empty, or which allow multiple child-items
+        var lists = $(selectors_instance_1.selectors.cb.listSelector).filter(":not(." + selectors_instance_1.selectors.cb.singleItem + "), :empty");
+        quick_e_1.$quickE.contentBlocks = lists // $(selectors.cb.listSelector)
+            .find(selectors_instance_1.selectors.cb.selector)
+            .add(lists); // selectors.cb.listSelector);
+    }
+    if (quick_e_1.$quickE.config.modules.enable)
+        quick_e_1.$quickE.modules = quick_e_1.$quickE.cachedPanes
+            .find(selectors_instance_1.selectors.mod.selector)
+            .add(quick_e_1.$quickE.cachedPanes);
+}
+/**
+ * Last time when contentblock and modules are refreshed.
+ * Helps to skip unnecessary calls to refresh(e).
+ */
+(function (refreshDomObjects) {
+})(refreshDomObjects || (refreshDomObjects = {}));
+/**
+ * position, align and show a menu linked to another item
+ */
+function positionAndAlign(element, coords) {
+    return element.css({
+        left: coords.x - quick_e_1.$quickE.bodyOffset.x,
+        top: coords.yh - quick_e_1.$quickE.bodyOffset.y,
+        width: coords.element.width(),
+    }).show();
+}
+exports.positionAndAlign = positionAndAlign;
+/**
+ * Refresh positioning / visibility of the quick-insert bar
+ * @param e
+ */
+function refresh(e) {
+    var highlightClass = 'sc-cb-highlight-for-insert';
+    var newDate = new Date();
+    if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
+        // console.log('refreshed contentblock and modules');
+        refreshDomObjects.lastCall = newDate;
+        refreshDomObjects();
+    }
+    if (quick_e_1.$quickE.config.innerBlocks.enable && quick_e_1.$quickE.contentBlocks) {
+        quick_e_1.$quickE.nearestCb = findNearest(quick_e_1.$quickE.contentBlocks, new coords_1.Coords(e.clientX, e.clientY));
+    }
+    if (quick_e_1.$quickE.config.modules.enable && quick_e_1.$quickE.modules) {
+        quick_e_1.$quickE.nearestMod = findNearest(quick_e_1.$quickE.modules, new coords_1.Coords(e.clientX, e.clientY));
+    }
+    quick_e_1.$quickE.modActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestMod === null);
+    quick_e_1.$quickE.cbActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestCb === null);
+    var oldParent = quick_e_1.$quickE.main.parentContainer;
+    if (quick_e_1.$quickE.nearestCb !== null || quick_e_1.$quickE.nearestMod !== null) {
+        var alignTo = quick_e_1.$quickE.nearestCb || quick_e_1.$quickE.nearestMod;
+        // find parent pane to highlight
+        var parentPane = $(alignTo.element).closest(selectors_instance_1.selectors.mod.listSelector);
+        var parentCbList = $(alignTo.element).closest(selectors_instance_1.selectors.cb.listSelector);
+        var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
+        // put part of the pane-name into the button-labels
+        if (parentPane.length > 0) {
+            var paneName_1 = parentPane.attr('id') || '';
+            if (paneName_1.length > 4)
+                paneName_1 = paneName_1.substr(4);
+            quick_e_1.$quickE.modActions.filter('[titleTemplate]').each(function () {
+                var t = $(this);
+                t.attr('title', t.attr('titleTemplate').replace('{0}', paneName_1));
+            });
+        }
+        positionAndAlign(quick_e_1.$quickE.main, alignTo);
+        // Keep current block as current on menu
+        quick_e_1.$quickE.main.actionsForCb = quick_e_1.$quickE.nearestCb ? quick_e_1.$quickE.nearestCb.element : null;
+        quick_e_1.$quickE.main.actionsForModule = quick_e_1.$quickE.nearestMod ? quick_e_1.$quickE.nearestMod.element : null;
+        quick_e_1.$quickE.main.parentContainer = parentContainer;
+        $(parentContainer).addClass(highlightClass);
+    }
+    else {
+        quick_e_1.$quickE.main.parentContainer = null;
+        quick_e_1.$quickE.main.hide();
+    }
+    // if previously a parent-pane was highlighted, un-highlight it now
+    if (oldParent && oldParent !== quick_e_1.$quickE.main.parentContainer)
+        $(oldParent).removeClass(highlightClass);
+}
+exports.refresh = refresh;
+/**
+ * Return the nearest element to the mouse cursor from elements (jQuery elements)
+ * @param elements
+ * @param position
+ */
+function findNearest(elements, position) {
+    var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
+    var nearestItem = null;
+    var nearestDistance = maxDistance;
+    var posX = position.x + quick_e_1.$quickE.win.scrollLeft();
+    var posY = position.y + quick_e_1.$quickE.win.scrollTop();
+    // Find nearest element
+    elements.each(function () {
+        var e = getCoordinates($(this));
+        // First check x coordinates - must be within container
+        if (posX < e.x || posX > e.x + e.w)
+            return;
+        // Check if y coordinates are within boundaries
+        var distance = Math.abs(posY - e.yh);
+        if (distance < maxDistance && distance < nearestDistance) {
+            nearestItem = e;
+            nearestDistance = distance;
+        }
+    });
+    return nearestItem;
+}
+exports.findNearest = findNearest;
+function getCoordinates(element) {
+    // sometimes element.length === 0 and element.offset() = undefined
+    // console.log("element.offset():", element.offset());
+    // console.log("element.length:", element.length);
+    var coords = {
+        element: element,
+        x: element.offset().left,
+        w: element.width(),
+        y: element.offset().top,
+        // For content-block ITEMS, the menu must be visible at the end
+        // For content-block-LISTS, the menu must be at top
+        yh: element.offset().top + (element.is(selectors_instance_1.selectors.eitherCbOrMod) ? element.height() : 0),
+    };
+    return coords;
+}
+exports.getCoordinates = getCoordinates;
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var toolbar_template_1 = __webpack_require__(23);
+/**
+ * the toolbar manager is an internal helper
+ * taking care of toolbars, buttons etc.
+ * @param canDesign
+ * @param sharedParameters
+ */
+function standardButtons(canDesign, sharedParameters) {
+    // create a deep-copy of the original object
+    var btns = $.extend(true, {}, toolbar_template_1.toolbarTemplate);
+    btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
+    if (!canDesign)
+        btns.groups.splice(2, 1); // remove this menu
+    return btns;
+}
+exports.standardButtons = standardButtons;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+// the default / initial buttons in a standard toolbar
+// ToDo: refactor to avoid side-effects
+exports.toolbarTemplate = {
+    groups: [
+        // ToDo: remove dead code
+        //{
+        //    name: "test",
+        //    buttons: [
+        //        {
+        //            action: "edit",
+        //            icon: "icon-sxc-code",
+        //            title: "just quick edit!"
+        //        },
+        //        "inexisting-action",
+        //        "edit",
+        //        {
+        //            action: "publish",
+        //            showCondition: true,
+        //            title: "forced publish button"
+        //        },
+        //        {
+        //            command: {
+        //                action: "custom",
+        //                customCode: "alert('custom button!')"
+        //            }
+        //        },
+        //        "more"
+        //    ]
+        //},
+        {
+            name: 'default',
+            buttons: 'edit,new,metadata,publish,layout'
+        }, {
+            name: 'list',
+            buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history'
+        }, {
+            name: 'data',
+            buttons: 'delete'
+        }, {
+            name: 'instance',
+            buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
+            defaults: {
+                classes: 'group-pro'
+            }
+        }, {
+            name: 'app',
+            buttons: 'app,app-settings,app-resources,zone',
+            defaults: {
+                classes: 'group-pro'
+            }
+        }
+    ],
+    defaults: {},
+    params: {},
+    settings: {
+        autoAddMore: 'right',
+    }
+};
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(1);
+var sxc_1 = __webpack_require__(2);
+var toolbar_manager_1 = __webpack_require__(25);
+// quick debug - set to false if not needed for production
+var dbg = true;
+// default / fallback settings for toolbars when nothings is specified
+var settingsForEmptyToolbar = {
+    hover: 'left',
+    autoAddMore: 'left',
+};
+// generate an empty / fallback toolbar tag
+function generateFallbackToolbar() {
+    var settingsString = JSON.stringify(settingsForEmptyToolbar);
+    return $("<ul class='sc-menu' toolbar='' settings='" + settingsString + "'/>");
+}
+// find current toolbars inside this wrapper-tag
+function getToolbarTags(parentTag) {
+    var allInner = $('.sc-menu[toolbar],.sc-menu[data-toolbar]', parentTag);
+    // return only those, which don't belong to a sub-item
+    var res = allInner.filter(function (i, e) { return $(e).closest('.sc-content-block')[0] === parentTag[0]; });
+    if (dbg)
+        console.log('found toolbars for parent', parentTag, res);
+    return res;
+}
+// create a process-toolbar command to generate toolbars inside a tag
+function buildToolbars(parentTag, optionalId) {
+    parentTag = $(parentTag || '.DnnModule-' + optionalId);
+    // if something says the toolbars are disabled, then skip
+    if (parentTag.attr(toolbar_manager_1._toolbarManager.cDisableAttrName))
+        return;
+    // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
+    // don't add, if it is has un-initialized content
+    // 2017-09-08 2dm disabled this, I believe the bootstrapping should never call this any more, if sc-uninitialized. if ok, then delete this in a few days
+    // let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
+    var toolbars = getToolbarTags(parentTag);
+    // no toolbars found, must help a bit because otherwise editing is hard
+    if (toolbars.length === 0) {
+        if (dbg)
+            console.log("didn't find toolbar, so will auto-create", parentTag);
+        var outsideCb = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
+        var contentTag = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
+        contentTag.addClass($2sxc.c.cls.scElm); // "sc-element");
+        contentTag.prepend(generateFallbackToolbar());
+        toolbars = getToolbarTags(parentTag);
+    }
+    toolbars.each(function initToolbar() {
+        var tag = $(this);
+        var data = null;
+        var toolbarConfig;
+        var toolbarSettings;
+        var at = $2sxc.c.attr;
+        try {
+            //debugger;
+            data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
+            toolbarConfig = JSON.parse(data);
+            console.log("TV#3: toolbarConfig", toolbarConfig);
+            data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
+            toolbarSettings = JSON.parse(data);
+            console.log("TV#4: toolbarSettings", toolbarSettings);
+            if (toolbarConfig === {} && toolbarSettings === {})
+                toolbarSettings = settingsForEmptyToolbar;
+        }
+        catch (err) {
+            console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
+            return;
+        }
+        try {
+            var sxc = sxc_1.getSxcInstance(tag);
+            tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
+        }
+        catch (err2) {
+            // note: errors happen a lot on custom toolbars, make sure the others are still rendered
+            console.error('error creating toolbar - will skip this one', err2);
+        }
+    });
+}
+exports.buildToolbars = buildToolbars;
+function disable(tag) {
+    tag = $(tag);
+    tag.attr(toolbar_manager_1._toolbarManager.cDisableAttrName, true);
+}
+exports.disable = disable;
+function isDisabled(sxc) {
+    var tag = $(api_1.getTag(sxc));
+    return !!tag.attr(toolbar_manager_1._toolbarManager.cDisableAttrName);
+}
+exports.isDisabled = isDisabled;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var build_toolbars_1 = __webpack_require__(24);
+var generate_button_html_1 = __webpack_require__(11);
+var generate_toolbar_html_1 = __webpack_require__(26);
+var standard_buttons_1 = __webpack_require__(27);
+var toolbar_template_1 = __webpack_require__(28);
+/**
+ * Toolbar manager for the whole page - basically a set of APIs
+ * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
+ */
+var ToolbarManager = /** @class */ (function () {
+    function ToolbarManager() {
+        // internal constants
+        this.cDisableAttrName = 'data-disable-toolbar';
+        // build toolbars
+        this.buildToolbars = build_toolbars_1.buildToolbars;
+        this.disable = build_toolbars_1.disable;
+        this.isDisabled = build_toolbars_1.isDisabled;
+        // generate button html
+        this.generateButtonHtml = generate_button_html_1.generateButtonHtml;
+        this.generateToolbarHtml = generate_toolbar_html_1.generateToolbarHtml;
+        this.standardButtons = standard_buttons_1.standardButtons;
+        this.toolbarTemplate = toolbar_template_1.toolbarTemplate;
+    }
+    return ToolbarManager;
+}());
+exports.ToolbarManager = ToolbarManager;
+exports._toolbarManager = new ToolbarManager();
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var generate_button_html_1 = __webpack_require__(11);
+var buttonHelpers = __webpack_require__(47);
+var standard_buttons_1 = __webpack_require__(27);
+function generateToolbarHtml(sxc, tbConfig, moreSettings) {
+    console.log("TV#1: ", sxc, tbConfig, moreSettings);
+    // if it has an action or is an array, keep that. Otherwise get standard buttons
+    tbConfig = tbConfig || {}; // if null/undefined, use empty object
+    var btnList = tbConfig;
+    if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
+        btnList = standard_buttons_1.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
+    // whatever we had, if more settings were provided, override with these...
+    var tlbDef = buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
+    var btnGroups = tlbDef.groups;
+    var behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
+    // todo: these settings assume it's not in an array...
+    var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
+        ((tbConfig.sortOrder === -1) ? ' listContent' : '') +
+        (tlbDef.settings.classes ? ' ' + tlbDef.settings.classes : '');
+    var toolbar = $('<ul />', {
+        'class': tbClasses,
+        'onclick': 'let e = arguments[0] || window.event; e.stopPropagation();'
+    });
+    for (var i = 0; i < btnGroups.length; i++) {
+        var btns = btnGroups[i].buttons;
+        for (var h = 0; h < btns.length; h++)
+            toolbar.append($('<li />').append($(generate_button_html_1.generateButtonHtml(sxc, btns[h], i))));
+    }
+    toolbar.attr('group-count', btnGroups.length);
+    return toolbar[0].outerHTML;
+}
+exports.generateToolbarHtml = generateToolbarHtml;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var toolbar_template_1 = __webpack_require__(28);
+/**
+ * the toolbar manager is an internal helper
+ * taking care of toolbars, buttons etc.
+ * @param canDesign
+ * @param sharedParameters
+ */
+function standardButtons(canDesign, sharedParameters) {
+    // create a deep-copy of the original object
+    var btns = $.extend(true, {}, toolbar_template_1.toolbarTemplate);
+    btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
+    if (!canDesign)
+        btns.groups.splice(2, 1); // remove this menu
+    return btns;
+}
+exports.standardButtons = standardButtons;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+// the default / initial buttons in a standard toolbar
+// ToDo: refactor to avoid side-effects
+exports.toolbarTemplate = {
+    groups: [
+        // ToDo: remove dead code
+        //{
+        //    name: "test",
+        //    buttons: [
+        //        {
+        //            action: "edit",
+        //            icon: "icon-sxc-code",
+        //            title: "just quick edit!"
+        //        },
+        //        "inexisting-action",
+        //        "edit",
+        //        {
+        //            action: "publish",
+        //            showCondition: true,
+        //            title: "forced publish button"
+        //        },
+        //        {
+        //            command: {
+        //                action: "custom",
+        //                customCode: "alert('custom button!')"
+        //            }
+        //        },
+        //        "more"
+        //    ]
+        //},
+        {
+            name: 'default',
+            buttons: 'edit,new,metadata,publish,layout'
+        }, {
+            name: 'list',
+            buttons: 'add,remove,moveup,movedown,instance-list,replace,item-history'
+        }, {
+            name: 'data',
+            buttons: 'delete'
+        }, {
+            name: 'instance',
+            buttons: 'template-develop,template-settings,contentitems,template-query,contenttype',
+            defaults: {
+                classes: 'group-pro'
+            }
+        }, {
+            name: 'app',
+            buttons: 'app,app-settings,app-resources,zone',
+            defaults: {
+                classes: 'group-pro'
+            }
+        }
+    ],
+    defaults: {},
+    params: {},
+    settings: {
+        autoAddMore: 'right',
+    }
+};
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var command_1 = __webpack_require__(48);
+/**
+ * assemble an object which will store the configuration and execute it
+ * @param sxc
+ * @param editContext
+ * @param specialSettings
+ */
+function commandCreate(sxc, editContext, specialSettings) {
+    var settings = Object.assign(sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+    var ngDialogUrl = editContext.Environment.SxcRootUrl +
+        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
+        editContext.Environment.SxcVersion;
+    var isDebug = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+    var cmd = new command_1.Command(sxc, settings, ngDialogUrl, isDebug);
+    return cmd;
+}
+exports.commandCreate = commandCreate;
+
+
+/***/ }),
 /* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2328,7 +2335,7 @@ exports.create = create;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var render_1 = __webpack_require__(7);
-var quick_dialog_1 = __webpack_require__(6);
+var quick_dialog_1 = __webpack_require__(8);
 var command_link_to_ng_dialog_1 = __webpack_require__(31);
 /**
  * open a new dialog of the angular-ui
@@ -2361,7 +2368,7 @@ exports.commandOpenNgDialog = commandOpenNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_create_1 = __webpack_require__(24);
+var command_create_1 = __webpack_require__(29);
 /**
  * create a dialog link
  * @param sxc
@@ -2388,9 +2395,9 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_create_1 = __webpack_require__(24);
-var command_execute_action_1 = __webpack_require__(44);
-var command_initialize_instance_commands_1 = __webpack_require__(11);
+var command_create_1 = __webpack_require__(29);
+var command_execute_action_1 = __webpack_require__(49);
+var command_initialize_instance_commands_1 = __webpack_require__(6);
 var command_link_to_ng_dialog_1 = __webpack_require__(31);
 var command_open_ng_dialog_1 = __webpack_require__(30);
 var Engine = /** @class */ (function () {
@@ -2458,7 +2465,7 @@ var ABTest;
     ABTest[ABTest["B"] = 1] = "B";
 })(ABTest || (ABTest = {}));
 /** config A or B */
-var testing = ABTest.B;
+var testing = ABTest.A;
 exports.isA = (testing < ABTest.B);
 
 
@@ -2568,6 +2575,245 @@ exports.UserOfEditContext = UserOfEditContext;
 
 /***/ }),
 /* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var render_1 = __webpack_require__(7);
+/*
+ * this is a content block in the browser
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ */
+/**
+ * internal helper, to do something and reload the content block
+ * @param sxc
+ * @param url
+ * @param params
+ * @returns {}
+ */
+function getAndReload(sxc, url, params) {
+    return sxc.webApi.get({
+        url: url,
+        params: params,
+    }).then(function () { render_1.reloadAndReInitialize(sxc); });
+}
+/**
+ * remove an item from a list, then reload
+ * @param {} sxc
+ * @param {} sortOrder
+ * @returns {}
+ */
+function removeFromList(sxc, sortOrder) {
+    return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
+}
+exports.removeFromList = removeFromList;
+/**
+ * change the order of an item in a list, then reload
+ * @param {} sxc
+ * @param {} initOrder
+ * @param {} newOrder
+ * @returns {}
+ */
+function changeOrder(sxc, initOrder, newOrder) {
+    return getAndReload(sxc, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
+}
+exports.changeOrder = changeOrder;
+/**
+ * add an item to the list at this position
+ * @param {} sxc
+ * @param {} sortOrder
+ * @returns {}
+ */
+function addItem(sxc, sortOrder) {
+    return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
+}
+exports.addItem = addItem;
+/**
+ * set a content-item in this block to published, then reload
+ * @param {} sxc
+ * @param {} part
+ * @param {} sortOrder
+ * @returns {}
+ */
+function publish(sxc, part, sortOrder) {
+    return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
+}
+exports.publish = publish;
+/**
+ * publish an item using it's ID
+ * @param {} sxc
+ * @param {} entityId
+ * @returns {}
+ */
+function publishId(sxc, entityId) {
+    return getAndReload(sxc, 'view/module/publish', { id: entityId });
+}
+exports.publishId = publishId;
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var quick_e_1 = __webpack_require__(0);
+var selectors_instance_1 = __webpack_require__(3);
+var configAttr = 'quick-edit-config';
+/**
+ * the initial configuration
+ */
+var conf = quick_e_1.$quickE.config = {
+    enable: true,
+    innerBlocks: {
+        enable: null,
+    },
+    modules: {
+        enable: null,
+    },
+};
+function _readPageConfig() {
+    var configs = $("[" + configAttr + "]");
+    var finalConfig = {};
+    var confJ;
+    var confO;
+    // any inner blocks found? will currently affect if modules can be inserted...
+    var hasInnerCBs = ($(selectors_instance_1.selectors.cb.listSelector).length > 0);
+    if (configs.length > 0) {
+        // go through reverse list, as the last is the most important...
+        for (var c = configs.length; c >= 0; c--) {
+            confJ = configs[0].getAttribute(configAttr);
+            try {
+                confO = JSON.parse(confJ);
+                Object.assign(finalConfig, confO);
+            }
+            catch (e) {
+                console.warn('had trouble with json', e);
+            }
+        }
+        Object.assign(conf, finalConfig);
+    }
+    // re-check "auto" or "null"
+    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
+    if (conf.modules.enable === null || conf.modules.enable === 'auto')
+        conf.modules.enable = !hasInnerCBs;
+    // for now, ContentBlocks are only enabled if they exist on the page
+    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
+        conf.innerBlocks.enable = hasInnerCBs;
+}
+exports._readPageConfig = _readPageConfig;
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Coords = /** @class */ (function () {
+    function Coords(x, y, w, yh, element) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.yh = yh;
+        this.element = element;
+    }
+    return Coords;
+}());
+exports.Coords = Coords;
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var _2sxc_translate_1 = __webpack_require__(5);
+/**
+ * this enhances the $2sxc client controller with stuff only needed when logged in
+ */
+// #region contentItem Commands
+exports.contentItems = {
+    // delete command - try to really delete a content-item
+    delete: function (sxc, itemId, itemGuid, itemTitle) {
+        // first show main warning / get ok
+        var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
+            .replace('{id}', itemId.toString())
+            .replace('{title}', itemTitle));
+        if (!ok)
+            return;
+        sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
+            .success(function () {
+            location.reload();
+        }).error(function (error) {
+            var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
+            console.log(error);
+            // check if it's a permission config problem
+            if (error.status === 401)
+                alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
+            if (error.status === 400)
+                alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
+        });
+    },
+};
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * helper function to create the configuration object
+ * @param name
+ * @param translateKey
+ * @param icon
+ * @param uiOnly
+ * @param partOfPage
+ * @param more
+ */
+function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
+    if (typeof (partOfPage) !== 'boolean')
+        throw 'partOfPage in commands not provided, order will be wrong!';
+    var btnConfig = {
+        icon: 'icon-sxc-' + icon,
+        classes: '',
+        title: 'Toolbar.' + translateKey,
+        dynamicClasses: function () { return ''; },
+        show: true,
+        showCondition: function () { return true; },
+        disabled: false,
+        dynamicDisabled: function () { return false; },
+    };
+    btnConfig = Object.assign(btnConfig, more);
+    var newDefinition = {
+        name: name,
+        title: btnConfig.title,
+        icon: btnConfig.icon,
+        uiActionOnly: uiOnly,
+        partOfPage: partOfPage,
+        tmpButtonDefaults: btnConfig,
+    };
+    return Object.assign(newDefinition, more);
+}
+exports.makeDef = makeDef;
+
+
+/***/ }),
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2836,7 +3082,7 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 
 
 /***/ }),
-/* 42 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3105,7 +3351,7 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 
 
 /***/ }),
-/* 43 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3193,14 +3439,14 @@ exports.Command = Command;
 
 
 /***/ }),
-/* 44 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var templates_1 = __webpack_require__(10);
-var command_initialize_instance_commands_1 = __webpack_require__(11);
+var command_initialize_instance_commands_1 = __webpack_require__(6);
 var command_open_ng_dialog_1 = __webpack_require__(30);
 // ToDo: remove dead code
 function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event) {
@@ -3237,241 +3483,14 @@ exports.commandExecuteAction = commandExecuteAction;
 
 
 /***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var quick_e_1 = __webpack_require__(0);
-var selectors_instance_1 = __webpack_require__(3);
-var configAttr = 'quick-edit-config';
-/**
- * the initial configuration
- */
-var conf = quick_e_1.$quickE.config = {
-    enable: true,
-    innerBlocks: {
-        enable: null,
-    },
-    modules: {
-        enable: null,
-    },
-};
-function _readPageConfig() {
-    var configs = $("[" + configAttr + "]");
-    var finalConfig = {};
-    var confJ;
-    var confO;
-    // any inner blocks found? will currently affect if modules can be inserted...
-    var hasInnerCBs = ($(selectors_instance_1.selectors.cb.listSelector).length > 0);
-    if (configs.length > 0) {
-        // go through reverse list, as the last is the most important...
-        for (var c = configs.length; c >= 0; c--) {
-            confJ = configs[0].getAttribute(configAttr);
-            try {
-                confO = JSON.parse(confJ);
-                Object.assign(finalConfig, confO);
-            }
-            catch (e) {
-                console.warn('had trouble with json', e);
-            }
-        }
-        Object.assign(conf, finalConfig);
-    }
-    // re-check "auto" or "null"
-    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-    if (conf.modules.enable === null || conf.modules.enable === 'auto')
-        conf.modules.enable = !hasInnerCBs;
-    // for now, ContentBlocks are only enabled if they exist on the page
-    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
-        conf.innerBlocks.enable = hasInnerCBs;
-}
-exports._readPageConfig = _readPageConfig;
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Coords = /** @class */ (function () {
-    function Coords(x, y, w, yh, element) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.yh = yh;
-        this.element = element;
-    }
-    return Coords;
-}());
-exports.Coords = Coords;
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(7);
-/*
- * this is a content block in the browser
- *
- * A Content Block is a stand alone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
- */
-/**
- * internal helper, to do something and reload the content block
- * @param sxc
- * @param url
- * @param params
- * @returns {}
- */
-function getAndReload(sxc, url, params) {
-    return sxc.webApi.get({
-        url: url,
-        params: params,
-    }).then(function () { render_1.reloadAndReInitialize(sxc); });
-}
-/**
- * remove an item from a list, then reload
- * @param {} sxc
- * @param {} sortOrder
- * @returns {}
- */
-function removeFromList(sxc, sortOrder) {
-    return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
-}
-exports.removeFromList = removeFromList;
-/**
- * change the order of an item in a list, then reload
- * @param {} sxc
- * @param {} initOrder
- * @param {} newOrder
- * @returns {}
- */
-function changeOrder(sxc, initOrder, newOrder) {
-    return getAndReload(sxc, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
-}
-exports.changeOrder = changeOrder;
-/**
- * add an item to the list at this position
- * @param {} sxc
- * @param {} sortOrder
- * @returns {}
- */
-function addItem(sxc, sortOrder) {
-    return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
-}
-exports.addItem = addItem;
-/**
- * set a content-item in this block to published, then reload
- * @param {} sxc
- * @param {} part
- * @param {} sortOrder
- * @returns {}
- */
-function publish(sxc, part, sortOrder) {
-    return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
-}
-exports.publish = publish;
-/**
- * publish an item using it's ID
- * @param {} sxc
- * @param {} entityId
- * @returns {}
- */
-function publishId(sxc, entityId) {
-    return getAndReload(sxc, 'view/module/publish', { id: entityId });
-}
-exports.publishId = publishId;
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(5);
-/**
- * this enhances the $2sxc client controller with stuff only needed when logged in
- */
-// #region contentItem Commands
-exports.contentItems = {
-    // delete command - try to really delete a content-item
-    delete: function (sxc, itemId, itemGuid, itemTitle) {
-        // first show main warning / get ok
-        var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
-            .replace('{id}', itemId.toString())
-            .replace('{title}', itemTitle));
-        if (!ok)
-            return;
-        sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
-            .success(function () {
-            location.reload();
-        }).error(function (error) {
-            var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
-            console.log(error);
-            // check if it's a permission config problem
-            if (error.status === 401)
-                alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
-            if (error.status === 400)
-                alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
-        });
-    },
-};
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * helper function to create the configuration object
- * @param name
- * @param translateKey
- * @param icon
- * @param uiOnly
- * @param partOfPage
- * @param more
- */
-function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
-    if (typeof (partOfPage) !== 'boolean')
-        throw 'partOfPage in commands not provided, order will be wrong!';
-    var newDefinition = {
-        name: name,
-        title: 'Toolbar.' + translateKey,
-        icon: 'icon-sxc-' + icon,
-        uiActionOnly: uiOnly,
-        partOfPage: partOfPage,
-    };
-    return Object.assign(newDefinition, more);
-}
-exports.makeDef = makeDef;
-
-
-/***/ }),
 /* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_initialize_instance_commands_1 = __webpack_require__(11);
-var create_1 = __webpack_require__(29);
+var command_initialize_instance_commands_1 = __webpack_require__(6);
+var create_1 = __webpack_require__(17);
 var engine_1 = __webpack_require__(32);
 var Commands = /** @class */ (function () {
     function Commands() {
@@ -3626,10 +3645,10 @@ exports._manage = new Manage();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var engine_1 = __webpack_require__(32);
-var manipulate_1 = __webpack_require__(51);
 var toolbar_feature_1 = __webpack_require__(4);
 var toolbar_feature_2 = __webpack_require__(4);
+var engine_1 = __webpack_require__(32);
+var manipulate_1 = __webpack_require__(51);
 var api_1 = __webpack_require__(1);
 var local_storage_helper_1 = __webpack_require__(54);
 /**
@@ -3798,7 +3817,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(1);
-var quick_dialog_1 = __webpack_require__(6);
+var quick_dialog_1 = __webpack_require__(8);
 var toolbar_feature_1 = __webpack_require__(4);
 var _2sxc_translate_1 = __webpack_require__(5);
 var sxc_1 = __webpack_require__(2);
@@ -3908,6 +3927,7 @@ var ButtonConfig = /** @class */ (function (_super) {
     __extends(ButtonConfig, _super);
     function ButtonConfig(action, config) {
         var _this = _super.call(this) || this;
+        _this.action = action;
         if (action) {
             _this.action = action;
         }
@@ -3915,7 +3935,11 @@ var ButtonConfig = /** @class */ (function (_super) {
             _this.setConfig(config);
         return _this;
     }
-    ButtonConfig.fromNameAndParams = function (name, params, config) {
+    ButtonConfig.fromNameAndParams = function (name, params, config, commands) {
+        //todo: look up command with this name
+        // todo create an action for that command
+        //todo: use the commands tmpButtonDefaults as the initial value
+        // then use the config? to override anything
         var buttonConfig = new ButtonConfig();
         buttonConfig.name = name;
         buttonConfig.params = params;
@@ -3937,18 +3961,26 @@ exports.ButtonConfig = ButtonConfig;
 Object.defineProperty(exports, "__esModule", { value: true });
 var ButtonBaseConfig = /** @class */ (function () {
     function ButtonBaseConfig() {
+        this.icon = '';
+        this.title = '';
+        this.show = true; // maybe
+        this.showCondition = true;
+        this.disabled = false;
+        this.dynamicDisabled = function () { return false; }; // maybe
         // have all values / properties null, this is to create a type-safe ButtonConfig which doesn't work, but has the correct property-names
-        this.classes = null;
-        this.icon = null;
-        this.title = null;
-        this.dynamicClasses = null;
-        this.show = null;
+        //this.classes = null;
+        //this.icon = null;
+        //this.title = null;
+        //this.dynamicClasses = null;
+        //this.show = null;
         this.showCondition = null;
         this.disabled = null;
         this.dynamicDisabled = null;
     }
     ButtonBaseConfig.prototype.setConfig = function (config) {
-        this.classes = config.classes;
+        // maybe loop through the properties, check if it exists, then overwrite and/or just use Object.assign
+        if (config.classes)
+            this.classes = config.classes;
         this.icon = config.icon;
         this.title = config.title;
         this.dynamicClasses = config.dynamicClasses;
@@ -4067,29 +4099,29 @@ __webpack_require__(36);
 __webpack_require__(4);
 __webpack_require__(64);
 __webpack_require__(65);
-__webpack_require__(24);
-__webpack_require__(44);
-__webpack_require__(11);
+__webpack_require__(29);
+__webpack_require__(49);
+__webpack_require__(6);
 __webpack_require__(31);
 __webpack_require__(30);
-__webpack_require__(43);
+__webpack_require__(48);
 __webpack_require__(50);
-__webpack_require__(29);
+__webpack_require__(17);
 __webpack_require__(66);
 __webpack_require__(32);
-__webpack_require__(49);
+__webpack_require__(45);
 __webpack_require__(67);
 __webpack_require__(68);
 __webpack_require__(69);
 __webpack_require__(70);
-__webpack_require__(47);
-__webpack_require__(25);
+__webpack_require__(41);
+__webpack_require__(18);
 __webpack_require__(71);
 __webpack_require__(51);
 __webpack_require__(7);
 __webpack_require__(10);
 __webpack_require__(72);
-__webpack_require__(28);
+__webpack_require__(19);
 __webpack_require__(73);
 __webpack_require__(74);
 __webpack_require__(75);
@@ -4100,7 +4132,7 @@ __webpack_require__(79);
 __webpack_require__(80);
 __webpack_require__(81);
 __webpack_require__(82);
-__webpack_require__(48);
+__webpack_require__(44);
 __webpack_require__(83);
 __webpack_require__(84);
 __webpack_require__(85);
@@ -4120,37 +4152,37 @@ __webpack_require__(39);
 __webpack_require__(40);
 __webpack_require__(92);
 __webpack_require__(93);
-__webpack_require__(6);
+__webpack_require__(8);
 __webpack_require__(94);
 __webpack_require__(58);
 __webpack_require__(12);
 __webpack_require__(59);
 __webpack_require__(96);
-__webpack_require__(45);
+__webpack_require__(42);
 __webpack_require__(97);
-__webpack_require__(46);
+__webpack_require__(43);
 __webpack_require__(99);
 __webpack_require__(100);
 __webpack_require__(13);
 __webpack_require__(60);
 __webpack_require__(101);
-__webpack_require__(27);
+__webpack_require__(21);
 __webpack_require__(0);
 __webpack_require__(3);
 __webpack_require__(102);
 __webpack_require__(103);
-__webpack_require__(26);
+__webpack_require__(20);
 __webpack_require__(14);
-__webpack_require__(8);
+__webpack_require__(9);
 __webpack_require__(16);
-__webpack_require__(41);
+__webpack_require__(46);
 __webpack_require__(104);
-__webpack_require__(17);
+__webpack_require__(22);
 __webpack_require__(105);
 __webpack_require__(15);
 __webpack_require__(106);
-__webpack_require__(18);
-__webpack_require__(19);
+__webpack_require__(23);
+__webpack_require__(24);
 __webpack_require__(107);
 __webpack_require__(57);
 __webpack_require__(108);
@@ -4160,14 +4192,14 @@ __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
 __webpack_require__(113);
-__webpack_require__(9);
-__webpack_require__(21);
-__webpack_require__(42);
+__webpack_require__(11);
+__webpack_require__(26);
+__webpack_require__(47);
 __webpack_require__(114);
-__webpack_require__(22);
+__webpack_require__(27);
 __webpack_require__(115);
-__webpack_require__(20);
-__webpack_require__(23);
+__webpack_require__(25);
+__webpack_require__(28);
 __webpack_require__(116);
 __webpack_require__(117);
 __webpack_require__(118);
@@ -4571,7 +4603,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var commands_1 = __webpack_require__(50);
 var manage_1 = __webpack_require__(52);
 var quick_e_1 = __webpack_require__(0);
-var start_1 = __webpack_require__(26);
+var start_1 = __webpack_require__(20);
 __webpack_require__(55);
 // stv simulation start
 var config_1 = __webpack_require__(56);
@@ -5088,7 +5120,8 @@ $(function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ButtonAction = /** @class */ (function () {
     function ButtonAction(name, params) {
-        this.name = name; // will auto - lookup the action and use the defaults
+        this.name = name;
+        //this.name = name; // will auto - lookup the action and use the defaults
         this.params = params; // same, but use custom params
     }
     return ButtonAction;

@@ -6,6 +6,7 @@ import { CmdSpec } from './cmd-spec';
 import { Definition } from './definition';
 import { makeDef } from './make-def';
 import { Settings } from './settings';
+import { ButtonConfig } from '../toolbar2/button/config';
 
 /*
  * Actions of 2sxc - mostly used in toolbars

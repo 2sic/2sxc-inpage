@@ -1,6 +1,8 @@
-﻿import { generateButtonHtml } from './generate-button-html';
+﻿import { commandInitializeInstanceCommands } from '../commands/command-initialize-instance-commands';
+import { generateButtonHtml } from './generate-button-html';
 import * as buttonHelpers from './helpers';
 import { standardButtons } from './standard-buttons';
+import { getEditContext } from '../manage/api';
 
 export function generateToolbarHtml(sxc, tbConfig, moreSettings) {
 
@@ -13,7 +15,9 @@ export function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     btnList = standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
 
   // whatever we had, if more settings were provided, override with these...
-  let tlbDef = buttonHelpers.buildFullDefinition(btnList, sxc.manage._commands.commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
+  const editContext = getEditContext(sxc);
+  let commands = commandInitializeInstanceCommands(editContext);
+  let tlbDef = buttonHelpers.buildFullDefinition(btnList, /*sxc.manage._commands.*/commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
   let btnGroups = tlbDef.groups;
   let behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
 
