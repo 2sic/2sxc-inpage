@@ -1,6 +1,6 @@
-﻿import { ButtonBaseConfig } from '../button/button-base-config';
+﻿import { ButtonConfig } from '../button/button-config';
 
 export class CommandDefinition {
   name: string;
-  buttonConfig: ButtonBaseConfig;
+  buttonConfig: ButtonConfig;
 }

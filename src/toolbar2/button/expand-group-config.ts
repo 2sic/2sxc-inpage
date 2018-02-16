@@ -1,6 +1,6 @@
 ﻿import { GroupConfig } from './group-config';
 
-export function ExpandGroupConfig(context, partialConfig: GroupConfig): GroupConfig {
+export function ExpandGroupConfig(context, config: GroupConfig): GroupConfig {
   // todo
-  return partialConfig;
+  return config;
 }

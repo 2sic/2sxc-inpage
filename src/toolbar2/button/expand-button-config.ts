@@ -1,6 +1,7 @@
 ﻿import { ButtonConfig } from './button-config';
 
-export function ExpandButtonConfig(context, partialConfig: ButtonConfig): ButtonConfig {
+export function ExpandButtonConfig(context, config: ButtonConfig): ButtonConfig {
   // todo
-  return partialConfig;
+
+  return config;
 }

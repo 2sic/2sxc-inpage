@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 61);
+/******/ 	return __webpack_require__(__webpack_require__.s = 60);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -850,8 +850,8 @@ exports.generateButtonHtml = generateButtonHtml;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(2);
-var cmds_strategy_factory_1 = __webpack_require__(59);
-var mod_1 = __webpack_require__(60);
+var cmds_strategy_factory_1 = __webpack_require__(58);
+var mod_1 = __webpack_require__(59);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /** add a clipboard to the quick edit */
@@ -3915,91 +3915,41 @@ function showGlassesButtonIfUninitialized(sxci) {
 
 "use strict";
 
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var button_base_config_1 = __webpack_require__(57);
-var ButtonConfig = /** @class */ (function (_super) {
-    __extends(ButtonConfig, _super);
-    function ButtonConfig(action, config) {
-        var _this = _super.call(this) || this;
-        _this.action = action;
-        if (action) {
-            _this.action = action;
-        }
-        if (config)
-            _this.setConfig(config);
-        return _this;
-    }
-    ButtonConfig.fromNameAndParams = function (name, params, config, commands) {
-        //todo: look up command with this name
-        // todo create an action for that command
-        //todo: use the commands tmpButtonDefaults as the initial value
-        // then use the config? to override anything
-        var buttonConfig = new ButtonConfig();
-        buttonConfig.name = name;
-        buttonConfig.params = params;
-        if (config)
-            buttonConfig.setConfig(config);
-        return buttonConfig;
-    };
-    return ButtonConfig;
-}(button_base_config_1.ButtonBaseConfig));
-exports.ButtonConfig = ButtonConfig;
-
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ButtonBaseConfig = /** @class */ (function () {
-    function ButtonBaseConfig() {
+var ButtonConfig = /** @class */ (function () {
+    function ButtonConfig(action, partialConfig, commands) {
+        this.action = action;
         this.icon = '';
         this.title = '';
         this.show = true; // maybe
         this.showCondition = true;
         this.disabled = false;
         this.dynamicDisabled = function () { return false; }; // maybe
-        // have all values / properties null, this is to create a type-safe ButtonConfig which doesn't work, but has the correct property-names
-        //this.classes = null;
-        //this.icon = null;
-        //this.title = null;
-        //this.dynamicClasses = null;
-        //this.show = null;
-        this.showCondition = null;
-        this.disabled = null;
-        this.dynamicDisabled = null;
+        if (action) {
+            this.action = action;
+        }
+        if (partialConfig)
+            Object.assign(this, partialConfig);
     }
-    ButtonBaseConfig.prototype.setConfig = function (config) {
-        // maybe loop through the properties, check if it exists, then overwrite and/or just use Object.assign
-        if (config.classes)
-            this.classes = config.classes;
-        this.icon = config.icon;
-        this.title = config.title;
-        this.dynamicClasses = config.dynamicClasses;
-        this.show = config.show;
-        this.showCondition = config.showCondition;
-        this.disabled = config.disabled;
-        this.dynamicDisabled = config.dynamicDisabled;
+    ButtonConfig.fromNameAndParams = function (name, params, partialConfig, commands) {
+        var buttonConfig = new ButtonConfig();
+        buttonConfig.name = name;
+        buttonConfig.params = params;
+        // todo: look up command with this name
+        // todo create an action for that command
+        // todo: use the commands tmpButtonDefaults as the initial value
+        // use the config? to override anything
+        if (partialConfig)
+            Object.assign(this, partialConfig);
+        return buttonConfig;
     };
-    return ButtonBaseConfig;
+    return ButtonConfig;
 }());
-exports.ButtonBaseConfig = ButtonBaseConfig;
+exports.ButtonConfig = ButtonConfig;
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4026,14 +3976,14 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var cb_1 = __webpack_require__(58);
-var Mod_1 = __webpack_require__(95);
+var cb_1 = __webpack_require__(57);
+var Mod_1 = __webpack_require__(94);
 var CmdsStrategyFactory = /** @class */ (function () {
     function CmdsStrategyFactory() {
         this.cmds = {};
@@ -4052,7 +4002,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4091,18 +4041,18 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(33);
 __webpack_require__(34);
 __webpack_require__(35);
+__webpack_require__(61);
 __webpack_require__(62);
-__webpack_require__(63);
 __webpack_require__(36);
 __webpack_require__(4);
+__webpack_require__(63);
 __webpack_require__(64);
-__webpack_require__(65);
 __webpack_require__(29);
 __webpack_require__(49);
 __webpack_require__(5);
@@ -4111,21 +4061,22 @@ __webpack_require__(30);
 __webpack_require__(48);
 __webpack_require__(50);
 __webpack_require__(17);
-__webpack_require__(66);
+__webpack_require__(65);
 __webpack_require__(32);
 __webpack_require__(45);
+__webpack_require__(66);
 __webpack_require__(67);
 __webpack_require__(68);
 __webpack_require__(69);
-__webpack_require__(70);
 __webpack_require__(41);
 __webpack_require__(18);
-__webpack_require__(71);
+__webpack_require__(70);
 __webpack_require__(51);
 __webpack_require__(7);
 __webpack_require__(10);
-__webpack_require__(72);
+__webpack_require__(71);
 __webpack_require__(19);
+__webpack_require__(72);
 __webpack_require__(73);
 __webpack_require__(74);
 __webpack_require__(75);
@@ -4135,8 +4086,8 @@ __webpack_require__(78);
 __webpack_require__(79);
 __webpack_require__(80);
 __webpack_require__(81);
-__webpack_require__(82);
 __webpack_require__(44);
+__webpack_require__(82);
 __webpack_require__(83);
 __webpack_require__(84);
 __webpack_require__(85);
@@ -4145,7 +4096,6 @@ __webpack_require__(87);
 __webpack_require__(88);
 __webpack_require__(89);
 __webpack_require__(90);
-__webpack_require__(91);
 __webpack_require__(0);
 __webpack_require__(53);
 __webpack_require__(37);
@@ -4154,41 +4104,41 @@ __webpack_require__(52);
 __webpack_require__(38);
 __webpack_require__(39);
 __webpack_require__(40);
+__webpack_require__(91);
 __webpack_require__(92);
-__webpack_require__(93);
 __webpack_require__(8);
-__webpack_require__(94);
-__webpack_require__(58);
+__webpack_require__(93);
+__webpack_require__(57);
 __webpack_require__(12);
-__webpack_require__(59);
-__webpack_require__(96);
+__webpack_require__(58);
+__webpack_require__(95);
 __webpack_require__(42);
-__webpack_require__(97);
+__webpack_require__(96);
 __webpack_require__(43);
+__webpack_require__(98);
 __webpack_require__(99);
-__webpack_require__(100);
 __webpack_require__(13);
-__webpack_require__(60);
-__webpack_require__(101);
+__webpack_require__(59);
+__webpack_require__(100);
 __webpack_require__(21);
 __webpack_require__(1);
 __webpack_require__(3);
+__webpack_require__(101);
 __webpack_require__(102);
-__webpack_require__(103);
 __webpack_require__(20);
 __webpack_require__(14);
 __webpack_require__(9);
 __webpack_require__(16);
 __webpack_require__(46);
-__webpack_require__(104);
+__webpack_require__(103);
 __webpack_require__(22);
-__webpack_require__(105);
+__webpack_require__(104);
 __webpack_require__(15);
-__webpack_require__(106);
+__webpack_require__(105);
 __webpack_require__(23);
 __webpack_require__(24);
+__webpack_require__(106);
 __webpack_require__(107);
-__webpack_require__(57);
 __webpack_require__(56);
 __webpack_require__(108);
 __webpack_require__(109);
@@ -4217,7 +4167,7 @@ module.exports = __webpack_require__(2);
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports) {
 
 if (window.$2sxc && !window.$2sxc.consts) {
@@ -4253,7 +4203,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports) {
 
 /** this enhances the $2sxc client controller with stuff only needed when logged in */
@@ -4278,7 +4228,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4293,7 +4243,7 @@ exports.Action = Action;
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4308,7 +4258,7 @@ exports.CmdSpec = CmdSpec;
 
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4323,7 +4273,7 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4338,7 +4288,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4353,7 +4303,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4368,7 +4318,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4386,7 +4336,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4401,7 +4351,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4416,7 +4366,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4431,7 +4381,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4446,7 +4396,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4461,7 +4411,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4476,7 +4426,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4491,7 +4441,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4506,7 +4456,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4521,7 +4471,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4536,7 +4486,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4567,7 +4517,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4598,7 +4548,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4644,16 +4594,22 @@ $(start_1.start); // run on-load
 
 
 /***/ }),
+/* 83 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
 /* 84 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
 /* 85 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -4676,12 +4632,6 @@ $(start_1.start); // run on-load
 
 /***/ }),
 /* 89 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4702,13 +4652,13 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -4752,7 +4702,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 93 */
+/* 92 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -4779,7 +4729,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 94 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4797,7 +4747,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4836,7 +4786,7 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 96 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4851,13 +4801,13 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 97 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cb_1 = __webpack_require__(98);
+var Cb_1 = __webpack_require__(97);
 var clipboard_1 = __webpack_require__(12);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
@@ -4887,7 +4837,7 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 98 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4914,6 +4864,12 @@ exports.Cb = Cb;
 
 
 /***/ }),
+/* 98 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
 /* 99 */
 /***/ (function(module, exports) {
 
@@ -4921,12 +4877,6 @@ exports.Cb = Cb;
 
 /***/ }),
 /* 100 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4959,7 +4909,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4977,7 +4927,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4992,7 +4942,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, exports) {
 
 /*
@@ -5093,7 +5043,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -5101,7 +5051,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -5116,7 +5066,7 @@ $(function () {
 
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5131,6 +5081,36 @@ var ButtonAction = /** @class */ (function () {
     return ButtonAction;
 }());
 exports.ButtonAction = ButtonAction;
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ButtonBaseConfig = /** @class */ (function () {
+    function ButtonBaseConfig() {
+        this.icon = '';
+        this.title = '';
+        this.show = true; // maybe
+        this.showCondition = true;
+        this.disabled = false;
+        this.dynamicDisabled = function () { return false; }; // maybe
+        // have all values / properties null, this is to create a type-safe ButtonConfig which doesn't work, but has the correct property-names
+        //this.classes = null;
+        //this.icon = null;
+        //this.title = null;
+        //this.dynamicClasses = null;
+        //this.show = null;
+        //this.showCondition = null;
+        //this.disabled = null;
+        //this.dynamicDisabled = null;
+    }
+    return ButtonBaseConfig;
+}());
+exports.ButtonBaseConfig = ButtonBaseConfig;
 
 
 /***/ }),
@@ -5155,9 +5135,9 @@ exports.Button = Button;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function ExpandButtonConfig(context, partialConfig) {
+function ExpandButtonConfig(context, config) {
     // todo
-    return partialConfig;
+    return config;
 }
 exports.ExpandButtonConfig = ExpandButtonConfig;
 
@@ -5169,9 +5149,9 @@ exports.ExpandButtonConfig = ExpandButtonConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function ExpandGroupConfig(context, partialConfig) {
+function ExpandGroupConfig(context, config) {
     // todo
-    return partialConfig;
+    return config;
 }
 exports.ExpandGroupConfig = ExpandGroupConfig;
 

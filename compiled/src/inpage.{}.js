@@ -6,8 +6,8 @@ var quick_e_1 = require("./quick-edit/quick-e");
 var start_1 = require("./quick-edit/start");
 require("./x-bootstrap/module-bootstrapper");
 // stv simulation start
-var config_1 = require("./toolbar2/button/config");
-var bc = new config_1.ButtonConfig();
+var button_config_1 = require("./toolbar2/button/button-config");
+var bc = new button_config_1.ButtonConfig();
 console.log('TV: ButtonConfig ', bc);
 // stv simulation end
 // debugger;

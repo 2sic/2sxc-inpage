@@ -15,20 +15,20 @@
     //this.title = null;
     //this.dynamicClasses = null;
     //this.show = null;
-    this.showCondition = null;
-    this.disabled = null;
-    this.dynamicDisabled = null;
+    //this.showCondition = null;
+    //this.disabled = null;
+    //this.dynamicDisabled = null;
   }
 
-  setConfig(config: ButtonBaseConfig) {
-    // maybe loop through the properties, check if it exists, then overwrite and/or just use Object.assign
-    if(config.classes) this.classes = config.classes;
-    this.icon = config.icon;
-    this.title = config.title;
-    this.dynamicClasses = config.dynamicClasses;
-    this.show = config.show;
-    this.showCondition = config.showCondition;
-    this.disabled = config.disabled;
-    this.dynamicDisabled = config.dynamicDisabled;
-  }
+  //setConfig(config: ButtonBaseConfig) {
+  //  // maybe loop through the properties, check if it exists, then overwrite and/or just use Object.assign
+  //  if(config.classes) this.classes = config.classes;
+  //  this.icon = config.icon;
+  //  this.title = config.title;
+  //  this.dynamicClasses = config.dynamicClasses;
+  //  this.show = config.show;
+  //  this.showCondition = config.showCondition;
+  //  this.disabled = config.disabled;
+  //  this.dynamicDisabled = config.dynamicDisabled;
+  //}
 }
