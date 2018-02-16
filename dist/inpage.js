@@ -288,10 +288,10 @@ exports.generateToolbarHtml = (ab_testing_config_1.isA) ? A_GenerateToolbarHtml.
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = __webpack_require__(17);
+var action_create_1 = __webpack_require__(17);
 function commandInitializeInstanceCommands(editContext) {
     var cg = editContext.ContentGroup;
-    return create_1.create({
+    return action_create_1.create({
         canDesign: editContext.User.CanDesign,
         templateId: cg.TemplateId,
         contentTypeId: cg.ContentTypeName,
@@ -2794,13 +2794,8 @@ function makeDef(name, translateKey, icon, uiOnly, partOfPage, more) {
         throw 'partOfPage in commands not provided, order will be wrong!';
     var btnConfig = {
         icon: 'icon-sxc-' + icon,
-        classes: '',
+        //classes: '',
         title: 'Toolbar.' + translateKey,
-        dynamicClasses: function () { return ''; },
-        show: true,
-        showCondition: function () { return true; },
-        disabled: false,
-        dynamicDisabled: function () { return false; },
     };
     btnConfig = Object.assign(btnConfig, more);
     var newDefinition = {
@@ -3493,13 +3488,13 @@ exports.commandExecuteAction = commandExecuteAction;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var action_create_1 = __webpack_require__(17);
 var command_initialize_instance_commands_1 = __webpack_require__(5);
-var create_1 = __webpack_require__(17);
 var engine_1 = __webpack_require__(32);
 var Commands = /** @class */ (function () {
     function Commands() {
         this.definitions = {
-            create: create_1.create,
+            create: action_create_1.create,
         };
         this.instanceEngine = engine_1.instanceEngine;
         this.initializeInstanceCommands = command_initialize_instance_commands_1.commandInitializeInstanceCommands;
@@ -4051,6 +4046,7 @@ __webpack_require__(61);
 __webpack_require__(62);
 __webpack_require__(36);
 __webpack_require__(4);
+__webpack_require__(17);
 __webpack_require__(63);
 __webpack_require__(64);
 __webpack_require__(29);
@@ -4060,7 +4056,6 @@ __webpack_require__(31);
 __webpack_require__(30);
 __webpack_require__(48);
 __webpack_require__(50);
-__webpack_require__(17);
 __webpack_require__(65);
 __webpack_require__(32);
 __webpack_require__(45);

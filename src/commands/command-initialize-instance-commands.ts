@@ -1,6 +1,6 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { Action } from './action';
-import { create } from './create';
+import { create } from './action-create';
 
 export function commandInitializeInstanceCommands(editContext: DataEditContext): Action {
   const cg = editContext.ContentGroup;
