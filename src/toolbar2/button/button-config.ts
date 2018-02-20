@@ -36,7 +36,7 @@ export class ButtonConfig {
 
     // todo: look up command with this name
     // const tmpCommandDefinition: CommandDefinition = commands[name];
-    console.log('stv: code in ButtonConfig: ', name, commands);
+    // console.log('stv: code in ButtonConfig: ', name, commands);
 
     // todo create an action for that command
 

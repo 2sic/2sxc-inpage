@@ -1,5 +1,6 @@
 ﻿import { getTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
+import { generateToolbarHtml } from './generate-toolbar-html';
 import { _toolbarManager } from './toolbar-manager';
 
 // quick debug - set to false if not needed for production
@@ -74,7 +75,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
 
     try {
       const sxc: SxcInstanceWithInternals = getSxcInstance(tag) as SxcInstanceWithInternals;
-      tag.replaceWith(sxc.manage.getToolbar(toolbarConfig, toolbarSettings));
+      tag.replaceWith(generateToolbarHtml(sxc,toolbarConfig, toolbarSettings));
     } catch (err2) {
       // note: errors happen a lot on custom toolbars, make sure the others are still rendered
       console.error('error creating toolbar - will skip this one', err2);

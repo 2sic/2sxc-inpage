@@ -1,4 +1,6 @@
-﻿/**
+﻿import { Commands } from "./command/commands";
+
+/**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
  */
@@ -24,7 +26,7 @@ export const defaultSettings = {
  * @param instanceConfig
  * @param moreSettings
  */
-export const buildFullDefinition = (unstructuredConfig, allActions, instanceConfig, moreSettings) => {
+export const buildFullDefinition = (unstructuredConfig, allActions: Commands, instanceConfig, moreSettings) => {
   const fullConfig = ensureDefinitionTree(unstructuredConfig, moreSettings);
 
   // ToDo: don't use console.log in production
@@ -87,21 +89,21 @@ export const ensureDefinitionTree = (original, moreSettings) => {
  * @param fullSet
  * @param actions
  */
-export const expandButtonGroups = (fullSet, actions) => { // , itemSettings) {
+export const expandButtonGroups = (fullSet, actions: Commands) => { // , itemSettings) {
   // by now we should have a structure, let's check/fix the buttons
   for (let g = 0; g < fullSet.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
     expandButtonList(fullSet.groups[g], fullSet.settings);
-
     // fix all the buttons
     const btns = fullSet.groups[g].buttons;
     if (Array.isArray(btns))
       for (let b = 0; b < btns.length; b++) {
         const btn = btns[b];
-        if (!(actions[btn.command.action]))
+        if (!(actions.get(btn.command.action)))
           console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
         Object.assign(btn.command, fullSet.params); // enhance the button with settings for this instance
         // tools.addCommandParams(fullSet, btn);
+
         addDefaultBtnSettings(btn,
           fullSet.groups[g],
           fullSet,
@@ -134,6 +136,7 @@ export const expandButtonList = (root, settings) => {
         const acts = btn.action.split(',');
         for (let a = 0; a < acts.length; a++) {
           btns.push($.extend(true, {}, btn, { action: acts[a] }));
+          console.log('stv1a#: ', btn);
         }
       } else
         btns.push(btn);
@@ -141,11 +144,13 @@ export const expandButtonList = (root, settings) => {
   } else if (typeof root.buttons === 'string') {
     btns = root.buttons.split(',');
     sharedProperties = Object.assign({}, root); // inherit all fields used in the button
+    console.log('stv1b#: ', btns);
     delete sharedProperties.buttons; // this one's not needed
     delete sharedProperties.name; // this one's not needed
     delete sharedProperties.action; //
   } else {
     btns = root.buttons;
+    console.log('stv1c#: ', btns);
   }
 
   // optionally add a more-button in each group
@@ -238,7 +243,7 @@ export const prvProperties = [
  * @param groups
  * @param actions
  */
-export const addDefaultBtnSettings = (btn, group, groups, actions) => {
+export const addDefaultBtnSettings = (btn, group, groups, actions: Commands) => {
   for (let d = 0; d < btnProperties.length; d++)
     fallbackBtnSetting(btn, group, groups, actions, btnProperties[d]);
 };
@@ -251,15 +256,16 @@ export const addDefaultBtnSettings = (btn, group, groups, actions) => {
  * @param actions
  * @param propName
  */
-function fallbackBtnSetting(btn, group, groups, actions, propName) {
+function fallbackBtnSetting(btn, group, groups, actions: Commands, propName) {
   btn[propName] = btn[propName] // by if already defined, use the already defined property
     ||
     (group.defaults && group.defaults[propName]) // if the group has defaults, try use that property
     ||
     (groups && groups.defaults && groups.defaults[propName]) // if the group has defaults, try use that property
     ||
-    (actions[btn.command.action] &&
-      actions[btn.command.action][propName]); // if there is an action, try to use that property name
+    (actions.get(btn.command.action) &&
+      actions.get(btn.command.action).buttonConfig &&
+      actions.get(btn.command.action).buttonConfig[propName]); // if there is an action, try to use that property name
 }
 
 export const customize = (toolbar) => {

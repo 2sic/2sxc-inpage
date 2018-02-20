@@ -13,18 +13,17 @@ export function generateToolbarHtml(sxc, tbConfig, moreSettings) {
   if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
     btnList = standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
 
-
   const editContext = getEditContext(sxc);
-  const commands = commandInitializeInstanceCommands(editContext);
+  // const oldCommands = commandInitializeInstanceCommands(editContext);
 
   // stv: temp start
   const newCommands = new Commands(editContext);
-  console.log('stv: new Command JSON', JSON.stringify(newCommands));
+  // console.log('stv: new Command JSON', JSON.stringify(newCommands));
   console.log('stv: new Command', newCommands);
   // stv: temp end
 
   // whatever we had, if more settings were provided, override with these...
-  let tlbDef = buttonHelpers.buildFullDefinition(btnList, /*sxc.manage._commands.*/commands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
+  let tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
   let btnGroups = tlbDef.groups;
   let behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
 

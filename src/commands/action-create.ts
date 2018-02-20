@@ -1,8 +1,8 @@
 ﻿import { addItem, changeOrder, publish, publishId, removeFromList } from '../contentBlock/actions';
 import { contentItems } from '../entity-manipulation/item-commands';
-import { translate } from '../translate/2sxc.translate';
-import { Commands } from '../toolbar2/command/commands';
 import { CommandDefinition } from '../toolbar2/command/command-definition';
+import { Commands } from '../toolbar2/command/commands';
+import { translate } from '../translate/2sxc.translate';
 import { Action } from './action';
 import { CmdSpec } from './cmd-spec';
 import { Definition } from './definition';
