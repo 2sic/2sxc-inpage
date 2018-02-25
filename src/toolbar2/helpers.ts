@@ -1,11 +1,12 @@
-﻿import { Commands } from "./command/commands";
+﻿import { Commands } from './command/commands';
+import { ToolbarSettings } from './toolbar/toolbar-settings';
 
 /**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
  */
 // ToDo: refactor to avoid side-effects
-export const defaultSettings = {
+export const defaultToolbarSettings: ToolbarSettings = {
   autoAddMore: null, // null | "right" | "start" | true
   hover: 'right', // right | left | none
   show: 'hover', // always | hover
@@ -24,15 +25,23 @@ export const defaultSettings = {
  * @param unstructuredConfig
  * @param allActions
  * @param instanceConfig
- * @param moreSettings
+ * @param toolbarSettings
  */
-export const buildFullDefinition = (unstructuredConfig, allActions: Commands, instanceConfig, moreSettings) => {
-  const fullConfig = ensureDefinitionTree(unstructuredConfig, moreSettings);
+export const buildFullDefinition = (unstructuredConfig, allActions: Commands, instanceConfig, toolbarSettings: ToolbarSettings) => {
+
+
+  const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
 
   // ToDo: don't use console.log in production
   if (unstructuredConfig.debug) console.log('toolbar: detailed debug on; start build full Def');
+
+
   expandButtonGroups(fullConfig, allActions);
+
+
   removeDisableButtons(fullConfig, instanceConfig);
+
+
   if (fullConfig.debug) console.log('after remove: ', fullConfig);
 
   customize(fullConfig);
@@ -50,9 +59,9 @@ export const buildFullDefinition = (unstructuredConfig, allActions: Commands, in
  * - defaults, already officially formatted
  * - params, officially formatted
  * @param original
- * @param moreSettings
+ * @param toolbarSettings
  */
-export const ensureDefinitionTree = (original, moreSettings) => {
+export const ensureDefinitionTree = (original, toolbarSettings: ToolbarSettings) => {
   // original is null/undefined, just return empty set
   if (!original) throw (`preparing toolbar, with nothing to work on: ${original}`);
 
@@ -78,7 +87,7 @@ export const ensureDefinitionTree = (original, moreSettings) => {
     groups: original.groups || [], // the groups of buttons
     defaults: original.defaults || {}, // the button defaults like icon, etc.
     params: original.params || {}, // these are the default command parameters
-    settings: Object.assign({}, defaultSettings, original.settings, moreSettings) as any,
+    settings: Object.assign({}, defaultToolbarSettings, original.settings, toolbarSettings) as any,
   };
 };
 //#endregion initial toolbar object

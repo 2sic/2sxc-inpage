@@ -1,16 +1,16 @@
-﻿import { generateToolbarHtml } from '../abtesting/toolbar-feature';
-import { getTag } from '../manage/api';
+﻿import { getTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { _toolbarManager } from './toolbar-manager';
+import { ToolbarSettings } from './toolbar/toolbar-settings';
+import { generateToolbarHtml } from './generate-toolbar-html';
 
 // quick debug - set to false if not needed for production
 const dbg = true;
 
-// default / fallback settings for toolbars when nothings is specified
-const settingsForEmptyToolbar = {
-  hover: 'left',
-  autoAddMore: 'left',
-};
+/** default / fallback settings for toolbars when nothings is specified */
+const settingsForEmptyToolbar = new ToolbarSettings();
+settingsForEmptyToolbar.autoAddMore = 'start'; // ex: 'left'
+settingsForEmptyToolbar.hover = 'left';
 
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar(): any {
@@ -58,7 +58,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     const tag: any = $(this);
     let data: any = null;
     let toolbarConfig: any;
-    let toolbarSettings: any;
+    let toolbarSettings: ToolbarSettings;
     const at = $2sxc.c.attr;
 
     try {
@@ -66,7 +66,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
       toolbarConfig = JSON.parse(data);
       data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
       toolbarSettings = JSON.parse(data);
-      if (toolbarConfig === {} && toolbarSettings === {})
+      if (toolbarConfig === {} && toolbarSettings === ({} as ToolbarSettings))
         toolbarSettings = settingsForEmptyToolbar;
     } catch (err) {
       console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
@@ -74,7 +74,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     }
 
     try {
-      const sxc: SxcInstanceWithInternals = getSxcInstance(tag) as SxcInstanceWithInternals;
+      const sxc: SxcInstanceWithInternals = getSxcInstance(tag);
       tag.replaceWith(generateToolbarHtml(sxc, toolbarConfig, toolbarSettings));
     } catch (err2) {
       // note: errors happen a lot on custom toolbars, make sure the others are still rendered

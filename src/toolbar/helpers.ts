@@ -1,4 +1,6 @@
-﻿/**
+﻿import { Action } from '../commands/action';
+
+/**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
  */
@@ -24,7 +26,14 @@ export const defaultSettings = {
  * @param instanceConfig
  * @param moreSettings
  */
-export const buildFullDefinition = (unstructuredConfig, allActions, instanceConfig, moreSettings) => {
+export const buildFullDefinition: (unstructuredConfig: any, allActions: Action, instanceConfig: any, moreSettings: any) => {
+  name;
+  debug;
+  groups;
+  defaults;
+  params;
+  settings;
+} = (unstructuredConfig, allActions: Action, instanceConfig, moreSettings) => {
   const fullConfig = ensureDefinitionTree(unstructuredConfig, moreSettings);
 
   // ToDo: don't use console.log in production
@@ -50,7 +59,7 @@ export const buildFullDefinition = (unstructuredConfig, allActions, instanceConf
  * @param original
  * @param moreSettings
  */
-export const ensureDefinitionTree = (original, moreSettings) => {
+export const ensureDefinitionTree: (original: any, moreSettings: any) => { name;debug;groups;defaults;params;settings } = (original, moreSettings) => {
   // original is null/undefined, just return empty set
   if (!original) throw (`preparing toolbar, with nothing to work on: ${original}`);
 

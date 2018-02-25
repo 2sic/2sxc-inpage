@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 62);
+/******/ 	return __webpack_require__(__webpack_require__.s = 63);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -150,7 +150,7 @@ exports.buildNgDialogParams = buildNgDialogParams;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var positioning_1 = __webpack_require__(21);
+var positioning_1 = __webpack_require__(22);
 /**
  * the quick-edit object
  * the quick-insert object
@@ -264,14 +264,14 @@ exports.selectors = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var A_BuildToolbars = __webpack_require__(15);
+var A_BuildToolbars = __webpack_require__(16);
 var A_GenerateButtonHtml = __webpack_require__(11);
 var A_GenerateToolbarHtml = __webpack_require__(9);
-var A_ToolbarManager = __webpack_require__(25);
-var B_BuildToolbars = __webpack_require__(26);
+var A_ToolbarManager = __webpack_require__(26);
+var B_BuildToolbars = __webpack_require__(27);
 var B_GenerateButtonHtml = __webpack_require__(12);
-var B_GenerateToolbarHtml = __webpack_require__(28);
-var B_ToolbarManager = __webpack_require__(27);
+var B_GenerateToolbarHtml = __webpack_require__(13);
+var B_ToolbarManager = __webpack_require__(28);
 var ab_testing_config_1 = __webpack_require__(38);
 exports._toolbarManager = (ab_testing_config_1.isA) ? A_ToolbarManager._toolbarManager : B_ToolbarManager._toolbarManager;
 exports.disable = (ab_testing_config_1.isA) ? A_BuildToolbars.disable : B_BuildToolbars.disable;
@@ -306,7 +306,7 @@ exports.translate = translate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var action_create_1 = __webpack_require__(16);
+var action_create_1 = __webpack_require__(17);
 function commandInitializeInstanceCommands(editContext) {
     var cg = editContext.ContentGroup;
     return action_create_1.create({
@@ -332,10 +332,10 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(0);
 var quick_dialog_1 = __webpack_require__(8);
-var start_1 = __webpack_require__(20);
+var start_1 = __webpack_require__(21);
 var toolbar_feature_1 = __webpack_require__(4);
-var main_content_block_1 = __webpack_require__(18);
-var web_api_promises_1 = __webpack_require__(19);
+var main_content_block_1 = __webpack_require__(19);
+var web_api_promises_1 = __webpack_require__(20);
 /*
  * this is the content block manager in the browser
  *
@@ -429,7 +429,7 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var main_content_block_1 = __webpack_require__(18);
+var main_content_block_1 = __webpack_require__(19);
 var render_1 = __webpack_require__(7);
 var templates_1 = __webpack_require__(10);
 var api_1 = __webpack_require__(0);
@@ -672,10 +672,10 @@ function watchForResize(keepWatching) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_initialize_instance_commands_1 = __webpack_require__(6);
+var api_1 = __webpack_require__(0);
 var generate_button_html_1 = __webpack_require__(11);
 var buttonHelpers = __webpack_require__(46);
-var standard_buttons_1 = __webpack_require__(23);
-var api_1 = __webpack_require__(0);
+var standard_buttons_1 = __webpack_require__(24);
 function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     // if it has an action or is an array, keep that. Otherwise get standard buttons
     tbConfig = tbConfig || {}; // if null/undefined, use empty object
@@ -717,7 +717,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var quick_dialog_1 = __webpack_require__(8);
 var toolbar_feature_1 = __webpack_require__(4);
 var render_1 = __webpack_require__(7);
-var web_api_promises_1 = __webpack_require__(19);
+var web_api_promises_1 = __webpack_require__(20);
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
@@ -892,9 +892,57 @@ exports.generateButtonHtml = generateButtonHtml;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(0);
+var commands_1 = __webpack_require__(47);
+var generate_button_html_1 = __webpack_require__(12);
+var buttonHelpers = __webpack_require__(50);
+var standard_buttons_1 = __webpack_require__(29);
+function generateToolbarHtml(sxc, tbConfig, toolbarSettings) {
+    // if it has an action or is an array, keep that. Otherwise get standard buttons
+    tbConfig = tbConfig || {}; // if null/undefined, use empty object
+    var btnList = tbConfig;
+    if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
+        btnList = standard_buttons_1.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
+    var editContext = api_1.getEditContext(sxc);
+    // stv: temp start
+    var newCommands = new commands_1.Commands(editContext);
+    // console.log('stv: new Command JSON', JSON.stringify(newCommands));
+    console.log('stv: new Command', newCommands);
+    // stv: temp end
+    // whatever we had, if more settings were provided, override with these...
+    var tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, sxc.manage._instanceConfig /* tb.config */, toolbarSettings);
+    var btnGroups = tlbDef.groups;
+    var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
+    // todo: these settings assume it's not in an array...
+    var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
+        ((tbConfig.sortOrder === -1) ? ' listContent' : '') +
+        (tlbDef.settings.classes ? ' ' + tlbDef.settings.classes : '');
+    var toolbar = $('<ul />', {
+        // ReSharper disable once UsingOfReservedWord
+        class: tbClasses,
+        onclick: 'let e = arguments[0] || window.event; e.stopPropagation();',
+    });
+    for (var i = 0; i < btnGroups.length; i++) {
+        var btns = btnGroups[i].buttons;
+        for (var h = 0; h < btns.length; h++)
+            toolbar.append($('<li />').append($(generate_button_html_1.generateButtonHtml(sxc, btns[h], i))));
+    }
+    toolbar.attr('group-count', btnGroups.length);
+    return toolbar[0].outerHTML;
+}
+exports.generateToolbarHtml = generateToolbarHtml;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(2);
-var cmds_strategy_factory_1 = __webpack_require__(60);
-var mod_1 = __webpack_require__(61);
+var cmds_strategy_factory_1 = __webpack_require__(61);
+var mod_1 = __webpack_require__(62);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /** add a clipboard to the quick edit */
@@ -1004,13 +1052,13 @@ $('a', quick_e_1.$quickE.selected).click(function () {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var clipboard_1 = __webpack_require__(13);
+var clipboard_1 = __webpack_require__(14);
 var quick_e_1 = __webpack_require__(1);
 /**
  * module specific stuff
@@ -1144,7 +1192,7 @@ function generatePaneMoveButtons(current) {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1153,7 +1201,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(0);
 var sxc_1 = __webpack_require__(2);
 var generate_toolbar_html_1 = __webpack_require__(9);
-var toolbar_manager_1 = __webpack_require__(25);
+var toolbar_manager_1 = __webpack_require__(26);
 // quick debug - set to false if not needed for production
 var dbg = false;
 // default / fallback settings for toolbars when nothings is specified
@@ -1238,14 +1286,14 @@ exports.isDisabled = isDisabled;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var actions_1 = __webpack_require__(17);
-var item_commands_1 = __webpack_require__(22);
+var actions_1 = __webpack_require__(18);
+var item_commands_1 = __webpack_require__(23);
 var _2sxc_translate_1 = __webpack_require__(5);
 var make_def_1 = __webpack_require__(45);
 /*
@@ -1553,7 +1601,7 @@ exports.create = create;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1638,7 +1686,7 @@ exports.publishId = publishId;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1679,7 +1727,7 @@ exports._contentBlock = new MainContentBlock();
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1758,14 +1806,14 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = __webpack_require__(43);
-var positioning_1 = __webpack_require__(21);
+var positioning_1 = __webpack_require__(22);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 function enable() {
@@ -1833,7 +1881,7 @@ exports.reset = reset;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1995,7 +2043,7 @@ exports.getCoordinates = getCoordinates;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2032,13 +2080,13 @@ exports.contentItems = {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_template_1 = __webpack_require__(24);
+var toolbar_template_1 = __webpack_require__(25);
 /**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
@@ -2057,7 +2105,7 @@ exports.standardButtons = standardButtons;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2124,17 +2172,17 @@ exports.toolbarTemplate = {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var build_toolbars_1 = __webpack_require__(15);
+var build_toolbars_1 = __webpack_require__(16);
 var generate_button_html_1 = __webpack_require__(11);
 var generate_toolbar_html_1 = __webpack_require__(9);
-var standard_buttons_1 = __webpack_require__(23);
-var toolbar_template_1 = __webpack_require__(24);
+var standard_buttons_1 = __webpack_require__(24);
+var toolbar_template_1 = __webpack_require__(25);
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
@@ -2160,23 +2208,23 @@ exports._toolbarManager = new ToolbarManager();
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_feature_1 = __webpack_require__(4);
 var api_1 = __webpack_require__(0);
 var sxc_1 = __webpack_require__(2);
-var toolbar_manager_1 = __webpack_require__(27);
+var toolbar_manager_1 = __webpack_require__(28);
+var toolbar_settings_1 = __webpack_require__(51);
+var generate_toolbar_html_1 = __webpack_require__(13);
 // quick debug - set to false if not needed for production
 var dbg = true;
-// default / fallback settings for toolbars when nothings is specified
-var settingsForEmptyToolbar = {
-    hover: 'left',
-    autoAddMore: 'left',
-};
+/** default / fallback settings for toolbars when nothings is specified */
+var settingsForEmptyToolbar = new toolbar_settings_1.ToolbarSettings();
+settingsForEmptyToolbar.autoAddMore = 'start'; // ex: 'left'
+settingsForEmptyToolbar.hover = 'left';
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar() {
     var settingsString = JSON.stringify(settingsForEmptyToolbar);
@@ -2232,7 +2280,7 @@ function buildToolbars(parentTag, optionalId) {
         }
         try {
             var sxc = sxc_1.getSxcInstance(tag);
-            tag.replaceWith(toolbar_feature_1.generateToolbarHtml(sxc, toolbarConfig, toolbarSettings));
+            tag.replaceWith(generate_toolbar_html_1.generateToolbarHtml(sxc, toolbarConfig, toolbarSettings));
         }
         catch (err2) {
             // note: errors happen a lot on custom toolbars, make sure the others are still rendered
@@ -2254,15 +2302,15 @@ exports.isDisabled = isDisabled;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var build_toolbars_1 = __webpack_require__(26);
+var build_toolbars_1 = __webpack_require__(27);
 var generate_button_html_1 = __webpack_require__(12);
-var generate_toolbar_html_1 = __webpack_require__(28);
+var generate_toolbar_html_1 = __webpack_require__(13);
 var standard_buttons_1 = __webpack_require__(29);
 var toolbar_template_1 = __webpack_require__(30);
 /**
@@ -2287,54 +2335,6 @@ var ToolbarManager = /** @class */ (function () {
 }());
 exports.ToolbarManager = ToolbarManager;
 exports._toolbarManager = new ToolbarManager();
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(0);
-var commands_1 = __webpack_require__(47);
-var generate_button_html_1 = __webpack_require__(12);
-var buttonHelpers = __webpack_require__(50);
-var standard_buttons_1 = __webpack_require__(29);
-function generateToolbarHtml(sxc, tbConfig, moreSettings) {
-    // if it has an action or is an array, keep that. Otherwise get standard buttons
-    tbConfig = tbConfig || {}; // if null/undefined, use empty object
-    var btnList = tbConfig;
-    if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
-        btnList = standard_buttons_1.standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
-    var editContext = api_1.getEditContext(sxc);
-    // const oldCommands = commandInitializeInstanceCommands(editContext);
-    // stv: temp start
-    var newCommands = new commands_1.Commands(editContext);
-    // console.log('stv: new Command JSON', JSON.stringify(newCommands));
-    console.log('stv: new Command', newCommands);
-    // stv: temp end
-    // whatever we had, if more settings were provided, override with these...
-    var tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, sxc.manage._instanceConfig /* tb.config */, moreSettings);
-    var btnGroups = tlbDef.groups;
-    var behaviourClasses = ' sc-tb-hover-' + tlbDef.settings.hover + ' sc-tb-show-' + tlbDef.settings.show;
-    // todo: these settings assume it's not in an array...
-    var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
-        ((tbConfig.sortOrder === -1) ? ' listContent' : '') +
-        (tlbDef.settings.classes ? ' ' + tlbDef.settings.classes : '');
-    var toolbar = $('<ul />', {
-        'class': tbClasses,
-        'onclick': 'let e = arguments[0] || window.event; e.stopPropagation();'
-    });
-    for (var i = 0; i < btnGroups.length; i++) {
-        var btns = btnGroups[i].buttons;
-        for (var h = 0; h < btns.length; h++)
-            toolbar.append($('<li />').append($(generate_button_html_1.generateButtonHtml(sxc, btns[h], i))));
-    }
-    toolbar.attr('group-count', btnGroups.length);
-    return toolbar[0].outerHTML;
-}
-exports.generateToolbarHtml = generateToolbarHtml;
 
 
 /***/ }),
@@ -2436,7 +2436,7 @@ exports.toolbarTemplate = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_1 = __webpack_require__(51);
+var command_1 = __webpack_require__(52);
 /**
  * assemble an object which will store the configuration and execute it
  * @param sxc
@@ -2524,7 +2524,7 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_create_1 = __webpack_require__(31);
-var command_execute_action_1 = __webpack_require__(52);
+var command_execute_action_1 = __webpack_require__(53);
 var command_initialize_instance_commands_1 = __webpack_require__(6);
 var command_link_to_ng_dialog_1 = __webpack_require__(33);
 var command_open_ng_dialog_1 = __webpack_require__(32);
@@ -3088,8 +3088,8 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var actions_1 = __webpack_require__(17);
-var item_commands_1 = __webpack_require__(22);
+var actions_1 = __webpack_require__(18);
+var item_commands_1 = __webpack_require__(23);
 var _2sxc_translate_1 = __webpack_require__(5);
 var button_action_1 = __webpack_require__(48);
 var button_config_1 = __webpack_require__(49);
@@ -3504,7 +3504,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * taking care of toolbars, buttons etc.
  */
 // ToDo: refactor to avoid side-effects
-exports.defaultSettings = {
+exports.defaultToolbarSettings = {
     autoAddMore: null,
     hover: 'right',
     show: 'hover',
@@ -3521,10 +3521,10 @@ exports.defaultSettings = {
  * @param unstructuredConfig
  * @param allActions
  * @param instanceConfig
- * @param moreSettings
+ * @param toolbarSettings
  */
-exports.buildFullDefinition = function (unstructuredConfig, allActions, instanceConfig, moreSettings) {
-    var fullConfig = exports.ensureDefinitionTree(unstructuredConfig, moreSettings);
+exports.buildFullDefinition = function (unstructuredConfig, allActions, instanceConfig, toolbarSettings) {
+    var fullConfig = exports.ensureDefinitionTree(unstructuredConfig, toolbarSettings);
     // ToDo: don't use console.log in production
     if (unstructuredConfig.debug)
         console.log('toolbar: detailed debug on; start build full Def');
@@ -3545,9 +3545,9 @@ exports.buildFullDefinition = function (unstructuredConfig, allActions, instance
  * - defaults, already officially formatted
  * - params, officially formatted
  * @param original
- * @param moreSettings
+ * @param toolbarSettings
  */
-exports.ensureDefinitionTree = function (original, moreSettings) {
+exports.ensureDefinitionTree = function (original, toolbarSettings) {
     // original is null/undefined, just return empty set
     if (!original)
         throw ("preparing toolbar, with nothing to work on: " + original);
@@ -3571,7 +3571,7 @@ exports.ensureDefinitionTree = function (original, moreSettings) {
         groups: original.groups || [],
         defaults: original.defaults || {},
         params: original.params || {},
-        settings: Object.assign({}, exports.defaultSettings, original.settings, moreSettings),
+        settings: Object.assign({}, exports.defaultToolbarSettings, original.settings, toolbarSettings),
     };
 };
 //#endregion initial toolbar object
@@ -3771,6 +3771,25 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/** contains toolbar behaviour settings like float, etc. */
+var ToolbarSettings = /** @class */ (function () {
+    function ToolbarSettings() {
+        this.autoAddMore = null; //  [true: used to be right/start]
+        this.hover = 'right';
+        this.show = 'hover';
+    }
+    return ToolbarSettings;
+}());
+exports.ToolbarSettings = ToolbarSettings;
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(5);
 var Command = /** @class */ (function () {
     function Command(sxc, settings, ngDialogUrl, isDebug) {
@@ -3853,7 +3872,7 @@ exports.Command = Command;
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3897,13 +3916,13 @@ exports.commandExecuteAction = commandExecuteAction;
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var action_create_1 = __webpack_require__(16);
+var action_create_1 = __webpack_require__(17);
 var command_initialize_instance_commands_1 = __webpack_require__(6);
 var engine_1 = __webpack_require__(34);
 var Commands = /** @class */ (function () {
@@ -3920,7 +3939,7 @@ exports._commands = new Commands();
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4026,13 +4045,13 @@ exports.manipulator = manipulator;
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = __webpack_require__(56);
+var create_1 = __webpack_require__(57);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -4053,7 +4072,7 @@ exports._manage = new Manage();
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4062,9 +4081,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var toolbar_feature_1 = __webpack_require__(4);
 var toolbar_feature_2 = __webpack_require__(4);
 var engine_1 = __webpack_require__(34);
-var manipulate_1 = __webpack_require__(54);
+var manipulate_1 = __webpack_require__(55);
 var api_1 = __webpack_require__(0);
-var local_storage_helper_1 = __webpack_require__(57);
+var local_storage_helper_1 = __webpack_require__(58);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -4198,7 +4217,7 @@ var EditManager = /** @class */ (function () {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4224,7 +4243,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4320,7 +4339,7 @@ function showGlassesButtonIfUninitialized(sxci) {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4347,14 +4366,14 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var cb_1 = __webpack_require__(59);
-var Mod_1 = __webpack_require__(97);
+var cb_1 = __webpack_require__(60);
+var Mod_1 = __webpack_require__(98);
 var CmdsStrategyFactory = /** @class */ (function () {
     function CmdsStrategyFactory() {
         this.cmds = {};
@@ -4373,13 +4392,13 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mod_manage_1 = __webpack_require__(14);
+var mod_manage_1 = __webpack_require__(15);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 var Mod = /** @class */ (function () {
@@ -4412,42 +4431,41 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(35);
 __webpack_require__(36);
 __webpack_require__(37);
-__webpack_require__(63);
 __webpack_require__(64);
+__webpack_require__(65);
 __webpack_require__(38);
 __webpack_require__(4);
-__webpack_require__(16);
-__webpack_require__(65);
+__webpack_require__(17);
 __webpack_require__(66);
+__webpack_require__(67);
 __webpack_require__(31);
-__webpack_require__(52);
+__webpack_require__(53);
 __webpack_require__(6);
 __webpack_require__(33);
 __webpack_require__(32);
-__webpack_require__(51);
-__webpack_require__(53);
-__webpack_require__(67);
+__webpack_require__(52);
+__webpack_require__(54);
+__webpack_require__(68);
 __webpack_require__(34);
 __webpack_require__(45);
-__webpack_require__(68);
 __webpack_require__(69);
 __webpack_require__(70);
 __webpack_require__(71);
-__webpack_require__(17);
-__webpack_require__(18);
 __webpack_require__(72);
-__webpack_require__(54);
+__webpack_require__(18);
+__webpack_require__(19);
+__webpack_require__(73);
+__webpack_require__(55);
 __webpack_require__(7);
 __webpack_require__(10);
-__webpack_require__(73);
-__webpack_require__(19);
 __webpack_require__(74);
+__webpack_require__(20);
 __webpack_require__(75);
 __webpack_require__(76);
 __webpack_require__(77);
@@ -4457,8 +4475,8 @@ __webpack_require__(80);
 __webpack_require__(81);
 __webpack_require__(82);
 __webpack_require__(83);
-__webpack_require__(22);
 __webpack_require__(84);
+__webpack_require__(23);
 __webpack_require__(85);
 __webpack_require__(86);
 __webpack_require__(87);
@@ -4468,78 +4486,79 @@ __webpack_require__(90);
 __webpack_require__(91);
 __webpack_require__(92);
 __webpack_require__(93);
+__webpack_require__(94);
 __webpack_require__(0);
-__webpack_require__(56);
-__webpack_require__(39);
 __webpack_require__(57);
-__webpack_require__(55);
+__webpack_require__(39);
+__webpack_require__(58);
+__webpack_require__(56);
 __webpack_require__(40);
 __webpack_require__(41);
 __webpack_require__(42);
-__webpack_require__(94);
 __webpack_require__(95);
-__webpack_require__(8);
 __webpack_require__(96);
-__webpack_require__(59);
-__webpack_require__(13);
+__webpack_require__(8);
+__webpack_require__(97);
 __webpack_require__(60);
-__webpack_require__(98);
-__webpack_require__(43);
-__webpack_require__(99);
-__webpack_require__(44);
-__webpack_require__(101);
-__webpack_require__(102);
 __webpack_require__(14);
 __webpack_require__(61);
+__webpack_require__(99);
+__webpack_require__(43);
+__webpack_require__(100);
+__webpack_require__(44);
+__webpack_require__(102);
 __webpack_require__(103);
-__webpack_require__(21);
+__webpack_require__(15);
+__webpack_require__(62);
+__webpack_require__(104);
+__webpack_require__(22);
 __webpack_require__(1);
 __webpack_require__(3);
-__webpack_require__(104);
 __webpack_require__(105);
-__webpack_require__(20);
-__webpack_require__(15);
+__webpack_require__(106);
+__webpack_require__(21);
+__webpack_require__(16);
 __webpack_require__(11);
 __webpack_require__(9);
 __webpack_require__(46);
-__webpack_require__(106);
-__webpack_require__(23);
 __webpack_require__(107);
-__webpack_require__(25);
-__webpack_require__(108);
 __webpack_require__(24);
+__webpack_require__(108);
 __webpack_require__(26);
-__webpack_require__(48);
 __webpack_require__(109);
-__webpack_require__(49);
+__webpack_require__(25);
+__webpack_require__(27);
+__webpack_require__(48);
 __webpack_require__(110);
+__webpack_require__(49);
 __webpack_require__(111);
 __webpack_require__(112);
 __webpack_require__(113);
 __webpack_require__(114);
+__webpack_require__(115);
 __webpack_require__(47);
 __webpack_require__(12);
-__webpack_require__(28);
+__webpack_require__(13);
 __webpack_require__(50);
-__webpack_require__(115);
-__webpack_require__(29);
 __webpack_require__(116);
-__webpack_require__(27);
-__webpack_require__(30);
+__webpack_require__(29);
 __webpack_require__(117);
+__webpack_require__(28);
+__webpack_require__(30);
 __webpack_require__(118);
 __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(121);
 __webpack_require__(122);
+__webpack_require__(51);
 __webpack_require__(123);
 __webpack_require__(5);
-__webpack_require__(58);
+__webpack_require__(59);
 module.exports = __webpack_require__(2);
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports) {
 
 if (window.$2sxc && !window.$2sxc.consts) {
@@ -4575,7 +4594,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports) {
 
 /** this enhances the $2sxc client controller with stuff only needed when logged in */
@@ -4600,7 +4619,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4615,7 +4634,7 @@ exports.Action = Action;
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4630,7 +4649,7 @@ exports.CmdSpec = CmdSpec;
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4645,7 +4664,7 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4660,7 +4679,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4675,7 +4694,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4690,7 +4709,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4708,7 +4727,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4723,7 +4742,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4738,7 +4757,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4753,7 +4772,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4768,7 +4787,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4783,7 +4802,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4798,7 +4817,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4813,7 +4832,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4828,7 +4847,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4843,7 +4862,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4858,7 +4877,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4889,7 +4908,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4920,17 +4939,17 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(53);
-var manage_1 = __webpack_require__(55);
+var commands_1 = __webpack_require__(54);
+var manage_1 = __webpack_require__(56);
 var quick_e_1 = __webpack_require__(1);
-var start_1 = __webpack_require__(20);
-__webpack_require__(58);
+var start_1 = __webpack_require__(21);
+__webpack_require__(59);
 // debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';
@@ -4961,12 +4980,6 @@ $(start_1.start); // run on-load
 
 
 /***/ }),
-/* 85 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 86 */
 /***/ (function(module, exports) {
 
@@ -4976,13 +4989,13 @@ $(start_1.start); // run on-load
 /* 87 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming
 
 
 /***/ }),
 /* 88 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -5005,6 +5018,12 @@ $(start_1.start); // run on-load
 
 /***/ }),
 /* 92 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5025,13 +5044,13 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -5075,7 +5094,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -5102,7 +5121,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5120,13 +5139,13 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mod_manage_1 = __webpack_require__(14);
+var mod_manage_1 = __webpack_require__(15);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 var Mod = /** @class */ (function () {
@@ -5159,7 +5178,7 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5174,14 +5193,14 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Cb_1 = __webpack_require__(100);
-var clipboard_1 = __webpack_require__(13);
+var Cb_1 = __webpack_require__(101);
+var clipboard_1 = __webpack_require__(14);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /**
@@ -5210,7 +5229,7 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5237,12 +5256,6 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 101 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 102 */
 /***/ (function(module, exports) {
 
@@ -5250,13 +5263,19 @@ exports.Cb = Cb;
 
 /***/ }),
 /* 103 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var clipboard_1 = __webpack_require__(13);
-var mod_manage_1 = __webpack_require__(14);
+var clipboard_1 = __webpack_require__(14);
+var mod_manage_1 = __webpack_require__(15);
 var quick_e_1 = __webpack_require__(1);
 var selectors_instance_1 = __webpack_require__(3);
 /**
@@ -5282,7 +5301,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5300,7 +5319,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5315,7 +5334,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports) {
 
 /*
@@ -5416,7 +5435,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -5424,7 +5443,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -5439,7 +5458,7 @@ $(function () {
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5469,7 +5488,7 @@ exports.ButtonBaseConfig = ButtonBaseConfig;
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5484,7 +5503,7 @@ exports.Button = Button;
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5498,7 +5517,7 @@ exports.ExpandButtonConfig = ExpandButtonConfig;
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5512,7 +5531,7 @@ exports.ExpandGroupConfig = ExpandGroupConfig;
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5535,7 +5554,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5550,7 +5569,7 @@ exports.CommandDefinition = CommandDefinition;
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5565,7 +5584,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -5573,7 +5592,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5588,7 +5607,7 @@ exports.ToolbarConfigTemplate = ToolbarConfigTemplate;
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5603,7 +5622,7 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5619,7 +5638,7 @@ exports.ToolbarConfig = ToolbarConfig;
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5633,7 +5652,7 @@ exports.ExpandToolbarConfig = ExpandToolbarConfig;
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5646,25 +5665,6 @@ var ToolbarParameters = /** @class */ (function () {
     return ToolbarParameters;
 }());
 exports.ToolbarParameters = ToolbarParameters;
-
-
-/***/ }),
-/* 122 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/** contains toolbar behaviour settings like float, etc. */
-var ToolbarSettings = /** @class */ (function () {
-    function ToolbarSettings() {
-        this.autoAddMore = null; //  [true: used to be right/start]
-        this.hover = 'right';
-        this.show = 'hover';
-    }
-    return ToolbarSettings;
-}());
-exports.ToolbarSettings = ToolbarSettings;
 
 
 /***/ }),
