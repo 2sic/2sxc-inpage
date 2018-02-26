@@ -844,7 +844,7 @@ exports.generateButtonHtml = generateButtonHtml;
 Object.defineProperty(exports, "__esModule", { value: true });
 var generate_button_html_1 = __webpack_require__(13);
 function generateToolbarHtml(sxc, toolbarData, toolbarConfig) {
-    var btnGroups = toolbarConfig.items;
+    var btnGroups = toolbarConfig.groups;
     var behaviourClasses = " sc-tb-hover-" + toolbarConfig.settings.hover + " sc-tb-show-" + toolbarConfig.settings.show;
     // todo: these settings assume it's not in an array...
     var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
@@ -3592,13 +3592,15 @@ exports.ensureDefinitionTree = function (original, toolbarSettings) {
         }
     }
     var toolbarConfig = new toolbar_config_1.ToolbarConfig();
-    toolbarConfig.items = original.groups || []; // the groups of buttons
+    // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
+    toolbarConfig.groups = original.groups || []; // the groups of buttons
     toolbarConfig.params = original.params || {}; // these are the default command parameters
     toolbarConfig.settings = Object.assign({}, toolbar_settings_1.defaultToolbarSettings, original.settings, toolbarSettings);
     // todo: old props, remove
     toolbarConfig.name = original.name || 'toolbar'; // name, no real use
     toolbarConfig.debug = original.debug || false; // show more debug info
     toolbarConfig.defaults = original.defaults || {}; // the button defaults like icon, etc.
+    console.log('stv: toolbarConfig ', toolbarConfig);
     return toolbarConfig;
 };
 //#endregion initial toolbar object
@@ -3623,11 +3625,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 exports.expandButtonGroups = function (fullSet, actions) {
     // by now we should have a structure, let's check/fix the buttons
-    for (var g = 0; g < fullSet.items.length; g++) {
+    for (var g = 0; g < fullSet.groups.length; g++) {
         // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-        exports.expandButtonList(fullSet.items[g], fullSet.settings);
+        exports.expandButtonList(fullSet.groups[g], fullSet.settings);
         // fix all the buttons
-        var btns = fullSet.items[g].buttons;
+        var btns = fullSet.groups[g].buttons;
         if (Array.isArray(btns))
             for (var b = 0; b < btns.length; b++) {
                 var btn = btns[b];
@@ -3635,7 +3637,7 @@ exports.expandButtonGroups = function (fullSet, actions) {
                     console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
                 Object.assign(btn.command, fullSet.params); // enhance the button with settings for this instance
                 // tools.addCommandParams(fullSet, btn);
-                exports.addDefaultBtnSettings(btn, fullSet.items[g], fullSet, actions); // ensure all buttons have either own settings, or the fallback
+                exports.addDefaultBtnSettings(btn, fullSet.groups[g], fullSet, actions); // ensure all buttons have either own settings, or the fallback
             }
     }
 };
@@ -3716,7 +3718,7 @@ exports.expandButtonConfig = function (original, sharedProps) {
 };
 // remove buttons which are not valid based on add condition
 exports.removeDisableButtons = function (full, config) {
-    var btnGroups = full.items;
+    var btnGroups = full.groups;
     for (var g = 0; g < btnGroups.length; g++) {
         var btns = btnGroups[g].buttons;
         removeUnfitButtons(btns, config);
@@ -3789,7 +3791,7 @@ exports.customize = function (toolbar) {
     // let set = toolbar.settings;
     // if (set.autoAddMore) {
     //    console.log("auto-more");
-    //    let grps = toolbar.items;
+    //    let grps = toolbar.groups;
     //    for (let g = 0; g < grps.length; g++) {
     //        let btns = grps[g];
     //        for (let i = 0; i < btns.length; i++) {
@@ -3815,8 +3817,8 @@ var group_config_1 = __webpack_require__(54);
 /** contains a toolbar config + settings + many groups */
 var ToolbarConfig = /** @class */ (function () {
     function ToolbarConfig() {
-        this.groupConfig = new group_config_1.GroupConfig();
-        this.items = []; // the groups of buttons
+        this.groupConfig = new group_config_1.GroupConfig(new Array()); // stv: this is temp
+        this.groups = []; // todo: stv rename to 'items', the groups of buttons
         // todo: old props, remove
         this.name = 'toolbar'; // name, no real use
         this.debug = false; // show more debug info
@@ -3834,14 +3836,12 @@ exports.ToolbarConfig = ToolbarConfig;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var GroupConfig = /** @class */ (function () {
-    function GroupConfig() {
-    }
-    GroupConfig.prototype.constructors = function (buttons) {
+    function GroupConfig(buttons) {
         // adds these to the items
-        this.items = buttons;
-    };
+        this.groups = buttons;
+    }
     GroupConfig.fromNameAndParams = function (name, params) {
-        var groupConfig = new GroupConfig();
+        var groupConfig = new GroupConfig(new Array());
         // builds buttons from name and params, then adds
         return groupConfig;
     };

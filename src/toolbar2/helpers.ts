@@ -15,11 +15,11 @@ import { ToolbarSettings } from './toolbar/toolbar-settings';
  */
 export const expandButtonGroups = (fullSet, actions: Commands) => { // , itemSettings) {
   // by now we should have a structure, let's check/fix the buttons
-  for (let g = 0; g < fullSet.items.length; g++) {
+  for (let g = 0; g < fullSet.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-    expandButtonList(fullSet.items[g], fullSet.settings);
+    expandButtonList(fullSet.groups[g], fullSet.settings);
     // fix all the buttons
-    const btns = fullSet.items[g].buttons;
+    const btns = fullSet.groups[g].buttons;
     if (Array.isArray(btns))
       for (let b = 0; b < btns.length; b++) {
         const btn = btns[b];
@@ -29,7 +29,7 @@ export const expandButtonGroups = (fullSet, actions: Commands) => { // , itemSet
         // tools.addCommandParams(fullSet, btn);
 
         addDefaultBtnSettings(btn,
-          fullSet.items[g],
+          fullSet.groups[g],
           fullSet,
           actions); // ensure all buttons have either own settings, or the fallback
       }
@@ -118,7 +118,7 @@ export const expandButtonConfig = (original, sharedProps) => {
 
 // remove buttons which are not valid based on add condition
 export const removeDisableButtons = (full, config) => {
-  const btnGroups = full.items;
+  const btnGroups = full.groups;
   for (let g = 0; g < btnGroups.length; g++) {
     const btns = btnGroups[g].buttons;
     removeUnfitButtons(btns, config);
@@ -197,7 +197,7 @@ export const customize = (toolbar) => {
   // let set = toolbar.settings;
   // if (set.autoAddMore) {
   //    console.log("auto-more");
-  //    let grps = toolbar.items;
+  //    let grps = toolbar.groups;
   //    for (let g = 0; g < grps.length; g++) {
   //        let btns = grps[g];
   //        for (let i = 0; i < btns.length; i++) {

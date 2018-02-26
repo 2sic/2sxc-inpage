@@ -3,7 +3,7 @@ import { ToolbarConfig } from './toolbar/toolbar-config';
 
 export function generateToolbarHtml(sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
 
-  const btnGroups = toolbarConfig.items;
+  const btnGroups = toolbarConfig.groups;
   const behaviourClasses = ` sc-tb-hover-${toolbarConfig.settings.hover} sc-tb-show-${toolbarConfig.settings.show}`;
 
   // todo: these settings assume it's not in an array...

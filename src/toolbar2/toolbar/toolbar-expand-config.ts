@@ -1,5 +1,7 @@
 ﻿import { DataEditContext } from '../../data-edit-context/data-edit-context';
 import { InstanceConfig } from '../../manage/instance-config';
+import { ButtonConfig } from '../button/button-config';
+import { GroupConfig } from '../button/group-config';
 import { Commands } from '../command/commands';
 import * as buttonHelpers from '../helpers';
 import { standardButtons } from '../standard-buttons';
@@ -90,7 +92,8 @@ export const ensureDefinitionTree = (original, toolbarSettings: ToolbarSettings)
   }
 
   const toolbarConfig = new ToolbarConfig();
-  toolbarConfig.items = original.groups || []; // the groups of buttons
+  // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
+  toolbarConfig.groups = original.groups || []; // the groups of buttons
   toolbarConfig.params = original.params || {}; // these are the default command parameters
   toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, original.settings, toolbarSettings) as ToolbarSettings;
 
@@ -98,6 +101,8 @@ export const ensureDefinitionTree = (original, toolbarSettings: ToolbarSettings)
   toolbarConfig.name = original.name || 'toolbar'; // name, no real use
   toolbarConfig.debug = original.debug || false; // show more debug info
   toolbarConfig.defaults = original.defaults || {}; // the button defaults like icon, etc.
+
+  console.log('stv: toolbarConfig ', toolbarConfig);
 
   return toolbarConfig;
 };
