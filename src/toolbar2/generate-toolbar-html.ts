@@ -23,7 +23,7 @@ export function generateToolbarHtml(sxc: SxcInstanceWithInternals, tbConfig: any
 
   // whatever we had, if more settings were provided, override with these...
   const tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, sxc.manage._instanceConfig /* tb.config */, toolbarSettings);
-  const btnGroups = tlbDef.groups;
+  const btnGroups = tlbDef.items;
   const behaviourClasses = ` sc-tb-hover-${tlbDef.settings.hover} sc-tb-show-${tlbDef.settings.show}`;
 
   // todo: these settings assume it's not in an array...

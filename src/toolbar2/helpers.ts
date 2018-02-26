@@ -1,4 +1,5 @@
 ﻿import { Commands } from './command/commands';
+import { ToolbarConfig } from './toolbar/toolbar-config';
 import { ToolbarSettings } from './toolbar/toolbar-settings';
 
 /**
@@ -61,7 +62,7 @@ export const buildFullDefinition = (unstructuredConfig, allActions: Commands, in
  * @param original
  * @param toolbarSettings
  */
-export const ensureDefinitionTree = (original, toolbarSettings: ToolbarSettings) => {
+export const ensureDefinitionTree = (original, toolbarSettings: ToolbarSettings): ToolbarConfig => {
   // original is null/undefined, just return empty set
   if (!original) throw (`preparing toolbar, with nothing to work on: ${original}`);
 
@@ -80,15 +81,17 @@ export const ensureDefinitionTree = (original, toolbarSettings: ToolbarSettings)
       console.warn("toolbar tried to build toolbar but couldn't detect type of this:", original);
   }
 
-  // build an object with this structure
-  return {
-    name: original.name || 'toolbar', // name, no real use
-    debug: original.debug || false, // show more debug info
-    groups: original.groups || [], // the groups of buttons
-    defaults: original.defaults || {}, // the button defaults like icon, etc.
-    params: original.params || {}, // these are the default command parameters
-    settings: Object.assign({}, defaultToolbarSettings, original.settings, toolbarSettings) as any,
-  };
+  const toolbarConfig = new ToolbarConfig();
+  toolbarConfig.items = original.groups || []; // the groups of buttons
+  toolbarConfig.params = original.params || {}; // these are the default command parameters
+  toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, original.settings, toolbarSettings) as ToolbarSettings;
+
+  // todo: old props, remove
+  toolbarConfig.name = original.name || 'toolbar'; // name, no real use
+  toolbarConfig.debug = original.debug || false; // show more debug info
+  toolbarConfig.defaults = original.defaults || {}; // the button defaults like icon, etc.
+
+  return toolbarConfig;
 };
 //#endregion initial toolbar object
 
@@ -100,11 +103,11 @@ export const ensureDefinitionTree = (original, toolbarSettings: ToolbarSettings)
  */
 export const expandButtonGroups = (fullSet, actions: Commands) => { // , itemSettings) {
   // by now we should have a structure, let's check/fix the buttons
-  for (let g = 0; g < fullSet.groups.length; g++) {
+  for (let g = 0; g < fullSet.items.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-    expandButtonList(fullSet.groups[g], fullSet.settings);
+    expandButtonList(fullSet.items[g], fullSet.settings);
     // fix all the buttons
-    const btns = fullSet.groups[g].buttons;
+    const btns = fullSet.items[g].buttons;
     if (Array.isArray(btns))
       for (let b = 0; b < btns.length; b++) {
         const btn = btns[b];
@@ -114,7 +117,7 @@ export const expandButtonGroups = (fullSet, actions: Commands) => { // , itemSet
         // tools.addCommandParams(fullSet, btn);
 
         addDefaultBtnSettings(btn,
-          fullSet.groups[g],
+          fullSet.items[g],
           fullSet,
           actions); // ensure all buttons have either own settings, or the fallback
       }
@@ -203,7 +206,7 @@ export const expandButtonConfig = (original, sharedProps) => {
 
 // remove buttons which are not valid based on add condition
 export const removeDisableButtons = (full, config) => {
-  const btnGroups = full.groups;
+  const btnGroups = full.items;
   for (let g = 0; g < btnGroups.length; g++) {
     const btns = btnGroups[g].buttons;
     removeUnfitButtons(btns, config);
@@ -282,7 +285,7 @@ export const customize = (toolbar) => {
   // let set = toolbar.settings;
   // if (set.autoAddMore) {
   //    console.log("auto-more");
-  //    let grps = toolbar.groups;
+  //    let grps = toolbar.items;
   //    for (let g = 0; g < grps.length; g++) {
   //        let btns = grps[g];
   //        for (let i = 0; i < btns.length; i++) {
