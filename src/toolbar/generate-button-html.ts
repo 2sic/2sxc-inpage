@@ -15,7 +15,7 @@ function flattenActionDefinition(actDef) {
 
 // generate the html for a button
 // Expects: instance sxc, action-definition, + group-index in which the button is shown
-export function generateButtonHtml(sxc, actDef, groupIndex: number): any {
+export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef: any, groupIndex: number): string {
 
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(actDef);
@@ -31,11 +31,11 @@ export function generateButtonHtml(sxc, actDef, groupIndex: number): any {
 
   for (let c = 0; c < classesList.length; c++) showClasses += ' ' + classesList[c];
 
-  let button = $('<a />', {
+  const button = $('<a />', {
     'class': 'sc-' + actDef.action + ' ' + showClasses +
-    (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
+      (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
     'onclick': onclick,
-    'data-i18n': '[title]' + actDef.title
+    'data-i18n': '[title]' + actDef.title,
   });
   button.html(box.html(symbol));
   return button[0].outerHTML;

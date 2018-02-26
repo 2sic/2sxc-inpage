@@ -49,16 +49,13 @@ export class Commands {
     newButtonAction.codeFunctionTemp = more.code; // todo stv: find what with this
     newButtonAction.code = ''; // todo stv: find where is 'code'
 
-    const newButtonConfig: ButtonConfig = this.getButtonConfig(icon, translateKey, uiOnly, partOfPage, more);
+    const newButtonConfig: ButtonConfig = this.getButtonConfig(name, icon, translateKey, uiOnly, partOfPage, more);
     newButtonConfig.action = newButtonAction;
 
     const newDefinition: CommandDefinition = {
       name: name,
       buttonConfig: newButtonConfig,
     };
-
-    // stv: check this???
-    // Object.assign(newDefinition, more);
 
     return newDefinition;
   }
@@ -371,7 +368,7 @@ export class Commands {
     }));
   }
 
-  private getButtonConfig(icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Definition) {
+  private getButtonConfig(name: string, icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Definition) {
 
     const partialButtonConfig = {
       icon: 'icon-sxc-' + icon,
@@ -380,8 +377,12 @@ export class Commands {
       partOfPage: partOfPage,
     } as Partial<ButtonConfig>;
 
+    // stv: 1st object assign 'more'
     Object.assign(partialButtonConfig, more);
 
+    // stv: name is never
+    // stv: 2nd object assign 'more'
+    // todo: stv, do we need 1st and 2nd?!?!
     return ButtonConfig.fromNameAndParams(name, more.params, partialButtonConfig);
   }
 }

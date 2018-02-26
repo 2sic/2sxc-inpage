@@ -1,5 +1,5 @@
 ﻿import { UserOfEditContext } from '../manage/user-of-edit-context';
-import {Params } from './params';
+import { Params } from './params';
 
 export class Settings {
   code: any;

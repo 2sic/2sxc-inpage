@@ -1,6 +1,8 @@
-﻿import { Commands } from './command/commands';
+﻿import { GroupConfig } from './button/group-config';
+import { Commands } from './command/commands';
 import { ToolbarConfig } from './toolbar/toolbar-config';
 import { ToolbarSettings } from './toolbar/toolbar-settings';
+import { ButtonConfig } from './button/button-config';
 
 /**
  * the toolbar manager is an internal helper
@@ -20,7 +22,10 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
     expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings);
     // fix all the buttons
     const btns = fullToolbarConfig.groups[g].buttons;
-    if (Array.isArray(btns))
+
+    let buttonConfigs = new Array<ButtonConfig>();
+
+    if (Array.isArray(btns)) {
       for (let b = 0; b < btns.length; b++) {
         const btn = btns[b];
         if (!(actions.get(btn.command.action)))
@@ -32,7 +37,14 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
           fullToolbarConfig.groups[g],
           fullToolbarConfig,
           actions); // ensure all buttons have either own settings, or the fallback
+
+        const buttonConfig = actions.get(btn.command.action).buttonConfig;
+        buttonConfigs.push(buttonConfig);
       }
+    }
+
+    fullToolbarConfig.groupConfigs.push(new GroupConfig(buttonConfigs));
+
   }
 };
 

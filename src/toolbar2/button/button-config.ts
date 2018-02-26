@@ -7,7 +7,7 @@ import { ButtonAction } from './button-action';
 export class ButtonConfig {
   name: string = '';
   params: any[] = [];
-
+  command: CommandDefinition;
   classes: string = '';
   dialog: string = '';
   fullScreen: boolean = null;
@@ -29,14 +29,12 @@ export class ButtonConfig {
   }
 
   static fromNameAndParams(name: string, params: any[], partialConfig?: Partial<ButtonConfig>, commands?: CommandDefinition): ButtonConfig {
-
     const buttonConfig = new ButtonConfig();
     buttonConfig.name = name;
     buttonConfig.params = params;
-
     // todo: look up command with this name
-    // const tmpCommandDefinition: CommandDefinition = commands[name];
-    // console.log('stv: code in ButtonConfig: ', name, commands);
+    // buttonConfig.command = commands[name];
+    // console.log('stv: code in ButtonConfig: ', name, buttonConfig.command);
 
     // todo create an action for that command
 

@@ -1,4 +1,8 @@
-﻿/**
+﻿import { ButtonConfig } from "./button/button-config";
+import { Settings } from "../commands/settings";
+import { ButtonAction } from "./button/button-action";
+
+/**
  * does some clean-up work on a button-definition object
  * because the target item could be specified directly, or in a complex internal object called entity
  * @param actDef
@@ -15,8 +19,8 @@ function flattenActionDefinition(actDef) {
 
 // generate the html for a button
 // Expects: instance sxc, action-definition, + group-index in which the button is shown
-export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef, groupIndex: number): string {
-
+export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef: any, groupIndex: number): string {
+  // debugger;
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(actDef);
 
@@ -27,7 +31,7 @@ export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef, groupI
   const symbol: any = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
   const onclick: string = actDef.disabled ?
       '' :
-      '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
+    '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
 
   for (let c = 0; c < classesList.length; c++) showClasses += ' ' + classesList[c];
 
@@ -38,5 +42,8 @@ export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef, groupI
     'data-i18n': '[title]' + actDef.title,
   });
   button.html(box.html(symbol));
+
+  console.log('stv: buttonHtml', button[0].outerHTML);
+
   return button[0].outerHTML;
 }
