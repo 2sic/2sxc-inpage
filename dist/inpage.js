@@ -3437,7 +3437,6 @@ var Commands = /** @class */ (function () {
         };
         // stv: 1st object assign 'more'
         Object.assign(partialButtonConfig, more);
-        // stv: name is never
         // stv: 2nd object assign 'more'
         // todo: stv, do we need 1st and 2nd?!?!
         return button_config_1.ButtonConfig.fromNameAndParams(name, more.params, partialButtonConfig);
