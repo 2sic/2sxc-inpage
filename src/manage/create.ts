@@ -65,7 +65,7 @@ class EditManager {
    * @param {Object<any>} moreSettings - additional / override settings
    * @returns {string} html of the current toolbar
    */
-  getToolbar = (tbConfig, moreSettings) => generateToolbarHtml(this.sxc, tbConfig, moreSettings);
+  // getToolbar = (tbConfig, moreSettings) => generateToolbarHtml(this.sxc, tbConfig, moreSettings);
 
   //#endregion official, public properties - everything below this can change at any time
 

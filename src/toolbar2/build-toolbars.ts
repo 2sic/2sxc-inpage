@@ -1,8 +1,13 @@
-﻿import { getTag } from '../manage/api';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { getEditContext, getTag } from '../manage/api';
+import { InstanceConfig } from '../manage/instance-config';
 import { getSxcInstance } from '../x-bootstrap/sxc';
+import { Commands } from './command/commands';
+import { generateToolbarHtml } from './generate-toolbar-html';
+import * as buttonHelpers from './helpers';
+import { standardButtons } from './standard-buttons';
 import { _toolbarManager } from './toolbar-manager';
 import { ToolbarSettings } from './toolbar/toolbar-settings';
-import { generateToolbarHtml } from './generate-toolbar-html';
 
 // quick debug - set to false if not needed for production
 const dbg = true;
@@ -73,15 +78,30 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
       return;
     }
 
-    // todo: create ToolbarConfig
-
-
-
-
-
     try {
       const sxc: SxcInstanceWithInternals = getSxcInstance(tag);
-      tag.replaceWith(generateToolbarHtml(sxc, toolbarConfig, toolbarSettings));
+
+      // todo: create ToolbarConfig
+      const editContext: DataEditContext = getEditContext(sxc);
+
+      // if it has an action or is an array, keep that. Otherwise get standard buttons
+      toolbarConfig = toolbarConfig || {}; // if null/undefined, use empty object
+      let btnList = toolbarConfig;
+      if (!toolbarConfig.action && !toolbarConfig.groups && !toolbarConfig.buttons && !Array.isArray(toolbarConfig))
+        btnList = standardButtons(editContext.User.CanDesign, toolbarConfig);
+
+      // stv: temp start
+      const newCommands = new Commands(editContext);
+      // console.log('stv: new Command JSON', JSON.stringify(newCommands));
+      console.log('stv: new Command', newCommands);
+      // stv: temp end
+
+      const instanceConfig: InstanceConfig = new InstanceConfig(editContext);
+
+      // whatever we had, if more settings were provided, override with these...
+      const tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, instanceConfig, toolbarSettings);
+
+      tag.replaceWith(generateToolbarHtml(sxc, toolbarConfig, toolbarSettings, tlbDef));
     } catch (err2) {
       // note: errors happen a lot on custom toolbars, make sure the others are still rendered
       console.error('error creating toolbar - will skip this one', err2);

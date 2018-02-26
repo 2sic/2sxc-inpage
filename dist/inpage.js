@@ -70,6 +70,75 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var positioning_1 = __webpack_require__(23);
+/**
+ * the quick-edit object
+ * the quick-insert object
+ */
+var QuickE = /** @class */ (function () {
+    function QuickE() {
+        var _this = this;
+        this.body = $('body');
+        this.win = $(window);
+        this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
+        this.template = '<a class=\'sc-content-block-menu-addcontent sc-invisible\' data-type=\'Default\' data-i18n=\'[titleTemplate]QuickInsertMenu.AddBlockContent\'>x</a>'
+            + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
+            + btn('select', 'ok', 'Select', true)
+            + btn('paste', 'paste', 'Paste', true, true);
+        this.selected = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
+            .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>");
+        // will be populated later in the module section
+        this.contentBlocks = null;
+        this.cachedPanes = null;
+        this.modules = null;
+        this.nearestCb = null;
+        this.nearestMod = null;
+        this.modManage = null;
+        // add stuff which depends on other values to create
+        this.cbActions = $(this.template);
+        this.modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
+            .attr('data-context', 'module')
+            .addClass('sc-content-block-menu-module');
+        this.selected.toggle = function (target) {
+            if (!target || target.length === 0) {
+                _this.selected.hide();
+            }
+            else {
+                var coords = positioning_1.getCoordinates(target);
+                coords.yh = coords.y + 20;
+                positioning_1.positionAndAlign(_this.selected, coords);
+                _this.selected.target = target;
+            }
+        };
+    }
+    return QuickE;
+}());
+exports.$quickE = new QuickE();
+function btn(action, icon, i18N, invisible, unavailable, classes) {
+    return '<a class=\'sc-content-block-menu-btn sc-cb-action icon-sxc-' + icon + ' '
+        + (invisible ? ' sc-invisible ' : '')
+        + (unavailable ? ' sc-unavailable ' : '')
+        + classes + '\' data-action=\'' + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
+}
+/**
+ * build the toolbar (hidden, but ready to show)
+ */
+function prepareToolbarInDom() {
+    exports.$quickE.body.append(exports.$quickE.main)
+        .append(exports.$quickE.selected);
+    exports.$quickE.main.append(exports.$quickE.cbActions)
+        .append(exports.$quickE.modActions);
+}
+exports.prepareToolbarInDom = prepareToolbarInDom;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var instance_config_1 = __webpack_require__(17);
 var ng_dialog_params_1 = __webpack_require__(41);
 var qucik_dialog_config_1 = __webpack_require__(42);
@@ -144,75 +213,6 @@ exports.buildNgDialogParams = buildNgDialogParams;
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var positioning_1 = __webpack_require__(23);
-/**
- * the quick-edit object
- * the quick-insert object
- */
-var QuickE = /** @class */ (function () {
-    function QuickE() {
-        var _this = this;
-        this.body = $('body');
-        this.win = $(window);
-        this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
-        this.template = '<a class=\'sc-content-block-menu-addcontent sc-invisible\' data-type=\'Default\' data-i18n=\'[titleTemplate]QuickInsertMenu.AddBlockContent\'>x</a>'
-            + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
-            + btn('select', 'ok', 'Select', true)
-            + btn('paste', 'paste', 'Paste', true, true);
-        this.selected = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-            .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>");
-        // will be populated later in the module section
-        this.contentBlocks = null;
-        this.cachedPanes = null;
-        this.modules = null;
-        this.nearestCb = null;
-        this.nearestMod = null;
-        this.modManage = null;
-        // add stuff which depends on other values to create
-        this.cbActions = $(this.template);
-        this.modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
-            .attr('data-context', 'module')
-            .addClass('sc-content-block-menu-module');
-        this.selected.toggle = function (target) {
-            if (!target || target.length === 0) {
-                _this.selected.hide();
-            }
-            else {
-                var coords = positioning_1.getCoordinates(target);
-                coords.yh = coords.y + 20;
-                positioning_1.positionAndAlign(_this.selected, coords);
-                _this.selected.target = target;
-            }
-        };
-    }
-    return QuickE;
-}());
-exports.$quickE = new QuickE();
-function btn(action, icon, i18N, invisible, unavailable, classes) {
-    return '<a class=\'sc-content-block-menu-btn sc-cb-action icon-sxc-' + icon + ' '
-        + (invisible ? ' sc-invisible ' : '')
-        + (unavailable ? ' sc-unavailable ' : '')
-        + classes + '\' data-action=\'' + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
-}
-/**
- * build the toolbar (hidden, but ready to show)
- */
-function prepareToolbarInDom() {
-    exports.$quickE.body.append(exports.$quickE.main)
-        .append(exports.$quickE.selected);
-    exports.$quickE.main.append(exports.$quickE.cbActions)
-        .append(exports.$quickE.modActions);
-}
-exports.prepareToolbarInDom = prepareToolbarInDom;
-
-
-/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -264,30 +264,6 @@ exports.selectors = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var A_BuildToolbars = __webpack_require__(16);
-var A_GenerateButtonHtml = __webpack_require__(11);
-var A_GenerateToolbarHtml = __webpack_require__(9);
-var A_ToolbarManager = __webpack_require__(27);
-var B_BuildToolbars = __webpack_require__(28);
-var B_GenerateButtonHtml = __webpack_require__(12);
-var B_GenerateToolbarHtml = __webpack_require__(13);
-var B_ToolbarManager = __webpack_require__(29);
-var ab_testing_config_1 = __webpack_require__(40);
-exports._toolbarManager = (ab_testing_config_1.isA) ? A_ToolbarManager._toolbarManager : B_ToolbarManager._toolbarManager;
-exports.disable = (ab_testing_config_1.isA) ? A_BuildToolbars.disable : B_BuildToolbars.disable;
-exports.isDisabled = (ab_testing_config_1.isA) ? A_BuildToolbars.isDisabled : B_BuildToolbars.isDisabled;
-exports.buildToolbars = (ab_testing_config_1.isA) ? A_BuildToolbars.buildToolbars : B_BuildToolbars.buildToolbars;
-exports.generateButtonHtml = (ab_testing_config_1.isA) ? A_GenerateButtonHtml.generateButtonHtml : B_GenerateButtonHtml.generateButtonHtml;
-exports.generateToolbarHtml = (ab_testing_config_1.isA) ? A_GenerateToolbarHtml.generateToolbarHtml : B_GenerateToolbarHtml.generateToolbarHtml;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
  * @param key
@@ -297,6 +273,30 @@ function translate(key) {
     return ($.t && $.t(key)) || key;
 }
 exports.translate = translate;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var A_BuildToolbars = __webpack_require__(16);
+var A_GenerateButtonHtml = __webpack_require__(11);
+var A_GenerateToolbarHtml = __webpack_require__(9);
+var A_ToolbarManager = __webpack_require__(27);
+var B_BuildToolbars = __webpack_require__(28);
+var B_GenerateButtonHtml = __webpack_require__(13);
+var B_GenerateToolbarHtml = __webpack_require__(12);
+var B_ToolbarManager = __webpack_require__(32);
+var ab_testing_config_1 = __webpack_require__(40);
+exports._toolbarManager = (ab_testing_config_1.isA) ? A_ToolbarManager._toolbarManager : B_ToolbarManager._toolbarManager;
+exports.disable = (ab_testing_config_1.isA) ? A_BuildToolbars.disable : B_BuildToolbars.disable;
+exports.isDisabled = (ab_testing_config_1.isA) ? A_BuildToolbars.isDisabled : B_BuildToolbars.isDisabled;
+exports.buildToolbars = (ab_testing_config_1.isA) ? A_BuildToolbars.buildToolbars : B_BuildToolbars.buildToolbars;
+exports.generateButtonHtml = (ab_testing_config_1.isA) ? A_GenerateButtonHtml.generateButtonHtml : B_GenerateButtonHtml.generateButtonHtml;
+exports.generateToolbarHtml = (ab_testing_config_1.isA) ? A_GenerateToolbarHtml.generateToolbarHtml : B_GenerateToolbarHtml.generateToolbarHtml;
 
 
 /***/ }),
@@ -330,10 +330,10 @@ exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
 var quick_dialog_1 = __webpack_require__(8);
 var start_1 = __webpack_require__(22);
-var toolbar_feature_1 = __webpack_require__(4);
+var toolbar_feature_1 = __webpack_require__(5);
 var main_content_block_1 = __webpack_require__(20);
 var web_api_promises_1 = __webpack_require__(21);
 /*
@@ -432,7 +432,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var main_content_block_1 = __webpack_require__(20);
 var render_1 = __webpack_require__(7);
 var templates_1 = __webpack_require__(10);
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -672,7 +672,7 @@ function watchForResize(keepWatching) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_initialize_instance_commands_1 = __webpack_require__(6);
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
 var generate_button_html_1 = __webpack_require__(11);
 var buttonHelpers = __webpack_require__(47);
 var standard_buttons_1 = __webpack_require__(25);
@@ -715,7 +715,7 @@ exports.generateToolbarHtml = generateToolbarHtml;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_dialog_1 = __webpack_require__(8);
-var toolbar_feature_1 = __webpack_require__(4);
+var toolbar_feature_1 = __webpack_require__(5);
 var render_1 = __webpack_require__(7);
 var web_api_promises_1 = __webpack_require__(21);
 /**
@@ -842,6 +842,37 @@ exports.generateButtonHtml = generateButtonHtml;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var generate_button_html_1 = __webpack_require__(13);
+function generateToolbarHtml(sxc, tbConfig, toolbarSettings, tlbDef) {
+    var btnGroups = tlbDef.items;
+    var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
+    // todo: these settings assume it's not in an array...
+    var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
+        ((tbConfig.sortOrder === -1) ? ' listContent' : '') +
+        (tlbDef.settings.classes ? ' ' + tlbDef.settings.classes : '');
+    var toolbar = $('<ul />', {
+        // ReSharper disable once UsingOfReservedWord
+        class: tbClasses,
+        onclick: 'let e = arguments[0] || window.event; e.stopPropagation();',
+    });
+    for (var i = 0; i < btnGroups.length; i++) {
+        var btns = btnGroups[i].buttons;
+        for (var h = 0; h < btns.length; h++)
+            toolbar.append($('<li />').append($(generate_button_html_1.generateButtonHtml(sxc, btns[h], i))));
+    }
+    toolbar.attr('group-count', btnGroups.length);
+    return toolbar[0].outerHTML;
+}
+exports.generateToolbarHtml = generateToolbarHtml;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * does some clean-up work on a button-definition object
  * because the target item could be specified directly, or in a complex internal object called entity
@@ -886,56 +917,6 @@ exports.generateButtonHtml = generateButtonHtml;
 
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(0);
-var instance_config_1 = __webpack_require__(17);
-var commands_1 = __webpack_require__(48);
-var generate_button_html_1 = __webpack_require__(12);
-var buttonHelpers = __webpack_require__(51);
-var standard_buttons_1 = __webpack_require__(31);
-function generateToolbarHtml(sxc, tbConfig, toolbarSettings) {
-    var editContext = api_1.getEditContext(sxc);
-    // if it has an action or is an array, keep that. Otherwise get standard buttons
-    tbConfig = tbConfig || {}; // if null/undefined, use empty object
-    var btnList = tbConfig;
-    if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
-        btnList = standard_buttons_1.standardButtons(editContext.User.CanDesign, tbConfig);
-    // stv: temp start
-    var newCommands = new commands_1.Commands(editContext);
-    // console.log('stv: new Command JSON', JSON.stringify(newCommands));
-    console.log('stv: new Command', newCommands);
-    // stv: temp end
-    var instanceConfig = new instance_config_1.InstanceConfig(editContext);
-    // whatever we had, if more settings were provided, override with these...
-    var tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, instanceConfig, toolbarSettings);
-    var btnGroups = tlbDef.items;
-    var behaviourClasses = " sc-tb-hover-" + tlbDef.settings.hover + " sc-tb-show-" + tlbDef.settings.show;
-    // todo: these settings assume it's not in an array...
-    var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
-        ((tbConfig.sortOrder === -1) ? ' listContent' : '') +
-        (tlbDef.settings.classes ? ' ' + tlbDef.settings.classes : '');
-    var toolbar = $('<ul />', {
-        // ReSharper disable once UsingOfReservedWord
-        class: tbClasses,
-        onclick: 'let e = arguments[0] || window.event; e.stopPropagation();',
-    });
-    for (var i = 0; i < btnGroups.length; i++) {
-        var btns = btnGroups[i].buttons;
-        for (var h = 0; h < btns.length; h++)
-            toolbar.append($('<li />').append($(generate_button_html_1.generateButtonHtml(sxc, btns[h], i))));
-    }
-    toolbar.attr('group-count', btnGroups.length);
-    return toolbar[0].outerHTML;
-}
-exports.generateToolbarHtml = generateToolbarHtml;
-
-
-/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -945,7 +926,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(2);
 var cmds_strategy_factory_1 = __webpack_require__(62);
 var mod_1 = __webpack_require__(63);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 /** add a clipboard to the quick edit */
 /**
@@ -1061,7 +1042,7 @@ $('a', quick_e_1.$quickE.selected).click(function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(14);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 /**
  * module specific stuff
  */
@@ -1200,7 +1181,7 @@ function generatePaneMoveButtons(current) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
 var sxc_1 = __webpack_require__(2);
 var generate_toolbar_html_1 = __webpack_require__(9);
 var toolbar_manager_1 = __webpack_require__(27);
@@ -1326,7 +1307,7 @@ exports.InstanceConfig = InstanceConfig;
 Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(19);
 var item_commands_1 = __webpack_require__(24);
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(4);
 var make_def_1 = __webpack_require__(46);
 /*
  * Actions of 2sxc - mostly used in toolbars
@@ -1846,7 +1827,7 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = __webpack_require__(44);
 var positioning_1 = __webpack_require__(23);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 function enable() {
     // build all toolbar html-elements
@@ -1920,7 +1901,7 @@ exports.reset = reset;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var coords_1 = __webpack_require__(45);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 /**
  * Module with everything related to positioning the quick-edit in-page editing
@@ -2081,7 +2062,7 @@ exports.getCoordinates = getCoordinates;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(4);
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
@@ -2246,11 +2227,15 @@ exports._toolbarManager = new ToolbarManager();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
+var instance_config_1 = __webpack_require__(17);
 var sxc_1 = __webpack_require__(2);
-var toolbar_manager_1 = __webpack_require__(29);
+var commands_1 = __webpack_require__(48);
+var generate_toolbar_html_1 = __webpack_require__(12);
+var buttonHelpers = __webpack_require__(51);
+var standard_buttons_1 = __webpack_require__(30);
+var toolbar_manager_1 = __webpack_require__(32);
 var toolbar_settings_1 = __webpack_require__(52);
-var generate_toolbar_html_1 = __webpack_require__(13);
 // quick debug - set to false if not needed for production
 var dbg = true;
 /** default / fallback settings for toolbars when nothings is specified */
@@ -2310,10 +2295,24 @@ function buildToolbars(parentTag, optionalId) {
             console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
             return;
         }
-        // todo: create ToolbarConfig
         try {
             var sxc = sxc_1.getSxcInstance(tag);
-            tag.replaceWith(generate_toolbar_html_1.generateToolbarHtml(sxc, toolbarConfig, toolbarSettings));
+            // todo: create ToolbarConfig
+            var editContext = api_1.getEditContext(sxc);
+            // if it has an action or is an array, keep that. Otherwise get standard buttons
+            toolbarConfig = toolbarConfig || {}; // if null/undefined, use empty object
+            var btnList = toolbarConfig;
+            if (!toolbarConfig.action && !toolbarConfig.groups && !toolbarConfig.buttons && !Array.isArray(toolbarConfig))
+                btnList = standard_buttons_1.standardButtons(editContext.User.CanDesign, toolbarConfig);
+            // stv: temp start
+            var newCommands = new commands_1.Commands(editContext);
+            // console.log('stv: new Command JSON', JSON.stringify(newCommands));
+            console.log('stv: new Command', newCommands);
+            // stv: temp end
+            var instanceConfig = new instance_config_1.InstanceConfig(editContext);
+            // whatever we had, if more settings were provided, override with these...
+            var tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, instanceConfig, toolbarSettings);
+            tag.replaceWith(generate_toolbar_html_1.generateToolbarHtml(sxc, toolbarConfig, toolbarSettings, tlbDef));
         }
         catch (err2) {
             // note: errors happen a lot on custom toolbars, make sure the others are still rendered
@@ -2341,42 +2340,6 @@ exports.isDisabled = isDisabled;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var build_toolbars_1 = __webpack_require__(28);
-var generate_button_html_1 = __webpack_require__(12);
-var generate_toolbar_html_1 = __webpack_require__(13);
-var standard_buttons_1 = __webpack_require__(31);
-var toolbar_template_1 = __webpack_require__(32);
-/**
- * Toolbar manager for the whole page - basically a set of APIs
- * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
- */
-var ToolbarManager = /** @class */ (function () {
-    function ToolbarManager() {
-        // internal constants
-        this.cDisableAttrName = 'data-disable-toolbar';
-        // build toolbars
-        this.buildToolbars = build_toolbars_1.buildToolbars;
-        this.disable = build_toolbars_1.disable;
-        this.isDisabled = build_toolbars_1.isDisabled;
-        // generate button html
-        this.generateButtonHtml = generate_button_html_1.generateButtonHtml;
-        this.generateToolbarHtml = generate_toolbar_html_1.generateToolbarHtml;
-        this.standardButtons = standard_buttons_1.standardButtons;
-        this.toolbarTemplate = toolbar_template_1.toolbarTemplate;
-    }
-    return ToolbarManager;
-}());
-exports.ToolbarManager = ToolbarManager;
-exports._toolbarManager = new ToolbarManager();
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 /** contains a toolbar config + settings + many groups */
 var ToolbarConfig = /** @class */ (function () {
     function ToolbarConfig() {
@@ -2391,13 +2354,13 @@ exports.ToolbarConfig = ToolbarConfig;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_template_1 = __webpack_require__(32);
+var toolbar_template_1 = __webpack_require__(31);
 /**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
@@ -2416,7 +2379,7 @@ exports.standardButtons = standardButtons;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2480,6 +2443,42 @@ exports.toolbarTemplate = {
         autoAddMore: 'right',
     }
 };
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var build_toolbars_1 = __webpack_require__(28);
+var generate_button_html_1 = __webpack_require__(13);
+var generate_toolbar_html_1 = __webpack_require__(12);
+var standard_buttons_1 = __webpack_require__(30);
+var toolbar_template_1 = __webpack_require__(31);
+/**
+ * Toolbar manager for the whole page - basically a set of APIs
+ * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
+ */
+var ToolbarManager = /** @class */ (function () {
+    function ToolbarManager() {
+        // internal constants
+        this.cDisableAttrName = 'data-disable-toolbar';
+        // build toolbars
+        this.buildToolbars = build_toolbars_1.buildToolbars;
+        this.disable = build_toolbars_1.disable;
+        this.isDisabled = build_toolbars_1.isDisabled;
+        // generate button html
+        this.generateButtonHtml = generate_button_html_1.generateButtonHtml;
+        this.generateToolbarHtml = generate_toolbar_html_1.generateToolbarHtml;
+        this.standardButtons = standard_buttons_1.standardButtons;
+        this.toolbarTemplate = toolbar_template_1.toolbarTemplate;
+    }
+    return ToolbarManager;
+}());
+exports.ToolbarManager = ToolbarManager;
+exports._toolbarManager = new ToolbarManager();
 
 
 /***/ }),
@@ -2657,7 +2656,7 @@ exports.isA = (testing < ABTest.B);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
 var NgDialogParams = /** @class */ (function () {
     function NgDialogParams(sxc, editContext) {
         this.zoneId = editContext.ContentGroup.ZoneId;
@@ -2689,7 +2688,7 @@ exports.NgDialogParams = NgDialogParams;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
 var QucikDialogConfig = /** @class */ (function () {
     function QucikDialogConfig(editContext) {
         this.appId = editContext.ContentGroup.AppId;
@@ -2731,7 +2730,7 @@ exports.UserOfEditContext = UserOfEditContext;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 var configAttr = 'quick-edit-config';
 /**
@@ -3113,7 +3112,7 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(19);
 var item_commands_1 = __webpack_require__(24);
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(4);
 var button_action_1 = __webpack_require__(49);
 var button_config_1 = __webpack_require__(50);
 var Commands = /** @class */ (function () {
@@ -3522,7 +3521,7 @@ exports.ButtonConfig = ButtonConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_config_1 = __webpack_require__(30);
+var toolbar_config_1 = __webpack_require__(29);
 /**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
@@ -3814,7 +3813,7 @@ exports.ToolbarSettings = ToolbarSettings;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(4);
 var Command = /** @class */ (function () {
     function Command(sxc, settings, ngDialogUrl, isDebug) {
         var _this = this;
@@ -3969,8 +3968,8 @@ exports._commands = new Commands();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_feature_1 = __webpack_require__(4);
-var _2sxc_translate_1 = __webpack_require__(5);
+var toolbar_feature_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(4);
 var sxc_1 = __webpack_require__(2);
 /** contains commands to create/move/delete a contentBlock in a page */
 var sxcInstance;
@@ -4102,11 +4101,10 @@ exports._manage = new Manage();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_feature_1 = __webpack_require__(4);
-var toolbar_feature_2 = __webpack_require__(4);
+var toolbar_feature_1 = __webpack_require__(5);
 var engine_1 = __webpack_require__(36);
 var manipulate_1 = __webpack_require__(56);
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
 var local_storage_helper_1 = __webpack_require__(59);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -4165,7 +4163,7 @@ var EditManager = /** @class */ (function () {
          * @param {Object<any>} moreSettings - additional / override settings
          * @returns {string} html of the current toolbar
          */
-        this.getToolbar = function (tbConfig, moreSettings) { return toolbar_feature_2.generateToolbarHtml(_this.sxc, tbConfig, moreSettings); };
+        //getToolbar = (tbConfig, moreSettings) => generateToolbarHtml(this.sxc, tbConfig, moreSettings);
         //#endregion official, public properties - everything below this can change at any time
         // ReSharper disable InconsistentNaming
         /**
@@ -4273,10 +4271,10 @@ exports.LocalStorageHelper = LocalStorageHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(0);
+var api_1 = __webpack_require__(1);
 var quick_dialog_1 = __webpack_require__(8);
-var toolbar_feature_1 = __webpack_require__(4);
-var _2sxc_translate_1 = __webpack_require__(5);
+var toolbar_feature_1 = __webpack_require__(5);
+var _2sxc_translate_1 = __webpack_require__(4);
 var sxc_1 = __webpack_require__(2);
 // import '/2sxc-api/js/2sxc.api';
 /**
@@ -4423,7 +4421,7 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(15);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 var Mod = /** @class */ (function () {
     function Mod() {
@@ -4464,7 +4462,7 @@ __webpack_require__(39);
 __webpack_require__(65);
 __webpack_require__(66);
 __webpack_require__(40);
-__webpack_require__(4);
+__webpack_require__(5);
 __webpack_require__(18);
 __webpack_require__(67);
 __webpack_require__(68);
@@ -4511,7 +4509,7 @@ __webpack_require__(92);
 __webpack_require__(93);
 __webpack_require__(94);
 __webpack_require__(95);
-__webpack_require__(0);
+__webpack_require__(1);
 __webpack_require__(58);
 __webpack_require__(17);
 __webpack_require__(59);
@@ -4536,7 +4534,7 @@ __webpack_require__(15);
 __webpack_require__(63);
 __webpack_require__(105);
 __webpack_require__(23);
-__webpack_require__(1);
+__webpack_require__(0);
 __webpack_require__(3);
 __webpack_require__(106);
 __webpack_require__(107);
@@ -4561,22 +4559,22 @@ __webpack_require__(114);
 __webpack_require__(115);
 __webpack_require__(116);
 __webpack_require__(48);
-__webpack_require__(12);
 __webpack_require__(13);
+__webpack_require__(12);
 __webpack_require__(51);
 __webpack_require__(117);
-__webpack_require__(31);
+__webpack_require__(30);
 __webpack_require__(118);
-__webpack_require__(29);
 __webpack_require__(32);
+__webpack_require__(31);
 __webpack_require__(119);
 __webpack_require__(120);
-__webpack_require__(30);
+__webpack_require__(29);
 __webpack_require__(121);
 __webpack_require__(122);
 __webpack_require__(52);
 __webpack_require__(123);
-__webpack_require__(5);
+__webpack_require__(4);
 __webpack_require__(60);
 module.exports = __webpack_require__(2);
 
@@ -4971,7 +4969,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_1 = __webpack_require__(55);
 var manage_1 = __webpack_require__(57);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var start_1 = __webpack_require__(22);
 __webpack_require__(60);
 // debugger;
@@ -5170,7 +5168,7 @@ exports.CbOrMod = CbOrMod;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(15);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 var Mod = /** @class */ (function () {
     function Mod() {
@@ -5225,7 +5223,7 @@ exports.Conf = Conf;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Cb_1 = __webpack_require__(102);
 var clipboard_1 = __webpack_require__(14);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 /**
  * content-block specific stuff like actions
@@ -5300,7 +5298,7 @@ exports.Cb = Cb;
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(14);
 var mod_manage_1 = __webpack_require__(15);
-var quick_e_1 = __webpack_require__(1);
+var quick_e_1 = __webpack_require__(0);
 var selectors_instance_1 = __webpack_require__(3);
 /**
  * module specific stuff
@@ -5652,7 +5650,7 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_config_1 = __webpack_require__(30);
+var toolbar_config_1 = __webpack_require__(29);
 function ExpandToolbarConfig(context, partialConfig) {
     // todo
     return partialConfig;
