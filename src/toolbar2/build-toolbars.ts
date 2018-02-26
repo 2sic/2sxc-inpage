@@ -73,6 +73,12 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
       return;
     }
 
+    // todo: create ToolbarConfig
+
+
+
+
+
     try {
       const sxc: SxcInstanceWithInternals = getSxcInstance(tag);
       tag.replaceWith(generateToolbarHtml(sxc, toolbarConfig, toolbarSettings));

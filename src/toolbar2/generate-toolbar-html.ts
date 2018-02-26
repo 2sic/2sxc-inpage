@@ -1,5 +1,6 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { getEditContext } from '../manage/api';
+import { InstanceConfig } from '../manage/instance-config';
 import { Commands } from './command/commands';
 import { generateButtonHtml } from './generate-button-html';
 import * as buttonHelpers from './helpers';
@@ -7,13 +8,14 @@ import { standardButtons } from './standard-buttons';
 import { ToolbarSettings } from './toolbar/toolbar-settings';
 
 export function generateToolbarHtml(sxc: SxcInstanceWithInternals, tbConfig: any, toolbarSettings: ToolbarSettings): any {
+
+  const editContext: DataEditContext = getEditContext(sxc);
+
   // if it has an action or is an array, keep that. Otherwise get standard buttons
   tbConfig = tbConfig || {}; // if null/undefined, use empty object
   let btnList = tbConfig;
   if (!tbConfig.action && !tbConfig.groups && !tbConfig.buttons && !Array.isArray(tbConfig))
-    btnList = standardButtons(sxc.manage._user.canDesign /* editContext.User.CanDesign */, tbConfig);
-
-  const editContext: DataEditContext = getEditContext(sxc);
+    btnList = standardButtons(editContext.User.CanDesign, tbConfig);
 
   // stv: temp start
   const newCommands = new Commands(editContext);
@@ -21,8 +23,10 @@ export function generateToolbarHtml(sxc: SxcInstanceWithInternals, tbConfig: any
   console.log('stv: new Command', newCommands);
   // stv: temp end
 
+  const instanceConfig: InstanceConfig = new InstanceConfig(editContext);
+
   // whatever we had, if more settings were provided, override with these...
-  const tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, sxc.manage._instanceConfig /* tb.config */, toolbarSettings);
+  const tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, instanceConfig, toolbarSettings);
   const btnGroups = tlbDef.items;
   const behaviourClasses = ` sc-tb-hover-${tlbDef.settings.hover} sc-tb-show-${tlbDef.settings.show}`;
 
