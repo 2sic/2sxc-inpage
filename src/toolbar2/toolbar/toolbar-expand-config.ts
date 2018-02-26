@@ -68,41 +68,42 @@ export const buildFullDefinition = (unstructuredConfig, allActions: Commands, in
  * - groups containing buttons[], but buttons could still be very flat
  * - defaults, already officially formatted
  * - params, officially formatted
- * @param original
+ * @param unstructuredConfig
  * @param toolbarSettings
  */
-export const ensureDefinitionTree = (original, toolbarSettings: ToolbarSettings): ToolbarConfig => {
+export const ensureDefinitionTree = (unstructuredConfig, toolbarSettings: ToolbarSettings): ToolbarConfig => {
   // original is null/undefined, just return empty set
-  if (!original) throw (`preparing toolbar, with nothing to work on: ${original}`);
+  if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 
   // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
-  if (!Array.isArray(original) && (original.action || original.buttons)) original = [original];
+  if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons)) unstructuredConfig = [unstructuredConfig];
 
   // ensure that arrays of actions or buttons are re-mapped to the right structure node
-  if (Array.isArray(original) && original.length) {
-    if (original[0].buttons) {
+  if (Array.isArray(unstructuredConfig) && unstructuredConfig.length) {
+    if (unstructuredConfig[0].buttons) {
       // an array of items having buttons, so it must be button-groups
-      (original as any).groups = original; // move "down"
-    } else if (original[0].command || original[0].action) {
+      (unstructuredConfig as any).groups = unstructuredConfig; // move "down"
+    } else if (unstructuredConfig[0].command || unstructuredConfig[0].action) {
       // array of items having an action, so these are buttons
-      original = { groups: [{ buttons: original }] };
+      unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
     } else {
-      console.warn("toolbar tried to build toolbar but couldn't detect type of this:", original);
+      console.warn("toolbar tried to build toolbar but couldn't detect type of this:", unstructuredConfig);
     }
   }
 
   const toolbarConfig = new ToolbarConfig();
   // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
-  toolbarConfig.groups = original.groups || []; // the groups of buttons
-  toolbarConfig.params = original.params || {}; // these are the default command parameters
-  toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, original.settings, toolbarSettings) as ToolbarSettings;
+  toolbarConfig.groups = unstructuredConfig.groups || []; // the groups of buttons
+  toolbarConfig.params = unstructuredConfig.params || {}; // these are the default command parameters
+  toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, unstructuredConfig.settings, toolbarSettings) as ToolbarSettings;
 
   // todo: old props, remove
-  toolbarConfig.name = original.name || 'toolbar'; // name, no real use
-  toolbarConfig.debug = original.debug || false; // show more debug info
-  toolbarConfig.defaults = original.defaults || {}; // the button defaults like icon, etc.
+  toolbarConfig.name = unstructuredConfig.name || 'toolbar'; // name, no real use
+  toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
+  toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
 
   console.log('stv: toolbarConfig ', toolbarConfig);
+  console.log('stv: toolbarConfig ', JSON.stringify(toolbarConfig));
 
   return toolbarConfig;
 };

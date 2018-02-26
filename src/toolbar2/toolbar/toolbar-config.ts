@@ -5,7 +5,7 @@ import { ToolbarSettings } from './toolbar-settings';
 
 /** contains a toolbar config + settings + many groups */
 export class ToolbarConfig {
-  groupConfig: GroupConfig = new GroupConfig(new Array<ButtonConfig>()); // stv: this is temp
+  groupConfigs: GroupConfig[] = new Array<GroupConfig>(); // stv: this is temp
   groups = []; // todo: stv rename to 'items', the groups of buttons
   settings: ToolbarSettings; // like floating of toolbar, etc.
   params: ToolbarParameters; // like EntityId, Content - Type - Name

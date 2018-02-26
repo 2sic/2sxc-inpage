@@ -77,8 +77,6 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
 
       const newCommands = new Commands(editContext);
 
-      console.log('stv: new Command', newCommands);
-
       const toolbarConfig: ToolbarConfig = ExpandToolbarConfig(editContext, newCommands, toolbarData, toolbarSettings);
 
       tag.replaceWith(generateToolbarHtml(sxc, toolbarData, toolbarConfig));

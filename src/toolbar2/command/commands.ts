@@ -31,6 +31,8 @@ export class Commands {
     } as CmdSpec;
 
     this.create(cmdSpec);
+
+    console.log('stv: command', this);
   }
 
   private addDef = (def: CommandDefinition): void => {

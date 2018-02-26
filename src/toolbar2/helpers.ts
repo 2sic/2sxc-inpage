@@ -10,27 +10,27 @@ import { ToolbarSettings } from './toolbar/toolbar-settings';
 /**
  * this will traverse a groups-tree and expand each group
  * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
- * @param fullSet
+ * @param fullToolbarConfig
  * @param actions
  */
-export const expandButtonGroups = (fullSet, actions: Commands) => { // , itemSettings) {
+export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Commands) => { // , itemSettings) {
   // by now we should have a structure, let's check/fix the buttons
-  for (let g = 0; g < fullSet.groups.length; g++) {
+  for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-    expandButtonList(fullSet.groups[g], fullSet.settings);
+    expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings);
     // fix all the buttons
-    const btns = fullSet.groups[g].buttons;
+    const btns = fullToolbarConfig.groups[g].buttons;
     if (Array.isArray(btns))
       for (let b = 0; b < btns.length; b++) {
         const btn = btns[b];
         if (!(actions.get(btn.command.action)))
           console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
-        Object.assign(btn.command, fullSet.params); // enhance the button with settings for this instance
+        Object.assign(btn.command, fullToolbarConfig.params); // enhance the button with settings for this instance
         // tools.addCommandParams(fullSet, btn);
 
         addDefaultBtnSettings(btn,
-          fullSet.groups[g],
-          fullSet,
+          fullToolbarConfig.groups[g],
+          fullToolbarConfig,
           actions); // ensure all buttons have either own settings, or the fallback
       }
   }
@@ -164,28 +164,28 @@ export const prvProperties = [
  * enhance button-object with default icons, etc.
  * @param btn
  * @param group
- * @param groups
+ * @param fullToolbarConfig
  * @param actions
  */
-export const addDefaultBtnSettings = (btn, group, groups, actions: Commands) => {
+export const addDefaultBtnSettings = (btn, group, fullToolbarConfig: ToolbarConfig, actions: Commands) => {
   for (let d = 0; d < btnProperties.length; d++)
-    fallbackBtnSetting(btn, group, groups, actions, btnProperties[d]);
+    fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
 };
 
 /**
  * configure missing button properties with various fallback options
  * @param btn
  * @param group
- * @param groups
+ * @param fullToolbarConfig
  * @param actions
  * @param propName
  */
-function fallbackBtnSetting(btn, group, groups, actions: Commands, propName) {
+function fallbackBtnSetting(btn, group, fullToolbarConfig: ToolbarConfig, actions: Commands, propName) {
   btn[propName] = btn[propName] // by if already defined, use the already defined property
     ||
     (group.defaults && group.defaults[propName]) // if the group has defaults, try use that property
     ||
-    (groups && groups.defaults && groups.defaults[propName]) // if the group has defaults, try use that property
+    (fullToolbarConfig && fullToolbarConfig.defaults && fullToolbarConfig.defaults[propName]) // if the group has defaults, try use that property
     ||
     (actions.get(btn.command.action) &&
       actions.get(btn.command.action).buttonConfig &&
