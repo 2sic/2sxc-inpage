@@ -5,3 +5,18 @@ export class ToolbarSettings {
   show: 'always' | 'hover' = 'hover';
   classes?: string;
 }
+
+// ToDo: refactor to avoid side-effects
+export const defaultToolbarSettings: ToolbarSettings = {
+  autoAddMore: null, // null | "right" | "start" | true
+  hover: 'right', // right | left | none
+  show: 'hover', // always | hover
+  // order or reverse, still thinking about this --> order: "default"    // default | reverse
+};
+
+/** default / fallback settings for toolbars when nothings is specified */
+export const settingsForEmptyToolbar: ToolbarSettings = {
+  autoAddMore: 'start', // ex: 'left'
+  hover: 'left',
+  show: 'hover',
+};

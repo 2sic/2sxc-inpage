@@ -1,21 +1,15 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { getEditContext, getTag } from '../manage/api';
-import { InstanceConfig } from '../manage/instance-config';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { Commands } from './command/commands';
 import { generateToolbarHtml } from './generate-toolbar-html';
-import * as buttonHelpers from './helpers';
-import { standardButtons } from './standard-buttons';
 import { _toolbarManager } from './toolbar-manager';
-import { ToolbarSettings } from './toolbar/toolbar-settings';
+import { ToolbarConfig } from './toolbar/toolbar-config';
+import { ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
+import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
 
 // quick debug - set to false if not needed for production
 const dbg = true;
-
-/** default / fallback settings for toolbars when nothings is specified */
-const settingsForEmptyToolbar = new ToolbarSettings();
-settingsForEmptyToolbar.autoAddMore = 'start'; // ex: 'left'
-settingsForEmptyToolbar.hover = 'left';
 
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar(): any {
@@ -62,17 +56,15 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
   toolbars.each(function initToolbar(): void {
     const tag: any = $(this);
     let data: any = null;
-    let toolbarConfig: any;
+    let toolbarData: any;
     let toolbarSettings: ToolbarSettings;
     const at = $2sxc.c.attr;
 
     try {
       data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
-      toolbarConfig = JSON.parse(data);
+      toolbarData = JSON.parse(data);
       data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
       toolbarSettings = JSON.parse(data);
-      if (toolbarConfig === {} && toolbarSettings === ({} as ToolbarSettings))
-        toolbarSettings = settingsForEmptyToolbar;
     } catch (err) {
       console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
       return;
@@ -81,27 +73,15 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     try {
       const sxc: SxcInstanceWithInternals = getSxcInstance(tag);
 
-      // todo: create ToolbarConfig
       const editContext: DataEditContext = getEditContext(sxc);
 
-      // if it has an action or is an array, keep that. Otherwise get standard buttons
-      toolbarConfig = toolbarConfig || {}; // if null/undefined, use empty object
-      let btnList = toolbarConfig;
-      if (!toolbarConfig.action && !toolbarConfig.groups && !toolbarConfig.buttons && !Array.isArray(toolbarConfig))
-        btnList = standardButtons(editContext.User.CanDesign, toolbarConfig);
-
-      // stv: temp start
       const newCommands = new Commands(editContext);
-      // console.log('stv: new Command JSON', JSON.stringify(newCommands));
+
       console.log('stv: new Command', newCommands);
-      // stv: temp end
 
-      const instanceConfig: InstanceConfig = new InstanceConfig(editContext);
+      const toolbarConfig: ToolbarConfig = ExpandToolbarConfig(editContext, newCommands, toolbarData, toolbarSettings);
 
-      // whatever we had, if more settings were provided, override with these...
-      const tlbDef = buttonHelpers.buildFullDefinition(btnList, newCommands, instanceConfig, toolbarSettings);
-
-      tag.replaceWith(generateToolbarHtml(sxc, toolbarConfig, toolbarSettings, tlbDef));
+      tag.replaceWith(generateToolbarHtml(sxc, toolbarData, toolbarConfig));
     } catch (err2) {
       // note: errors happen a lot on custom toolbars, make sure the others are still rendered
       console.error('error creating toolbar - will skip this one', err2);

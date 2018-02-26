@@ -6,7 +6,7 @@
 function flattenActionDefinition(actDef) {
   if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
 
-  let editInfo = actDef.entity._2sxcEditInformation;
+  const editInfo = actDef.entity._2sxcEditInformation;
   actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
   if (editInfo.entityId !== undefined) actDef.entityId = editInfo.entityId;
   if (editInfo.sortOrder !== undefined) actDef.sortOrder = editInfo.sortOrder;
@@ -15,7 +15,7 @@ function flattenActionDefinition(actDef) {
 
 // generate the html for a button
 // Expects: instance sxc, action-definition, + group-index in which the button is shown
-export function generateButtonHtml(sxc, actDef, groupIndex: number): any {
+export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef, groupIndex: number): string {
 
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(actDef);
@@ -31,11 +31,11 @@ export function generateButtonHtml(sxc, actDef, groupIndex: number): any {
 
   for (let c = 0; c < classesList.length; c++) showClasses += ' ' + classesList[c];
 
-  let button = $('<a />', {
+  const button = $('<a />', {
     'class': 'sc-' + actDef.action + ' ' + showClasses +
-    (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
+      (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
     'onclick': onclick,
-    'data-i18n': '[title]' + actDef.title
+    'data-i18n': '[title]' + actDef.title,
   });
   button.html(box.html(symbol));
   return button[0].outerHTML;

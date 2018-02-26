@@ -1,8 +1,11 @@
-﻿import { ToolbarParameters } from './toolbar-parameters';
+﻿import { GroupConfig } from '../button/group-config';
+import { ToolbarParameters } from './toolbar-parameters';
 import { ToolbarSettings } from './toolbar-settings';
+
 
 /** contains a toolbar config + settings + many groups */
 export class ToolbarConfig {
+  groupConfig: GroupConfig = new GroupConfig();
   items = []; // the groups of buttons
   settings: ToolbarSettings; // like floating of toolbar, etc.
   params: ToolbarParameters; // like EntityId, Content - Type - Name

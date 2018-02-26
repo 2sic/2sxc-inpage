@@ -1,10 +1,11 @@
 ﻿import { ButtonConfig} from './button-config';
 
 export class GroupConfig {
-  items: Item[];
+  items: ButtonConfig[]; // array of buttons
 
   constructors(buttons: ButtonConfig[]) {
     // adds these to the items
+    this.items = buttons;
   }
 
   static fromNameAndParams(name: string, params?: any[]): GroupConfig {
