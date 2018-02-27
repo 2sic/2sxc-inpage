@@ -24,6 +24,9 @@ export function ExpandToolbarConfig(editContext: DataEditContext, allActions: Co
 
   // whatever we had, if more settings were provided, override with these...
   const config = buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
+
+  // console.log('stv: fullToolbarConfig', JSON.stringify(config));
+
   return config;
 }
 
@@ -102,8 +105,8 @@ export const ensureDefinitionTree = (unstructuredConfig, toolbarSettings: Toolba
   toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
   toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
 
-  console.log('stv: toolbarConfig ', toolbarConfig);
-  console.log('stv: toolbarConfig ', JSON.stringify(toolbarConfig));
+  // console.log('stv: toolbarConfig ', toolbarConfig);
+  // console.log('stv: toolbarConfig ', JSON.stringify(toolbarConfig));
 
   return toolbarConfig;
 };

@@ -3,6 +3,10 @@ import { GroupConfig } from './button/group-config';
 import { Commands } from './command/commands';
 import { ToolbarConfig } from './toolbar/toolbar-config';
 import { ToolbarSettings } from './toolbar/toolbar-settings';
+import * as Buttonaction from './button/button-action';
+import ButtonAction = Buttonaction.ButtonAction;
+import { CommandDefinition } from './command/command-definition';
+import { GetButtonConfigDefaultsV1 } from './button/expand-button-config';
 
 /**
  * the toolbar manager is an internal helper
@@ -19,15 +23,16 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
   // by now we should have a structure, let's check/fix the buttons
   for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-    expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings);
+    expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings, actions);
     // fix all the buttons
+
     const btns = fullToolbarConfig.groups[g].buttons;
 
-    const buttonConfigs = new Array<ButtonConfig>();
+    const buttonConfigs: ButtonConfig[] = [];
 
     if (Array.isArray(btns)) {
       for (let b = 0; b < btns.length; b++) {
-        const btn = btns[b];
+        const btn = btns[b] as any;
         if (!(actions.get(btn.command.action)))
           console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
         Object.assign(btn.command, fullToolbarConfig.params); // enhance the button with settings for this instance
@@ -38,13 +43,19 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
           fullToolbarConfig,
           actions); // ensure all buttons have either own settings, or the fallback
 
-        const buttonConfig = actions.get(btn.command.action).buttonConfig;
-        buttonConfigs.push(buttonConfig);
+        const name = btn.command.action;
+        const newButtonAction = new ButtonAction(name, fullToolbarConfig.params);
+        newButtonAction.commandDefinition = actions.get(name);
+        const newButtonConfig = new ButtonConfig(newButtonAction);
+        buttonConfigs.push(newButtonConfig);
+
       }
     }
 
-    fullToolbarConfig.groupConfigs.push(new GroupConfig(buttonConfigs));
+    // console.log('stv: btns', JSON.stringify(btns));
+    // console.log('stv: buttonConfigs', JSON.stringify(buttonConfigs));
 
+    // fullToolbarConfig.groups[g].buttons = buttonConfigs;
   }
 };
 
@@ -57,7 +68,8 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
  * @param root
  * @param settings
  */
-export const expandButtonList = (root, settings) => {
+export const expandButtonList = (root, settings: ToolbarSettings, actions: Commands) => {
+
   // let root = grp; // the root object which has all params of the command
   let btns = [];
   let sharedProperties = null;
@@ -65,28 +77,40 @@ export const expandButtonList = (root, settings) => {
   // convert compact buttons (with multi-verb action objects) into own button-objects
   // important because an older syntax allowed {action: "new,edit", entityId: 17}
   if (Array.isArray(root.buttons)) {
+
     for (let b = 0; b < root.buttons.length; b++) {
       const btn = root.buttons[b];
-      if (typeof btn.action === 'string' && btn.action.indexOf(',') > -1
-      ) { // if btns. is neither array nor string, it's a short-hand with action names
+      if (typeof btn.action === 'string' && btn.action.indexOf(',') > -1) {
+        // if btns. is neither array nor string, it's a short-hand with action names
         const acts = btn.action.split(',');
         for (let a = 0; a < acts.length; a++) {
+
           btns.push($.extend(true, {}, btn, { action: acts[a] }));
-          console.log('stv1a#: ', btn);
+          // console.log('stv: btn', JSON.stringify(btn));
         }
-      } else
+      } else {
         btns.push(btn);
+      }
     }
+   // console.log('stv: btns #1', btns);
+
   } else if (typeof root.buttons === 'string') {
+
     btns = root.buttons.split(',');
+
     sharedProperties = Object.assign({}, root); // inherit all fields used in the button
-    console.log('stv1b#: ', btns);
     delete sharedProperties.buttons; // this one's not needed
     delete sharedProperties.name; // this one's not needed
     delete sharedProperties.action; //
+
+    //console.log('stv: btns #2', btns);
+
   } else {
+
     btns = root.buttons;
-    console.log('stv1c#: ', btns);
+
+    //console.log('stv: btns #3', btns);
+
   }
 
   // optionally add a more-button in each group
@@ -103,7 +127,11 @@ export const expandButtonList = (root, settings) => {
     btns[v] = expandButtonConfig(btns[v], sharedProperties);
     // todo: refactor this out, not needed any more as they are all together now
     // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
+
   }
+
+  // console.log('stv: btns', JSON.stringify(btns));
+
   root.buttons = btns; // ensure the internal def is also an array now
 };
 

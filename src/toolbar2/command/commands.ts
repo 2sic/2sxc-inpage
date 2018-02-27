@@ -7,8 +7,8 @@ import { contentItems } from '../../entity-manipulation/item-commands';
 import { translate } from '../../translate/2sxc.translate';
 import { ButtonAction } from '../button/button-action';
 import { ButtonConfig } from '../button/button-config';
+import { GetButtonConfigDefaultsV1 } from '../button/expand-button-config';
 import { CommandDefinition } from './command-definition';
-
 
 
 export class Commands {
@@ -32,7 +32,7 @@ export class Commands {
 
     this.create(cmdSpec);
 
-    console.log('stv: command', this);
+    // console.log('stv: command', this);
   }
 
   private addDef = (def: CommandDefinition): void => {
@@ -45,17 +45,16 @@ export class Commands {
     if (typeof (partOfPage) !== 'boolean')
       throw 'partOfPage in commands not provided, order will be wrong!';
 
+    const newDefinition = new CommandDefinition();
+    newDefinition.name = name;
+    newDefinition.buttonConfig = GetButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more);
+
     const newButtonAction: ButtonAction = new ButtonAction(name, more.params);
-    newButtonAction.codeFunctionTemp = more.code; // todo stv: find what with this
+    newButtonAction.commandDefinition = newDefinition;
     newButtonAction.code = ''; // todo stv: find where is 'code'
 
-    const newButtonConfig: ButtonConfig = this.getButtonConfig(name, icon, translateKey, uiOnly, partOfPage, more);
-    newButtonConfig.action = newButtonAction;
-
-    const newDefinition: CommandDefinition = {
-      name: name,
-      buttonConfig: newButtonConfig,
-    };
+    const newButtonConfig: ButtonConfig = new ButtonConfig(newButtonAction);
+    // console.log('stv: newButtonConfig', newButtonConfig);
 
     return newDefinition;
   }
@@ -368,20 +367,4 @@ export class Commands {
     }));
   }
 
-  private getButtonConfig(name: string, icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Definition) {
-
-    const partialButtonConfig = {
-      icon: 'icon-sxc-' + icon,
-      title: 'Toolbar.' + translateKey,
-      uiActionOnly: uiOnly,
-      partOfPage: partOfPage,
-    } as Partial<ButtonConfig>;
-
-    // stv: 1st object assign 'more'
-    Object.assign(partialButtonConfig, more);
-
-    // stv: 2nd object assign 'more'
-    // todo: stv, do we need 1st and 2nd?!?!
-    return ButtonConfig.fromNameAndParams(name, more.params, partialButtonConfig);
-  }
 }

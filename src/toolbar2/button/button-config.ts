@@ -7,7 +7,9 @@ import { ButtonAction } from './button-action';
 export class ButtonConfig {
   name: string = '';
   params: any[] = [];
-  command: CommandDefinition;
+
+  action: ButtonAction;
+
   classes: string = '';
   dialog: string = '';
   fullScreen: boolean = null;
@@ -19,16 +21,18 @@ export class ButtonConfig {
   title: string = '';
   uiActionOnly: boolean = null;
 
-  constructor(public action?: ButtonAction, partialConfig?: Partial<ButtonConfig>, commands?: CommandDefinition[]) {
+  constructor(action?: ButtonAction, partialConfig?: Partial<ButtonConfig>) {
 
     if (action) {
       this.action = action;
+      // get defaults from action commandDefinition
+      Object.assign(this, action.commandDefinition.buttonConfig);
     }
 
     if (partialConfig) Object.assign(this, partialConfig);
   }
 
-  static fromNameAndParams(name: string, params: any[], partialConfig?: Partial<ButtonConfig>, commands?: CommandDefinition): ButtonConfig {
+  static fromNameAndParams(name: string, params: any[], partialConfig?: Partial<ButtonConfig>): ButtonConfig {
     const buttonConfig = new ButtonConfig();
     buttonConfig.name = name;
     buttonConfig.params = params;

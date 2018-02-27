@@ -106,18 +106,18 @@ module.exports = {
         }
       ]
     }),
-    new TypedocWebpackPlugin({
-      name: '2sxc-inpage',
-      mode: 'modules',
-      includeDeclarations: true,
-      ignoreCompilerErrors: true,
-      out: '../docs',
-      module: 'commonjs',
-      target: 'es5',
-      exclude: '**/node_modules/**/*.*',
-      experimentalDecorators: true,
-      excludeExternals: true,
-      extends: './tsconfig.json'
-    }, entryTsFiles)
+    //new TypedocWebpackPlugin({
+    //  name: '2sxc-inpage',
+    //  mode: 'modules',
+    //  includeDeclarations: true,
+    //  ignoreCompilerErrors: true,
+    //  out: '../docs',
+    //  module: 'commonjs',
+    //  target: 'es5',
+    //  exclude: '**/node_modules/**/*.*',
+    //  experimentalDecorators: true,
+    //  excludeExternals: true,
+    //  extends: './tsconfig.json'
+    //}, entryTsFiles)
   ]
 };

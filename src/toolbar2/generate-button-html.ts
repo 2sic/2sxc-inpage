@@ -43,7 +43,7 @@ export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef: any, g
   });
   button.html(box.html(symbol));
 
-  console.log('stv: buttonHtml', button[0].outerHTML);
+  // console.log('stv: buttonHtml', button[0].outerHTML);
 
   return button[0].outerHTML;
 }
