@@ -194,3 +194,5 @@ _/
 .vs/slnx.sqlite
 .vs/slnx.sqlite-journal
 
+/.idea
+/docs

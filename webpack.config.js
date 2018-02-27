@@ -1,5 +1,6 @@
 ﻿var glob = require('glob');
-//var path = require('path');
+var TypedocWebpackPlugin = require('typedoc-webpack-plugin');
+// var path = require('path');
 var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 var FileManagerPlugin = require('filemanager-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -104,6 +105,19 @@ module.exports = {
           ]
         }
       ]
-    })
+    }),
+    new TypedocWebpackPlugin({
+      name: '2sxc-inpage',
+      mode: 'modules',
+      includeDeclarations: true,
+      ignoreCompilerErrors: true,
+      out: '../docs',
+      module: 'commonjs',
+      target: 'es5',
+      exclude: '**/node_modules/**/*.*',
+      experimentalDecorators: true,
+      excludeExternals: true,
+      extends: './tsconfig.json'
+    }, entryTsFiles)
   ]
 };

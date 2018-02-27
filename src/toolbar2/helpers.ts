@@ -1,8 +1,8 @@
-﻿import { GroupConfig } from './button/group-config';
+﻿import { ButtonConfig } from './button/button-config';
+import { GroupConfig } from './button/group-config';
 import { Commands } from './command/commands';
 import { ToolbarConfig } from './toolbar/toolbar-config';
 import { ToolbarSettings } from './toolbar/toolbar-settings';
-import { ButtonConfig } from './button/button-config';
 
 /**
  * the toolbar manager is an internal helper
@@ -23,7 +23,7 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
     // fix all the buttons
     const btns = fullToolbarConfig.groups[g].buttons;
 
-    let buttonConfigs = new Array<ButtonConfig>();
+    const buttonConfigs = new Array<ButtonConfig>();
 
     if (Array.isArray(btns)) {
       for (let b = 0; b < btns.length; b++) {
