@@ -44,6 +44,8 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
           actions); // ensure all buttons have either own settings, or the fallback
 
         const name = btn.command.action;
+
+        // Toolbar API v2
         const newButtonAction = new ButtonAction(name, fullToolbarConfig.params);
         newButtonAction.commandDefinition = actions.get(name);
         const newButtonConfig = new ButtonConfig(newButtonAction);
@@ -55,7 +57,8 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
     // console.log('stv: btns', JSON.stringify(btns));
     // console.log('stv: buttonConfigs', JSON.stringify(buttonConfigs));
 
-    // fullToolbarConfig.groups[g].buttons = buttonConfigs;
+    // Toolbar API v2 overwrite V1
+    fullToolbarConfig.groups[g].buttons = buttonConfigs;
   }
 };
 
@@ -103,13 +106,13 @@ export const expandButtonList = (root, settings: ToolbarSettings, actions: Comma
     delete sharedProperties.name; // this one's not needed
     delete sharedProperties.action; //
 
-    //console.log('stv: btns #2', btns);
+    // console.log('stv: btns #2', btns);
 
   } else {
 
     btns = root.buttons;
 
-    //console.log('stv: btns #3', btns);
+    // console.log('stv: btns #3', btns);
 
   }
 
@@ -165,7 +168,8 @@ export const removeDisableButtons = (full, config) => {
     disableButtons(btns, config);
 
     // remove the group, if no buttons left, or only "more"
-    if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
+    // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
+    if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more'))
       btnGroups.splice(g--, 1); // remove, and decrement counter
   }
 };
@@ -175,14 +179,17 @@ export function removeUnfitButtons(btns, config) {
     // let add = btns[i].showCondition;
     // if (add !== undefined)
     //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
-    if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
+    // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
+    if (!evalPropOrFunction(btns[i].showCondition, btns[i].action.params, config, true))
       btns.splice(i--, 1);
   }
 }
 
 export function disableButtons(btns, config) {
-  for (let i = 0; i < btns.length; i++)
-    btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+  for (let i = 0; i < btns.length; i++) {
+    // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+    btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].action.params, config, false);
+  }
 }
 
 export const btnProperties = [
@@ -232,7 +239,7 @@ function fallbackBtnSetting(btn, group, fullToolbarConfig: ToolbarConfig, action
       actions.get(btn.command.action).buttonConfig[propName]); // if there is an action, try to use that property name
 }
 
-export const customize = (toolbar) => {
+export const customize = (toolbar: ToolbarConfig) => {
   // if (!toolbar.settings) return;
   // let set = toolbar.settings;
   // if (set.autoAddMore) {

@@ -37,4 +37,6 @@ export class Settings {
   templateId: number;
   useModuleList: boolean;
   user: UserOfEditContext;
+  //
+  name: string;
 }

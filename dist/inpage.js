@@ -846,7 +846,6 @@ var generate_button_html_1 = __webpack_require__(13);
 function generateToolbarHtml(sxc, toolbarData, toolbarConfig) {
     // debugger;
     var btnGroups = toolbarConfig.groups;
-    // const btnGroups = toolbarConfig.groupConfigs;
     var behaviourClasses = " sc-tb-hover-" + toolbarConfig.settings.hover + " sc-tb-show-" + toolbarConfig.settings.show;
     // todo: these settings assume it's not in an array...
     var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
@@ -902,9 +901,11 @@ function generateButtonHtml(sxc, actDef, groupIndex) {
     var classesList = (actDef.classes || '').split(',');
     var box = $('<div/>');
     var symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
+    var oldParamsAdapter = Object.assign({ action: actDef.action.name }, actDef.action.params);
+    // console.log('stv: oldParamsAdapter', oldParamsAdapter);
     var onclick = actDef.disabled ?
         '' :
-        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
+        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(oldParamsAdapter) + ', event);';
     for (var c = 0; c < classesList.length; c++)
         showClasses += ' ' + classesList[c];
     var button = $('<a />', {
@@ -3595,6 +3596,7 @@ exports.buildFullDefinition = function (unstructuredConfig, allActions, instance
     if (fullConfig.debug)
         console.log('after remove: ', fullConfig);
     buttonHelpers.customize(fullConfig);
+    console.log('stv: fullConfig', JSON.stringify(fullConfig));
     return fullConfig;
 };
 //#region build initial toolbar object
@@ -3682,19 +3684,18 @@ exports.expandButtonGroups = function (fullToolbarConfig, actions) {
                 Object.assign(btn.command, fullToolbarConfig.params); // enhance the button with settings for this instance
                 // tools.addCommandParams(fullSet, btn);
                 exports.addDefaultBtnSettings(btn, fullToolbarConfig.groups[g], fullToolbarConfig, actions); // ensure all buttons have either own settings, or the fallback
-                // stv: wip
-                // const buttonConfig = actions.get(btn.command.action).buttonConfig;
-                // buttonConfigs.push(buttonConfig);
                 var name = btn.command.action;
+                // Toolbar API v2
                 var newButtonAction = new ButtonAction(name, fullToolbarConfig.params);
                 newButtonAction.commandDefinition = actions.get(name);
                 var newButtonConfig = new button_config_1.ButtonConfig(newButtonAction);
                 buttonConfigs.push(newButtonConfig);
             }
         }
-        //console.log('stv: btns', JSON.stringify(btns));
-        //console.log('stv: buttonConfigs', JSON.stringify(buttonConfigs));
-        // fullToolbarConfig.groups[g].buttons = buttonConfigs;
+        // console.log('stv: btns', JSON.stringify(btns));
+        // console.log('stv: buttonConfigs', JSON.stringify(buttonConfigs));
+        // Toolbar API v2 overwrite V1
+        fullToolbarConfig.groups[g].buttons = buttonConfigs;
     }
 };
 /**
@@ -3735,11 +3736,11 @@ exports.expandButtonList = function (root, settings, actions) {
         delete sharedProperties.buttons; // this one's not needed
         delete sharedProperties.name; // this one's not needed
         delete sharedProperties.action; //
-        //console.log('stv: btns #2', btns);
+        // console.log('stv: btns #2', btns);
     }
     else {
         btns = root.buttons;
-        //console.log('stv: btns #3', btns);
+        // console.log('stv: btns #3', btns);
     }
     // optionally add a more-button in each group
     if (settings.autoAddMore) {
@@ -3784,7 +3785,8 @@ exports.removeDisableButtons = function (full, config) {
         removeUnfitButtons(btns, config);
         disableButtons(btns, config);
         // remove the group, if no buttons left, or only "more"
-        if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
+        // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
+        if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more'))
             btnGroups.splice(g--, 1); // remove, and decrement counter
     }
 };
@@ -3793,14 +3795,17 @@ function removeUnfitButtons(btns, config) {
         // let add = btns[i].showCondition;
         // if (add !== undefined)
         //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
-        if (!exports.evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
+        // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
+        if (!exports.evalPropOrFunction(btns[i].showCondition, btns[i].action.params, config, true))
             btns.splice(i--, 1);
     }
 }
 exports.removeUnfitButtons = removeUnfitButtons;
 function disableButtons(btns, config) {
-    for (var i = 0; i < btns.length; i++)
-        btns[i].disabled = exports.evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+    for (var i = 0; i < btns.length; i++) {
+        // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+        btns[i].disabled = exports.evalPropOrFunction(btns[i].disabled, btns[i].action.params, config, false);
+    }
 }
 exports.disableButtons = disableButtons;
 exports.btnProperties = [

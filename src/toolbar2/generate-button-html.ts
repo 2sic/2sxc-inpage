@@ -29,9 +29,11 @@ export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef: any, g
   const classesList = (actDef.classes || '').split(',');
   const box: any = $('<div/>');
   const symbol: any = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
+  const oldParamsAdapter: any = Object.assign({ action: actDef.action.name }, actDef.action.params);
+  // console.log('stv: oldParamsAdapter', oldParamsAdapter);
   const onclick: string = actDef.disabled ?
       '' :
-    '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(actDef.command) + ', event);';
+    '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(oldParamsAdapter) + ', event);';
 
   for (let c = 0; c < classesList.length; c++) showClasses += ' ' + classesList[c];
 
