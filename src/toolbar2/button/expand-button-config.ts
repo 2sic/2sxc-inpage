@@ -1,7 +1,7 @@
 ﻿import { Definition } from '../../commands/definition';
 import { ButtonConfig } from './button-config';
 
-export function ExpandButtonConfig(buttonConfig: ButtonConfig, context): ButtonConfig {
+export function ExpandButtonConfig(context, buttonConfig: ButtonConfig): ButtonConfig {
   // todo
 
   return buttonConfig;

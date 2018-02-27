@@ -41,7 +41,8 @@ function create(parentId: number, fieldName: string, index: number, appName: str
       else // ...or just at the beginning?
         listTag.prepend(newTag);
 
-      let sxcNew = getSxcInstance(newTag);
+      // ReSharper disable once UnusedLocals
+      const sxcNew = getSxcInstance(newTag);
       _toolbarManager.buildToolbars(newTag);
     });
 }

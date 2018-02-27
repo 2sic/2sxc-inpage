@@ -134,7 +134,8 @@ function generatePaneMoveButtons(current: string): any {
   }
 
   // attach click event...
-  targets.find('a').click(function(d) {
+  // ReSharper disable once UnusedParameter
+  targets.find('a').click(function (d) {
     const link = $(this);
     const clip = data;
     const modId: number = getModuleId(clip.item.className);

@@ -1,4 +1,5 @@
 if (typeof Object.assign != 'function') {
+    // ReSharper disable once UnusedParameter
     Object.assign = function (target, varArgs) {
         'use strict';
         if (target === null) {

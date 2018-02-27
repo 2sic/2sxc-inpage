@@ -17,6 +17,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
     };
     // selectors
     var sel_1 = $2sxc.c.sel = {};
+    // ReSharper disable once UnusedParameter
     Object.keys($2sxc.c.cls).forEach(function (key, index) {
         sel_1[key] = "." + $2sxc.c.cls[key];
     });

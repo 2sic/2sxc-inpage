@@ -1,5 +1,4 @@
-﻿import { ButtonConfig } from '../toolbar2/button/button-config';
-import { Definition } from './definition';
+﻿import { Definition } from './definition';
 
 /**
  * helper function to create the configuration object

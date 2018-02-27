@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// ReSharper disable once UnusedParameter
 function extend() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {

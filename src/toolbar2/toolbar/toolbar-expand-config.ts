@@ -1,7 +1,5 @@
 ﻿import { DataEditContext } from '../../data-edit-context/data-edit-context';
 import { InstanceConfig } from '../../manage/instance-config';
-import { ButtonConfig } from '../button/button-config';
-import { GroupConfig } from '../button/group-config';
 import { Commands } from '../command/commands';
 import * as buttonHelpers from '../helpers';
 import { standardButtons } from '../standard-buttons';

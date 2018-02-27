@@ -1,8 +1,4 @@
-﻿import { ButtonConfig } from "./button/button-config";
-import { Settings } from "../commands/settings";
-import { ButtonAction } from "./button/button-action";
-
-/**
+﻿/**
  * does some clean-up work on a button-definition object
  * because the target item could be specified directly, or in a complex internal object called entity
  * @param actDef
@@ -32,7 +28,7 @@ export function generateButtonHtml(sxc: SxcInstanceWithInternals, actDef: any, g
   const oldParamsAdapter: any = Object.assign({ action: actDef.action.name }, actDef.action.params);
   // console.log('stv: oldParamsAdapter', oldParamsAdapter);
   const onclick: string = actDef.disabled ?
-      '' :
+    '' :
     '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(oldParamsAdapter) + ', event);';
 
   for (let c = 0; c < classesList.length; c++) showClasses += ' ' + classesList[c];

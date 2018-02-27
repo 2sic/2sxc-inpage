@@ -1,5 +1,4 @@
 ﻿import { generateButtonHtml } from '../abtesting/toolbar-feature';
-import { generateToolbarHtml } from '../abtesting/toolbar-feature';
 import { Engine, instanceEngine } from '../commands/engine';
 import { manipulator } from '../contentBlock/manipulate';
 import { DataEditContext } from '../data-edit-context/data-edit-context';

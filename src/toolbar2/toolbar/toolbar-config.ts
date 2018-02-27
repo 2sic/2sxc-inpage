@@ -1,6 +1,4 @@
-﻿import { ButtonConfig } from '../button/button-config';
-import { GroupConfig } from '../button/group-config';
-import { ToolbarParameters } from './toolbar-parameters';
+﻿import { GroupConfig } from '../button/group-config';
 import { ToolbarSettings } from './toolbar-settings';
 
 /** contains a toolbar config + settings + many groups */

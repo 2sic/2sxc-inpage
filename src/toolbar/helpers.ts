@@ -176,6 +176,7 @@ export const expandButtonList = (root, settings) => {
 };
 
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
+// ReSharper disable once UnusedParameter
 export const expandButtonConfig = (original, sharedProps) => {
   // prevent multiple inits
   if (original._expanded || original.command)
@@ -271,6 +272,7 @@ function fallbackBtnSetting(btn, group, groups, actions, propName) {
       actions[btn.command.action][propName]); // if there is an action, try to use that property name
 }
 
+// ReSharper disable once UnusedParameter
 export const customize = (toolbar) => {
   // if (!toolbar.settings) return;
   // let set = toolbar.settings;

@@ -1168,6 +1168,7 @@ function generatePaneMoveButtons(current) {
             targets.append("<a data='" + pName + "'>" + pName + "</a>");
     }
     // attach click event...
+    // ReSharper disable once UnusedParameter
     targets.find('a').click(function (d) {
         var link = $(this);
         var clip = clipboard_1.data;
@@ -2989,6 +2990,7 @@ exports.expandButtonList = function (root, settings) {
     root.buttons = btns; // ensure the internal def is also an array now
 };
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
+// ReSharper disable once UnusedParameter
 exports.expandButtonConfig = function (original, sharedProps) {
     // prevent multiple inits
     if (original._expanded || original.command)
@@ -3075,6 +3077,7 @@ function fallbackBtnSetting(btn, group, groups, actions, propName) {
             (actions[btn.command.action] &&
                 actions[btn.command.action][propName]); // if there is an action, try to use that property name
 }
+// ReSharper disable once UnusedParameter
 exports.customize = function (toolbar) {
     // if (!toolbar.settings) return;
     // let set = toolbar.settings;
@@ -3432,7 +3435,7 @@ exports.Commands = Commands;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function ExpandButtonConfig(buttonConfig, context) {
+function ExpandButtonConfig(context, buttonConfig) {
     // todo
     return buttonConfig;
 }
@@ -4079,6 +4082,7 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
                 .after(newTag);
         else
             listTag.prepend(newTag);
+        // ReSharper disable once UnusedLocals
         var sxcNew = sxc_1.getSxcInstance(newTag);
         toolbar_feature_1._toolbarManager.buildToolbars(newTag);
     });
@@ -4624,29 +4628,28 @@ __webpack_require__(113);
 __webpack_require__(26);
 __webpack_require__(28);
 __webpack_require__(53);
-__webpack_require__(114);
 __webpack_require__(54);
-__webpack_require__(115);
+__webpack_require__(114);
 __webpack_require__(49);
+__webpack_require__(115);
 __webpack_require__(116);
-__webpack_require__(117);
 __webpack_require__(50);
 __webpack_require__(48);
 __webpack_require__(13);
 __webpack_require__(12);
 __webpack_require__(52);
-__webpack_require__(118);
+__webpack_require__(117);
 __webpack_require__(30);
-__webpack_require__(119);
+__webpack_require__(118);
 __webpack_require__(29);
 __webpack_require__(31);
+__webpack_require__(119);
 __webpack_require__(120);
-__webpack_require__(121);
 __webpack_require__(55);
 __webpack_require__(51);
-__webpack_require__(122);
+__webpack_require__(121);
 __webpack_require__(32);
-__webpack_require__(123);
+__webpack_require__(122);
 __webpack_require__(4);
 __webpack_require__(63);
 module.exports = __webpack_require__(2);
@@ -4675,6 +4678,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
     };
     // selectors
     var sel_1 = $2sxc.c.sel = {};
+    // ReSharper disable once UnusedParameter
     Object.keys($2sxc.c.cls).forEach(function (key, index) {
         sel_1[key] = "." + $2sxc.c.cls[key];
     });
@@ -5124,6 +5128,7 @@ $(start_1.start); // run on-load
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+// ReSharper disable once UnusedParameter
 function extend() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -5193,6 +5198,7 @@ if (!Array.prototype.find) {
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
+    // ReSharper disable once UnusedParameter
     Object.assign = function (target, varArgs) {
         'use strict';
         if (target === null) {
@@ -5559,36 +5565,6 @@ $(function () {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ButtonBaseConfig = /** @class */ (function () {
-    function ButtonBaseConfig() {
-        this.icon = '';
-        this.title = '';
-        this.show = true; // maybe
-        this.showCondition = true;
-        this.disabled = false;
-        this.dynamicDisabled = function () { return false; }; // maybe
-        // have all values / properties null, this is to create a type-safe ButtonConfig which doesn't work, but has the correct property-names
-        //this.classes = null;
-        //this.icon = null;
-        //this.title = null;
-        //this.dynamicClasses = null;
-        //this.show = null;
-        //this.showCondition = null;
-        //this.disabled = null;
-        //this.dynamicDisabled = null;
-    }
-    return ButtonBaseConfig;
-}());
-exports.ButtonBaseConfig = ButtonBaseConfig;
-
-
-/***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var Button = /** @class */ (function () {
     function Button() {
     }
@@ -5598,7 +5574,7 @@ exports.Button = Button;
 
 
 /***/ }),
-/* 116 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5612,7 +5588,7 @@ exports.ExpandGroupConfig = ExpandGroupConfig;
 
 
 /***/ }),
-/* 117 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5635,7 +5611,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 118 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5650,7 +5626,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 119 */
+/* 118 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -5658,7 +5634,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 120 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5673,7 +5649,7 @@ exports.ToolbarConfigTemplate = ToolbarConfigTemplate;
 
 
 /***/ }),
-/* 121 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5688,7 +5664,7 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 
 
 /***/ }),
-/* 122 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5704,7 +5680,7 @@ exports.ToolbarParameters = ToolbarParameters;
 
 
 /***/ }),
-/* 123 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

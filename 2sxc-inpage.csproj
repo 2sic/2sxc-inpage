@@ -82,7 +82,6 @@
     <TypeScriptCompile Include="src\quick-edit\selectors-instance.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors.ts" />
     <TypeScriptCompile Include="src\toolbar2\button\button-action.ts" />
-    <TypeScriptCompile Include="src\toolbar2\button\button-base-config.ts" />
     <TypeScriptCompile Include="src\toolbar2\button\button-config.ts" />
     <TypeScriptCompile Include="src\toolbar2\button\expand-button-config.ts" />
     <TypeScriptCompile Include="src\toolbar2\button\expand-group-config.ts" />
