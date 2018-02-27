@@ -1,5 +1,4 @@
-﻿import { ButtonConfig } from '../toolbar2/button/button-config';
-import { Command } from './command';
+﻿import { Command } from './command';
 import { ModConfig } from './mod-config';
 // import { Params } from './params';
 import { Settings } from './settings';
@@ -20,6 +19,4 @@ export class Definition {
   newWindow?: boolean;
   inlineWindow?: boolean;
   fullScreen?: boolean;
-
-  tmpButtonDefaults?: Partial<ButtonConfig>;
 }

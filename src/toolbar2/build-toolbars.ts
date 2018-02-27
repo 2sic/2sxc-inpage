@@ -9,7 +9,7 @@ import { ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
 import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
 
 // quick debug - set to false if not needed for production
-const dbg = true;
+const dbg = false;
 
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar(): any {

@@ -5,8 +5,6 @@ import { addItem, changeOrder, publish, publishId, removeFromList } from '../../
 import { DataEditContext } from '../../data-edit-context/data-edit-context';
 import { contentItems } from '../../entity-manipulation/item-commands';
 import { translate } from '../../translate/2sxc.translate';
-import { ButtonAction } from '../button/button-action';
-import { ButtonConfig } from '../button/button-config';
 import { GetButtonConfigDefaultsV1 } from '../button/expand-button-config';
 import { CommandDefinition } from './command-definition';
 
@@ -45,16 +43,10 @@ export class Commands {
     if (typeof (partOfPage) !== 'boolean')
       throw 'partOfPage in commands not provided, order will be wrong!';
 
+    // Toolbar API v2
     const newDefinition = new CommandDefinition();
     newDefinition.name = name;
     newDefinition.buttonConfig = GetButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more);
-
-    const newButtonAction: ButtonAction = new ButtonAction(name, more.params);
-    newButtonAction.commandDefinition = newDefinition;
-    newButtonAction.code = ''; // todo stv: find where is 'code'
-
-    const newButtonConfig: ButtonConfig = new ButtonConfig(newButtonAction);
-    // console.log('stv: newButtonConfig', newButtonConfig);
 
     return newDefinition;
   }

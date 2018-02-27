@@ -1,12 +1,8 @@
-﻿import { ButtonConfig } from './button/button-config';
-import { GroupConfig } from './button/group-config';
+﻿import { ButtonAction } from './button/button-action';
+import { ButtonConfig } from './button/button-config';
 import { Commands } from './command/commands';
 import { ToolbarConfig } from './toolbar/toolbar-config';
 import { ToolbarSettings } from './toolbar/toolbar-settings';
-import * as Buttonaction from './button/button-action';
-import ButtonAction = Buttonaction.ButtonAction;
-import { CommandDefinition } from './command/command-definition';
-import { GetButtonConfigDefaultsV1 } from './button/expand-button-config';
 
 /**
  * the toolbar manager is an internal helper
@@ -23,7 +19,7 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
   // by now we should have a structure, let's check/fix the buttons
   for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
-    expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings, actions);
+    expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings);
     // fix all the buttons
 
     const btns = fullToolbarConfig.groups[g].buttons;
@@ -71,7 +67,7 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
  * @param root
  * @param settings
  */
-export const expandButtonList = (root, settings: ToolbarSettings, actions: Commands) => {
+export const expandButtonList = (root, settings: ToolbarSettings) => {
 
   // let root = grp; // the root object which has all params of the command
   let btns = [];
@@ -139,6 +135,7 @@ export const expandButtonList = (root, settings: ToolbarSettings, actions: Comma
 };
 
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
+// ReSharper disable once UnusedParameter
 export const expandButtonConfig = (original, sharedProps) => {
   // prevent multiple inits
   if (original._expanded || original.command)
@@ -239,6 +236,7 @@ function fallbackBtnSetting(btn, group, fullToolbarConfig: ToolbarConfig, action
       actions.get(btn.command.action).buttonConfig[propName]); // if there is an action, try to use that property name
 }
 
+// ReSharper disable once UnusedParameter
 export const customize = (toolbar: ToolbarConfig) => {
   // if (!toolbar.settings) return;
   // let set = toolbar.settings;

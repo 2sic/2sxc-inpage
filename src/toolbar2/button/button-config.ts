@@ -1,7 +1,6 @@
 ﻿import { Command } from '../../commands/command';
 import { ModConfig } from '../../commands/mod-config';
 import { Settings } from '../../commands/settings';
-import { CommandDefinition } from '../command/command-definition';
 import { ButtonAction } from './button-action';
 
 export class ButtonConfig {

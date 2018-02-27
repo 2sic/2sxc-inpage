@@ -59,7 +59,7 @@ export const buildFullDefinition = (unstructuredConfig, allActions: Commands, in
 
   buttonHelpers.customize(fullConfig);
 
-  console.log('stv: fullConfig', JSON.stringify(fullConfig));
+  // console.log('stv: fullConfig', JSON.stringify(fullConfig));
 
   return fullConfig;
 };
