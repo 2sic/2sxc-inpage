@@ -1,5 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
+/**
+ * open the import dialog
+ */
 export class AppImport extends CommandBase {
   constructor(cmdSpecs) {
     super(cmdSpecs);

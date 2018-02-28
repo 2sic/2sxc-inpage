@@ -1,14 +1,13 @@
-﻿import { Definition } from '../../commands/definition';
+﻿import { CmdSpec } from '../../commands/cmd-spec';
+import { Definition } from '../../commands/definition';
 import { getButtonConfigDefaultsV1 } from '../button/expand-button-config';
 import { CommandDefinition } from './command-definition';
-import { CmdSpec } from '../../commands/cmd-spec';
 
 export abstract class CommandBase {
 
   public commandDefinition = new CommandDefinition();
-
-  protected enableTools: boolean;
-  protected isContent: boolean;
+  public enableTools: boolean;
+  public isContent: boolean;
 
   constructor(cmdSpecs: CmdSpec) {
     this.enableTools = cmdSpecs.canDesign;
