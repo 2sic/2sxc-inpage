@@ -1,8 +1,20 @@
-﻿import { ToolbarConfigTemplate } from './toolbar-config-template';
+﻿import { defaultToolbarTemplate } from './template/default-toolbar-template';
+import { leftToolbarTemplate } from './template/left-toolbar-template';
+import { ToolbarConfigTemplate } from './toolbar-config-template';
 
 export class ToolbarConfigTemplates {
-  configTemplateList: ToolbarConfigTemplate[];
-  list: () => {}; // hash - table of templates, to be used a list()['template - name']
-  get: (name: string) => {}; // a single template – usually 'default'
-  add: (name: string, template: ToolbarConfigTemplate, force?: boolean) => {}; // adds a config to the list, if it doesn't exist
+  configTemplateList: ToolbarConfigTemplate[] = [];
+  list: HashTable<ToolbarConfigTemplate> = {}; // hash - table of templates, to be used a list()['template - name']
+  constructor() {
+    this.add('default', defaultToolbarTemplate);
+    this.add('left', leftToolbarTemplate);
+  }
+  // a single template – usually 'default'
+  get(name: string): ToolbarConfigTemplate {
+    return this.list[name];
+  }
+  // adds a config to the list, if it doesn't exist
+  add(name: string, template: ToolbarConfigTemplate, force?: boolean) {
+    this.list[name] = template;
+  }
 }
