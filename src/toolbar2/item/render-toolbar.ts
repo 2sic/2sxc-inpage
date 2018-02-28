@@ -1,9 +1,7 @@
 ﻿import { ToolbarConfig } from '../toolbar/toolbar-config';
-import { renderButton } from './render-button';
+import { renderGroups } from './render-groups';
 
 export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
-
-  const btnGroups = toolbarConfig.groups;
 
   const behaviourClasses = ` sc-tb-hover-${toolbarConfig.settings.hover} sc-tb-show-${toolbarConfig.settings.show}`;
 
@@ -18,12 +16,10 @@ export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, t
     onclick: 'var e = arguments[0] || window.event; e.stopPropagation();',
   });
 
-  for (let i = 0; i < btnGroups.length; i++) {
-    const btns = btnGroups[i].buttons;
-    for (let h = 0; h < btns.length; h++)
-      toolbar.append($('<li />').append($(renderButton(sxc, btns[h], i))));
-  }
+  // render groups of buttons
+  const groups = renderGroups(sxc, toolbarConfig);
+  toolbar.append(groups);
+  toolbar.attr('group-count', groups.length);
 
-  toolbar.attr('group-count', btnGroups.length);
   return toolbar[0].outerHTML;
 }

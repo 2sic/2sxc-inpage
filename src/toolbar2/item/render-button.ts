@@ -1,7 +1,11 @@
 ﻿import { ButtonConfig } from '../button/button-config';
 
-// generate the html for a button
-// Expects: instance sxc, action-definition, + group-index in which the button is shown
+/**
+ * generate the html for a button
+ * @param sxc instance sxc
+ * @param buttonConfig
+ * @param groupIndex group-index in which the button is shown
+ */
 export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): string {
   // debugger;
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
