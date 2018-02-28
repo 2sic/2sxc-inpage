@@ -1,5 +1,5 @@
-﻿import { defaultToolbarTemplate } from './template/default-toolbar-template';
-import { leftToolbarTemplate } from './template/left-toolbar-template';
+﻿import { defaultToolbarTemplate } from './templates/default-toolbar-template';
+import { leftToolbarTemplate } from './templates/left-toolbar-template';
 import { ToolbarConfigTemplate } from './toolbar-config-template';
 
 export class ToolbarConfigTemplates {
