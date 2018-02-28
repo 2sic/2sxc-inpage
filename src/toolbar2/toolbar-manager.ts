@@ -1,7 +1,7 @@
 ﻿import { buildToolbars, disable, isDisabled } from './build-toolbars';
 import { renderButton } from './item/render-button';
 import { renderToolbar } from './item/render-toolbar';
-import { toolbarTemplate } from './toolbar-template';
+import { toolbarTemplate } from './toolbar/template/toolbar-template';
 import { toolbarStandardButtons } from './toolbar/toolbar-standard-buttons';
 
 /**

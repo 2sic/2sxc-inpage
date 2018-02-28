@@ -1,4 +1,4 @@
-﻿import { toolbarTemplate } from '../toolbar-template';
+﻿import { toolbarTemplate } from './template/toolbar-template';
 
 /**
  * the toolbar manager is an internal helper
