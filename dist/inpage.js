@@ -295,7 +295,7 @@ exports._toolbarManager = (ab_testing_config_1.isA) ? A_ToolbarManager._toolbarM
 exports.disable = (ab_testing_config_1.isA) ? A_BuildToolbars.disable : B_BuildToolbars.disable;
 exports.isDisabled = (ab_testing_config_1.isA) ? A_BuildToolbars.isDisabled : B_BuildToolbars.isDisabled;
 exports.buildToolbars = (ab_testing_config_1.isA) ? A_BuildToolbars.buildToolbars : B_BuildToolbars.buildToolbars;
-exports.generateButtonHtml = (ab_testing_config_1.isA) ? A_GenerateButtonHtml.generateButtonHtml : B_GenerateButtonHtml.generateButtonHtml;
+exports.generateButtonHtml = (ab_testing_config_1.isA) ? A_GenerateButtonHtml.generateButtonHtml : B_GenerateButtonHtml.renderButton;
 exports.generateToolbarHtml = (ab_testing_config_1.isA) ? A_GenerateToolbarHtml.generateToolbarHtml : B_GenerateToolbarHtml.renderToolbar;
 
 
@@ -842,9 +842,8 @@ exports.generateButtonHtml = generateButtonHtml;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var generate_button_html_1 = __webpack_require__(13);
+var render_button_1 = __webpack_require__(13);
 function renderToolbar(sxc, toolbarData, toolbarConfig) {
-    // debugger;
     var btnGroups = toolbarConfig.groups;
     var behaviourClasses = " sc-tb-hover-" + toolbarConfig.settings.hover + " sc-tb-show-" + toolbarConfig.settings.show;
     // todo: these settings assume it's not in an array...
@@ -859,7 +858,7 @@ function renderToolbar(sxc, toolbarData, toolbarConfig) {
     for (var i = 0; i < btnGroups.length; i++) {
         var btns = btnGroups[i].buttons;
         for (var h = 0; h < btns.length; h++)
-            toolbar.append($('<li />').append($(generate_button_html_1.generateButtonHtml(sxc, btns[h], i))));
+            toolbar.append($('<li />').append($(render_button_1.renderButton(sxc, btns[h], i))));
     }
     toolbar.attr('group-count', btnGroups.length);
     return toolbar[0].outerHTML;
@@ -874,25 +873,9 @@ exports.renderToolbar = renderToolbar;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * does some clean-up work on a button-definition object
- * because the target item could be specified directly, or in a complex internal object called entity
- * @param actDef
- */
-function flattenActionDefinition(actDef) {
-    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
-        return;
-    var editInfo = actDef.entity._2sxcEditInformation;
-    actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-    if (editInfo.entityId !== undefined)
-        actDef.entityId = editInfo.entityId;
-    if (editInfo.sortOrder !== undefined)
-        actDef.sortOrder = editInfo.sortOrder;
-    delete actDef.entity; // clean up edit-info
-}
 // generate the html for a button
 // Expects: instance sxc, action-definition, + group-index in which the button is shown
-function generateButtonHtml(sxc, buttonConfig, groupIndex) {
+function renderButton(sxc, buttonConfig, groupIndex) {
     // debugger;
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     flattenActionDefinition(buttonConfig);
@@ -919,7 +902,23 @@ function generateButtonHtml(sxc, buttonConfig, groupIndex) {
     // console.log('stv: buttonHtml', button[0].outerHTML);
     return button[0].outerHTML;
 }
-exports.generateButtonHtml = generateButtonHtml;
+exports.renderButton = renderButton;
+/**
+ * does some clean-up work on a button-definition object
+ * because the target item could be specified directly, or in a complex internal object called entity
+ * @param actDef
+ */
+function flattenActionDefinition(actDef) {
+    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
+        return;
+    var editInfo = actDef.entity._2sxcEditInformation;
+    actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
+    if (editInfo.entityId !== undefined)
+        actDef.entityId = editInfo.entityId;
+    if (editInfo.sortOrder !== undefined)
+        actDef.sortOrder = editInfo.sortOrder;
+    delete actDef.entity; // clean up edit-info
+}
 
 
 /***/ }),
@@ -2331,7 +2330,7 @@ exports.isDisabled = isDisabled;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(28);
-var generate_button_html_1 = __webpack_require__(13);
+var render_button_1 = __webpack_require__(13);
 var render_toolbar_1 = __webpack_require__(12);
 var standard_buttons_1 = __webpack_require__(30);
 var toolbar_template_1 = __webpack_require__(31);
@@ -2348,7 +2347,7 @@ var ToolbarManager = /** @class */ (function () {
         this.disable = build_toolbars_1.disable;
         this.isDisabled = build_toolbars_1.isDisabled;
         // generate button html
-        this.generateButtonHtml = generate_button_html_1.generateButtonHtml;
+        this.generateButtonHtml = render_button_1.renderButton;
         this.generateToolbarHtml = render_toolbar_1.renderToolbar;
         this.standardButtons = standard_buttons_1.standardButtons;
         this.toolbarTemplate = toolbar_template_1.toolbarTemplate;
@@ -4690,9 +4689,9 @@ __webpack_require__(116);
 __webpack_require__(117);
 __webpack_require__(50);
 __webpack_require__(48);
-__webpack_require__(13);
 __webpack_require__(52);
 __webpack_require__(118);
+__webpack_require__(13);
 __webpack_require__(12);
 __webpack_require__(30);
 __webpack_require__(119);

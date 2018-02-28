@@ -1,6 +1,6 @@
 ﻿import { buildToolbars, disable, isDisabled } from './build-toolbars';
-import { generateButtonHtml } from './generate-button-html';
-import { renderToolbar as generateToolbarHtml } from './item/render-toolbar';
+import { renderButton } from './item/render-button';
+import { renderToolbar } from './item/render-toolbar';
 import { standardButtons } from './standard-buttons';
 import { toolbarTemplate } from './toolbar-template';
 
@@ -16,8 +16,8 @@ export class ToolbarManager {
   disable = disable;
   isDisabled = isDisabled;
   // generate button html
-  generateButtonHtml = generateButtonHtml;
-  generateToolbarHtml = generateToolbarHtml;
+  generateButtonHtml = renderButton;
+  generateToolbarHtml = renderToolbar;
   standardButtons = standardButtons;
   toolbarTemplate = toolbarTemplate;
 }

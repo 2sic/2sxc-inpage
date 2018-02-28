@@ -1,9 +1,8 @@
-﻿import { generateButtonHtml } from '../generate-button-html';
-import { ToolbarConfig } from '../toolbar/toolbar-config';
+﻿import { ToolbarConfig } from '../toolbar/toolbar-config';
+import { renderButton } from './render-button';
 
 export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
 
-  // debugger;
   const btnGroups = toolbarConfig.groups;
 
   const behaviourClasses = ` sc-tb-hover-${toolbarConfig.settings.hover} sc-tb-show-${toolbarConfig.settings.show}`;
@@ -22,7 +21,7 @@ export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, t
   for (let i = 0; i < btnGroups.length; i++) {
     const btns = btnGroups[i].buttons;
     for (let h = 0; h < btns.length; h++)
-      toolbar.append($('<li />').append($(generateButtonHtml(sxc, btns[h], i))));
+      toolbar.append($('<li />').append($(renderButton(sxc, btns[h], i))));
   }
 
   toolbar.attr('group-count', btnGroups.length);

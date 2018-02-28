@@ -1,23 +1,8 @@
-﻿import { ButtonConfig } from "./button/button-config";
-
-/**
- * does some clean-up work on a button-definition object
- * because the target item could be specified directly, or in a complex internal object called entity
- * @param actDef
- */
-function flattenActionDefinition(actDef) {
-  if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
-
-  const editInfo = actDef.entity._2sxcEditInformation;
-  actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-  if (editInfo.entityId !== undefined) actDef.entityId = editInfo.entityId;
-  if (editInfo.sortOrder !== undefined) actDef.sortOrder = editInfo.sortOrder;
-  delete actDef.entity; // clean up edit-info
-}
+﻿import { ButtonConfig } from '../button/button-config';
 
 // generate the html for a button
 // Expects: instance sxc, action-definition, + group-index in which the button is shown
-export function generateButtonHtml(sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): string {
+export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): string {
   // debugger;
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(buttonConfig);
@@ -48,4 +33,19 @@ export function generateButtonHtml(sxc: SxcInstanceWithInternals, buttonConfig: 
   // console.log('stv: buttonHtml', button[0].outerHTML);
 
   return button[0].outerHTML;
+}
+
+/**
+ * does some clean-up work on a button-definition object
+ * because the target item could be specified directly, or in a complex internal object called entity
+ * @param actDef
+ */
+function flattenActionDefinition(actDef) {
+  if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
+
+  const editInfo = actDef.entity._2sxcEditInformation;
+  actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
+  if (editInfo.entityId !== undefined) actDef.entityId = editInfo.entityId;
+  if (editInfo.sortOrder !== undefined) actDef.sortOrder = editInfo.sortOrder;
+  delete actDef.entity; // clean up edit-info
 }
