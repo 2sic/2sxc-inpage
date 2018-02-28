@@ -7,7 +7,12 @@ import { contentItems } from '../../entity-manipulation/item-commands';
 import { translate } from '../../translate/2sxc.translate';
 import { getButtonConfigDefaultsV1 } from '../button/expand-button-config';
 import { CommandDefinition } from './command-definition';
-
+import { Add } from './commands/add';
+import { AppImport } from './commands/app-import';
+import { Edit } from './commands/edit';
+import { New } from './commands/new';
+import {Metadata} from './commands/metadata';
+import { Remove } from './commands/remove';
 
 export class Commands {
 
@@ -53,81 +58,29 @@ export class Commands {
 
   private create = (cmdSpecs: CmdSpec): void => {
 
-    const enableTools = cmdSpecs.canDesign;
-    const isContent = cmdSpecs.isContent;
+    const enableTools = cmdSpecs.canDesign; // todo: delete this after refactoring
+    const isContent = cmdSpecs.isContent; // todo: delete this after refactoring
 
     // open the import dialog
-    this.addDef(this.makeDef('app-import', 'Dashboard', '', true, false, {}));
+    this.addDef(new AppImport(cmdSpecs).commandDefinition);
 
     // open an edit-item dialog
-    this.addDef(this.makeDef('edit', 'Edit', 'pencil', false, true, {
-      params: { mode: 'edit' },
-      showCondition(settings, modConfig) {
-        return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
-      },
-    }));
+    this.addDef(new Edit(cmdSpecs).commandDefinition);
 
     // new is a dialog to add something, and will not add if cancelled
     // new can also be used for mini-toolbars which just add an entity not attached to a module
     // in that case it's essential to add a contentType like
     // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-    this.addDef(this.makeDef('new', 'New', 'plus', false, true, {
-      params: { mode: 'new' },
-      dialog: 'edit', // don't use "new" (default) but use "edit"
-      showCondition(settings, modConfig) {
-        return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
-      },
-      code(settings, event, sxc) {
-        // todo - should refactor this to be a toolbarManager.contentBlock command
-        const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
-        sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
-      },
-    }));
+    this.addDef(new New(cmdSpecs).commandDefinition);
 
     // add brings no dialog, just add an empty item
-    this.addDef(this.makeDef('add', 'AddDemo', 'plus-circled', false, true, {
-      showCondition(settings, modConfig) {
-        return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-      },
-      code(settings, event, sxc) {
-        addItem(sxc, settings.sortOrder + 1);
-      },
-    }));
+    this.addDef(new Add(cmdSpecs).commandDefinition);
 
     // create a metadata toolbar
-    this.addDef(this.makeDef('metadata', 'Metadata', 'tag', false, false, {
-      params: { mode: 'new' },
-      dialog: 'edit', // don't use "new" (default) but use "edit"
-      dynamicClasses(settings: Settings): string {
-        // if it doesn't have data yet, make it less strong
-        return settings.entityId ? '' : 'empty';
-        // return settings.items && settings.items[0].entityId ? "" : "empty";
-      },
-      showCondition(settings, modConfig) {
-        return !!settings.metadata;
-      }, // only add a metadata-button if it has metadata-infos
-      configureCommand(cmd) {
-        const itm = {
-          Title: 'EditFormTitle.Metadata',
-          Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata),
-        };
-        Object.assign(cmd.items[0], itm);
-      },
-    }));
+    this.addDef(new Metadata(cmdSpecs).commandDefinition);
 
     // remove an item from the placeholder (usually for lists)
-    this.addDef(this.makeDef('remove', 'Remove', 'minus-circled', false, true, {
-      showCondition(settings, modConfig) {
-        return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
-      },
-      code(settings, event, sxc) {
-        if (confirm(translate('Toolbar.ConfirmRemove'))) {
-          removeFromList(sxc, settings.sortOrder);
-          // sxc.manage.contentBlock
-          //    .removeFromList(settings.sortOrder);
-        }
-      },
-    }));
+    this.addDef(new Remove(cmdSpecs).commandDefinition);
 
     // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
     this.addDef(this.makeDef('delete', 'Delete', 'cancel', true, false, {
