@@ -2,7 +2,7 @@
 import { getEditContext, getTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { Commands } from './command/commands';
-import { generateToolbarHtml } from './generate-toolbar-html';
+import { renderToolbar } from './item/render-toolbar';
 import { _toolbarManager } from './toolbar-manager';
 import { ToolbarConfig } from './toolbar/toolbar-config';
 import { ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
@@ -81,7 +81,10 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
 
       const toolbarConfig: ToolbarConfig = ExpandToolbarConfig(editContext, newCommands, toolbarData, toolbarSettings);
 
-      tag.replaceWith(generateToolbarHtml(sxc, toolbarData, toolbarConfig));
+      const toolbar = renderToolbar(sxc, toolbarData, toolbarConfig);
+
+      tag.replaceWith(toolbar);
+
     } catch (err2) {
       // note: errors happen a lot on custom toolbars, make sure the others are still rendered
       console.error('error creating toolbar - will skip this one', err2);

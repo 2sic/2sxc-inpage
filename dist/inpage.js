@@ -296,7 +296,7 @@ exports.disable = (ab_testing_config_1.isA) ? A_BuildToolbars.disable : B_BuildT
 exports.isDisabled = (ab_testing_config_1.isA) ? A_BuildToolbars.isDisabled : B_BuildToolbars.isDisabled;
 exports.buildToolbars = (ab_testing_config_1.isA) ? A_BuildToolbars.buildToolbars : B_BuildToolbars.buildToolbars;
 exports.generateButtonHtml = (ab_testing_config_1.isA) ? A_GenerateButtonHtml.generateButtonHtml : B_GenerateButtonHtml.generateButtonHtml;
-exports.generateToolbarHtml = (ab_testing_config_1.isA) ? A_GenerateToolbarHtml.generateToolbarHtml : B_GenerateToolbarHtml.generateToolbarHtml;
+exports.generateToolbarHtml = (ab_testing_config_1.isA) ? A_GenerateToolbarHtml.generateToolbarHtml : B_GenerateToolbarHtml.renderToolbar;
 
 
 /***/ }),
@@ -843,7 +843,7 @@ exports.generateButtonHtml = generateButtonHtml;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var generate_button_html_1 = __webpack_require__(13);
-function generateToolbarHtml(sxc, toolbarData, toolbarConfig) {
+function renderToolbar(sxc, toolbarData, toolbarConfig) {
     // debugger;
     var btnGroups = toolbarConfig.groups;
     var behaviourClasses = " sc-tb-hover-" + toolbarConfig.settings.hover + " sc-tb-show-" + toolbarConfig.settings.show;
@@ -864,7 +864,7 @@ function generateToolbarHtml(sxc, toolbarData, toolbarConfig) {
     toolbar.attr('group-count', btnGroups.length);
     return toolbar[0].outerHTML;
 }
-exports.generateToolbarHtml = generateToolbarHtml;
+exports.renderToolbar = renderToolbar;
 
 
 /***/ }),
@@ -2237,7 +2237,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(1);
 var sxc_1 = __webpack_require__(2);
 var commands_1 = __webpack_require__(48);
-var generate_toolbar_html_1 = __webpack_require__(12);
+var render_toolbar_1 = __webpack_require__(12);
 var toolbar_manager_1 = __webpack_require__(29);
 var toolbar_expand_config_1 = __webpack_require__(51);
 var toolbar_settings_1 = __webpack_require__(32);
@@ -2301,7 +2301,8 @@ function buildToolbars(parentTag, optionalId) {
             var editContext = api_1.getEditContext(sxc);
             var newCommands = new commands_1.Commands(editContext);
             var toolbarConfig = toolbar_expand_config_1.ExpandToolbarConfig(editContext, newCommands, toolbarData, toolbarSettings);
-            tag.replaceWith(generate_toolbar_html_1.generateToolbarHtml(sxc, toolbarData, toolbarConfig));
+            var toolbar = render_toolbar_1.renderToolbar(sxc, toolbarData, toolbarConfig);
+            tag.replaceWith(toolbar);
         }
         catch (err2) {
             // note: errors happen a lot on custom toolbars, make sure the others are still rendered
@@ -2331,7 +2332,7 @@ exports.isDisabled = isDisabled;
 Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(28);
 var generate_button_html_1 = __webpack_require__(13);
-var generate_toolbar_html_1 = __webpack_require__(12);
+var render_toolbar_1 = __webpack_require__(12);
 var standard_buttons_1 = __webpack_require__(30);
 var toolbar_template_1 = __webpack_require__(31);
 /**
@@ -2348,7 +2349,7 @@ var ToolbarManager = /** @class */ (function () {
         this.isDisabled = build_toolbars_1.isDisabled;
         // generate button html
         this.generateButtonHtml = generate_button_html_1.generateButtonHtml;
-        this.generateToolbarHtml = generate_toolbar_html_1.generateToolbarHtml;
+        this.generateToolbarHtml = render_toolbar_1.renderToolbar;
         this.standardButtons = standard_buttons_1.standardButtons;
         this.toolbarTemplate = toolbar_template_1.toolbarTemplate;
     }
@@ -3492,7 +3493,7 @@ function ExpandToolbarConfig(editContext, allActions, toolbarData, toolbarSettin
         unstructuredConfig = standard_buttons_1.standardButtons(editContext.User.CanDesign, toolbarData);
     var instanceConfig = new instance_config_1.InstanceConfig(editContext);
     // whatever we had, if more settings were provided, override with these...
-    var config = exports.buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
+    var config = buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
     // console.log('stv: fullToolbarConfig', JSON.stringify(config));
     // console.log('stv: fullToolbarConfig', config);
     return config;
@@ -3512,8 +3513,8 @@ exports.ExpandToolbarConfig = ExpandToolbarConfig;
  * @param instanceConfig
  * @param toolbarSettings
  */
-exports.buildFullDefinition = function (unstructuredConfig, allActions, instanceConfig, toolbarSettings) {
-    var fullConfig = exports.ensureDefinitionTree(unstructuredConfig, toolbarSettings);
+var buildFullDefinition = function (unstructuredConfig, allActions, instanceConfig, toolbarSettings) {
+    var fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
     // ToDo: don't use console.log in production
     if (unstructuredConfig.debug)
         console.log('toolbar: detailed debug on; start build full Def');
@@ -3522,8 +3523,8 @@ exports.buildFullDefinition = function (unstructuredConfig, allActions, instance
     if (fullConfig.debug)
         console.log('after remove: ', fullConfig);
     buttonHelpers.customize(fullConfig);
-    //console.log('stv: fullConfig', JSON.stringify(fullConfig));
-    //console.log('stv: fullConfig', fullConfig);
+    // console.log('stv: fullConfig', JSON.stringify(fullConfig));
+    // console.log('stv: fullConfig', fullConfig);
     return fullConfig;
 };
 //#region build initial toolbar object
@@ -3538,7 +3539,7 @@ exports.buildFullDefinition = function (unstructuredConfig, allActions, instance
  * @param unstructuredConfig
  * @param toolbarSettings
  */
-exports.ensureDefinitionTree = function (unstructuredConfig, toolbarSettings) {
+var ensureDefinitionTree = function (unstructuredConfig, toolbarSettings) {
     // original is null/undefined, just return empty set
     if (!unstructuredConfig)
         throw ("preparing toolbar, with nothing to work on: " + unstructuredConfig);
@@ -4690,9 +4691,9 @@ __webpack_require__(117);
 __webpack_require__(50);
 __webpack_require__(48);
 __webpack_require__(13);
-__webpack_require__(12);
 __webpack_require__(52);
 __webpack_require__(118);
+__webpack_require__(12);
 __webpack_require__(30);
 __webpack_require__(119);
 __webpack_require__(29);

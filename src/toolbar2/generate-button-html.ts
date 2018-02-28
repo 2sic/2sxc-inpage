@@ -1,5 +1,4 @@
 ﻿import { ButtonConfig } from "./button/button-config";
-import { Settings } from "../commands/settings";
 
 /**
  * does some clean-up work on a button-definition object

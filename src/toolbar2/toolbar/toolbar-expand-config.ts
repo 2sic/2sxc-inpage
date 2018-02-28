@@ -43,7 +43,7 @@ export function ExpandToolbarConfig(editContext: DataEditContext, allActions: Co
  * @param instanceConfig
  * @param toolbarSettings
  */
-export const buildFullDefinition = (unstructuredConfig, allActions: Commands, instanceConfig, toolbarSettings: ToolbarSettings) => {
+const buildFullDefinition = (unstructuredConfig, allActions: Commands, instanceConfig, toolbarSettings: ToolbarSettings) => {
 
   const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
 
@@ -58,8 +58,8 @@ export const buildFullDefinition = (unstructuredConfig, allActions: Commands, in
 
   buttonHelpers.customize(fullConfig);
 
-  //console.log('stv: fullConfig', JSON.stringify(fullConfig));
-  //console.log('stv: fullConfig', fullConfig);
+  // console.log('stv: fullConfig', JSON.stringify(fullConfig));
+  // console.log('stv: fullConfig', fullConfig);
 
   return fullConfig;
 };
@@ -76,7 +76,7 @@ export const buildFullDefinition = (unstructuredConfig, allActions: Commands, in
  * @param unstructuredConfig
  * @param toolbarSettings
  */
-export const ensureDefinitionTree = (unstructuredConfig, toolbarSettings: ToolbarSettings): ToolbarConfig => {
+const ensureDefinitionTree = (unstructuredConfig, toolbarSettings: ToolbarSettings): ToolbarConfig => {
   // original is null/undefined, just return empty set
   if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 

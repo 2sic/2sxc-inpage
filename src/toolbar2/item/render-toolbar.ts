@@ -1,7 +1,7 @@
-﻿import { generateButtonHtml } from './generate-button-html';
-import { ToolbarConfig } from './toolbar/toolbar-config';
+﻿import { generateButtonHtml } from '../generate-button-html';
+import { ToolbarConfig } from '../toolbar/toolbar-config';
 
-export function generateToolbarHtml(sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
+export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
 
   // debugger;
   const btnGroups = toolbarConfig.groups;

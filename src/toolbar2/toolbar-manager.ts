@@ -1,6 +1,6 @@
 ﻿import { buildToolbars, disable, isDisabled } from './build-toolbars';
 import { generateButtonHtml } from './generate-button-html';
-import { generateToolbarHtml } from './generate-toolbar-html';
+import { renderToolbar as generateToolbarHtml } from './item/render-toolbar';
 import { standardButtons } from './standard-buttons';
 import { toolbarTemplate } from './toolbar-template';
 
