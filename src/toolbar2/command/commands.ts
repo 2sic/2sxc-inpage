@@ -58,19 +58,6 @@ export class Commands {
     this.list[def.name] = def;
   }
 
-  // quick helper so we can better debug the creation of definitions
-  private makeDef = (name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Definition): CommandDefinition => {
-    if (typeof (partOfPage) !== 'boolean')
-      throw 'partOfPage in commands not provided, order will be wrong!';
-
-    // Toolbar API v2
-    const newDefinition = new CommandDefinition();
-    newDefinition.name = name;
-    newDefinition.buttonConfig = getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more);
-
-    return newDefinition;
-  }
-
   private create = (cmdSpecs: CmdSpec): void => {
 
     // open the import dialog
