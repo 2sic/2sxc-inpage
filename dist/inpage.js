@@ -2560,7 +2560,7 @@ exports.toolbarTemplate = {
     defaults: {},
     params: {},
     settings: {
-        autoAddMore: 'right',
+        autoAddMore: 'end',
     }
 };
 
@@ -2616,7 +2616,7 @@ exports.defaultToolbarSettings = {
 };
 /** default / fallback settings for toolbars when nothings is specified */
 exports.settingsForEmptyToolbar = {
-    autoAddMore: 'start',
+    autoAddMore: 'end',
     hover: 'left',
     show: 'hover',
 };
@@ -3637,8 +3637,8 @@ function ExpandToolbarConfig(editContext, allActions, toolbarData, toolbarSettin
     var instanceConfig = new instance_config_1.InstanceConfig(editContext);
     // whatever we had, if more settings were provided, override with these...
     var config = buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
-    // console.log('stv: fullToolbarConfig', JSON.stringify(config));
-    // console.log('stv: fullToolbarConfig', config);
+    console.log('stv: fullToolbarConfig', JSON.stringify(config));
+    console.log('stv: fullToolbarConfig', config);
     return config;
 }
 exports.ExpandToolbarConfig = ExpandToolbarConfig;
@@ -3817,7 +3817,7 @@ function expandButtonList(root, settings) {
     }
     // optionally add a more-button in each group
     if (settings.autoAddMore) {
-        if (settings.autoAddMore === 'right')
+        if (settings.autoAddMore === 'end')
             btns.push('more');
         else {
             btns.unshift('more');

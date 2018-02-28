@@ -1,6 +1,6 @@
 ﻿/** contains toolbar behaviour settings like float, etc. */
 export class ToolbarSettings {
-  autoAddMore: null | 'right' | 'end' | 'start' | true = null; //  [true: used to be right/start]
+  autoAddMore: null | 'end' | 'start' | true = null; //  [true: used to be right/start]
   hover: 'right' | 'left' | 'none' = 'right';
   show: 'always' | 'hover' = 'hover';
   classes?: string;
@@ -8,7 +8,7 @@ export class ToolbarSettings {
 
 // ToDo: refactor to avoid side-effects
 export const defaultToolbarSettings: ToolbarSettings = {
-  autoAddMore: null, // null | "right" | "start" | true
+  autoAddMore: null, // null | "end" | "start" | true
   hover: 'right', // right | left | none
   show: 'hover', // always | hover
   // order or reverse, still thinking about this --> order: "default"    // default | reverse
@@ -16,7 +16,7 @@ export const defaultToolbarSettings: ToolbarSettings = {
 
 /** default / fallback settings for toolbars when nothings is specified */
 export const settingsForEmptyToolbar: ToolbarSettings = {
-  autoAddMore: 'start', // ex: 'left'
+  autoAddMore: 'end', // ex: 'left'
   hover: 'left',
   show: 'hover',
 };

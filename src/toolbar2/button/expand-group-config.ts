@@ -118,7 +118,7 @@ function expandButtonList(root, settings: ToolbarSettings): void {
 
   // optionally add a more-button in each group
   if (settings.autoAddMore) {
-    if (settings.autoAddMore === 'right')
+    if (settings.autoAddMore === 'end')
       btns.push('more');
     else {
       btns.unshift('more');
