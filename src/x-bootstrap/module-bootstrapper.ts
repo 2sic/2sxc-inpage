@@ -1,9 +1,8 @@
-﻿import { getTag } from '../manage/api';
+﻿import { buildToolbars } from '../abtesting/toolbar-feature';
+import { getTag } from '../manage/api';
 import { current } from '../quick-dialog/quick-dialog';
-import { buildToolbars } from '../abtesting/toolbar-feature';
 import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from './sxc';
-
 
 // import '/2sxc-api/js/2sxc.api';
 

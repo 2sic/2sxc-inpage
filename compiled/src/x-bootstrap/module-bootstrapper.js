@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var toolbar_feature_1 = require("../abtesting/toolbar-feature");
 var api_1 = require("../manage/api");
 var quick_dialog_1 = require("../quick-dialog/quick-dialog");
-var toolbar_feature_1 = require("../abtesting/toolbar-feature");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var sxc_1 = require("./sxc");
 // import '/2sxc-api/js/2sxc.api';

@@ -93,7 +93,7 @@ export const expandButtonList = (root, settings: ToolbarSettings) => {
       }
     }
 
-    console.log('stv: btns #1', btns);
+    // console.log('stv: btns #1', btns);
 
   } else if (typeof root.buttons === 'string') {
 
