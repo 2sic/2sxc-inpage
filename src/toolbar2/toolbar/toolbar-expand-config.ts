@@ -1,7 +1,8 @@
 ﻿import { DataEditContext } from '../../data-edit-context/data-edit-context';
 import { InstanceConfig } from '../../manage/instance-config';
+import { customize, removeDisableButtons } from '../button/expand-button-config';
+import { expandButtonGroups } from '../button/expand-group-config';
 import { Commands } from '../command/commands';
-import * as buttonHelpers from '../helpers';
 import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 import { toolbarStandardButtons } from './toolbar-standard-buttons';
@@ -50,13 +51,13 @@ const buildFullDefinition = (unstructuredConfig, allActions: Commands, instanceC
   // ToDo: don't use console.log in production
   if (unstructuredConfig.debug) console.log('toolbar: detailed debug on; start build full Def');
 
-  buttonHelpers.expandButtonGroups(fullConfig, allActions);
+  expandButtonGroups(fullConfig, allActions);
 
-  buttonHelpers.removeDisableButtons(fullConfig, instanceConfig);
+  removeDisableButtons(fullConfig, instanceConfig);
 
   if (fullConfig.debug) console.log('after remove: ', fullConfig);
 
-  buttonHelpers.customize(fullConfig);
+  customize(fullConfig);
 
   // console.log('stv: fullConfig', JSON.stringify(fullConfig));
   // console.log('stv: fullConfig', fullConfig);

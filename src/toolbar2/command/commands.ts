@@ -5,7 +5,7 @@ import { addItem, changeOrder, publish, publishId, removeFromList } from '../../
 import { DataEditContext } from '../../data-edit-context/data-edit-context';
 import { contentItems } from '../../entity-manipulation/item-commands';
 import { translate } from '../../translate/2sxc.translate';
-import { GetButtonConfigDefaultsV1 } from '../button/expand-button-config';
+import { getButtonConfigDefaultsV1 } from '../button/expand-button-config';
 import { CommandDefinition } from './command-definition';
 
 
@@ -46,7 +46,7 @@ export class Commands {
     // Toolbar API v2
     const newDefinition = new CommandDefinition();
     newDefinition.name = name;
-    newDefinition.buttonConfig = GetButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more);
+    newDefinition.buttonConfig = getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more);
 
     return newDefinition;
   }
