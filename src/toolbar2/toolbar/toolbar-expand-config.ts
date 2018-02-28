@@ -23,7 +23,8 @@ export function ExpandToolbarConfig(editContext: DataEditContext, allActions: Co
   // whatever we had, if more settings were provided, override with these...
   const config = buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
 
-  // console.log('stv: fullToolbarConfig', JSON.stringify(config));
+  console.log('stv: fullToolbarConfig', JSON.stringify(config));
+  console.log('stv: fullToolbarConfig', config);
 
   return config;
 }
@@ -57,7 +58,8 @@ export const buildFullDefinition = (unstructuredConfig, allActions: Commands, in
 
   buttonHelpers.customize(fullConfig);
 
-  // console.log('stv: fullConfig', JSON.stringify(fullConfig));
+  //console.log('stv: fullConfig', JSON.stringify(fullConfig));
+  //console.log('stv: fullConfig', fullConfig);
 
   return fullConfig;
 };

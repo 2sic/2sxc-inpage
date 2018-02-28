@@ -854,7 +854,7 @@ function generateToolbarHtml(sxc, toolbarData, toolbarConfig) {
     var toolbar = $('<ul />', {
         // ReSharper disable once UsingOfReservedWord
         class: tbClasses,
-        onclick: 'let e = arguments[0] || window.event; e.stopPropagation();',
+        onclick: 'var e = arguments[0] || window.event; e.stopPropagation();',
     });
     for (var i = 0; i < btnGroups.length; i++) {
         var btns = btnGroups[i].buttons;
@@ -892,27 +892,28 @@ function flattenActionDefinition(actDef) {
 }
 // generate the html for a button
 // Expects: instance sxc, action-definition, + group-index in which the button is shown
-function generateButtonHtml(sxc, actDef, groupIndex) {
+function generateButtonHtml(sxc, buttonConfig, groupIndex) {
     // debugger;
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
-    flattenActionDefinition(actDef);
+    flattenActionDefinition(buttonConfig);
     // retrieve configuration for this button
-    var showClasses = 'group-' + groupIndex + (actDef.disabled ? ' disabled' : '');
-    var classesList = (actDef.classes || '').split(',');
+    var showClasses = 'group-' + groupIndex + (buttonConfig.disabled ? ' disabled' : '');
+    var classesList = (buttonConfig.classes || '').split(',');
     var box = $('<div/>');
-    var symbol = $('<i class="' + actDef.icon + '" aria-hidden="true"></i>');
-    var oldParamsAdapter = Object.assign({ action: actDef.action.name }, actDef.action.params);
+    var symbol = $('<i class="' + buttonConfig.icon + '" aria-hidden="true"></i>');
+    var oldParamsAdapter = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
     // console.log('stv: oldParamsAdapter', oldParamsAdapter);
-    var onclick = actDef.disabled ?
+    var onclick = buttonConfig.disabled ?
         '' :
         '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(oldParamsAdapter) + ', event);';
-    for (var c = 0; c < classesList.length; c++)
+    for (var c = 0; c < classesList.length; c++) {
         showClasses += ' ' + classesList[c];
+    }
     var button = $('<a />', {
-        'class': 'sc-' + actDef.action + ' ' + showClasses +
-            (actDef.dynamicClasses ? ' ' + actDef.dynamicClasses(actDef) : ''),
+        'class': 'sc-' + buttonConfig.action.name + ' ' + showClasses +
+            (buttonConfig.dynamicClasses ? ' ' + buttonConfig.dynamicClasses(buttonConfig) : ''),
         'onclick': onclick,
-        'data-i18n': '[title]' + actDef.title,
+        'data-i18n': '[title]' + buttonConfig.title,
     });
     button.html(box.html(symbol));
     // console.log('stv: buttonHtml', button[0].outerHTML);
@@ -3492,7 +3493,8 @@ function ExpandToolbarConfig(editContext, allActions, toolbarData, toolbarSettin
     var instanceConfig = new instance_config_1.InstanceConfig(editContext);
     // whatever we had, if more settings were provided, override with these...
     var config = exports.buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
-    // console.log('stv: fullToolbarConfig', JSON.stringify(config));
+    console.log('stv: fullToolbarConfig', JSON.stringify(config));
+    console.log('stv: fullToolbarConfig', config);
     return config;
 }
 exports.ExpandToolbarConfig = ExpandToolbarConfig;
@@ -3520,7 +3522,8 @@ exports.buildFullDefinition = function (unstructuredConfig, allActions, instance
     if (fullConfig.debug)
         console.log('after remove: ', fullConfig);
     buttonHelpers.customize(fullConfig);
-    // console.log('stv: fullConfig', JSON.stringify(fullConfig));
+    //console.log('stv: fullConfig', JSON.stringify(fullConfig));
+    //console.log('stv: fullConfig', fullConfig);
     return fullConfig;
 };
 //#region build initial toolbar object
@@ -3596,6 +3599,7 @@ exports.expandButtonGroups = function (fullToolbarConfig, actions) {
     for (var g = 0; g < fullToolbarConfig.groups.length; g++) {
         // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
         exports.expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings);
+        // console.log('stv: fullToolbarConfig.settings', fullToolbarConfig.settings);
         // fix all the buttons
         var btns = fullToolbarConfig.groups[g].buttons;
         var buttonConfigs = [];
@@ -3604,14 +3608,14 @@ exports.expandButtonGroups = function (fullToolbarConfig, actions) {
                 var btn = btns[b];
                 if (!(actions.get(btn.command.action)))
                     console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
-                Object.assign(btn.command, fullToolbarConfig.params); // enhance the button with settings for this instance
-                // tools.addCommandParams(fullSet, btn);
-                exports.addDefaultBtnSettings(btn, fullToolbarConfig.groups[g], fullToolbarConfig, actions); // ensure all buttons have either own settings, or the fallback
                 var name = btn.command.action;
+                var contentType = btn.command.contentType;
                 // Toolbar API v2
-                var newButtonAction = new button_action_1.ButtonAction(name, fullToolbarConfig.params);
+                var newButtonAction = new button_action_1.ButtonAction(name, contentType, fullToolbarConfig.params);
                 newButtonAction.commandDefinition = actions.get(name);
                 var newButtonConfig = new button_config_1.ButtonConfig(newButtonAction);
+                newButtonConfig.name = name;
+                exports.addDefaultBtnSettings(newButtonConfig, fullToolbarConfig.groups[g], fullToolbarConfig, actions); // ensure all buttons have either own settings, or the fallback
                 buttonConfigs.push(newButtonConfig);
             }
         }
@@ -3651,7 +3655,7 @@ exports.expandButtonList = function (root, settings) {
                 btns.push(btn);
             }
         }
-        // console.log('stv: btns #1', btns);
+        console.log('stv: btns #1', btns);
     }
     else if (typeof root.buttons === 'string') {
         btns = root.buttons.split(',');
@@ -3771,9 +3775,9 @@ function fallbackBtnSetting(btn, group, fullToolbarConfig, actions, propName) {
         ||
             (fullToolbarConfig && fullToolbarConfig.defaults && fullToolbarConfig.defaults[propName]) // if the group has defaults, try use that property
         ||
-            (actions.get(btn.command.action) &&
-                actions.get(btn.command.action).buttonConfig &&
-                actions.get(btn.command.action).buttonConfig[propName]); // if there is an action, try to use that property name
+            (actions.get(btn.action.name) &&
+                actions.get(btn.action.name).buttonConfig &&
+                actions.get(btn.action.name).buttonConfig[propName]); // if there is an action, try to use that property name
 }
 // ReSharper disable once UnusedParameter
 exports.customize = function (toolbar) {
@@ -3804,9 +3808,13 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var ButtonAction = /** @class */ (function () {
-    function ButtonAction(name, params) {
+    function ButtonAction(name, contentType, params) {
         this.name = name;
         this.params = params;
+        if (!params)
+            this.params = {};
+        if (contentType)
+            Object.assign(this.params, { contentType: contentType });
     }
     return ButtonAction;
 }());
@@ -5671,12 +5679,12 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 /** contains toolbar params like entity Ids, etc. */
-var ToolbarParameters = /** @class */ (function () {
-    function ToolbarParameters() {
+var ToolbarParameter = /** @class */ (function () {
+    function ToolbarParameter() {
     }
-    return ToolbarParameters;
+    return ToolbarParameter;
 }());
-exports.ToolbarParameters = ToolbarParameters;
+exports.ToolbarParameter = ToolbarParameter;
 
 
 /***/ }),

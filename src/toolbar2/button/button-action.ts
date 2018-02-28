@@ -6,5 +6,10 @@ export class ButtonAction {
   commandDefinition: CommandDefinition; // reference to action to be run
   code: string; // custom code if used
 
-  constructor(public name: string, public params?: any[]) { }
+  constructor(public name: string, contentType?: string, public params?: any) {
+    if (!params) this.params = {};
+
+    if (contentType) Object.assign(this.params, { contentType: contentType });
+
+  }
 }

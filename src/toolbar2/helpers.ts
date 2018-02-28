@@ -20,6 +20,7 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
   for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
     expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings);
+    // console.log('stv: fullToolbarConfig.settings', fullToolbarConfig.settings);
     // fix all the buttons
 
     const btns = fullToolbarConfig.groups[g].buttons;
@@ -31,20 +32,21 @@ export const expandButtonGroups = (fullToolbarConfig: ToolbarConfig, actions: Co
         const btn = btns[b] as any;
         if (!(actions.get(btn.command.action)))
           console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
-        Object.assign(btn.command, fullToolbarConfig.params); // enhance the button with settings for this instance
-        // tools.addCommandParams(fullSet, btn);
 
-        addDefaultBtnSettings(btn,
+        const name = btn.command.action;
+        const contentType = btn.command.contentType;
+
+        // Toolbar API v2
+        const newButtonAction = new ButtonAction(name, contentType, fullToolbarConfig.params);
+        newButtonAction.commandDefinition = actions.get(name);
+        const newButtonConfig = new ButtonConfig(newButtonAction);
+        newButtonConfig.name = name;
+
+        addDefaultBtnSettings(newButtonConfig,
           fullToolbarConfig.groups[g],
           fullToolbarConfig,
           actions); // ensure all buttons have either own settings, or the fallback
 
-        const name = btn.command.action;
-
-        // Toolbar API v2
-        const newButtonAction = new ButtonAction(name, fullToolbarConfig.params);
-        newButtonAction.commandDefinition = actions.get(name);
-        const newButtonConfig = new ButtonConfig(newButtonAction);
         buttonConfigs.push(newButtonConfig);
 
       }
@@ -76,7 +78,6 @@ export const expandButtonList = (root, settings: ToolbarSettings) => {
   // convert compact buttons (with multi-verb action objects) into own button-objects
   // important because an older syntax allowed {action: "new,edit", entityId: 17}
   if (Array.isArray(root.buttons)) {
-
     for (let b = 0; b < root.buttons.length; b++) {
       const btn = root.buttons[b];
       if (typeof btn.action === 'string' && btn.action.indexOf(',') > -1) {
@@ -91,7 +92,8 @@ export const expandButtonList = (root, settings: ToolbarSettings) => {
         btns.push(btn);
       }
     }
-   // console.log('stv: btns #1', btns);
+
+    console.log('stv: btns #1', btns);
 
   } else if (typeof root.buttons === 'string') {
 
@@ -231,9 +233,9 @@ function fallbackBtnSetting(btn, group, fullToolbarConfig: ToolbarConfig, action
     ||
     (fullToolbarConfig && fullToolbarConfig.defaults && fullToolbarConfig.defaults[propName]) // if the group has defaults, try use that property
     ||
-    (actions.get(btn.command.action) &&
-      actions.get(btn.command.action).buttonConfig &&
-      actions.get(btn.command.action).buttonConfig[propName]); // if there is an action, try to use that property name
+    (actions.get(btn.action.name) &&
+      actions.get(btn.action.name).buttonConfig &&
+      actions.get(btn.action.name).buttonConfig[propName]); // if there is an action, try to use that property name
 }
 
 // ReSharper disable once UnusedParameter

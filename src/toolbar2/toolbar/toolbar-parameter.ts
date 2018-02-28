@@ -1,4 +1,4 @@
 ﻿/** contains toolbar params like entity Ids, etc. */
-export class ToolbarParameters {
+export class ToolbarParameter {
   [key: string]: any;
 }

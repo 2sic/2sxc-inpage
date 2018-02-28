@@ -16,7 +16,7 @@ export function generateToolbarHtml(sxc: SxcInstanceWithInternals, toolbarData: 
   const toolbar = $('<ul />', {
     // ReSharper disable once UsingOfReservedWord
     class: tbClasses,
-    onclick: 'let e = arguments[0] || window.event; e.stopPropagation();',
+    onclick: 'var e = arguments[0] || window.event; e.stopPropagation();',
   });
 
   for (let i = 0; i < btnGroups.length; i++) {
