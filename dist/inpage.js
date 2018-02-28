@@ -2333,8 +2333,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(28);
 var render_button_1 = __webpack_require__(13);
 var render_toolbar_1 = __webpack_require__(12);
-var standard_buttons_1 = __webpack_require__(30);
-var toolbar_template_1 = __webpack_require__(31);
+var toolbar_template_1 = __webpack_require__(30);
+var toolbar_standard_buttons_1 = __webpack_require__(31);
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
@@ -2350,7 +2350,7 @@ var ToolbarManager = /** @class */ (function () {
         // generate button html
         this.generateButtonHtml = render_button_1.renderButton;
         this.generateToolbarHtml = render_toolbar_1.renderToolbar;
-        this.standardButtons = standard_buttons_1.standardButtons;
+        this.standardButtons = toolbar_standard_buttons_1.toolbarStandardButtons;
         this.toolbarTemplate = toolbar_template_1.toolbarTemplate;
     }
     return ToolbarManager;
@@ -2361,32 +2361,6 @@ exports._toolbarManager = new ToolbarManager();
 
 /***/ }),
 /* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_template_1 = __webpack_require__(31);
-/**
- * the toolbar manager is an internal helper
- * taking care of toolbars, buttons etc.
- * @param canDesign
- * @param sharedParameters
- */
-function standardButtons(canDesign, sharedParameters) {
-    // create a deep-copy of the original object
-    var btns = $.extend(true, {}, toolbar_template_1.toolbarTemplate);
-    btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
-    if (!canDesign)
-        btns.groups.splice(2, 1); // remove this menu
-    // console.log('stv: btns', JSON.stringify(btns));
-    return btns;
-}
-exports.standardButtons = standardButtons;
-
-
-/***/ }),
-/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2450,6 +2424,32 @@ exports.toolbarTemplate = {
         autoAddMore: 'right',
     }
 };
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var toolbar_template_1 = __webpack_require__(30);
+/**
+ * the toolbar manager is an internal helper
+ * taking care of toolbars, buttons etc.
+ * @param canDesign
+ * @param sharedParameters
+ */
+function toolbarStandardButtons(canDesign, sharedParameters) {
+    // create a deep-copy of the original object
+    var btns = $.extend(true, {}, toolbar_template_1.toolbarTemplate);
+    btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
+    if (!canDesign)
+        btns.groups.splice(2, 1); // remove this menu
+    // console.log('stv: btns', JSON.stringify(btns));
+    return btns;
+}
+exports.toolbarStandardButtons = toolbarStandardButtons;
 
 
 /***/ }),
@@ -3509,9 +3509,9 @@ exports.renderGroups = renderGroups;
 Object.defineProperty(exports, "__esModule", { value: true });
 var instance_config_1 = __webpack_require__(17);
 var buttonHelpers = __webpack_require__(53);
-var standard_buttons_1 = __webpack_require__(30);
 var toolbar_config_1 = __webpack_require__(56);
 var toolbar_settings_1 = __webpack_require__(32);
+var toolbar_standard_buttons_1 = __webpack_require__(31);
 function ExpandToolbarConfig(editContext, allActions, toolbarData, toolbarSettings) {
     if (toolbarData === {} && toolbarSettings === {})
         toolbarSettings = toolbar_settings_1.settingsForEmptyToolbar;
@@ -3519,7 +3519,7 @@ function ExpandToolbarConfig(editContext, allActions, toolbarData, toolbarSettin
     toolbarData = toolbarData || {}; // if null/undefined, use empty object
     var unstructuredConfig = toolbarData;
     if (!toolbarData.action && !toolbarData.groups && !toolbarData.buttons && !Array.isArray(toolbarData))
-        unstructuredConfig = standard_buttons_1.standardButtons(editContext.User.CanDesign, toolbarData);
+        unstructuredConfig = toolbar_standard_buttons_1.toolbarStandardButtons(editContext.User.CanDesign, toolbarData);
     var instanceConfig = new instance_config_1.InstanceConfig(editContext);
     // whatever we had, if more settings were provided, override with these...
     var config = buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
@@ -4724,15 +4724,15 @@ __webpack_require__(119);
 __webpack_require__(13);
 __webpack_require__(51);
 __webpack_require__(12);
-__webpack_require__(30);
 __webpack_require__(120);
 __webpack_require__(29);
-__webpack_require__(31);
+__webpack_require__(30);
 __webpack_require__(121);
 __webpack_require__(122);
 __webpack_require__(56);
 __webpack_require__(52);
 __webpack_require__(32);
+__webpack_require__(31);
 __webpack_require__(65);
 __webpack_require__(4);
 __webpack_require__(64);

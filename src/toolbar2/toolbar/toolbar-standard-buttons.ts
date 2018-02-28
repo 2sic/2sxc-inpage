@@ -1,4 +1,4 @@
-﻿import { toolbarTemplate } from './toolbar-template';
+﻿import { toolbarTemplate } from '../toolbar-template';
 
 /**
  * the toolbar manager is an internal helper
@@ -6,7 +6,7 @@
  * @param canDesign
  * @param sharedParameters
  */
-export function standardButtons(canDesign, sharedParameters) {
+export function toolbarStandardButtons(canDesign: boolean, sharedParameters: any[]) {
   // create a deep-copy of the original object
   const btns = $.extend(true, {}, toolbarTemplate);
   btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;

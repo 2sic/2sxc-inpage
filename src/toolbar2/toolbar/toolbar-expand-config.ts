@@ -2,9 +2,9 @@
 import { InstanceConfig } from '../../manage/instance-config';
 import { Commands } from '../command/commands';
 import * as buttonHelpers from '../helpers';
-import { standardButtons } from '../standard-buttons';
 import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
+import { toolbarStandardButtons } from './toolbar-standard-buttons';
 
 export function ExpandToolbarConfig(editContext: DataEditContext, allActions: Commands, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
 
@@ -16,7 +16,7 @@ export function ExpandToolbarConfig(editContext: DataEditContext, allActions: Co
 
   let unstructuredConfig = toolbarData;
   if (!toolbarData.action && !toolbarData.groups && !toolbarData.buttons && !Array.isArray(toolbarData))
-    unstructuredConfig = standardButtons(editContext.User.CanDesign, toolbarData);
+    unstructuredConfig = toolbarStandardButtons(editContext.User.CanDesign, toolbarData);
 
   const instanceConfig: InstanceConfig = new InstanceConfig(editContext);
 

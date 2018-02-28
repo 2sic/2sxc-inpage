@@ -1,8 +1,8 @@
 ﻿import { buildToolbars, disable, isDisabled } from './build-toolbars';
 import { renderButton } from './item/render-button';
 import { renderToolbar } from './item/render-toolbar';
-import { standardButtons } from './standard-buttons';
 import { toolbarTemplate } from './toolbar-template';
+import { toolbarStandardButtons } from './toolbar/toolbar-standard-buttons';
 
 /**
  * Toolbar manager for the whole page - basically a set of APIs
@@ -18,7 +18,7 @@ export class ToolbarManager {
   // generate button html
   generateButtonHtml = renderButton;
   generateToolbarHtml = renderToolbar;
-  standardButtons = standardButtons;
+  standardButtons = toolbarStandardButtons;
   toolbarTemplate = toolbarTemplate;
 }
 
