@@ -53,7 +53,6 @@
     <None Remove="src\toolbar2\toolbar\toolbar-config-templates.ts" />
     <None Remove="src\toolbar2\toolbar\toolbar-config.ts" />
     <None Remove="src\toolbar2\toolbar\toolbar-expand-config.ts" />
-    <None Remove="src\toolbar2\toolbar\toolbar-parameter.ts" />
     <None Remove="src\toolbar2\toolbar\toolbar-settings.ts" />
     <None Remove="src\x-bootstrap\sxc.ts" />
   </ItemGroup>
@@ -92,7 +91,6 @@
     <TypeScriptCompile Include="src\toolbar2\item\item-render.ts" />
     <TypeScriptCompile Include="src\toolbar2\toolbar\toolbar-config-template.ts" />
     <TypeScriptCompile Include="src\toolbar2\toolbar\toolbar-expand-config.ts" />
-    <TypeScriptCompile Include="src\toolbar2\toolbar\toolbar-parameter.ts" />
     <TypeScriptCompile Include="src\toolbar2\toolbar\toolbar-settings.ts" />
     <TypeScriptCompile Include="src\toolbar2\toolbar\toolbar-config-templates.ts" />
     <TypeScriptCompile Include="src\toolbar2\toolbar\toolbar-config.ts" />

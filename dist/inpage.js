@@ -3493,8 +3493,8 @@ function ExpandToolbarConfig(editContext, allActions, toolbarData, toolbarSettin
     var instanceConfig = new instance_config_1.InstanceConfig(editContext);
     // whatever we had, if more settings were provided, override with these...
     var config = exports.buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
-    console.log('stv: fullToolbarConfig', JSON.stringify(config));
-    console.log('stv: fullToolbarConfig', config);
+    // console.log('stv: fullToolbarConfig', JSON.stringify(config));
+    // console.log('stv: fullToolbarConfig', config);
     return config;
 }
 exports.ExpandToolbarConfig = ExpandToolbarConfig;
@@ -4655,9 +4655,8 @@ __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(55);
 __webpack_require__(51);
-__webpack_require__(121);
 __webpack_require__(32);
-__webpack_require__(122);
+__webpack_require__(121);
 __webpack_require__(4);
 __webpack_require__(63);
 module.exports = __webpack_require__(2);
@@ -5673,22 +5672,6 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 
 /***/ }),
 /* 121 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/** contains toolbar params like entity Ids, etc. */
-var ToolbarParameter = /** @class */ (function () {
-    function ToolbarParameter() {
-    }
-    return ToolbarParameter;
-}());
-exports.ToolbarParameter = ToolbarParameter;
-
-
-/***/ }),
-/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
