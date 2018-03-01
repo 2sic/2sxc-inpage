@@ -1,25 +1,30 @@
 ﻿import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { renderGroups } from './render-groups';
+import { addClasses } from './render-helpers';
 
 export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
-  // todo: stv, remove jquery
-  const behaviourClasses = ` sc-tb-hover-${toolbarConfig.settings.hover} sc-tb-show-${toolbarConfig.settings.show}`;
-
-  // todo: these settings assume it's not in an array...
-  const tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
-    ((toolbarData.sortOrder === -1) ? ' listContent' : '') +
-    (toolbarConfig.settings.classes ? ' ' + toolbarConfig.settings.classes : '');
-
-  const toolbar = $('<ul />', {
-    // ReSharper disable once UsingOfReservedWord
-    class: tbClasses,
-    onclick: 'var e = arguments[0] || window.event; e.stopPropagation();',
-  });
 
   // render groups of buttons
   const groups = renderGroups(sxc, toolbarConfig);
-  toolbar.append(groups);
-  toolbar.attr('group-count', groups.length);
 
-  return toolbar[0].outerHTML;
+  // render toolbar
+  const toolbar = document.createElement('ul');
+  toolbar.classList.add(...['sc-menu', 'group-0']);
+
+  // add behaviour classes
+  toolbar.classList.add(`sc-tb-hover-${toolbarConfig.settings.hover}`);
+  toolbar.classList.add(`sc-tb-show-${toolbarConfig.settings.show}`);
+  if (toolbarData.sortOrder === -1) {
+    toolbar.classList.add('listContent');
+  }
+  addClasses(toolbar, toolbarConfig.settings.classes, ' ');
+  toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; e.stopPropagation();'); // serialize JavaScript because of ajax
+
+  // add button groups to toolbar
+  toolbar.setAttribute('group-count', groups.length.toString());
+  for (let g = 0; g < groups.length; g++) {
+    toolbar.appendChild(groups[g]);
+  }
+
+  return toolbar.outerHTML;
 }

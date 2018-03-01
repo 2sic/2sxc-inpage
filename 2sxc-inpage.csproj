@@ -76,6 +76,7 @@
     <None Remove="src\toolbar2\command\commands\zone.ts" />
     <None Remove="src\toolbar2\item\item-render.ts" />
     <None Remove="src\toolbar2\item\render-groups.ts" />
+    <None Remove="src\toolbar2\item\render-helpers.ts" />
     <None Remove="src\toolbar2\toolbar\toolbar-config-template.ts" />
     <None Remove="src\toolbar2\toolbar\toolbar-config-templates.ts" />
     <None Remove="src\toolbar2\toolbar\toolbar-config.ts" />
@@ -142,6 +143,7 @@
     <TypeScriptCompile Include="src\toolbar2\command\commands\edit.ts" />
     <TypeScriptCompile Include="src\toolbar2\command\commands\app-import.ts" />
     <TypeScriptCompile Include="src\toolbar2\item\item-render.ts" />
+    <TypeScriptCompile Include="src\toolbar2\item\render-helpers.ts" />
     <TypeScriptCompile Include="src\toolbar2\item\render-groups.ts" />
     <TypeScriptCompile Include="src\toolbar2\toolbar\toolbar-config-template.ts" />
     <TypeScriptCompile Include="src\toolbar2\toolbar\toolbar-expand-config.ts" />
