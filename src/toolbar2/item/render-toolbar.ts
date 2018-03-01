@@ -21,7 +21,7 @@ export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, t
   toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; e.stopPropagation();'); // serialize JavaScript because of ajax
 
   // add button groups to toolbar
-  toolbar.setAttribute('group-count', groups.length.toString());
+  toolbar.setAttribute('group-count', toolbarConfig.groups.length.toString());
   for (let g = 0; g < groups.length; g++) {
     toolbar.appendChild(groups[g]);
   }

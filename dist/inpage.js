@@ -1178,7 +1178,7 @@ function renderToolbar(sxc, toolbarData, toolbarConfig) {
     render_helpers_1.addClasses(toolbar, toolbarConfig.settings.classes, ' ');
     toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; e.stopPropagation();'); // serialize JavaScript because of ajax
     // add button groups to toolbar
-    toolbar.setAttribute('group-count', groups.length.toString());
+    toolbar.setAttribute('group-count', toolbarConfig.groups.length.toString());
     for (var g = 0; g < groups.length; g++) {
         toolbar.appendChild(groups[g]);
     }
