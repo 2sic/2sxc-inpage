@@ -1,10 +1,11 @@
-﻿import { generateButtonHtml } from '../abtesting/toolbar-feature';
-import { Engine, instanceEngine } from '../commands/engine';
+﻿import { Engine, instanceEngine } from '../commands/engine';
 import { manipulator } from '../contentBlock/manipulate';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { renderButton } from '../toolbar2/item/render-button';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
+
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -56,7 +57,7 @@ class EditManager {
    * @param {int} groupIndex - number what button-group it's in'
    * @returns {string} html of a button
    */
-  getButton = (actDef, groupIndex) => generateButtonHtml(this.sxc, actDef, groupIndex);
+  getButton = (actDef, groupIndex) => renderButton(this.sxc, actDef, groupIndex).outerHTML;
 
   /**
    * Builds the toolbar and returns it as HTML

@@ -70,7 +70,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var expand_button_config_1 = __webpack_require__(14);
+var expand_button_config_1 = __webpack_require__(15);
 var command_definition_1 = __webpack_require__(52);
 var CommandBase = /** @class */ (function () {
     function CommandBase(cmdSpecs) {
@@ -397,12 +397,12 @@ exports.publishId = publishId;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var A_BuildToolbars = __webpack_require__(19);
-var A_GenerateButtonHtml = __webpack_require__(13);
-var A_GenerateToolbarHtml = __webpack_require__(11);
+var A_GenerateButtonHtml = __webpack_require__(14);
+var A_GenerateToolbarHtml = __webpack_require__(12);
 var A_ToolbarManager = __webpack_require__(29);
 var B_BuildToolbars = __webpack_require__(30);
-var B_GenerateButtonHtml = __webpack_require__(16);
-var B_GenerateToolbarHtml = __webpack_require__(15);
+var B_GenerateButtonHtml = __webpack_require__(11);
+var B_GenerateToolbarHtml = __webpack_require__(16);
 var B_ToolbarManager = __webpack_require__(31);
 var ab_testing_config_1 = __webpack_require__(42);
 exports._toolbarManager = (ab_testing_config_1.isA) ? A_ToolbarManager._toolbarManager : B_ToolbarManager._toolbarManager;
@@ -545,7 +545,7 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 Object.defineProperty(exports, "__esModule", { value: true });
 var main_content_block_1 = __webpack_require__(22);
 var render_1 = __webpack_require__(9);
-var templates_1 = __webpack_require__(12);
+var templates_1 = __webpack_require__(13);
 var api_1 = __webpack_require__(2);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -785,9 +785,90 @@ function watchForResize(keepWatching) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * generate the html for a button
+ * @param sxc instance sxc
+ * @param buttonConfig
+ * @param groupIndex group-index in which the button is shown
+ */
+function renderButton(sxc, buttonConfig, groupIndex) {
+    // if the button belongs to a content-item, move the specs up to the item into the settings-object
+    flattenActionDefinition(buttonConfig);
+    // retrieve configuration for this button
+    var oldParamsAdapter = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
+    // console.log('stv: oldParamsAdapter', oldParamsAdapter);
+    var onclick = buttonConfig.disabled ?
+        '' :
+        "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(oldParamsAdapter) + ", event);";
+    // todo: stv, change manage.run to include context, or add new method like this...
+    // '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run2($2sxc.context(this), ' + JSON.stringify(oldParamsAdapter) + ', event);';
+    var button = document.createElement('a');
+    button.classList.add("sc-" + buttonConfig.action.name);
+    button.classList.add("group-" + groupIndex);
+    if (buttonConfig.disabled) {
+        button.classList.add('disabled');
+    }
+    addClasses(button, buttonConfig.classes, ',');
+    if (buttonConfig.dynamicClasses) {
+        var dynamicClasses = buttonConfig.dynamicClasses(buttonConfig);
+        addClasses(button, dynamicClasses, ' ');
+    }
+    button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
+    button.setAttribute('data-i18n', "[title]" + buttonConfig.title); // localization support
+    var box = document.createElement('div');
+    var symbol = document.createElement('i');
+    addClasses(symbol, buttonConfig.icon, ' ');
+    symbol.setAttribute('aria-hidden', 'true');
+    box.appendChild(symbol);
+    button.appendChild(box);
+    // console.log('stv: button2', button.outerHTML);
+    return button;
+}
+exports.renderButton = renderButton;
+/**
+ * does some clean-up work on a button-definition object
+ * because the target item could be specified directly, or in a complex internal object called entity
+ * @param actDef
+ */
+function flattenActionDefinition(actDef) {
+    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
+        return;
+    var editInfo = actDef.entity._2sxcEditInformation;
+    actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
+    if (editInfo.entityId !== undefined)
+        actDef.entityId = editInfo.entityId;
+    if (editInfo.sortOrder !== undefined)
+        actDef.sortOrder = editInfo.sortOrder;
+    delete actDef.entity; // clean up edit-info
+}
+/**
+ * helper method to add list of zero to many classes to Element
+ * @param element
+ * @param classes
+ * @param spliter
+ */
+function addClasses(element, classes, spliter) {
+    if (classes) {
+        var classessArray = classes.split(spliter);
+        for (var c = 0; c < classessArray.length; c++) {
+            if (classessArray[c]) {
+                element.classList.add(classessArray[c]);
+            }
+        }
+    }
+}
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var command_initialize_instance_commands_1 = __webpack_require__(8);
 var api_1 = __webpack_require__(2);
-var generate_button_html_1 = __webpack_require__(13);
+var generate_button_html_1 = __webpack_require__(14);
 var buttonHelpers = __webpack_require__(49);
 var standard_buttons_1 = __webpack_require__(27);
 function generateToolbarHtml(sxc, tbConfig, moreSettings) {
@@ -822,7 +903,7 @@ exports.generateToolbarHtml = generateToolbarHtml;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -900,7 +981,7 @@ exports.updateTemplate = updateTemplate;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -950,7 +1031,7 @@ exports.generateButtonHtml = generateButtonHtml;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1089,7 +1170,7 @@ exports.customize = customize;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1115,87 +1196,6 @@ function renderToolbar(sxc, toolbarData, toolbarConfig) {
     return toolbar[0].outerHTML;
 }
 exports.renderToolbar = renderToolbar;
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * generate the html for a button
- * @param sxc instance sxc
- * @param buttonConfig
- * @param groupIndex group-index in which the button is shown
- */
-function renderButton(sxc, buttonConfig, groupIndex) {
-    // if the button belongs to a content-item, move the specs up to the item into the settings-object
-    flattenActionDefinition(buttonConfig);
-    // retrieve configuration for this button
-    var oldParamsAdapter = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
-    // console.log('stv: oldParamsAdapter', oldParamsAdapter);
-    var onclick = buttonConfig.disabled ?
-        '' :
-        "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(oldParamsAdapter) + ", event);";
-    // todo: stv, change manage.run to include context, or add new method like this...
-    // '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run2($2sxc.context(this), ' + JSON.stringify(oldParamsAdapter) + ', event);';
-    var button = document.createElement('a');
-    button.classList.add("sc-" + buttonConfig.action.name);
-    button.classList.add("group-" + groupIndex);
-    if (buttonConfig.disabled) {
-        button.classList.add('disabled');
-    }
-    addClasses(button, buttonConfig.classes, ',');
-    if (buttonConfig.dynamicClasses) {
-        var dynamicClasses = buttonConfig.dynamicClasses(buttonConfig);
-        addClasses(button, dynamicClasses, ' ');
-    }
-    button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
-    button.setAttribute('data-i18n', "[title]" + buttonConfig.title); // localization support
-    var box = document.createElement('div');
-    var symbol = document.createElement('i');
-    addClasses(symbol, buttonConfig.icon, ' ');
-    symbol.setAttribute('aria-hidden', 'true');
-    box.appendChild(symbol);
-    button.appendChild(box);
-    // console.log('stv: button2', button.outerHTML);
-    return button.outerHTML;
-}
-exports.renderButton = renderButton;
-/**
- * does some clean-up work on a button-definition object
- * because the target item could be specified directly, or in a complex internal object called entity
- * @param actDef
- */
-function flattenActionDefinition(actDef) {
-    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
-        return;
-    var editInfo = actDef.entity._2sxcEditInformation;
-    actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-    if (editInfo.entityId !== undefined)
-        actDef.entityId = editInfo.entityId;
-    if (editInfo.sortOrder !== undefined)
-        actDef.sortOrder = editInfo.sortOrder;
-    delete actDef.entity; // clean up edit-info
-}
-/**
- * helper method to add list of zero to many classes to Element
- * @param element
- * @param classes
- * @param spliter
- */
-function addClasses(element, classes, spliter) {
-    if (classes) {
-        var classessArray = classes.split(spliter);
-        for (var c = 0; c < classessArray.length; c++) {
-            if (classessArray[c]) {
-                element.classList.add(classessArray[c]);
-            }
-        }
-    }
-}
 
 
 /***/ }),
@@ -1466,7 +1466,7 @@ function generatePaneMoveButtons(current) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(2);
 var sxc_1 = __webpack_require__(3);
-var generate_toolbar_html_1 = __webpack_require__(11);
+var generate_toolbar_html_1 = __webpack_require__(12);
 var toolbar_manager_1 = __webpack_require__(29);
 // quick debug - set to false if not needed for production
 var dbg = false;
@@ -1903,7 +1903,7 @@ exports.create = create;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(12);
+var templates_1 = __webpack_require__(13);
 /*
  * this is a content block in the browser
  *
@@ -2390,8 +2390,8 @@ exports.toolbarTemplate = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(19);
-var generate_button_html_1 = __webpack_require__(13);
-var generate_toolbar_html_1 = __webpack_require__(11);
+var generate_button_html_1 = __webpack_require__(14);
+var generate_toolbar_html_1 = __webpack_require__(12);
 var standard_buttons_1 = __webpack_require__(27);
 var toolbar_template_1 = __webpack_require__(28);
 /**
@@ -2428,7 +2428,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(2);
 var sxc_1 = __webpack_require__(3);
 var commands_1 = __webpack_require__(50);
-var render_toolbar_1 = __webpack_require__(15);
+var render_toolbar_1 = __webpack_require__(16);
 var toolbar_manager_1 = __webpack_require__(31);
 var toolbar_expand_config_1 = __webpack_require__(80);
 var toolbar_settings_1 = __webpack_require__(34);
@@ -2522,8 +2522,8 @@ exports.isDisabled = isDisabled;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(30);
-var render_button_1 = __webpack_require__(16);
-var render_toolbar_1 = __webpack_require__(15);
+var render_button_1 = __webpack_require__(11);
+var render_toolbar_1 = __webpack_require__(16);
 var toolbar_config_templates_1 = __webpack_require__(32);
 var toolbar_standard_buttons_1 = __webpack_require__(33);
 /**
@@ -4424,22 +4424,24 @@ exports.Zone = Zone;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_button_1 = __webpack_require__(16);
+var render_button_1 = __webpack_require__(11);
 /**
  * render groups of buttons in toolbar
  * @param sxc
  * @param toolbarConfig
  */
 function renderGroups(sxc, toolbarConfig) {
-    // todo: stv, remove jquery
-    var groupsBuffer = []; // temporary storage for detached DOM objects
+    var groupsBuffer = []; // temporary storage for detached HTML DOM objects
     var btnGroups = toolbarConfig.groups;
     for (var i = 0; i < btnGroups.length; i++) {
         var btns = btnGroups[i].buttons;
         for (var h = 0; h < btns.length; h++) {
-            // render one button
+            // create one button
             var button = render_button_1.renderButton(sxc, btns[h], i);
-            groupsBuffer.push($('<li />').append($(button)));
+            // add button to group of buttons
+            var item = document.createElement('li');
+            item.appendChild(button);
+            groupsBuffer.push(item);
         }
     }
     return groupsBuffer;
@@ -4539,7 +4541,7 @@ exports.leftToolbarTemplate = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var instance_config_1 = __webpack_require__(20);
-var expand_button_config_1 = __webpack_require__(14);
+var expand_button_config_1 = __webpack_require__(15);
 var expand_group_config_1 = __webpack_require__(81);
 var toolbar_config_1 = __webpack_require__(84);
 var toolbar_settings_1 = __webpack_require__(34);
@@ -4646,7 +4648,7 @@ var ensureDefinitionTree = function (unstructuredConfig, toolbarSettings) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var button_action_1 = __webpack_require__(82);
 var button_config_1 = __webpack_require__(83);
-var expand_button_config_1 = __webpack_require__(14);
+var expand_button_config_1 = __webpack_require__(15);
 //export function ExpandGroupConfig(context, config: GroupConfig): GroupConfig {
 //  // todo
 //  return config;
@@ -4937,7 +4939,7 @@ exports.Command = Command;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(12);
+var templates_1 = __webpack_require__(13);
 var command_initialize_instance_commands_1 = __webpack_require__(8);
 var command_open_ng_dialog_1 = __webpack_require__(36);
 // ToDo: remove dead code
@@ -5138,9 +5140,9 @@ exports._manage = new Manage();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_feature_1 = __webpack_require__(7);
 var engine_1 = __webpack_require__(38);
 var manipulate_1 = __webpack_require__(88);
+var render_button_1 = __webpack_require__(11);
 var api_1 = __webpack_require__(2);
 var local_storage_helper_1 = __webpack_require__(91);
 /**
@@ -5193,7 +5195,7 @@ var EditManager = /** @class */ (function () {
          * @param {int} groupIndex - number what button-group it's in'
          * @returns {string} html of a button
          */
-        this.getButton = function (actDef, groupIndex) { return toolbar_feature_1.generateButtonHtml(_this.sxc, actDef, groupIndex); };
+        this.getButton = function (actDef, groupIndex) { return render_button_1.renderButton(_this.sxc, actDef, groupIndex).outerHTML; };
         /**
          * Builds the toolbar and returns it as HTML
          * @param {Object<any>} tbConfig - general toolbar config
@@ -5568,7 +5570,7 @@ __webpack_require__(22);
 __webpack_require__(107);
 __webpack_require__(88);
 __webpack_require__(9);
-__webpack_require__(12);
+__webpack_require__(13);
 __webpack_require__(108);
 __webpack_require__(23);
 __webpack_require__(109);
@@ -5623,8 +5625,8 @@ __webpack_require__(139);
 __webpack_require__(140);
 __webpack_require__(24);
 __webpack_require__(19);
-__webpack_require__(13);
-__webpack_require__(11);
+__webpack_require__(14);
+__webpack_require__(12);
 __webpack_require__(49);
 __webpack_require__(141);
 __webpack_require__(27);
@@ -5636,7 +5638,7 @@ __webpack_require__(30);
 __webpack_require__(82);
 __webpack_require__(83);
 __webpack_require__(144);
-__webpack_require__(14);
+__webpack_require__(15);
 __webpack_require__(81);
 __webpack_require__(145);
 __webpack_require__(0);
@@ -5668,9 +5670,9 @@ __webpack_require__(74);
 __webpack_require__(75);
 __webpack_require__(76);
 __webpack_require__(146);
-__webpack_require__(16);
+__webpack_require__(11);
 __webpack_require__(77);
-__webpack_require__(15);
+__webpack_require__(16);
 __webpack_require__(147);
 __webpack_require__(31);
 __webpack_require__(78);

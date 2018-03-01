@@ -6,7 +6,7 @@
  * @param buttonConfig
  * @param groupIndex group-index in which the button is shown
  */
-export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): string {
+export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): HTMLElement {
 
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(buttonConfig);
@@ -57,7 +57,7 @@ export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: Button
 
   // console.log('stv: button2', button.outerHTML);
 
-  return button.outerHTML;
+  return button;
 }
 
 /**
