@@ -4,7 +4,6 @@ import { Commands } from '../command/commands';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-config';
-import { GroupConfig } from './group-config';
 
 //export function ExpandGroupConfig(context, config: GroupConfig): GroupConfig {
 //  // todo

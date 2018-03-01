@@ -7,7 +7,7 @@ import { renderButton } from './render-button';
  * @param toolbarConfig
  */
 export function renderGroups(sxc: SxcInstanceWithInternals, toolbarConfig: ToolbarConfig): any[] {
-
+  // todo: stv, remove jquery
   const groupsBuffer = []; // temporary storage for detached DOM objects
 
   const btnGroups = toolbarConfig.groups;

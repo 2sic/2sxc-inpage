@@ -2,7 +2,7 @@
 import { renderGroups } from './render-groups';
 
 export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
-
+  // todo: stv, remove jquery
   const behaviourClasses = ` sc-tb-hover-${toolbarConfig.settings.hover} sc-tb-show-${toolbarConfig.settings.show}`;
 
   // todo: these settings assume it's not in an array...

@@ -7,36 +7,57 @@
  * @param groupIndex group-index in which the button is shown
  */
 export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): string {
-  // debugger;
+
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(buttonConfig);
 
   // retrieve configuration for this button
-  let showClasses: string = 'group-' + groupIndex + (buttonConfig.disabled ? ' disabled' : '');
-  const classesList = (buttonConfig.classes || '').split(',');
-  const box: any = $('<div/>');
-  const symbol: any = $('<i class="' + buttonConfig.icon + '" aria-hidden="true"></i>');
   const oldParamsAdapter: any = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
   // console.log('stv: oldParamsAdapter', oldParamsAdapter);
+
   const onclick: string = buttonConfig.disabled ?
     '' :
-    '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(oldParamsAdapter) + ', event);';
+    `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
 
-  for (let c = 0; c < classesList.length; c++) {
-    showClasses += ' ' + classesList[c];
+  // todo: stv, change manage.run to include context, or add new method like this...
+  // '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run2($2sxc.context(this), ' + JSON.stringify(oldParamsAdapter) + ', event);';
+
+  const button = document.createElement('a');
+
+  button.classList.add(`sc-${buttonConfig.action.name}`);
+
+  button.classList.add(`group-${groupIndex}`);
+
+  if (buttonConfig.disabled) {
+    button.classList.add('disabled');
   }
 
-  const button = $('<a />', {
-    'class': 'sc-' + buttonConfig.action.name + ' ' + showClasses +
-      (buttonConfig.dynamicClasses ? ' ' + buttonConfig.dynamicClasses(buttonConfig as any) : ''),
-    'onclick': onclick,
-    'data-i18n': '[title]' + buttonConfig.title,
-  });
-  button.html(box.html(symbol));
+  addClasses(button, buttonConfig.classes, ',');
 
-  // console.log('stv: buttonHtml', button[0].outerHTML);
+  if (buttonConfig.dynamicClasses) {
+    const dynamicClasses = buttonConfig.dynamicClasses(buttonConfig as any);
+    addClasses(button, dynamicClasses, ' ');
+  }
 
-  return button[0].outerHTML;
+  button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
+
+  button.setAttribute('data-i18n', `[title]${buttonConfig.title}`); // localization support
+
+  const box = document.createElement('div');
+
+  const symbol = document.createElement('i');
+
+  addClasses(symbol, buttonConfig.icon, ' ');
+
+  symbol.setAttribute('aria-hidden', 'true');
+
+  box.appendChild(symbol);
+
+  button.appendChild(box);
+
+  // console.log('stv: button2', button.outerHTML);
+
+  return button.outerHTML;
 }
 
 /**
@@ -52,4 +73,21 @@ function flattenActionDefinition(actDef) {
   if (editInfo.entityId !== undefined) actDef.entityId = editInfo.entityId;
   if (editInfo.sortOrder !== undefined) actDef.sortOrder = editInfo.sortOrder;
   delete actDef.entity; // clean up edit-info
+}
+
+/**
+ * helper method to add list of zero to many classes to Element
+ * @param element
+ * @param classes
+ * @param spliter
+ */
+function addClasses(element: HTMLElement, classes: string, spliter: string) {
+  if (classes) {
+    const classessArray = classes.split(spliter);
+    for (let c = 0; c < classessArray.length; c++) {
+      if (classessArray[c]) {
+        element.classList.add(classessArray[c]);
+      }
+    }
+  }
 }

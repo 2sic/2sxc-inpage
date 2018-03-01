@@ -1097,6 +1097,7 @@ exports.customize = customize;
 Object.defineProperty(exports, "__esModule", { value: true });
 var render_groups_1 = __webpack_require__(77);
 function renderToolbar(sxc, toolbarData, toolbarConfig) {
+    // todo: stv, remove jquery
     var behaviourClasses = " sc-tb-hover-" + toolbarConfig.settings.hover + " sc-tb-show-" + toolbarConfig.settings.show;
     // todo: these settings assume it's not in an array...
     var tbClasses = 'sc-menu group-0 ' + behaviourClasses + ' ' +
@@ -1130,31 +1131,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param groupIndex group-index in which the button is shown
  */
 function renderButton(sxc, buttonConfig, groupIndex) {
-    // debugger;
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     flattenActionDefinition(buttonConfig);
     // retrieve configuration for this button
-    var showClasses = 'group-' + groupIndex + (buttonConfig.disabled ? ' disabled' : '');
-    var classesList = (buttonConfig.classes || '').split(',');
-    var box = $('<div/>');
-    var symbol = $('<i class="' + buttonConfig.icon + '" aria-hidden="true"></i>');
     var oldParamsAdapter = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
     // console.log('stv: oldParamsAdapter', oldParamsAdapter);
     var onclick = buttonConfig.disabled ?
         '' :
-        '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run(' + JSON.stringify(oldParamsAdapter) + ', event);';
-    for (var c = 0; c < classesList.length; c++) {
-        showClasses += ' ' + classesList[c];
+        "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run(" + JSON.stringify(oldParamsAdapter) + ", event);";
+    // todo: stv, change manage.run to include context, or add new method like this...
+    // '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run2($2sxc.context(this), ' + JSON.stringify(oldParamsAdapter) + ', event);';
+    var button = document.createElement('a');
+    button.classList.add("sc-" + buttonConfig.action.name);
+    button.classList.add("group-" + groupIndex);
+    if (buttonConfig.disabled) {
+        button.classList.add('disabled');
     }
-    var button = $('<a />', {
-        'class': 'sc-' + buttonConfig.action.name + ' ' + showClasses +
-            (buttonConfig.dynamicClasses ? ' ' + buttonConfig.dynamicClasses(buttonConfig) : ''),
-        'onclick': onclick,
-        'data-i18n': '[title]' + buttonConfig.title,
-    });
-    button.html(box.html(symbol));
-    // console.log('stv: buttonHtml', button[0].outerHTML);
-    return button[0].outerHTML;
+    addClasses(button, buttonConfig.classes, ',');
+    if (buttonConfig.dynamicClasses) {
+        var dynamicClasses = buttonConfig.dynamicClasses(buttonConfig);
+        addClasses(button, dynamicClasses, ' ');
+    }
+    button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
+    button.setAttribute('data-i18n', "[title]" + buttonConfig.title); // localization support
+    var box = document.createElement('div');
+    var symbol = document.createElement('i');
+    addClasses(symbol, buttonConfig.icon, ' ');
+    symbol.setAttribute('aria-hidden', 'true');
+    box.appendChild(symbol);
+    button.appendChild(box);
+    // console.log('stv: button2', button.outerHTML);
+    return button.outerHTML;
 }
 exports.renderButton = renderButton;
 /**
@@ -1172,6 +1179,22 @@ function flattenActionDefinition(actDef) {
     if (editInfo.sortOrder !== undefined)
         actDef.sortOrder = editInfo.sortOrder;
     delete actDef.entity; // clean up edit-info
+}
+/**
+ * helper method to add list of zero to many classes to Element
+ * @param element
+ * @param classes
+ * @param spliter
+ */
+function addClasses(element, classes, spliter) {
+    if (classes) {
+        var classessArray = classes.split(spliter);
+        for (var c = 0; c < classessArray.length; c++) {
+            if (classessArray[c]) {
+                element.classList.add(classessArray[c]);
+            }
+        }
+    }
 }
 
 
@@ -4408,6 +4431,7 @@ var render_button_1 = __webpack_require__(16);
  * @param toolbarConfig
  */
 function renderGroups(sxc, toolbarConfig) {
+    // todo: stv, remove jquery
     var groupsBuffer = []; // temporary storage for detached DOM objects
     var btnGroups = toolbarConfig.groups;
     for (var i = 0; i < btnGroups.length; i++) {
