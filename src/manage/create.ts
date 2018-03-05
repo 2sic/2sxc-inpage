@@ -52,6 +52,11 @@ class EditManager {
   run = this.cmdEngine.executeAction;
 
   /**
+  * run2 a command - new command used in toolbars and custom buttons
+  */
+  run2 = this.cmdEngine.run2;
+
+  /**
    * Generate a button (an <a>-tag) for one specific toolbar-action.
    * @param {Object<any>} actDef - settings, an object containing the spec for the expected button
    * @param {int} groupIndex - number what button-group it's in'

@@ -13,6 +13,7 @@ interface SxcControllerWithInternals {
   contentItems: any;
   system: any;
   translate: any;
+  context: any;
 }
 // ReSharper restore InconsistentNaming
 declare let $2sxc: SxcControllerWithInternals;

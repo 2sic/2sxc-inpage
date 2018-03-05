@@ -5,6 +5,8 @@ import { commandInitializeInstanceCommands } from './command-initialize-instance
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Settings } from './settings';
+import { getSxcInstance } from '../x-bootstrap/sxc';
+import { getEditContext } from '../manage/api';
 
 export class Engine {
   constructor(public sxc: SxcInstanceWithInternals, public editContext: DataEditContext) { }
@@ -30,6 +32,12 @@ export class Engine {
 
   executeAction = (nameOrSettings, eventOrSettings?: any, event?: any) => {
     return commandExecuteAction(this.sxc, this.editContext, nameOrSettings, eventOrSettings, event);
+  }
+
+  run2 = (context, nameOrSettings, eventOrSettings?: any, event?: any) => {
+    const sxc: SxcInstanceWithInternals = getSxcInstance(context);
+    const editContext: DataEditContext = getEditContext(sxc);
+    return commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings, event);
   }
 
 }

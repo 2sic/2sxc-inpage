@@ -18,10 +18,8 @@ export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: Button
 
   const onclick: string = buttonConfig.disabled ?
     '' :
-    `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
-
-  // todo: stv, change manage.run to include context, or add new method like this...
-  // '$2sxc(' + sxc.id + ', ' + sxc.cbid + ').manage.run2($2sxc.context(this), ' + JSON.stringify(oldParamsAdapter) + ', event);';
+    `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
+  // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
 
   const button = document.createElement('a');
 

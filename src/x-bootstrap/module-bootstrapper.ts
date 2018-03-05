@@ -25,7 +25,7 @@ document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(f
 // return; // avoid side-effects
 
 function initAllModules(isFirstRun: boolean): void {
-  $('div[data-edit-context]').each(function() {
+  $('div[data-edit-context]').each(function () {
     initModule(this, isFirstRun);
   });
   tryShowTemplatePicker();
