@@ -1,13 +1,13 @@
 ﻿import { CommandBase } from '../command-base';
 
 export class App extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('app', 'App', 'settings', true, false, {
       // ReSharper disable UnusedParameter
-      showCondition: (settings, modConfig) => {
+      showCondition: (context, settings, modConfig) => {
         // ReSharper restore UnusedParameter
-        return this.enableTools;
+        return context.enableTools;
       },
     });
   }

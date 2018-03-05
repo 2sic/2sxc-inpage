@@ -62,7 +62,7 @@ class EditManager {
    * @param {int} groupIndex - number what button-group it's in'
    * @returns {string} html of a button
    */
-  getButton = (actDef, groupIndex) => renderButton(this.sxc, actDef, groupIndex).outerHTML;
+  // getButton = (actDef, groupIndex) => renderButton(this.sxc, actDef, groupIndex).outerHTML;
 
   /**
    * Builds the toolbar and returns it as HTML

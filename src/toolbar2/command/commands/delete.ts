@@ -5,11 +5,11 @@ import { CommandBase } from '../command-base';
  * todo: work in progress related to https://github.com/2sic/2sxc/issues/618
  */
 export class Delete extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('delete', 'Delete', 'cancel', true, false, {
       // disabled: true,
-      showCondition(settings, modConfig) {
+      showCondition(context, settings, modConfig) {
         // can never be used for a modulelist item, as it is always in use somewhere
         if (settings.useModuleList)
           return false;
@@ -17,7 +17,7 @@ export class Delete extends CommandBase {
         // check if all data exists required for deleting
         return settings.entityId && settings.entityGuid && settings.entityTitle;
       },
-      code(settings, event, sxc) {
+      code(context, settings, event, sxc) {
         contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
       },
     });

@@ -1,4 +1,5 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { context } from '../context/context';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { getEditContext, getTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { Commands } from './command/commands';
@@ -7,6 +8,7 @@ import { _toolbarManager } from './toolbar-manager';
 import { ToolbarConfig } from './toolbar/toolbar-config';
 import { ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
 import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
+
 
 // quick debug - set to false if not needed for production
 const dbg = true;
@@ -73,15 +75,18 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     }
 
     try {
+
+      const cnt = context(tag);
+
       const sxc: SxcInstanceWithInternals = getSxcInstance(tag);
 
       const editContext: DataEditContext = getEditContext(sxc);
 
-      const newCommands = new Commands(editContext);
+      const newCommands = new Commands();
 
-      const toolbarConfig: ToolbarConfig = ExpandToolbarConfig(editContext, newCommands, toolbarData, toolbarSettings);
+      const toolbarConfig: ToolbarConfig = ExpandToolbarConfig(cnt, editContext, newCommands, toolbarData, toolbarSettings);
 
-      const toolbar = renderToolbar(sxc, toolbarData, toolbarConfig);
+      const toolbar = renderToolbar(cnt, sxc, toolbarData, toolbarConfig);
 
       tag.replaceWith(toolbar);
 

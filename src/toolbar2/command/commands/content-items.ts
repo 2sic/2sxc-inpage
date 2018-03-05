@@ -1,15 +1,17 @@
 ﻿import { CommandBase } from '../command-base';
 
 export class ContentItems extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('contentitems', 'ContentItems', 'table', true, false, {
-      params: { contentTypeName: cmdSpecs.contentTypeId },
-      // ReSharper disable once UnusedParameter
-      showCondition: (settings, modConfig) => {
-        return this.enableTools && (settings.contentType || cmdSpecs.contentTypeId);
+      params: (context) => {
+        return { contentTypeName: context.cmdSpec.contentTypeId };
       },
-      configureCommand: (cmd) => {
+      // ReSharper disable once UnusedParameter
+      showCondition: (context, settings, modConfig) => {
+        return context.enableTools && (settings.contentType || context.cmdSpec.contentTypeId);
+      },
+      configureCommand: (context, cmd) => {
         if (cmd.settings.contentType) // optionally override with custom type
           cmd.params.contentTypeName = cmd.settings.contentType;
         // maybe: if item doesn't have a type, use that of template

@@ -4,8 +4,8 @@
  * open the import dialog
  */
 export class AppImport extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('app-import', 'Dashboard', '', true, false, {});
   }
 }

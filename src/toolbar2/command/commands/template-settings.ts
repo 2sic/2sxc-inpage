@@ -1,8 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
 export class TemplateSettings extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('template-settings',
       'TemplateSettings',
       'sliders',
@@ -10,11 +10,11 @@ export class TemplateSettings extends CommandBase {
       false,
       {
         dialog: 'edit',
-        showCondition: (settings, modConfig) => {
-          return this.enableTools && !this.isContent;
+        showCondition: (context, settings, modConfig) => {
+          return context.enableTools && !context.isContent;
         },
-        configureCommand: (cmd) => {
-          cmd.items = [{ EntityId: cmdSpecs.templateId }];
+        configureCommand: (context, cmd) => {
+          cmd.items = [{ EntityId: context.cmdSpec.templateId }];
         },
       });
   }

@@ -1,8 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
 export class TemplateDevelop extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('template-develop',
       'Develop',
       'code',
@@ -11,11 +11,11 @@ export class TemplateDevelop extends CommandBase {
       {
         newWindow: true,
         dialog: 'develop',
-        showCondition: (settings, modConfig) => {
-          return this.enableTools;
+        showCondition: (context, settings, modConfig) => {
+          return context.enableTools;
         },
-        configureCommand: (cmd) => {
-          cmd.items = [{ EntityId: cmdSpecs.templateId }];
+        configureCommand: (context, cmd) => {
+          cmd.items = [{ EntityId: context.cmdSpec.templateId }];
         },
       });
   }

@@ -1,27 +1,27 @@
 ﻿import { CommandBase } from '../command-base';
 
 export class AppSettings extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
       dialog: 'edit',
       // ReSharper disable UnusedParameter
-      disabled: (settings, modConfig) => {
+      disabled: (context, settings, modConfig) => {
         // ReSharper restore UnusedParameter
-        return cmdSpecs.appSettingsId === null;
+        return context.cmdSpec.appSettingsId === null;
       },
-      title: 'Toolbar.AppSettings' + (cmdSpecs.appSettingsId === null ? 'Disabled' : ''),
+      title: (context) => `Toolbar.AppSettings${context.cmdSpec.appSettingsId === null ? 'Disabled' : ''}`,
       // ReSharper disable UnusedParameter
-      showCondition: (settings, modConfig) => {
+      showCondition: (context, settings, modConfig) => {
         // ReSharper restore UnusedParameter
-        return this.enableTools && !this.isContent; // only if settings exist, or are 0 (to be created)
+        return context.enableTools && !context.isContent; // only if settings exist, or are 0 (to be created)
       },
-      configureCommand: (cmd) => {
-        cmd.items = [{ EntityId: cmdSpecs.appSettingsId }];
+      configureCommand: (context, cmd) => {
+        cmd.items = [{ EntityId: context.cmdSpec.appSettingsId }];
       },
       // ReSharper disable once UnusedParameter
-      dynamicClasses: (settings) => {
-        return cmdSpecs.appSettingsId !== null ? '' : 'empty';  // if it doesn't have a query, make it less strong
+      dynamicClasses: (context, settings) => {
+        return context.cmdSpec.appSettingsId !== null ? '' : 'empty';  // if it doesn't have a query, make it less strong
       },
     });
   }

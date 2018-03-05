@@ -1,8 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
 export class Layout extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('layout', 'ChangeLayout', 'glasses', true, true, {
       inlineWindow: true,
     });

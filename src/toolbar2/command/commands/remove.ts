@@ -6,18 +6,18 @@ import { CommandBase } from '../command-base';
  * remove an item from the placeholder (usually for lists)
  */
 export class Remove extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('remove',
       'Remove',
       'minus-circled',
       false,
       true,
       {
-        showCondition(settings, modConfig) {
+        showCondition(context, settings, modConfig) {
           return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
-        code(settings, event, sxc) {
+        code(context, settings, event, sxc) {
           if (confirm(translate('Toolbar.ConfirmRemove'))) {
             removeFromList(sxc, settings.sortOrder);
             // sxc.manage.contentBlock

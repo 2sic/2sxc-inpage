@@ -1,7 +1,7 @@
-﻿import { Definition } from '../../commands/definition';
-import { ButtonAction } from '../button/button-action';
+﻿import { ButtonAction } from '../button/button-action';
 import { ButtonConfig } from '../button/button-config';
 import { Commands } from '../command/commands';
+import { Definition2 } from '../command/definition2';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { GroupConfig } from './group-config';
@@ -34,7 +34,7 @@ export function expandButtonConfig(original: any, sharedProps: any[]) {
   return original;
 }
 
-export function getButtonConfigDefaultsV1(name: string, icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Definition): Partial<ButtonConfig> {
+export function getButtonConfigDefaultsV1(name: string, icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Definition2): Partial<ButtonConfig> {
   // stv: v1 code
   const partialButtonConfig = {
     icon: 'icon-sxc-' + icon,
@@ -49,12 +49,12 @@ export function getButtonConfigDefaultsV1(name: string, icon: string, translateK
 }
 
 // remove buttons which are not valid based on add condition
-export function removeDisableButtons(full: ToolbarConfig, config): void {
+export function removeDisableButtons(context, full: ToolbarConfig, config): void {
   const btnGroups = full.groups;
   for (let g = 0; g < btnGroups.length; g++) {
     const btns = btnGroups[g].buttons;
-    removeUnfitButtons(btns, config);
-    disableButtons(btns, config);
+    removeUnfitButtons(context, btns, config);
+    disableButtons(context, btns, config);
 
     // remove the group, if no buttons left, or only "more"
     // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
@@ -63,28 +63,28 @@ export function removeDisableButtons(full: ToolbarConfig, config): void {
   }
 }
 
-function removeUnfitButtons(btns: ButtonConfig[], config): void {
+function removeUnfitButtons(context, btns: ButtonConfig[], config): void {
   for (let i = 0; i < btns.length; i++) {
     // let add = btns[i].showCondition;
     // if (add !== undefined)
     //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
     // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
-    if (!evalPropOrFunction(btns[i].showCondition, btns[i].action.params, config, true))
+    if (!evalPropOrFunction(btns[i].showCondition, context, btns[i].action.params, config, true))
       btns.splice(i--, 1);
   }
 }
 
-function disableButtons(btns: ButtonConfig[], config): void {
+function disableButtons(context, btns: ButtonConfig[], config): void {
   for (let i = 0; i < btns.length; i++) {
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
-    btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].action.params, config, false);
+    btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, btns[i].action.params, config, false);
   }
 }
 
-function evalPropOrFunction(propOrFunction: any, settings, config, fallback): any {
+function evalPropOrFunction(propOrFunction: any, context: any, settings, config, fallback): any {
   if (propOrFunction === undefined || propOrFunction === null)
     return fallback;
-  return typeof (propOrFunction) === 'function' ? propOrFunction(settings, config) : propOrFunction;
+  return typeof (propOrFunction) === 'function' ? propOrFunction(context, settings, config) : propOrFunction;
 }
 
 /**

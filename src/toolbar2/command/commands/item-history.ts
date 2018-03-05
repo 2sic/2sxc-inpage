@@ -4,8 +4,8 @@
  * show the version dialog
  */
 export class ItemHistory extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('item-history', 'ItemHistory', 'clock', true, false, {
       inlineWindow: true,
       fullScreen: true,

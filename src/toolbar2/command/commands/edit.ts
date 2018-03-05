@@ -4,16 +4,18 @@
  * open an edit-item dialog
  */
 export class Edit extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('edit',
       'Edit',
       'pencil',
       false,
       true,
       {
-        params: { mode: 'edit' },
-        showCondition(settings, modConfig) {
+        params: (context) => {
+          return { mode: 'edit' };
+        },
+        showCondition(context, settings, modConfig) {
           return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
         },
       });

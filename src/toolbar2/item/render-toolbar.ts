@@ -1,11 +1,12 @@
-﻿import { ToolbarConfig } from '../toolbar/toolbar-config';
+﻿import { ContextOfButton } from '../../context/context-of-button';
+import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { renderGroups } from './render-groups';
 import { addClasses } from './render-helpers';
 
-export function renderToolbar(sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
+export function renderToolbar(context: ContextOfButton, sxc: SxcInstanceWithInternals, toolbarData: any, toolbarConfig: ToolbarConfig): string {
 
   // render groups of buttons
-  const groups = renderGroups(sxc, toolbarConfig);
+  const groups = renderGroups(context, sxc, toolbarConfig);
 
   // render toolbar
   const toolbar = document.createElement('ul');

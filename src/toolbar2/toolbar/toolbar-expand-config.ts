@@ -7,7 +7,7 @@ import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 import { toolbarStandardButtons } from './toolbar-standard-buttons';
 
-export function ExpandToolbarConfig(editContext: DataEditContext, allActions: Commands, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
+export function ExpandToolbarConfig(context, editContext: DataEditContext, allActions: Commands, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
 
   if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings))
     toolbarSettings = settingsForEmptyToolbar;
@@ -22,7 +22,7 @@ export function ExpandToolbarConfig(editContext: DataEditContext, allActions: Co
   const instanceConfig: InstanceConfig = new InstanceConfig(editContext);
 
   // whatever we had, if more settings were provided, override with these...
-  const config = buildFullDefinition(unstructuredConfig, allActions, instanceConfig, toolbarSettings);
+  const config = buildFullDefinition(context, unstructuredConfig, allActions, instanceConfig, toolbarSettings);
 
   // console.log('stv: fullToolbarConfig', JSON.stringify(config));
   // console.log('stv: fullToolbarConfig', config);
@@ -44,7 +44,7 @@ export function ExpandToolbarConfig(editContext: DataEditContext, allActions: Co
  * @param instanceConfig
  * @param toolbarSettings
  */
-const buildFullDefinition = (unstructuredConfig, allActions: Commands, instanceConfig, toolbarSettings: ToolbarSettings) => {
+const buildFullDefinition = (context, unstructuredConfig, allActions: Commands, instanceConfig, toolbarSettings: ToolbarSettings) => {
 
   const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
 
@@ -53,7 +53,7 @@ const buildFullDefinition = (unstructuredConfig, allActions: Commands, instanceC
 
   expandButtonGroups(fullConfig, allActions);
 
-  removeDisableButtons(fullConfig, instanceConfig);
+  removeDisableButtons(context, fullConfig, instanceConfig);
 
   if (fullConfig.debug) console.log('after remove: ', fullConfig);
 

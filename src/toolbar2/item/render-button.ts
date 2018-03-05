@@ -1,4 +1,5 @@
-﻿import { ButtonConfig } from '../button/button-config';
+﻿import { ContextOfButton } from '../../context/context-of-button';
+import { ButtonConfig } from '../button/button-config';
 import { addClasses } from './render-helpers';
 
 /**
@@ -7,7 +8,7 @@ import { addClasses } from './render-helpers';
  * @param buttonConfig
  * @param groupIndex group-index in which the button is shown
  */
-export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): HTMLElement {
+export function renderButton(context: ContextOfButton, sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): HTMLElement {
 
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(buttonConfig);
@@ -34,7 +35,7 @@ export function renderButton(sxc: SxcInstanceWithInternals, buttonConfig: Button
   addClasses(button, buttonConfig.classes, ',');
 
   if (buttonConfig.dynamicClasses) {
-    const dynamicClasses = buttonConfig.dynamicClasses(buttonConfig as any);
+    const dynamicClasses = buttonConfig.dynamicClasses(context, buttonConfig as any);
     addClasses(button, dynamicClasses, ' ');
   }
 

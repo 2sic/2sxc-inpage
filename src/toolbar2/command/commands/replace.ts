@@ -1,10 +1,10 @@
 ﻿import { CommandBase } from '../command-base';
 
 export class Replace extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('replace', 'Replace', 'replace', false, true, {
-      showCondition(settings, modConfig) {
+      showCondition(context, settings, modConfig) {
         return settings.useModuleList;
       },
     });

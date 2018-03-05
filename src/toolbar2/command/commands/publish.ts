@@ -6,16 +6,16 @@ import { CommandBase } from '../command-base';
  * todo: shouldn't be available if changes are not allowed
  */
 export class Publish extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('publish', 'Unpublished', 'eye-off', false, false, {
-      showCondition(settings, modConfig) {
+      showCondition(context, settings, modConfig) {
         return settings.isPublished === false;
       },
-      disabled(settings, modConfig) {
-        return !cmdSpecs.allowPublish;
+      disabled(context, settings, modConfig) {
+        return !context.cmdSpec.allowPublish;
       },
-      code(settings, event, sxc) {
+      code(context, settings, event, sxc) {
         if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
 
         // if we have an entity-id, publish based on that

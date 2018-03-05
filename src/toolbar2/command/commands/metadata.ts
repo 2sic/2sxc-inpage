@@ -5,20 +5,22 @@ import { CommandBase } from '../command-base';
  * create a metadata toolbar
  */
 export class Metadata extends CommandBase {
-  constructor(cmdSpecs) {
-    super(cmdSpecs);
+  constructor() {
+    super();
     this.makeDef('metadata', 'Metadata', 'tag', false, false, {
-      params: { mode: 'new' },
+      params: (context) => {
+        return { mode: 'new' };
+      },
       dialog: 'edit', // don't use "new" (default) but use "edit"
-      dynamicClasses(settings: Settings): string {
+      dynamicClasses(context, settings): string {
         // if it doesn't have data yet, make it less strong
         return settings.entityId ? '' : 'empty';
         // return settings.items && settings.items[0].entityId ? "" : "empty";
       },
-      showCondition(settings, modConfig) {
+      showCondition(context, settings, modConfig) {
         return !!settings.metadata;
       }, // only add a metadata-button if it has metadata-infos
-      configureCommand(cmd) {
+      configureCommand(context, cmd) {
         const itm = {
           Title: 'EditFormTitle.Metadata',
           Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata),
