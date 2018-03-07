@@ -15,15 +15,15 @@ export class Publish extends CommandBase {
       disabled(context, settings) {
         return !context.instance.allowPublish;
       },
-      code(context, settings, sxc) {
+      code(context, settings) {
         if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
 
         // if we have an entity-id, publish based on that
-        if (settings.entityId) return publishId(sxc, settings.entityId);
+        if (settings.entityId) return publishId(context.sxc.sxc, settings.entityId);
 
         const part: string = settings.sortOrder === -1 ? 'listcontent' : 'content';
         const index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-        return publish(sxc, part, index);
+        return publish(context.sxc.sxc, part, index);
       },
     });
   }

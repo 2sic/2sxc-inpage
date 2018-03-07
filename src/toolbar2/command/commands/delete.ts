@@ -17,8 +17,8 @@ export class Delete extends CommandBase {
         // check if all data exists required for deleting
         return settings.entityId && settings.entityGuid && settings.entityTitle;
       },
-      code(context, settings, sxc) {
-        contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+      code(context, settings) {
+        contentItems.delete(context.sxc.sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
       },
     });
   }

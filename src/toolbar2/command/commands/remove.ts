@@ -17,9 +17,9 @@ export class Remove extends CommandBase {
         showCondition(context, settings) {
           return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
-        code(context, settings, sxc) {
+        code(context, settings) {
           if (confirm(translate('Toolbar.ConfirmRemove'))) {
-            removeFromList(sxc, settings.sortOrder);
+            removeFromList(context.sxc.sxc, settings.sortOrder);
             // sxc.manage.contentBlock
             //    .removeFromList(settings.sortOrder);
           }

@@ -1,6 +1,6 @@
 ﻿import { Command } from '../../commands/command';
-import { ContextOfButton } from '../../context/context-of-button';
 import { Settings } from '../../commands/settings';
+import { ContextOfButton } from '../../context/context-of-button';
 
 export class Definition2 {
   name?: string;
@@ -11,7 +11,7 @@ export class Definition2 {
   params?(context: ContextOfButton): any ; // stv: Params;
   dialog?: string;
   showCondition?(context: ContextOfButton, settings: Settings): boolean | number | string;
-  code?(context: ContextOfButton, settings: Settings, sxc: SxcInstanceWithInternals): void;
+  code?(context: ContextOfButton, settings: Settings): void;
   dynamicClasses?(context: ContextOfButton, settings: Settings): string;
   disabled?(context: ContextOfButton, settings: Settings): boolean;
   configureCommand?(context: ContextOfButton, cmd: Command): void;

@@ -3885,8 +3885,8 @@ var Add = /** @class */ (function (_super) {
             showCondition: function (context, settings) {
                 return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
             },
-            code: function (context, settings, sxc) {
-                actions_1.addItem(sxc, settings.sortOrder + 1);
+            code: function (context, settings) {
+                actions_1.addItem(context.sxc.sxc, settings.sortOrder + 1);
             },
         });
         return _this;
@@ -4193,7 +4193,7 @@ var Custom = /** @class */ (function (_super) {
     function Custom() {
         var _this = _super.call(this) || this;
         _this.makeDef('custom', 'Custom', 'bomb', true, false, {
-            code: function (context, settings, sxc) {
+            code: function (context, settings) {
                 console.log('custom action with code - BETA feature, may change');
                 if (!settings.customCode) {
                     console.warn('custom code action, but no onclick found to run', settings);
@@ -4201,7 +4201,7 @@ var Custom = /** @class */ (function (_super) {
                 }
                 try {
                     var fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
-                    fn(settings, event, sxc);
+                    fn(settings, event, context.sxc.sxc);
                 }
                 catch (err) {
                     console.error('error in custom button-code: ', settings);
@@ -4250,8 +4250,8 @@ var Delete = /** @class */ (function (_super) {
                 // check if all data exists required for deleting
                 return settings.entityId && settings.entityGuid && settings.entityTitle;
             },
-            code: function (context, settings, sxc) {
-                item_commands_1.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+            code: function (context, settings) {
+                item_commands_1.contentItems.delete(context.sxc.sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
             },
         });
         return _this;
@@ -4479,7 +4479,7 @@ var More = /** @class */ (function (_super) {
     function More() {
         var _this = _super.call(this) || this;
         _this.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
-            code: function (context, settings, sxc) {
+            code: function (context, settings) {
                 var btn = $(context.element);
                 var fullMenu = btn.closest('ul.sc-menu');
                 var oldState = Number(fullMenu.attr('data-state') || 0);
@@ -4525,9 +4525,9 @@ var MoveDown = /** @class */ (function (_super) {
                 // TODO: do not display if is last item in list
                 return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
             },
-            code: function (context, settings, sxc) {
+            code: function (context, settings) {
                 // TODO: make sure index is never greater than the amount of items
-                actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
+                actions_1.changeOrder(context.sxc.sxc, settings.sortOrder, settings.sortOrder + 1);
             },
         });
         return _this;
@@ -4564,8 +4564,8 @@ var MoveUp = /** @class */ (function (_super) {
             showCondition: function (context, settings) {
                 return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
             },
-            code: function (context, settings, sxc) {
-                actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+            code: function (context, settings) {
+                actions_1.changeOrder(context.sxc.sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
             },
         });
         return _this;
@@ -4611,10 +4611,10 @@ var New = /** @class */ (function (_super) {
             showCondition: function (context, settings) {
                 return settings.contentType || context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
             },
-            code: function (context, settings, sxc) {
+            code: function (context, settings) {
                 // todo - should refactor this to be a toolbarManager.contentBlock command
                 var settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 });
-                sxc.manage._commands._openNgDialog(settingsExtend, sxc);
+                context.sxc.sxc.manage._commands._openNgDialog(settingsExtend, context.sxc.sxc);
             },
         });
         return _this;
@@ -4658,15 +4658,15 @@ var Publish = /** @class */ (function (_super) {
             disabled: function (context, settings) {
                 return !context.instance.allowPublish;
             },
-            code: function (context, settings, sxc) {
+            code: function (context, settings) {
                 if (settings.isPublished)
                     return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
                 // if we have an entity-id, publish based on that
                 if (settings.entityId)
-                    return actions_1.publishId(sxc, settings.entityId);
+                    return actions_1.publishId(context.sxc.sxc, settings.entityId);
                 var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
                 var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
-                return actions_1.publish(sxc, part, index);
+                return actions_1.publish(context.sxc.sxc, part, index);
             },
         });
         return _this;
@@ -4707,9 +4707,9 @@ var Remove = /** @class */ (function (_super) {
             showCondition: function (context, settings) {
                 return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
             },
-            code: function (context, settings, sxc) {
+            code: function (context, settings) {
                 if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
-                    actions_1.removeFromList(sxc, settings.sortOrder);
+                    actions_1.removeFromList(context.sxc.sxc, settings.sortOrder);
                     // sxc.manage.contentBlock
                     //    .removeFromList(settings.sortOrder);
                 }

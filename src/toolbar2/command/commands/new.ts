@@ -18,10 +18,10 @@ export class New extends CommandBase {
       showCondition(context, settings) {
         return settings.contentType || context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
       },
-      code(context, settings, sxc) {
+      code(context, settings) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
         const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
-        sxc.manage._commands._openNgDialog(settingsExtend, sxc);
+        context.sxc.sxc.manage._commands._openNgDialog(settingsExtend, context.sxc.sxc);
       },
     });
   }
