@@ -1,6 +1,9 @@
 ﻿import { changeOrder } from '../../../contentBlock/actions';
 import { CommandBase } from '../command-base';
 
+/**
+ * import this module to commands.ts
+ */
 export class MoveUp extends CommandBase {
   constructor() {
     super();
@@ -19,3 +22,5 @@ export class MoveUp extends CommandBase {
       });
   }
 }
+
+const cmd = new MoveUp();

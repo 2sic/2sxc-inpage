@@ -6,6 +6,8 @@ import { CommandBase } from '../command-base';
  * new can also be used for mini-toolbars which just add an entity not attached to a module
  * in that case it's essential to add a contentType like
  * <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
+ *
+ * import this module to commands.ts
  */
 export class New extends CommandBase {
   constructor() {
@@ -26,3 +28,5 @@ export class New extends CommandBase {
     });
   }
 }
+
+const cmd = new New();

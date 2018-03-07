@@ -4,6 +4,8 @@ import { CommandBase } from '../command-base';
 
 /**
  * remove an item from the placeholder (usually for lists)
+ *
+ * import this module to commands.ts
  */
 export class Remove extends CommandBase {
   constructor() {
@@ -27,3 +29,5 @@ export class Remove extends CommandBase {
       });
   }
 }
+
+const cmd = new Remove();

@@ -4,6 +4,8 @@ import { CommandBase } from '../command-base';
 
 /**
  * todo: shouldn't be available if changes are not allowed
+ *
+ * import this module to commands.ts
  */
 export class Publish extends CommandBase {
   constructor() {
@@ -28,3 +30,5 @@ export class Publish extends CommandBase {
     });
   }
 }
+
+const cmd = new Publish();

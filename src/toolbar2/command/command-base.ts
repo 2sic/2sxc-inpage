@@ -2,6 +2,7 @@
 import { getButtonConfigDefaultsV1 } from '../button/expand-button-config';
 import { CommandDefinition } from './command-definition';
 import { Definition2 } from './definition2';
+import { Commands } from './commands';
 
 export abstract class CommandBase {
 
@@ -16,5 +17,8 @@ export abstract class CommandBase {
     // Toolbar API v2
     this.commandDefinition.name = name;
     this.commandDefinition.buttonConfig = getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more);
+
+    // register new CommandDefinition with in Commands
+    Commands.getInstance().addDef(this.commandDefinition);
   }
 }

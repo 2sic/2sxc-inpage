@@ -1,5 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
+/**
+ * import this module to commands.ts
+ */
 export class AppResources extends CommandBase {
   constructor() {
     super();
@@ -26,3 +29,5 @@ export class AppResources extends CommandBase {
     });
   }
 }
+
+const cmd = new AppResources();

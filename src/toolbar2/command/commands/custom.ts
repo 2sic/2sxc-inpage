@@ -1,5 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
+/**
+ * import this module to commands.ts
+ */
 export class Custom extends CommandBase {
   constructor() {
     super();
@@ -20,3 +23,5 @@ export class Custom extends CommandBase {
     });
   }
 }
+
+const cmd = new Custom();

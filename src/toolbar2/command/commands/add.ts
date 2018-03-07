@@ -3,6 +3,8 @@ import { CommandBase } from '../command-base';
 
 /**
  * add brings no dialog, just add an empty item
+ * 
+ * import this module to commands.ts
  */
 export class Add extends CommandBase {
   constructor() {
@@ -22,3 +24,5 @@ export class Add extends CommandBase {
       });
   }
 }
+
+const cmd = new Add();

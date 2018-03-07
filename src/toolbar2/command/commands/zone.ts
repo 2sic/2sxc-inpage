@@ -1,5 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
+/**
+ * import this module to commands.ts
+ */
 export class Zone extends CommandBase {
   constructor() {
     super();
@@ -12,3 +15,5 @@ export class Zone extends CommandBase {
     });
   }
 }
+
+const cmd = new Zone();

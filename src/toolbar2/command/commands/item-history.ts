@@ -2,6 +2,8 @@
 
 /**
  * show the version dialog
+ *
+ * import this module to commands.ts
  */
 export class ItemHistory extends CommandBase {
   constructor() {
@@ -12,3 +14,5 @@ export class ItemHistory extends CommandBase {
     });
   }
 }
+
+const cmd = new ItemHistory();

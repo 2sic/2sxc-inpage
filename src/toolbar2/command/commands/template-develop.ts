@@ -1,5 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
+/**
+ * import this module to commands.ts
+ */
 export class TemplateDevelop extends CommandBase {
   constructor() {
     super();
@@ -20,3 +23,5 @@ export class TemplateDevelop extends CommandBase {
       });
   }
 }
+
+const cmd = new TemplateDevelop();

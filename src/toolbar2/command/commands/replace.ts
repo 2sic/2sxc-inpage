@@ -1,5 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
+/**
+ * import this module to commands.ts
+ */
 export class Replace extends CommandBase {
   constructor() {
     super();
@@ -10,3 +13,5 @@ export class Replace extends CommandBase {
     });
   }
 }
+
+const cmd = new Replace();

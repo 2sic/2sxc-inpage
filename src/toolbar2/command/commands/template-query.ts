@@ -1,6 +1,9 @@
 ﻿import { Params } from '../../../commands/params';
 import { CommandBase } from '../command-base';
 
+/**
+ * import this module to commands.ts
+ */
 export class TemplateQuery extends CommandBase {
   constructor() {
     super();
@@ -28,3 +31,5 @@ export class TemplateQuery extends CommandBase {
     });
   }
 }
+
+const cmd = new TemplateQuery();

@@ -2,6 +2,8 @@
 
 /**
  * open an edit-item dialog
+ *
+ * import this module to commands.ts
  */
 export class Edit extends CommandBase {
   constructor() {
@@ -21,3 +23,6 @@ export class Edit extends CommandBase {
       });
   }
 }
+
+// open an edit-item dialog
+const cmd = new Edit();

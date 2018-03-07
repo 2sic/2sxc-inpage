@@ -1,5 +1,8 @@
 ﻿import { CommandBase } from '../command-base';
 
+/**
+ * import this module to commands.ts
+ */
 export class ContentItems extends CommandBase {
   constructor() {
     super();
@@ -31,3 +34,5 @@ export class ContentItems extends CommandBase {
     });
   }
 }
+
+const cmd = new ContentItems();

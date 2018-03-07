@@ -11,8 +11,6 @@ import { Settings } from './settings';
 export function commandLinkToNgDialog(context: ContextOfButton, specialSettings: Settings): string {
   const cmd = commandCreate(context, specialSettings);
 
-  debugger;
-
   if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
   else cmd.addSimpleItem();
 

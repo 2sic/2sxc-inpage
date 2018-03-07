@@ -3,6 +3,8 @@ import { CommandBase } from '../command-base';
 
 /**
  * create a metadata toolbar
+ *
+ * import this module to commands.ts
  */
 export class Metadata extends CommandBase {
   constructor() {
@@ -30,3 +32,5 @@ export class Metadata extends CommandBase {
     });
   }
 }
+
+const cmd = new Metadata();

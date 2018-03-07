@@ -2,6 +2,8 @@
 
 /**
  * open the import dialog
+ * 
+ * import this module to commands.ts
  */
 export class AppImport extends CommandBase {
   constructor() {
@@ -9,3 +11,6 @@ export class AppImport extends CommandBase {
     this.makeDef('app-import', 'Dashboard', '', true, false, {});
   }
 }
+
+// open the import dialog
+const cmd = new AppImport();

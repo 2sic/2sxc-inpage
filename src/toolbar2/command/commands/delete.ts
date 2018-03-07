@@ -3,6 +3,8 @@ import { CommandBase } from '../command-base';
 
 /**
  * todo: work in progress related to https://github.com/2sic/2sxc/issues/618
+ *
+ * import this module to commands.ts
  */
 export class Delete extends CommandBase {
   constructor() {
@@ -23,3 +25,5 @@ export class Delete extends CommandBase {
     });
   }
 }
+
+const cmd = new Delete();
