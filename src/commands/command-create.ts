@@ -19,7 +19,9 @@ export function commandCreate(context: ContextOfButton, specialSettings: Setting
 
   const isDebug: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
 
-  const cmd = new Command(context.sxc.sxc, settings, ngDialogUrl, isDebug);
+  debugger;
+
+  const cmd = new Command(context, settings, ngDialogUrl, isDebug);
 
   return cmd;
 }

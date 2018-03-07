@@ -1,4 +1,5 @@
-﻿import { CommandBase } from '../command-base';
+﻿import { Params } from '../../../commands/params';
+import { CommandBase } from '../command-base';
 
 export class TemplateQuery extends CommandBase {
   constructor() {
@@ -14,9 +15,7 @@ export class TemplateQuery extends CommandBase {
         // ReSharper restore UnusedParameter
         return context.app.settingsId === null;
       },
-      title: (context) => {
-        return `Toolbar.QueryEdit${context.contentBlock.queryId === null ? 'Disabled' : ''}`;
-      },
+      title: (context) => `Toolbar.QueryEdit${context.contentBlock.queryId === null ? 'Disabled' : ''}`,
       // ReSharper disable UnusedParameter
       showCondition: (context, settings) => {
         // ReSharper restore UnusedParameter

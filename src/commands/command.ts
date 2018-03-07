@@ -1,21 +1,29 @@
-﻿import { NgDialogParams } from '../manage/ng-dialog-params';
+﻿import { ContextOfButton } from '../context/context-of-button';
+import { NgDialogParams } from '../manage/ng-dialog-params';
 import { translate } from '../translate/2sxc.translate';
 import { Params } from './params';
 import { Settings } from './settings';
 
 export class Command {
-
+  sxc: SxcInstanceWithInternals;
   items: any;
   params: Params;
 
-  constructor(public sxc: SxcInstanceWithInternals, public settings: Settings, public ngDialogUrl: string, public isDebug: string) {
+  constructor(context: ContextOfButton, public settings: Settings, public ngDialogUrl: string, public isDebug: string) {
+    this.sxc = context.sxc.sxc;
     this.settings = settings;
     this.items = settings.items || []; // use predefined or create empty array
     this.params = Object.assign({
       dialog: settings.dialog || settings.action, // the variable used to name the dialog changed in the history of 2sxc from action to dialog
     },
-      settings.params) as Params;
+      this.evalPropOrFunction(settings.params, context, {})) as Params;
   }
+
+  private evalPropOrFunction = (propOrFunction, context, fallback) => {
+    if (propOrFunction === undefined || propOrFunction === null)
+      return fallback;
+    return typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction;
+  };
 
   addSimpleItem = () => {
     const item = {} as Item;

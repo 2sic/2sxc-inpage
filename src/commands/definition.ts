@@ -1,6 +1,6 @@
 ﻿import { Command } from './command';
 import { ModConfig } from './mod-config';
-// import { Params } from './params';
+import { Params } from './params';
 import { Settings } from './settings';
 
 export class Definition {
@@ -9,7 +9,7 @@ export class Definition {
   icon?: string;
   uiActionOnly?: boolean;
   partOfPage?: boolean;
-  params?: any; // stv: Params;
+  params?: Params; // stv: Params;
   dialog?: string;
   showCondition?(settings: Settings, modConfig: ModConfig): boolean | number | string;
   code?(settings: Settings, event: ModConfig, sxc: SxcInstanceWithInternals): void;

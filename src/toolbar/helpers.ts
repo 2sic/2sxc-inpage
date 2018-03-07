@@ -59,7 +59,7 @@ export const buildFullDefinition: (unstructuredConfig: any, allActions: Action, 
  * @param original
  * @param moreSettings
  */
-export const ensureDefinitionTree: (original: any, moreSettings: any) => { name;debug;groups;defaults;params;settings } = (original, moreSettings) => {
+export const ensureDefinitionTree: (original: any, moreSettings: any) => { name; debug; groups; defaults; params; settings } = (original, moreSettings) => {
   // original is null/undefined, just return empty set
   if (!original) throw (`preparing toolbar, with nothing to work on: ${original}`);
 

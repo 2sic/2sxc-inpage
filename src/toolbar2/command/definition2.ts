@@ -1,4 +1,5 @@
 ﻿import { Command } from '../../commands/command';
+import { Params } from '../../commands/params';
 import { Settings } from '../../commands/settings';
 import { ContextOfButton } from '../../context/context-of-button';
 
@@ -8,7 +9,7 @@ export class Definition2 {
   icon?: string;
   uiActionOnly?: boolean;
   partOfPage?: boolean;
-  params?(context: ContextOfButton): any ; // stv: Params;
+  params?(context: ContextOfButton): Params;
   dialog?: string;
   showCondition?(context: ContextOfButton, settings: Settings): boolean | number | string;
   code?(context: ContextOfButton, settings: Settings): void;

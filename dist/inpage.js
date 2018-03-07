@@ -2855,7 +2855,8 @@ function commandCreate(context, specialSettings) {
         'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
         context.sxc.editContext.Environment.SxcVersion;
     var isDebug = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-    var cmd = new command_1.Command(context.sxc.sxc, settings, ngDialogUrl, isDebug);
+    debugger;
+    var cmd = new command_1.Command(context, settings, ngDialogUrl, isDebug);
     return cmd;
 }
 exports.commandCreate = commandCreate;
@@ -5268,12 +5269,16 @@ exports.ToolbarConfig = ToolbarConfig;
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(5);
 var Command = /** @class */ (function () {
-    function Command(sxc, settings, ngDialogUrl, isDebug) {
+    function Command(context, settings, ngDialogUrl, isDebug) {
         var _this = this;
-        this.sxc = sxc;
         this.settings = settings;
         this.ngDialogUrl = ngDialogUrl;
         this.isDebug = isDebug;
+        this.evalPropOrFunction = function (propOrFunction, context, fallback) {
+            if (propOrFunction === undefined || propOrFunction === null)
+                return fallback;
+            return typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction;
+        };
         this.addSimpleItem = function () {
             var item = {};
             var ct = _this.settings.contentType || _this.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
@@ -5336,11 +5341,12 @@ var Command = /** @class */ (function () {
                 _this.isDebug;
             //#endregion
         };
+        this.sxc = context.sxc.sxc;
         this.settings = settings;
         this.items = settings.items || []; // use predefined or create empty array
         this.params = Object.assign({
             dialog: settings.dialog || settings.action,
-        }, settings.params);
+        }, this.evalPropOrFunction(settings.params, context, {}));
     }
     return Command;
 }());
@@ -5442,6 +5448,7 @@ var command_create_1 = __webpack_require__(38);
  */
 function commandLinkToNgDialog(context, specialSettings) {
     var cmd = command_create_1.commandCreate(context, specialSettings);
+    debugger;
     if (cmd.settings.useModuleList)
         cmd.addContentGroupItemSetsToEditList(true);
     else
@@ -5663,10 +5670,6 @@ var EditManager = /** @class */ (function () {
         this.userInfo = userInfo;
         this.cmdEngine = cmdEngine;
         //#region Official, public properties and commands, which are stable for use from the outside
-        /**
-         * run a command - often used in toolbars and custom buttons
-         */
-        // run = this.cmdEngine.executeAction;
         /**
          * run2 a command - new command used in toolbars and custom buttons
          */

@@ -12,10 +12,10 @@ export class Publish extends CommandBase {
       showCondition(context, settings) {
         return settings.isPublished === false;
       },
-      disabled(context, settings) {
+      disabled: (context, settings) => {
         return !context.instance.allowPublish;
       },
-      code(context, settings) {
+      code: (context, settings) => {
         if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
 
         // if we have an entity-id, publish based on that
