@@ -8,20 +8,20 @@ export class AppSettings extends CommandBase {
       // ReSharper disable UnusedParameter
       disabled: (context, settings, modConfig) => {
         // ReSharper restore UnusedParameter
-        return context.cmdSpec.appSettingsId === null;
+        return context.app.settingsId === null;
       },
-      title: (context) => `Toolbar.AppSettings${context.cmdSpec.appSettingsId === null ? 'Disabled' : ''}`,
+      title: (context) => `Toolbar.AppSettings${context.app.settingsId === null ? 'Disabled' : ''}`,
       // ReSharper disable UnusedParameter
       showCondition: (context, settings, modConfig) => {
         // ReSharper restore UnusedParameter
-        return context.enableTools && !context.isContent; // only if settings exist, or are 0 (to be created)
+        return context.user.canDesign && !context.app.isContent; // only if settings exist, or are 0 (to be created)
       },
       configureCommand: (context, cmd) => {
-        cmd.items = [{ EntityId: context.cmdSpec.appSettingsId }];
+        cmd.items = [{ EntityId: context.app.settingsId }];
       },
       // ReSharper disable once UnusedParameter
       dynamicClasses: (context, settings) => {
-        return context.cmdSpec.appSettingsId !== null ? '' : 'empty';  // if it doesn't have a query, make it less strong
+        return context.app.settingsId !== null ? '' : 'empty';  // if it doesn't have a query, make it less strong
       },
     });
   }

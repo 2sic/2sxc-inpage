@@ -41,7 +41,7 @@ export function renderButton(context: ContextOfButton, sxc: SxcInstanceWithInter
 
   button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
 
-  button.setAttribute('data-i18n', `[title]${buttonConfig.title}`); // localization support
+  button.setAttribute('data-i18n', `[title]${buttonConfig.title(context)}`); // localization support
 
   const box = document.createElement('div');
 

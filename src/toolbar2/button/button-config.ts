@@ -7,8 +7,8 @@ import { ButtonAction } from './button-action';
 
 export class ButtonConfig {
   name: string = '';
-  title: string;
-  params: any = [];
+  title: ((context: ContextOfButton) => string);
+  params: ((context: ContextOfButton) => any);
 
   action: ButtonAction;
 

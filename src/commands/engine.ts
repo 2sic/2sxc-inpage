@@ -36,8 +36,8 @@ export class Engine {
 
   run2 = (context, nameOrSettings, eventOrSettings?: any, event?: any) => {
     console.log('stv: context', context);
-    //const sxc: SxcInstanceWithInternals = getSxcInstance(context);
-    //const editContext: DataEditContext = getEditContext(sxc);
+    // const sxc: SxcInstanceWithInternals = getSxcInstance(context);
+    // const editContext: DataEditContext = getEditContext(sxc);
     return commandExecuteAction(context.sxc, context.editContext, nameOrSettings, eventOrSettings, event);
   }
 

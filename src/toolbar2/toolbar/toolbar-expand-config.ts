@@ -77,7 +77,7 @@ const buildFullDefinition = (context, unstructuredConfig, allActions: Commands, 
  * @param unstructuredConfig
  * @param toolbarSettings
  */
-const ensureDefinitionTree = (unstructuredConfig, toolbarSettings: ToolbarSettings): ToolbarConfig => {
+const ensureDefinitionTree = (unstructuredConfig : any, toolbarSettings: ToolbarSettings): ToolbarConfig => {
   // original is null/undefined, just return empty set
   if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 

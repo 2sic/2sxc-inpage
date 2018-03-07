@@ -13,7 +13,7 @@ export class Publish extends CommandBase {
         return settings.isPublished === false;
       },
       disabled(context, settings, modConfig) {
-        return !context.cmdSpec.allowPublish;
+        return !context.instance.allowPublish;
       },
       code(context, settings, event, sxc) {
         if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));

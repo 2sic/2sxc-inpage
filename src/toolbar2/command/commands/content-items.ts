@@ -5,11 +5,11 @@ export class ContentItems extends CommandBase {
     super();
     this.makeDef('contentitems', 'ContentItems', 'table', true, false, {
       params: (context) => {
-        return { contentTypeName: context.cmdSpec.contentTypeId };
+        return { contentTypeName: context.contentBlock.contentTypeId };
       },
       // ReSharper disable once UnusedParameter
       showCondition: (context, settings, modConfig) => {
-        return context.enableTools && (settings.contentType || context.cmdSpec.contentTypeId);
+        return context.user.canDesign && (settings.contentType || context.contentBlock.contentTypeId);
       },
       configureCommand: (context, cmd) => {
         if (cmd.settings.contentType) // optionally override with custom type

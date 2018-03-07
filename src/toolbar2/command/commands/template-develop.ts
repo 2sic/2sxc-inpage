@@ -12,10 +12,10 @@ export class TemplateDevelop extends CommandBase {
         newWindow: true,
         dialog: 'develop',
         showCondition: (context, settings, modConfig) => {
-          return context.enableTools;
+          return context.user.canDesign;
         },
         configureCommand: (context, cmd) => {
-          cmd.items = [{ EntityId: context.cmdSpec.templateId }];
+          cmd.items = [{ EntityId: context.contentBlock.templateId }];
         },
       });
   }

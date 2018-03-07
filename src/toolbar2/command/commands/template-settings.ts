@@ -11,10 +11,10 @@ export class TemplateSettings extends CommandBase {
       {
         dialog: 'edit',
         showCondition: (context, settings, modConfig) => {
-          return context.enableTools && !context.isContent;
+          return context.user.canDesign && !context.app.isContent;
         },
         configureCommand: (context, cmd) => {
-          cmd.items = [{ EntityId: context.cmdSpec.templateId }];
+          cmd.items = [{ EntityId: context.contentBlock.templateId }];
         },
       });
   }

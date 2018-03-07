@@ -8,20 +8,20 @@ export class AppResources extends CommandBase {
       // ReSharper disable UnusedParameter
       disabled: (context, settings, modConfig) => {
         // ReSharper restore UnusedParameter
-        return context.cmdSpec.appResourcesId === null;
+        return context.app.resourcesId === null;
       },
-      title: (context) => `Toolbar.AppResources${context.cmdSpec.appResourcesId === null ? 'Disabled' : ''}`,
+      title: (context) => `Toolbar.AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,
       // ReSharper disable UnusedParameter
       showCondition: (context, settings, modConfig) => {
         // ReSharper restore UnusedParameter
-        return context.enableTools && !context.isContent; // only if resources exist or are 0 (to be created)...
+        return context.user.canDesign && !context.app.isContent; // only if resources exist or are 0 (to be created)...
       },
       configureCommand: (context, cmd) => {
-        cmd.items = [{ EntityId: context.cmdSpec.appResourcesId }];
+        cmd.items = [{ EntityId: context.app.resourcesId }];
       },
       // ReSharper disable once UnusedParameter
       dynamicClasses: (context, settings) => {
-        return context.cmdSpec.appResourcesId !== null ? '' : 'empty';  // if it doesn't have a query, make it less strong
+        return context.app.resourcesId !== null ? '' : 'empty';  // if it doesn't have a query, make it less strong
       },
     });
   }

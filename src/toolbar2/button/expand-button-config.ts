@@ -1,4 +1,5 @@
-﻿import { ButtonAction } from '../button/button-action';
+﻿import { ContextOfButton } from '../../context/context-of-button';
+import { ButtonAction } from '../button/button-action';
 import { ButtonConfig } from '../button/button-config';
 import { Commands } from '../command/commands';
 import { Definition2 } from '../command/definition2';
@@ -38,7 +39,7 @@ export function getButtonConfigDefaultsV1(name: string, icon: string, translateK
   // stv: v1 code
   const partialButtonConfig = {
     icon: 'icon-sxc-' + icon,
-    title: 'Toolbar.' + translateKey,
+    title: (context: ContextOfButton) => 'Toolbar.' + translateKey,
     uiActionOnly: uiOnly,
     partOfPage: partOfPage,
   } as Partial<ButtonConfig>;
