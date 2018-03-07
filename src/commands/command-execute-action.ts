@@ -28,17 +28,13 @@ export function commandExecuteAction(context: ContextOfButton, nameOrSettings: a
     :
     nameOrSettings;
 
-
-  // v1
-  // const conf = commandInitializeInstanceCommands(editContext)[settings.action];
-  // v2
-  const conf = Commands.getInstance().get(settings.action).buttonConfig; // todo: stv ... finish this
+  const conf = Commands.getInstance().get(settings.action).buttonConfig;
 
   settings = Object.assign({}, conf, settings) as Settings; // merge conf & settings, but settings has higher priority
 
   if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
   if (!settings.code) settings.code = (contextParam: ContextOfButton, settingsParam: Settings) => {
-    return commandOpenNgDialog(contextParam.sxc.sxc, contextParam.sxc.editContext, settingsParam);
+    return commandOpenNgDialog(contextParam, settingsParam);
   }; // decide what action to perform
 
   // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences

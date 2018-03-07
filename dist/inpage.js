@@ -5377,16 +5377,13 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
         }) // place the name as an action-name into a command-object
         :
             nameOrSettings;
-    // v1
-    // const conf = commandInitializeInstanceCommands(editContext)[settings.action];
-    // v2
-    var conf = commands_1.Commands.getInstance().get(settings.action).buttonConfig; // todo: stv ... finish this
+    var conf = commands_1.Commands.getInstance().get(settings.action).buttonConfig;
     settings = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
     if (!settings.dialog)
         settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
     if (!settings.code)
         settings.code = function (contextParam, settingsParam) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(contextParam.sxc.sxc, contextParam.sxc.editContext, settingsParam);
+            return command_open_ng_dialog_1.commandOpenNgDialog(contextParam, settingsParam);
         }; // decide what action to perform
     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
     var origEvent = event || window.event;
@@ -5416,16 +5413,16 @@ var command_link_to_ng_dialog_1 = __webpack_require__(105);
  * @param sxc
  * @param editContext
  */
-function commandOpenNgDialog(sxc, editContext, settings) {
+function commandOpenNgDialog(contextParam, settings) {
     // the callback will handle events after closing the dialog
     // and reload the in-page view w/ajax or page reload
     var callback = function () {
-        render_1.reloadAndReInitialize(sxc);
+        render_1.reloadAndReInitialize(contextParam.sxc.sxc);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
     };
-    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(sxc, editContext, settings); // the link contains everything to open a full dialog (lots of params added)
+    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(contextParam.sxc.sxc, contextParam.sxc.editContext, settings); // the link contains everything to open a full dialog (lots of params added)
     if (settings.inlineWindow)
-        return quick_dialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+        return quick_dialog_1.showOrToggle(contextParam.sxc.sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
     if (settings.newWindow /*|| (event && event.shiftKey)*/)
         return window.open(link);
     return $2sxc.totalPopup.open(link, callback);

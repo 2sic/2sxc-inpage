@@ -1,7 +1,10 @@
 ﻿import { CmdSpec } from '../commands/cmd-spec';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { getEditContext } from '../manage/api';
+import { Commands } from '../toolbar2/command/commands';
 import { ToolbarConfig } from '../toolbar2/toolbar/toolbar-config';
+import { ExpandToolbarConfig } from '../toolbar2/toolbar/toolbar-expand-config';
+import { ToolbarSettings } from '../toolbar2/toolbar/toolbar-settings';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';
@@ -13,9 +16,6 @@ import { InstanceContext } from './instance-context/instance-context';
 import { SxcContext } from './instance-context/sxc-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
-import { ToolbarSettings } from '../toolbar2/toolbar/toolbar-settings';
-import { ExpandToolbarConfig } from '../toolbar2/toolbar/toolbar-expand-config';
-import { Commands } from '../toolbar2/command/commands';
 
 /**
  * Primary API to get the context
