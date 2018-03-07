@@ -8,7 +8,9 @@ import { addClasses } from './render-helpers';
  * @param buttonConfig
  * @param groupIndex group-index in which the button is shown
  */
-export function renderButton(context: ContextOfButton, sxc: SxcInstanceWithInternals, buttonConfig: ButtonConfig, groupIndex: number): HTMLElement {
+export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfig, groupIndex: number): HTMLElement {
+
+  const sxc = context.sxc.sxc;
 
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(buttonConfig);

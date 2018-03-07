@@ -1102,9 +1102,9 @@ exports.customize = customize;
 Object.defineProperty(exports, "__esModule", { value: true });
 var render_groups_1 = __webpack_require__(97);
 var render_helpers_1 = __webpack_require__(33);
-function renderToolbar(context, sxc, toolbarData, toolbarConfig) {
+function renderToolbar(context, toolbarData, toolbarConfig) {
     // render groups of buttons
-    var groups = render_groups_1.renderGroups(context, sxc, toolbarConfig);
+    var groups = render_groups_1.renderGroups(context, toolbarConfig);
     // render toolbar
     var toolbar = document.createElement('ul');
     (_a = toolbar.classList).add.apply(_a, ['sc-menu', 'group-0']);
@@ -1141,7 +1141,8 @@ var render_helpers_1 = __webpack_require__(33);
  * @param buttonConfig
  * @param groupIndex group-index in which the button is shown
  */
-function renderButton(context, sxc, buttonConfig, groupIndex) {
+function renderButton(context, buttonConfig, groupIndex) {
+    var sxc = context.sxc.sxc;
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     flattenActionDefinition(buttonConfig);
     // retrieve configuration for this button
@@ -2421,7 +2422,6 @@ exports._toolbarManager = new ToolbarManager();
 Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = __webpack_require__(31);
 var api_1 = __webpack_require__(1);
-var sxc_1 = __webpack_require__(3);
 var commands_1 = __webpack_require__(70);
 var render_toolbar_1 = __webpack_require__(15);
 var toolbar_manager_1 = __webpack_require__(34);
@@ -2484,11 +2484,9 @@ function buildToolbars(parentTag, optionalId) {
         }
         try {
             var cnt = context_1.context(tag);
-            var sxc = sxc_1.getSxcInstance(tag);
-            var editContext = api_1.getEditContext(sxc);
             var newCommands = new commands_1.Commands();
-            var toolbarConfig = toolbar_expand_config_1.ExpandToolbarConfig(cnt, editContext, newCommands, toolbarData, toolbarSettings);
-            var toolbar = render_toolbar_1.renderToolbar(cnt, sxc, toolbarData, toolbarConfig);
+            var toolbarConfig = toolbar_expand_config_1.ExpandToolbarConfig(cnt, newCommands, toolbarData, toolbarSettings);
+            var toolbar = render_toolbar_1.renderToolbar(cnt, toolbarData, toolbarConfig);
             tag.replaceWith(toolbar);
         }
         catch (err2) {
@@ -2542,6 +2540,7 @@ function context(context) {
     // *** ContextOf ***
     // this will be everything about the current system, like system / api -paths etc.
     contextOfButton.system = new system_context_1.SystemContext();
+    // empty
     // this will be something about the current tenant(the dnn portal)
     contextOfButton.tenant = new tenant_context_1.TenantContext();
     contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
@@ -2554,8 +2553,10 @@ function context(context) {
     contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
     // *** ContextOfInstance ***
     // this will be something about the sxc - object, version, etc.
-    contextOfButton.twosxc = new sxc_context_1.SxcContext();
-    contextOfButton.twosxc.version = editContext.Environment.SxcVersion;
+    contextOfButton.sxc = new sxc_context_1.SxcContext();
+    contextOfButton.sxc.version = editContext.Environment.SxcVersion;
+    contextOfButton.sxc.sxc = sxc; // stv: this is temp
+    contextOfButton.sxc.editContext = editContext; // stv: this is temp
     // information related to the current DNN module, incl.instanceId, etc.
     contextOfButton.instance = new instance_context_1.InstanceContext();
     contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
@@ -2579,13 +2580,13 @@ function context(context) {
     // *** ContextOfItem ***
     // information about the current item
     contextOfButton.item = new item_context_1.ItemContext();
+    // empty
     // *** ContextOfToolbar ***
     contextOfButton.toolbar = new toolbar_config_1.ToolbarConfig();
+    // empty
     // *** ContextOfButton ***
-    contextOfButton.sxc = sxc;
-    contextOfButton.editContext = editContext;
-    contextOfButton.element = context;
-    // contextOfButton.button = ButtonConfig; // tood: stv....
+    contextOfButton.element = context; // HTMLElement
+    // contextOfButton.button = ButtonConfig; // todo: stv....
     // contextOfButton.cmdSpec = cmdSpec;
     // contextOfButton.enableTools = editContext.User.CanDesign;
     // contextOfButton.isContent = editContext.ContentGroup.IsContent;
@@ -2887,7 +2888,7 @@ var Engine = /** @class */ (function () {
         };
         this.run2 = function (context, nameOrSettings, eventOrSettings, event) {
             // console.log('stv: context', context);
-            return command_execute_action_1.commandExecuteAction(context.sxc, context.editContext, nameOrSettings, eventOrSettings, event);
+            return command_execute_action_1.commandExecuteAction(context.sxc.sxc, context.sxc.editContext, nameOrSettings, eventOrSettings, event);
         };
     }
     return Engine;
@@ -4934,14 +4935,14 @@ var render_button_1 = __webpack_require__(16);
  * @param sxc
  * @param toolbarConfig
  */
-function renderGroups(context, sxc, toolbarConfig) {
+function renderGroups(context, toolbarConfig) {
     var groupsBuffer = []; // temporary storage for detached HTML DOM objects
     var btnGroups = toolbarConfig.groups;
     for (var i = 0; i < btnGroups.length; i++) {
         var btns = btnGroups[i].buttons;
         for (var h = 0; h < btns.length; h++) {
             // create one button
-            var button = render_button_1.renderButton(context, sxc, btns[h], i);
+            var button = render_button_1.renderButton(context, btns[h], i);
             // add button to group of buttons
             var item = document.createElement('li');
             item.appendChild(button);
@@ -5050,7 +5051,8 @@ var expand_group_config_1 = __webpack_require__(101);
 var toolbar_config_1 = __webpack_require__(32);
 var toolbar_settings_1 = __webpack_require__(37);
 var toolbar_standard_buttons_1 = __webpack_require__(36);
-function ExpandToolbarConfig(context, editContext, allActions, toolbarData, toolbarSettings) {
+function ExpandToolbarConfig(context, allActions, toolbarData, toolbarSettings) {
+    var editContext = context.sxc.editContext;
     if (toolbarData === {} && toolbarSettings === {})
         toolbarSettings = toolbar_settings_1.settingsForEmptyToolbar;
     // if it has an action or is an array, keep that. Otherwise get standard buttons

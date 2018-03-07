@@ -29,6 +29,7 @@ export function context(context: HTMLElement): ContextOfButton {
   // *** ContextOf ***
   // this will be everything about the current system, like system / api -paths etc.
   contextOfButton.system = new SystemContext();
+  // empty
 
   // this will be something about the current tenant(the dnn portal)
   contextOfButton.tenant = new TenantContext();
@@ -45,8 +46,10 @@ export function context(context: HTMLElement): ContextOfButton {
 
   // *** ContextOfInstance ***
   // this will be something about the sxc - object, version, etc.
-  contextOfButton.twosxc = new SxcContext();
-  contextOfButton.twosxc.version = editContext.Environment.SxcVersion;
+  contextOfButton.sxc = new SxcContext();
+  contextOfButton.sxc.version = editContext.Environment.SxcVersion;
+  contextOfButton.sxc.sxc = sxc; // stv: this is temp
+  contextOfButton.sxc.editContext = editContext; // stv: this is temp
 
   // information related to the current DNN module, incl.instanceId, etc.
   contextOfButton.instance = new InstanceContext();
@@ -74,18 +77,16 @@ export function context(context: HTMLElement): ContextOfButton {
   // *** ContextOfItem ***
   // information about the current item
   contextOfButton.item = new ItemContext();
-
+  // empty
 
   // *** ContextOfToolbar ***
   contextOfButton.toolbar = new ToolbarConfig();
+  // empty
 
   // *** ContextOfButton ***
+  contextOfButton.element = context; // HTMLElement
+  // contextOfButton.button = ButtonConfig; // todo: stv....
 
-  contextOfButton.sxc = sxc;
-  contextOfButton.editContext = editContext;
-
-  contextOfButton.element = context;
-  // contextOfButton.button = ButtonConfig; // tood: stv....
   // contextOfButton.cmdSpec = cmdSpec;
   // contextOfButton.enableTools = editContext.User.CanDesign;
   // contextOfButton.isContent = editContext.ContentGroup.IsContent;

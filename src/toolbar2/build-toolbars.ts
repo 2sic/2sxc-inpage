@@ -78,15 +78,11 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
 
       const cnt = context(tag);
 
-      const sxc: SxcInstanceWithInternals = getSxcInstance(tag);
-
-      const editContext: DataEditContext = getEditContext(sxc);
-
       const newCommands = new Commands();
 
-      const toolbarConfig: ToolbarConfig = ExpandToolbarConfig(cnt, editContext, newCommands, toolbarData, toolbarSettings);
+      const toolbarConfig: ToolbarConfig = ExpandToolbarConfig(cnt, newCommands, toolbarData, toolbarSettings);
 
-      const toolbar = renderToolbar(cnt, sxc, toolbarData, toolbarConfig);
+      const toolbar = renderToolbar(cnt, toolbarData, toolbarConfig);
 
       tag.replaceWith(toolbar);
 

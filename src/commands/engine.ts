@@ -34,7 +34,7 @@ export class Engine {
 
   run2 = (context, nameOrSettings, eventOrSettings?: any, event?: any) => {
     // console.log('stv: context', context);
-    return commandExecuteAction(context.sxc, context.editContext, nameOrSettings, eventOrSettings, event);
+    return commandExecuteAction(context.sxc.sxc, context.sxc.editContext, nameOrSettings, eventOrSettings, event);
   }
 
 }

@@ -5,7 +5,7 @@ import { SxcContext } from './instance-context/sxc-context';
 
 
 export class ContextOfInstance extends ContextOfPage {
-  twosxc: SxcContext; // this will be something about the sxc - object, version, etc.
+  sxc: SxcContext; // this will be something about the sxc - object, version, etc.
   instance: InstanceContext; // information related to the current DNN module, incl.instanceId, etc.
   app: AppContext; // this will be about the current app, settings of the app, app - paths, etc.
 }
