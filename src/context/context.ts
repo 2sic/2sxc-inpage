@@ -29,8 +29,11 @@ export function context(context: HTMLElement): ContextOfButton {
   // *** ContextOf ***
   // this will be everything about the current system, like system / api -paths etc.
   contextOfButton.system = new SystemContext();
+
   // this will be something about the current tenant(the dnn portal)
   contextOfButton.tenant = new TenantContext();
+  contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
+
   // things about the user
   contextOfButton.user = new UserContext();
   contextOfButton.user.canDesign = editContext.User.CanDesign;
@@ -38,25 +41,35 @@ export function context(context: HTMLElement): ContextOfButton {
   // *** ContextOfPage ***
   // this will be information related to the current page
   contextOfButton.page = new PageContext();
+  contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
 
   // *** ContextOfInstance ***
   // this will be something about the sxc - object, version, etc.
   contextOfButton.twosxc = new SxcContext();
+  contextOfButton.twosxc.version = editContext.Environment.SxcVersion;
+
   // information related to the current DNN module, incl.instanceId, etc.
   contextOfButton.instance = new InstanceContext();
-  contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed,
+  contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
+  contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;
+
   // this will be about the current app, settings of the app, app - paths, etc.
   contextOfButton.app = new AppContext();
   contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
   contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
   contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
+  contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // ex: InstanceConfig.appPath
 
   // *** ContextOfContentBlock ***
   // information related to the current contentBlock
   contextOfButton.contentBlock = new ContentBlockContext();
+  contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // ex: InstanceConfig.cbid
+  contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
+  contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
   contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
   contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
   contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
+  contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
 
   // *** ContextOfItem ***
   // information about the current item
@@ -71,13 +84,11 @@ export function context(context: HTMLElement): ContextOfButton {
   contextOfButton.sxc = sxc;
   contextOfButton.editContext = editContext;
 
+  contextOfButton.element = context;
   // contextOfButton.button = ButtonConfig; // tood: stv....
   // contextOfButton.cmdSpec = cmdSpec;
   // contextOfButton.enableTools = editContext.User.CanDesign;
   // contextOfButton.isContent = editContext.ContentGroup.IsContent;
-
-  //console.log('stv: context', context);
-  //return cob;
 
   return contextOfButton;
 }

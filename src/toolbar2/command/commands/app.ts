@@ -5,7 +5,7 @@ export class App extends CommandBase {
     super();
     this.makeDef('app', 'App', 'settings', true, false, {
       // ReSharper disable UnusedParameter
-      showCondition: (context, settings, modConfig) => {
+      showCondition: (context, settings) => {
         // ReSharper restore UnusedParameter
         return context.user.canDesign;
       },

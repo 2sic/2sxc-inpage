@@ -5,7 +5,7 @@ export class Zone extends CommandBase {
     super();
     this.makeDef('zone', 'Zone', 'manage', true, false, {
       // ReSharper disable UnusedParameter
-      showCondition: (context, settings, modConfig) => {
+      showCondition: (context, settings) => {
         // ReSharper restore UnusedParameter
         return context.user.canDesign;
       },

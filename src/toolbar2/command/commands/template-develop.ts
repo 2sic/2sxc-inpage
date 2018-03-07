@@ -11,7 +11,7 @@ export class TemplateDevelop extends CommandBase {
       {
         newWindow: true,
         dialog: 'develop',
-        showCondition: (context, settings, modConfig) => {
+        showCondition: (context, settings) => {
           return context.user.canDesign;
         },
         configureCommand: (context, cmd) => {

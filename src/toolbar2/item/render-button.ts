@@ -74,5 +74,3 @@ function flattenActionDefinition(actDef) {
   if (editInfo.sortOrder !== undefined) actDef.sortOrder = editInfo.sortOrder;
   delete actDef.entity; // clean up edit-info
 }
-
-

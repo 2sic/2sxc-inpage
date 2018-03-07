@@ -15,13 +15,13 @@ export class New extends CommandBase {
         return { mode: 'new' };
       },
       dialog: 'edit', // don't use "new" (default) but use "edit"
-      showCondition(context, settings, modConfig) {
-        return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
+      showCondition(context, settings) {
+        return settings.contentType || context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
       },
-      code(context, settings, event, sxc) {
+      code(context, settings, sxc) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
         const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
-        sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
+        sxc.manage._commands._openNgDialog(settingsExtend, sxc);
       },
     });
   }

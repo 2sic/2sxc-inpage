@@ -4,7 +4,7 @@ export class Custom extends CommandBase {
   constructor() {
     super();
     this.makeDef('custom', 'Custom', 'bomb', true, false, {
-      code(context, settings, event, sxc) {
+      code(context, settings, sxc) {
         console.log('custom action with code - BETA feature, may change');
         if (!settings.customCode) {
           console.warn('custom code action, but no onclick found to run', settings);

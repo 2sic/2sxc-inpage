@@ -5,6 +5,7 @@ import { ContextOfToolbar } from './context-of-toolbar';
 
 export class ContextOfButton extends ContextOfToolbar {
   button: ButtonConfig;
+  element: HTMLElement;
   sxc: SxcInstanceWithInternals;
   editContext: DataEditContext;
   // cmdSpec: CmdSpec;

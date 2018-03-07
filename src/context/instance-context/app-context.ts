@@ -5,4 +5,5 @@ export class AppContext {
   isContent: boolean; // if it’s the main Content app or not
   settingsId: number;
   resourcesId: number;
+  appPath: string;
 }

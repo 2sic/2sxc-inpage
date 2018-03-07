@@ -10,7 +10,7 @@ export class TemplateQuery extends CommandBase {
       },
       newWindow: true,
       // ReSharper disable UnusedParameter
-      disabled: (context, settings, modConfig) => {
+      disabled: (context, settings) => {
         // ReSharper restore UnusedParameter
         return context.app.settingsId === null;
       },
@@ -18,7 +18,7 @@ export class TemplateQuery extends CommandBase {
         return `Toolbar.QueryEdit${context.contentBlock.queryId === null ? 'Disabled' : ''}`;
       },
       // ReSharper disable UnusedParameter
-      showCondition: (context, settings, modConfig) => {
+      showCondition: (context, settings) => {
         // ReSharper restore UnusedParameter
         return context.user.canDesign && !context.app.isContent;
       },

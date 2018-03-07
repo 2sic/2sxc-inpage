@@ -1,7 +1,6 @@
 ﻿import { Command } from '../../commands/command';
 import { ContextOfButton } from '../../context/context-of-button';
 import { Settings } from '../../commands/settings';
-import { ModConfig } from '../../commands/mod-config';
 
 export class Definition2 {
   name?: string;
@@ -11,10 +10,10 @@ export class Definition2 {
   partOfPage?: boolean;
   params?(context: ContextOfButton): any ; // stv: Params;
   dialog?: string;
-  showCondition?(context: ContextOfButton, settings: Settings, modConfig: ModConfig): boolean | number | string;
-  code?(context: ContextOfButton, settings: Settings, event: ModConfig, sxc: SxcInstanceWithInternals): void;
+  showCondition?(context: ContextOfButton, settings: Settings): boolean | number | string;
+  code?(context: ContextOfButton, settings: Settings, sxc: SxcInstanceWithInternals): void;
   dynamicClasses?(context: ContextOfButton, settings: Settings): string;
-  disabled?(context: ContextOfButton, settings: Settings, modConfig: ModConfig): boolean;
+  disabled?(context: ContextOfButton, settings: Settings): boolean;
   configureCommand?(context: ContextOfButton, cmd: Command): void;
   newWindow?: boolean;
   inlineWindow?: boolean;

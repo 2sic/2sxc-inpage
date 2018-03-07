@@ -5,7 +5,7 @@ export class ContentType extends CommandBase {
     super();
     this.makeDef('contenttype', 'ContentType', 'fields', true, false, {
       // ReSharper disable UnusedParameter
-      showCondition: (context, settings, modConfig) => {
+      showCondition: (context, settings) => {
         // ReSharper restore UnusedParameter
         return context.user.canDesign;
       },

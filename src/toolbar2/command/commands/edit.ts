@@ -15,7 +15,7 @@ export class Edit extends CommandBase {
         params: (context) => {
           return { mode: 'edit' };
         },
-        showCondition(context, settings, modConfig) {
+        showCondition(context, settings) {
           return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
         },
       });

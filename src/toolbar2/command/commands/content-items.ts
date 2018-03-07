@@ -8,7 +8,7 @@ export class ContentItems extends CommandBase {
         return { contentTypeName: context.contentBlock.contentTypeId };
       },
       // ReSharper disable once UnusedParameter
-      showCondition: (context, settings, modConfig) => {
+      showCondition: (context, settings) => {
         return context.user.canDesign && (settings.contentType || context.contentBlock.contentTypeId);
       },
       configureCommand: (context, cmd) => {

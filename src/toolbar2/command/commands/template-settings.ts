@@ -10,7 +10,7 @@ export class TemplateSettings extends CommandBase {
       false,
       {
         dialog: 'edit',
-        showCondition: (context, settings, modConfig) => {
+        showCondition: (context, settings) => {
           return context.user.canDesign && !context.app.isContent;
         },
         configureCommand: (context, cmd) => {

@@ -4,8 +4,8 @@ export class More extends CommandBase {
   constructor() {
     super();
     this.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
-      code(context, settings, event, sxc) {
-        const btn: any = $(event.target);
+      code(context, settings, sxc) {
+        const btn: any = $(context.element);
         const fullMenu: any = btn.closest('ul.sc-menu');
         const oldState: number = Number(fullMenu.attr('data-state') || 0);
         const max: number = Number(fullMenu.attr('group-count'));

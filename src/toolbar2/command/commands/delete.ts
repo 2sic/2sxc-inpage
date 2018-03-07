@@ -9,7 +9,7 @@ export class Delete extends CommandBase {
     super();
     this.makeDef('delete', 'Delete', 'cancel', true, false, {
       // disabled: true,
-      showCondition(context, settings, modConfig) {
+      showCondition(context, settings) {
         // can never be used for a modulelist item, as it is always in use somewhere
         if (settings.useModuleList)
           return false;
@@ -17,7 +17,7 @@ export class Delete extends CommandBase {
         // check if all data exists required for deleting
         return settings.entityId && settings.entityGuid && settings.entityTitle;
       },
-      code(context, settings, event, sxc) {
+      code(context, settings, sxc) {
         contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
       },
     });

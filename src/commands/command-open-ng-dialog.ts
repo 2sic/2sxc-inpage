@@ -11,7 +11,7 @@ import { Settings } from './settings';
  * @param sxc
  * @param editContext
  */
-export function commandOpenNgDialog(sxc: SxcInstanceWithInternals, editContext: DataEditContext, settings: Settings, event: any) {
+export function commandOpenNgDialog(sxc: SxcInstanceWithInternals, editContext: DataEditContext, settings: Settings) {
   // the callback will handle events after closing the dialog
   // and reload the in-page view w/ajax or page reload
   const callback = () => {
@@ -23,7 +23,7 @@ export function commandOpenNgDialog(sxc: SxcInstanceWithInternals, editContext: 
   if (settings.inlineWindow)
     return showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
 
-  if (settings.newWindow || (event && event.shiftKey))
+  if (settings.newWindow /*|| (event && event.shiftKey)*/)
     return window.open(link);
 
   return $2sxc.totalPopup.open(link, callback);

@@ -2544,29 +2544,38 @@ function context(context) {
     contextOfButton.system = new system_context_1.SystemContext();
     // this will be something about the current tenant(the dnn portal)
     contextOfButton.tenant = new tenant_context_1.TenantContext();
+    contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
     // things about the user
     contextOfButton.user = new user_context_1.UserContext();
     contextOfButton.user.canDesign = editContext.User.CanDesign;
     // *** ContextOfPage ***
     // this will be information related to the current page
     contextOfButton.page = new page_context_1.PageContext();
+    contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
     // *** ContextOfInstance ***
     // this will be something about the sxc - object, version, etc.
     contextOfButton.twosxc = new sxc_context_1.SxcContext();
+    contextOfButton.twosxc.version = editContext.Environment.SxcVersion;
     // information related to the current DNN module, incl.instanceId, etc.
     contextOfButton.instance = new instance_context_1.InstanceContext();
-    contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed,
-        // this will be about the current app, settings of the app, app - paths, etc.
-        contextOfButton.app = new app_context_1.AppContext();
+    contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
+    contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;
+    // this will be about the current app, settings of the app, app - paths, etc.
+    contextOfButton.app = new app_context_1.AppContext();
     contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
     contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
     contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
+    contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // ex: InstanceConfig.appPath
     // *** ContextOfContentBlock ***
     // information related to the current contentBlock
     contextOfButton.contentBlock = new content_block_context_1.ContentBlockContext();
+    contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // ex: InstanceConfig.cbid
+    contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
+    contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
     contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
     contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
     contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
+    contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
     // *** ContextOfItem ***
     // information about the current item
     contextOfButton.item = new item_context_1.ItemContext();
@@ -2575,12 +2584,11 @@ function context(context) {
     // *** ContextOfButton ***
     contextOfButton.sxc = sxc;
     contextOfButton.editContext = editContext;
+    contextOfButton.element = context;
     // contextOfButton.button = ButtonConfig; // tood: stv....
     // contextOfButton.cmdSpec = cmdSpec;
     // contextOfButton.enableTools = editContext.User.CanDesign;
     // contextOfButton.isContent = editContext.ContentGroup.IsContent;
-    //console.log('stv: context', context);
-    //return cob;
     return contextOfButton;
 }
 exports.context = context;
@@ -2798,7 +2806,7 @@ var command_link_to_ng_dialog_1 = __webpack_require__(40);
  * @param sxc
  * @param editContext
  */
-function commandOpenNgDialog(sxc, editContext, settings, event) {
+function commandOpenNgDialog(sxc, editContext, settings) {
     // the callback will handle events after closing the dialog
     // and reload the in-page view w/ajax or page reload
     var callback = function () {
@@ -2808,7 +2816,7 @@ function commandOpenNgDialog(sxc, editContext, settings, event) {
     var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(sxc, editContext, settings); // the link contains everything to open a full dialog (lots of params added)
     if (settings.inlineWindow)
         return quick_dialog_1.showOrToggle(sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
-    if (settings.newWindow || (event && event.shiftKey))
+    if (settings.newWindow /*|| (event && event.shiftKey)*/)
         return window.open(link);
     return $2sxc.totalPopup.open(link, callback);
 }
@@ -2871,16 +2879,14 @@ var Engine = /** @class */ (function () {
         };
         // open a new dialog of the angular-ui
         // ReSharper disable once InconsistentNaming
-        this._openNgDialog = function (settings, event, sxc) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, _this.editContext, settings, event);
+        this._openNgDialog = function (settings, sxc) {
+            return command_open_ng_dialog_1.commandOpenNgDialog(sxc, _this.editContext, settings);
         };
         this.executeAction = function (nameOrSettings, eventOrSettings, event) {
             return command_execute_action_1.commandExecuteAction(_this.sxc, _this.editContext, nameOrSettings, eventOrSettings, event);
         };
         this.run2 = function (context, nameOrSettings, eventOrSettings, event) {
-            console.log('stv: context', context);
-            // const sxc: SxcInstanceWithInternals = getSxcInstance(context);
-            // const editContext: DataEditContext = getEditContext(sxc);
+            // console.log('stv: context', context);
             return command_execute_action_1.commandExecuteAction(context.sxc, context.editContext, nameOrSettings, eventOrSettings, event);
         };
     }
@@ -3875,10 +3881,10 @@ var Add = /** @class */ (function (_super) {
     function Add() {
         var _this = _super.call(this) || this;
         _this.makeDef('add', 'AddDemo', 'plus-circled', false, true, {
-            showCondition: function (context, settings, modConfig) {
-                return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+            showCondition: function (context, settings) {
+                return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
             },
-            code: function (context, settings, event, sxc) {
+            code: function (context, settings, sxc) {
                 actions_1.addItem(sxc, settings.sortOrder + 1);
             },
         });
@@ -3928,7 +3934,7 @@ var App = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('app', 'App', 'settings', true, false, {
             // ReSharper disable UnusedParameter
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.user.canDesign;
             },
@@ -3998,13 +4004,13 @@ var AppResources = /** @class */ (function (_super) {
         _this.makeDef('app-resources', 'AppResources', 'language', true, false, {
             dialog: 'edit',
             // ReSharper disable UnusedParameter
-            disabled: function (context, settings, modConfig) {
+            disabled: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.app.resourcesId === null;
             },
             title: function (context) { return "Toolbar.AppResources" + (context.app.resourcesId === null ? 'Disabled' : ''); },
             // ReSharper disable UnusedParameter
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.user.canDesign && !context.app.isContent; // only if resources exist or are 0 (to be created)...
             },
@@ -4048,13 +4054,13 @@ var AppSettings = /** @class */ (function (_super) {
         _this.makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
             dialog: 'edit',
             // ReSharper disable UnusedParameter
-            disabled: function (context, settings, modConfig) {
+            disabled: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.app.settingsId === null;
             },
             title: function (context) { return "Toolbar.AppSettings" + (context.app.settingsId === null ? 'Disabled' : ''); },
             // ReSharper disable UnusedParameter
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.user.canDesign && !context.app.isContent; // only if settings exist, or are 0 (to be created)
             },
@@ -4100,7 +4106,7 @@ var ContentItems = /** @class */ (function (_super) {
                 return { contentTypeName: context.contentBlock.contentTypeId };
             },
             // ReSharper disable once UnusedParameter
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 return context.user.canDesign && (settings.contentType || context.contentBlock.contentTypeId);
             },
             configureCommand: function (context, cmd) {
@@ -4151,7 +4157,7 @@ var ContentType = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('contenttype', 'ContentType', 'fields', true, false, {
             // ReSharper disable UnusedParameter
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.user.canDesign;
             },
@@ -4186,7 +4192,7 @@ var Custom = /** @class */ (function (_super) {
     function Custom() {
         var _this = _super.call(this) || this;
         _this.makeDef('custom', 'Custom', 'bomb', true, false, {
-            code: function (context, settings, event, sxc) {
+            code: function (context, settings, sxc) {
                 console.log('custom action with code - BETA feature, may change');
                 if (!settings.customCode) {
                     console.warn('custom code action, but no onclick found to run', settings);
@@ -4236,14 +4242,14 @@ var Delete = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('delete', 'Delete', 'cancel', true, false, {
             // disabled: true,
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 // can never be used for a modulelist item, as it is always in use somewhere
                 if (settings.useModuleList)
                     return false;
                 // check if all data exists required for deleting
                 return settings.entityId && settings.entityGuid && settings.entityTitle;
             },
-            code: function (context, settings, event, sxc) {
+            code: function (context, settings, sxc) {
                 item_commands_1.contentItems.delete(sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
             },
         });
@@ -4283,7 +4289,7 @@ var Edit = /** @class */ (function (_super) {
             params: function (context) {
                 return { mode: 'edit' };
             },
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 return settings.entityId || settings.useModuleList; // need ID or a "slot", otherwise edit won't work
             },
         });
@@ -4317,8 +4323,8 @@ var InstanceList = /** @class */ (function (_super) {
     function InstanceList() {
         var _this = _super.call(this) || this;
         _this.makeDef('instance-list', 'Sort', 'list-numbered', false, true, {
-            showCondition: function (context, settings, modConfig) {
-                return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+            showCondition: function (context, settings) {
+                return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
             },
         });
         return _this;
@@ -4431,7 +4437,7 @@ var Metadata = /** @class */ (function (_super) {
                 return settings.entityId ? '' : 'empty';
                 // return settings.items && settings.items[0].entityId ? "" : "empty";
             },
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 return !!settings.metadata;
             },
             configureCommand: function (context, cmd) {
@@ -4472,8 +4478,8 @@ var More = /** @class */ (function (_super) {
     function More() {
         var _this = _super.call(this) || this;
         _this.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
-            code: function (context, settings, event, sxc) {
-                var btn = $(event.target);
+            code: function (context, settings, sxc) {
+                var btn = $(context.element);
                 var fullMenu = btn.closest('ul.sc-menu');
                 var oldState = Number(fullMenu.attr('data-state') || 0);
                 var max = Number(fullMenu.attr('group-count'));
@@ -4514,11 +4520,11 @@ var MoveDown = /** @class */ (function (_super) {
     function MoveDown() {
         var _this = _super.call(this) || this;
         _this.makeDef('movedown', 'MoveDown', 'move-down', false, true, {
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 // TODO: do not display if is last item in list
-                return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+                return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
             },
-            code: function (context, settings, event, sxc) {
+            code: function (context, settings, sxc) {
                 // TODO: make sure index is never greater than the amount of items
                 actions_1.changeOrder(sxc, settings.sortOrder, settings.sortOrder + 1);
             },
@@ -4554,10 +4560,10 @@ var MoveUp = /** @class */ (function (_super) {
     function MoveUp() {
         var _this = _super.call(this) || this;
         _this.makeDef('moveup', 'MoveUp', 'move-up', false, true, {
-            showCondition: function (context, settings, modConfig) {
-                return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
+            showCondition: function (context, settings) {
+                return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
             },
-            code: function (context, settings, event, sxc) {
+            code: function (context, settings, sxc) {
                 actions_1.changeOrder(sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
             },
         });
@@ -4601,13 +4607,13 @@ var New = /** @class */ (function (_super) {
                 return { mode: 'new' };
             },
             dialog: 'edit',
-            showCondition: function (context, settings, modConfig) {
-                return settings.contentType || modConfig.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
+            showCondition: function (context, settings) {
+                return settings.contentType || context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
             },
-            code: function (context, settings, event, sxc) {
+            code: function (context, settings, sxc) {
                 // todo - should refactor this to be a toolbarManager.contentBlock command
                 var settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 });
-                sxc.manage._commands._openNgDialog(settingsExtend, event, sxc);
+                sxc.manage._commands._openNgDialog(settingsExtend, sxc);
             },
         });
         return _this;
@@ -4645,13 +4651,13 @@ var Publish = /** @class */ (function (_super) {
     function Publish() {
         var _this = _super.call(this) || this;
         _this.makeDef('publish', 'Unpublished', 'eye-off', false, false, {
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 return settings.isPublished === false;
             },
-            disabled: function (context, settings, modConfig) {
+            disabled: function (context, settings) {
                 return !context.instance.allowPublish;
             },
-            code: function (context, settings, event, sxc) {
+            code: function (context, settings, sxc) {
                 if (settings.isPublished)
                     return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
                 // if we have an entity-id, publish based on that
@@ -4697,10 +4703,10 @@ var Remove = /** @class */ (function (_super) {
     function Remove() {
         var _this = _super.call(this) || this;
         _this.makeDef('remove', 'Remove', 'minus-circled', false, true, {
-            showCondition: function (context, settings, modConfig) {
-                return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+            showCondition: function (context, settings) {
+                return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
             },
-            code: function (context, settings, event, sxc) {
+            code: function (context, settings, sxc) {
                 if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
                     actions_1.removeFromList(sxc, settings.sortOrder);
                     // sxc.manage.contentBlock
@@ -4738,7 +4744,7 @@ var Replace = /** @class */ (function (_super) {
     function Replace() {
         var _this = _super.call(this) || this;
         _this.makeDef('replace', 'Replace', 'replace', false, true, {
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 return settings.useModuleList;
             },
         });
@@ -4774,7 +4780,7 @@ var TemplateDevelop = /** @class */ (function (_super) {
         _this.makeDef('template-develop', 'Develop', 'code', true, false, {
             newWindow: true,
             dialog: 'develop',
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 return context.user.canDesign;
             },
             configureCommand: function (context, cmd) {
@@ -4817,7 +4823,7 @@ var TemplateQuery = /** @class */ (function (_super) {
             },
             newWindow: true,
             // ReSharper disable UnusedParameter
-            disabled: function (context, settings, modConfig) {
+            disabled: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.app.settingsId === null;
             },
@@ -4825,7 +4831,7 @@ var TemplateQuery = /** @class */ (function (_super) {
                 return "Toolbar.QueryEdit" + (context.contentBlock.queryId === null ? 'Disabled' : '');
             },
             // ReSharper disable UnusedParameter
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.user.canDesign && !context.app.isContent;
             },
@@ -4865,7 +4871,7 @@ var TemplateSettings = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('template-settings', 'TemplateSettings', 'sliders', true, false, {
             dialog: 'edit',
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 return context.user.canDesign && !context.app.isContent;
             },
             configureCommand: function (context, cmd) {
@@ -4903,7 +4909,7 @@ var Zone = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('zone', 'Zone', 'manage', true, false, {
             // ReSharper disable UnusedParameter
-            showCondition: function (context, settings, modConfig) {
+            showCondition: function (context, settings) {
                 // ReSharper restore UnusedParameter
                 return context.user.canDesign;
             },
@@ -5439,7 +5445,7 @@ function commandExecuteAction(sxc, editContext, nameOrSettings, eventOrSettings,
         settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
     if (!settings.code)
         settings.code = function (settingsParam, eventParam, sxcParam) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(sxcParam, editContext, settingsParam, eventParam);
+            return command_open_ng_dialog_1.commandOpenNgDialog(sxcParam, editContext, settingsParam);
         }; // decide what action to perform
     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
     var origEvent = event || window.event;

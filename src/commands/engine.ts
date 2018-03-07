@@ -5,8 +5,6 @@ import { commandInitializeInstanceCommands } from './command-initialize-instance
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Settings } from './settings';
-import { getSxcInstance } from '../x-bootstrap/sxc';
-import { getEditContext } from '../manage/api';
 
 export class Engine {
   constructor(public sxc: SxcInstanceWithInternals, public editContext: DataEditContext) { }
@@ -26,8 +24,8 @@ export class Engine {
 
   // open a new dialog of the angular-ui
   // ReSharper disable once InconsistentNaming
-  _openNgDialog = (settings: Settings, event: any, sxc: SxcInstanceWithInternals) => {
-    return commandOpenNgDialog(sxc, this.editContext, settings, event);
+  _openNgDialog = (settings: Settings, sxc: SxcInstanceWithInternals) => {
+    return commandOpenNgDialog(sxc, this.editContext, settings);
   }
 
   executeAction = (nameOrSettings, eventOrSettings?: any, event?: any) => {
@@ -35,9 +33,7 @@ export class Engine {
   }
 
   run2 = (context, nameOrSettings, eventOrSettings?: any, event?: any) => {
-    console.log('stv: context', context);
-    // const sxc: SxcInstanceWithInternals = getSxcInstance(context);
-    // const editContext: DataEditContext = getEditContext(sxc);
+    // console.log('stv: context', context);
     return commandExecuteAction(context.sxc, context.editContext, nameOrSettings, eventOrSettings, event);
   }
 

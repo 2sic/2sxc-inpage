@@ -13,10 +13,10 @@ export class Add extends CommandBase {
       false,
       true,
       {
-        showCondition(context, settings, modConfig) {
-          return modConfig.isList && settings.useModuleList && settings.sortOrder !== -1;
+        showCondition(context, settings) {
+          return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
         },
-        code(context, settings, event, sxc) {
+        code(context, settings, sxc) {
           addItem(sxc, settings.sortOrder + 1);
         },
       });

@@ -9,13 +9,13 @@ export class Publish extends CommandBase {
   constructor() {
     super();
     this.makeDef('publish', 'Unpublished', 'eye-off', false, false, {
-      showCondition(context, settings, modConfig) {
+      showCondition(context, settings) {
         return settings.isPublished === false;
       },
-      disabled(context, settings, modConfig) {
+      disabled(context, settings) {
         return !context.instance.allowPublish;
       },
-      code(context, settings, event, sxc) {
+      code(context, settings, sxc) {
         if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
 
         // if we have an entity-id, publish based on that

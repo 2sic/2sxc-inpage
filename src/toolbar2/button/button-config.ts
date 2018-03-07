@@ -1,5 +1,5 @@
 ﻿import { Command } from '../../commands/command';
-import { ModConfig } from '../../commands/mod-config';
+//import { ModConfig } from '../../commands/mod-config';
 import { Settings } from '../../commands/settings';
 import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonAction } from './button-action';
@@ -52,17 +52,14 @@ export class ButtonConfig {
     return buttonConfig;
   }
 
-  //params: ((context: ContextOfButton) => any[]);
-  //title: ((context: ContextOfButton) => string);
-
   // disabled: boolean | (() => boolean) = false;
-  disabled: ((context: ContextOfButton, settings: Settings, modConfig: ModConfig) => boolean);
+  disabled: ((context: ContextOfButton, settings: Settings) => boolean);
   // dynamicClasses: (() => string);
   dynamicClasses: ((context: ContextOfButton, settings: Settings) => string);
   dynamicDisabled: (() => boolean) = () => false; // maybe
-  code: ((context: ContextOfButton, settings: Settings, event: ModConfig, sxc: SxcInstanceWithInternals) => void);
+  code: ((context: ContextOfButton, settings: Settings, sxc: SxcInstanceWithInternals) => void);
   configureCommand?(context: ContextOfButton, cmd: Command): void; // stv: todo ???
   // showCondition: boolean | (() => boolean) = true;
-  showCondition: ((context: ContextOfButton, settings: Settings, modConfig: ModConfig) => boolean | number | string);
+  showCondition: ((context: ContextOfButton, settings: Settings) => boolean | number | string);
 
 }

@@ -6,13 +6,13 @@ export class AppResources extends CommandBase {
     this.makeDef('app-resources', 'AppResources', 'language', true, false, {
       dialog: 'edit',
       // ReSharper disable UnusedParameter
-      disabled: (context, settings, modConfig) => {
+      disabled: (context, settings) => {
         // ReSharper restore UnusedParameter
         return context.app.resourcesId === null;
       },
       title: (context) => `Toolbar.AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,
       // ReSharper disable UnusedParameter
-      showCondition: (context, settings, modConfig) => {
+      showCondition: (context, settings) => {
         // ReSharper restore UnusedParameter
         return context.user.canDesign && !context.app.isContent; // only if resources exist or are 0 (to be created)...
       },
