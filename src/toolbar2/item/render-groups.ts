@@ -7,9 +7,9 @@ import { renderButton } from './render-button';
  * @param sxc
  * @param toolbarConfig
  */
-export function renderGroups(context: ContextOfButton, toolbarConfig: ToolbarConfig): HTMLElement[] {
+export function renderGroups(context: ContextOfButton): HTMLElement[] {
   const groupsBuffer: HTMLElement[] = []; // temporary storage for detached HTML DOM objects
-  const btnGroups = toolbarConfig.groups;
+  const btnGroups = context.toolbar.groups;
   for (let i = 0; i < btnGroups.length; i++) {
     const btns = btnGroups[i].buttons;
     for (let h = 0; h < btns.length; h++) {

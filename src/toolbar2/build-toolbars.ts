@@ -57,32 +57,30 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
 
   toolbars.each(function initToolbar(): void {
     const tag: any = $(this);
-    let data: any = null;
+
     let toolbarData: any;
     let toolbarSettings: ToolbarSettings;
     const at = $2sxc.c.attr;
 
     try {
-      data = tag.attr(at.toolbar) || tag.attr(at.toolbarData) || '{}';
+      const data = this.attributes.getNamedItem(at.toolbar).textContent || this.attributes.getNamedItem(at.toolbarData).textContent || '{}';
       toolbarData = JSON.parse(data);
-      // console.log('stv: toolbarData', JSON.stringify(toolbarData));
-      data = tag.attr(at.settings) || tag.attr(at.settingsData) || '{}';
-      toolbarSettings = JSON.parse(data);
-      // console.log('stv: toolbarSettings', JSON.stringify(toolbarSettings));
+      const settings = this.attributes.getNamedItem(at.settings).textContent || this.attributes.getNamedItem(at.settingsData).textContent || '{}';
+      toolbarSettings = JSON.parse(settings);
     } catch (err) {
-      console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', data, err);
+      console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', toolbarData, err);
       return;
     }
 
     try {
 
+      // debugger;
       const cnt = context(tag);
 
-      const newCommands = new Commands();
+      // *** ContextOfToolbar ***
+      cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
 
-      const toolbarConfig: ToolbarConfig = ExpandToolbarConfig(cnt, newCommands, toolbarData, toolbarSettings);
-
-      const toolbar = renderToolbar(cnt, toolbarData, toolbarConfig);
+      const toolbar = renderToolbar(cnt);
 
       tag.replaceWith(toolbar);
 

@@ -5,6 +5,7 @@ import { renderButton } from '../toolbar2/item/render-button';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
+import { context } from '../context/context';
 
 
 /**
@@ -49,7 +50,7 @@ class EditManager {
   /**
    * run a command - often used in toolbars and custom buttons
    */
-  run = this.cmdEngine.executeAction;
+  // run = this.cmdEngine.executeAction;
 
   /**
   * run2 a command - new command used in toolbars and custom buttons
@@ -141,16 +142,17 @@ class EditManager {
    * init this object
    */
   init = () => {
+    const tag = getTag(this.sxc);
     // enhance UI in case there are known errors / issues
     if (this.editContext.error.type)
-      this._handleErrors(this.editContext.error.type, getTag(this.sxc));
+      this._handleErrors(this.editContext.error.type, tag);
 
     // todo: move this to dialog-handling
     // display the dialog
     const openDialogId = LocalStorageHelper.getItemValue<number>('dia-cbid');
     if (this.editContext.error.type || !openDialogId || openDialogId !== this.sxc.cbid) return false;
     sessionStorage.removeItem('dia-cbid');
-    this.run('layout');
+    this.run2(context(tag),'layout');
     return true;
   }
 

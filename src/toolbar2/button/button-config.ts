@@ -1,9 +1,7 @@
 ﻿import { Command } from '../../commands/command';
-//import { ModConfig } from '../../commands/mod-config';
 import { Settings } from '../../commands/settings';
 import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonAction } from './button-action';
-
 
 export class ButtonConfig {
   name: string = '';

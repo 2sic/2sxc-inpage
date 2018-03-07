@@ -1,11 +1,16 @@
 ﻿import { prepareToAddContent } from '../contentBlock/templates';
+import { ContextOfButton } from '../context/context-of-button';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { Commands } from '../toolbar2/command/commands';
 import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Settings } from './settings';
 
 // ToDo: remove dead code
-export function commandExecuteAction(sxc: SxcInstanceWithInternals, editContext: DataEditContext, nameOrSettings: any, eventOrSettings?: any, event?: any) {
+export function commandExecuteAction(context: ContextOfButton, nameOrSettings: any, eventOrSettings?: any, event?: any) {
+
+  const sxc: SxcInstanceWithInternals = context.sxc.sxc;
+  const editContext: DataEditContext = context.sxc.editContext;
 
   let settings: Settings = eventOrSettings;
 
@@ -23,20 +28,25 @@ export function commandExecuteAction(sxc: SxcInstanceWithInternals, editContext:
     :
     nameOrSettings;
 
-  const conf = commandInitializeInstanceCommands(editContext)[settings.action];
+
+  // v1
+  // const conf = commandInitializeInstanceCommands(editContext)[settings.action];
+  // v2
+  const conf = Commands.getInstance().get(settings.action).buttonConfig; // todo: stv ... finish this
+
   settings = Object.assign({}, conf, settings) as Settings; // merge conf & settings, but settings has higher priority
 
   if (!settings.dialog) settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
-  if (!settings.code) settings.code = (settingsParam: Settings, eventParam: any, sxcParam: SxcInstanceWithInternals) => {
-    return commandOpenNgDialog(sxcParam, editContext, settingsParam);
+  if (!settings.code) settings.code = (contextParam: ContextOfButton, settingsParam: Settings) => {
+    return commandOpenNgDialog(contextParam.sxc.sxc, contextParam.sxc.editContext, settingsParam);
   }; // decide what action to perform
 
   // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
   const origEvent = event || window.event;
 
-  if (conf.uiActionOnly) return settings.code(settings, origEvent, sxc);
+  if (conf.uiActionOnly) return settings.code(context, settings);
 
   // if more than just a UI-action, then it needs to be sure the content-group is created first
   return prepareToAddContent(sxc, settings.useModuleList)
-    .then(() => settings.code(settings, origEvent, sxc));
+    .then(() => settings.code(context, settings));
 }

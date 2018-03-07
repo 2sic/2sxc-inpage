@@ -1,4 +1,4 @@
-﻿import {CommandBase} from '../command-base';
+﻿import { CommandBase } from '../command-base';
 
 /**
  * open an edit-item dialog

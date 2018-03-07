@@ -1,27 +1,31 @@
 ﻿import { getSxcInstance } from '../x-bootstrap/sxc';
+import { getTag } from '../manage/api';
+import { context } from '../context/context';
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
 export class ActionMenuMapper {
   private run: any;
+  private tag: HTMLElement;
 
   constructor(moduleId: number) {
     const sxc: SxcInstanceWithInternals = getSxcInstance(moduleId) as SxcInstanceWithInternals;
-    this.run = sxc.manage.run;
+    this.tag = getTag(sxc);
+    this.run = sxc.manage.run2;
   }
 
-  changeLayoutOrContent = () => { this.run('layout'); };
+  changeLayoutOrContent = () => { this.run(context(this.tag), 'layout'); };
 
-  addItem = () => { this.run('add', { useModuleList: true, sortOrder: 0 }); };
+  addItem = () => { this.run(context(this.tag), 'add', { useModuleList: true, sortOrder: 0 }); };
 
-  edit = () => { this.run('edit', { useModuleList: true, sortOrder: 0 }); };
+  edit = () => { this.run(context(this.tag), 'edit', { useModuleList: true, sortOrder: 0 }); };
 
-  adminApp = () => { this.run('app'); };
+  adminApp = () => { this.run(context(this.tag), 'app'); };
 
-  adminZone = () => { this.run('zone'); };
+  adminZone = () => { this.run(context(this.tag), 'zone'); };
 
-  develop = () => { this.run('template-develop'); };
+  develop = () => { this.run(context(this.tag), 'template-develop'); };
 }
 
 window.$2sxcActionMenuMapper = (moduleId: number) => {

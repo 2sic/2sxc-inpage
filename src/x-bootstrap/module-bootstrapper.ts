@@ -1,9 +1,9 @@
 ﻿import { buildToolbars } from '../abtesting/toolbar-feature';
+import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { current } from '../quick-dialog/quick-dialog';
 import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from './sxc';
-
 // import '/2sxc-api/js/2sxc.api';
 
 /**
@@ -52,7 +52,7 @@ function tryShowTemplatePicker(): boolean {
   // show the template picker of this module
   const module = uninitializedModules.parent('div[data-edit-context]')[0];
   const sxc = getSxcInstance(module);
-  sxc.manage.run('layout');
+  sxc.manage.run2(context(module), 'layout');
   openedTemplatePickerOnce = true;
   return true;
 }
@@ -93,7 +93,7 @@ function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals) {
   const btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
 
   btn.on('click', (): void => {
-    sxci.manage.run('layout');
+    sxci.manage.run2(context(tag), 'layout');
   });
 
   btn.on('mouseover', (): void => {

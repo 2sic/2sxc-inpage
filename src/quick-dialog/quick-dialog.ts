@@ -2,6 +2,7 @@
 import { ajaxLoad, reloadAndReInitialize, showMessage } from '../contentBlock/render';
 import { updateTemplateFromDia } from '../contentBlock/templates';
 import { getTag } from '../manage/api';
+import { context } from '../context/context';
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -176,7 +177,7 @@ function extendIFrameWithSxcState(iFrame) {
       localStorage.setItem('cancelled-dialog', 'true');
       return newFrm.closeCallback();
     },
-    run: (verb: string) => reSxc().manage.run(verb),
+    run: (verb: string) => reSxc().manage.run2(context(getTag(reSxc())), verb),
     showMessage: (message: string) => showMessage(reSxc(), `<p class="no-live-preview-available">${message}</p>`),
     reloadAndReInit: () => reloadAndReInitialize(reSxc(), true, true),
     saveTemplate: (templateId: number) => updateTemplateFromDia(reSxc(), templateId, false),

@@ -1,4 +1,4 @@
-﻿import {Settings} from '../../../commands/settings';
+﻿import { Settings } from '../../../commands/settings';
 import { CommandBase } from '../command-base';
 
 /**

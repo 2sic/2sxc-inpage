@@ -16,7 +16,10 @@ import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-confi
  * @param fullToolbarConfig
  * @param actions
  */
-export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, actions: Commands): void {
+export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
+
+  const actions = Commands.getInstance();
+
   // by now we should have a structure, let's check/fix the buttons
   for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]

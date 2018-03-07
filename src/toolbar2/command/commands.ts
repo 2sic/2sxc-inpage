@@ -31,15 +31,21 @@ import { Zone } from './commands/zone';
 
 export class Commands {
 
+  private static instance: Commands;
+
   commandList: CommandDefinition[] = [];
   list: HashTable<CommandDefinition> = {}; // hash - table of action definitions, to be used a list()["action - name"]
   get = (name: string) => this.list[name]; // a specific action definition
 
-  constructor() {
-
+  private constructor() {
     this.create();
+  }
 
-    // console.log('stv: command', this);
+  static getInstance() {
+    if (!Commands.instance) {
+      Commands.instance = new Commands();
+    }
+    return Commands.instance;
   }
 
   private addDef = (def: CommandDefinition): void => {

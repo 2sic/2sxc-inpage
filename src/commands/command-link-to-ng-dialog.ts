@@ -8,13 +8,14 @@ import { Settings } from './settings';
  * @param specialSettings
  */
 export function commandLinkToNgDialog(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): string {
+  const context = null; // todo: stv, provide missing context value
   const cmd = commandCreate(sxc, editContext, specialSettings);
 
   if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
   else cmd.addSimpleItem();
 
   // if the command has own configuration stuff, do that now
-  if (cmd.settings.configureCommand) cmd.settings.configureCommand(cmd);
+  if (cmd.settings.configureCommand) cmd.settings.configureCommand(context, cmd);
 
   return cmd.generateLink();
 }

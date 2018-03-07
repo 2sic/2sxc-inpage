@@ -13,14 +13,17 @@ import { InstanceContext } from './instance-context/instance-context';
 import { SxcContext } from './instance-context/sxc-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
+import { ToolbarSettings } from '../toolbar2/toolbar/toolbar-settings';
+import { ExpandToolbarConfig } from '../toolbar2/toolbar/toolbar-expand-config';
+import { Commands } from '../toolbar2/command/commands';
 
 /**
  * Primary API to get the context
- * @param context
+ * @param htmlElement
  */
-export function context(context: HTMLElement): ContextOfButton {
+export function context(htmlElement: HTMLElement): ContextOfButton {
 
-  const sxc: SxcInstanceWithInternals = getSxcInstance(context);
+  const sxc: SxcInstanceWithInternals = getSxcInstance(htmlElement);
   const editContext: DataEditContext = getEditContext(sxc);
   // console.log('stv: sxc, editContext', sxc, editContext);
 
@@ -80,11 +83,10 @@ export function context(context: HTMLElement): ContextOfButton {
   // empty
 
   // *** ContextOfToolbar ***
-  contextOfButton.toolbar = new ToolbarConfig();
-  // empty
+  // fill externally
 
   // *** ContextOfButton ***
-  contextOfButton.element = context; // HTMLElement
+  contextOfButton.element = htmlElement; // HTMLElement
   // contextOfButton.button = ButtonConfig; // todo: stv....
 
   // contextOfButton.cmdSpec = cmdSpec;

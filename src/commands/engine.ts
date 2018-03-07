@@ -18,23 +18,24 @@ export class Engine {
 
   // create a dialog link
   // ReSharper disable once InconsistentNaming
-  _linkToNgDialog = (specialSettings: Settings) => {
-    return commandLinkToNgDialog(this.sxc, this.editContext, specialSettings);
-  }
+  // _linkToNgDialog = (specialSettings: Settings) => {
+  //  return commandLinkToNgDialog(this.sxc, this.editContext, specialSettings);
+  // }
 
   // open a new dialog of the angular-ui
   // ReSharper disable once InconsistentNaming
-  _openNgDialog = (settings: Settings, sxc: SxcInstanceWithInternals) => {
-    return commandOpenNgDialog(sxc, this.editContext, settings);
-  }
+  // _openNgDialog = (settings: Settings, sxc: SxcInstanceWithInternals) => {
+  //  return commandOpenNgDialog(sxc, this.editContext, settings);
+  // }
 
-  executeAction = (nameOrSettings, eventOrSettings?: any, event?: any) => {
-    return commandExecuteAction(this.sxc, this.editContext, nameOrSettings, eventOrSettings, event);
-  }
+  // executeAction = (nameOrSettings, eventOrSettings?: any, event?: any) => {
+  //  debugger;
+  //  //return commandExecuteAction(this.sxc, this.editContext, nameOrSettings, eventOrSettings, event);
+  // }
 
   run2 = (context, nameOrSettings, eventOrSettings?: any, event?: any) => {
     // console.log('stv: context', context);
-    return commandExecuteAction(context.sxc.sxc, context.sxc.editContext, nameOrSettings, eventOrSettings, event);
+    return commandExecuteAction(context, nameOrSettings, eventOrSettings, event);
   }
 
 }

@@ -7,7 +7,7 @@ import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 import { toolbarStandardButtons } from './toolbar-standard-buttons';
 
-export function ExpandToolbarConfig(context, allActions: Commands, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
+export function ExpandToolbarConfig(context, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
 
   const editContext: DataEditContext = context.sxc.editContext;
 
@@ -24,7 +24,7 @@ export function ExpandToolbarConfig(context, allActions: Commands, toolbarData: 
   const instanceConfig: InstanceConfig = new InstanceConfig(editContext);
 
   // whatever we had, if more settings were provided, override with these...
-  const config = buildFullDefinition(context, unstructuredConfig, allActions, instanceConfig, toolbarSettings);
+  const config = buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings);
 
   // console.log('stv: fullToolbarConfig', JSON.stringify(config));
   // console.log('stv: fullToolbarConfig', config);
@@ -46,14 +46,14 @@ export function ExpandToolbarConfig(context, allActions: Commands, toolbarData: 
  * @param instanceConfig
  * @param toolbarSettings
  */
-const buildFullDefinition = (context, unstructuredConfig, allActions: Commands, instanceConfig, toolbarSettings: ToolbarSettings) => {
+const buildFullDefinition = (context, unstructuredConfig, instanceConfig, toolbarSettings: ToolbarSettings) => {
 
   const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
 
   // ToDo: don't use console.log in production
   if (unstructuredConfig.debug) console.log('toolbar: detailed debug on; start build full Def');
 
-  expandButtonGroups(fullConfig, allActions);
+  expandButtonGroups(fullConfig);
 
   removeDisableButtons(context, fullConfig, instanceConfig);
 
@@ -79,7 +79,7 @@ const buildFullDefinition = (context, unstructuredConfig, allActions: Commands, 
  * @param unstructuredConfig
  * @param toolbarSettings
  */
-const ensureDefinitionTree = (unstructuredConfig : any, toolbarSettings: ToolbarSettings): ToolbarConfig => {
+const ensureDefinitionTree = (unstructuredConfig: any, toolbarSettings: ToolbarSettings): ToolbarConfig => {
   // original is null/undefined, just return empty set
   if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 
