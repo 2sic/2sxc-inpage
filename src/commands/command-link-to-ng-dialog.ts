@@ -1,4 +1,5 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { ContextOfButton } from '../context/context-of-button';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { commandCreate } from './command-create';
 import { Settings } from './settings';
 
@@ -7,9 +8,8 @@ import { Settings } from './settings';
  * @param sxc
  * @param specialSettings
  */
-export function commandLinkToNgDialog(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): string {
-  const context = null; // todo: stv, provide missing context value
-  const cmd = commandCreate(sxc, editContext, specialSettings);
+export function commandLinkToNgDialog(context: ContextOfButton, specialSettings: Settings): string {
+  const cmd = commandCreate(context, specialSettings);
 
   if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
   else cmd.addSimpleItem();

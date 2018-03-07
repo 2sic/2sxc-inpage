@@ -1,4 +1,5 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { ContextOfButton } from '../context/context-of-button';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { Command } from './command';
 import { Settings } from './settings';
 
@@ -8,17 +9,17 @@ import { Settings } from './settings';
  * @param editContext
  * @param specialSettings
  */
-export function commandCreate(sxc: SxcInstanceWithInternals, editContext: DataEditContext, specialSettings: Settings): Command {
+export function commandCreate(context: ContextOfButton, specialSettings: Settings): Command {
 
-  const settings: Settings = Object.assign(sxc.manage._instanceConfig, specialSettings) as Settings; // merge button with general toolbar-settings
+  const settings: Settings = Object.assign(context.sxc.sxc.manage._instanceConfig, specialSettings) as Settings; // merge button with general toolbar-settings
 
-  const ngDialogUrl: string = editContext.Environment.SxcRootUrl +
+  const ngDialogUrl: string = context.sxc.editContext.Environment.SxcRootUrl +
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-    editContext.Environment.SxcVersion;
+    context.sxc.editContext.Environment.SxcVersion;
 
   const isDebug: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
 
-  const cmd = new Command(sxc, settings, ngDialogUrl, isDebug);
+  const cmd = new Command(context.sxc.sxc, settings, ngDialogUrl, isDebug);
 
   return cmd;
 }

@@ -33,7 +33,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
   const editContext = getEditContext(sxc);
   // ReSharper disable AssignedValueIsNeverUsed
   const userInfo = getUserOfEditContext(editContext);
-  const cmdEngine = instanceEngine(sxc, editContext);
+  const cmdEngine = instanceEngine();
   // ReSharper restore AssignedValueIsNeverUsed
 
   const editManager = new EditManager(sxc, editContext, userInfo, cmdEngine);
@@ -48,13 +48,8 @@ class EditManager {
 
   //#region Official, public properties and commands, which are stable for use from the outside
   /**
-   * run a command - often used in toolbars and custom buttons
+   * run2 a command - new command used in toolbars and custom buttons
    */
-  // run = this.cmdEngine.executeAction;
-
-  /**
-  * run2 a command - new command used in toolbars and custom buttons
-  */
   run2 = this.cmdEngine.run2;
 
   /**

@@ -1,19 +1,21 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { ContextOfButton } from '../context/context-of-button';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { commandCreate } from './command-create';
 import { commandExecuteAction } from './command-execute-action';
 import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Settings } from './settings';
+import { Commands } from '../toolbar2/command/commands';
 
 export class Engine {
-  constructor(public sxc: SxcInstanceWithInternals, public editContext: DataEditContext) { }
+  constructor() {}
 
-  commands = commandInitializeInstanceCommands(this.editContext);
+  commands = Commands.getInstance;
 
   // assemble an object which will store the configuration and execute it
-  create = (specialSettings: Settings) => {
-    return commandCreate(this.sxc, this.editContext, specialSettings);
+  create = (context: ContextOfButton, specialSettings: Settings) => {
+    return commandCreate(context, specialSettings);
   }
 
   // create a dialog link
@@ -40,6 +42,6 @@ export class Engine {
 
 }
 
-export function instanceEngine(sxc: SxcInstanceWithInternals, editContext: DataEditContext): Engine {
-  return new Engine(sxc, editContext);
+export function instanceEngine(): Engine {
+  return new Engine();
 }

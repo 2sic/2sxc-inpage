@@ -70,7 +70,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var expand_button_config_1 = __webpack_require__(17);
+var expand_button_config_1 = __webpack_require__(16);
 var command_definition_1 = __webpack_require__(76);
 var CommandBase = /** @class */ (function () {
     function CommandBase() {
@@ -177,7 +177,7 @@ exports.buildNgDialogParams = buildNgDialogParams;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var positioning_1 = __webpack_require__(26);
+var positioning_1 = __webpack_require__(27);
 /**
  * the quick-edit object
  * the quick-insert object
@@ -480,13 +480,13 @@ exports.context = context;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var A_BuildToolbars = __webpack_require__(20);
-var A_GenerateButtonHtml = __webpack_require__(14);
+var A_GenerateButtonHtml = __webpack_require__(13);
 var A_GenerateToolbarHtml = __webpack_require__(11);
-var A_ToolbarManager = __webpack_require__(30);
-var B_BuildToolbars = __webpack_require__(31);
-var B_GenerateButtonHtml = __webpack_require__(16);
-var B_GenerateToolbarHtml = __webpack_require__(15);
-var B_ToolbarManager = __webpack_require__(33);
+var A_ToolbarManager = __webpack_require__(31);
+var B_BuildToolbars = __webpack_require__(32);
+var B_GenerateButtonHtml = __webpack_require__(15);
+var B_GenerateToolbarHtml = __webpack_require__(14);
+var B_ToolbarManager = __webpack_require__(34);
 var ab_testing_config_1 = __webpack_require__(43);
 exports._toolbarManager = (ab_testing_config_1.isA) ? A_ToolbarManager._toolbarManager : B_ToolbarManager._toolbarManager;
 exports.disable = (ab_testing_config_1.isA) ? A_BuildToolbars.disable : B_BuildToolbars.disable;
@@ -505,10 +505,10 @@ exports.generateToolbarHtml = (ab_testing_config_1.isA) ? A_GenerateToolbarHtml.
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(1);
 var quick_dialog_1 = __webpack_require__(10);
-var start_1 = __webpack_require__(25);
+var start_1 = __webpack_require__(26);
 var toolbar_feature_1 = __webpack_require__(8);
-var main_content_block_1 = __webpack_require__(23);
-var web_api_promises_1 = __webpack_require__(24);
+var main_content_block_1 = __webpack_require__(24);
+var web_api_promises_1 = __webpack_require__(25);
 /*
  * this is the content block manager in the browser
  *
@@ -602,9 +602,9 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var main_content_block_1 = __webpack_require__(23);
+var main_content_block_1 = __webpack_require__(24);
 var render_1 = __webpack_require__(9);
-var templates_1 = __webpack_require__(13);
+var templates_1 = __webpack_require__(12);
 var api_1 = __webpack_require__(1);
 var context_1 = __webpack_require__(7);
 /**
@@ -845,11 +845,11 @@ function watchForResize(keepWatching) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_initialize_instance_commands_1 = __webpack_require__(12);
+var command_initialize_instance_commands_1 = __webpack_require__(22);
 var api_1 = __webpack_require__(1);
-var generate_button_html_1 = __webpack_require__(14);
+var generate_button_html_1 = __webpack_require__(13);
 var buttonHelpers = __webpack_require__(67);
-var standard_buttons_1 = __webpack_require__(28);
+var standard_buttons_1 = __webpack_require__(29);
 function generateToolbarHtml(sxc, tbConfig, moreSettings) {
     // if it has an action or is an array, keep that. Otherwise get standard buttons
     tbConfig = tbConfig || {}; // if null/undefined, use empty object
@@ -888,34 +888,10 @@ exports.generateToolbarHtml = generateToolbarHtml;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var action_create_1 = __webpack_require__(22);
-function commandInitializeInstanceCommands(editContext) {
-    var cg = editContext.ContentGroup;
-    return action_create_1.create({
-        canDesign: editContext.User.CanDesign,
-        templateId: cg.TemplateId,
-        contentTypeId: cg.ContentTypeName,
-        isContent: cg.IsContent,
-        queryId: cg.QueryId,
-        appResourcesId: cg.AppResourcesId,
-        appSettingsId: cg.AppSettingsId,
-        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed,
-    });
-}
-exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var quick_dialog_1 = __webpack_require__(10);
 var toolbar_feature_1 = __webpack_require__(8);
 var render_1 = __webpack_require__(9);
-var web_api_promises_1 = __webpack_require__(24);
+var web_api_promises_1 = __webpack_require__(25);
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
@@ -984,7 +960,7 @@ exports.updateTemplate = updateTemplate;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1034,14 +1010,14 @@ exports.generateButtonHtml = generateButtonHtml;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var render_groups_1 = __webpack_require__(68);
-var render_helpers_1 = __webpack_require__(32);
+var render_helpers_1 = __webpack_require__(33);
 function renderToolbar(context) {
     // render groups of buttons
     var groups = render_groups_1.renderGroups(context);
@@ -1068,13 +1044,13 @@ exports.renderToolbar = renderToolbar;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_helpers_1 = __webpack_require__(32);
+var render_helpers_1 = __webpack_require__(33);
 /**
  * generate the html for a button
  * @param sxc instance sxc
@@ -1134,7 +1110,7 @@ function flattenActionDefinition(actDef) {
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1270,6 +1246,108 @@ function customize(toolbar) {
     // }
 }
 exports.customize = customize;
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var add_1 = __webpack_require__(75);
+var app_1 = __webpack_require__(77);
+var app_import_1 = __webpack_require__(78);
+var app_resources_1 = __webpack_require__(79);
+var app_settings_1 = __webpack_require__(80);
+var content_items_1 = __webpack_require__(81);
+var content_type_1 = __webpack_require__(82);
+var custom_1 = __webpack_require__(83);
+var delete_1 = __webpack_require__(84);
+var edit_1 = __webpack_require__(85);
+var instance_list_1 = __webpack_require__(86);
+var item_history_1 = __webpack_require__(87);
+var layout_1 = __webpack_require__(88);
+var metadata_1 = __webpack_require__(89);
+var more_1 = __webpack_require__(90);
+var movedown_1 = __webpack_require__(91);
+var moveup_1 = __webpack_require__(92);
+var new_1 = __webpack_require__(93);
+var publish_1 = __webpack_require__(94);
+var remove_1 = __webpack_require__(95);
+var replace_1 = __webpack_require__(96);
+var template_develop_1 = __webpack_require__(97);
+var template_query_1 = __webpack_require__(98);
+var template_settings_1 = __webpack_require__(99);
+var zone_1 = __webpack_require__(100);
+var Commands = /** @class */ (function () {
+    function Commands() {
+        var _this = this;
+        this.commandList = [];
+        this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
+        this.get = function (name) { return _this.list[name]; }; // a specific action definition
+        this.addDef = function (def) {
+            _this.commandList.push(def);
+            _this.list[def.name] = def;
+        };
+        this.create = function () {
+            // open the import dialog
+            _this.addDef(new app_import_1.AppImport().commandDefinition);
+            // open an edit-item dialog
+            _this.addDef(new edit_1.Edit().commandDefinition);
+            // new is a dialog to add something, and will not add if cancelled
+            // new can also be used for mini-toolbars which just add an entity not attached to a module
+            // in that case it's essential to add a contentType like
+            // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
+            _this.addDef(new new_1.New().commandDefinition);
+            // add brings no dialog, just add an empty item
+            _this.addDef(new add_1.Add().commandDefinition);
+            // create a metadata toolbar
+            _this.addDef(new metadata_1.Metadata().commandDefinition);
+            // remove an item from the placeholder (usually for lists)
+            _this.addDef(new remove_1.Remove().commandDefinition);
+            // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
+            _this.addDef(new delete_1.Delete().commandDefinition);
+            _this.addDef(new moveup_1.MoveUp().commandDefinition);
+            _this.addDef(new movedown_1.MoveDown().commandDefinition);
+            _this.addDef(new instance_list_1.InstanceList().commandDefinition);
+            // todo: shouldn't be available if changes are not allowed
+            _this.addDef(new publish_1.Publish().commandDefinition);
+            _this.addDef(new replace_1.Replace().commandDefinition);
+            //#region app-actions: app-settings, app-resources
+            _this.addDef(new app_settings_1.AppSettings().commandDefinition);
+            _this.addDef(new app_resources_1.AppResources().commandDefinition);
+            //#endregion
+            //#region app & zone
+            _this.addDef(new app_1.App().commandDefinition);
+            _this.addDef(new zone_1.Zone().commandDefinition);
+            //#endregion
+            //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
+            _this.addDef(new content_type_1.ContentType().commandDefinition);
+            _this.addDef(new content_items_1.ContentItems().commandDefinition);
+            _this.addDef(new template_develop_1.TemplateDevelop().commandDefinition);
+            _this.addDef(new template_query_1.TemplateQuery().commandDefinition);
+            _this.addDef(new template_settings_1.TemplateSettings().commandDefinition);
+            //#endregion template commands
+            //#region custom code buttons
+            _this.addDef(new custom_1.Custom().commandDefinition);
+            //#endregion
+            _this.addDef(new layout_1.Layout().commandDefinition);
+            _this.addDef(new more_1.More().commandDefinition);
+            // show the version dialog
+            _this.addDef(new item_history_1.ItemHistory().commandDefinition);
+        };
+        this.create();
+    }
+    Commands.getInstance = function () {
+        if (!Commands.instance) {
+            Commands.instance = new Commands();
+        }
+        return Commands.instance;
+    };
+    return Commands;
+}());
+exports.Commands = Commands;
 
 
 /***/ }),
@@ -1541,7 +1619,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(1);
 var sxc_1 = __webpack_require__(3);
 var generate_toolbar_html_1 = __webpack_require__(11);
-var toolbar_manager_1 = __webpack_require__(30);
+var toolbar_manager_1 = __webpack_require__(31);
 // quick debug - set to false if not needed for production
 var dbg = false;
 // default / fallback settings for toolbars when nothings is specified
@@ -1662,8 +1740,32 @@ exports.InstanceConfig = InstanceConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var action_create_1 = __webpack_require__(23);
+function commandInitializeInstanceCommands(editContext) {
+    var cg = editContext.ContentGroup;
+    return action_create_1.create({
+        canDesign: editContext.User.CanDesign,
+        templateId: cg.TemplateId,
+        contentTypeId: cg.ContentTypeName,
+        isContent: cg.IsContent,
+        queryId: cg.QueryId,
+        appResourcesId: cg.AppResourcesId,
+        appSettingsId: cg.AppSettingsId,
+        allowPublish: editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed,
+    });
+}
+exports.commandInitializeInstanceCommands = commandInitializeInstanceCommands;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(6);
-var item_commands_1 = __webpack_require__(27);
+var item_commands_1 = __webpack_require__(28);
 var _2sxc_translate_1 = __webpack_require__(5);
 var make_def_1 = __webpack_require__(66);
 /*
@@ -1971,13 +2073,13 @@ exports.create = create;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(13);
+var templates_1 = __webpack_require__(12);
 /*
  * this is a content block in the browser
  *
@@ -2012,7 +2114,7 @@ exports._contentBlock = new MainContentBlock();
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2091,14 +2193,14 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = __webpack_require__(64);
-var positioning_1 = __webpack_require__(26);
+var positioning_1 = __webpack_require__(27);
 var quick_e_1 = __webpack_require__(2);
 var selectors_instance_1 = __webpack_require__(4);
 function enable() {
@@ -2166,7 +2268,7 @@ exports.reset = reset;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2328,7 +2430,7 @@ exports.getCoordinates = getCoordinates;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2365,13 +2467,13 @@ exports.contentItems = {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_template_1 = __webpack_require__(29);
+var toolbar_template_1 = __webpack_require__(30);
 /**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
@@ -2390,7 +2492,7 @@ exports.standardButtons = standardButtons;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2457,17 +2559,17 @@ exports.toolbarTemplate = {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(20);
-var generate_button_html_1 = __webpack_require__(14);
+var generate_button_html_1 = __webpack_require__(13);
 var generate_toolbar_html_1 = __webpack_require__(11);
-var standard_buttons_1 = __webpack_require__(28);
-var toolbar_template_1 = __webpack_require__(29);
+var standard_buttons_1 = __webpack_require__(29);
+var toolbar_template_1 = __webpack_require__(30);
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
@@ -2493,7 +2595,7 @@ exports._toolbarManager = new ToolbarManager();
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2501,8 +2603,8 @@ exports._toolbarManager = new ToolbarManager();
 Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = __webpack_require__(7);
 var api_1 = __webpack_require__(1);
-var render_toolbar_1 = __webpack_require__(15);
-var toolbar_manager_1 = __webpack_require__(33);
+var render_toolbar_1 = __webpack_require__(14);
+var toolbar_manager_1 = __webpack_require__(34);
 var toolbar_expand_config_1 = __webpack_require__(71);
 var toolbar_settings_1 = __webpack_require__(37);
 // quick debug - set to false if not needed for production
@@ -2585,7 +2687,7 @@ exports.isDisabled = isDisabled;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2611,17 +2713,17 @@ exports.addClasses = addClasses;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var build_toolbars_1 = __webpack_require__(31);
-var render_button_1 = __webpack_require__(16);
-var render_toolbar_1 = __webpack_require__(15);
-var toolbar_config_templates_1 = __webpack_require__(34);
-var toolbar_standard_buttons_1 = __webpack_require__(35);
+var build_toolbars_1 = __webpack_require__(32);
+var render_button_1 = __webpack_require__(15);
+var render_toolbar_1 = __webpack_require__(14);
+var toolbar_config_templates_1 = __webpack_require__(35);
+var toolbar_standard_buttons_1 = __webpack_require__(36);
 /**
  * Toolbar manager for the whole page - basically a set of APIs
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
@@ -2647,7 +2749,7 @@ exports._toolbarManager = new ToolbarManager();
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2676,13 +2778,13 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_config_templates_1 = __webpack_require__(34);
+var toolbar_config_templates_1 = __webpack_require__(35);
 /**
  * the toolbar manager is an internal helper
  * taking care of toolbars, buttons etc.
@@ -2700,108 +2802,6 @@ function toolbarStandardButtons(canDesign, sharedParameters) {
     return btns;
 }
 exports.toolbarStandardButtons = toolbarStandardButtons;
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var add_1 = __webpack_require__(75);
-var app_1 = __webpack_require__(77);
-var app_import_1 = __webpack_require__(78);
-var app_resources_1 = __webpack_require__(79);
-var app_settings_1 = __webpack_require__(80);
-var content_items_1 = __webpack_require__(81);
-var content_type_1 = __webpack_require__(82);
-var custom_1 = __webpack_require__(83);
-var delete_1 = __webpack_require__(84);
-var edit_1 = __webpack_require__(85);
-var instance_list_1 = __webpack_require__(86);
-var item_history_1 = __webpack_require__(87);
-var layout_1 = __webpack_require__(88);
-var metadata_1 = __webpack_require__(89);
-var more_1 = __webpack_require__(90);
-var movedown_1 = __webpack_require__(91);
-var moveup_1 = __webpack_require__(92);
-var new_1 = __webpack_require__(93);
-var publish_1 = __webpack_require__(94);
-var remove_1 = __webpack_require__(95);
-var replace_1 = __webpack_require__(96);
-var template_develop_1 = __webpack_require__(97);
-var template_query_1 = __webpack_require__(98);
-var template_settings_1 = __webpack_require__(99);
-var zone_1 = __webpack_require__(100);
-var Commands = /** @class */ (function () {
-    function Commands() {
-        var _this = this;
-        this.commandList = [];
-        this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
-        this.get = function (name) { return _this.list[name]; }; // a specific action definition
-        this.addDef = function (def) {
-            _this.commandList.push(def);
-            _this.list[def.name] = def;
-        };
-        this.create = function () {
-            // open the import dialog
-            _this.addDef(new app_import_1.AppImport().commandDefinition);
-            // open an edit-item dialog
-            _this.addDef(new edit_1.Edit().commandDefinition);
-            // new is a dialog to add something, and will not add if cancelled
-            // new can also be used for mini-toolbars which just add an entity not attached to a module
-            // in that case it's essential to add a contentType like
-            // <ul class="sc-menu" data-toolbar='{"action":"new", "contentType": "Category"}'></ul>
-            _this.addDef(new new_1.New().commandDefinition);
-            // add brings no dialog, just add an empty item
-            _this.addDef(new add_1.Add().commandDefinition);
-            // create a metadata toolbar
-            _this.addDef(new metadata_1.Metadata().commandDefinition);
-            // remove an item from the placeholder (usually for lists)
-            _this.addDef(new remove_1.Remove().commandDefinition);
-            // todo: work in progress related to https://github.com/2sic/2sxc/issues/618
-            _this.addDef(new delete_1.Delete().commandDefinition);
-            _this.addDef(new moveup_1.MoveUp().commandDefinition);
-            _this.addDef(new movedown_1.MoveDown().commandDefinition);
-            _this.addDef(new instance_list_1.InstanceList().commandDefinition);
-            // todo: shouldn't be available if changes are not allowed
-            _this.addDef(new publish_1.Publish().commandDefinition);
-            _this.addDef(new replace_1.Replace().commandDefinition);
-            //#region app-actions: app-settings, app-resources
-            _this.addDef(new app_settings_1.AppSettings().commandDefinition);
-            _this.addDef(new app_resources_1.AppResources().commandDefinition);
-            //#endregion
-            //#region app & zone
-            _this.addDef(new app_1.App().commandDefinition);
-            _this.addDef(new zone_1.Zone().commandDefinition);
-            //#endregion
-            //#region template commands: contenttype, contentitems, template-query, template-develop, template-settings
-            _this.addDef(new content_type_1.ContentType().commandDefinition);
-            _this.addDef(new content_items_1.ContentItems().commandDefinition);
-            _this.addDef(new template_develop_1.TemplateDevelop().commandDefinition);
-            _this.addDef(new template_query_1.TemplateQuery().commandDefinition);
-            _this.addDef(new template_settings_1.TemplateSettings().commandDefinition);
-            //#endregion template commands
-            //#region custom code buttons
-            _this.addDef(new custom_1.Custom().commandDefinition);
-            //#endregion
-            _this.addDef(new layout_1.Layout().commandDefinition);
-            _this.addDef(new more_1.More().commandDefinition);
-            // show the version dialog
-            _this.addDef(new item_history_1.ItemHistory().commandDefinition);
-        };
-        this.create();
-    }
-    Commands.getInstance = function () {
-        if (!Commands.instance) {
-            Commands.instance = new Commands();
-        }
-        return Commands.instance;
-    };
-    return Commands;
-}());
-exports.Commands = Commands;
 
 
 /***/ }),
@@ -2849,13 +2849,13 @@ var command_1 = __webpack_require__(102);
  * @param editContext
  * @param specialSettings
  */
-function commandCreate(sxc, editContext, specialSettings) {
-    var settings = Object.assign(sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
-    var ngDialogUrl = editContext.Environment.SxcRootUrl +
+function commandCreate(context, specialSettings) {
+    var settings = Object.assign(context.sxc.sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+    var ngDialogUrl = context.sxc.editContext.Environment.SxcRootUrl +
         'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-        editContext.Environment.SxcVersion;
+        context.sxc.editContext.Environment.SxcVersion;
     var isDebug = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-    var cmd = new command_1.Command(sxc, settings, ngDialogUrl, isDebug);
+    var cmd = new command_1.Command(context.sxc.sxc, settings, ngDialogUrl, isDebug);
     return cmd;
 }
 exports.commandCreate = commandCreate;
@@ -2870,16 +2870,13 @@ exports.commandCreate = commandCreate;
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_create_1 = __webpack_require__(38);
 var command_execute_action_1 = __webpack_require__(103);
-var command_initialize_instance_commands_1 = __webpack_require__(12);
+var commands_1 = __webpack_require__(17);
 var Engine = /** @class */ (function () {
-    function Engine(sxc, editContext) {
-        var _this = this;
-        this.sxc = sxc;
-        this.editContext = editContext;
-        this.commands = command_initialize_instance_commands_1.commandInitializeInstanceCommands(this.editContext);
+    function Engine() {
+        this.commands = commands_1.Commands.getInstance;
         // assemble an object which will store the configuration and execute it
-        this.create = function (specialSettings) {
-            return command_create_1.commandCreate(_this.sxc, _this.editContext, specialSettings);
+        this.create = function (context, specialSettings) {
+            return command_create_1.commandCreate(context, specialSettings);
         };
         // create a dialog link
         // ReSharper disable once InconsistentNaming
@@ -2903,8 +2900,8 @@ var Engine = /** @class */ (function () {
     return Engine;
 }());
 exports.Engine = Engine;
-function instanceEngine(sxc, editContext) {
-    return new Engine(sxc, editContext);
+function instanceEngine() {
+    return new Engine();
 }
 exports.instanceEngine = instanceEngine;
 
@@ -3774,7 +3771,7 @@ exports.evalPropOrFunction = function (propOrFunction, settings, config, fallbac
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_button_1 = __webpack_require__(16);
+var render_button_1 = __webpack_require__(15);
 /**
  * render groups of buttons in toolbar
  * @param sxc
@@ -3891,11 +3888,11 @@ exports.leftToolbarTemplate = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var instance_config_1 = __webpack_require__(21);
-var expand_button_config_1 = __webpack_require__(17);
+var expand_button_config_1 = __webpack_require__(16);
 var expand_group_config_1 = __webpack_require__(72);
 var toolbar_config_1 = __webpack_require__(101);
 var toolbar_settings_1 = __webpack_require__(37);
-var toolbar_standard_buttons_1 = __webpack_require__(35);
+var toolbar_standard_buttons_1 = __webpack_require__(36);
 function ExpandToolbarConfig(context, toolbarData, toolbarSettings) {
     var editContext = context.sxc.editContext;
     if (toolbarData === {} && toolbarSettings === {})
@@ -3999,8 +3996,8 @@ var ensureDefinitionTree = function (unstructuredConfig, toolbarSettings) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var button_action_1 = __webpack_require__(73);
 var button_config_1 = __webpack_require__(74);
-var commands_1 = __webpack_require__(36);
-var expand_button_config_1 = __webpack_require__(17);
+var commands_1 = __webpack_require__(17);
+var expand_button_config_1 = __webpack_require__(16);
 //export function ExpandGroupConfig(context, config: GroupConfig): GroupConfig {
 //  // todo
 //  return config;
@@ -4552,7 +4549,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_commands_1 = __webpack_require__(27);
+var item_commands_1 = __webpack_require__(28);
 var command_base_1 = __webpack_require__(0);
 /**
  * todo: work in progress related to https://github.com/2sic/2sxc/issues/618
@@ -5357,8 +5354,8 @@ exports.Command = Command;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(13);
-var commands_1 = __webpack_require__(36);
+var templates_1 = __webpack_require__(12);
+var commands_1 = __webpack_require__(17);
 var command_open_ng_dialog_1 = __webpack_require__(104);
 // ToDo: remove dead code
 function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
@@ -5413,16 +5410,16 @@ var command_link_to_ng_dialog_1 = __webpack_require__(105);
  * @param sxc
  * @param editContext
  */
-function commandOpenNgDialog(contextParam, settings) {
+function commandOpenNgDialog(context, settings) {
     // the callback will handle events after closing the dialog
     // and reload the in-page view w/ajax or page reload
     var callback = function () {
-        render_1.reloadAndReInitialize(contextParam.sxc.sxc);
+        render_1.reloadAndReInitialize(context.sxc.sxc);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
     };
-    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(contextParam.sxc.sxc, contextParam.sxc.editContext, settings); // the link contains everything to open a full dialog (lots of params added)
+    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context, settings); // the link contains everything to open a full dialog (lots of params added)
     if (settings.inlineWindow)
-        return quick_dialog_1.showOrToggle(contextParam.sxc.sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
     if (settings.newWindow /*|| (event && event.shiftKey)*/)
         return window.open(link);
     return $2sxc.totalPopup.open(link, callback);
@@ -5443,9 +5440,8 @@ var command_create_1 = __webpack_require__(38);
  * @param sxc
  * @param specialSettings
  */
-function commandLinkToNgDialog(sxc, editContext, specialSettings) {
-    var context = null; // todo: stv, provide missing context value
-    var cmd = command_create_1.commandCreate(sxc, editContext, specialSettings);
+function commandLinkToNgDialog(context, specialSettings) {
+    var cmd = command_create_1.commandCreate(context, specialSettings);
     if (cmd.settings.useModuleList)
         cmd.addContentGroupItemSetsToEditList(true);
     else
@@ -5465,8 +5461,8 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var action_create_1 = __webpack_require__(22);
-var command_initialize_instance_commands_1 = __webpack_require__(12);
+var action_create_1 = __webpack_require__(23);
+var command_initialize_instance_commands_1 = __webpack_require__(22);
 var engine_1 = __webpack_require__(39);
 var Commands = /** @class */ (function () {
     function Commands() {
@@ -5652,7 +5648,7 @@ function _initInstance(sxc) {
     var editContext = api_1.getEditContext(sxc);
     // ReSharper disable AssignedValueIsNeverUsed
     var userInfo = api_1.getUserOfEditContext(editContext);
-    var cmdEngine = engine_1.instanceEngine(sxc, editContext);
+    var cmdEngine = engine_1.instanceEngine();
     // ReSharper restore AssignedValueIsNeverUsed
     var editManager = new EditManager(sxc, editContext, userInfo, cmdEngine);
     editManager.init();
@@ -5672,8 +5668,8 @@ var EditManager = /** @class */ (function () {
          */
         // run = this.cmdEngine.executeAction;
         /**
-        * run2 a command - new command used in toolbars and custom buttons
-        */
+         * run2 a command - new command used in toolbars and custom buttons
+         */
         this.run2 = this.cmdEngine.run2;
         /**
          * Generate a button (an <a>-tag) for one specific toolbar-action.
@@ -6036,12 +6032,12 @@ __webpack_require__(117);
 __webpack_require__(118);
 __webpack_require__(43);
 __webpack_require__(8);
-__webpack_require__(22);
+__webpack_require__(23);
 __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(38);
 __webpack_require__(103);
-__webpack_require__(12);
+__webpack_require__(22);
 __webpack_require__(105);
 __webpack_require__(104);
 __webpack_require__(102);
@@ -6054,13 +6050,13 @@ __webpack_require__(123);
 __webpack_require__(124);
 __webpack_require__(125);
 __webpack_require__(6);
-__webpack_require__(23);
+__webpack_require__(24);
 __webpack_require__(126);
 __webpack_require__(107);
 __webpack_require__(9);
-__webpack_require__(13);
+__webpack_require__(12);
 __webpack_require__(127);
-__webpack_require__(24);
+__webpack_require__(25);
 __webpack_require__(58);
 __webpack_require__(47);
 __webpack_require__(48);
@@ -6089,7 +6085,7 @@ __webpack_require__(134);
 __webpack_require__(135);
 __webpack_require__(136);
 __webpack_require__(137);
-__webpack_require__(27);
+__webpack_require__(28);
 __webpack_require__(138);
 __webpack_require__(139);
 __webpack_require__(140);
@@ -6124,32 +6120,32 @@ __webpack_require__(156);
 __webpack_require__(19);
 __webpack_require__(115);
 __webpack_require__(157);
-__webpack_require__(26);
+__webpack_require__(27);
 __webpack_require__(2);
 __webpack_require__(4);
 __webpack_require__(158);
 __webpack_require__(159);
-__webpack_require__(25);
+__webpack_require__(26);
 __webpack_require__(20);
-__webpack_require__(14);
+__webpack_require__(13);
 __webpack_require__(11);
 __webpack_require__(67);
 __webpack_require__(160);
-__webpack_require__(28);
-__webpack_require__(161);
-__webpack_require__(30);
-__webpack_require__(162);
 __webpack_require__(29);
+__webpack_require__(161);
 __webpack_require__(31);
+__webpack_require__(162);
+__webpack_require__(30);
+__webpack_require__(32);
 __webpack_require__(73);
 __webpack_require__(74);
 __webpack_require__(163);
-__webpack_require__(17);
+__webpack_require__(16);
 __webpack_require__(72);
 __webpack_require__(164);
 __webpack_require__(0);
 __webpack_require__(76);
-__webpack_require__(36);
+__webpack_require__(17);
 __webpack_require__(75);
 __webpack_require__(78);
 __webpack_require__(79);
@@ -6177,20 +6173,20 @@ __webpack_require__(99);
 __webpack_require__(100);
 __webpack_require__(165);
 __webpack_require__(166);
-__webpack_require__(16);
-__webpack_require__(68);
-__webpack_require__(32);
 __webpack_require__(15);
-__webpack_require__(167);
+__webpack_require__(68);
 __webpack_require__(33);
+__webpack_require__(14);
+__webpack_require__(167);
+__webpack_require__(34);
 __webpack_require__(69);
 __webpack_require__(70);
 __webpack_require__(168);
-__webpack_require__(34);
+__webpack_require__(35);
 __webpack_require__(101);
 __webpack_require__(71);
 __webpack_require__(37);
-__webpack_require__(35);
+__webpack_require__(36);
 __webpack_require__(111);
 __webpack_require__(5);
 __webpack_require__(112);
@@ -6593,7 +6589,7 @@ var commands_1 = __webpack_require__(106);
 var context_1 = __webpack_require__(7);
 var manage_1 = __webpack_require__(108);
 var quick_e_1 = __webpack_require__(2);
-var start_1 = __webpack_require__(25);
+var start_1 = __webpack_require__(26);
 var _2sxc__translateInit_1 = __webpack_require__(111);
 __webpack_require__(112);
 $2sxc.context = context_1.context; // primary API to get the context
