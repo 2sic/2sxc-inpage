@@ -35,6 +35,8 @@ export class NgDialogParams {
     this.publishing = editContext.ContentBlock.VersioningRequirements;
     // todo= probably move the user into the dashboard info
     this.user = getUserOfEditContext(editContext);
-    this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
+    this.approot =
+      editContext.ContentGroup.AppUrl ||
+      null; // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
   }
 }

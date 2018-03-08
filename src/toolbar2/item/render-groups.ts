@@ -1,5 +1,4 @@
 ﻿import { ContextOfButton } from '../../context/context-of-button';
-import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { renderButton } from './render-button';
 
 /**

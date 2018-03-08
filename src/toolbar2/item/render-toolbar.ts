@@ -1,5 +1,4 @@
 ﻿import { ContextOfButton } from '../../context/context-of-button';
-import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { renderGroups } from './render-groups';
 import { addClasses } from './render-helpers';
 
@@ -18,7 +17,8 @@ export function renderToolbar(context: ContextOfButton): string {
     toolbar.classList.add('listContent');
   }
   addClasses(toolbar, context.toolbar.settings.classes, ' ');
-  toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; e.stopPropagation();'); // serialize JavaScript because of ajax
+  toolbar.setAttribute('onclick',
+    'var e = arguments[0] || window.event; e.stopPropagation();'); // serialize JavaScript because of ajax
 
   // add button groups to toolbar
   toolbar.setAttribute('group-count', context.toolbar.groups.length.toString());

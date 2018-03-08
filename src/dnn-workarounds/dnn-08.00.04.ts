@@ -16,9 +16,7 @@
   const fn = $.fn.attr;
   $.fn.attr = function() {
     const val = fn.apply(this, arguments);
-    if (arguments[0] !== 'class'
-      || typeof val !== 'string'
-      || val.search('DnnModule-2sxc ') === -1) return val;
+    if (arguments[0] !== 'class' || typeof val !== 'string' || val.search('DnnModule-2sxc ') === -1) return val;
     return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';
   };
 })();

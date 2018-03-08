@@ -17,7 +17,8 @@ export const selectors = {
     id: 'mod',
     'class': 'DnnModule',
     selector: '.DnnModule',
-    listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)', // Found no better way to get all panes - the hidden variable does not exist when not in edit page mode
+    listSelector:
+      '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)', // Found no better way to get all panes - the hidden variable does not exist when not in edit page mode
     context: null,
   } as CbOrMod,
   eitherCbOrMod: '.DnnModule, .sc-content-block',

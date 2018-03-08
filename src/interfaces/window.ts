@@ -9,4 +9,5 @@ interface Window {
   $2sxcActionMenuMapper: any; // (moduleId: number) => ActionMenuMapper,
 }
 // ReSharper restore InconsistentNaming
+
 declare let windows: Window;

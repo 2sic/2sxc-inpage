@@ -8,5 +8,6 @@ export class Selectors {
   mod: CbOrMod;
   eitherCbOrMod: string;
   selected: string;
+
   [propName: string]: any;
 }

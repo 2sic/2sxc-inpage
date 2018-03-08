@@ -6,10 +6,10 @@
       throw new TypeError('Cannot convert undefined or null to object');
     }
 
-    let to = Object(target);
+    const to = Object(target);
 
     for (let index = 1; index < arguments.length; index++) {
-      let nextSource = arguments[index];
+      const nextSource = arguments[index];
 
       if (nextSource !== null) { // Skip over if undefined or null
         for (let nextKey in nextSource) {

@@ -25,7 +25,7 @@ document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(f
 // return; // avoid side-effects
 
 function initAllModules(isFirstRun: boolean): void {
-  $('div[data-edit-context]').each(function () {
+  $('div[data-edit-context]').each(function() {
     initModule(this, isFirstRun);
   });
   tryShowTemplatePicker();
@@ -92,13 +92,15 @@ function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals) {
   // note: title is added on mouseover, as the translation isn't ready at page-load
   const btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
 
-  btn.on('click', (): void => {
-    sxci.manage.run2(context(tag), 'layout');
-  });
+  btn.on('click',
+    (): void => {
+      sxci.manage.run2(context(tag), 'layout');
+    });
 
-  btn.on('mouseover', (): void => {
-    btn.title = translate(btn.title);
-  });
+  btn.on('mouseover',
+    (): void => {
+      btn.title = translate(btn.title);
+    });
 
   tag.append(btn);
   return true;

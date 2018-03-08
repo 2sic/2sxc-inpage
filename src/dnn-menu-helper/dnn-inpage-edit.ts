@@ -10,7 +10,7 @@ export class ActionMenuMapper {
   private tag: HTMLElement;
 
   constructor(moduleId: number) {
-    const sxc: SxcInstanceWithInternals = getSxcInstance(moduleId) as SxcInstanceWithInternals;
+    const sxc = getSxcInstance(moduleId) as SxcInstanceWithInternals;
     this.tag = getTag(sxc);
     this.run = sxc.manage.run2;
   }

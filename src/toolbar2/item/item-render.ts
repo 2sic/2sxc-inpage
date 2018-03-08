@@ -3,4 +3,3 @@
   group: (groupConfig: any) => {};
   toolbar: (toolbarConfig: any) => {};
 }
-

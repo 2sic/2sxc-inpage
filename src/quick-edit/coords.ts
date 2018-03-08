@@ -5,5 +5,6 @@
     public w?: number,
     public yh?: number,
     public element?: any,
-  ) { }
+  ) {
+  }
 }

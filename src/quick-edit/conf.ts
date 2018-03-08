@@ -6,6 +6,8 @@
   modules: {
     enable: boolean | string | null;
   };
+
   getAttribute?(configAttr: string): any;
+
   guid?: string;
 }

@@ -43,7 +43,8 @@ export function removeFromList(sxc: SxcInstanceWithInternals, sortOrder: number)
  * @returns {}
  */
 export function changeOrder(sxc: SxcInstanceWithInternals, initOrder: number, newOrder: number): any {
-  return getAndReload(sxc, 'view/module/changeorder',
+  return getAndReload(sxc,
+    'view/module/changeorder',
     { sortOrder: initOrder, destinationSortOrder: newOrder } as ActionParams);
 }
 

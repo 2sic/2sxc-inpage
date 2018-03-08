@@ -33,23 +33,25 @@ function xhrError(xhr: any, optionalMessage: string): void {
 
 // service calls we'll need
 function createModWithTypeName(paneName: string, index: number, type: string): any {
-  return sendDnnAjax(null, 'controlbar/GetPortalDesktopModules', {
-    data: 'category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=',
-    success: (desktopModules: any) => {
-      const moduleToFind: string = type === 'Default' ? ' Content' : ' App';
-      let module: any = null;
+  return sendDnnAjax(null,
+    'controlbar/GetPortalDesktopModules',
+    {
+      data: 'category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=',
+      success: (desktopModules: any) => {
+        const moduleToFind: string = type === 'Default' ? ' Content' : ' App';
+        let module: any = null;
 
-      // ReSharper disable once UnusedParameter
-      desktopModules.forEach((e: any, i: any) => {
-        if (e.ModuleName === moduleToFind)
-          module = e;
-      });
+        // ReSharper disable once UnusedParameter
+        desktopModules.forEach((e: any, i: any) => {
+          if (e.ModuleName === moduleToFind)
+            module = e;
+        });
 
-      return (!module)
-        ? alert(moduleToFind + ' module not found.')
-        : createMod(paneName, index, module.ModuleID);
-    },
-  });
+        return (!module)
+          ? alert(moduleToFind + ' module not found.')
+          : createMod(paneName, index, module.ModuleID);
+      },
+    });
 }
 
 // move a dnn module
@@ -60,14 +62,17 @@ function moveMod(modId: number, pane: string, order: number): any {
     TabId: tabId,
     ModuleId: modId,
     Pane: pane,
-    ModuleOrder: (2 * order + 4), // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
+    ModuleOrder: (2 * order + 4
+    ), // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
   };
 
-  sendDnnAjax(modId, 'ModuleService/MoveModule', {
-    type: 'POST',
-    data: dataVar,
-    success: () => window.location.reload(),
-  });
+  sendDnnAjax(modId,
+    'ModuleService/MoveModule',
+    {
+      type: 'POST',
+      data: dataVar,
+      success: () => window.location.reload(),
+    });
 
   // fire window resize to reposition action menus
   $(window).resize();
@@ -77,16 +82,18 @@ function moveMod(modId: number, pane: string, order: number): any {
 function deleteMod(modId: number): any {
   const service: any = $.dnnSF(modId);
   const tabId: number = service.getTabId();
-  return sendDnnAjax(modId, '2sxc/dnn/module/delete', {
-    url: $.dnnSF().getServiceRoot('2sxc') + 'dnn/module/delete',
-    type: 'GET',
-    data: {
-      tabId: tabId,
-      modId: modId,
-    },
-    // ReSharper disable once UnusedParameter
-    success: (d: any) => window.location.reload(),
-  });
+  return sendDnnAjax(modId,
+    '2sxc/dnn/module/delete',
+    {
+      url: $.dnnSF().getServiceRoot('2sxc') + 'dnn/module/delete',
+      type: 'GET',
+      data: {
+        tabId: tabId,
+        modId: modId,
+      },
+      // ReSharper disable once UnusedParameter
+      success: (d: any) => window.location.reload(),
+    });
 }
 
 // call an api on dnn
@@ -94,11 +101,12 @@ function sendDnnAjax(modId: number, serviceName: string, options: any): any {
   const service: any = $.dnnSF(modId);
 
   return $.ajax($.extend({
-    type: 'GET',
-    url: service.getServiceRoot('internalservices') + serviceName,
-    beforeSend: service.setModuleHeaders,
-    error: xhrError,
-  }, options));
+      type: 'GET',
+      url: service.getServiceRoot('internalservices') + serviceName,
+      beforeSend: service.setModuleHeaders,
+      error: xhrError,
+    },
+    options));
 }
 
 // create / insert a new module
@@ -113,12 +121,14 @@ function createMod(paneName: string, position: number, modId: number): any {
     AddExistingModule: false,
     CopyModule: false,
   };
-  return sendDnnAjax(null, 'controlbar/AddModule', {
-    type: 'POST',
-    data: postData,
-    // ReSharper disable once UnusedParameter
-    success: (d: any) => window.location.reload(),
-  });
+  return sendDnnAjax(null,
+    'controlbar/AddModule',
+    {
+      type: 'POST',
+      data: postData,
+      // ReSharper disable once UnusedParameter
+      success: (d: any) => window.location.reload(),
+    });
 }
 
 
@@ -135,10 +145,10 @@ function generatePaneMoveButtons(current: string): any {
 
   // attach click event...
   // ReSharper disable once UnusedParameter
-  targets.find('a').click(function (d: any) {
+  targets.find('a').click(function(d: any) {
     const link = $(this);
     const clip = data;
-    const modId: number = getModuleId(clip.item.className);
+    const modId = getModuleId(clip.item.className);
     const newPane = link.attr('data');
 
     moveMod(modId, newPane, 0);

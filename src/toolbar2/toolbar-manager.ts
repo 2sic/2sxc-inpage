@@ -1,7 +1,6 @@
 ﻿import { buildToolbars, disable, isDisabled } from './build-toolbars';
 import { renderButton } from './item/render-button';
 import { renderToolbar } from './item/render-toolbar';
-import { ToolbarConfigTemplate } from './toolbar/toolbar-config-template';
 import { ToolbarConfigTemplates } from './toolbar/toolbar-config-templates';
 import { toolbarStandardButtons } from './toolbar/toolbar-standard-buttons';
 
@@ -20,7 +19,7 @@ export class ToolbarManager {
   generateButtonHtml = renderButton;
   generateToolbarHtml = renderToolbar;
   standardButtons = toolbarStandardButtons;
-  toolbarTemplate: ToolbarConfigTemplate = new ToolbarConfigTemplates().get('default');
+  toolbarTemplate = new ToolbarConfigTemplates().get('default');
 }
 
 export const _toolbarManager = new ToolbarManager();

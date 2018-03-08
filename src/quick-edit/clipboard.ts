@@ -15,40 +15,40 @@ import { Specs } from './specs';
  * @param type
  */
 export function copyPasteInPage(cbAction: string, list: any, index: number, type: any): any {
-  const newClip: Specs = createSpecs(type, list, index);
+  const newClip = createSpecs(type, list, index);
 
   // action!
   switch (cbAction) {
-    case 'select':
-      mark(newClip);
+  case 'select':
+    mark(newClip);
 
-      break;
-    case 'paste':
-      const from = data.index;
-      const to = newClip.index;
-      // check that we only move block-to-block or module to module
-      if (data.type !== newClip.type)
-        return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
+    break;
+  case 'paste':
+    const from = data.index;
+    const to = newClip.index;
+    // check that we only move block-to-block or module to module
+    if (data.type !== newClip.type)
+      return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
-      if (isNaN(from) || isNaN(to) || from === to) // || from + 1 === to) // this moves it to the same spot, so ignore
-        return clear(); // don't do anything
+    if (isNaN(from) || isNaN(to) || from === to) // || from + 1 === to) // this moves it to the same spot, so ignore
+      return clear(); // don't do anything
 
-      // cb-numbering is a bit different, because the selector is at the bottom
-      // only there we should also skip on +1;
-      if (newClip.type === selectors.cb.id && from + 1 === to)
-        return clear(); // don't do anything
+    // cb-numbering is a bit different, because the selector is at the bottom
+    // only there we should also skip on +1;
+    if (newClip.type === selectors.cb.id && from + 1 === to)
+      return clear(); // don't do anything
 
-      if (type === selectors.cb.id) {
-        const sxc: SxcInstanceWithInternals = getSxcInstance(list) as SxcInstanceWithInternals;
-        sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
-      } else {
-        // sometimes missing oldClip.item
-        // if (clipboard.data.item)
-        Mod.move(data, newClip, from, to);
-      }
-      clear();
-      break;
-    default:
+    if (type === selectors.cb.id) {
+      const sxc = getSxcInstance(list) as SxcInstanceWithInternals;
+      sxc.manage._getCbManipulator().move(newClip.parent, newClip.field, from, to);
+    } else {
+      // sometimes missing oldClip.item
+      // if (clipboard.data.item)
+      Mod.move(data, newClip, from, to);
+    }
+    clear();
+    break;
+  default:
   }
   return null;
 }
@@ -89,10 +89,18 @@ export function clear(): void {
 
 export function createSpecs(type: string, list: any, index: number): Specs {
   const listItems: any = list.find(selectors[type].selector);
-  if (index >= listItems.length) index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
+  if (index >= listItems.length
+  ) index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
   const currentItem: any = listItems[index];
   const editContext = JSON.parse(list.attr(selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
-  return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
+  return {
+    parent: editContext.parent,
+    field: editContext.field,
+    list: list,
+    item: currentItem,
+    index: index,
+    type: type
+  };
 }
 
 
@@ -111,11 +119,11 @@ $('a', quickE.selected).click(function() {
   const action: string = $(this).data('action');
   const clip: any = data;
   switch (action) {
-    case 'delete':
-      return cmdsStrategyFactory.delete(clip);
-    case 'sendToPane':
-      return Mod.sendToPane();
-    default:
-      throw new Error(`unexpected action: ${action}`);
+  case 'delete':
+    return cmdsStrategyFactory.delete(clip);
+  case 'sendToPane':
+    return Mod.sendToPane();
+  default:
+    throw new Error(`unexpected action: ${action}`);
   }
 });

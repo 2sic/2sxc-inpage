@@ -10,11 +10,11 @@ export class CmdsStrategyFactory {
     this.cmds['mod'] = new Mod();
   }
 
-  public getCmds(cliptype: string): Delete {
+  getCmds(cliptype: string): Delete {
     return this.cmds[cliptype];
   }
 
-  public delete(clip: any): Delete {
+  delete(clip: any): Delete {
     return this.cmds[clip.type].delete(clip);
   }
 }

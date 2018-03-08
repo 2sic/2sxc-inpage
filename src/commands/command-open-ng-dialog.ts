@@ -1,6 +1,5 @@
 ﻿import { reloadAndReInitialize } from '../contentBlock/render';
 import { ContextOfButton } from '../context/context-of-button';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { showOrToggle } from '../quick-dialog/quick-dialog';
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
 import { Settings } from './settings';
@@ -19,10 +18,16 @@ export function commandOpenNgDialog(context: ContextOfButton, settings: Settings
     reloadAndReInitialize(context.sxc.sxc);
     // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
   };
-  const link: string = commandLinkToNgDialog(context, settings); // the link contains everything to open a full dialog (lots of params added)
+  const
+    link = commandLinkToNgDialog(context,
+      settings); // the link contains everything to open a full dialog (lots of params added)
 
   if (settings.inlineWindow)
-    return showOrToggle(context.sxc.sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
+    return showOrToggle(context.sxc.sxc,
+      link,
+      callback,
+      settings.fullScreen /* settings.dialog === "item-history"*/,
+      settings.dialog);
 
   if (settings.newWindow /*|| (event && event.shiftKey)*/)
     return window.open(link);

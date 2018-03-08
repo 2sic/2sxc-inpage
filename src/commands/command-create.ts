@@ -10,9 +10,11 @@ import { Settings } from './settings';
  */
 export function commandCreate(context: ContextOfButton, specialSettings: Settings): Command {
 
-  const settings: Settings = Object.assign(context.sxc.sxc.manage._instanceConfig, specialSettings) as Settings; // merge button with general toolbar-settings
+  const settings =
+    Object.assign(context.sxc.sxc.manage._instanceConfig,
+      specialSettings) as Settings; // merge button with general toolbar-settings
 
-  const ngDialogUrl: string = context.sxc.editContext.Environment.SxcRootUrl +
+  const ngDialogUrl = context.sxc.editContext.Environment.SxcRootUrl +
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
     context.sxc.editContext.Environment.SxcVersion;
 

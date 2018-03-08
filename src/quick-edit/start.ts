@@ -18,14 +18,15 @@ function watchMouse() {
   let refreshTimeout: any = null;
   $('body').on('mousemove',
     (e: any) => {
-    if (refreshTimeout === null)
-      refreshTimeout = window.setTimeout(() => {
-        requestAnimationFrame(() => {
-          refresh(e);
-          refreshTimeout = null;
-        });
-      }, 20);
-  });
+      if (refreshTimeout === null)
+        refreshTimeout = window.setTimeout(() => {
+            requestAnimationFrame(() => {
+              refresh(e);
+              refreshTimeout = null;
+            });
+          },
+          20);
+    });
 }
 
 export function start(): void {

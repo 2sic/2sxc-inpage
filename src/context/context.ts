@@ -1,5 +1,4 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { getEditContext } from '../manage/api';
+﻿import { getEditContext } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';
@@ -18,8 +17,8 @@ import { PageContext } from './page-context/page-context';
  */
 export function context(htmlElement: HTMLElement): ContextOfButton {
 
-  const sxc: SxcInstanceWithInternals = getSxcInstance(htmlElement);
-  const editContext: DataEditContext = getEditContext(sxc);
+  const sxc = getSxcInstance(htmlElement);
+  const editContext = getEditContext(sxc);
   // console.log('stv: sxc, editContext', sxc, editContext);
 
   const contextOfButton = new ContextOfButton();

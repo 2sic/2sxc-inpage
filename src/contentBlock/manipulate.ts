@@ -15,7 +15,12 @@ let sxcInstance: SxcInstanceWithInternals;
  * @param container
  * @param newGuid
  */
-function create(parentId: number, fieldName: string, index: number, appName: string, container: any, newGuid: string): any {
+function create(parentId: number,
+  fieldName: string,
+  index: number,
+  appName: string,
+  container: any,
+  newGuid: string): any {
   // the wrapper, into which this will be placed and the list of pre-existing blocks
   const listTag = container;
   if (listTag.length === 0) return alert('can\'t add content-block as we couldn\'t find the list');

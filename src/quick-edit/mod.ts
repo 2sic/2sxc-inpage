@@ -5,13 +5,13 @@ import { selectors } from './selectors-instance';
 export class Mod implements Delete {
   delete(clip: any): void {
     if (!confirm('are you sure?')) return;
-    const modId: number = modManage.getModuleId(clip.item.className);
+    const modId = modManage.getModuleId(clip.item.className);
     modManage.delete(modId);
   }
 
   // todo: unsure if this is a good place for this bit of code...
   static move(oldClip: any, newClip: any, from: number, to: number): void {
-    const modId: number = modManage.getModuleId(oldClip.item.className);
+    const modId = modManage.getModuleId(oldClip.item.className);
     const pane: string = modManage.getPaneName(newClip.list);
     modManage.move(modId, pane, to);
   }

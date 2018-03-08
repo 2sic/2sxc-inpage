@@ -1,11 +1,7 @@
 ﻿import { context } from '../context/context';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { getEditContext, getTag } from '../manage/api';
-import { getSxcInstance } from '../x-bootstrap/sxc';
-import { Commands } from './command/commands';
+import { getTag } from '../manage/api';
 import { renderToolbar } from './item/render-toolbar';
 import { _toolbarManager } from './toolbar-manager';
-import { ToolbarConfig } from './toolbar/toolbar-config';
 import { ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
 import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
 
@@ -15,7 +11,7 @@ const dbg = true;
 
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar(): any {
-  const settingsString: string = JSON.stringify(settingsForEmptyToolbar);
+  const settingsString = JSON.stringify(settingsForEmptyToolbar);
   return $(`<ul class='sc-menu' toolbar='' settings='${settingsString}'/>`);
 }
 
@@ -47,7 +43,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
   if (toolbars.length === 0) { // && !disableAutoAdd) {
     if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
 
-    const outsideCb: boolean = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
+    const outsideCb = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
     const contentTag: any = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
     contentTag.addClass($2sxc.c.cls.scElm); // "sc-element");
 
@@ -63,12 +59,19 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     const at = $2sxc.c.attr;
 
     try {
-      const data = this.attributes.getNamedItem(at.toolbar).textContent || this.attributes.getNamedItem(at.toolbarData).textContent || '{}';
+      const data = this.attributes.getNamedItem(at.toolbar).textContent ||
+        this.attributes.getNamedItem(at.toolbarData).textContent ||
+        '{}';
       toolbarData = JSON.parse(data);
-      const settings = this.attributes.getNamedItem(at.settings).textContent || this.attributes.getNamedItem(at.settingsData).textContent || '{}';
+      const settings = this.attributes.getNamedItem(at.settings).textContent ||
+        this.attributes.getNamedItem(at.settingsData).textContent ||
+        '{}';
       toolbarSettings = JSON.parse(settings);
     } catch (err) {
-      console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', toolbarData, err);
+      console.error(
+        'error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...',
+        toolbarData,
+        err);
       return;
     }
 

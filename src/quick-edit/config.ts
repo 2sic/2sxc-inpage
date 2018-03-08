@@ -7,7 +7,7 @@ const configAttr: string = 'quick-edit-config';
 /**
  * the initial configuration
  */
-const conf: Conf = quickE.config = {
+const conf = quickE.config = {
   enable: true,
   innerBlocks: {
     enable: null, // default: auto-detect
@@ -19,18 +19,18 @@ const conf: Conf = quickE.config = {
 
 export function _readPageConfig() {
   const configs: Conf[] = $(`[${configAttr}]`);
-  const finalConfig: Conf = {} as Conf;
   let confJ: string;
-  let confO: Conf;
 
   // any inner blocks found? will currently affect if modules can be inserted...
-  const hasInnerCBs: boolean = ($(selectors.cb.listSelector).length > 0);
+  const hasInnerCBs = ($(selectors.cb.listSelector).length > 0);
 
   if (configs.length > 0) {
     // go through reverse list, as the last is the most important...
+    const finalConfig = {} as Conf;
     for (let c = configs.length; c >= 0; c--) {
       confJ = configs[0].getAttribute(configAttr);
       try {
+        let confO: Conf;
         confO = JSON.parse(confJ) as Conf;
         Object.assign(finalConfig, confO);
       } catch (e) {

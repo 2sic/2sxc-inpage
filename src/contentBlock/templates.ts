@@ -36,7 +36,7 @@ export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList
  */
 export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean) {
   const contentGroup: ContentGroup = sxc.manage._editContext.ContentGroup;
-  const showingAjaxPreview: boolean = isDisabled(sxc);
+  const showingAjaxPreview = isDisabled(sxc);
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
   // or just reset it, so it picks up the right values again ?

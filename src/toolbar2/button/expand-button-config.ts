@@ -1,10 +1,8 @@
 ﻿import { ContextOfButton } from '../../context/context-of-button';
-import { ButtonAction } from '../button/button-action';
 import { ButtonConfig } from '../button/button-config';
 import { Commands } from '../command/commands';
 import { Definition2 } from '../command/definition2';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
-import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { GroupConfig } from './group-config';
 
 // export function ExpandButtonConfig(context, buttonConfig: ButtonConfig): ButtonConfig {
@@ -35,11 +33,16 @@ export function expandButtonConfig(original: any, sharedProps: any[]) {
   return original;
 }
 
-export function getButtonConfigDefaultsV1(name: string, icon: string, translateKey: string, uiOnly: boolean, partOfPage: boolean, more: Definition2): Partial<ButtonConfig> {
+export function getButtonConfigDefaultsV1(name: string,
+  icon: string,
+  translateKey: string,
+  uiOnly: boolean,
+  partOfPage: boolean,
+  more: Definition2): Partial<ButtonConfig> {
   // stv: v1 code
   const partialButtonConfig = {
-    icon: 'icon-sxc-' + icon,
-    title: (context: ContextOfButton) => 'Toolbar.' + translateKey,
+    icon: `icon-sxc-${icon}`,
+    title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
     uiActionOnly: uiOnly,
     partOfPage: partOfPage,
   } as Partial<ButtonConfig>;
@@ -95,7 +98,10 @@ function evalPropOrFunction(propOrFunction: any, context: any, settings: any, co
  * @param fullToolbarConfig
  * @param actions
  */
-export function addDefaultBtnSettings(btn: ButtonConfig, group: GroupConfig, fullToolbarConfig: ToolbarConfig, actions: Commands) {
+export function addDefaultBtnSettings(btn: ButtonConfig,
+  group: GroupConfig,
+  fullToolbarConfig: ToolbarConfig,
+  actions: Commands) {
   for (let d = 0; d < btnProperties.length; d++)
     fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
 }
@@ -123,12 +129,17 @@ const prvProperties = [
  * @param actions
  * @param propName
  */
-function fallbackBtnSetting(btn: ButtonConfig, group: GroupConfig, fullToolbarConfig: ToolbarConfig, actions: Commands, propName: string): void {
+function fallbackBtnSetting(btn: ButtonConfig,
+  group: GroupConfig,
+  fullToolbarConfig: ToolbarConfig,
+  actions: Commands,
+  propName: string): void {
   btn[propName] = btn[propName] // by if already defined, use the already defined property
     ||
     (group.defaults && group.defaults[propName]) // if the group has defaults, try use that property
     ||
-    (fullToolbarConfig && fullToolbarConfig.defaults && fullToolbarConfig.defaults[propName]) // if the group has defaults, try use that property
+    (fullToolbarConfig && fullToolbarConfig.defaults && fullToolbarConfig.defaults[propName]
+    ) // if the group has defaults, try use that property
     ||
     (actions.get(btn.action.name) &&
       actions.get(btn.action.name).buttonConfig &&

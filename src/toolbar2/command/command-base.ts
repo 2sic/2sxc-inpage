@@ -5,10 +5,15 @@ import { Definition2 } from './definition2';
 
 export abstract class CommandBase {
 
-  public commandDefinition = new CommandDefinition();
+  commandDefinition = new CommandDefinition();
 
   // quick helper so we can better debug the creation of definitions
-  protected makeDef(name: string, translateKey: string, icon: string, uiOnly: boolean, partOfPage: boolean, more: Definition2): void {
+  protected makeDef(name: string,
+    translateKey: string,
+    icon: string,
+    uiOnly: boolean,
+    partOfPage: boolean,
+    more: Definition2): void {
     if (typeof (partOfPage) !== 'boolean') {
       throw 'partOfPage in commands not provided, order will be wrong!';
     }

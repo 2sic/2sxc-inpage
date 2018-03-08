@@ -16,12 +16,14 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
   flattenActionDefinition(buttonConfig);
 
   // retrieve configuration for this button
-  const oldParamsAdapter: any = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
+  const oldParamsAdapter: any =
+    Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType },
+      buttonConfig.action.params);
   // console.log('stv: oldParamsAdapter', oldParamsAdapter);
 
-  const onclick: string = buttonConfig.disabled ?
-    '' :
-    `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
+  const onclick = buttonConfig.disabled
+    ? ''
+    : `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
   // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
 
   const button = document.createElement('a');

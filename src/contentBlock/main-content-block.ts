@@ -1,4 +1,5 @@
 ﻿import { prepareToAddContent, updateTemplateFromDia } from './templates';
+
 /*
  * this is a content block in the browser
  *
@@ -16,8 +17,9 @@
  */
 export class MainContentBlock {
   // constants
-  cViewWithoutContent: string = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-  cUseExistingTemplate: number = -1;
+  cViewWithoutContent: string =
+    '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+  cUseExistingTemplate = -1;
   prepareToAddContent: any = prepareToAddContent;
   updateTemplateFromDia: any = updateTemplateFromDia;
 }

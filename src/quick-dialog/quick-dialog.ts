@@ -80,8 +80,10 @@ export function getIFrame(container?: any): any {
  */
 export function isShowing(sxc: SxcInstanceWithInternals, dialogName: string): any {
   return current // there is a current dialog
-    && current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
-    && current.dialogName === dialogName; // the view is the same as previously
+    &&
+    current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
+    &&
+    current.dialogName === dialogName; // the view is the same as previously
 }
 
 /**
@@ -93,7 +95,11 @@ export function isShowing(sxc: SxcInstanceWithInternals, dialogName: string): an
  * @param {string} [dialogName] - optional name of dialog, to check if it's already open
  * @returns {any} jquery object of the iframe
  */
-export function showOrToggle(sxc: SxcInstanceWithInternals, url: string, closeCallback: any, fullScreen: boolean, dialogName: string): any {
+export function showOrToggle(sxc: SxcInstanceWithInternals,
+  url: string,
+  closeCallback: any,
+  fullScreen: boolean,
+  dialogName: string): any {
   setSize(fullScreen);
   const iFrame: any = getIFrame();
 
@@ -150,39 +156,40 @@ function extendIFrameWithSxcState(iFrame: any) {
     return hiddenSxc.recreate();
   }
 
-  const newFrm: any = Object.assign(iFrame, {
-    closeCallback: null,
-    rewire: (sxc: SxcInstanceWithInternals, callback: any, dialogName: string) => {
-      hiddenSxc = sxc;
-      tagModule = $($(getTag(sxc)).parent().eq(0));
-      newFrm.sxcCacheKey = sxc.cacheKey;
-      newFrm.closeCallback = callback;
-      if (dialogName) newFrm.dialogName = dialogName;
-    },
-    getManageInfo: () => reSxc().manage._dialogParameters,
-    getAdditionalDashboardConfig: () => reSxc().manage._quickDialogConfig,
-    persistDia: () => persistDialog(reSxc()),
-    scrollToTarget: () => {
-      $('body').animate({
-        scrollTop: tagModule.offset().top - scrollTopOffset,
-    });
-    },
-    toggle: (show: boolean) => toggle(show),
-    cancel: () => {
-      newFrm.toggle(false);
-      // todo: only re-init if something was changed?
-      // return cbApi.reloadAndReInitialize(reSxc());
+  const newFrm: any = Object.assign(iFrame,
+    {
+      closeCallback: null,
+      rewire: (sxc: SxcInstanceWithInternals, callback: any, dialogName: string) => {
+        hiddenSxc = sxc;
+        tagModule = $($(getTag(sxc)).parent().eq(0));
+        newFrm.sxcCacheKey = sxc.cacheKey;
+        newFrm.closeCallback = callback;
+        if (dialogName) newFrm.dialogName = dialogName;
+      },
+      getManageInfo: () => reSxc().manage._dialogParameters,
+      getAdditionalDashboardConfig: () => reSxc().manage._quickDialogConfig,
+      persistDia: () => persistDialog(reSxc()),
+      scrollToTarget: () => {
+        $('body').animate({
+          scrollTop: tagModule.offset().top - scrollTopOffset,
+        });
+      },
+      toggle: (show: boolean) => toggle(show),
+      cancel: () => {
+        newFrm.toggle(false);
+        // todo: only re-init if something was changed?
+        // return cbApi.reloadAndReInitialize(reSxc());
 
-      // cancel the dialog
-      localStorage.setItem('cancelled-dialog', 'true');
-      return newFrm.closeCallback();
-    },
-    run: (verb: string) => reSxc().manage.run2(context(getTag(reSxc())), verb),
-    showMessage: (message: string) => showMessage(reSxc(), `<p class="no-live-preview-available">${message}</p>`),
-    reloadAndReInit: () => reloadAndReInitialize(reSxc(), true, true),
-    saveTemplate: (templateId: number) => updateTemplateFromDia(reSxc(), templateId, false),
-    previewTemplate: (templateId: number) => ajaxLoad(reSxc(), templateId, true),
-  });
+        // cancel the dialog
+        localStorage.setItem('cancelled-dialog', 'true');
+        return newFrm.closeCallback();
+      },
+      run: (verb: string) => reSxc().manage.run2(context(getTag(reSxc())), verb),
+      showMessage: (message: string) => showMessage(reSxc(), `<p class="no-live-preview-available">${message}</p>`),
+      reloadAndReInit: () => reloadAndReInitialize(reSxc(), true, true),
+      saveTemplate: (templateId: number) => updateTemplateFromDia(reSxc(), templateId, false),
+      previewTemplate: (templateId: number) => ajaxLoad(reSxc(), templateId, true),
+    });
   return newFrm;
 }
 
@@ -223,21 +230,22 @@ function watchForResize(keepWatching?: boolean): any {
   const cont: any = getContainer();
   if (!resizeWatcher) // only add a timer if not already running
     resizeWatcher = setInterval(() => {
-      try {
-        const frm: any = getIFrame(cont);
-        if (!frm) return;
-        const height: number = frm.contentDocument.body.offsetHeight;
-        if (frm.previousHeight === height) return;
-        frm.style.minHeight = cont.css('min-height');
-        frm.style.height = height + 'px';
-        frm.previousHeight = height;
-        if (isFullscreen) {
-          frm.style.height = '100%';
-          frm.style.position = 'absolute';
+        try {
+          const frm: any = getIFrame(cont);
+          if (!frm) return;
+          const height: number = frm.contentDocument.body.offsetHeight;
+          if (frm.previousHeight === height) return;
+          frm.style.minHeight = cont.css('min-height');
+          frm.style.height = height + 'px';
+          frm.previousHeight = height;
+          if (isFullscreen) {
+            frm.style.height = '100%';
+            frm.style.position = 'absolute';
+          }
+        } catch (e) {
+          // ignore
         }
-      } catch (e) {
-        // ignore
-      }
-    }, resizeInterval);
+      },
+      resizeInterval);
   return resizeWatcher;
 }

@@ -111,10 +111,7 @@ var QuickE = /** @class */ (function () {
         this.body = $('body');
         this.win = $(window);
         this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
-        this.template = '<a class=\'sc-content-block-menu-addcontent sc-invisible\' data-type=\'Default\' data-i18n=\'[titleTemplate]QuickInsertMenu.AddBlockContent\'>x</a>'
-            + "<a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>"
-            + btn('select', 'ok', 'Select', true)
-            + btn('paste', 'paste', 'Paste', true, true);
+        this.template = "<a class='sc-content-block-menu-addcontent sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a><a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>" + btn('select', 'ok', 'Select', true) + btn('paste', 'paste', 'Paste', true, true);
         this.selected = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
             .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>");
         // will be populated later in the module section
@@ -145,10 +142,7 @@ var QuickE = /** @class */ (function () {
 }());
 exports.$quickE = new QuickE();
 function btn(action, icon, i18N, invisible, unavailable, classes) {
-    return '<a class=\'sc-content-block-menu-btn sc-cb-action icon-sxc-' + icon + ' '
-        + (invisible ? ' sc-invisible ' : '')
-        + (unavailable ? ' sc-unavailable ' : '')
-        + classes + '\' data-action=\'' + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
+    return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + " " + (invisible ? ' sc-invisible ' : '') + (unavailable ? ' sc-unavailable ' : '') + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
 }
 /**
  * build the toolbar (hidden, but ready to show)
@@ -606,8 +600,10 @@ exports.getIFrame = getIFrame;
  */
 function isShowing(sxc, dialogName) {
     return exports.current // there is a current dialog
-        && exports.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
-        && exports.current.dialogName === dialogName; // the view is the same as previously
+        &&
+            exports.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
+        &&
+            exports.current.dialogName === dialogName; // the view is the same as previously
 }
 exports.isShowing = isShowing;
 /**
@@ -916,9 +912,13 @@ function buildToolbars(parentTag, optionalId) {
         var toolbarSettings;
         var at = $2sxc.c.attr;
         try {
-            var data = this.attributes.getNamedItem(at.toolbar).textContent || this.attributes.getNamedItem(at.toolbarData).textContent || '{}';
+            var data = this.attributes.getNamedItem(at.toolbar).textContent ||
+                this.attributes.getNamedItem(at.toolbarData).textContent ||
+                '{}';
             toolbarData = JSON.parse(data);
-            var settings = this.attributes.getNamedItem(at.settings).textContent || this.attributes.getNamedItem(at.settingsData).textContent || '{}';
+            var settings = this.attributes.getNamedItem(at.settings).textContent ||
+                this.attributes.getNamedItem(at.settingsData).textContent ||
+                '{}';
             toolbarSettings = JSON.parse(settings);
         }
         catch (err) {
@@ -1064,8 +1064,8 @@ exports.expandButtonConfig = expandButtonConfig;
 function getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more) {
     // stv: v1 code
     var partialButtonConfig = {
-        icon: 'icon-sxc-' + icon,
-        title: function (context) { return 'Toolbar.' + translateKey; },
+        icon: "icon-sxc-" + icon,
+        title: function (context) { return "Toolbar." + translateKey; },
         uiActionOnly: uiOnly,
         partOfPage: partOfPage,
     };
@@ -1261,7 +1261,14 @@ function createSpecs(type, list, index) {
         index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
     var currentItem = listItems[index];
     var editContext = JSON.parse(list.attr(selectors_instance_1.selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
-    return { parent: editContext.parent, field: editContext.field, list: list, item: currentItem, index: index, type: type };
+    return {
+        parent: editContext.parent,
+        field: editContext.field,
+        list: list,
+        item: currentItem,
+        index: index,
+        type: type
+    };
 }
 exports.createSpecs = createSpecs;
 function setSecondaryActionsState(state) {
@@ -1631,7 +1638,8 @@ exports.getBodyPosition = getBodyPosition;
  * Refresh content block and modules elements
  */
 function refreshDomObjects() {
-    quick_e_1.$quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
+    quick_e_1.$quickE.bodyOffset =
+        getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
     //// Cache the panes (because panes can't change dynamically)
     // if (!quickE.cachedPanes)
     //    quickE.cachedPanes = $(selectors.mod.listSelector);
@@ -1817,9 +1825,9 @@ function renderButton(context, buttonConfig, groupIndex) {
     // retrieve configuration for this button
     var oldParamsAdapter = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
     // console.log('stv: oldParamsAdapter', oldParamsAdapter);
-    var onclick = buttonConfig.disabled ?
-        '' :
-        "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run2($2sxc.context(this), " + JSON.stringify(oldParamsAdapter) + ", event);";
+    var onclick = buttonConfig.disabled
+        ? ''
+        : "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run2($2sxc.context(this), " + JSON.stringify(oldParamsAdapter) + ", event);";
     // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
     var button = document.createElement('a');
     button.classList.add("sc-" + buttonConfig.action.name);
@@ -2195,7 +2203,8 @@ var Command = /** @class */ (function () {
         };
         this.addSimpleItem = function () {
             var item = {};
-            var ct = _this.settings.contentType || _this.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+            var ct = _this.settings.contentType ||
+                _this.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
             if (_this.settings.entityId)
                 item.EntityId = _this.settings.entityId;
             if (ct)
@@ -2250,8 +2259,10 @@ var Command = /** @class */ (function () {
                 sharedParams.partOfPage = false;
             }
             return _this.ngDialogUrl +
-                '#' + $.param(sharedParams) +
-                '&' + $.param(_this.params) +
+                '#' +
+                $.param(sharedParams) +
+                '&' +
+                $.param(_this.params) +
                 _this.isDebug;
             //#endregion
         };
@@ -2259,7 +2270,8 @@ var Command = /** @class */ (function () {
         this.settings = settings;
         this.items = settings.items || []; // use predefined or create empty array
         this.params = Object.assign({
-            dialog: settings.dialog || settings.action,
+            dialog: settings.dialog ||
+                settings.action,
         }, this.evalPropOrFunction(settings.params, context, {}));
     }
     return Command;
@@ -2288,12 +2300,11 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
         settings = {}; // clear the settings variable, as none was provided
     }
     // check if name is name (string) or object (settings)
-    settings = (typeof nameOrSettings === 'string') ?
-        Object.assign(settings || {}, {
+    settings = (typeof nameOrSettings === 'string')
+        ? Object.assign(settings || {}, {
             action: nameOrSettings,
         }) // place the name as an action-name into a command-object
-        :
-            nameOrSettings;
+        : nameOrSettings;
     var conf = commands_1.Commands.getInstance().get(settings.action).buttonConfig;
     settings = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
     if (!settings.dialog)
@@ -2338,7 +2349,9 @@ var NgDialogParams = /** @class */ (function () {
         this.publishing = editContext.ContentBlock.VersioningRequirements;
         // todo= probably move the user into the dashboard info
         this.user = api_1.getUserOfEditContext(editContext);
-        this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
+        this.approot =
+            editContext.ContentGroup.AppUrl ||
+                null; // this is the only value which doesn't have a slash by default.  note that the app-root doesn't exist when opening "manage-app"
     }
     return NgDialogParams;
 }());
@@ -2411,16 +2424,16 @@ var conf = quick_e_1.$quickE.config = {
 };
 function _readPageConfig() {
     var configs = $("[" + configAttr + "]");
-    var finalConfig = {};
     var confJ;
-    var confO;
     // any inner blocks found? will currently affect if modules can be inserted...
     var hasInnerCBs = ($(selectors_instance_1.selectors.cb.listSelector).length > 0);
     if (configs.length > 0) {
         // go through reverse list, as the last is the most important...
+        var finalConfig = {};
         for (var c = configs.length; c >= 0; c--) {
             confJ = configs[0].getAttribute(configAttr);
             try {
+                var confO = void 0;
                 confO = JSON.parse(confJ);
                 Object.assign(finalConfig, confO);
             }
@@ -3045,7 +3058,8 @@ var ensureDefinitionTree = function (unstructuredConfig, toolbarSettings) {
     // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
     toolbarConfig.groups = unstructuredConfig.groups || []; // the groups of buttons
     toolbarConfig.params = unstructuredConfig.params || {}; // these are the default command parameters
-    toolbarConfig.settings = Object.assign({}, toolbar_settings_1.defaultToolbarSettings, unstructuredConfig.settings, toolbarSettings);
+    toolbarConfig.settings =
+        Object.assign({}, toolbar_settings_1.defaultToolbarSettings, unstructuredConfig.settings, toolbarSettings);
     // todo: old props, remove
     toolbarConfig.name = unstructuredConfig.name || 'toolbar'; // name, no real use
     toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
@@ -3659,7 +3673,8 @@ function _translateInit(manage) {
         whitelist: ['en', 'de', 'fr', 'it', 'uk', 'nl'],
         preload: ['en'],
         backend: {
-            loadPath: manage._editContext.Environment.SxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js',
+            loadPath: manage._editContext.Environment.SxcRootUrl +
+                'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js',
         },
     }, function (err, t) {
         // ReSharper restore UnusedParameter
@@ -4351,9 +4366,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
     var fn = $.fn.attr;
     $.fn.attr = function () {
         var val = fn.apply(this, arguments);
-        if (arguments[0] !== 'class'
-            || typeof val !== 'string'
-            || val.search('DnnModule-2sxc ') === -1)
+        if (arguments[0] !== 'class' || typeof val !== 'string' || val.search('DnnModule-2sxc ') === -1)
             return val;
         return val.replace('DnnModule-2sxc ', '') + ' DnnModule-2sxc';
     };
@@ -4820,8 +4833,6 @@ exports.Specs = Specs;
     //calculates if shake did occur
     Shake.prototype.devicemotion = function (e) {
         var current = e.accelerationIncludingGravity;
-        var currentTime;
-        var timeDifference;
         var deltaX = 0;
         var deltaY = 0;
         var deltaZ = 0;
@@ -4834,9 +4845,13 @@ exports.Specs = Specs;
         deltaX = Math.abs(this.lastX - current.x);
         deltaY = Math.abs(this.lastY - current.y);
         deltaZ = Math.abs(this.lastZ - current.z);
-        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
+        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) ||
+            ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) ||
+            ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
             //calculate time in milliseconds since last shake registered
+            var currentTime = void 0;
             currentTime = new Date();
+            var timeDifference = void 0;
             timeDifference = currentTime.getTime() - this.lastTime.getTime();
             if (timeDifference > this.options.timeout) {
                 // once triggered, execute  the callback
@@ -4844,7 +4859,7 @@ exports.Specs = Specs;
                     this.options.callback();
                 }
                 else
-                    console.log("shake event without callback detected");
+                    console.log('shake event without callback detected');
                 this.lastTime = new Date();
             }
         }
@@ -5033,7 +5048,8 @@ var AppResources = /** @class */ (function (_super) {
             // ReSharper disable UnusedParameter
             showCondition: function (context, settings) {
                 // ReSharper restore UnusedParameter
-                return context.user.canDesign && !context.app.isContent; // only if resources exist or are 0 (to be created)...
+                return context.user.canDesign &&
+                    !context.app.isContent; // only if resources exist or are 0 (to be created)...
             },
             configureCommand: function (context, cmd) {
                 cmd.items = [{ EntityId: context.app.resourcesId }];
@@ -5586,8 +5602,8 @@ var More = /** @class */ (function (_super) {
                 var oldState = Number(fullMenu.attr('data-state') || 0);
                 var max = Number(fullMenu.attr('group-count'));
                 var newState = (oldState + 1) % max;
-                fullMenu.removeClass('group-' + oldState)
-                    .addClass('group-' + newState)
+                fullMenu.removeClass("group-" + oldState)
+                    .addClass("group-" + newState)
                     .attr('data-state', newState);
             },
         });
@@ -5671,7 +5687,10 @@ var MoveUp = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('moveup', 'MoveUp', 'move-up', false, true, {
             showCondition: function (context, settings) {
-                return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1 && settings.sortOrder !== 0;
+                return context.contentBlock.isList &&
+                    settings.useModuleList &&
+                    settings.sortOrder !== -1 &&
+                    settings.sortOrder !== 0;
             },
             code: function (context, settings) {
                 actions_1.changeOrder(context.sxc.sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
@@ -5722,7 +5741,10 @@ var New = /** @class */ (function (_super) {
             },
             dialog: 'edit',
             showCondition: function (context, settings) {
-                return settings.contentType || context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1; // don't provide new on the header-item
+                return settings.contentType ||
+                    context.contentBlock.isList &&
+                        settings.useModuleList &&
+                        settings.sortOrder !== -1; // don't provide new on the header-item
             },
             code: function (context, settings) {
                 // todo - should refactor this to be a toolbarManager.contentBlock command

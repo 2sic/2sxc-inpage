@@ -10,5 +10,6 @@ export class ToolbarConfig {
   name: string = 'toolbar'; // name, no real use
   debug?: boolean = false; // show more debug info
   defaults: any; // the button defaults like icon, etc.
+
   [propName: string]: any;
 }

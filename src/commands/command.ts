@@ -14,8 +14,10 @@ export class Command {
     this.settings = settings;
     this.items = settings.items || []; // use predefined or create empty array
     this.params = Object.assign({
-      dialog: settings.dialog || settings.action, // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-    },
+        dialog:
+          settings.dialog ||
+            settings.action, // the variable used to name the dialog changed in the history of 2sxc from action to dialog
+      },
       this.evalPropOrFunction(settings.params, context, {})) as Params;
   }
 
@@ -27,15 +29,22 @@ export class Command {
 
   addSimpleItem = () => {
     const item = {} as Item;
-    const ct: string = this.settings.contentType || this.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+    const ct = this.settings.contentType ||
+      this.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
     if (this.settings.entityId) item.EntityId = this.settings.entityId;
     if (ct) item.ContentTypeName = ct;
     // only add if there was stuff to add
     if (item.EntityId || item.ContentTypeName) this.items.push(item);
-  }
+  };
 
   // this adds an item of the content-group, based on the group GUID and the sequence number
-  addContentGroupItem = (guid: number, index: number, part: string, isAdd: boolean, isEntity: boolean, cbid: number, sectionLanguageKey: string) => {
+  addContentGroupItem = (guid: number,
+    index: number,
+    part: string,
+    isAdd: boolean,
+    isEntity: boolean,
+    cbid: number,
+    sectionLanguageKey: string) => {
     this.items.push({
       Group: {
         Guid: guid,
@@ -45,7 +54,7 @@ export class Command {
       },
       Title: translate(sectionLanguageKey),
     });
-  }
+  };
 
   // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
   addContentGroupItemSetsToEditList = (withPresentation: boolean) => {
@@ -57,10 +66,23 @@ export class Command {
     const isAdd = this.settings.action === 'new';
     const groupId = this.settings.contentGroupId;
 
-    this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, this.settings.cbIsEntity, this.settings.cbId, `EditFormTitle.${cTerm}`);
+    this.addContentGroupItem(groupId,
+      index,
+      cTerm.toLowerCase(),
+      isAdd,
+      this.settings.cbIsEntity,
+      this.settings.cbId,
+      `EditFormTitle.${cTerm}`);
 
-    if (withPresentation) this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, this.settings.cbIsEntity, this.settings.cbId, `EditFormTitle.${pTerm}`);
-  }
+    if (withPresentation)
+      this.addContentGroupItem(groupId,
+        index,
+        pTerm.toLowerCase(),
+        isAdd,
+        this.settings.cbIsEntity,
+        this.settings.cbId,
+        `EditFormTitle.${pTerm}`);
+  };
 
   // build the link, combining specific params with global ones and put all in the url
   generateLink = () => {
@@ -84,9 +106,11 @@ export class Command {
     }
 
     return this.ngDialogUrl +
-      '#' + $.param(sharedParams) +
-      '&' + $.param(this.params) +
+      '#' +
+      $.param(sharedParams) +
+      '&' +
+      $.param(this.params) +
       this.isDebug;
     //#endregion
-  }
+  };
 }

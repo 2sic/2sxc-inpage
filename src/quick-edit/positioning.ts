@@ -25,7 +25,8 @@ export function getBodyPosition(): Coords {
  * Refresh content block and modules elements
  */
 function refreshDomObjects(): void {
-  quickE.bodyOffset = getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
+  quickE.bodyOffset =
+    getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
 
   //// Cache the panes (because panes can't change dynamically)
   // if (!quickE.cachedPanes)
@@ -69,7 +70,7 @@ export function positionAndAlign(element: any, coords: Coords) {
  */
 export function refresh(e: any) {
   const highlightClass: string = 'sc-cb-highlight-for-insert';
-  const newDate: Date = new Date();
+  const newDate = new Date();
   if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
     // console.log('refreshed contentblock and modules');
     refreshDomObjects.lastCall = newDate;
@@ -133,21 +134,21 @@ export function findNearest(elements: any, position: Coords): Coords {
   const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
 
   let nearestItem: any = null;
-  let nearestDistance: number = maxDistance;
+  let nearestDistance = maxDistance;
 
   const posX: number = position.x + quickE.win.scrollLeft();
   const posY: number = position.y + quickE.win.scrollTop();
 
   // Find nearest element
   elements.each(function() {
-    const e: Coords = getCoordinates($(this));
+    const e = getCoordinates($(this));
 
     // First check x coordinates - must be within container
     if (posX < e.x || posX > e.x + e.w)
       return;
 
     // Check if y coordinates are within boundaries
-    const distance: number = Math.abs(posY - e.yh);
+    const distance = Math.abs(posY - e.yh);
 
     if (distance < maxDistance && distance < nearestDistance) {
       nearestItem = e;

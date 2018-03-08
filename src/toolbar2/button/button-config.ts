@@ -56,8 +56,11 @@ export class ButtonConfig {
   dynamicClasses: ((context: ContextOfButton, settings: Settings) => string);
   dynamicDisabled: (() => boolean) = () => false; // maybe
   code: ((context: ContextOfButton, settings: Settings, sxc: SxcInstanceWithInternals) => void);
+
   configureCommand?(context: ContextOfButton, cmd: Command): void; // stv: todo ???
+
   // showCondition: boolean | (() => boolean) = true;
   showCondition: ((context: ContextOfButton, settings: Settings) => boolean | number | string);
+
   [propName: string]: any;
 }
