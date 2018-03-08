@@ -1,5 +1,4 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { Command } from './command';
 import { Settings } from './settings';
 

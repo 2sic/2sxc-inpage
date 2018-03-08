@@ -1,8 +1,7 @@
-﻿import { CmdSpec } from '../../commands/cmd-spec';
-import { getButtonConfigDefaultsV1 } from '../button/expand-button-config';
+﻿import { getButtonConfigDefaultsV1 } from '../button/expand-button-config';
 import { CommandDefinition } from './command-definition';
-import { Definition2 } from './definition2';
 import { Commands } from './commands';
+import { Definition2 } from './definition2';
 
 export abstract class CommandBase {
 

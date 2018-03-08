@@ -2,7 +2,6 @@
 import { manipulator } from '../contentBlock/manipulate';
 import { context } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { renderButton } from '../toolbar2/item/render-button';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';

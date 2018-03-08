@@ -29,8 +29,6 @@
     <None Remove="src\commands\command-execute-action.ts" />
     <None Remove="src\commands\command-link-to-ng-dialog.ts" />
     <None Remove="src\commands\command-open-ng-dialog.ts" />
-    <None Remove="src\commands\make-def.ts" />
-    <None Remove="src\commands\mod-config.ts" />
     <None Remove="src\contentBlock\action-params.ts" />
     <None Remove="src\contentBlock\manipulate-params.ts" />
     <None Remove="src\contentBlock\web-api-params.ts" />
@@ -93,8 +91,6 @@
     <TypeScriptCompile Include="src\commands\command-create.ts" />
     <TypeScriptCompile Include="src\commands\command-execute-action.ts" />
     <TypeScriptCompile Include="src\commands\command-link-to-ng-dialog.ts" />
-    <TypeScriptCompile Include="src\commands\make-def.ts" />
-    <TypeScriptCompile Include="src\commands\mod-config.ts" />
     <TypeScriptCompile Include="src\commands\command-open-ng-dialog.ts" />
     <TypeScriptCompile Include="src\contentBlock\action-params.ts" />
     <TypeScriptCompile Include="src\contentBlock\manipulate-params.ts" />

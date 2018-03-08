@@ -1,8 +1,8 @@
-﻿import { _commands } from './commands/commands';
-import { context } from './context/context';
+﻿import { context } from './context/context';
 import { _manage } from './manage/manage';
 import { $quickE } from './quick-edit/quick-e';
 import { start } from './quick-edit/start';
+import { Commands } from './toolbar2/command/commands';
 import { _translateInit } from './translate/2sxc._translateInit';
 import './x-bootstrap/module-bootstrapper';
 
@@ -16,7 +16,7 @@ $2sxc._translateInit = _translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.I
 // let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
 // $2sxc.c = $2sxc.consts
 // $2sxc.system
-$2sxc._commands = _commands;
+$2sxc._commands = Commands.getInstance();
 // $2sxc._lib
 // $2sxc._commands.definitions = {};
 // $2sxc._contentBlock

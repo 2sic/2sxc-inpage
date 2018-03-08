@@ -1,8 +1,5 @@
-﻿import { CmdSpec } from '../../commands/cmd-spec';
-import { Definition } from '../../commands/definition';
-import { DataEditContext } from '../../data-edit-context/data-edit-context';
-import { getButtonConfigDefaultsV1 } from '../button/expand-button-config';
-import { CommandDefinition } from './command-definition';
+﻿import { CommandDefinition } from './command-definition';
+import { instanceEngine } from '../../commands/engine';
 // import all commands here to stop optimizers from excluding code that was not called form other module
 import { Add } from './commands/add';
 import { App } from './commands/app';
@@ -61,4 +58,6 @@ export class Commands {
       // console.log('stv: !!!', def.name);
     }
   }
+
+  instanceEngine = instanceEngine;
 }

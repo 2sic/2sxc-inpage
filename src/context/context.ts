@@ -1,10 +1,5 @@
-﻿import { CmdSpec } from '../commands/cmd-spec';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { getEditContext } from '../manage/api';
-import { Commands } from '../toolbar2/command/commands';
-import { ToolbarConfig } from '../toolbar2/toolbar/toolbar-config';
-import { ExpandToolbarConfig } from '../toolbar2/toolbar/toolbar-expand-config';
-import { ToolbarSettings } from '../toolbar2/toolbar/toolbar-settings';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';

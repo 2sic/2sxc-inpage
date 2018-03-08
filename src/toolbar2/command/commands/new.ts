@@ -1,4 +1,5 @@
-﻿import { Settings } from '../../../commands/settings';
+﻿import { commandOpenNgDialog } from '../../../commands/command-open-ng-dialog';
+import { Settings } from '../../../commands/settings';
 import { CommandBase } from '../command-base';
 
 /**
@@ -23,7 +24,7 @@ export class New extends CommandBase {
       code(context, settings) {
         // todo - should refactor this to be a toolbarManager.contentBlock command
         const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
-        context.sxc.sxc.manage._commands._openNgDialog(settingsExtend, context.sxc.sxc);
+        commandOpenNgDialog(context, settingsExtend);
       },
     });
   }

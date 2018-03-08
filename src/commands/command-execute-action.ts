@@ -2,7 +2,6 @@
 import { ContextOfButton } from '../context/context-of-button';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { Commands } from '../toolbar2/command/commands';
-import { commandInitializeInstanceCommands } from './command-initialize-instance-commands';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Settings } from './settings';
 
