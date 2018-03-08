@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = require("../x-bootstrap/sxc");
-var api_1 = require("../manage/api");
 var context_1 = require("../context/context");
+var api_1 = require("../manage/api");
+var sxc_1 = require("../x-bootstrap/sxc");
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */

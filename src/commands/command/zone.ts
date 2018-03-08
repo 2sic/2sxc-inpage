@@ -21,4 +21,5 @@ export class Zone extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new Zone();

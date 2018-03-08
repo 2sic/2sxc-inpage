@@ -16,11 +16,12 @@ export class TemplateSettings extends CommandBase {
         showCondition: (context, settings) => {
           return context.user.canDesign && !context.app.isContent;
         },
-        configureCommand: (context, cmd) => {
-          cmd.items = [{ EntityId: context.contentBlock.templateId }];
+        configureCommand: (context, command) => {
+          command.items = [{ EntityId: context.contentBlock.templateId }];
         },
       });
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new TemplateSettings();

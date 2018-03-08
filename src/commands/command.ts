@@ -25,7 +25,7 @@ export class Command {
     if (propOrFunction === undefined || propOrFunction === null)
       return fallback;
     return typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction;
-  };
+  }
 
   addSimpleItem = () => {
     const item = {} as Item;
@@ -35,10 +35,11 @@ export class Command {
     if (ct) item.ContentTypeName = ct;
     // only add if there was stuff to add
     if (item.EntityId || item.ContentTypeName) this.items.push(item);
-  };
+  }
 
   // this adds an item of the content-group, based on the group GUID and the sequence number
-  addContentGroupItem = (guid: number,
+  addContentGroupItem = (
+    guid: number,
     index: number,
     part: string,
     isAdd: boolean,
@@ -54,7 +55,7 @@ export class Command {
       },
       Title: translate(sectionLanguageKey),
     });
-  };
+  }
 
   // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
   addContentGroupItemSetsToEditList = (withPresentation: boolean) => {
@@ -82,7 +83,7 @@ export class Command {
         this.settings.cbIsEntity,
         this.settings.cbId,
         `EditFormTitle.${pTerm}`);
-  };
+  }
 
   // build the link, combining specific params with global ones and put all in the url
   generateLink = () => {
@@ -112,5 +113,5 @@ export class Command {
       $.param(this.params) +
       this.isDebug;
     //#endregion
-  };
+  }
 }

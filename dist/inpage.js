@@ -249,7 +249,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.selectors = {
     cb: {
         id: 'cb',
-        'class': 'sc-content-block',
+        class: 'sc-content-block',
         selector: '.sc-content-block',
         listSelector: '.sc-content-block-list',
         context: 'data-list-context',
@@ -257,7 +257,7 @@ exports.selectors = {
     },
     mod: {
         id: 'mod',
-        'class': 'DnnModule',
+        class: 'DnnModule',
         selector: '.DnnModule',
         listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)',
         context: null,
@@ -1263,7 +1263,7 @@ function createSpecs(type, list, index) {
         list: list,
         item: currentItem,
         index: index,
-        type: type
+        type: type,
     };
 }
 exports.createSpecs = createSpecs;
@@ -2303,7 +2303,6 @@ var commands_1 = __webpack_require__(7);
 // ToDo: remove dead code
 function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
     var sxc = context.sxc.sxc;
-    var editContext = context.sxc.editContext;
     var settings = eventOrSettings;
     // cycle parameters, in case it was called with 2 params only
     if (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined') {
@@ -2318,14 +2317,16 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
         : nameOrSettings;
     var conf = commands_1.Commands.getInstance().get(settings.action).buttonConfig;
     settings = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
-    if (!settings.dialog)
+    if (!settings.dialog) {
         settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
-    if (!settings.code)
+    }
+    if (!settings.code) {
         settings.code = function (contextParam, settingsParam) {
             return command_open_ng_dialog_1.commandOpenNgDialog(contextParam, settingsParam);
         }; // decide what action to perform
+    }
     // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-    var origEvent = event || window.event;
+    // const origEvent = event || window.event;
     if (conf.uiActionOnly)
         return settings.code(context, settings);
     // if more than just a UI-action, then it needs to be sure the content-group is created first
@@ -3834,8 +3835,8 @@ var Mod_1 = __webpack_require__(135);
 var CmdsStrategyFactory = /** @class */ (function () {
     function CmdsStrategyFactory() {
         this.cmds = {};
-        this.cmds['cb'] = new cb_1.Cb();
-        this.cmds['mod'] = new Mod_1.Mod();
+        this.cmds.cb = new cb_1.Cb();
+        this.cmds.mod = new Mod_1.Mod();
     }
     CmdsStrategyFactory.prototype.getCmds = function (cliptype) {
         return this.cmds[cliptype];
@@ -4144,6 +4145,7 @@ var Add = /** @class */ (function (_super) {
     return Add;
 }(command_base_1.CommandBase));
 exports.Add = Add;
+// ReSharper disable once UnusedLocals
 var cmd = new Add();
 
 
@@ -4180,7 +4182,7 @@ var AppImport = /** @class */ (function (_super) {
     return AppImport;
 }(command_base_1.CommandBase));
 exports.AppImport = AppImport;
-// open the import dialog
+// ReSharper disable once UnusedLocals
 var cmd = new AppImport();
 
 
@@ -4223,8 +4225,8 @@ var AppResources = /** @class */ (function (_super) {
                 return context.user.canDesign &&
                     !context.app.isContent; // only if resources exist or are 0 (to be created)...
             },
-            configureCommand: function (context, cmd) {
-                cmd.items = [{ EntityId: context.app.resourcesId }];
+            configureCommand: function (context, command) {
+                command.items = [{ EntityId: context.app.resourcesId }];
             },
             // ReSharper disable once UnusedParameter
             dynamicClasses: function (context, settings) {
@@ -4236,6 +4238,7 @@ var AppResources = /** @class */ (function (_super) {
     return AppResources;
 }(command_base_1.CommandBase));
 exports.AppResources = AppResources;
+// ReSharper disable once UnusedLocals
 var cmd = new AppResources();
 
 
@@ -4277,8 +4280,8 @@ var AppSettings = /** @class */ (function (_super) {
                 // ReSharper restore UnusedParameter
                 return context.user.canDesign && !context.app.isContent; // only if settings exist, or are 0 (to be created)
             },
-            configureCommand: function (context, cmd) {
-                cmd.items = [{ EntityId: context.app.settingsId }];
+            configureCommand: function (context, command) {
+                command.items = [{ EntityId: context.app.settingsId }];
             },
             // ReSharper disable once UnusedParameter
             dynamicClasses: function (context, settings) {
@@ -4290,6 +4293,7 @@ var AppSettings = /** @class */ (function (_super) {
     return AppSettings;
 }(command_base_1.CommandBase));
 exports.AppSettings = AppSettings;
+// ReSharper disable once UnusedLocals
 var cmd = new AppSettings();
 
 
@@ -4330,6 +4334,7 @@ var App = /** @class */ (function (_super) {
     return App;
 }(command_base_1.CommandBase));
 exports.App = App;
+// ReSharper disable once UnusedLocals
 var cmd = new App();
 
 
@@ -4366,20 +4371,20 @@ var ContentItems = /** @class */ (function (_super) {
             showCondition: function (context, settings) {
                 return context.user.canDesign && (settings.contentType || context.contentBlock.contentTypeId);
             },
-            configureCommand: function (context, cmd) {
-                if (cmd.settings.contentType)
-                    cmd.params.contentTypeName = cmd.settings.contentType;
+            configureCommand: function (context, command) {
+                if (command.settings.contentType)
+                    command.params.contentTypeName = command.settings.contentType;
                 // maybe: if item doesn't have a type, use that of template
                 // else if (cmdSpecs.contentTypeId)
                 //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
-                if (cmd.settings.filters) {
-                    var enc = JSON.stringify(cmd.settings.filters);
+                if (command.settings.filters) {
+                    var enc = JSON.stringify(command.settings.filters);
                     // special case - if it contains a "+" character, this won't survive
                     // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b
                     // so we're base64 encoding it - see https://github.com/2sic/2sxc/issues/1061
                     if (enc.indexOf('+') > -1)
                         enc = btoa(enc);
-                    cmd.params.filters = enc;
+                    command.params.filters = enc;
                 }
             },
         });
@@ -4388,6 +4393,7 @@ var ContentItems = /** @class */ (function (_super) {
     return ContentItems;
 }(command_base_1.CommandBase));
 exports.ContentItems = ContentItems;
+// ReSharper disable once UnusedLocals
 var cmd = new ContentItems();
 
 
@@ -4428,6 +4434,7 @@ var ContentType = /** @class */ (function (_super) {
     return ContentType;
 }(command_base_1.CommandBase));
 exports.ContentType = ContentType;
+// ReSharper disable once UnusedLocals
 var cmd = new ContentType();
 
 
@@ -4477,6 +4484,7 @@ var Custom = /** @class */ (function (_super) {
     return Custom;
 }(command_base_1.CommandBase));
 exports.Custom = Custom;
+// ReSharper disable once UnusedLocals
 var cmd = new Custom();
 
 
@@ -4526,6 +4534,7 @@ var Delete = /** @class */ (function (_super) {
     return Delete;
 }(command_base_1.CommandBase));
 exports.Delete = Delete;
+// ReSharper disable once UnusedLocals
 var cmd = new Delete();
 
 
@@ -4569,7 +4578,7 @@ var Edit = /** @class */ (function (_super) {
     return Edit;
 }(command_base_1.CommandBase));
 exports.Edit = Edit;
-// open an edit-item dialog
+// ReSharper disable once UnusedLocals
 var cmd = new Edit();
 
 
@@ -4608,6 +4617,7 @@ var InstanceList = /** @class */ (function (_super) {
     return InstanceList;
 }(command_base_1.CommandBase));
 exports.InstanceList = InstanceList;
+// ReSharper disable once UnusedLocals
 var cmd = new InstanceList();
 
 
@@ -4647,6 +4657,7 @@ var ItemHistory = /** @class */ (function (_super) {
     return ItemHistory;
 }(command_base_1.CommandBase));
 exports.ItemHistory = ItemHistory;
+// ReSharper disable once UnusedLocals
 var cmd = new ItemHistory();
 
 
@@ -4683,6 +4694,7 @@ var Layout = /** @class */ (function (_super) {
     return Layout;
 }(command_base_1.CommandBase));
 exports.Layout = Layout;
+// ReSharper disable once UnusedLocals
 var cmd = new Layout();
 
 
@@ -4726,12 +4738,12 @@ var Metadata = /** @class */ (function (_super) {
             showCondition: function (context, settings) {
                 return !!settings.metadata;
             },
-            configureCommand: function (context, cmd) {
+            configureCommand: function (context, command) {
                 var itm = {
                     Title: 'EditFormTitle.Metadata',
-                    Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata),
+                    Metadata: Object.assign({ keyType: 'string', targetType: 10 }, command.settings.metadata),
                 };
-                Object.assign(cmd.items[0], itm);
+                Object.assign(command.items[0], itm);
             },
         });
         return _this;
@@ -4739,6 +4751,7 @@ var Metadata = /** @class */ (function (_super) {
     return Metadata;
 }(command_base_1.CommandBase));
 exports.Metadata = Metadata;
+// ReSharper disable once UnusedLocals
 var cmd = new Metadata();
 
 
@@ -4784,6 +4797,7 @@ var More = /** @class */ (function (_super) {
     return More;
 }(command_base_1.CommandBase));
 exports.More = More;
+// ReSharper disable once UnusedLocals
 var cmd = new More();
 
 
@@ -4828,6 +4842,7 @@ var MoveDown = /** @class */ (function (_super) {
     return MoveDown;
 }(command_base_1.CommandBase));
 exports.MoveDown = MoveDown;
+// ReSharper disable once UnusedLocals
 var cmd = new MoveDown();
 
 
@@ -4873,6 +4888,7 @@ var MoveUp = /** @class */ (function (_super) {
     return MoveUp;
 }(command_base_1.CommandBase));
 exports.MoveUp = MoveUp;
+// ReSharper disable once UnusedLocals
 var cmd = new MoveUp();
 
 
@@ -4893,8 +4909,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_open_ng_dialog_1 = __webpack_require__(30);
 var command_base_1 = __webpack_require__(0);
+var command_open_ng_dialog_1 = __webpack_require__(30);
 /**
  * new is a dialog to add something, and will not add if cancelled
  * new can also be used for mini-toolbars which just add an entity not attached to a module
@@ -4929,6 +4945,7 @@ var New = /** @class */ (function (_super) {
     return New;
 }(command_base_1.CommandBase));
 exports.New = New;
+// ReSharper disable once UnusedLocals
 var cmd = new New();
 
 
@@ -4984,6 +5001,7 @@ var Publish = /** @class */ (function (_super) {
     return Publish;
 }(command_base_1.CommandBase));
 exports.Publish = Publish;
+// ReSharper disable once UnusedLocals
 var cmd = new Publish();
 
 
@@ -5033,6 +5051,7 @@ var Remove = /** @class */ (function (_super) {
     return Remove;
 }(command_base_1.CommandBase));
 exports.Remove = Remove;
+// ReSharper disable once UnusedLocals
 var cmd = new Remove();
 
 
@@ -5071,6 +5090,7 @@ var Replace = /** @class */ (function (_super) {
     return Replace;
 }(command_base_1.CommandBase));
 exports.Replace = Replace;
+// ReSharper disable once UnusedLocals
 var cmd = new Replace();
 
 
@@ -5105,8 +5125,8 @@ var TemplateDevelop = /** @class */ (function (_super) {
             showCondition: function (context, settings) {
                 return context.user.canDesign;
             },
-            configureCommand: function (context, cmd) {
-                cmd.items = [{ EntityId: context.contentBlock.templateId }];
+            configureCommand: function (context, command) {
+                command.items = [{ EntityId: context.contentBlock.templateId }];
             },
         });
         return _this;
@@ -5114,6 +5134,7 @@ var TemplateDevelop = /** @class */ (function (_super) {
     return TemplateDevelop;
 }(command_base_1.CommandBase));
 exports.TemplateDevelop = TemplateDevelop;
+// ReSharper disable once UnusedLocals
 var cmd = new TemplateDevelop();
 
 
@@ -5169,6 +5190,7 @@ var TemplateQuery = /** @class */ (function (_super) {
     return TemplateQuery;
 }(command_base_1.CommandBase));
 exports.TemplateQuery = TemplateQuery;
+// ReSharper disable once UnusedLocals
 var cmd = new TemplateQuery();
 
 
@@ -5202,8 +5224,8 @@ var TemplateSettings = /** @class */ (function (_super) {
             showCondition: function (context, settings) {
                 return context.user.canDesign && !context.app.isContent;
             },
-            configureCommand: function (context, cmd) {
-                cmd.items = [{ EntityId: context.contentBlock.templateId }];
+            configureCommand: function (context, command) {
+                command.items = [{ EntityId: context.contentBlock.templateId }];
             },
         });
         return _this;
@@ -5211,6 +5233,7 @@ var TemplateSettings = /** @class */ (function (_super) {
     return TemplateSettings;
 }(command_base_1.CommandBase));
 exports.TemplateSettings = TemplateSettings;
+// ReSharper disable once UnusedLocals
 var cmd = new TemplateSettings();
 
 
@@ -5251,6 +5274,7 @@ var Zone = /** @class */ (function (_super) {
     return Zone;
 }(command_base_1.CommandBase));
 exports.Zone = Zone;
+// ReSharper disable once UnusedLocals
 var cmd = new Zone();
 
 
@@ -5474,9 +5498,9 @@ exports.User = User;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = __webpack_require__(4);
-var api_1 = __webpack_require__(2);
 var context_1 = __webpack_require__(6);
+var api_1 = __webpack_require__(2);
+var sxc_1 = __webpack_require__(4);
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
@@ -6004,7 +6028,7 @@ exports.ItemRender = ItemRender;
         this.options = {
             threshold: 15,
             timeout: 1000,
-            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
+            callback: null,
         };
         if (typeof options === 'object') {
             for (var i in options) {

@@ -1,7 +1,7 @@
 ﻿import { getButtonConfigDefaultsV1 } from '../toolbar/button/expand-button-config';
 import { CommandDefinition } from './command-definition';
 import { Commands } from './commands';
-import { Definition as Definition2 } from './definition';
+import { Definition } from './definition';
 
 export abstract class CommandBase {
 
@@ -9,11 +9,11 @@ export abstract class CommandBase {
 
   // quick helper so we can better debug the creation of definitions
   protected makeDef(name: string,
-    translateKey: string,
-    icon: string,
-    uiOnly: boolean,
-    partOfPage: boolean,
-    more: Definition2): void {
+                    translateKey: string,
+                    icon: string,
+                    uiOnly: boolean,
+                    partOfPage: boolean,
+                    more: Definition): void {
     if (typeof (partOfPage) !== 'boolean') {
       throw 'partOfPage in commands not provided, order will be wrong!';
     }

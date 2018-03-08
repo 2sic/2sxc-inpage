@@ -2,8 +2,7 @@
 import { manipulator } from '../contentBlock/manipulate';
 import { context } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext
-  } from './api';
+import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
 
@@ -44,9 +43,9 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
 class EditManager {
 
   constructor(private sxc: SxcInstanceWithInternals,
-    private editContext: DataEditContext,
-    private userInfo: UserOfEditContext,
-    private cmdEngine: Engine) {
+              private editContext: DataEditContext,
+              private userInfo: UserOfEditContext,
+              private cmdEngine: Engine) {
   }
 
   //#region Official, public properties and commands, which are stable for use from the outside
@@ -123,7 +122,7 @@ class EditManager {
     errWrapper.append(msg);
     errWrapper.append(toolbar);
     $(cbTag).append(errWrapper);
-  };
+  }
 
   /**
    * change config by replacing the guid, and refreshing dependent sub-objects
@@ -131,7 +130,7 @@ class EditManager {
   _updateContentGroupGuid = (newGuid: string) => {
     this.editContext.ContentGroup.Guid = newGuid;
     this._instanceConfig = buildInstanceConfig(this.editContext);
-  };
+  }
 
   _getCbManipulator = () => manipulator(this.sxc);
   // ReSharper restore InconsistentNaming
@@ -152,6 +151,6 @@ class EditManager {
     sessionStorage.removeItem('dia-cbid');
     this.run2(context(tag), 'layout');
     return true;
-  };
+  }
 
 }

@@ -21,4 +21,5 @@ export class ContentType extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new ContentType();

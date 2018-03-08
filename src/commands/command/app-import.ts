@@ -2,7 +2,7 @@
 
 /**
  * open the import dialog
- * 
+ *
  * import this module to commands.ts
  */
 export class AppImport extends CommandBase {
@@ -12,5 +12,5 @@ export class AppImport extends CommandBase {
   }
 }
 
-// open the import dialog
+// ReSharper disable once UnusedLocals
 const cmd = new AppImport();

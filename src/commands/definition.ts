@@ -1,7 +1,7 @@
-﻿import { Command } from './command';
+﻿import { ContextOfButton } from '../context/context-of-button';
+import { Command } from './command';
 import { Params } from './params';
 import { Settings } from './settings';
-import { ContextOfButton } from '../context/context-of-button';
 
 export class Definition {
   name?: string;

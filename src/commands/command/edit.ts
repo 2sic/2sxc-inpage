@@ -24,5 +24,5 @@ export class Edit extends CommandBase {
   }
 }
 
-// open an edit-item dialog
+// ReSharper disable once UnusedLocals
 const cmd = new Edit();

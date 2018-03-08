@@ -26,15 +26,16 @@ export class Metadata extends CommandBase {
         showCondition(context, settings) {
           return !!settings.metadata;
         }, // only add a metadata-button if it has metadata-infos
-        configureCommand(context, cmd) {
+        configureCommand(context, command) {
           const itm = {
             Title: 'EditFormTitle.Metadata',
-            Metadata: Object.assign({ keyType: 'string', targetType: 10 }, cmd.settings.metadata),
+            Metadata: Object.assign({ keyType: 'string', targetType: 10 }, command.settings.metadata),
           };
-          Object.assign(cmd.items[0], itm);
+          Object.assign(command.items[0], itm);
         },
       });
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new Metadata();

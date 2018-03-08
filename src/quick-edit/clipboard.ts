@@ -99,7 +99,7 @@ export function createSpecs(type: string, list: any, index: number): Specs {
     list: list,
     item: currentItem,
     index: index,
-    type: type
+    type: type,
   };
 }
 

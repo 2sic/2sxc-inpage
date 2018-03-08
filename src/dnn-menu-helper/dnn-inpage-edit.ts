@@ -1,6 +1,6 @@
-﻿import { getSxcInstance } from '../x-bootstrap/sxc';
+﻿import { context } from '../context/context';
 import { getTag } from '../manage/api';
-import { context } from '../context/context';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)

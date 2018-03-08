@@ -27,4 +27,5 @@ export class More extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new More();

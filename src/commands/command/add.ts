@@ -3,7 +3,7 @@ import { CommandBase } from '../command-base';
 
 /**
  * add brings no dialog, just add an empty item
- * 
+ *
  * import this module to commands.ts
  */
 export class Add extends CommandBase {
@@ -25,4 +25,5 @@ export class Add extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new Add();

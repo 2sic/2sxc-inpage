@@ -20,4 +20,5 @@ export class ItemHistory extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new ItemHistory();

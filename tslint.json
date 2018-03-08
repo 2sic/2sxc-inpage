@@ -5,6 +5,7 @@
     ],
     "jsRules": {},
   "rules": {
+    "align": [ true, "parameters", "statements" ],
     "curly": false,
     "eofline": true,
     "indent": [ true, "spaces", 2 ],

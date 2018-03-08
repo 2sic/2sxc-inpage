@@ -30,4 +30,5 @@ export class Remove extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new Remove();

@@ -17,11 +17,12 @@ export class TemplateDevelop extends CommandBase {
         showCondition: (context, settings) => {
           return context.user.canDesign;
         },
-        configureCommand: (context, cmd) => {
-          cmd.items = [{ EntityId: context.contentBlock.templateId }];
+        configureCommand: (context, command) => {
+          command.items = [{ EntityId: context.contentBlock.templateId }];
         },
       });
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new TemplateDevelop();

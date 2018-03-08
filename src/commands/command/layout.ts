@@ -17,4 +17,5 @@ export class Layout extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new Layout();

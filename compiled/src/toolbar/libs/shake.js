@@ -13,7 +13,7 @@
         this.options = {
             threshold: 15,
             timeout: 1000,
-            callback: null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
+            callback: null,
         };
         if (typeof options === 'object') {
             for (var i in options) {
@@ -53,8 +53,6 @@
     //calculates if shake did occur
     Shake.prototype.devicemotion = function (e) {
         var current = e.accelerationIncludingGravity;
-        var currentTime;
-        var timeDifference;
         var deltaX = 0;
         var deltaY = 0;
         var deltaZ = 0;
@@ -67,9 +65,13 @@
         deltaX = Math.abs(this.lastX - current.x);
         deltaY = Math.abs(this.lastY - current.y);
         deltaZ = Math.abs(this.lastZ - current.z);
-        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) || ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) || ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
+        if (((deltaX > this.options.threshold) && (deltaY > this.options.threshold)) ||
+            ((deltaX > this.options.threshold) && (deltaZ > this.options.threshold)) ||
+            ((deltaY > this.options.threshold) && (deltaZ > this.options.threshold))) {
             //calculate time in milliseconds since last shake registered
+            var currentTime = void 0;
             currentTime = new Date();
+            var timeDifference = void 0;
             timeDifference = currentTime.getTime() - this.lastTime.getTime();
             if (timeDifference > this.options.timeout) {
                 // once triggered, execute  the callback
@@ -77,7 +79,7 @@
                     this.options.callback();
                 }
                 else
-                    console.log("shake event without callback detected");
+                    console.log('shake event without callback detected');
                 this.lastTime = new Date();
             }
         }

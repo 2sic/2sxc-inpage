@@ -19,7 +19,7 @@
         threshold: 15, //default velocity threshold for shake to register
         timeout: 1000,
         callback:
-          null // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
+          null, // callback - will only be used if provided, otherwise generate event // function() {}//default interval between events
       };
 
       if (typeof options === 'object') {

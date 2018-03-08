@@ -26,4 +26,5 @@ export class MoveUp extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new MoveUp();

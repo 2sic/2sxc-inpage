@@ -19,25 +19,26 @@ export class ContentItems extends CommandBase {
         showCondition: (context, settings) => {
           return context.user.canDesign && (settings.contentType || context.contentBlock.contentTypeId);
         },
-        configureCommand: (context, cmd) => {
-          if (cmd.settings.contentType) // optionally override with custom type
-            cmd.params.contentTypeName = cmd.settings.contentType;
+        configureCommand: (context, command) => {
+          if (command.settings.contentType) // optionally override with custom type
+            command.params.contentTypeName = command.settings.contentType;
           // maybe: if item doesn't have a type, use that of template
           // else if (cmdSpecs.contentTypeId)
           //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
-          if (cmd.settings.filters) {
-            let enc = JSON.stringify(cmd.settings.filters);
+          if (command.settings.filters) {
+            let enc = JSON.stringify(command.settings.filters);
 
             // special case - if it contains a "+" character, this won't survive
             // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b
             // so we're base64 encoding it - see https://github.com/2sic/2sxc/issues/1061
             if (enc.indexOf('+') > -1)
               enc = btoa(enc);
-            cmd.params.filters = enc;
+            command.params.filters = enc;
           }
         },
       });
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new ContentItems();

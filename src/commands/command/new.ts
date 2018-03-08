@@ -1,6 +1,6 @@
-﻿import { commandOpenNgDialog } from '../command-open-ng-dialog';
+﻿import { CommandBase } from '../command-base';
+import { commandOpenNgDialog } from '../command-open-ng-dialog';
 import { Settings } from '../settings';
-import { CommandBase } from '../command-base';
 
 /**
  * new is a dialog to add something, and will not add if cancelled
@@ -38,4 +38,5 @@ export class New extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new New();

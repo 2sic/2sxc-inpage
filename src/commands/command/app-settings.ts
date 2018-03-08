@@ -24,8 +24,8 @@ export class AppSettings extends CommandBase {
           // ReSharper restore UnusedParameter
           return context.user.canDesign && !context.app.isContent; // only if settings exist, or are 0 (to be created)
         },
-        configureCommand: (context, cmd) => {
-          cmd.items = [{ EntityId: context.app.settingsId }];
+        configureCommand: (context, command) => {
+          command.items = [{ EntityId: context.app.settingsId }];
         },
         // ReSharper disable once UnusedParameter
         dynamicClasses: (context, settings) => {
@@ -35,4 +35,5 @@ export class AppSettings extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new AppSettings();

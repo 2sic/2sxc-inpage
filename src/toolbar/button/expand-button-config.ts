@@ -28,11 +28,11 @@ export function expandButtonConfig(original: any, sharedProps: any[]) {
 }
 
 export function getButtonConfigDefaultsV1(name: string,
-  icon: string,
-  translateKey: string,
-  uiOnly: boolean,
-  partOfPage: boolean,
-  more: Definition): Partial<ButtonConfig> {
+                                          icon: string,
+                                          translateKey: string,
+                                          uiOnly: boolean,
+                                          partOfPage: boolean,
+                                          more: Definition): Partial<ButtonConfig> {
   // stv: v1 code
   const partialButtonConfig = {
     icon: `icon-sxc-${icon}`,
@@ -93,9 +93,9 @@ function evalPropOrFunction(propOrFunction: any, context: any, settings: any, co
  * @param actions
  */
 export function addDefaultBtnSettings(btn: ButtonConfig,
-  group: GroupConfig,
-  fullToolbarConfig: ToolbarConfig,
-  actions: Commands) {
+                                      group: GroupConfig,
+                                      fullToolbarConfig: ToolbarConfig,
+                                      actions: Commands) {
   for (let d = 0; d < btnProperties.length; d++)
     fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
 }
@@ -124,10 +124,10 @@ const prvProperties = [
  * @param propName
  */
 function fallbackBtnSetting(btn: ButtonConfig,
-  group: GroupConfig,
-  fullToolbarConfig: ToolbarConfig,
-  actions: Commands,
-  propName: string): void {
+                            group: GroupConfig,
+                            fullToolbarConfig: ToolbarConfig,
+                            actions: Commands,
+                            propName: string): void {
   btn[propName] = btn[propName] // by if already defined, use the already defined property
     ||
     (group.defaults && group.defaults[propName]) // if the group has defaults, try use that property

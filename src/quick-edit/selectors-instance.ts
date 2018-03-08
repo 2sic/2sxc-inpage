@@ -7,7 +7,7 @@ import { Selectors } from './selectors';
 export const selectors = {
   cb: {
     id: 'cb',
-    'class': 'sc-content-block',
+    class: 'sc-content-block',
     selector: '.sc-content-block',
     listSelector: '.sc-content-block-list',
     context: 'data-list-context',
@@ -15,7 +15,7 @@ export const selectors = {
   } as CbOrMod,
   mod: {
     id: 'mod',
-    'class': 'DnnModule',
+    class: 'DnnModule',
     selector: '.DnnModule',
     listSelector:
       '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)', // Found no better way to get all panes - the hidden variable does not exist when not in edit page mode

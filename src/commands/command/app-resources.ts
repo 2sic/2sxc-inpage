@@ -25,8 +25,8 @@ export class AppResources extends CommandBase {
           return context.user.canDesign &&
             !context.app.isContent; // only if resources exist or are 0 (to be created)...
         },
-        configureCommand: (context, cmd) => {
-          cmd.items = [{ EntityId: context.app.resourcesId }];
+        configureCommand: (context, command) => {
+          command.items = [{ EntityId: context.app.resourcesId }];
         },
         // ReSharper disable once UnusedParameter
         dynamicClasses: (context, settings) => {
@@ -36,4 +36,5 @@ export class AppResources extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new AppResources();

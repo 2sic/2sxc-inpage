@@ -6,8 +6,8 @@ export class CmdsStrategyFactory {
 
   constructor() {
     this.cmds = {};
-    this.cmds['cb'] = new Cb();
-    this.cmds['mod'] = new Mod();
+    this.cmds.cb = new Cb();
+    this.cmds.mod = new Mod();
   }
 
   getCmds(cliptype: string): Delete {

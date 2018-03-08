@@ -25,4 +25,5 @@ export class MoveDown extends CommandBase {
   }
 }
 
+// ReSharper disable once UnusedLocals
 const cmd = new MoveDown();

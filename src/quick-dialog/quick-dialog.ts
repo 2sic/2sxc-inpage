@@ -96,10 +96,10 @@ export function isShowing(sxc: SxcInstanceWithInternals, dialogName: string): an
  * @returns {any} jquery object of the iframe
  */
 export function showOrToggle(sxc: SxcInstanceWithInternals,
-  url: string,
-  closeCallback: any,
-  fullScreen: boolean,
-  dialogName: string): any {
+                             url: string,
+                             closeCallback: any,
+                             fullScreen: boolean,
+                             dialogName: string): any {
   setSize(fullScreen);
   const iFrame: any = getIFrame();
 
