@@ -25,8 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="src\abtesting\ab-testing-config.ts" />
-    <None Remove="src\abtesting\toolbar-feature.ts" />
     <None Remove="src\commands\command-create.ts" />
     <None Remove="src\commands\command-execute-action.ts" />
     <None Remove="src\commands\command-link-to-ng-dialog.ts" />
@@ -92,8 +90,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="src\abtesting\ab-testing-config.ts" />
-    <TypeScriptCompile Include="src\abtesting\toolbar-feature.ts" />
     <TypeScriptCompile Include="src\commands\command-create.ts" />
     <TypeScriptCompile Include="src\commands\command-execute-action.ts" />
     <TypeScriptCompile Include="src\commands\command-link-to-ng-dialog.ts" />

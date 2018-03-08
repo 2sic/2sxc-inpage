@@ -50,15 +50,15 @@ export class Commands {
   public addDef = (def: CommandDefinition): void => {
     if (!this.list[def.name]) {
       // add
-      console.log('stv: add', def.name);
+      // console.log('stv: add', def.name);
       this.commandList.push(def);
       this.list[def.name] = def;
     } else if (this.list[def.name] !== def) {
       // update
-      console.log('stv: update', def.name);
+      // console.log('stv: update', def.name);
       this.list[def.name] = def;
     } else {
-      console.log('stv: !!!', def.name);
+      // console.log('stv: !!!', def.name);
     }
   }
 }

@@ -1,7 +1,7 @@
 ﻿import { getTag } from '../manage/api';
 import { hide } from '../quick-dialog/quick-dialog';
 import { reset } from '../quick-edit/start';
-import { disable } from '../abtesting/toolbar-feature';
+import { disable } from '../toolbar2/build-toolbars';
 import { _contentBlock } from './main-content-block';
 import { getPreviewWithTemplate } from './web-api-promises';
 

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var toolbar_feature_1 = require("../abtesting/toolbar-feature");
 var context_1 = require("../context/context");
 var api_1 = require("../manage/api");
 var quick_dialog_1 = require("../quick-dialog/quick-dialog");
+var build_toolbars_1 = require("../toolbar2/build-toolbars");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var sxc_1 = require("./sxc");
 // import '/2sxc-api/js/2sxc.api';
@@ -66,7 +66,7 @@ function initModule(module, isFirstRun) {
     // this must run even after first-run, because it can be added ajax-style
     var wasEmpty = showGlassesButtonIfUninitialized(sxc);
     if (isFirstRun || !wasEmpty)
-        toolbar_feature_1.buildToolbars(module);
+        build_toolbars_1.buildToolbars(module);
     return true;
 }
 function showGlassesButtonIfUninitialized(sxci) {

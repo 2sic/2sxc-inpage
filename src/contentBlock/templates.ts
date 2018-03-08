@@ -1,6 +1,6 @@
 ﻿import { ContentGroup } from '../data-edit-context/content-group';
 import { hide } from '../quick-dialog/quick-dialog';
-import { isDisabled } from '../abtesting/toolbar-feature';
+import { isDisabled } from '../toolbar2/build-toolbars';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
 

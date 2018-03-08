@@ -31,6 +31,7 @@ function addDef(def: Definition): void {
 }
 
 export function create(cmdSpecs: CmdSpec): Action {
+  debugger;
   const enableTools = cmdSpecs.canDesign;
   const isContent = cmdSpecs.isContent;
 
