@@ -1,7 +1,7 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { Commands } from '../toolbar2/command/commands';
 import { commandCreate } from './command-create';
 import { commandExecuteAction } from './command-execute-action';
+import { Commands } from './commands';
 import { Settings } from './settings';
 
 export class Engine {

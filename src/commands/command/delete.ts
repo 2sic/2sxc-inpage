@@ -1,4 +1,4 @@
-﻿import { contentItems } from '../../../entity-manipulation/item-commands';
+﻿import { contentItems } from '../../entity-manipulation/item-commands';
 import { CommandBase } from '../command-base';
 
 /**

@@ -1,7 +1,7 @@
 ﻿import { prepareToAddContent } from '../contentBlock/templates';
 import { ContextOfButton } from '../context/context-of-button';
-import { Commands } from '../toolbar2/command/commands';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
+import { Commands } from './commands';
 import { Settings } from './settings';
 
 // ToDo: remove dead code

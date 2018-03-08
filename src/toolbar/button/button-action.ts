@@ -1,4 +1,4 @@
-﻿import { CommandDefinition } from '../command/command-definition';
+﻿import { CommandDefinition } from '../../commands/command-definition';
 
 export class ButtonAction {
   // name: string; // the command name from the action list

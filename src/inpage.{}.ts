@@ -1,8 +1,8 @@
-﻿import { context } from './context/context';
+﻿import { Commands } from './commands/commands';
+import { context } from './context/context';
 import { _manage } from './manage/manage';
 import { $quickE } from './quick-edit/quick-e';
 import { start } from './quick-edit/start';
-import { Commands } from './toolbar2/command/commands';
 import { _translateInit } from './translate/2sxc._translateInit';
 import './x-bootstrap/module-bootstrapper';
 

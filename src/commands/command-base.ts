@@ -1,7 +1,7 @@
-﻿import { getButtonConfigDefaultsV1 } from '../button/expand-button-config';
+﻿import { getButtonConfigDefaultsV1 } from '../toolbar/button/expand-button-config';
 import { CommandDefinition } from './command-definition';
 import { Commands } from './commands';
-import { Definition2 } from './definition2';
+import { Definition as Definition2 } from './definition';
 
 export abstract class CommandBase {
 

@@ -1,5 +1,5 @@
-﻿import { removeFromList } from '../../../contentBlock/actions';
-import { translate } from '../../../translate/2sxc.translate';
+﻿import { removeFromList } from '../../contentBlock/actions';
+import { translate } from '../../translate/2sxc.translate';
 import { CommandBase } from '../command-base';
 
 /**

@@ -1,9 +1,9 @@
-﻿import { Command } from '../../commands/command';
-import { Params } from '../../commands/params';
-import { Settings } from '../../commands/settings';
-import { ContextOfButton } from '../../context/context-of-button';
+﻿import { Command } from './command';
+import { Params } from './params';
+import { Settings } from './settings';
+import { ContextOfButton } from '../context/context-of-button';
 
-export class Definition2 {
+export class Definition {
   name?: string;
 
   title?(context: ContextOfButton): string;

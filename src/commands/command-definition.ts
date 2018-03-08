@@ -1,4 +1,4 @@
-﻿import { ButtonConfig } from '../button/button-config';
+﻿import { ButtonConfig } from '../toolbar/button/button-config';
 
 export class CommandDefinition {
   name: string;

@@ -1,20 +1,14 @@
-﻿import { ButtonAction } from '../button/button-action';
+﻿import { Commands } from '../../commands/commands';
+import { ButtonAction } from '../button/button-action';
 import { ButtonConfig } from '../button/button-config';
-import { Commands } from '../command/commands';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-config';
-
-//export function ExpandGroupConfig(context, config: GroupConfig): GroupConfig {
-//  // todo
-//  return config;
-//}
 
 /**
  * this will traverse a groups-tree and expand each group
  * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
  * @param fullToolbarConfig
- * @param actions
  */
 export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
 

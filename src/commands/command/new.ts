@@ -1,5 +1,5 @@
-﻿import { commandOpenNgDialog } from '../../../commands/command-open-ng-dialog';
-import { Settings } from '../../../commands/settings';
+﻿import { commandOpenNgDialog } from '../command-open-ng-dialog';
+import { Settings } from '../settings';
 import { CommandBase } from '../command-base';
 
 /**

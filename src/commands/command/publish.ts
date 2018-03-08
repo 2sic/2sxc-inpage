@@ -1,5 +1,5 @@
-﻿import { publish, publishId } from '../../../contentBlock/actions';
-import { translate } from '../../../translate/2sxc.translate';
+﻿import { publish, publishId } from '../../contentBlock/actions';
+import { translate } from '../../translate/2sxc.translate';
 import { CommandBase } from '../command-base';
 
 /**

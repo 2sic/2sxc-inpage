@@ -1,4 +1,4 @@
-﻿import { changeOrder } from '../../../contentBlock/actions';
+﻿import { changeOrder } from '../../contentBlock/actions';
 import { CommandBase } from '../command-base';
 
 /**

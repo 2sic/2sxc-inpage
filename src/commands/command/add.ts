@@ -1,4 +1,4 @@
-﻿import { addItem } from '../../../contentBlock/actions';
+﻿import { addItem } from '../../contentBlock/actions';
 import { CommandBase } from '../command-base';
 
 /**

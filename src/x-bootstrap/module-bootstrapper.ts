@@ -1,7 +1,7 @@
 ﻿import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { current } from '../quick-dialog/quick-dialog';
-import { buildToolbars } from '../toolbar2/build-toolbars';
+import { buildToolbars } from '../toolbar/build-toolbars';
 import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from './sxc';
 // import '/2sxc-api/js/2sxc.api';

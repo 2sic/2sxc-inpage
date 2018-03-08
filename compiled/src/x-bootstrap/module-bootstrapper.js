@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("../context/context");
 var api_1 = require("../manage/api");
 var quick_dialog_1 = require("../quick-dialog/quick-dialog");
-var build_toolbars_1 = require("../toolbar2/build-toolbars");
+var build_toolbars_1 = require("../toolbar/build-toolbars");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var sxc_1 = require("./sxc");
 // import '/2sxc-api/js/2sxc.api';

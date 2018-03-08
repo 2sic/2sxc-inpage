@@ -1,15 +1,9 @@
-﻿import { ContextOfButton } from '../../context/context-of-button';
+﻿import { Commands } from '../../commands/commands';
+import { Definition } from '../../commands/definition';
+import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonConfig } from '../button/button-config';
-import { Commands } from '../command/commands';
-import { Definition2 } from '../command/definition2';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { GroupConfig } from './group-config';
-
-// export function ExpandButtonConfig(context, buttonConfig: ButtonConfig): ButtonConfig {
-//  // todo
-
-//  return buttonConfig;
-//}
 
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
 // ReSharper disable once UnusedParameter
@@ -38,7 +32,7 @@ export function getButtonConfigDefaultsV1(name: string,
   translateKey: string,
   uiOnly: boolean,
   partOfPage: boolean,
-  more: Definition2): Partial<ButtonConfig> {
+  more: Definition): Partial<ButtonConfig> {
   // stv: v1 code
   const partialButtonConfig = {
     icon: `icon-sxc-${icon}`,

@@ -1,4 +1,4 @@
-﻿import { ButtonConfig } from '../toolbar2/button/button-config';
+﻿import { ButtonConfig } from '../toolbar/button/button-config';
 import { ContextOfToolbar } from './context-of-toolbar';
 
 export class ContextOfButton extends ContextOfToolbar {
