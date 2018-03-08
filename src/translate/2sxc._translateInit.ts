@@ -26,7 +26,7 @@ export function _translateInit(manage: any): void {
         loadPath: manage._editContext.Environment.SxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js',
       },
       // ReSharper disable UnusedParameter
-    }, (err, t) => {
+    }, (err: any, t: any) => {
       // ReSharper restore UnusedParameter
       // for options see
       // https://github.com/i18next/jquery-i18next#initialize-the-plugin

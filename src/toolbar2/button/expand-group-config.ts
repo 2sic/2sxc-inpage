@@ -73,11 +73,11 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
  * @param root
  * @param settings
  */
-function expandButtonList(root, settings: ToolbarSettings): void {
+function expandButtonList(root: any, settings: ToolbarSettings): void {
 
   // let root = grp; // the root object which has all params of the command
-  let btns = [];
-  let sharedProperties = null;
+  let btns: any[] = [];
+  let sharedProperties: any = null;
 
   // convert compact buttons (with multi-verb action objects) into own button-objects
   // important because an older syntax allowed {action: "new,edit", entityId: 17}

@@ -17,7 +17,7 @@ export let contentItems = {
     sxc.webApi.delete(`app-content/any/${itemGuid}`, null, null, true)
       .success(() => {
         location.reload();
-      }).error((error) => {
+      }).error((error: any) => {
         const msgJs = translate('Delete.ErrCheckConsole');
         console.log(error);
 

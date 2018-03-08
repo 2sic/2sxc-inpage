@@ -608,8 +608,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var main_content_block_1 = __webpack_require__(24);
 var render_1 = __webpack_require__(9);
 var templates_1 = __webpack_require__(13);
-var api_1 = __webpack_require__(1);
 var context_1 = __webpack_require__(7);
+var api_1 = __webpack_require__(1);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -4500,9 +4500,9 @@ exports._manage = new Manage();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(39);
 var manipulate_1 = __webpack_require__(81);
+var context_1 = __webpack_require__(7);
 var api_1 = __webpack_require__(1);
 var local_storage_helper_1 = __webpack_require__(84);
-var context_1 = __webpack_require__(7);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.

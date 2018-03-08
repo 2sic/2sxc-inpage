@@ -2,7 +2,8 @@
 
 export class GroupConfig {
   buttons: ButtonConfig[] = []; // array of buttons
-  defaults: any[] = []; // v1
+  defaults: any = []; // v1
+  [propName: string]: any;
 
   constructor(buttons: ButtonConfig[]) {
     // adds these to the items

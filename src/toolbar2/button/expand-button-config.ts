@@ -50,7 +50,7 @@ export function getButtonConfigDefaultsV1(name: string, icon: string, translateK
 }
 
 // remove buttons which are not valid based on add condition
-export function removeDisableButtons(context, full: ToolbarConfig, config): void {
+export function removeDisableButtons(context: any, full: ToolbarConfig, config: any): void {
   const btnGroups = full.groups;
   for (let g = 0; g < btnGroups.length; g++) {
     const btns = btnGroups[g].buttons;
@@ -64,7 +64,7 @@ export function removeDisableButtons(context, full: ToolbarConfig, config): void
   }
 }
 
-function removeUnfitButtons(context, btns: ButtonConfig[], config): void {
+function removeUnfitButtons(context: any, btns: ButtonConfig[], config: any): void {
   for (let i = 0; i < btns.length; i++) {
     // let add = btns[i].showCondition;
     // if (add !== undefined)
@@ -75,14 +75,14 @@ function removeUnfitButtons(context, btns: ButtonConfig[], config): void {
   }
 }
 
-function disableButtons(context, btns: ButtonConfig[], config): void {
+function disableButtons(context: any, btns: ButtonConfig[], config: any): void {
   for (let i = 0; i < btns.length; i++) {
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
     btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, btns[i].action.params, config, false);
   }
 }
 
-function evalPropOrFunction(propOrFunction: any, context: any, settings, config, fallback): any {
+function evalPropOrFunction(propOrFunction: any, context: any, settings: any, config: any, fallback: any): any {
   if (propOrFunction === undefined || propOrFunction === null)
     return fallback;
   return typeof (propOrFunction) === 'function' ? propOrFunction(context, settings, config) : propOrFunction;

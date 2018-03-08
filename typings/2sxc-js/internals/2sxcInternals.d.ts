@@ -30,7 +30,7 @@ interface SxcControllerWithInternals extends SxcController {
 
 
 interface SxcWebApiWithInternals extends SxcWebApi {
-    _action(settings?, params?, data?, preventAutoFail?, method?): any,
+    _action(settings?: any, params?: any, data?: any, preventAutoFail?: any, method?: any): any,
     getActionUrl(settings: any): string,
 }
 

@@ -6,11 +6,11 @@
 
 (function(global, factory) {
         global.Shake = factory(global, global.document);
-} (typeof window !== 'undefined' ? window : this, function (window, document) {
+}(typeof window !== 'undefined' ? window : this, function (window: any, document: any) {
 
     'use strict';
 
-    function Shake(options) {
+    function Shake(options: any) {
         //feature detect
         this.hasDeviceMotion = 'ondevicemotion' in window;
 
@@ -62,10 +62,10 @@
     };
 
     //calculates if shake did occur
-    Shake.prototype.devicemotion = function (e) {
+  Shake.prototype.devicemotion = function (e: any) {
         let current = e.accelerationIncludingGravity;
-        let currentTime;
-        let timeDifference;
+        let currentTime: any;
+        let timeDifference: any;
         let deltaX = 0;
         let deltaY = 0;
         let deltaZ = 0;
@@ -103,7 +103,7 @@
     };
 
     //event handler
-    Shake.prototype.handleEvent = function (e) {
+  Shake.prototype.handleEvent = function (e: any) {
         if (typeof (this[e.type]) === 'function') {
             return this[e.type](e);
         }

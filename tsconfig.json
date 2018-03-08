@@ -4,7 +4,7 @@
     //"outFile": "../../dist-test/inpage/inpage.min.js",
     "outDir": "compiled",
     "noEmitOnError": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     //"noFallthroughCasesInSwitch": true,
     //"allowUnreachableCode": false,
     //"allowUnusedLabels": false,

@@ -6,7 +6,7 @@
  */
 // ToDo: refactor to avoid side-effects
 export const defaultSettings = {
-  autoAddMore: null, // null | "right" | "start" | true
+  autoAddMore: null as any, // null | "right" | "start" | true,
   hover: 'right', // right | left | none
   show: 'hover', // always | hover
   // order or reverse, still thinking about this --> order: "default"    // default | reverse
@@ -27,12 +27,12 @@ export const defaultSettings = {
  * @param moreSettings
  */
 export const buildFullDefinition: (unstructuredConfig: any, allActions: Action, instanceConfig: any, moreSettings: any) => {
-  name;
-  debug;
-  groups;
-  defaults;
-  params;
-  settings;
+  name: any;
+  debug: any;
+  groups: any;
+  defaults: any;
+  params: any;
+  settings: any;
 } = (unstructuredConfig, allActions: Action, instanceConfig, moreSettings) => {
   const fullConfig = ensureDefinitionTree(unstructuredConfig, moreSettings);
 
@@ -59,7 +59,7 @@ export const buildFullDefinition: (unstructuredConfig: any, allActions: Action, 
  * @param original
  * @param moreSettings
  */
-export const ensureDefinitionTree: (original: any, moreSettings: any) => { name; debug; groups; defaults; params; settings } = (original, moreSettings) => {
+export const ensureDefinitionTree: (original: any, moreSettings: any) => { name: any; debug: any; groups: any; defaults: any; params: any; settings: any } = (original, moreSettings) => {
   // original is null/undefined, just return empty set
   if (!original) throw (`preparing toolbar, with nothing to work on: ${original}`);
 
@@ -96,7 +96,7 @@ export const ensureDefinitionTree: (original: any, moreSettings: any) => { name;
  * @param fullSet
  * @param actions
  */
-export const expandButtonGroups = (fullSet, actions) => { // , itemSettings) {
+export const expandButtonGroups = (fullSet: any, actions: any) => { // , itemSettings) {
   // by now we should have a structure, let's check/fix the buttons
   for (let g = 0; g < fullSet.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
@@ -128,10 +128,10 @@ export const expandButtonGroups = (fullSet, actions) => { // , itemSettings) {
  * @param root
  * @param settings
  */
-export const expandButtonList = (root, settings) => {
+export const expandButtonList = (root: any, settings: any) => {
   // let root = grp; // the root object which has all params of the command
-  let btns = [];
-  let sharedProperties = null;
+  let btns: any = [];
+  let sharedProperties: any = null;
 
   // convert compact buttons (with multi-verb action objects) into own button-objects
   // important because an older syntax allowed {action: "new,edit", entityId: 17}
@@ -149,7 +149,7 @@ export const expandButtonList = (root, settings) => {
     }
   } else if (typeof root.buttons === 'string') {
     btns = root.buttons.split(',');
-    sharedProperties = Object.assign({}, root); // inherit all fields used in the button
+    sharedProperties = Object.assign({}, root) as any; // inherit all fields used in the button
     delete sharedProperties.buttons; // this one's not needed
     delete sharedProperties.name; // this one's not needed
     delete sharedProperties.action; //
@@ -177,7 +177,7 @@ export const expandButtonList = (root, settings) => {
 
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
 // ReSharper disable once UnusedParameter
-export const expandButtonConfig = (original, sharedProps) => {
+export const expandButtonConfig = (original: any, sharedProps: any) => {
   // prevent multiple inits
   if (original._expanded || original.command)
     return original;
@@ -198,7 +198,7 @@ export const expandButtonConfig = (original, sharedProps) => {
 };
 
 // remove buttons which are not valid based on add condition
-export const removeDisableButtons = (full, config) => {
+export const removeDisableButtons = (full: any, config: any) => {
   const btnGroups = full.groups;
   for (let g = 0; g < btnGroups.length; g++) {
     const btns = btnGroups[g].buttons;
@@ -211,7 +211,7 @@ export const removeDisableButtons = (full, config) => {
   }
 };
 
-export function removeUnfitButtons(btns, config) {
+export function removeUnfitButtons(btns: any, config: any) {
   for (let i = 0; i < btns.length; i++) {
     // let add = btns[i].showCondition;
     // if (add !== undefined)
@@ -221,7 +221,7 @@ export function removeUnfitButtons(btns, config) {
   }
 }
 
-export function disableButtons(btns, config) {
+export function disableButtons(btns: any, config: any) {
   for (let i = 0; i < btns.length; i++)
     btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
 }
@@ -248,7 +248,7 @@ export const prvProperties = [
  * @param groups
  * @param actions
  */
-export const addDefaultBtnSettings = (btn, group, groups, actions) => {
+export const addDefaultBtnSettings = (btn: any, group: any, groups: any, actions: any) => {
   for (let d = 0; d < btnProperties.length; d++)
     fallbackBtnSetting(btn, group, groups, actions, btnProperties[d]);
 };
@@ -261,7 +261,7 @@ export const addDefaultBtnSettings = (btn, group, groups, actions) => {
  * @param actions
  * @param propName
  */
-function fallbackBtnSetting(btn, group, groups, actions, propName) {
+function fallbackBtnSetting(btn: any, group: any, groups: any, actions: any, propName: any) {
   btn[propName] = btn[propName] // by if already defined, use the already defined property
     ||
     (group.defaults && group.defaults[propName]) // if the group has defaults, try use that property
@@ -273,7 +273,7 @@ function fallbackBtnSetting(btn, group, groups, actions, propName) {
 }
 
 // ReSharper disable once UnusedParameter
-export const customize = (toolbar) => {
+export const customize = (toolbar: any) => {
   // if (!toolbar.settings) return;
   // let set = toolbar.settings;
   // if (set.autoAddMore) {
@@ -287,7 +287,7 @@ export const customize = (toolbar) => {
   // }
 };
 
-export const evalPropOrFunction = (propOrFunction, settings, config, fallback) => {
+export const evalPropOrFunction = (propOrFunction: any, settings: any, config: any, fallback: any) => {
   if (propOrFunction === undefined || propOrFunction === null)
     return fallback;
   return typeof (propOrFunction) === 'function' ? propOrFunction(settings, config) : propOrFunction;

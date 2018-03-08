@@ -3,7 +3,7 @@
  * because the target item could be specified directly, or in a complex internal object called entity
  * @param actDef
  */
-function flattenActionDefinition(actDef) {
+function flattenActionDefinition(actDef: any) {
   if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
 
   let editInfo = actDef.entity._2sxcEditInformation;

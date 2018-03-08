@@ -23,7 +23,7 @@ function getToolbarTags(parentTag: any): any {
   const allInner: any = $('.sc-menu[toolbar],.sc-menu[data-toolbar]', parentTag);
 
   // return only those, which don't belong to a sub-item
-  const res: any = allInner.filter((i, e) => $(e).closest('.sc-content-block')[0] === parentTag[0]);
+  const res: any = allInner.filter((i: any, e: any) => $(e).closest('.sc-content-block')[0] === parentTag[0]);
   if (dbg) console.log('found toolbars for parent', parentTag, res);
   return res;
 }

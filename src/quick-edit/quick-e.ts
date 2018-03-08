@@ -38,7 +38,7 @@ class QuickE {
 
   constructor() {
 
-    this.selected.toggle = (target) => {
+    this.selected.toggle = (target: any) => {
       if (!target || target.length === 0) {
         this.selected.hide();
       } else {

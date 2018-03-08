@@ -31,7 +31,7 @@ function create(parentId: number, fieldName: string, index: number, appName: str
   };
 
   return sxcInstance.webApi.get({ url: 'view/module/generatecontentblock', params: params })
-    .then((result) => {
+    .then((result: any) => {
       const newTag = $(result); // prepare tag for inserting
 
       // should I add it to a specific position...

@@ -95,7 +95,7 @@ interface SxcWebApi {
      * @param preventAutoFail 
      * @returns {Promise} jQuery ajax promise object
      */
-    get(settingsOrUrl, params?, data?, preventAutoFail?: boolean): any,
+    get(settingsOrUrl: any, params?: any, data?: any, preventAutoFail?: boolean): any,
 
     /**
      * returns an http-get promise
@@ -105,7 +105,7 @@ interface SxcWebApi {
      * @param preventAutoFail 
      * @returns {Promise} jQuery ajax promise object
      */
-    post(settings, params?, data?, preventAutoFail?: boolean): any,
+    post(settings: any, params?: any, data?: any, preventAutoFail?: boolean): any,
 
     /**
      * returns an http-get promise
@@ -115,7 +115,7 @@ interface SxcWebApi {
      * @param preventAutoFail 
      * @returns {Promise} jQuery ajax promise object
      */
-    delete(settings, params?, data?, preventAutoFail?: boolean): any,
+    delete(settings: any, params?: any, data?: any, preventAutoFail?: boolean): any,
 
     /**
      * returns an http-get promise
@@ -125,7 +125,7 @@ interface SxcWebApi {
      * @param preventAutoFail 
      * @returns {Promise} jQuery ajax promise object
      */
-    put(settings, params?, data?, preventAutoFail?: boolean): any,
+    put(settings: any, params?: any, data?: any, preventAutoFail?: boolean): any,
 }
 
 

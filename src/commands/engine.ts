@@ -9,8 +9,6 @@ import { Settings } from './settings';
 import { Commands } from '../toolbar2/command/commands';
 
 export class Engine {
-  constructor() {}
-
   commands = Commands.getInstance;
 
   // assemble an object which will store the configuration and execute it
@@ -35,7 +33,7 @@ export class Engine {
   //  //return commandExecuteAction(this.sxc, this.editContext, nameOrSettings, eventOrSettings, event);
   // }
 
-  run2 = (context, nameOrSettings, eventOrSettings?: any, event?: any) => {
+  run2 = (context: ContextOfButton, nameOrSettings: any, eventOrSettings?: any, event?: any) => {
     // console.log('stv: context', context);
     return commandExecuteAction(context, nameOrSettings, eventOrSettings, event);
   }

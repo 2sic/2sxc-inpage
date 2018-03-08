@@ -2,7 +2,7 @@
 // https://stackoverflow.com/questions/31455805/find-object-in-array-using-typescript
 if (!Array.prototype.find) {
     Object.defineProperty(Array.prototype, 'find', {
-        value: function (predicate) {
+        value: function (predicate: any) {
             // 1. Let O be ? ToObject(this value).
             if (this == null) { // jshint ignore:line
                 throw new TypeError('"this" is null or not defined');

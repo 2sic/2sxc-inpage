@@ -67,7 +67,7 @@ export function positionAndAlign(element: any, coords: Coords) {
  * Refresh positioning / visibility of the quick-insert bar
  * @param e
  */
-export function refresh(e) {
+export function refresh(e: any) {
   const highlightClass: string = 'sc-cb-highlight-for-insert';
   const newDate: Date = new Date();
   if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
@@ -132,7 +132,7 @@ export function refresh(e) {
 export function findNearest(elements: any, position: Coords): Coords {
   const maxDistance: number = 30; // Defines the maximal distance of the cursor when the menu is displayed
 
-  let nearestItem = null;
+  let nearestItem: any = null;
   let nearestDistance: number = maxDistance;
 
   const posX: number = position.x + quickE.win.scrollLeft();

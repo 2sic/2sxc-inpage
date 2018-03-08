@@ -17,7 +17,7 @@ function enable(): void {
 function watchMouse() {
   let refreshTimeout: any = null;
   $('body').on('mousemove',
-    (e) => {
+    (e: any) => {
     if (refreshTimeout === null)
       refreshTimeout = window.setTimeout(() => {
         requestAnimationFrame(() => {

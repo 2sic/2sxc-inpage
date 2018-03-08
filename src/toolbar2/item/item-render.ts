@@ -1,6 +1,6 @@
 ﻿export class ItemRender {
-  button: (buttonConfig) => {};
-  group: (groupConfig) => {};
-  toolbar: (toolbarConfig) => {};
+  button: (buttonConfig: any) => {};
+  group: (groupConfig: any) => {};
+  toolbar: (toolbarConfig: any) => {};
 }
 

@@ -7,7 +7,7 @@ import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 import { toolbarStandardButtons } from './toolbar-standard-buttons';
 
-export function ExpandToolbarConfig(context, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
+export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
 
   const editContext: DataEditContext = context.sxc.editContext;
 
@@ -46,7 +46,7 @@ export function ExpandToolbarConfig(context, toolbarData: any, toolbarSettings: 
  * @param instanceConfig
  * @param toolbarSettings
  */
-const buildFullDefinition = (context, unstructuredConfig, instanceConfig, toolbarSettings: ToolbarSettings) => {
+const buildFullDefinition = (context: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings) => {
 
   const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
 

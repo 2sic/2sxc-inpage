@@ -16,7 +16,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
     publishAllowed: 'DraftOptional',
   };
   // selectors
-  const sel = $2sxc.c.sel = {};
+  const sel: any = $2sxc.c.sel = {};
 // ReSharper disable once UnusedParameter
   Object.keys($2sxc.c.cls).forEach((key, index) => {
     sel[key] = `.${$2sxc.c.cls[key]}`;

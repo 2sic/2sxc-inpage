@@ -1,12 +1,11 @@
 ﻿import { Engine, instanceEngine } from '../commands/engine';
 import { manipulator } from '../contentBlock/manipulate';
+import { context } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { renderButton } from '../toolbar2/item/render-button';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
-import { context } from '../context/context';
-
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -108,7 +107,7 @@ class EditManager {
   /**
    * private: show error when the app-data hasn't been installed yet for this imported-module
    */
-  _handleErrors = (errType, cbTag) => {
+  _handleErrors = (errType: any, cbTag: any) => {
     const errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
     let msg = '';
     const toolbar = $("<ul class='sc-menu'></ul>");

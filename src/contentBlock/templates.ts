@@ -58,7 +58,7 @@ export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId:
  */
 export function updateTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean) {
   return saveTemplate(sxc, templateId, forceCreate)
-    .then((data, textStatus, xhr) => {
+    .then((data: any, textStatus: any, xhr: any) => {
 
       // error handling
       if (xhr.status !== 200) return alert('error - result not ok, was not able to create ContentGroup');

@@ -1,8 +1,8 @@
 ﻿import { _contentBlock } from '../contentBlock/main-content-block';
 import { ajaxLoad, reloadAndReInitialize, showMessage } from '../contentBlock/render';
 import { updateTemplateFromDia } from '../contentBlock/templates';
-import { getTag } from '../manage/api';
 import { context } from '../context/context';
+import { getTag } from '../manage/api';
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -11,7 +11,7 @@ import { context } from '../context/context';
 
 const resizeInterval: number = 200;
 const scrollTopOffset: number = 80;
-let resizeWatcher = null;
+let resizeWatcher: any = null;
 const diagShowClass: string = 'dia-select';
 let isFullscreen: boolean = false;
 
@@ -135,11 +135,11 @@ function setSize(fullScreen: boolean): void {
   isFullscreen = fullScreen;
 }
 
-function extendIFrameWithSxcState(iFrame) {
-  let hiddenSxc = null;
+function extendIFrameWithSxcState(iFrame: any) {
+  let hiddenSxc: SxcInstanceWithInternals = null;
   // ReSharper disable once UnusedLocals
   const cbApi = _contentBlock;
-  let tagModule = null;
+  let tagModule: any = null;
 
   /**
    * get the sxc-object of this iframe

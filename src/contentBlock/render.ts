@@ -60,7 +60,7 @@ export function showMessage(sxc: SxcInstanceWithInternals, newContent: any): voi
  */
 export function ajaxLoad(sxc: SxcInstanceWithInternals, alternateTemplateId: number, justPreview: boolean): any {
   return getPreviewWithTemplate(sxc, alternateTemplateId)
-    .then((result) => replaceCb(sxc, result, justPreview))
+    .then((result: any) => replaceCb(sxc, result, justPreview))
     .then(reset); // reset quick-edit, because the config could have changed
 }
 

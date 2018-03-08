@@ -15,8 +15,8 @@ interface SxcData {
     // controller // 2017-09-05 2dm: remove this, don't believe anybody is using this - leave comment till 2018, then remove completely
     load(source: any): SxcData,
     reload(): SxcData,
-    on(events, callback): SxcData,
-    one(events, callback): SxcData,
+    on(events: any, callback: any): SxcData,
+    one(events: any, callback: any): SxcData,
 }
 
 interface SxcDataWithInternals extends SxcData {

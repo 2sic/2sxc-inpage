@@ -35,12 +35,12 @@ function xhrError(xhr: any, optionalMessage: string): void {
 function createModWithTypeName(paneName: string, index: number, type: string): any {
   return sendDnnAjax(null, 'controlbar/GetPortalDesktopModules', {
     data: 'category=All&loadingStartIndex=0&loadingPageSize=100&searchTerm=',
-    success: (desktopModules) => {
+    success: (desktopModules: any) => {
       const moduleToFind: string = type === 'Default' ? ' Content' : ' App';
       let module: any = null;
 
       // ReSharper disable once UnusedParameter
-      desktopModules.forEach((e, i) => {
+      desktopModules.forEach((e: any, i: any) => {
         if (e.ModuleName === moduleToFind)
           module = e;
       });
@@ -85,7 +85,7 @@ function deleteMod(modId: number): any {
       modId: modId,
     },
     // ReSharper disable once UnusedParameter
-    success: (d) => window.location.reload(),
+    success: (d: any) => window.location.reload(),
   });
 }
 
@@ -117,7 +117,7 @@ function createMod(paneName: string, position: number, modId: number): any {
     type: 'POST',
     data: postData,
     // ReSharper disable once UnusedParameter
-    success: (d) => window.location.reload(),
+    success: (d: any) => window.location.reload(),
   });
 }
 
@@ -135,7 +135,7 @@ function generatePaneMoveButtons(current: string): any {
 
   // attach click event...
   // ReSharper disable once UnusedParameter
-  targets.find('a').click(function (d) {
+  targets.find('a').click(function (d: any) {
     const link = $(this);
     const clip = data;
     const modId: number = getModuleId(clip.item.className);

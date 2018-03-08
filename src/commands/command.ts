@@ -19,7 +19,7 @@ export class Command {
       this.evalPropOrFunction(settings.params, context, {})) as Params;
   }
 
-  private evalPropOrFunction = (propOrFunction, context, fallback) => {
+  private evalPropOrFunction = (propOrFunction: any, context: ContextOfButton, fallback: any) => {
     if (propOrFunction === undefined || propOrFunction === null)
       return fallback;
     return typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction;
