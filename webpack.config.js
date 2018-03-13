@@ -70,7 +70,7 @@ module.exports = {
         use: {
           loader: 'file-loader',
           options: {
-            name: '../lib/fonts/[name].[ext]?09.14.00'  // create images on same relative path with same name
+            name: '../lib/fonts/[name].[ext]?09.15.00'  // create images on same relative path with same name
           }
         }
       }
