@@ -18,9 +18,7 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
   for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
     expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings);
-    // console.log('stv: fullToolbarConfig.settings', fullToolbarConfig.settings);
     // fix all the buttons
-
     const btns = fullToolbarConfig.groups[g].buttons;
 
     const buttonConfigs: ButtonConfig[] = [];
@@ -49,9 +47,6 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
 
       }
     }
-
-    // console.log('stv: btns', JSON.stringify(btns));
-    // console.log('stv: buttonConfigs', JSON.stringify(buttonConfigs));
 
     // Toolbar API v2 overwrite V1
     fullToolbarConfig.groups[g].buttons = buttonConfigs;
@@ -82,16 +77,12 @@ function expandButtonList(root: any, settings: ToolbarSettings): void {
         // if btns. is neither array nor string, it's a short-hand with action names
         const acts = btn.action.split(',');
         for (let a = 0; a < acts.length; a++) {
-
           btns.push($.extend(true, {}, btn, { action: acts[a] }));
-          // console.log('stv: btn', JSON.stringify(btn));
         }
       } else {
         btns.push(btn);
       }
     }
-
-    // console.log('stv: btns #1', btns);
 
   } else if (typeof root.buttons === 'string') {
 
@@ -102,13 +93,9 @@ function expandButtonList(root: any, settings: ToolbarSettings): void {
     delete sharedProperties.name; // this one's not needed
     delete sharedProperties.action; //
 
-    // console.log('stv: btns #2', btns);
-
   } else {
 
     btns = root.buttons;
-
-    // console.log('stv: btns #3', btns);
 
   }
 
@@ -128,8 +115,6 @@ function expandButtonList(root: any, settings: ToolbarSettings): void {
     // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
 
   }
-
-  // console.log('stv: btns', JSON.stringify(btns));
 
   root.buttons = btns; // ensure the internal def is also an array now
 }

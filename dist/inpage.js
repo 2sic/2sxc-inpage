@@ -326,7 +326,6 @@ var page_context_1 = __webpack_require__(58);
 function context(htmlElement) {
     var sxc = sxc_1.getSxcInstance(htmlElement);
     var editContext = api_1.getEditContext(sxc);
-    // console.log('stv: sxc, editContext', sxc, editContext);
     var contextOfButton = new context_of_button_1.ContextOfButton();
     // *** ContextOf ***
     // this will be everything about the current system, like system / api -paths etc.
@@ -402,17 +401,12 @@ var Commands = /** @class */ (function () {
         this.addDef = function (def) {
             if (!_this.list[def.name]) {
                 // add
-                // console.log('stv: add', def.name);
                 _this.commandList.push(def);
                 _this.list[def.name] = def;
             }
             else if (_this.list[def.name] !== def) {
                 // update
-                // console.log('stv: update', def.name);
                 _this.list[def.name] = def;
-            }
-            else {
-                // console.log('stv: !!!', def.name);
             }
         };
         this.instanceEngine = engine_1.instanceEngine;
@@ -1458,7 +1452,6 @@ var Engine = /** @class */ (function () {
             return command_create_1.commandCreate(context, specialSettings);
         };
         this.run2 = function (context, nameOrSettings, eventOrSettings, event) {
-            // console.log('stv: context', context);
             return command_execute_action_1.commandExecuteAction(context, nameOrSettings, eventOrSettings, event);
         };
     }
@@ -1486,6 +1479,7 @@ var command_1 = __webpack_require__(35);
  * @param specialSettings
  */
 function commandCreate(context, specialSettings) {
+    // todo: stv, !!! sxc.manage._instanceConfig
     var settings = Object.assign(context.sxc.sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
     var ngDialogUrl = context.sxc.editContext.Environment.SxcRootUrl +
         'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
@@ -1860,7 +1854,6 @@ function renderButton(context, buttonConfig, groupIndex) {
     flattenActionDefinition(buttonConfig);
     // retrieve configuration for this button
     var oldParamsAdapter = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
-    // console.log('stv: oldParamsAdapter', oldParamsAdapter);
     var onclick = buttonConfig.disabled
         ? ''
         : "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run2($2sxc.context(this), " + JSON.stringify(oldParamsAdapter) + ", event);";
@@ -1884,7 +1877,6 @@ function renderButton(context, buttonConfig, groupIndex) {
     symbol.setAttribute('aria-hidden', 'true');
     box.appendChild(symbol);
     button.appendChild(box);
-    // console.log('stv: button2', button.outerHTML);
     return button;
 }
 exports.renderButton = renderButton;
@@ -2016,9 +2008,10 @@ function toolbarStandardButtons(canDesign, sharedParameters) {
     var toolbarTemplate = new toolbar_config_templates_1.ToolbarConfigTemplates().get('default'); // use default toolbar template
     var btns = $.extend(true, {}, toolbarTemplate);
     btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
-    if (!canDesign)
-        btns.groups.splice(2, 1); // remove this menu
-    // console.log('stv: btns', JSON.stringify(btns));
+    if (!canDesign) {
+        // remove this menu
+        btns.groups.splice(2, 1);
+    }
     return btns;
 }
 exports.toolbarStandardButtons = toolbarStandardButtons;
@@ -2259,7 +2252,7 @@ var Command = /** @class */ (function () {
                 _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, "EditFormTitle." + pTerm);
         };
         // build the link, combining specific params with global ones and put all in the url
-        this.generateLink = function () {
+        this.generateLink = function (context) {
             // if there is no items-array, create an empty one (it's required later on)
             if (!_this.settings.items)
                 _this.settings.items = [];
@@ -2272,6 +2265,8 @@ var Command = /** @class */ (function () {
             }
             _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
             // clone the params and adjust parts based on partOfPage settings...
+            //debugger;
+            //console.log('stv: context', context);
             var sharedParams = Object.assign({}, _this.sxc.manage._dialogParameters);
             if (!_this.settings.partOfPage) {
                 delete sharedParams.versioningRequirements;
@@ -3009,8 +3004,6 @@ function ExpandToolbarConfig(context, toolbarData, toolbarSettings) {
     var instanceConfig = new instance_config_1.InstanceConfig(editContext);
     // whatever we had, if more settings were provided, override with these...
     var config = buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings);
-    // console.log('stv: fullToolbarConfig', JSON.stringify(config));
-    // console.log('stv: fullToolbarConfig', config);
     return config;
 }
 exports.ExpandToolbarConfig = ExpandToolbarConfig;
@@ -3038,8 +3031,6 @@ var buildFullDefinition = function (context, unstructuredConfig, instanceConfig,
     if (fullConfig.debug)
         console.log('after remove: ', fullConfig);
     expand_button_config_1.customize(fullConfig);
-    // console.log('stv: fullConfig', JSON.stringify(fullConfig));
-    // console.log('stv: fullConfig', fullConfig);
     return fullConfig;
 };
 //#region build initial toolbar object
@@ -3085,8 +3076,6 @@ var ensureDefinitionTree = function (unstructuredConfig, toolbarSettings) {
     toolbarConfig.name = unstructuredConfig.name || 'toolbar'; // name, no real use
     toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
     toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
-    // console.log('stv: toolbarConfig ', toolbarConfig);
-    // console.log('stv: toolbarConfig ', JSON.stringify(toolbarConfig));
     return toolbarConfig;
 };
 //#endregion initial toolbar object
@@ -3114,7 +3103,6 @@ function expandButtonGroups(fullToolbarConfig) {
     for (var g = 0; g < fullToolbarConfig.groups.length; g++) {
         // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
         expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings);
-        // console.log('stv: fullToolbarConfig.settings', fullToolbarConfig.settings);
         // fix all the buttons
         var btns = fullToolbarConfig.groups[g].buttons;
         var buttonConfigs = [];
@@ -3134,8 +3122,6 @@ function expandButtonGroups(fullToolbarConfig) {
                 buttonConfigs.push(newButtonConfig);
             }
         }
-        // console.log('stv: btns', JSON.stringify(btns));
-        // console.log('stv: buttonConfigs', JSON.stringify(buttonConfigs));
         // Toolbar API v2 overwrite V1
         fullToolbarConfig.groups[g].buttons = buttonConfigs;
     }
@@ -3164,14 +3150,12 @@ function expandButtonList(root, settings) {
                 var acts = btn.action.split(',');
                 for (var a = 0; a < acts.length; a++) {
                     btns.push($.extend(true, {}, btn, { action: acts[a] }));
-                    // console.log('stv: btn', JSON.stringify(btn));
                 }
             }
             else {
                 btns.push(btn);
             }
         }
-        // console.log('stv: btns #1', btns);
     }
     else if (typeof root.buttons === 'string') {
         btns = root.buttons.split(',');
@@ -3179,11 +3163,9 @@ function expandButtonList(root, settings) {
         delete sharedProperties.buttons; // this one's not needed
         delete sharedProperties.name; // this one's not needed
         delete sharedProperties.action; //
-        // console.log('stv: btns #2', btns);
     }
     else {
         btns = root.buttons;
-        // console.log('stv: btns #3', btns);
     }
     // optionally add a more-button in each group
     if (settings.autoAddMore) {
@@ -3199,7 +3181,6 @@ function expandButtonList(root, settings) {
         // todo: refactor this out, not needed any more as they are all together now
         // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
     }
-    // console.log('stv: btns', JSON.stringify(btns));
     root.buttons = btns; // ensure the internal def is also an array now
 }
 
@@ -3258,9 +3239,7 @@ var ButtonConfig = /** @class */ (function () {
         buttonConfig.name = name;
         buttonConfig.params = params;
         // todo: look up command with this name
-        // buttonConfig.command = commands[name];
-        // console.log('stv: code in ButtonConfig: ', name, buttonConfig.command);
-        // todo create an action for that command
+        // todo: create an action for that command
         // todo: use the commands tmpButtonDefaults as the initial value
         // use the config? to override anything
         if (partialConfig)
@@ -3307,14 +3286,18 @@ var command_create_1 = __webpack_require__(17);
  */
 function commandLinkToNgDialog(context, specialSettings) {
     var cmd = command_create_1.commandCreate(context, specialSettings);
-    if (cmd.settings.useModuleList)
+    if (cmd.settings.useModuleList) {
         cmd.addContentGroupItemSetsToEditList(true);
-    else
+    }
+    else {
         cmd.addSimpleItem();
+    }
+    ;
     // if the command has own configuration stuff, do that now
-    if (cmd.settings.configureCommand)
+    if (cmd.settings.configureCommand) {
         cmd.settings.configureCommand(context, cmd);
-    return cmd.generateLink();
+    }
+    return cmd.generateLink(context);
 }
 exports.commandLinkToNgDialog = commandLinkToNgDialog;
 

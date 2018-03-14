@@ -13,7 +13,6 @@ export class Engine {
   }
 
   run2 = (context: ContextOfButton, nameOrSettings: any, eventOrSettings?: any, event?: any) => {
-    // console.log('stv: context', context);
     return commandExecuteAction(context, nameOrSettings, eventOrSettings, event);
   }
 

@@ -19,7 +19,6 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
   const oldParamsAdapter: any =
     Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType },
       buttonConfig.action.params);
-  // console.log('stv: oldParamsAdapter', oldParamsAdapter);
 
   const onclick = buttonConfig.disabled
     ? ''
@@ -58,8 +57,6 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
   box.appendChild(symbol);
 
   button.appendChild(box);
-
-  // console.log('stv: button2', button.outerHTML);
 
   return button;
 }

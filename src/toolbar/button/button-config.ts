@@ -37,11 +37,7 @@ export class ButtonConfig {
     buttonConfig.name = name;
     buttonConfig.params = params;
     // todo: look up command with this name
-    // buttonConfig.command = commands[name];
-    // console.log('stv: code in ButtonConfig: ', name, buttonConfig.command);
-
-    // todo create an action for that command
-
+    // todo: create an action for that command
     // todo: use the commands tmpButtonDefaults as the initial value
 
     // use the config? to override anything

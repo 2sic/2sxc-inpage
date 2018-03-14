@@ -11,7 +11,10 @@ export function toolbarStandardButtons(canDesign: boolean, sharedParameters: any
   const toolbarTemplate = new ToolbarConfigTemplates().get('default'); // use default toolbar template
   const btns = $.extend(true, {}, toolbarTemplate);
   btns.params = sharedParameters && (Array.isArray(sharedParameters) && sharedParameters[0]) || sharedParameters;
-  if (!canDesign) btns.groups.splice(2, 1); // remove this menu
-  // console.log('stv: btns', JSON.stringify(btns));
+  if (!canDesign) {
+    // remove this menu
+    btns.groups.splice(2, 1);
+  } 
+
   return btns;
 }

@@ -10,11 +10,16 @@ import { Settings } from './settings';
 export function commandLinkToNgDialog(context: ContextOfButton, specialSettings: Settings): string {
   const cmd = commandCreate(context, specialSettings);
 
-  if (cmd.settings.useModuleList) cmd.addContentGroupItemSetsToEditList(true);
-  else cmd.addSimpleItem();
+  if (cmd.settings.useModuleList) {
+    cmd.addContentGroupItemSetsToEditList(true);
+  } else {
+    cmd.addSimpleItem();
+  };
 
   // if the command has own configuration stuff, do that now
-  if (cmd.settings.configureCommand) cmd.settings.configureCommand(context, cmd);
+  if (cmd.settings.configureCommand) {
+    cmd.settings.configureCommand(context, cmd);
+  }
 
-  return cmd.generateLink();
+  return cmd.generateLink(context);
 }

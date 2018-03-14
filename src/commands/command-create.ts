@@ -10,6 +10,8 @@ import { Settings } from './settings';
  */
 export function commandCreate(context: ContextOfButton, specialSettings: Settings): Command {
 
+
+  // todo: stv, !!! sxc.manage._instanceConfig
   const settings =
     Object.assign(context.sxc.sxc.manage._instanceConfig,
       specialSettings) as Settings; // merge button with general toolbar-settings

@@ -86,7 +86,7 @@ export class Command {
   }
 
   // build the link, combining specific params with global ones and put all in the url
-  generateLink = () => {
+  generateLink = (context: ContextOfButton) => {
     // if there is no items-array, create an empty one (it's required later on)
     if (!this.settings.items) this.settings.items = [];
     //#region steps for all actions: prefill, serialize, open-dialog
@@ -99,6 +99,8 @@ export class Command {
     this.params.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
+    //debugger;
+    //console.log('stv: context', context);
     const sharedParams = Object.assign({}, this.sxc.manage._dialogParameters) as NgDialogParams;
     if (!this.settings.partOfPage) {
       delete sharedParams.versioningRequirements;

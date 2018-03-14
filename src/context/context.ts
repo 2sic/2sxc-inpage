@@ -19,8 +19,6 @@ export function context(htmlElement: HTMLElement): ContextOfButton {
 
   const sxc = getSxcInstance(htmlElement);
   const editContext = getEditContext(sxc);
-  // console.log('stv: sxc, editContext', sxc, editContext);
-
   const contextOfButton = new ContextOfButton();
 
   // *** ContextOf ***

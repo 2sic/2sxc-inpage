@@ -25,9 +25,6 @@ export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSetti
   // whatever we had, if more settings were provided, override with these...
   const config = buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings);
 
-  // console.log('stv: fullToolbarConfig', JSON.stringify(config));
-  // console.log('stv: fullToolbarConfig', config);
-
   return config;
 }
 
@@ -60,9 +57,6 @@ const buildFullDefinition =
     if (fullConfig.debug) console.log('after remove: ', fullConfig);
 
     customize(fullConfig);
-
-    // console.log('stv: fullConfig', JSON.stringify(fullConfig));
-    // console.log('stv: fullConfig', fullConfig);
 
     return fullConfig;
   };
@@ -111,9 +105,6 @@ const ensureDefinitionTree = (unstructuredConfig: any, toolbarSettings: ToolbarS
   toolbarConfig.name = unstructuredConfig.name || 'toolbar'; // name, no real use
   toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
   toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
-
-  // console.log('stv: toolbarConfig ', toolbarConfig);
-  // console.log('stv: toolbarConfig ', JSON.stringify(toolbarConfig));
 
   return toolbarConfig;
 };
