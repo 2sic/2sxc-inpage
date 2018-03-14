@@ -24,8 +24,14 @@
     "./typings/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
+    "_reports",
     "bin",
+    "compiled",
+    "coverage",
+    "dist",
+    "docs",
+    "lib",
+    "node_modules",
     "obj"
   ]
 }

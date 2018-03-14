@@ -36,7 +36,6 @@ module.exports = {
       {
         test: /\.tsx?$/,
         include: /src/,
-        exclude: /node_modules/,
         loader: 'ts-loader',
         options: {
           transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
@@ -45,7 +44,6 @@ module.exports = {
       {
         test: /\.css$/,
         include: /src/,
-        exclude: /node_modules/,
         use: ExtractTextPlugin.extract([{
           loader: 'css-loader',
           options: {

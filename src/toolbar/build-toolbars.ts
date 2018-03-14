@@ -5,9 +5,8 @@ import { _toolbarManager } from './toolbar-manager';
 import { ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
 import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
 
-
 // quick debug - set to false if not needed for production
-const dbg = true;
+const dbg = false;
 
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar(): any {
@@ -51,36 +50,35 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     toolbars = getToolbarTags(parentTag);
   }
 
-  toolbars.each(function initToolbar(): void {
-    const tag: any = $(this);
+  for (let i = 0; i < toolbars.length; i++) {
+
+    const tag: any = $(toolbars[i]);
 
     let toolbarData: any;
     let toolbarSettings: ToolbarSettings;
     const at = $2sxc.c.attr;
 
     try {
-      const data = this.attributes.getNamedItem(at.toolbar).textContent ||
-        this.attributes.getNamedItem(at.toolbarData).textContent ||
-        '{}';
+      const data = getTextContent(toolbars[i], at.toolbar, at.toolbarData);
+
       toolbarData = JSON.parse(data);
-      const settings = this.attributes.getNamedItem(at.settings).textContent ||
-        this.attributes.getNamedItem(at.settingsData).textContent ||
-        '{}';
+
+      const settings = getTextContent(toolbars[i], at.settings, at.settingsData);
+
       toolbarSettings = JSON.parse(settings);
+
     } catch (err) {
       console.error(
         'error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...',
+        // ReSharper disable once UsageOfPossiblyUnassignedValue
         toolbarData,
         err);
       return;
     }
 
     try {
-
-      // debugger;
       const cnt = context(tag);
 
-      // *** ContextOfToolbar ***
       cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
 
       const toolbar = renderToolbar(cnt);
@@ -91,7 +89,19 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
       // note: errors happen a lot on custom toolbars, make sure the others are still rendered
       console.error('error creating toolbar - will skip this one', err2);
     }
-  });
+
+  }
+}
+
+function getTextContent(toolbar: any, name1: string, name2: string): string {
+  const item1 = toolbar.attributes.getNamedItem(name1);
+  const item2 = toolbar.attributes.getNamedItem(name2);
+  if (item1 && item1.textContent) {
+    return item1.textContent;
+  } else if (item2 && item2.textContent) {
+    return item2.textContent;
+  };
+  return '{}';
 }
 
 export function disable(tag: any): void {

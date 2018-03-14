@@ -85,6 +85,7 @@ var CommandBase = /** @class */ (function () {
         // Toolbar API v2
         this.commandDefinition.name = name;
         this.commandDefinition.buttonConfig = expand_button_config_1.getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more);
+        // todo STV: please put into own method for clarity, call it "registerInCatalog()"
         // register new CommandDefinition with in Commands
         commands_1.Commands.getInstance().addDef(this.commandDefinition);
     };
@@ -870,7 +871,7 @@ var toolbar_manager_1 = __webpack_require__(25);
 var toolbar_expand_config_1 = __webpack_require__(62);
 var toolbar_settings_1 = __webpack_require__(28);
 // quick debug - set to false if not needed for production
-var dbg = true;
+var dbg = false;
 // generate an empty / fallback toolbar tag
 function generateFallbackToolbar() {
     var settingsString = JSON.stringify(toolbar_settings_1.settingsForEmptyToolbar);
@@ -906,29 +907,25 @@ function buildToolbars(parentTag, optionalId) {
         contentTag.prepend(generateFallbackToolbar());
         toolbars = getToolbarTags(parentTag);
     }
-    toolbars.each(function initToolbar() {
-        var tag = $(this);
-        var toolbarData;
-        var toolbarSettings;
+    for (var i = 0; i < toolbars.length; i++) {
+        var tag = $(toolbars[i]);
+        var toolbarData = void 0;
+        var toolbarSettings = void 0;
         var at = $2sxc.c.attr;
         try {
-            var data = this.attributes.getNamedItem(at.toolbar).textContent ||
-                this.attributes.getNamedItem(at.toolbarData).textContent ||
-                '{}';
+            var data = getTextContent(toolbars[i], at.toolbar, at.toolbarData);
             toolbarData = JSON.parse(data);
-            var settings = this.attributes.getNamedItem(at.settings).textContent ||
-                this.attributes.getNamedItem(at.settingsData).textContent ||
-                '{}';
+            var settings = getTextContent(toolbars[i], at.settings, at.settingsData);
             toolbarSettings = JSON.parse(settings);
         }
         catch (err) {
-            console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', toolbarData, err);
+            console.error('error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...', 
+            // ReSharper disable once UsageOfPossiblyUnassignedValue
+            toolbarData, err);
             return;
         }
         try {
-            // debugger;
             var cnt = context_1.context(tag);
-            // *** ContextOfToolbar ***
             cnt.toolbar = toolbar_expand_config_1.ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
             var toolbar = render_toolbar_1.renderToolbar(cnt);
             tag.replaceWith(toolbar);
@@ -937,9 +934,21 @@ function buildToolbars(parentTag, optionalId) {
             // note: errors happen a lot on custom toolbars, make sure the others are still rendered
             console.error('error creating toolbar - will skip this one', err2);
         }
-    });
+    }
 }
 exports.buildToolbars = buildToolbars;
+function getTextContent(toolbar, name1, name2) {
+    var item1 = toolbar.attributes.getNamedItem(name1);
+    var item2 = toolbar.attributes.getNamedItem(name2);
+    if (item1 && item1.textContent) {
+        return item1.textContent;
+    }
+    else if (item2 && item2.textContent) {
+        return item2.textContent;
+    }
+    ;
+    return '{}';
+}
 function disable(tag) {
     tag = $(tag);
     tag.attr(toolbar_manager_1._toolbarManager.cDisableAttrName, true);
@@ -3719,14 +3728,18 @@ var sxc_1 = __webpack_require__(4);
  */
 var initializedModules = [];
 var openedTemplatePickerOnce = false;
-var cancelledDialog = localStorage.getItem('cancelled-dialog');
-if (cancelledDialog)
-    localStorage.removeItem('cancelled-dialog');
-initAllModules(true);
-// watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-// ReSharper disable once UnusedParameter
-document.body.addEventListener('DOMSubtreeModified', function (event) { return initAllModules(false); }, false);
-// return; // avoid side-effects
+var cancelledDialog;
+$(document).ready(function () {
+    cancelledDialog = localStorage.getItem('cancelled-dialog');
+    if (cancelledDialog) {
+        localStorage.removeItem('cancelled-dialog');
+    }
+    ;
+    initAllModules(true);
+    // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
+    // ReSharper disable once UnusedParameter
+    document.body.addEventListener('DOMSubtreeModified', function (event) { return initAllModules(false); }, false);
+});
 function initAllModules(isFirstRun) {
     $('div[data-edit-context]').each(function () {
         initModule(this, isFirstRun);
@@ -3742,14 +3755,20 @@ function initAllModules(isFirstRun) {
  */
 function tryShowTemplatePicker() {
     var uninitializedModules = $('.sc-uninitialized');
-    if (cancelledDialog || openedTemplatePickerOnce)
+    if (cancelledDialog || openedTemplatePickerOnce) {
         return false;
+    }
+    ;
     // already showing a dialog
-    if (quick_dialog_1.current !== null)
+    if (quick_dialog_1.current !== null) {
         return false;
+    }
+    ;
     // not exactly one uninitialized module
-    if (uninitializedModules.length !== 1)
+    if (uninitializedModules.length !== 1) {
         return false;
+    }
+    ;
     // show the template picker of this module
     var module = uninitializedModules.parent('div[data-edit-context]')[0];
     var sxc = sxc_1.getSxcInstance(module);
@@ -3759,30 +3778,39 @@ function tryShowTemplatePicker() {
 }
 function initModule(module, isFirstRun) {
     // check if module is already in the list of initialized modules
-    if (initializedModules.find(function (m) { return m === module; }))
+    if (initializedModules.find(function (m) { return m === module; })) {
         return false;
+    }
+    ;
     // add to modules-list
     initializedModules.push(module);
     var sxc = sxc_1.getSxcInstance(module);
     // check if the sxc must be re-created. This is necessary when modules are dynamically changed
     // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-    if (!isFirstRun)
+    if (!isFirstRun) {
         sxc = sxc.recreate(true);
+    }
+    ;
     // check if we must show the glasses
     // this must run even after first-run, because it can be added ajax-style
     var wasEmpty = showGlassesButtonIfUninitialized(sxc);
-    if (isFirstRun || !wasEmpty)
+    if (isFirstRun || !wasEmpty) {
         build_toolbars_1.buildToolbars(module);
+    }
+    ;
     return true;
 }
 function showGlassesButtonIfUninitialized(sxci) {
     // already initialized
-    if (sxci.manage._editContext.ContentGroup.TemplateId !== 0)
+    if (sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
         return false;
+    }
+    ;
     // already has a glasses button
     var tag = $(api_1.getTag(sxci));
-    if (tag.find('.sc-uninitialized').length !== 0)
+    if (tag.find('.sc-uninitialized').length !== 0) {
         return false;
+    }
     // note: title is added on mouseover, as the translation isn't ready at page-load
     var btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
     btn.on('click', function () {
@@ -5285,6 +5313,8 @@ var cmd = new Zone();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+// todo: pls ensure these properties all have a typedoc
+// as it will be in the public API
 var Definition = /** @class */ (function () {
     function Definition() {
     }
