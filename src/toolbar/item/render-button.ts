@@ -16,18 +16,20 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
   flattenActionDefinition(buttonConfig);
 
   // retrieve configuration for this button
-  const oldParamsAdapter: any =
-    Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType },
-      buttonConfig.action.params);
+  const oldParamsAdapter: any = paramsAdapter(buttonConfig.action);
 
-  const onclick = buttonConfig.disabled
-    ? ''
-    : `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
-  // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
+  let onclick: string = '';
+
+  if (!buttonConfig.disabled){
+    // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
+    onclick = `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
+  }
 
   const button = document.createElement('a');
 
-  button.classList.add(`sc-${buttonConfig.action.name}`);
+  if (buttonConfig.action) {
+    button.classList.add(`sc-${buttonConfig.action.name}`);
+  }
 
   button.classList.add(`group-${groupIndex}`);
 
@@ -44,7 +46,9 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
 
   button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
 
-  button.setAttribute('data-i18n', `[title]${buttonConfig.title(context)}`); // localization support
+  if (buttonConfig.title) {
+    button.setAttribute('data-i18n', `[title]${buttonConfig.title(context)}`); // localization support
+  }
 
   const box = document.createElement('div');
 
@@ -61,17 +65,46 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
   return button;
 }
 
+function paramsAdapter(action: any): any {
+
+  let params: any = {};
+
+  if (action) {
+
+    if (action.name) {
+      params.action = action.name;
+    }
+
+    if (action.params) {
+      Object.assign(
+        params,
+        action.params);
+    }
+  }
+
+  return params;
+}
+
 /**
  * does some clean-up work on a button-definition object
  * because the target item could be specified directly, or in a complex internal object called entity
  * @param actDef
  */
 function flattenActionDefinition(actDef: any) {
-  if (!actDef.entity || !actDef.entity._2sxcEditInformation) return;
+  if (!actDef.entity || !actDef.entity._2sxcEditInformation) {
+    return;
+  }
 
   const editInfo = actDef.entity._2sxcEditInformation;
   actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-  if (editInfo.entityId !== undefined) actDef.entityId = editInfo.entityId;
-  if (editInfo.sortOrder !== undefined) actDef.sortOrder = editInfo.sortOrder;
+
+  if (editInfo.entityId !== undefined) {
+    actDef.entityId = editInfo.entityId;
+  }
+
+  if (editInfo.sortOrder !== undefined) {
+    actDef.sortOrder = editInfo.sortOrder;
+  }
+
   delete actDef.entity; // clean up edit-info
 }

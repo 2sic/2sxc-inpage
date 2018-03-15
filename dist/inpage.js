@@ -966,11 +966,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // ReSharper disable once UnusedParameter
 function expandButtonConfig(original, sharedProps) {
     // prevent multiple inits
-    if (original._expanded || original.command)
+    if (original._expanded || original.command) {
         return original;
+    }
+    ;
     // if just a name, turn into a command
-    if (typeof original === 'string')
+    if (typeof original === 'string') {
         original = { action: original };
+    }
+    ;
     // if it's a command w/action, wrap into command + trim
     if (typeof original.action === 'string') {
         original.action = original.action.trim();
@@ -1003,8 +1007,9 @@ function removeDisableButtons(context, full, config) {
         disableButtons(context, btns, config);
         // remove the group, if no buttons left, or only "more"
         // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
-        if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more'))
-            btnGroups.splice(g--, 1); // remove, and decrement counter
+        if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more')) {
+            btnGroups.splice(g--, 1);
+        } // remove, and decrement counter
     }
 }
 exports.removeDisableButtons = removeDisableButtons;
@@ -1014,20 +1019,32 @@ function removeUnfitButtons(context, btns, config) {
         // if (add !== undefined)
         //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
         // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
-        if (!evalPropOrFunction(btns[i].showCondition, context, btns[i].action.params, config, true))
+        if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, btns[i].action.params, config, true)) {
             btns.splice(i--, 1);
+        }
     }
 }
 function disableButtons(context, btns, config) {
     for (var i = 0; i < btns.length; i++) {
         // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
-        btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, btns[i].action.params, config, false);
+        if (btns[i].action) {
+            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, btns[i].action.params, config, false);
+        }
+        else {
+            btns[i].disabled = (function (context, settings) { return false; });
+        }
     }
 }
 function evalPropOrFunction(propOrFunction, context, settings, config, fallback) {
-    if (propOrFunction === undefined || propOrFunction === null)
+    if (propOrFunction === undefined || propOrFunction === null) {
         return fallback;
-    return typeof (propOrFunction) === 'function' ? propOrFunction(context, settings, config) : propOrFunction;
+    }
+    if (typeof (propOrFunction) === 'function') {
+        return propOrFunction(context, settings, config);
+    }
+    else {
+        return propOrFunction;
+    }
 }
 /**
  * enhance button-object with default icons, etc.
@@ -1037,8 +1054,9 @@ function evalPropOrFunction(propOrFunction, context, settings, config, fallback)
  * @param actions
  */
 function addDefaultBtnSettings(btn, group, fullToolbarConfig, actions) {
-    for (var d = 0; d < btnProperties.length; d++)
+    for (var d = 0; d < btnProperties.length; d++) {
         fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
+    }
 }
 exports.addDefaultBtnSettings = addDefaultBtnSettings;
 var btnProperties = [
@@ -1063,15 +1081,29 @@ var prvProperties = [
  * @param propName
  */
 function fallbackBtnSetting(btn, group, fullToolbarConfig, actions, propName) {
-    btn[propName] = btn[propName] // by if already defined, use the already defined property
-        ||
-            (group.defaults && group.defaults[propName]) // if the group has defaults, try use that property
-        ||
-            (fullToolbarConfig && fullToolbarConfig.defaults && fullToolbarConfig.defaults[propName]) // if the group has defaults, try use that property
-        ||
-            (actions.get(btn.action.name) &&
-                actions.get(btn.action.name).buttonConfig &&
-                actions.get(btn.action.name).buttonConfig[propName]); // if there is an action, try to use that property name
+    if (btn[propName]) {
+        // if already defined, use the already defined property
+        btn[propName] = btn[propName];
+    }
+    else if (group.defaults &&
+        group.defaults[propName]) {
+        // if the group has defaults, try use that property
+        btn[propName] = group.defaults[propName];
+    }
+    else if (fullToolbarConfig &&
+        fullToolbarConfig.defaults &&
+        fullToolbarConfig.defaults[propName]) {
+        // if the toolbar has defaults, try use that property
+        btn[propName] = fullToolbarConfig.defaults[propName];
+    }
+    else if (btn.action &&
+        btn.action.name &&
+        actions.get(btn.action.name) &&
+        actions.get(btn.action.name).buttonConfig &&
+        actions.get(btn.action.name).buttonConfig[propName]) {
+        // if there is an action, try to use that property name
+        btn[propName] = actions.get(btn.action.name).buttonConfig[propName];
+    }
 }
 // ReSharper disable once UnusedParameter
 function customize(toolbar) {
@@ -1862,13 +1894,16 @@ function renderButton(context, buttonConfig, groupIndex) {
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     flattenActionDefinition(buttonConfig);
     // retrieve configuration for this button
-    var oldParamsAdapter = Object.assign({ action: buttonConfig.action.name, contentType: buttonConfig.action.params.contentType }, buttonConfig.action.params);
-    var onclick = buttonConfig.disabled
-        ? ''
-        : "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run2($2sxc.context(this), " + JSON.stringify(oldParamsAdapter) + ", event);";
-    // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
+    var oldParamsAdapter = paramsAdapter(buttonConfig.action);
+    var onclick = '';
+    if (!buttonConfig.disabled) {
+        // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
+        onclick = "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run2($2sxc.context(this), " + JSON.stringify(oldParamsAdapter) + ", event);";
+    }
     var button = document.createElement('a');
-    button.classList.add("sc-" + buttonConfig.action.name);
+    if (buttonConfig.action) {
+        button.classList.add("sc-" + buttonConfig.action.name);
+    }
     button.classList.add("group-" + groupIndex);
     if (buttonConfig.disabled) {
         button.classList.add('disabled');
@@ -1879,7 +1914,9 @@ function renderButton(context, buttonConfig, groupIndex) {
         render_helpers_1.addClasses(button, dynamicClasses, ' ');
     }
     button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
-    button.setAttribute('data-i18n', "[title]" + buttonConfig.title(context)); // localization support
+    if (buttonConfig.title) {
+        button.setAttribute('data-i18n', "[title]" + buttonConfig.title(context)); // localization support
+    }
     var box = document.createElement('div');
     var symbol = document.createElement('i');
     render_helpers_1.addClasses(symbol, buttonConfig.icon, ' ');
@@ -1889,20 +1926,35 @@ function renderButton(context, buttonConfig, groupIndex) {
     return button;
 }
 exports.renderButton = renderButton;
+function paramsAdapter(action) {
+    var params = {};
+    if (action) {
+        if (action.name) {
+            params.action = action.name;
+        }
+        if (action.params) {
+            Object.assign(params, action.params);
+        }
+    }
+    return params;
+}
 /**
  * does some clean-up work on a button-definition object
  * because the target item could be specified directly, or in a complex internal object called entity
  * @param actDef
  */
 function flattenActionDefinition(actDef) {
-    if (!actDef.entity || !actDef.entity._2sxcEditInformation)
+    if (!actDef.entity || !actDef.entity._2sxcEditInformation) {
         return;
+    }
     var editInfo = actDef.entity._2sxcEditInformation;
     actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-    if (editInfo.entityId !== undefined)
+    if (editInfo.entityId !== undefined) {
         actDef.entityId = editInfo.entityId;
-    if (editInfo.sortOrder !== undefined)
+    }
+    if (editInfo.sortOrder !== undefined) {
         actDef.sortOrder = editInfo.sortOrder;
+    }
     delete actDef.entity; // clean up edit-info
 }
 
@@ -3276,26 +3328,15 @@ var ButtonConfig = /** @class */ (function () {
         this.show = null; // maybe
         this.uiActionOnly = null;
         this.dynamicDisabled = function () { return false; }; // maybe
-        if (action) {
+        if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
             this.action = action;
             // get defaults from action commandDefinition
             Object.assign(this, action.commandDefinition.buttonConfig);
         }
-        if (partialConfig)
+        if (partialConfig) {
             Object.assign(this, partialConfig);
+        }
     }
-    ButtonConfig.fromNameAndParams = function (name, params, partialConfig) {
-        var buttonConfig = new ButtonConfig();
-        buttonConfig.name = name;
-        buttonConfig.params = params;
-        // todo: look up command with this name
-        // todo: create an action for that command
-        // todo: use the commands tmpButtonDefaults as the initial value
-        // use the config? to override anything
-        if (partialConfig)
-            Object.assign(buttonConfig, partialConfig);
-        return buttonConfig;
-    };
     return ButtonConfig;
 }());
 exports.ButtonConfig = ButtonConfig;

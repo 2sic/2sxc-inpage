@@ -22,29 +22,32 @@ export class ButtonConfig {
   uiActionOnly: boolean = null;
 
   constructor(action?: ButtonAction, partialConfig?: Partial<ButtonConfig>) {
-
-    if (action) {
+    if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
       this.action = action;
       // get defaults from action commandDefinition
       Object.assign(this, action.commandDefinition.buttonConfig);
     }
 
-    if (partialConfig) Object.assign(this, partialConfig);
+    if (partialConfig) {
+      Object.assign(this, partialConfig);
+    }
   }
 
-  static fromNameAndParams(name: string, params: any, partialConfig?: Partial<ButtonConfig>): ButtonConfig {
-    const buttonConfig = new ButtonConfig();
-    buttonConfig.name = name;
-    buttonConfig.params = params;
-    // todo: look up command with this name
-    // todo: create an action for that command
-    // todo: use the commands tmpButtonDefaults as the initial value
+  //static fromNameAndParams(name: string, params: any, partialConfig?: Partial<ButtonConfig>): ButtonConfig {
+  //  const buttonConfig = new ButtonConfig();
+  //  buttonConfig.name = name;
+  //  buttonConfig.params = params;
+  //  // todo: look up command with this name
+  //  // todo: create an action for that command
+  //  // todo: use the commands tmpButtonDefaults as the initial value
 
-    // use the config? to override anything
-    if (partialConfig) Object.assign(buttonConfig, partialConfig);
+  //  // use the config? to override anything
+  //  if (partialConfig) {
+  //    Object.assign(buttonConfig, partialConfig);
+  //  }
 
-    return buttonConfig;
-  }
+  //  return buttonConfig;
+  //}
 
   // disabled: boolean | (() => boolean) = false;
   disabled: ((context: ContextOfButton, settings: Settings) => boolean);
