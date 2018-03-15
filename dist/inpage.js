@@ -2265,9 +2265,10 @@ var Command = /** @class */ (function () {
             }
             _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
             // clone the params and adjust parts based on partOfPage settings...
-            //debugger;
-            //console.log('stv: context', context);
+            // debugger;
+            // console.log('stv: context', context);
             var sharedParams = Object.assign({}, _this.sxc.manage._dialogParameters);
+            // console.log('stv: sharedParams', sharedParams);
             if (!_this.settings.partOfPage) {
                 delete sharedParams.versioningRequirements;
                 delete sharedParams.publishing;
@@ -3113,8 +3114,11 @@ function expandButtonGroups(fullToolbarConfig) {
                     console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
                 var name = btn.command.action;
                 var contentType = btn.command.contentType;
+                // parameters adapter from v1 to v2
+                var params = parametersAdapter(btn.command);
+                Object.assign(params, fullToolbarConfig.params);
                 // Toolbar API v2
-                var newButtonAction = new button_action_1.ButtonAction(name, contentType, fullToolbarConfig.params);
+                var newButtonAction = new button_action_1.ButtonAction(name, contentType, params);
                 newButtonAction.commandDefinition = actions.get(name);
                 var newButtonConfig = new button_config_1.ButtonConfig(newButtonAction);
                 newButtonConfig.name = name;
@@ -3127,6 +3131,12 @@ function expandButtonGroups(fullToolbarConfig) {
     }
 }
 exports.expandButtonGroups = expandButtonGroups;
+function parametersAdapter(oldParameters) {
+    var newParams = oldParameters;
+    // some clean-up
+    delete newParams.action; // remove the action property
+    return newParams;
+}
 /**
  * take a list of buttons (objects OR strings)
  * and convert to proper array of buttons with actions
@@ -5583,7 +5593,6 @@ var _2sxc__translateInit_1 = __webpack_require__(73);
 __webpack_require__(74);
 $2sxc.context = context_1.context; // primary API to get the context
 $2sxc._translateInit = _2sxc__translateInit_1._translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
-// debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals

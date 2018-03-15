@@ -77,7 +77,7 @@ function initModule(module: any, isFirstRun: boolean) {
   initializedModules.push(module);
 
   let sxc = getSxcInstance(module);
-
+  
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
   if (!isFirstRun) {

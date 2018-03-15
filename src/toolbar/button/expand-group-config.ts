@@ -32,8 +32,13 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
         const name = btn.command.action;
         const contentType = btn.command.contentType;
 
+        // parameters adapter from v1 to v2
+        let params = parametersAdapter(btn.command);
+
+        Object.assign(params, fullToolbarConfig.params);
+
         // Toolbar API v2
-        const newButtonAction = new ButtonAction(name, contentType, fullToolbarConfig.params);
+        const newButtonAction = new ButtonAction(name, contentType, params);
         newButtonAction.commandDefinition = actions.get(name);
         const newButtonConfig = new ButtonConfig(newButtonAction);
         newButtonConfig.name = name;
@@ -51,6 +56,13 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
     // Toolbar API v2 overwrite V1
     fullToolbarConfig.groups[g].buttons = buttonConfigs;
   }
+}
+
+function parametersAdapter(oldParameters: any): any {
+  const newParams = oldParameters;
+  // some clean-up
+  delete newParams.action; // remove the action property
+  return newParams;
 }
 
 /**

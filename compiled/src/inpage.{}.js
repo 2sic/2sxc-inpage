@@ -9,7 +9,6 @@ var _2sxc__translateInit_1 = require("./translate/2sxc._translateInit");
 require("./x-bootstrap/module-bootstrapper");
 $2sxc.context = context_1.context; // primary API to get the context
 $2sxc._translateInit = _2sxc__translateInit_1._translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
-// debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals

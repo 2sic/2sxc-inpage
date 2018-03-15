@@ -8,7 +8,6 @@ import './x-bootstrap/module-bootstrapper';
 
 $2sxc.context = context; // primary API to get the context
 $2sxc._translateInit = _translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
-// debugger;
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
 // import '/2sxc-api/js/2sxc.api';
 // TODO inpage globals

@@ -7,7 +7,6 @@ import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from
 import { toolbarStandardButtons } from './toolbar-standard-buttons';
 
 export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
-
   const editContext: DataEditContext = context.sxc.editContext;
 
   if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings))
