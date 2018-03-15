@@ -4,6 +4,8 @@ import { ButtonConfig } from '../button/button-config';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-config';
+import { ContextOfButton } from '../../context/context-of-button';
+import { Settings } from '../../commands/settings';
 
 /**
  * this will traverse a groups-tree and expand each group
@@ -33,8 +35,7 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
         const contentType = btn.command.contentType;
 
         // parameters adapter from v1 to v2
-        let params = parametersAdapter(btn.command);
-
+        const params = parametersAdapter(btn.command);
         Object.assign(params, fullToolbarConfig.params);
 
         // Toolbar API v2
@@ -42,6 +43,10 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
         newButtonAction.commandDefinition = actions.get(name);
         const newButtonConfig = new ButtonConfig(newButtonAction);
         newButtonConfig.name = name;
+
+        // settings adapter from v1 to v2
+        const settings = settingsAdapter(btn);
+        Object.assign(newButtonConfig, settings);
 
         addDefaultBtnSettings(newButtonConfig,
           fullToolbarConfig.groups[g],
@@ -63,6 +68,43 @@ function parametersAdapter(oldParameters: any): any {
   // some clean-up
   delete newParams.action; // remove the action property
   return newParams;
+}
+
+function settingsAdapter(oldSettings: any): any {
+
+  const newSettings: any = {};
+
+  // 'classes',
+  if (oldSettings.classes) {
+    newSettings.classes = oldSettings.classes;
+  }
+
+  // 'icon',
+  if (oldSettings.icon) {
+    newSettings.icon = oldSettings.icon;
+  }
+
+  // 'title',
+  if (oldSettings.title) {
+    newSettings.title = ((context: ContextOfButton) => oldSettings.title);
+  }
+
+  // 'dynamicClasses',
+  if (oldSettings.dynamicClasses) {
+    newSettings.dynamicClasses = oldSettings.dynamicClasses;
+  }
+
+  // 'showCondition',
+  if (oldSettings.showCondition) {
+    newSettings.showCondition = oldSettings.showCondition;
+  }
+
+  // 'disabled'
+  if (oldSettings.disabled) {
+    newSettings.disabled = ((context: ContextOfButton, settings: Settings) => oldSettings.disabled);
+  }
+
+  return newSettings;
 }
 
 /**

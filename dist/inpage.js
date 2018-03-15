@@ -3131,6 +3131,9 @@ function expandButtonGroups(fullToolbarConfig) {
                 newButtonAction.commandDefinition = actions.get(name);
                 var newButtonConfig = new button_config_1.ButtonConfig(newButtonAction);
                 newButtonConfig.name = name;
+                // settings adapter from v1 to v2
+                var settings = settingsAdapter(btn);
+                Object.assign(newButtonConfig, settings);
                 expand_button_config_1.addDefaultBtnSettings(newButtonConfig, fullToolbarConfig.groups[g], fullToolbarConfig, actions); // ensure all buttons have either own settings, or the fallback
                 buttonConfigs.push(newButtonConfig);
             }
@@ -3145,6 +3148,34 @@ function parametersAdapter(oldParameters) {
     // some clean-up
     delete newParams.action; // remove the action property
     return newParams;
+}
+function settingsAdapter(oldSettings) {
+    var newSettings = {};
+    // 'classes',
+    if (oldSettings.classes) {
+        newSettings.classes = oldSettings.classes;
+    }
+    // 'icon',
+    if (oldSettings.icon) {
+        newSettings.icon = oldSettings.icon;
+    }
+    // 'title',
+    if (oldSettings.title) {
+        newSettings.title = (function (context) { return oldSettings.title; });
+    }
+    // 'dynamicClasses',
+    if (oldSettings.dynamicClasses) {
+        newSettings.dynamicClasses = oldSettings.dynamicClasses;
+    }
+    // 'showCondition',
+    if (oldSettings.showCondition) {
+        newSettings.showCondition = oldSettings.showCondition;
+    }
+    // 'disabled'
+    if (oldSettings.disabled) {
+        newSettings.disabled = (function (context, settings) { return oldSettings.disabled; });
+    }
+    return newSettings;
 }
 /**
  * take a list of buttons (objects OR strings)
@@ -3503,9 +3534,9 @@ var engine_1 = __webpack_require__(17);
 var manipulate_1 = __webpack_require__(69);
 var context_1 = __webpack_require__(4);
 var render_toolbar_1 = __webpack_require__(14);
+var toolbar_expand_config_1 = __webpack_require__(28);
 var api_1 = __webpack_require__(1);
 var local_storage_helper_1 = __webpack_require__(72);
-var toolbar_expand_config_1 = __webpack_require__(28);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
