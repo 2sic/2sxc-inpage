@@ -2,6 +2,8 @@
 import { manipulator } from '../contentBlock/manipulate';
 import { context } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { renderToolbar } from '../toolbar/item/render-toolbar';
+import { ExpandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
@@ -31,7 +33,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
   const editContext = getEditContext(sxc);
   // ReSharper disable AssignedValueIsNeverUsed
   const userInfo = getUserOfEditContext(editContext);
-  const cmdEngine = instanceEngine();
+  const cmdEngine = instanceEngine(sxc);
   // ReSharper restore AssignedValueIsNeverUsed
 
   const editManager = new EditManager(sxc, editContext, userInfo, cmdEngine);
@@ -49,6 +51,12 @@ class EditManager {
   }
 
   //#region Official, public properties and commands, which are stable for use from the outside
+
+  /**
+   * run a command - command used in toolbars and custom buttons
+   */
+  run = this.cmdEngine.run;
+
   /**
    * run2 a command - new command used in toolbars and custom buttons
    */
@@ -68,7 +76,18 @@ class EditManager {
    * @param {Object<any>} moreSettings - additional / override settings
    * @returns {string} html of the current toolbar
    */
-  // getToolbar = (tbConfig, moreSettings) => generateToolbarHtml(this.sxc, tbConfig, moreSettings);
+  getToolbar = (tbConfig: any, moreSettings: any) => {
+    const tag = getTag(this.sxc);
+    const myContext = context(tag);
+    const toolbarConfig = ExpandToolbarConfig(
+      myContext,
+      tbConfig,
+      moreSettings);
+
+    myContext.toolbar = toolbarConfig;
+
+    return renderToolbar(myContext);
+  };
 
   //#endregion official, public properties - everything below this can change at any time
 
