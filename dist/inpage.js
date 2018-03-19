@@ -2591,24 +2591,9 @@ void this.loadResources(t)):t()},t.prototype.dir=function(e){e||(e=this.language
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(5);
-var button_config_adapter_1 = __webpack_require__(21);
-var render_button_1 = __webpack_require__(14);
 var edit = /** @class */ (function () {
     function edit() {
     }
-    //* .command(command stuff)
-    //* .button(...)
-    //* .group(...)
-    //* .toolbar({ }), .toolbar(name1, name2, ...)
-    //* either this: .registerCommand($2sxc.api.edit.command(...));
-    //* or better: .register(command | toolbarTemplate | ...)
-    edit.button = function (tag, def, groupIndex) {
-        var myContext = context_1.context($(tag));
-        var newButtonConfig = button_config_adapter_1.buttonConfigAdapter(myContext, def, groupIndex);
-        var button = render_button_1.renderButton(myContext, newButtonConfig, groupIndex);
-        $(tag).replaceWith(button.outerHTML);
-    };
     return edit;
 }());
 exports.edit = edit;

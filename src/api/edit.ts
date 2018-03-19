@@ -13,22 +13,22 @@ export class edit {
   //* either this: .registerCommand($2sxc.api.edit.command(...));
   //* or better: .register(command | toolbarTemplate | ...)
 
-  public static button = (tag: string, def: ButtonDefinition, groupIndex: number): void => {
+  //public static button = (tag: string, def: ButtonDefinition, groupIndex: number): void => {
 
-    const myContext = context($(tag));
+  //  const myContext = context($(tag));
 
-    const newButtonConfig = buttonConfigAdapter(
-      myContext,
-      def,
-      groupIndex);
+  //  const newButtonConfig = buttonConfigAdapter(
+  //    myContext,
+  //    def,
+  //    groupIndex);
 
-    const button = renderButton(
-      myContext,
-      newButtonConfig,
-      groupIndex);
+  //  const button = renderButton(
+  //    myContext,
+  //    newButtonConfig,
+  //    groupIndex);
 
-    $(tag).replaceWith(button.outerHTML);
-  }
+  //  $(tag).replaceWith(button.outerHTML);
+  //}
 
   //public toolbar = (tag: string, tbConfig: any, moreSettings: any): string => {
 
