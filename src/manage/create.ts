@@ -6,7 +6,7 @@ import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { ExpandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
-import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
+import { buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
@@ -123,11 +123,6 @@ class EditManager {
   _dialogParameters = buildNgDialogParams(this.sxc, this.editContext);
 
   /**
-   * used to configure buttons / toolbars
-   */
-  _instanceConfig = buildInstanceConfig(this.editContext);
-
-  /**
    * metadata necessary to know what/how to edit
    */
   _editContext = this.editContext;
@@ -166,7 +161,6 @@ class EditManager {
    */
   _updateContentGroupGuid = (newGuid: string) => {
     this.editContext.ContentGroup.Guid = newGuid;
-    this._instanceConfig = buildInstanceConfig(this.editContext);
   }
 
   _getCbManipulator = () => manipulator(this.sxc);

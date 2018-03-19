@@ -1,5 +1,4 @@
 ﻿import { DataEditContext } from '../../data-edit-context/data-edit-context';
-import { InstanceConfig } from '../../manage/instance-config';
 import { customize, removeDisableButtons } from '../button/expand-button-config';
 import { expandButtonGroups } from '../button/expand-group-config';
 import { ToolbarConfig } from './toolbar-config';
@@ -7,7 +6,7 @@ import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from
 import { toolbarStandardButtons } from './toolbar-standard-buttons';
 
 export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
-  const editContext: DataEditContext = context.sxc.editContext;
+  // const editContext: DataEditContext = context.sxc.editContext;
 
   if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings))
     toolbarSettings = settingsForEmptyToolbar;
@@ -17,12 +16,10 @@ export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSetti
 
   let unstructuredConfig = toolbarData;
   if (!toolbarData.action && !toolbarData.groups && !toolbarData.buttons && !Array.isArray(toolbarData))
-    unstructuredConfig = toolbarStandardButtons(editContext.User.CanDesign, toolbarData);
-
-  const instanceConfig = new InstanceConfig(editContext);
+    unstructuredConfig = toolbarStandardButtons(context.user.canDesign, toolbarData);
 
   // whatever we had, if more settings were provided, override with these...
-  const config = buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings);
+  const config = buildFullDefinition(context, unstructuredConfig, toolbarSettings);
 
   return config;
 }
@@ -42,7 +39,7 @@ export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSetti
  * @param toolbarSettings
  */
 const buildFullDefinition =
-  (context: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings) => {
+  (context: any, unstructuredConfig: any, toolbarSettings: ToolbarSettings) => {
 
     const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
 
@@ -51,7 +48,7 @@ const buildFullDefinition =
 
     expandButtonGroups(fullConfig);
 
-    removeDisableButtons(context, fullConfig, instanceConfig);
+    removeDisableButtons(context, fullConfig);
 
     if (fullConfig.debug) console.log('after remove: ', fullConfig);
 

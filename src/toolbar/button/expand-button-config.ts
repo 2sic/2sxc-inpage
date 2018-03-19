@@ -51,12 +51,12 @@ export function getButtonConfigDefaultsV1(name: string,
 }
 
 // remove buttons which are not valid based on add condition
-export function removeDisableButtons(context: any, full: ToolbarConfig, config: any): void {
+export function removeDisableButtons(context: any, full: ToolbarConfig): void {
   const btnGroups = full.groups;
   for (let g = 0; g < btnGroups.length; g++) {
     const btns = btnGroups[g].buttons;
-    removeUnfitButtons(context, btns, config);
-    disableButtons(context, btns, config);
+    removeUnfitButtons(context, btns);
+    disableButtons(context, btns);
 
     // remove the group, if no buttons left, or only "more"
     // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
@@ -66,19 +66,19 @@ export function removeDisableButtons(context: any, full: ToolbarConfig, config: 
   }
 }
 
-function removeUnfitButtons(context: any, btns: ButtonConfig[], config: any): void {
+function removeUnfitButtons(context: ContextOfButton, btns: ButtonConfig[]): void {
   for (let i = 0; i < btns.length; i++) {
     // let add = btns[i].showCondition;
     // if (add !== undefined)
     //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
     // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
-    if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, btns[i].action.params, config, true)) {
+    if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, btns[i].action.params, true)) {
       btns.splice(i--, 1);
     }
   }
 }
 
-function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: any): void {
+function disableButtons(context: ContextOfButton, btns: ButtonConfig[]): void {
   for (let i = 0; i < btns.length; i++) {
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
     if (btns[i].action) {
@@ -86,7 +86,6 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
         btns[i].disabled,
         context,
         btns[i].action.params,
-        config,
         false);
     } else {
       btns[i].disabled = ((context: ContextOfButton, settings: Settings) => false);
@@ -95,12 +94,12 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
   }
 }
 
-function evalPropOrFunction(propOrFunction: any, context: ContextOfButton, settings: any, config: any, fallback: any): any {
+function evalPropOrFunction(propOrFunction: any, context: ContextOfButton, settings: any, fallback: any): any {
   if (propOrFunction === undefined || propOrFunction === null) {
     return fallback;
   }
   if (typeof (propOrFunction) === 'function') {
-    return propOrFunction(context, settings, config);
+    return propOrFunction(context, settings);
   } else {
     return propOrFunction;
   }

@@ -1,5 +1,4 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { InstanceConfig } from './instance-config';
 import { NgDialogParams } from './ng-dialog-params';
 import { QucikDialogConfig } from './qucik-dialog-config';
 import { UserOfEditContext } from './user-of-edit-context';
@@ -30,15 +29,6 @@ export function getEditContextOfTag(htmlTag: any): DataEditContext {
  */
 export function getEditContext(sxc: SxcInstanceWithInternals): DataEditContext {
   return getEditContextOfTag(getTag(sxc));
-}
-
-/**
- * builds a config object used in the toolbar system
- * @param {DataEditContext} editContext
- * @returns {InstanceConfig} object containing various properties for this current sxc-instance
- */
-export function buildInstanceConfig(editContext: DataEditContext): InstanceConfig {
-  return new InstanceConfig(editContext);
 }
 
 /**
