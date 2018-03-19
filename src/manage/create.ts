@@ -2,11 +2,14 @@
 import { manipulator } from '../contentBlock/manipulate';
 import { context } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { ButtonDefinition } from '../toolbar/button/button-definition';
+import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { ExpandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
+import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -45,9 +48,9 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
 class EditManager {
 
   constructor(private sxc: SxcInstanceWithInternals,
-              private editContext: DataEditContext,
-              private userInfo: UserOfEditContext,
-              private cmdEngine: Engine) {
+    private editContext: DataEditContext,
+    private userInfo: UserOfEditContext,
+    private cmdEngine: Engine) {
   }
 
   //#region Official, public properties and commands, which are stable for use from the outside
@@ -68,7 +71,22 @@ class EditManager {
    * @param {int} groupIndex - number what button-group it's in'
    * @returns {string} html of a button
    */
-  // getButton = (actDef, groupIndex) => renderButton(this.sxc, actDef, groupIndex).outerHTML;
+  getButton = (actDef: ButtonDefinition, groupIndex: number): string => {
+    const tag: any = getTag(this.sxc);
+    const myContext = context(tag);
+
+    const newButtonConfig = buttonConfigAdapter(
+      myContext,
+      actDef,
+      groupIndex);
+ 
+    const button = renderButton(
+      myContext,
+      newButtonConfig,
+      groupIndex);
+
+    return button.outerHTML;
+  }
 
   /**
    * Builds the toolbar and returns it as HTML
@@ -76,8 +94,8 @@ class EditManager {
    * @param {Object<any>} moreSettings - additional / override settings
    * @returns {string} html of the current toolbar
    */
-  getToolbar = (tbConfig: any, moreSettings: any) => {
-    const tag = getTag(this.sxc);
+  getToolbar = (tbConfig: any, moreSettings: any): string => {
+    const tag: any = getTag(this.sxc);
     const myContext = context(tag);
     const toolbarConfig = ExpandToolbarConfig(
       myContext,

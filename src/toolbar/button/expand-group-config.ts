@@ -1,11 +1,13 @@
-﻿import { Commands } from '../../commands/commands';
+﻿import { ContextOfButton } from '../../context/context-of-button';
+import { Settings } from '../../commands/settings';
+import { Commands } from '../../commands/commands';
+import { parametersAdapter } from '../adapters/parameters-adapter';
+import { settingsAdapter } from '../adapters/settings-adapter';
 import { ButtonAction } from '../button/button-action';
 import { ButtonConfig } from '../button/button-config';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-config';
-import { ContextOfButton } from '../../context/context-of-button';
-import { Settings } from '../../commands/settings';
 
 /**
  * this will traverse a groups-tree and expand each group
@@ -61,50 +63,6 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig): void {
     // Toolbar API v2 overwrite V1
     fullToolbarConfig.groups[g].buttons = buttonConfigs;
   }
-}
-
-function parametersAdapter(oldParameters: any): any {
-  const newParams = oldParameters;
-  // some clean-up
-  delete newParams.action; // remove the action property
-  return newParams;
-}
-
-function settingsAdapter(oldSettings: any): any {
-
-  const newSettings: any = {};
-
-  // 'classes',
-  if (oldSettings.classes) {
-    newSettings.classes = oldSettings.classes;
-  }
-
-  // 'icon',
-  if (oldSettings.icon) {
-    newSettings.icon = oldSettings.icon;
-  }
-
-  // 'title',
-  if (oldSettings.title) {
-    newSettings.title = ((context: ContextOfButton) => oldSettings.title);
-  }
-
-  // 'dynamicClasses',
-  if (oldSettings.dynamicClasses) {
-    newSettings.dynamicClasses = oldSettings.dynamicClasses;
-  }
-
-  // 'showCondition',
-  if (oldSettings.showCondition) {
-    newSettings.showCondition = oldSettings.showCondition;
-  }
-
-  // 'disabled'
-  if (oldSettings.disabled) {
-    newSettings.disabled = ((context: ContextOfButton, settings: Settings) => oldSettings.disabled);
-  }
-
-  return newSettings;
 }
 
 /**

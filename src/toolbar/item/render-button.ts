@@ -1,4 +1,5 @@
 ﻿import { ContextOfButton } from '../../context/context-of-button';
+import { oldParametersAdapter } from '../adapters/old-parameters-adapter';
 import { ButtonConfig } from '../button/button-config';
 import { addClasses } from './render-helpers';
 
@@ -16,7 +17,7 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
   flattenActionDefinition(buttonConfig);
 
   // retrieve configuration for this button
-  const oldParamsAdapter: any = paramsAdapter(buttonConfig.action);
+  const oldParamsAdapter: any = oldParametersAdapter(buttonConfig.action);
 
   let onclick: string = '';
 
@@ -63,26 +64,6 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
   button.appendChild(box);
 
   return button;
-}
-
-function paramsAdapter(action: any): any {
-
-  let params: any = {};
-
-  if (action) {
-
-    if (action.name) {
-      params.action = action.name;
-    }
-
-    if (action.params) {
-      Object.assign(
-        params,
-        action.params);
-    }
-  }
-
-  return params;
 }
 
 /**

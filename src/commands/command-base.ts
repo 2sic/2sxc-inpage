@@ -22,8 +22,11 @@ export abstract class CommandBase {
     this.commandDefinition.name = name;
     this.commandDefinition.buttonConfig = getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more);
 
-    // todo STV: please put into own method for clarity, call it "registerInCatalog()"
-    // register new CommandDefinition with in Commands
+    this.registerInCatalog();
+  }
+
+  /** register new CommandDefinition with in Commands */
+  protected registerInCatalog() {
     Commands.getInstance().addDef(this.commandDefinition);
   }
 }
