@@ -3,5 +3,6 @@
  */
 export class InstanceContext {
   id: number; // instance id (aka moduleId)
+  isEditable: boolean;
   allowPublish: boolean;
 }

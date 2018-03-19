@@ -3,4 +3,5 @@
  */
 export class UserContext {
   canDesign: boolean;
+  canDevelop: boolean;
 }

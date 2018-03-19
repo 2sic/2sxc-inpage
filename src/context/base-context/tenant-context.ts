@@ -3,4 +3,5 @@
  */
 export class TenantContext {
   id: number;
+  url: string;
 }

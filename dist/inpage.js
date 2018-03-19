@@ -300,43 +300,88 @@ function context(htmlElement) {
     // *** ContextOf ***
     // this will be everything about the current system, like system / api -paths etc.
     contextOfButton.system = new system_context_1.SystemContext();
+    if (editContext.error) {
+        contextOfButton.system.error = editContext.error.type;
+    }
     // empty
     // this will be something about the current tenant(the dnn portal)
     contextOfButton.tenant = new tenant_context_1.TenantContext();
-    contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
+    if (editContext.Environment) {
+        contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
+        contextOfButton.tenant.url = editContext.Environment.WebsiteUrl;
+    }
     // things about the user
     contextOfButton.user = new user_context_1.UserContext();
-    contextOfButton.user.canDesign = editContext.User.CanDesign;
+    if (editContext.User) {
+        contextOfButton.user.canDesign = editContext.User.CanDesign;
+        contextOfButton.user.canDevelop = editContext.User.CanDevelop;
+    }
     // *** ContextOfPage ***
     // this will be information related to the current page
     contextOfButton.page = new page_context_1.PageContext();
-    contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
+    if (editContext.Environment) {
+        contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
+        contextOfButton.page.url = editContext.Environment.PageUrl;
+    }
     // *** ContextOfInstance ***
     // this will be something about the sxc - object, version, etc.
     contextOfButton.sxc = new sxc_context_1.SxcContext();
-    contextOfButton.sxc.version = editContext.Environment.SxcVersion;
+    if (editContext.Environment) {
+        contextOfButton.sxc.version = editContext.Environment.SxcVersion;
+        contextOfButton.sxc.parameters = editContext.Environment.parameters;
+        contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl;
+    }
+    // temp
     contextOfButton.sxc.sxc = sxc; // stv: this is temp
     contextOfButton.sxc.editContext = editContext; // stv: this is temp
     // information related to the current DNN module, incl.instanceId, etc.
     contextOfButton.instance = new instance_context_1.InstanceContext();
-    contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
-    contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;
+    if (editContext.Environment) {
+        contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
+        contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
+    }
+    if (editContext.ContentBlock) {
+        contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;
+    }
     // this will be about the current app, settings of the app, app - paths, etc.
     contextOfButton.app = new app_context_1.AppContext();
-    contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
-    contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
-    contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
-    contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // ex: InstanceConfig.appPath
+    if (editContext.ContentGroup) {
+        contextOfButton.app.id = editContext.ContentGroup.AppId;
+        contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
+        contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
+        contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
+        contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // ex: InstanceConfig.appPath
+        contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
+        contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
+        contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId;
+        contextOfButton.app.guid = editContext.ContentGroup.Guid;
+    }
+    if (editContext.Language) {
+        // languages
+        contextOfButton.app.currentLanguage = editContext.Language.Current;
+        contextOfButton.app.primaryLanguage = editContext.Language.Primary;
+        contextOfButton.app.allLanguages = editContext.Language.All;
+    }
     // *** ContextOfContentBlock ***
     // information related to the current contentBlock
     contextOfButton.contentBlock = new content_block_context_1.ContentBlockContext();
-    contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // ex: InstanceConfig.cbid
-    contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
-    contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
-    contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
-    contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
-    contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
-    contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
+    if (editContext.ContentBlock) {
+        contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // ex: InstanceConfig.cbid
+        contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
+        contextOfButton.contentBlock.showTemplatePicker = editContext.ContentBlock.ShowTemplatePicker;
+        contextOfButton.contentBlock.versioningRequirements = editContext.ContentBlock.VersioningRequirements;
+        contextOfButton.contentBlock.parentFieldName = editContext.ContentBlock.ParentFieldName;
+        contextOfButton.contentBlock.parentFieldSortOrder = editContext.ContentBlock.ParentFieldSortOrder;
+        contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage;
+    }
+    if (editContext.ContentGroup) {
+        contextOfButton.contentBlock.isCreated = editContext.ContentGroup.IsCreated;
+        contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
+        contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
+        contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
+        contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
+        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
+    }
     // *** ContextOfItem ***
     // information about the current item
     contextOfButton.item = new item_context_1.ItemContext();

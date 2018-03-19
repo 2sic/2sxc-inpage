@@ -3,4 +3,5 @@
  */
 export class PageContext {
   id: number;
+  url: string;
 }
