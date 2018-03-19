@@ -1,4 +1,5 @@
-﻿import { Commands } from './commands/commands';
+﻿import { edit } from './api/edit';
+import { Commands } from './commands/commands';
 import { context } from './context/context';
 import { _manage } from './manage/manage';
 import { $quickE } from './quick-edit/quick-e';
@@ -6,6 +7,7 @@ import { start } from './quick-edit/start';
 import { _translateInit } from './translate/2sxc._translateInit';
 import './x-bootstrap/module-bootstrapper';
 
+$2sxc.api = edit;
 $2sxc.context = context; // primary API to get the context
 $2sxc._translateInit = _translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
 // const $2sxc = window.$2sxc as SxcControllerWithInternals;
@@ -34,3 +36,4 @@ $2sxc._manage = _manage;
 // window.$2sxc = $2sxc;
 window.$quickE = $quickE;
 $(start); // run on-load
+

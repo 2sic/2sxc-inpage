@@ -2,7 +2,7 @@
 import { Definition } from '../../commands/definition';
 import { Settings } from '../../commands/settings';
 import { ContextOfButton } from '../../context/context-of-button';
-import { ButtonConfig } from '../button/button-config';
+import { ButtonConfig } from './button-config';
 import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { GroupConfig } from './group-config';
 

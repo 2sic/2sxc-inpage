@@ -1,5 +1,6 @@
 ﻿import { Settings } from '../../commands/settings';
 import { Params } from '../../commands/params';
+import * as ModConfig from './mod-config';
 
 /** Button Definition v1. from old API */
 export class ButtonDefinition {
@@ -19,7 +20,7 @@ export class ButtonDefinition {
   dynamicClasses?(settings: Settings): string;
 
   // bool/function showCondition (API still experimental) - used to dynamically choose if this button should be shown or not
-  showCondition?(settings: Settings, modConfig: ModConfig): boolean;
+  showCondition?(settings: Settings, modConfig: ModConfig.ModConfig): boolean;
 
   // bool disabled (API still experimental) would disable the click on a button
   disabled?: boolean;
@@ -34,7 +35,7 @@ export class ButtonDefinition {
   uiActionOnly?: boolean;
 
   // code(settings, event) - the code executed on click, if it's not the default action
-  code?(settings: Settings, event: ModConfig): any;
+  code?(settings: Settings, event: ModConfig.ModConfig): any;
 
   // created in the buttonConfig v1
   name?: string;
@@ -44,9 +45,4 @@ export class ButtonDefinition {
   newWindow?: boolean;
   inlineWindow?: boolean;
   fullScreen?: boolean;
-}
-
-export class ModConfig {
-  target: any;
-  isList: boolean;
 }

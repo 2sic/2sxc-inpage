@@ -3,6 +3,7 @@
  */
 // ReSharper disable InconsistentNaming
 interface SxcControllerWithInternals {
+  api: any;
   _commands: any;
   _contentBlock: any;
   _lib: any;
