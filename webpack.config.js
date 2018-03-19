@@ -22,8 +22,8 @@ module.exports = {
   // get all files for boundles
   entry: {
     'inpage.js': entryFiles,
-    'inpage.min.js': entryFiles,
-    'inpage.min.css': entryCssFiles
+    'inpage.min.js': entryFiles
+    //'inpage.min.css': entryCssFiles
   },
 
   output: {
@@ -40,48 +40,49 @@ module.exports = {
         options: {
           transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
         }
-      },
-      {
-        test: /\.css$/,
-        include: /src/,
-        use: ExtractTextPlugin.extract([{
-          loader: 'css-loader',
-          options: {
-            minimize: true,
-            sourceMap: true
-          }
-        }])
-      },
-      {
-        test: /\.png$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '../../[name].[ext]' // create images on same relative path with same name
-          }
-        }
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '../lib/fonts/[name].[ext]?09.15.00'  // create images on same relative path with same name
-          }
-        }
       }
+      //{
+      //  test: /\.css$/,
+      //  include: /src/,
+      //  use: ExtractTextPlugin.extract([{
+      //    loader: 'css-loader',
+      //    options: {
+      //      minimize: true,
+      //      sourceMap: true
+      //    }
+      //  }])
+      //},
+      //{
+      //  test: /\.png$/,
+      //  exclude: /node_modules/,
+      //  use: {
+      //    loader: 'file-loader',
+      //    options: {
+      //      name: '../../[name].[ext]' // create images on same relative path with same name
+      //    }
+      //  }
+      //},
+      //{
+      //  test: /\.(woff|woff2|eot|ttf|svg)$/,
+      //  exclude: /node_modules/,
+      //  use: {
+      //    loader: 'file-loader',
+      //    options: {
+      //      name: '../lib/fonts/[name].[ext]?09.15.00'  // create images on same relative path with same name
+      //    }
+      //  }
+      //}
     ]
   },
 
   resolve: {
-    extensions: ['.ts', '.js', '.css']
+    //extensions: ['.ts', '.js', '.css']
+    extensions: ['.ts', '.js']
   },
 
   plugins: [
     new ForkTsCheckerWebpackPlugin(),
-    new ExtractTextPlugin('inpage.min.css'),
+    // new ExtractTextPlugin('inpage.min.css'),
     new UglifyJsPlugin({
       include: /\.min\.js$/
     }),
@@ -89,21 +90,22 @@ module.exports = {
       onStart: [
         {
           delete: [
-            './dist/*'
+            './dist/*.js'
+          
           ]
         }
       ],
       onEnd: [
         {
           copy: [
-            { source: './dist/inpage.min.css', destination: './dist/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
-            { source: './dist/inpage.min.css.map', destination: './dist/inpage.css.map' }, // just copy min because can't generate full and minified css.map boundle files in one pass
-            { source: './dist/*', destination: '../x/inpage' },
+            // { source: './dist/inpage.min.css', destination: './dist/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
+            // { source: './dist/inpage.min.css.map', destination: './dist/inpage.css.map' }, // just copy min because can't generate full and minified css.map boundle files in one pass
+            // { source: './dist/*', destination: '../x/inpage' },
             { source: './dist/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' }
           ]
         }
       ]
-    }),
+    })
     //new TypedocWebpackPlugin({
     //  name: '2sxc-inpage',
     //  mode: 'modules',
