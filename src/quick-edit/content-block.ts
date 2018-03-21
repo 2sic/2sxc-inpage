@@ -1,4 +1,4 @@
-﻿import { Cb as cb } from './Cb';
+﻿import { Cb as cb } from './cb';
 import { copyPasteInPage } from './clipboard';
 import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';

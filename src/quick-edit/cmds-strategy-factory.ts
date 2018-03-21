@@ -1,5 +1,5 @@
 ﻿import { Cb } from './cb';
-import { Mod } from './Mod';
+import { Mod } from './mod';
 
 export class CmdsStrategyFactory {
   cmds: Dictionary;
