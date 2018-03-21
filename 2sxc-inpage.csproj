@@ -25,9 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="src\api\edit.ts" />
-    <None Remove="src\api\edit\button\button-action-enum.ts" />
-    <None Remove="src\api\edit\button\buttons.ts" />
     <None Remove="src\commands\command-create.ts" />
     <None Remove="src\commands\command-execute-action.ts" />
     <None Remove="src\commands\command-link-to-ng-dialog.ts" />
@@ -54,7 +51,6 @@
     <None Remove="src\toolbar\button\AppResourcesButton.ts" />
     <None Remove="src\toolbar\button\AppSettingsButton.ts" />
     <None Remove="src\toolbar\button\buttons.ts" />
-    <None Remove="src\toolbar\button\buttons\button-factory.ts" />
     <None Remove="src\toolbar\button\ContentItemsButton.ts" />
     <None Remove="src\toolbar\button\ContentTypeButton.ts" />
     <None Remove="src\toolbar\button\CustomButton.ts" />
@@ -95,15 +91,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="src\api\edit.ts" />
-    <TypeScriptCompile Include="src\api\edit\button\buttons.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\add-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\app-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\app-import-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\app-resources-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\app-settings-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\button-action-enum.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\button.ts" />
     <TypeScriptCompile Include="src\commands\command-create.ts" />
     <TypeScriptCompile Include="src\commands\command-execute-action.ts" />
     <TypeScriptCompile Include="src\commands\command-link-to-ng-dialog.ts" />
@@ -124,12 +111,6 @@
     <TypeScriptCompile Include="src\toolbar\adapters\settings-adapter.ts" />
     <TypeScriptCompile Include="src\toolbar\button\button-action.ts" />
     <TypeScriptCompile Include="src\toolbar\button\button-config.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\button-factory.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\contentitems-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\contenttype-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\custom-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\delete-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\edit-button.ts" />
     <TypeScriptCompile Include="src\toolbar\button\expand-button-config.ts" />
     <TypeScriptCompile Include="src\toolbar\button\expand-group-config.ts" />
     <TypeScriptCompile Include="src\toolbar\button\group-config.ts" />
@@ -162,22 +143,7 @@
     <TypeScriptCompile Include="src\commands\command\new.ts" />
     <TypeScriptCompile Include="src\commands\command\edit.ts" />
     <TypeScriptCompile Include="src\commands\command\app-import.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\instance-list-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\item-history-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\layout-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\metadata-button.ts" />
     <TypeScriptCompile Include="src\toolbar\button\mod-config.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\more-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\movedown-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\moveup-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\new-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\publish-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\remove-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\replace-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\template-develop-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\template-query-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\template-settings-button.ts" />
-    <TypeScriptCompile Include="src\toolbar\button\buttons\zone-button.ts" />
     <TypeScriptCompile Include="src\toolbar\item\item-render.ts" />
     <TypeScriptCompile Include="src\toolbar\item\render-helpers.ts" />
     <TypeScriptCompile Include="src\toolbar\item\render-groups.ts" />
