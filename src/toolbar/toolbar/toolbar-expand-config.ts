@@ -5,12 +5,15 @@ import { expandButtonGroups } from '../button/expand-group-config';
 import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 import { toolbarStandardButtons } from './toolbar-standard-buttons';
+//import { Log } from '../../beta-log/log';
 
-export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
+export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings/*, log?: Log*/): ToolbarConfig {
   const editContext: DataEditContext = context.sxc.editContext;
 
-  if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings))
-    toolbarSettings = settingsForEmptyToolbar;
+  if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings)) {
+    //log && log.add('no data or settings found, will use default toolbar');
+    toolbarSettings = settingsForEmptyToolbar;    
+  }
 
   // if it has an action or is an array, keep that. Otherwise get standard buttons
   toolbarData = toolbarData || {}; // if null/undefined, use empty object
@@ -41,8 +44,7 @@ export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSetti
  * @param instanceConfig
  * @param toolbarSettings
  */
-const buildFullDefinition =
-  (context: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings) => {
+function buildFullDefinition(context: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings) {
 
     const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
 
@@ -72,7 +74,7 @@ const buildFullDefinition =
  * @param unstructuredConfig
  * @param toolbarSettings
  */
-const ensureDefinitionTree = (unstructuredConfig: any, toolbarSettings: ToolbarSettings): ToolbarConfig => {
+function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
   // original is null/undefined, just return empty set
   if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 
