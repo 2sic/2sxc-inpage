@@ -98,9 +98,70 @@ describe('Toolbar test suite', function () {
     expect(generatedHtml).toBe(expectedHtml);
   });
 
-  //it('10 mock toolbar one button "new" and settings { "hover": "left" } to contain `sc-tb-hover-left`', function () {
-  //  const toolbarData: any = [{ "action": "new", "contentType": "Dummy" }];
-  //  const toolbarSettings: ToolbarSettings = { "hover": "left" } as ToolbarSettings;
+  it('10 mock toolbar two "new" buttons and settings { "hover": "left", "show": "always" } to contain `sc-tb-hover-left sc-tb-show-always`', function () {
+    const toolbarData: any = [{
+      "command": {
+        "action": "new",
+        "contentType": "Category"
+      },
+      "title": "create Category",
+      "classes": "group-pro"
+    }, {
+      "command": {
+        "action": "new",
+        "contentType": "Author"
+      },
+      "title": "create Author"
+    }];
+    const toolbarSettings: ToolbarSettings = { "hover": "left", "show": "always" } as ToolbarSettings;
+    //toolbarSettings.hover = 'left';
+    const cnt = getContextFromEditContext(editContext);
+    cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
+    const generatedHtml = renderToolbar(cnt);
+    const containHtml = `sc-tb-hover-left sc-tb-show-always`;
+    expect(generatedHtml).toContain(containHtml);
+  });
+
+  it('11 mock toolbar two "new" buttons and settings { "hover": "left", "show": "always" }', function () {
+    const toolbarData: any = [{
+      "command": {
+        "action": "new",
+        "contentType": "Category"
+      },
+      "title": "create Category",
+      "classes": "group-pro"
+    }, {
+      "command": {
+        "action": "new",
+        "contentType": "Author"
+      },
+      "title": "create Author"
+    }];
+    const toolbarSettings: ToolbarSettings = { "hover": "left", "show": "always" } as ToolbarSettings;
+    //toolbarSettings.hover = 'left';
+    const cnt = getContextFromEditContext(editContext);
+    cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
+    const generatedHtml = renderToolbar(cnt);
+    const expectedHtml = `<ul class="sc-menu group-0 sc-tb-hover-left sc-tb-show-always" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-new group-0 group-pro" onclick="$2sxc(2506, 2506).manage.run2($2sxc.context(this), {&quot;action&quot;:&quot;new&quot;,&quot;contentType&quot;:&quot;Category&quot;}, event);" data-i18n="[title]create Category"><div><i class="icon-sxc-plus" aria-hidden="true"></i></div></a></li><li><a class="sc-new group-0" onclick="$2sxc(2506, 2506).manage.run2($2sxc.context(this), {&quot;action&quot;:&quot;new&quot;,&quot;contentType&quot;:&quot;Author&quot;}, event);" data-i18n="[title]create Author"><div><i class="icon-sxc-plus" aria-hidden="true"></i></div></a></li></ul>`;
+    expect(generatedHtml).toBe(expectedHtml);
+  });
+
+  //it('12 mock toolbar two "new" buttons and settings { "hover": "left", "show": "always" } to contain `sc-tb-hover-left sc-tb-show-always`', function () {
+  //  const toolbarData: any = [{
+  //    "command": {
+  //      "action": "new",
+  //      "contentType": "Category"
+  //    },
+  //    "title": "create Category",
+  //    "classes": "group-pro"
+  //  }, {
+  //    "command": {
+  //      "action": "new",
+  //      "contentType": "Author"
+  //    },
+  //    "title": "create Author"
+  //  }];
+  //  const toolbarSettings: ToolbarSettings = { "hover": "left", "show": "always" } as ToolbarSettings;
   //  //toolbarSettings.hover = 'left';
   //  const cnt = getContextFromEditContext(editContext);
   //  cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
@@ -108,13 +169,26 @@ describe('Toolbar test suite', function () {
   //  console.log(
   //    'stv: html',
   //    generatedHtml);
-  //  const containHtml = `sc-tb-hover-left`;
+  //  const containHtml = `sc-tb-hover-left sc-tb-show-always`;
   //  expect(generatedHtml).toContain(containHtml);
   //});
 
-  //it('11 mock toolbar one button "new" and settings "hover": "left" ', function () {
-  //  const toolbarData: any = [{ "action": "new", "contentType": "Dummy" }];
-  //  const toolbarSettings: ToolbarSettings = { "hover": "left" } as ToolbarSettings;
+  //it('12b mock toolbar two "new" buttons and settings { "hover": "left", "show": "always" }', function () {
+  //  const toolbarData: any = [{
+  //    "command": {
+  //      "action": "new",
+  //      "contentType": "Category"
+  //    },
+  //    "title": "create Category",
+  //    "classes": "group-pro"
+  //  }, {
+  //    "command": {
+  //      "action": "new",
+  //      "contentType": "Author"
+  //    },
+  //    "title": "create Author"
+  //  }];
+  //  const toolbarSettings: ToolbarSettings = { "hover": "left", "show": "always" } as ToolbarSettings;
   //  //toolbarSettings.hover = 'left';
   //  const cnt = getContextFromEditContext(editContext);
   //  cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
@@ -122,7 +196,7 @@ describe('Toolbar test suite', function () {
   //  console.log(
   //    'stv: html',
   //    generatedHtml);
-  //  const expectedHtml = `<ul class="sc-menu group-0 sc-tb-hover-left sc-tb-show-hover" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-new group-0" onclick="$2sxc(2506, 2506).manage.run2($2sxc.context(this), {&quot;action&quot;:&quot;new&quot;,&quot;contentType&quot;:&quot;Dummy&quot;}, event);" data-i18n="[title]Toolbar.New"><div><i class="icon-sxc-plus" aria-hidden="true"></i></div></a></li></ul>`;
+  //  const expectedHtml = `<ul class="sc-menu group-0 sc-tb-hover-left sc-tb-show-always" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-new group-0 group-pro" onclick="$2sxc(2506, 2506).manage.run2($2sxc.context(this), {&quot;action&quot;:&quot;new&quot;,&quot;contentType&quot;:&quot;Category&quot;}, event);" data-i18n="[title]create Category"><div><i class="icon-sxc-plus" aria-hidden="true"></i></div></a></li><li><a class="sc-new group-0" onclick="$2sxc(2506, 2506).manage.run2($2sxc.context(this), {&quot;action&quot;:&quot;new&quot;,&quot;contentType&quot;:&quot;Author&quot;}, event);" data-i18n="[title]create Author"><div><i class="icon-sxc-plus" aria-hidden="true"></i></div></a></li></ul>`;
   //  expect(generatedHtml).toBe(expectedHtml);
   //});
 
