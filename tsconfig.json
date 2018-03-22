@@ -13,10 +13,7 @@
     "inlineSources": false,
     "target": "es5",
     "allowJs": true,
-    //"module": "amd",
     "module": "commonjs"
-    //"module": "es2015"
-    //"moduleResolution": "node"
   },
   "include": [
     "./src/**/*.ts",

@@ -1,5 +1,5 @@
-//Karma configuration
-//Generated on Thu Jan 11 2018 14:00:13 GMT+0100 (Central European Standard Time)
+﻿//Karma configuration Webpack variant, it is not used, only for testing
+var webpackConf = require('./webpack.config.js');
 
 module.exports = function (config) {
   config.set({
@@ -14,20 +14,42 @@ module.exports = function (config) {
       'karma-typescript'
     ],
 
-    // list of files / patterns to load in the browser
     files: [
       '../2sxc-dnn742/Website/Resources/Libraries/jQuery/01_09_01/jquery.js', // resolve $
       '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/Js/2sxc.api.min.js', // resolve $2sxc
-      // './dist/inpage.js',
       { pattern: './src/**/libs/*.js', watched: false },
       { pattern: './src/**/*.ts', watched: false },
       { pattern: './test/*.ts', watched: false }
     ],
 
+    preprocessors: {
+      './src/**/libs/*.js': ['webpack'],
+      './src/**/*.ts': ['webpack', 'karma-typescript', 'sourcemap'],
+      './test/*.ts': ['webpack', 'karma-typescript', 'sourcemap']
+    },
+
+    webpack: {
+      //node: {
+      //  fs: 'empty'
+      //},
+      target: 'node',
+      context: webpackConf.context,
+      devtool: webpackConf.devtool,
+      // entry: webpackConf.entry,
+      output: webpackConf.output,
+      module: webpackConf.module,
+      resolve: webpackConf.resolve,
+      plugins: webpackConf.plugins
+    },
+
+    webpackMiddleware: {
+      noInfo: true,
+      stats: 'errors-only'
+    },
+
     // list of files / patterns to exclude
     exclude: [
-      './test/assests/*',
-      'node_modules'
+      './node_modules/*'
     ],
 
     typings: [
@@ -36,19 +58,15 @@ module.exports = function (config) {
 
     plugins: ['karma-*'],
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      '**/*.ts': ['karma-typescript']
-    },
-
     typescriptPreprocessor: {
       options: {
         sourceMap: true, // generate source maps
         noResolve: false // enforce type resolution
       },
       transformPath: function (path) {
-        return path.replace(/\.ts$/, '.js');
+        return path.replace(
+          /\.ts$/,
+          '.js');
       }
     },
 
@@ -58,8 +76,28 @@ module.exports = function (config) {
     reporters: [
       'jasmine-diff',
       'progress',
-      'karma-typescript'
+      'karma-typescript',
+      'spec'
+      // 'coverage-istanbul'
     ],
+
+    specReporter: {
+      maxLogLines: 5, // limit number of lines logged per test
+      suppressErrorSummary: true, // do not print error summary
+      suppressFailed: false, // do not print information about failed tests
+      suppressPassed: false, // do not print information about passed tests
+      suppressSkipped: true, // do not print information about skipped tests
+      showSpecTiming: true // print the time elapsed for each spec
+    },
+
+    coverageIstanbulReporter: {
+      reports: ['html', 'lcov', 'text-summary'],
+      dir: './coverage', // coverage results needs to be saved under coverage/
+      fixWebpackSourcePaths: true,
+      query: {
+        esModules: true
+      }
+    },
 
     jasmineDiffReporter: {
       multiline: true,
@@ -76,7 +114,7 @@ module.exports = function (config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_ERROR,
 
 
     // enable / disable watching file and executing tests whenever any file changes

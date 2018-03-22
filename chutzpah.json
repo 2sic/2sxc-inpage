@@ -1,0 +1,41 @@
+﻿{
+  "Framework": "jasmine",
+  //"TestHarnessLocationMode": "SettingsFileAdjacent",
+  //"EnableTestFileBatching": false,
+  //"Server": {
+  //  "Enabled": true
+  //},
+  "Compile": {
+    "Mode": "External",
+    "Extensions": [ ".ts" ],
+    "ExtensionsWithNoOutput": [ ".d.ts" ],
+    "OutDirectory": "compiled",
+    "UseSourceMaps": true,
+    "Paths": [
+      // Merge all files in the source folder to a single merged js file
+      {
+        "SourcePath": "src",
+        "OutputPath": "compiled/src"
+      },
+
+      // Map all test files in the test folder 1-1 to their corresponding js files
+      {
+        "SourcePath": "test",
+        "OutputPath": "compiled/test"
+      }
+    ]
+  },
+  "References": [
+    {
+      "Includes": [ "*/src/**/*.ts" ],
+      "Excludes": [ "*/node_modules/*" ]
+    }
+  ],
+  "Tests": [
+    {
+      "Includes": [ "*/test/*.ts" ],
+      "Excludes": [ "*/test/assests/*.ts" ]
+    }
+  ]
+}
+
