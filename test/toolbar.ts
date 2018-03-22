@@ -184,47 +184,49 @@ describe('Toolbar test suite', function () {
     expect(generatedHtml).toBe(expectedHtml);
   });
 
-  //it('14 mock toolbar one "custom" in group to contain "custom"', function () {
-  //  const toolbarData: any = {
-  //    "groups": [{
-  //      "buttons": [{
-  //        "command": {
-  //          "action": "custom",
-  //          "customCode": "alert(\"custom button!\")"
-  //        }
-  //      }]
-  //    }]
-  //  };
-  //  const toolbarSettings: ToolbarSettings = {} as ToolbarSettings;
+  it('14 mock toolbar with one button "app" and defaults, plus settings to contain "group-pro"', function () {
+    const toolbarData: any = { "groups": [{ "name": "default", "buttons": "app", "contentType": "Libraries" }], "defaults": { "title": "Libraries", "classes": "group-pro" } };
+    const toolbarSettings: ToolbarSettings = { "hover": "none", "show": "always" } as ToolbarSettings;
+    const cnt = getContextFromEditContext(editContext);
+    cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
+    const generatedHtml = renderToolbar(cnt);
+    const containHtml = `group-pro`;
+    expect(generatedHtml).toContain(containHtml);
+  });
+
+  it('15 mock toolbar with one button "app" and defaults, plus settigns', function () {
+    const toolbarData: any = { "groups": [{ "name": "default", "buttons": "app", "contentType": "Libraries" }], "defaults": { "title": "Libraries", "classes": "group-pro" } };
+    const toolbarSettings: ToolbarSettings = { "hover": "none", "show": "always" } as ToolbarSettings;
+    const cnt = getContextFromEditContext(editContext);
+    cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
+    const generatedHtml = renderToolbar(cnt);
+    const expectedHtml = `<ul class="sc-menu group-0 sc-tb-hover-none sc-tb-show-always" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-app group-0 group-pro" onclick="$2sxc(2506, 2506).manage.run2($2sxc.context(this), {&quot;action&quot;:&quot;app&quot;}, event);" data-i18n="[title]Toolbar.App"><div><i class="icon-sxc-settings" aria-hidden="true"></i></div></a></li></ul>`;
+    expect(generatedHtml).toBe(expectedHtml);
+  });
+
+  //it('16 mock toolbar with one button "app" and defaults, plus settings to contain "group-pro"', function () {
+  //  const toolbarData: any = { "groups": [{ "name": "default", "buttons": "app", "contentType": "Libraries" }], "defaults": { "title": "Libraries", "classes": "group-pro" } };
+  //  const toolbarSettings: ToolbarSettings = { "hover": "none", "show": "always" } as ToolbarSettings;
   //  const cnt = getContextFromEditContext(editContext);
   //  cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
   //  const generatedHtml = renderToolbar(cnt);
   //  console.log(
   //    'stv: html',
   //    generatedHtml);
-  //  const containHtml = `custom`;
+  //  const containHtml = `group-pro`;
   //  expect(generatedHtml).toContain(containHtml);
   //});
 
-  //it('15 mock toolbar one "custom" in group', function () {
-  //  const toolbarData: any = {
-  //    "groups": [{
-  //      "buttons": [{
-  //        "command": {
-  //          "action": "custom",
-  //          "customCode": "alert(\"custom button!\")"
-  //        }
-  //      }]
-  //    }]
-  //  };
-  //  const toolbarSettings: ToolbarSettings = {} as ToolbarSettings;
+  //it('17 mock toolbar with one button "app" and defaults, plus settigns', function () {
+  //  const toolbarData: any = { "groups": [{ "name": "default", "buttons": "app", "contentType": "Libraries" }], "defaults": { "title": "Libraries", "classes": "group-pro" } };
+  //  const toolbarSettings: ToolbarSettings = { "hover": "none", "show": "always" } as ToolbarSettings;
   //  const cnt = getContextFromEditContext(editContext);
   //  cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
   //  const generatedHtml = renderToolbar(cnt);
   //  console.log(
   //    'stv: html',
   //    generatedHtml);
-  //  const expectedHtml = `<ul class="sc-menu group-0 sc-tb-hover-right sc-tb-show-hover" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-custom group-0" onclick="$2sxc(2506, 2506).manage.run2($2sxc.context(this), {&quot;action&quot;:&quot;custom&quot;,&quot;customCode&quot;:&quot;alert(\\&quot;custom button!\\&quot;)&quot;}, event);" data-i18n="[title]Toolbar.Custom"><div><i class="icon-sxc-bomb" aria-hidden="true"></i></div></a></li></ul>`;
+  //  const expectedHtml = `<ul class="sc-menu group-0 sc-tb-hover-none sc-tb-show-always" onclick="var e = arguments[0] || window.event; e.stopPropagation();" group-count="1"><li><a class="sc-app group-0 group-pro" onclick="$2sxc(2506, 2506).manage.run2($2sxc.context(this), {&quot;action&quot;:&quot;app&quot;}, event);" data-i18n="[title]Toolbar.App"><div><i class="icon-sxc-settings" aria-hidden="true"></i></div></a></li></ul>`;
   //  expect(generatedHtml).toBe(expectedHtml);
   //});
 
