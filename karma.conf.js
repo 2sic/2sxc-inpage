@@ -21,7 +21,7 @@ module.exports = function (config) {
       // './dist/inpage.js',
       { pattern: './src/**/libs/*.js', watched: false },
       { pattern: './src/**/*.ts', watched: false },
-      { pattern: './test/*.ts', watched: false }
+      { pattern: './test/*.ts', watched: true }
     ],
 
     // list of files / patterns to exclude
@@ -67,7 +67,7 @@ module.exports = function (config) {
     },
 
     // web server port
-    port: 9876,
+    port: 29876,
 
 
     // enable / disable colors in the output (reporters and logs)

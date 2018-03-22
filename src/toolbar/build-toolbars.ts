@@ -9,7 +9,7 @@ import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-sett
 const dbg = false;
 
 // generate an empty / fallback toolbar tag
-function generateFallbackToolbar(): any {
+export function generateFallbackToolbar(): any {
   const settingsString = JSON.stringify(settingsForEmptyToolbar);
   return $(`<ul class='sc-menu' toolbar='' settings='${settingsString}'/>`);
 }
