@@ -1,9 +1,11 @@
 ﻿import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { renderToolbar } from './item/render-toolbar';
-import { _toolbarManager } from './toolbar-manager';
-import { ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
+import { disableToolbarAttribute } from './toolbar-manager';
+import { expandToolbarConfig as ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
 import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
+import { HasLog } from '../logging/has-log';
+import { Log } from '../logging/log';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -24,12 +26,14 @@ function getToolbarTags(parentTag: any): any {
   return res;
 }
 
+
 // create a process-toolbar command to generate toolbars inside a tag
-export function buildToolbars(parentTag: any, optionalId?: number): void {
+export function buildToolbars(parentLog: Log, parentTag: any, optionalId?: number): void {
+  const log = new Log('Tlb.BldAll', parentLog);
   parentTag = $(parentTag || '.DnnModule-' + optionalId);
 
   // if something says the toolbars are disabled, then skip
-  if (parentTag.attr(_toolbarManager.cDisableAttrName)) return;
+  if (parentTag.attr(disableToolbarAttribute)) return;
 
   // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
   // don't add, if it is has un-initialized content
@@ -79,7 +83,7 @@ export function buildToolbars(parentTag: any, optionalId?: number): void {
     try {
       const cnt = context(tag);
 
-      cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings);
+      cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings, log);
 
       const toolbar = renderToolbar(cnt);
 
@@ -106,10 +110,10 @@ function getTextContent(toolbar: any, name1: string, name2: string): string {
 
 export function disable(tag: any): void {
   tag = $(tag);
-  tag.attr(_toolbarManager.cDisableAttrName, true);
+  tag.attr(disableToolbarAttribute, true);
 }
 
 export function isDisabled(sxc: SxcInstanceWithInternals): boolean {
   const tag: any = $(getTag(sxc));
-  return !!tag.attr(_toolbarManager.cDisableAttrName);
+  return !!tag.attr(disableToolbarAttribute);
 }

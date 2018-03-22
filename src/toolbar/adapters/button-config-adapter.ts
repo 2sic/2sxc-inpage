@@ -90,7 +90,7 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
     partialButtonConfig.fullScreen = actDef.fullScreen;
   }
 
-  actDef = (expandButtonConfig(actDef, [])) as ButtonDefinition;
+  actDef = (expandButtonConfig(actDef, [], null)) as ButtonDefinition;
 
   const name = actDef.command.action;
   const contentType = actDef.command.contentType;

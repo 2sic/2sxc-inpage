@@ -5,7 +5,7 @@ import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
-import { ExpandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
+import { expandToolbarConfig as ExpandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';

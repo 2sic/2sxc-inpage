@@ -1,12 +1,15 @@
 ﻿import { defaultToolbarTemplate } from './templates/default-toolbar-template';
 import { leftToolbarTemplate } from './templates/left-toolbar-template';
 import { ToolbarConfigTemplate } from './toolbar-config-template';
+import { HasLog } from '../../logging/has-log';
+import { Log } from '../../logging/log';
 
-export class ToolbarConfigTemplates {
+export class ToolbarConfigTemplates extends HasLog {
   configTemplateList: ToolbarConfigTemplate[] = [];
   list: HashTable<ToolbarConfigTemplate> = {}; // hash - table of templates, to be used a list()['template - name']
 
-  constructor() {
+  constructor(parentLog: Log) {
+    super('Tlb.TmpMan', parentLog, "build");
     this.add('default', defaultToolbarTemplate);
     this.add('left', leftToolbarTemplate);
   }

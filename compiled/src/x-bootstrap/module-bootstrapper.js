@@ -6,6 +6,7 @@ var quick_dialog_1 = require("../quick-dialog/quick-dialog");
 var build_toolbars_1 = require("../toolbar/build-toolbars");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var sxc_1 = require("./sxc");
+var log_1 = require("../logging/log");
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -14,6 +15,7 @@ var sxc_1 = require("./sxc");
 var initializedModules = [];
 var openedTemplatePickerOnce = false;
 var cancelledDialog;
+// const builder = new Build(null);
 $(document).ready(function () {
     cancelledDialog = localStorage.getItem('cancelled-dialog');
     if (cancelledDialog) {
@@ -80,7 +82,11 @@ function initModule(module, isFirstRun) {
     // this must run even after first-run, because it can be added ajax-style
     var wasEmpty = showGlassesButtonIfUninitialized(sxc);
     if (isFirstRun || !wasEmpty) {
-        build_toolbars_1.buildToolbars(module);
+        // use a logger for each iteration
+        var log = new log_1.Log('Bts.Module');
+        build_toolbars_1.buildToolbars(log, module);
+        if ($2sxc.debug.load)
+            console.log(log.dump());
     }
     ;
     return true;
