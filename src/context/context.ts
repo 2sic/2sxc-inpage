@@ -10,15 +10,26 @@ import { InstanceContext } from './instance-context/instance-context';
 import { SxcContext } from './instance-context/sxc-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
+import { DataEditContext } from '../data-edit-context/data-edit-context';
 
 /**
  * Primary API to get the context
  * @param htmlElement
  */
 export function context(htmlElement: HTMLElement): ContextOfButton {
-
+  debugger;
   const sxc = getSxcInstance(htmlElement);
+  
   const editContext = getEditContext(sxc);
+  const contextOfButton = getContextFromEditContext(editContext);
+
+  contextOfButton.sxc.sxc = sxc; // stv: this is temp
+  contextOfButton.element = htmlElement; // HTMLElement
+
+  return contextOfButton;
+}
+
+export function getContextFromEditContext(editContext: DataEditContext) {
   const contextOfButton = new ContextOfButton();
 
   // *** ContextOf ***
@@ -61,7 +72,6 @@ export function context(htmlElement: HTMLElement): ContextOfButton {
   }
 
   // temp
-  contextOfButton.sxc.sxc = sxc; // stv: this is temp
   contextOfButton.sxc.editContext = editContext; // stv: this is temp
 
   // information related to the current DNN module, incl.instanceId, etc.
@@ -124,7 +134,6 @@ export function context(htmlElement: HTMLElement): ContextOfButton {
   // fill externally
 
   // *** ContextOfButton ***
-  contextOfButton.element = htmlElement; // HTMLElement
   // contextOfButton.button = ButtonConfig; // todo: stv....
 
   // contextOfButton.cmdSpec = cmdSpec;

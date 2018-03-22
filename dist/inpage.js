@@ -263,8 +263,16 @@ var page_context_1 = __webpack_require__(61);
  * @param htmlElement
  */
 function context(htmlElement) {
+    debugger;
     var sxc = sxc_1.getSxcInstance(htmlElement);
     var editContext = api_1.getEditContext(sxc);
+    var contextOfButton = getContextFromEditContext(editContext);
+    contextOfButton.sxc.sxc = sxc; // stv: this is temp
+    contextOfButton.element = htmlElement; // HTMLElement
+    return contextOfButton;
+}
+exports.context = context;
+function getContextFromEditContext(editContext) {
     var contextOfButton = new context_of_button_1.ContextOfButton();
     // *** ContextOf ***
     // this will be everything about the current system, like system / api -paths etc.
@@ -301,7 +309,6 @@ function context(htmlElement) {
         contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl;
     }
     // temp
-    contextOfButton.sxc.sxc = sxc; // stv: this is temp
     contextOfButton.sxc.editContext = editContext; // stv: this is temp
     // information related to the current DNN module, incl.instanceId, etc.
     contextOfButton.instance = new instance_context_1.InstanceContext();
@@ -358,14 +365,13 @@ function context(htmlElement) {
     // *** ContextOfToolbar ***
     // fill externally
     // *** ContextOfButton ***
-    contextOfButton.element = htmlElement; // HTMLElement
     // contextOfButton.button = ButtonConfig; // todo: stv....
     // contextOfButton.cmdSpec = cmdSpec;
     // contextOfButton.enableTools = editContext.User.CanDesign;
     // contextOfButton.isContent = editContext.ContentGroup.IsContent;
     return contextOfButton;
 }
-exports.context = context;
+exports.getContextFromEditContext = getContextFromEditContext;
 
 
 /***/ }),
@@ -1298,7 +1304,6 @@ var render_helpers_1 = __webpack_require__(23);
  * @param groupIndex group-index in which the button is shown
  */
 function renderButton(context, buttonConfig, groupIndex) {
-    var sxc = context.sxc.sxc;
     // if the button belongs to a content-item, move the specs up to the item into the settings-object
     flattenActionDefinition(buttonConfig);
     // retrieve configuration for this button
@@ -1306,7 +1311,7 @@ function renderButton(context, buttonConfig, groupIndex) {
     var onclick = '';
     if (!buttonConfig.disabled) {
         // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
-        onclick = "$2sxc(" + sxc.id + ", " + sxc.cbid + ").manage.run2($2sxc.context(this), " + JSON.stringify(oldParamsAdapter) + ", event);";
+        onclick = "$2sxc(" + context.instance.id + ", " + context.contentBlock.id + ").manage.run2($2sxc.context(this), " + JSON.stringify(oldParamsAdapter) + ", event);";
     }
     var button = document.createElement('a');
     if (buttonConfig.action) {

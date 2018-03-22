@@ -11,8 +11,6 @@ import { addClasses } from './render-helpers';
  */
 export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfig, groupIndex: number): HTMLElement {
 
-  const sxc = context.sxc.sxc;
-
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(buttonConfig);
 
@@ -23,7 +21,7 @@ export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfi
 
   if (!buttonConfig.disabled){
     // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
-    onclick = `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
+    onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
   }
 
   const button = document.createElement('a');
