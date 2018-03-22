@@ -1,6 +1,6 @@
 ﻿import 'jasmine';
 
-describe("A suite", function () {
+describe("Toolbar test suite", function () {
   it("contains spec with an expectation", function () {
     expect(true).toBe(true);
   });
