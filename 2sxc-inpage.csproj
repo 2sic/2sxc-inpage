@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="karma.conf.webpack.js" />
     <None Remove="src\commands\command-create.ts" />
     <None Remove="src\commands\command-execute-action.ts" />
     <None Remove="src\commands\command-link-to-ng-dialog.ts" />
@@ -89,10 +88,6 @@
     <None Remove="src\toolbar\toolbar\toolbar-settings.ts" />
     <None Remove="src\x-bootstrap\sxc.ts" />
     <None Remove="test\toolbar.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="karma.conf.webpack.js" />
   </ItemGroup>
 
   <ItemGroup>

@@ -87,6 +87,7 @@ export function buildToolbars(parentLog: Log, parentTag: any, optionalId?: numbe
     }
 
     try {
+
       const cnt = context(tag);
 
       cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings, log);

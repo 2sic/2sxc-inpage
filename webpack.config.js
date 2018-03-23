@@ -20,15 +20,17 @@ var plugins = [
       NODE_ENV: JSON.stringify(nodeEnv)
     }
   }),
-  new ForkTsCheckerWebpackPlugin(),
-  new UglifyJsPlugin(
-    {
-      include: /\.min\.js$/
-    })
+  new ForkTsCheckerWebpackPlugin()
 ];
 
 if (!isProd) {
   // development
+  plugins.push(
+    new UglifyJsPlugin(
+      {
+        include: /\.min\.js$/,
+        sourceMap: true
+      }));
   plugins.push(new FileManagerPlugin(
     {
       onStart: [
@@ -48,6 +50,12 @@ if (!isProd) {
     }));
 } else {
   // production
+  plugins.push(
+    new UglifyJsPlugin(
+      {
+        include: /\.min\.js$/,
+        sourceMap: false
+      }));
   plugins.push(new ExtractTextPlugin('inpage.min.css'));
   plugins.push(new FileManagerPlugin(
     {
@@ -131,8 +139,8 @@ if (isProd) {
     use: ExtractTextPlugin.extract([{
       loader: 'css-loader',
       options: {
-        minimize: true,
-        sourceMap: true
+        minimize: isProd,
+        sourceMap: !isProd
       }
     }])
   });
