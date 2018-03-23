@@ -1,9 +1,10 @@
 ﻿import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { current } from '../quick-dialog/quick-dialog';
-import { buildToolbars } from '../toolbar/build-toolbars';
+import { buildToolbars} from '../toolbar/build-toolbars';
 import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from './sxc';
+import { Log } from '../logging/log';
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -12,6 +13,8 @@ import { getSxcInstance } from './sxc';
 const initializedModules: any[] = [];
 let openedTemplatePickerOnce = false;
 let cancelledDialog: string;
+
+// const builder = new Build(null);
 
 $(document).ready(() => {
 
@@ -89,7 +92,11 @@ function initModule(module: any, isFirstRun: boolean) {
   const wasEmpty = showGlassesButtonIfUninitialized(sxc);
 
   if (isFirstRun || !wasEmpty) {
-    buildToolbars(module);
+    // use a logger for each iteration
+    const log = new Log('Bts.Module');
+    buildToolbars(log, module);
+    if ($2sxc.debug.load)
+      console.log(log.dump());
   };
 
   return true;

@@ -9,5 +9,4 @@ export class Entry {
   {
   }
 
-  //public string Serialize() => Message;
 }

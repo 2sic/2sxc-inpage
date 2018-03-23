@@ -5,13 +5,15 @@ import { expandButtonGroups } from '../button/expand-group-config';
 import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 import { toolbarStandardButtons } from './toolbar-standard-buttons';
-//import { Log } from '../../beta-log/log';
+import { Log } from '../../logging/log';
 
-export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings/*, log?: Log*/): ToolbarConfig {
+
+export function expandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
+  const log = new Log('Tlb.ExpTop', parentLog, 'expand start');
   const editContext: DataEditContext = context.sxc.editContext;
 
   if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings)) {
-    //log && log.add('no data or settings found, will use default toolbar');
+    log.add('no data or settings found, will use default toolbar');
     toolbarSettings = settingsForEmptyToolbar;    
   }
 
@@ -19,14 +21,17 @@ export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSetti
   toolbarData = toolbarData || {}; // if null/undefined, use empty object
 
   let unstructuredConfig = toolbarData;
-  if (!toolbarData.action && !toolbarData.groups && !toolbarData.buttons && !Array.isArray(toolbarData))
-    unstructuredConfig = toolbarStandardButtons(editContext.User.CanDesign, toolbarData);
+  if (!toolbarData.action && !toolbarData.groups && !toolbarData.buttons && !Array.isArray(toolbarData)) {
+    log.add('no toolbar details found, will use standard toolbar template');
+    unstructuredConfig = toolbarStandardButtons(editContext.User.CanDesign, toolbarData, log);
+  }
 
   const instanceConfig = new InstanceConfig(editContext);
 
   // whatever we had, if more settings were provided, override with these...
-  const config = buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings);
+  const config = buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings, log);
 
+  log.add('expand done');
   return config;
 }
 
@@ -44,16 +49,16 @@ export function ExpandToolbarConfig(context: any, toolbarData: any, toolbarSetti
  * @param instanceConfig
  * @param toolbarSettings
  */
-function buildFullDefinition(context: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings) {
-
-    const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings);
+function buildFullDefinition(context: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings, parentLog : Log) {
+    const log = new Log('Tlb.BldFul', parentLog, 'start');
+    const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings, log);
 
     // ToDo: don't use console.log in production
     if (unstructuredConfig.debug) console.log('toolbar: detailed debug on; start build full Def');
 
-    expandButtonGroups(fullConfig);
+    expandButtonGroups(fullConfig, log);
 
-    removeDisableButtons(context, fullConfig, instanceConfig);
+    removeDisableButtons(context, fullConfig, instanceConfig, log);
 
     if (fullConfig.debug) console.log('after remove: ', fullConfig);
 
@@ -74,26 +79,32 @@ function buildFullDefinition(context: any, unstructuredConfig: any, instanceConf
  * @param unstructuredConfig
  * @param toolbarSettings
  */
-function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarSettings): ToolbarConfig {
+function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarSettings, parentLog : Log): ToolbarConfig {
+  const log = new Log("Tlb.DefTre", parentLog, "start");
   // original is null/undefined, just return empty set
   if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 
   // ensure that if it's just actions or buttons, they are then processed as arrays with 1 entry
-  if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons))
+  if (!Array.isArray(unstructuredConfig) && (unstructuredConfig.action || unstructuredConfig.buttons)) {
+    log.add('found no array, but detected action/buttons properties, will wrap config into array');
     unstructuredConfig = [unstructuredConfig];
+  }
 
   // ensure that arrays of actions or buttons are re-mapped to the right structure node
   if (Array.isArray(unstructuredConfig) && unstructuredConfig.length) {
+    log.add('detected array with length');
     if (unstructuredConfig[0].buttons) {
-      // an array of items having buttons, so it must be button-groups
+      log.add('detected buttons on first item, assume button-group, moving into .groups');
       (unstructuredConfig as any).groups = unstructuredConfig; // move "down"
     } else if (unstructuredConfig[0].command || unstructuredConfig[0].action) {
-      // array of items having an action, so these are buttons
+      log.add('detected command or action on first item, assume buttons, move into .groups[buttons] ');
       unstructuredConfig = { groups: [{ buttons: unstructuredConfig }] };
     } else {
+      log.add('can\'t detect what this is - show warning');
       console.warn("toolbar tried to build toolbar but couldn't detect type of this:", unstructuredConfig);
     }
-  }
+  } else
+    log.add('not array or has no items');
 
   const toolbarConfig = new ToolbarConfig();
   // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
@@ -107,6 +118,7 @@ function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarS
   toolbarConfig.debug = unstructuredConfig.debug || false; // show more debug info
   toolbarConfig.defaults = unstructuredConfig.defaults || {}; // the button defaults like icon, etc.
 
+  log.add('done');
   return toolbarConfig;
 };
 //#endregion initial toolbar object
