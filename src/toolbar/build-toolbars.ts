@@ -2,7 +2,7 @@
 import { getTag } from '../manage/api';
 import { renderToolbar } from './item/render-toolbar';
 import { disableToolbarAttribute } from './toolbar-manager';
-import { expandToolbarConfig as ExpandToolbarConfig } from './toolbar/toolbar-expand-config';
+import { expandToolbarConfig } from './toolbar/toolbar-expand-config';
 import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
@@ -22,7 +22,9 @@ function getToolbarTags(parentTag: any): any {
 
   // return only those, which don't belong to a sub-item
   const res: any = allInner.filter((i: any, e: any) => $(e).closest('.sc-content-block')[0] === parentTag[0]);
-  if (dbg) console.log('found toolbars for parent', parentTag, res);
+  if (dbg) {
+    console.log('found toolbars for parent', parentTag, res);
+  }
   return res;
 }
 
@@ -33,7 +35,9 @@ export function buildToolbars(parentLog: Log, parentTag: any, optionalId?: numbe
   parentTag = $(parentTag || '.DnnModule-' + optionalId);
 
   // if something says the toolbars are disabled, then skip
-  if (parentTag.attr(disableToolbarAttribute)) return;
+  if (parentTag.attr(disableToolbarAttribute)) {
+    return;
+  }
 
   // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
   // don't add, if it is has un-initialized content
@@ -44,7 +48,9 @@ export function buildToolbars(parentLog: Log, parentTag: any, optionalId?: numbe
 
   // no toolbars found, must help a bit because otherwise editing is hard
   if (toolbars.length === 0) { // && !disableAutoAdd) {
-    if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
+    if (dbg) {
+      console.log("didn't find toolbar, so will auto-create", parentTag);
+    }
 
     const outsideCb = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
     const contentTag: any = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
@@ -69,7 +75,7 @@ export function buildToolbars(parentLog: Log, parentTag: any, optionalId?: numbe
 
       const settings = getTextContent(toolbars[i], at.settings, at.settingsData);
 
-      toolbarSettings = JSON.parse(settings);
+      toolbarSettings = JSON.parse(settings) as ToolbarSettings;
 
     } catch (err) {
       console.error(
@@ -83,7 +89,7 @@ export function buildToolbars(parentLog: Log, parentTag: any, optionalId?: numbe
     try {
       const cnt = context(tag);
 
-      cnt.toolbar = ExpandToolbarConfig(cnt, toolbarData, toolbarSettings, log);
+      cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings, log);
 
       const toolbar = renderToolbar(cnt);
 

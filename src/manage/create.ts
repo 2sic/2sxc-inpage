@@ -5,11 +5,12 @@ import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
-import { expandToolbarConfig as ExpandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
+import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
+import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -94,10 +95,10 @@ class EditManager {
    * @param {Object<any>} moreSettings - additional / override settings
    * @returns {string} html of the current toolbar
    */
-  getToolbar = (tbConfig: any, moreSettings: any): string => {
+  getToolbar = (tbConfig: any, moreSettings: ToolbarSettings): string => {
     const tag: any = getTag(this.sxc);
     const myContext = context(tag);
-    const toolbarConfig = ExpandToolbarConfig(
+    const toolbarConfig = expandToolbarConfig(
       myContext,
       tbConfig,
       moreSettings);
