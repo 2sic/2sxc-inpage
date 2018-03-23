@@ -63,19 +63,26 @@ export class Log {
   /**
    * add a message to the log-list
    * @param message
+   *
+   * preferred usage is with string parameter:
+   * log.add(`description ${ parameter }`);
+   *
+   * in case that we experience error with normal string parameter, we can use arrow function to enclose parameter like this () => parameter
+   * but use it very rarely, because there is certainly a performance implication!
+   * log.add(`description ${() => parameter}`);
    */
   add(message: Function | string): string {
     let messageText: string;
     if (message instanceof Function) {
       try {
         messageText = ((message as Function)()).toString();
+        message = null; // maybe it is unnecessary, but added to be safe as possible that arrow function parameter will be garbage collected
       } catch (e) {
         messageText = 'undefined';
       }
     } else {
       messageText = message.toString(); 
     }
-
     const entry = new Entry(this, messageText);
     this.addEntry(entry);
     if(liveDump) console.log(this.dump(undefined, undefined, undefined, entry));
