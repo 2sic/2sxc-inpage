@@ -61,14 +61,25 @@ export class Log {
   }
 
   /**
-   * add a messag to the log-list
+   * add a message to the log-list
    * @param message
    */
-  add(message:string): string {
-    const entry = new Entry(this, message);
+  add(message: Function | string): string {
+    let messageText: string;
+    if (message instanceof Function) {
+      try {
+        messageText = ((message as Function)()).toString();
+      } catch (e) {
+        messageText = 'undefined';
+      }
+    } else {
+      messageText = message.toString(); 
+    }
+
+    const entry = new Entry(this, messageText);
     this.addEntry(entry);
     if(liveDump) console.log(this.dump(undefined, undefined, undefined, entry));
-    return message;
+    return messageText;
   }
 
   /**
@@ -113,8 +124,6 @@ export class Log {
     }
     return randomstring;
   }
-
-
 
   /**
    * parent logger - important if loggers are chained

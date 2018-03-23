@@ -318,15 +318,27 @@ var Log = /** @class */ (function () {
         }
     };
     /**
-     * add a messag to the log-list
+     * add a message to the log-list
      * @param message
      */
     Log.prototype.add = function (message) {
-        var entry = new entry_1.Entry(this, message);
+        var messageText;
+        if (message instanceof Function) {
+            try {
+                messageText = (message()).toString();
+            }
+            catch (e) {
+                messageText = 'undefined';
+            }
+        }
+        else {
+            messageText = message.toString();
+        }
+        var entry = new entry_1.Entry(this, messageText);
         this.addEntry(entry);
         if (liveDump)
             console.log(this.dump(undefined, undefined, undefined, entry));
-        return message;
+        return messageText;
     };
     /**
      * helper to create a text-output of the log info
@@ -808,6 +820,7 @@ function evalPropOrFunction(propOrFunction, context, settings, config, fallback)
  * @param actions
  */
 function addDefaultBtnSettings(btn, group, fullToolbarConfig, actions, log) {
+    // log.add(`adding default btn settings for ${() => btn.action.name}`);
     log.add("adding default btn settings for " + btn.action.name);
     for (var d = 0; d < btnProperties.length; d++) {
         fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
@@ -3647,6 +3660,7 @@ function expandButtonGroups(fullToolbarConfig, parentLog) {
             log.add("will process " + btns.length + " buttons");
             for (var b = 0; b < btns.length; b++) {
                 var btn = btns[b];
+                debugger;
                 if (!(actions.get(btn.command.action))) {
                     log.add("couldn't find action " + btn.command.action + " - show warning");
                     console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);

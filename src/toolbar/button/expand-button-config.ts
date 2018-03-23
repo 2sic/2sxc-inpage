@@ -133,7 +133,9 @@ export function addDefaultBtnSettings(btn: ButtonConfig,
                                       fullToolbarConfig: ToolbarConfig,
                                       actions: Commands,
                                       log: Log) {
-  log.add(`adding default btn settings for ${btn.action.name}`);
+
+  // log.add(`adding default btn settings for ${btn.action.name}`);
+  log.add(`adding default btn settings for ${() => btn.action.name}`);
   for (let d = 0; d < btnProperties.length; d++) {
     fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
   }
