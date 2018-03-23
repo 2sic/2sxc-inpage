@@ -99,8 +99,6 @@ export class Command {
     this.params.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
-    // debugger;
-    // console.log('stv: context', context);
     const sharedParams = Object.assign({}, this.sxc.manage._dialogParameters) as NgDialogParams;
     // console.log('stv: sharedParams', sharedParams);
     if (!this.settings.partOfPage) {

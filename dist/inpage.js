@@ -263,7 +263,6 @@ var page_context_1 = __webpack_require__(61);
  * @param htmlElement
  */
 function context(htmlElement) {
-    debugger;
     var sxc = sxc_1.getSxcInstance(htmlElement);
     var editContext = api_1.getEditContext(sxc);
     var contextOfButton = getContextFromEditContext(editContext);
@@ -3080,8 +3079,6 @@ var Command = /** @class */ (function () {
             }
             _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
             // clone the params and adjust parts based on partOfPage settings...
-            // debugger;
-            // console.log('stv: context', context);
             var sharedParams = Object.assign({}, _this.sxc.manage._dialogParameters);
             // console.log('stv: sharedParams', sharedParams);
             if (!_this.settings.partOfPage) {

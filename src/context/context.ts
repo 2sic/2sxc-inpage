@@ -17,7 +17,6 @@ import { DataEditContext } from '../data-edit-context/data-edit-context';
  * @param htmlElement
  */
 export function context(htmlElement: HTMLElement): ContextOfButton {
-  debugger;
   const sxc = getSxcInstance(htmlElement);
   
   const editContext = getEditContext(sxc);
