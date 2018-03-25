@@ -820,8 +820,8 @@ function evalPropOrFunction(propOrFunction, context, settings, config, fallback)
  * @param actions
  */
 function addDefaultBtnSettings(btn, group, fullToolbarConfig, actions, log) {
-    // log.add(`adding default btn settings for ${() => btn.action.name}`);
-    log.add("adding default btn settings for " + btn.action.name);
+    // log.add(`adding default btn settings for ${btn.action.name}`);
+    log.add("adding default btn settings for " + function () { return btn.action.name; });
     for (var d = 0; d < btnProperties.length; d++) {
         fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
     }
@@ -3660,7 +3660,6 @@ function expandButtonGroups(fullToolbarConfig, parentLog) {
             log.add("will process " + btns.length + " buttons");
             for (var b = 0; b < btns.length; b++) {
                 var btn = btns[b];
-                debugger;
                 if (!(actions.get(btn.command.action))) {
                     log.add("couldn't find action " + btn.command.action + " - show warning");
                     console.warn('warning: toolbar-button with unknown action-name:', btn.command.action);
