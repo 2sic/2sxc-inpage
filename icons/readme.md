@@ -2,9 +2,15 @@
 
 Icons used in the UI of 2sxc
 
-## Icon tooling
+## Icon tooling & Update Process
 
-We use [fontello](http://www.fontello.com) to build the icon library.
+We use [fontello](http://www.fontello.com) to build the icon library. To update the library, this is the process:
+
+1. go to fontello
+1. unzip (with password - see notes) the config.json and upload to fontello
+1. make your changes
+1. download resulting zip and copy all the files into this icons folder
+1. _todo: document how they are then included in the build process_
 
 ## My icon sources are
 
