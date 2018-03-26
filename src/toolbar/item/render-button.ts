@@ -9,7 +9,9 @@ import { addClasses } from './render-helpers';
  * @param buttonConfig
  * @param groupIndex group-index in which the button is shown
  */
-export function renderButton(context: ContextOfButton, buttonConfig: ButtonConfig, groupIndex: number): HTMLElement {
+export function renderButton(context: ContextOfButton, groupIndex: number): HTMLElement {
+
+  const buttonConfig = context.button;
 
   // if the button belongs to a content-item, move the specs up to the item into the settings-object
   flattenActionDefinition(buttonConfig);

@@ -17,7 +17,7 @@ export class ContentItems extends CommandBase {
         },
         // ReSharper disable once UnusedParameter
         showCondition: (context, settings) => {
-          return context.user.canDesign && (settings.contentType || context.contentBlock.contentTypeId);
+          return (context.user.canDesign) && ((!!settings.contentType) || (!!context.contentBlock.contentTypeId));
         },
         configureCommand: (context, command) => {
           if (command.settings.contentType) // optionally override with custom type

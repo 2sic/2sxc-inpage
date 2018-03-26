@@ -16,7 +16,7 @@ export class Add extends CommandBase {
       true,
       {
         showCondition(context, settings) {
-          return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
+          return (context.contentBlock.isList) && (settings.useModuleList) && (settings.sortOrder !== -1);
         },
         code(context, settings) {
           addItem(context.sxc.sxc, settings.sortOrder + 1);

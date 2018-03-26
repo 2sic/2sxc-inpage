@@ -43,10 +43,8 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
   context.sxc.sxc = sxc; // stv: this is temp
   context.element = getTag(sxc); // HTMLElement
 
-  // ReSharper disable AssignedValueIsNeverUsed
   const userInfo = getUserOfEditContext(editContext);
   const cmdEngine = instanceEngine(sxc);
-  // ReSharper restore AssignedValueIsNeverUsed
 
   const editManager = new EditManager(sxc, editContext, userInfo, cmdEngine, context);
   editManager.init();
@@ -89,10 +87,11 @@ class EditManager {
       this.context,
       actDef,
       groupIndex);
+
+    this.context.button = newButtonConfig;
  
     const button = renderButton(
       this.context,
-      newButtonConfig,
       groupIndex);
 
     return button.outerHTML;

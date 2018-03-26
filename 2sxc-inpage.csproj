@@ -13,18 +13,22 @@
     <Compile Remove="compiled\**" />
     <Compile Remove="coverage\**" />
     <Compile Remove="dist\**" />
+    <Compile Remove="docs\**" />
     <Compile Remove="_reports\**" />
     <Content Remove="compiled\**" />
     <Content Remove="coverage\**" />
     <Content Remove="dist\**" />
+    <Content Remove="docs\**" />
     <Content Remove="_reports\**" />
     <EmbeddedResource Remove="compiled\**" />
     <EmbeddedResource Remove="coverage\**" />
     <EmbeddedResource Remove="dist\**" />
+    <EmbeddedResource Remove="docs\**" />
     <EmbeddedResource Remove="_reports\**" />
     <None Remove="compiled\**" />
     <None Remove="coverage\**" />
     <None Remove="dist\**" />
+    <None Remove="docs\**" />
     <None Remove="_reports\**" />
   </ItemGroup>
 

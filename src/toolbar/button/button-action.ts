@@ -7,9 +7,13 @@ export class ButtonAction {
   code: string; // custom code if used
 
   constructor(public name: string, contentType?: string, public params?: any) {
-    if (!params) this.params = {};
+    if (!params) {
+      this.params = {};
+    }
 
-    if (contentType) Object.assign(this.params, { contentType: contentType });
+    if (contentType) {
+      Object.assign(this.params, { contentType: contentType });
+    }
 
   }
 }

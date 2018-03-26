@@ -12,9 +12,7 @@ export function commandCreate(context: ContextOfButton, specialSettings: Setting
 
 
   // todo: stv, !!! sxc.manage._instanceConfig
-  const settings =
-    Object.assign(context.sxc.sxc.manage._instanceConfig,
-      specialSettings) as Settings; // merge button with general toolbar-settings
+  const settings = Object.assign(context.sxc.sxc.manage._instanceConfig, specialSettings) as Settings; // merge button with general toolbar-settings
 
   const ngDialogUrl = context.sxc.editContext.Environment.SxcRootUrl +
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +

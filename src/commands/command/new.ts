@@ -24,10 +24,8 @@ export class New extends CommandBase {
         },
         dialog: 'edit', // don't use "new" (default) but use "edit"
         showCondition(context, settings) {
-          return settings.contentType ||
-            context.contentBlock.isList &&
-            settings.useModuleList &&
-            settings.sortOrder !== -1; // don't provide new on the header-item
+          return (!!settings.contentType)
+            || ((context.contentBlock.isList) && (settings.useModuleList) && (settings.sortOrder !== -1)); // don't provide new on the header-item
         },
         code(context, settings) {
           // todo - should refactor this to be a toolbarManager.contentBlock command
