@@ -53,7 +53,9 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.uiActionOnly) {
-    partialButtonConfig.uiActionOnly = actDef.uiActionOnly;
+    partialButtonConfig.uiActionOnly = (context: ContextOfButton) => {
+      return actDef.uiActionOnly;
+    }
   }
 
   if (actDef.code) {

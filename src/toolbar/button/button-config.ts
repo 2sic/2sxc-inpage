@@ -19,8 +19,6 @@ export class ButtonConfig {
   partOfPage: boolean = null;
   show: boolean = null; // maybe
 
-  uiActionOnly: boolean = null;
-
   constructor(action?: ButtonAction, partialConfig?: Partial<ButtonConfig>) {
     if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
       this.action = action;
@@ -33,18 +31,16 @@ export class ButtonConfig {
     }
   }
 
-  icon: ((context: ContextOfButton) => string);
-  title: ((context: ContextOfButton) => string);
-  params: ((context: ContextOfButton) => any);
+  code: ((context: ContextOfButton) => void);
+  configureCommand?(context: ContextOfButton, cmd: Command): void; // stv: todo ???
   disabled: ((context: ContextOfButton) => boolean);
   dynamicClasses: ((context: ContextOfButton) => string);
   dynamicDisabled: (() => boolean) = () => false; // maybe
-  code: ((context: ContextOfButton) => void);
-
-  configureCommand?(context: ContextOfButton, cmd: Command): void; // stv: todo ???
-
-  // showCondition: boolean | (() => boolean) = true;
+  icon: ((context: ContextOfButton) => string);
+  params: ((context: ContextOfButton) => any);
   showCondition: ((context: ContextOfButton) => boolean);
+  title: ((context: ContextOfButton) => string);
+  uiActionOnly: ((context: ContextOfButton) => boolean);
 
   [propName: string]: any;
 }

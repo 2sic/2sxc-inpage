@@ -15,8 +15,7 @@ export class Definition {
 
   icon?(context: ContextOfButton): string;
 
-  // todo STV try to refactor so it is also (context)
-    uiActionOnly?: boolean;
+  uiActionOnly?(context: ContextOfButton): boolean;
 
   // todo STV try to refactor so it is also (context)
     partOfPage?: boolean;
