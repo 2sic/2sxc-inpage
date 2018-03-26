@@ -5,6 +5,7 @@ var TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 var FileManagerPlugin = require('filemanager-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var merge = require('webpack-merge');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var entryJsFiles = glob.sync('./src/**/libs/*.js');
 var entryTsFiles = glob.sync('./src/**/*.ts');
@@ -36,14 +37,14 @@ if (!isProd) {
       onStart: [
         {
           delete: [
-            './dist/*.js'
+            './dist/inpage/*.js'
           ]
         }
       ],
       onEnd: [
         {
           copy: [
-            { source: './dist/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' }
+            { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' }
           ]
         }
       ]
@@ -56,22 +57,24 @@ if (!isProd) {
         include: /\.min\.js$/,
         sourceMap: false
       }));
-  plugins.push(new ExtractTextPlugin('inpage.min.css'));
+  plugins.push(new ExtractTextPlugin('./inpage/inpage.min.css'));
   plugins.push(new FileManagerPlugin(
     {
       onStart: [
         {
           delete: [
-            './dist/*.js'
+            './dist/inpage/*.js'
           ]
         }
       ],
       onEnd: [
         {
           copy: [
-            { source: './dist/inpage.min.css', destination: './dist/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
-            { source: './dist/inpage.min.css.map', destination: './dist/inpage.css.map' }, // just copy min because can't generate full and minified css.map boundle files in one pass
-            { source: './dist/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' }
+            { source: './dist/inpage/inpage.min.css', destination: './dist/inpage/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
+            { source: './dist/inpage/inpage.min.css.map', destination: './dist/inpage/inpage.css.map' }, // just copy min because can't generate full and minified css.map boundle files in one pass
+            { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' },
+            { source: './dist/images/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/images' },
+            { source: './dist/lib/fonts/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/lib/fonts' }
           ]
         }
       ]
@@ -103,8 +106,8 @@ var config = {
 
   // get all files for boundles
   entry: {
-    'inpage.js': entryFiles,
-    'inpage.min.js': entryFiles
+    './inpage/inpage.js': entryFiles,
+    './inpage/inpage.min.js': entryFiles
   },
 
   output: {
@@ -131,7 +134,7 @@ var config = {
 }
 
 if (isProd) {
-  config.entry['inpage.min.css'] = entryCssFiles;
+  config.entry['inpage/inpage.min.css'] = entryCssFiles;
   config.resolve.extensions.push('.css');
   config.module.rules.push({
     test: /\.css$/,
@@ -139,8 +142,9 @@ if (isProd) {
     use: ExtractTextPlugin.extract([{
       loader: 'css-loader',
       options: {
-        minimize: isProd,
-        sourceMap: !isProd
+        minimize: true,
+        sourceMap: true,
+        name: './inpage/[name].[ext]'
       }
     }])
   });
@@ -150,7 +154,7 @@ if (isProd) {
     use: {
       loader: 'file-loader',
       options: {
-        name: '../../[name].[ext]' // create images on same relative path with same name
+        name: '../images/[name].[ext]'
       }
     }
   });
@@ -160,7 +164,7 @@ if (isProd) {
     use: {
       loader: 'file-loader',
       options: {
-        name: '../lib/fonts/[name].[ext]?09.15.00'  // create images on same relative path with same name
+        name: '../lib/fonts/[name].[ext]?09.15.00'
       }
     }
   });
