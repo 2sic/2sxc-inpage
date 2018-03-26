@@ -760,7 +760,7 @@ function getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage,
         icon: function (context) { return "icon-sxc-" + icon; },
         title: function (context) { return "Toolbar." + translateKey; },
         uiActionOnly: function (context) { return uiOnly; },
-        partOfPage: partOfPage,
+        partOfPage: function (context) { return partOfPage; },
     };
     Object.assign(partialButtonConfig, more);
     return partialButtonConfig;
@@ -1578,7 +1578,6 @@ var ButtonConfig = /** @class */ (function () {
         this.fullScreen = null;
         this.inlineWindow = null;
         this.newWindow = null;
-        this.partOfPage = null;
         this.show = null; // maybe
         this.dynamicDisabled = function () { return false; }; // maybe
         if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
@@ -2419,25 +2418,29 @@ function settingsAdapter(oldSettings) {
     if (oldSettings.classes) {
         newSettings.classes = oldSettings.classes;
     }
-    // 'icon',
-    if (oldSettings.icon) {
-        newSettings.icon = (function (context) { return oldSettings.icon; });
-    }
-    // 'title',
-    if (oldSettings.title) {
-        newSettings.title = (function (context) { return oldSettings.title; });
+    // 'disabled'
+    if (oldSettings.disabled) {
+        newSettings.disabled = (function (context, settings) { return oldSettings.disabled; });
     }
     // 'dynamicClasses',
     if (oldSettings.dynamicClasses) {
         newSettings.dynamicClasses = oldSettings.dynamicClasses;
     }
+    // 'icon',
+    if (oldSettings.icon) {
+        newSettings.icon = (function (context) { return oldSettings.icon; });
+    }
+    // partOfPage
+    if (oldSettings.partOfPage) {
+        newSettings.partOfPage = (function (context) { return oldSettings.partOfPage; });
+    }
     // 'showCondition',
     if (oldSettings.showCondition) {
         newSettings.showCondition = oldSettings.showCondition;
     }
-    // 'disabled'
-    if (oldSettings.disabled) {
-        newSettings.disabled = (function (context, settings) { return oldSettings.disabled; });
+    // 'title',
+    if (oldSettings.title) {
+        newSettings.title = (function (context) { return oldSettings.title; });
     }
     return newSettings;
 }
@@ -4276,18 +4279,55 @@ var mod_config_1 = __webpack_require__(82);
 var parameters_adapter_1 = __webpack_require__(31);
 function buttonConfigAdapter(context, actDef, groupIndex) {
     var partialButtonConfig = {};
-    if (actDef.title) {
-        partialButtonConfig.title = function (context) { return "Toolbar." + actDef.title; };
+    if (actDef.code) {
+        partialButtonConfig.code = function (context) {
+            var modConfig = new mod_config_1.ModConfig();
+            // todo: stv .. .find this data
+            //modConfig.target = ''; // todo
+            //modConfig.isList = false; // todo
+            return actDef.code(context.button.action.params, modConfig);
+        };
     }
     if (actDef.icon) {
-        partialButtonConfig.icon = function (context) { return "icon-sxc-" + actDef.icon; };
+        partialButtonConfig.icon = function (context) {
+            return "icon-sxc-" + actDef.icon;
+        };
     }
     if (actDef.classes) {
         partialButtonConfig.classes = actDef.classes;
     }
+    if (actDef.dialog) {
+        partialButtonConfig.dialog = actDef.dialog;
+    }
+    if (actDef.disabled) {
+        partialButtonConfig.disabled = function (context) {
+            return actDef.disabled;
+        };
+    }
     if (actDef.dynamicClasses) {
         partialButtonConfig.dynamicClasses = function (context) {
             return actDef.dynamicClasses(context.button.action.params);
+        };
+    }
+    if (actDef.fullScreen) {
+        partialButtonConfig.fullScreen = actDef.fullScreen;
+    }
+    if (actDef.inlineWindow) {
+        partialButtonConfig.inlineWindow = actDef.inlineWindow;
+    }
+    if (actDef.name) {
+        partialButtonConfig.name = actDef.name;
+    }
+    if (actDef.newWindow) {
+        partialButtonConfig.newWindow = actDef.newWindow;
+    }
+    if (actDef.params) {
+        // todo: stv ... test this...
+        Object.assign(partialButtonConfig.params, actDef.params);
+    }
+    if (actDef.partOfPage) {
+        partialButtonConfig.partOfPage = function (context) {
+            return actDef.partOfPage;
         };
     }
     if (actDef.showCondition) {
@@ -4299,43 +4339,15 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
             return actDef.showCondition(context.button.action.params, modConfig);
         };
     }
-    if (actDef.disabled) {
-        partialButtonConfig.disabled = function (context) {
-            return actDef.disabled;
+    if (actDef.title) {
+        partialButtonConfig.title = function (context) {
+            return "Toolbar." + actDef.title;
         };
-    }
-    if (actDef.params) {
-        // todo: stv ... test this...
-        Object.assign(partialButtonConfig.params, actDef.params);
     }
     if (actDef.uiActionOnly) {
         partialButtonConfig.uiActionOnly = function (context) {
             return actDef.uiActionOnly;
         };
-    }
-    if (actDef.code) {
-        partialButtonConfig.code = function (context) {
-            var modConfig = new mod_config_1.ModConfig();
-            // todo: stv .. .find this data
-            //modConfig.target = ''; // todo
-            //modConfig.isList = false; // todo
-            return actDef.code(context.button.action.params, modConfig);
-        };
-    }
-    if (actDef.name) {
-        partialButtonConfig.name = actDef.name;
-    }
-    if (actDef.dialog) {
-        partialButtonConfig.dialog = actDef.dialog;
-    }
-    if (actDef.newWindow) {
-        partialButtonConfig.newWindow = actDef.newWindow;
-    }
-    if (actDef.inlineWindow) {
-        partialButtonConfig.inlineWindow = actDef.inlineWindow;
-    }
-    if (actDef.fullScreen) {
-        partialButtonConfig.fullScreen = actDef.fullScreen;
     }
     actDef = (expand_button_config_1.expandButtonConfig(actDef, [], null));
     var name = actDef.command.action;

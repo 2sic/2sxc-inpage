@@ -11,21 +11,68 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
 
   const partialButtonConfig: Partial<ButtonConfig> = {};
 
-  if (actDef.title) {
-    partialButtonConfig.title = (context: ContextOfButton) => `Toolbar.${actDef.title}`;
+  if (actDef.code) {
+    partialButtonConfig.code = (context: ContextOfButton) => {
+
+      const modConfig = new ModConfig();
+      // todo: stv .. .find this data
+      //modConfig.target = ''; // todo
+      //modConfig.isList = false; // todo
+
+      return actDef.code(context.button.action.params, modConfig);
+    }
   }
 
   if (actDef.icon) {
-    partialButtonConfig.icon = (context: ContextOfButton) => `icon-sxc-${actDef.icon}`;
+    partialButtonConfig.icon = (context: ContextOfButton) => {
+      return `icon-sxc-${actDef.icon}`;
+    }
   }
 
   if (actDef.classes) {
     partialButtonConfig.classes = actDef.classes;
   }
 
+  if (actDef.dialog) {
+    partialButtonConfig.dialog = actDef.dialog;
+  }
+
+  if (actDef.disabled) {
+    partialButtonConfig.disabled = (context: ContextOfButton) => {
+      return actDef.disabled;
+    }
+  }
+
   if (actDef.dynamicClasses) {
     partialButtonConfig.dynamicClasses = (context: ContextOfButton) => {
       return actDef.dynamicClasses(context.button.action.params);
+    }
+  }
+
+  if (actDef.fullScreen) {
+    partialButtonConfig.fullScreen = actDef.fullScreen;
+  }
+
+  if (actDef.inlineWindow) {
+    partialButtonConfig.inlineWindow = actDef.inlineWindow;
+  }
+
+  if (actDef.name) {
+    partialButtonConfig.name = actDef.name;
+  }
+
+  if (actDef.newWindow) {
+    partialButtonConfig.newWindow = actDef.newWindow;
+  }
+
+  if (actDef.params) {
+    // todo: stv ... test this...
+    Object.assign(partialButtonConfig.params, actDef.params);
+  }
+
+  if (actDef.partOfPage) {
+    partialButtonConfig.partOfPage = (context: ContextOfButton) => {
+      return actDef.partOfPage;
     }
   }
 
@@ -41,54 +88,16 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
     }
   }
 
-  if (actDef.disabled) {
-    partialButtonConfig.disabled = (context: ContextOfButton) => {
-      return actDef.disabled;
+  if (actDef.title) {
+    partialButtonConfig.title = (context: ContextOfButton) => {
+      return `Toolbar.${actDef.title}`;
     }
-  }
-
-  if (actDef.params) {
-    // todo: stv ... test this...
-    Object.assign(partialButtonConfig.params, actDef.params);
   }
 
   if (actDef.uiActionOnly) {
     partialButtonConfig.uiActionOnly = (context: ContextOfButton) => {
       return actDef.uiActionOnly;
     }
-  }
-
-  if (actDef.code) {
-    partialButtonConfig.code = (context: ContextOfButton) => {
-
-      const modConfig = new ModConfig();
-      // todo: stv .. .find this data
-      //modConfig.target = ''; // todo
-      //modConfig.isList = false; // todo
-
-      return actDef.code(context.button.action.params, modConfig);
-    }
-
-  }
-
-  if (actDef.name) {
-    partialButtonConfig.name = actDef.name;
-  }
-
-  if (actDef.dialog) {
-    partialButtonConfig.dialog = actDef.dialog;
-  }
-
-  if (actDef.newWindow) {
-    partialButtonConfig.newWindow = actDef.newWindow;
-  }
-
-  if (actDef.inlineWindow) {
-    partialButtonConfig.inlineWindow = actDef.inlineWindow;
-  }
-
-  if (actDef.fullScreen) {
-    partialButtonConfig.fullScreen = actDef.fullScreen;
   }
 
   actDef = (expandButtonConfig(actDef, [], null)) as ButtonDefinition;

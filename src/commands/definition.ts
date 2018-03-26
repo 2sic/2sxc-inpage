@@ -17,8 +17,7 @@ export class Definition {
 
   uiActionOnly?(context: ContextOfButton): boolean;
 
-  // todo STV try to refactor so it is also (context)
-    partOfPage?: boolean;
+  partOfPage?(context: ContextOfButton): boolean;
 
   params?(context: ContextOfButton): Params;
 

@@ -5,18 +5,12 @@ import { ButtonAction } from './button-action';
 
 export class ButtonConfig {
   name: string = '';
-
-  // params: any;
-
   action: ButtonAction;
-
   classes: string = '';
   dialog: string = '';
   fullScreen: boolean = null;
-
   inlineWindow: boolean = null;
   newWindow: boolean = null;
-  partOfPage: boolean = null;
   show: boolean = null; // maybe
 
   constructor(action?: ButtonAction, partialConfig?: Partial<ButtonConfig>) {
@@ -38,6 +32,7 @@ export class ButtonConfig {
   dynamicDisabled: (() => boolean) = () => false; // maybe
   icon: ((context: ContextOfButton) => string);
   params: ((context: ContextOfButton) => any);
+  partOfPage: ((context: ContextOfButton) => boolean);
   showCondition: ((context: ContextOfButton) => boolean);
   title: ((context: ContextOfButton) => string);
   uiActionOnly: ((context: ContextOfButton) => boolean);

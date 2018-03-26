@@ -49,7 +49,7 @@ export function getButtonConfigDefaultsV1(name: string,
     icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
     title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
     uiActionOnly: (context: ContextOfButton) => uiOnly,
-    partOfPage: partOfPage,
+    partOfPage: (context: ContextOfButton) => partOfPage,
   } as Partial<ButtonConfig>;
 
   Object.assign(partialButtonConfig, more);
