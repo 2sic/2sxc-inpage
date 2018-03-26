@@ -2612,9 +2612,16 @@ function commandOpenNgDialog(context) {
     };
     var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
     if (context.button.inlineWindow) {
-        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, context.button.fullScreen(context), /* settings.dialog === "item-history"*/ context.button.dialog(context).toString());
+        var fullScreen = false;
+        if (!!context.button.fullScreen) {
+            if (typeof (context.button.fullScreen) === 'function') {
+                fullScreen = context.button.fullScreen(context);
+            }
+        }
+        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, fullScreen, /* settings.dialog === "item-history"*/ context.button.dialog(context).toString());
     }
-    if (context.button.newWindow /*|| (event && event.shiftKey)*/) {
+    var origEvent = event || window.event;
+    if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
         return window.open(link);
     }
     return $2sxc.totalPopup.open(link, callback);
@@ -3469,22 +3476,12 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
     var origEvent = event || window.event;
     var name = settings.action;
     var contentType = settings.contentType;
-    // parameters adapter from v1 to v2
-    //const params = parametersAdapter(settings);
     // Toolbar API v2
     var newButtonAction = new button_action_1.ButtonAction(name, contentType, settings);
     newButtonAction.commandDefinition = commands_1.Commands.getInstance().get(name);
     var newButtonConfig = new button_config_1.ButtonConfig(newButtonAction);
     newButtonConfig.name = name;
-    // settings adapter from v1 to v2
-    //Object.assign(newButtonConfig, settingsAdapter(settings));
-    //addDefaultBtnSettings(newButtonConfig,
-    //  null, //fullToolbarConfig.groups[g],
-    //  null, //fullToolbarConfig,
-    //  Commands.getInstance(),
-    //  log); // ensure all buttons have either own settings, or the fallback
     context.button = Object.assign(newButtonConfig, newButtonAction.commandDefinition.buttonConfig, settings_adapter_1.settingsAdapter(settings)); // merge conf & settings, but settings has higher priority
-    //context.button = newButtonConfig;
     if (!context.button.dialog) {
         context.button.dialog = function (contextParam) {
             return name;
@@ -6004,8 +6001,9 @@ var cmd = new Zone();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-// todo: pls ensure these properties all have a typedoc
-// as it will be in the public API
+/**
+ * Command definition, for creation of commands
+ */
 var Definition = /** @class */ (function () {
     function Definition() {
     }

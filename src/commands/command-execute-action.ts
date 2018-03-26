@@ -44,15 +44,11 @@ export function commandExecuteAction(
     conf,
     settings) as Settings; // merge conf & settings, but settings has higher priority
 
-
   // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
   const origEvent = event || window.event;
 
   const name = settings.action;
   const contentType = settings.contentType;
-
-  // parameters adapter from v1 to v2
-  //const params = parametersAdapter(settings);
 
   // Toolbar API v2
   const newButtonAction = new ButtonAction(name, contentType, settings);
@@ -60,20 +56,9 @@ export function commandExecuteAction(
   const newButtonConfig = new ButtonConfig(newButtonAction);
   newButtonConfig.name = name;
 
-  // settings adapter from v1 to v2
-  //Object.assign(newButtonConfig, settingsAdapter(settings));
-
-  //addDefaultBtnSettings(newButtonConfig,
-  //  null, //fullToolbarConfig.groups[g],
-  //  null, //fullToolbarConfig,
-  //  Commands.getInstance(),
-  //  log); // ensure all buttons have either own settings, or the fallback
-
   context.button = Object.assign(newButtonConfig,
     newButtonAction.commandDefinition.buttonConfig,
     settingsAdapter(settings)) as ButtonConfig; // merge conf & settings, but settings has higher priority
-
-  //context.button = newButtonConfig;
 
   if (!context.button.dialog) {
     context.button.dialog = (contextParam: ContextOfButton) => {

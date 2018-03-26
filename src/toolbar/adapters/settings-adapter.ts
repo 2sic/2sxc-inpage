@@ -1,5 +1,4 @@
 ﻿import { ContextOfButton } from '../../context/context-of-button';
-import { Settings } from '../../commands/settings';
 
 export function settingsAdapter(oldSettings: any): any {
 

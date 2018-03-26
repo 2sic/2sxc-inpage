@@ -21,14 +21,24 @@ export function commandOpenNgDialog(context: ContextOfButton) {
   const link = commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
 
   if (context.button.inlineWindow) {
+
+    let fullScreen = false;
+    if (!!context.button.fullScreen) {
+      if (typeof (context.button.fullScreen) === 'function') {
+        fullScreen = context.button.fullScreen(context);
+      }
+    }
+
     return showOrToggle(context.sxc.sxc,
       link,
       callback,
-      context.button.fullScreen(context), /* settings.dialog === "item-history"*/
+      fullScreen, /* settings.dialog === "item-history"*/
       context.button.dialog(context).toString());
   }
 
-  if (context.button.newWindow /*|| (event && event.shiftKey)*/) {
+  const origEvent: any = event || window.event;
+
+  if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
     return window.open(link);
   }
 
