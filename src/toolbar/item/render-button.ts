@@ -54,8 +54,9 @@ export function renderButton(context: ContextOfButton, groupIndex: number): HTML
   const box = document.createElement('div');
 
   const symbol = document.createElement('i');
-
-  addClasses(symbol, buttonConfig.icon(context), ' ');
+  if (buttonConfig.icon) {
+    addClasses(symbol, buttonConfig.icon(context), ' ');
+  }
 
   symbol.setAttribute('aria-hidden', 'true');
 

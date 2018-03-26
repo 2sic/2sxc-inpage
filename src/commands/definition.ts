@@ -13,14 +13,12 @@ export class Definition {
   disabled?(context: ContextOfButton): boolean;
   dynamicClasses?(context: ContextOfButton): string;
   icon?(context: ContextOfButton): string;
+  newWindow?(context: ContextOfButton): boolean;
   params?(context: ContextOfButton): Params;
   partOfPage?(context: ContextOfButton): boolean;
   showCondition?(context: ContextOfButton): boolean;
   title?(context: ContextOfButton): string;
   uiActionOnly?(context: ContextOfButton): boolean;
-  
-  // todo STV try to refactor so it is also (context)
-  newWindow?: boolean;
 
   // todo STV try to refactor so it is also (context)
   inlineWindow?: boolean;

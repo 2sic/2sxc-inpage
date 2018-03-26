@@ -12,7 +12,7 @@ export class TemplateDevelop extends CommandBase {
       true,
       false,
       {
-        newWindow: true,
+        newWindow: (context) => true,
         dialog: (context) => 'develop',
         showCondition: (context) => {
           return (context.user.canDesign);

@@ -9,7 +9,6 @@ export class ButtonConfig {
   classes: string = '';
   fullScreen: boolean = null;
   inlineWindow: boolean = null;
-  newWindow: boolean = null;
   show: boolean = null; // maybe
 
   constructor(action?: ButtonAction, partialConfig?: Partial<ButtonConfig>) {
@@ -31,6 +30,7 @@ export class ButtonConfig {
   dynamicClasses: (context: ContextOfButton) => string;
   dynamicDisabled: (() => boolean) = () => false; // maybe
   icon: (context: ContextOfButton) => string;
+  newWindow: (context: ContextOfButton) => boolean;
   params: (context: ContextOfButton) => any;
   partOfPage: (context: ContextOfButton) => boolean;
   showCondition: (context: ContextOfButton) => boolean;

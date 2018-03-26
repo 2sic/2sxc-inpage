@@ -64,7 +64,9 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.newWindow) {
-    partialButtonConfig.newWindow = actDef.newWindow;
+    partialButtonConfig.newWindow = (context: ContextOfButton) => {
+      return actDef.newWindow;
+    }
   }
 
   if (actDef.params) {

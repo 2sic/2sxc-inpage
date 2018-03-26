@@ -16,7 +16,7 @@ export class TemplateQuery extends CommandBase {
         params: (context) => {
           return { pipelineId: context.contentBlock.queryId };
         },
-        newWindow: true,
+        newWindow: (context) =>true,
         disabled: (context) => {
           return context.app.settingsId === null;
         },

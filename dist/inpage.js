@@ -1512,7 +1512,9 @@ function renderButton(context, groupIndex) {
     }
     var box = document.createElement('div');
     var symbol = document.createElement('i');
-    render_helpers_1.addClasses(symbol, buttonConfig.icon(context), ' ');
+    if (buttonConfig.icon) {
+        render_helpers_1.addClasses(symbol, buttonConfig.icon(context), ' ');
+    }
     symbol.setAttribute('aria-hidden', 'true');
     box.appendChild(symbol);
     button.appendChild(box);
@@ -1576,7 +1578,6 @@ var ButtonConfig = /** @class */ (function () {
         this.classes = '';
         this.fullScreen = null;
         this.inlineWindow = null;
-        this.newWindow = null;
         this.show = null; // maybe
         this.dynamicDisabled = function () { return false; }; // maybe
         if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
@@ -2419,35 +2420,46 @@ function settingsAdapter(oldSettings) {
     }
     // 'dialog',
     if (oldSettings.dialog) {
-        newSettings.dialog = oldSettings.dialog;
+        newSettings.dialog = evalPropOrFunction(oldSettings.dialog);
     }
     // 'disabled'
     if (oldSettings.disabled) {
-        newSettings.disabled = oldSettings.disabled;
+        newSettings.disabled = evalPropOrFunction(oldSettings.disabled);
     }
     // 'dynamicClasses',
     if (oldSettings.dynamicClasses) {
-        newSettings.dynamicClasses = oldSettings.dynamicClasses;
+        newSettings.dynamicClasses = evalPropOrFunction(oldSettings.dynamicClasses);
     }
     // 'icon',
     if (oldSettings.icon) {
-        newSettings.icon = oldSettings.icon;
+        newSettings.icon = evalPropOrFunction(oldSettings.icon);
     }
     // partOfPage
     if (oldSettings.partOfPage) {
-        newSettings.partOfPage = oldSettings.partOfPage;
+        newSettings.partOfPage = evalPropOrFunction(oldSettings.partOfPage);
     }
     // 'showCondition',
     if (oldSettings.showCondition) {
-        newSettings.showCondition = oldSettings.showCondition;
+        newSettings.showCondition = evalPropOrFunction(oldSettings.showCondition);
     }
     // 'title',
     if (oldSettings.title) {
-        newSettings.title = oldSettings.title;
+        newSettings.title = evalPropOrFunction(oldSettings.title);
     }
     return newSettings;
 }
 exports.settingsAdapter = settingsAdapter;
+function evalPropOrFunction(propOrFunction) {
+    if (propOrFunction === undefined || propOrFunction === null) {
+        return false;
+    }
+    if (typeof (propOrFunction) === 'function') {
+        return propOrFunction;
+    }
+    else {
+        return function (context) { return propOrFunction; };
+    }
+}
 
 
 /***/ }),
@@ -4329,7 +4341,9 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
         partialButtonConfig.name = actDef.name;
     }
     if (actDef.newWindow) {
-        partialButtonConfig.newWindow = actDef.newWindow;
+        partialButtonConfig.newWindow = function (context) {
+            return actDef.newWindow;
+        };
     }
     if (actDef.params) {
         // todo: stv ... test this...
@@ -5818,7 +5832,7 @@ var TemplateDevelop = /** @class */ (function (_super) {
     function TemplateDevelop() {
         var _this = _super.call(this) || this;
         _this.makeDef('template-develop', 'Develop', 'code', true, false, {
-            newWindow: true,
+            newWindow: function (context) { return true; },
             dialog: function (context) { return 'develop'; },
             showCondition: function (context) {
                 return (context.user.canDesign);
@@ -5866,7 +5880,7 @@ var TemplateQuery = /** @class */ (function (_super) {
             params: function (context) {
                 return { pipelineId: context.contentBlock.queryId };
             },
-            newWindow: true,
+            newWindow: function (context) { return true; },
             disabled: function (context) {
                 return context.app.settingsId === null;
             },

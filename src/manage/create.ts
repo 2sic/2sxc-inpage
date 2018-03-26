@@ -90,9 +90,7 @@ class EditManager {
 
     this.context.button = newButtonConfig;
  
-    const button = renderButton(
-      this.context,
-      groupIndex);
+    const button = renderButton(this.context, groupIndex);
 
     return button.outerHTML;
   }
