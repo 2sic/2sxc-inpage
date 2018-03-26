@@ -52,11 +52,15 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.fullScreen) {
-    partialButtonConfig.fullScreen = actDef.fullScreen;
+    partialButtonConfig.fullScreen = (context: ContextOfButton) => {
+      return actDef.fullScreen;
+    }
   }
 
   if (actDef.inlineWindow) {
-    partialButtonConfig.inlineWindow = actDef.inlineWindow;
+    partialButtonConfig.inlineWindow = (context: ContextOfButton) => {
+      return actDef.inlineWindow;
+    }
   }
 
   if (actDef.name) {

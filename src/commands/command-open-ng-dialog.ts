@@ -24,7 +24,7 @@ export function commandOpenNgDialog(context: ContextOfButton) {
     return showOrToggle(context.sxc.sxc,
       link,
       callback,
-      context.button.fullScreen /* settings.dialog === "item-history"*/,
+      context.button.fullScreen(context), /* settings.dialog === "item-history"*/
       context.button.dialog(context).toString());
   }
 

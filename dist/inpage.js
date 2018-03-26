@@ -1576,8 +1576,6 @@ var ButtonConfig = /** @class */ (function () {
     function ButtonConfig(action, partialConfig) {
         this.name = '';
         this.classes = '';
-        this.fullScreen = null;
-        this.inlineWindow = null;
         this.show = null; // maybe
         this.dynamicDisabled = function () { return false; }; // maybe
         if (action && action.commandDefinition && action.commandDefinition.buttonConfig) {
@@ -2430,9 +2428,21 @@ function settingsAdapter(oldSettings) {
     if (oldSettings.dynamicClasses) {
         newSettings.dynamicClasses = evalPropOrFunction(oldSettings.dynamicClasses);
     }
+    // 'fullScreen',
+    if (oldSettings.fullScreen) {
+        newSettings.fullScreen = evalPropOrFunction(oldSettings.fullScreen);
+    }
     // 'icon',
     if (oldSettings.icon) {
         newSettings.icon = evalPropOrFunction(oldSettings.icon);
+    }
+    // 'inlineWindow',
+    if (oldSettings.inlineWindow) {
+        newSettings.inlineWindow = evalPropOrFunction(oldSettings.inlineWindow);
+    }
+    // 'newWindow',
+    if (oldSettings.newWindow) {
+        newSettings.newWindow = evalPropOrFunction(oldSettings.newWindow);
     }
     // partOfPage
     if (oldSettings.partOfPage) {
@@ -2602,7 +2612,7 @@ function commandOpenNgDialog(context) {
     };
     var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
     if (context.button.inlineWindow) {
-        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, context.button.fullScreen /* settings.dialog === "item-history"*/, context.button.dialog(context).toString());
+        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, context.button.fullScreen(context), /* settings.dialog === "item-history"*/ context.button.dialog(context).toString());
     }
     if (context.button.newWindow /*|| (event && event.shiftKey)*/) {
         return window.open(link);
@@ -4332,10 +4342,14 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
         };
     }
     if (actDef.fullScreen) {
-        partialButtonConfig.fullScreen = actDef.fullScreen;
+        partialButtonConfig.fullScreen = function (context) {
+            return actDef.fullScreen;
+        };
     }
     if (actDef.inlineWindow) {
-        partialButtonConfig.inlineWindow = actDef.inlineWindow;
+        partialButtonConfig.inlineWindow = function (context) {
+            return actDef.inlineWindow;
+        };
     }
     if (actDef.name) {
         partialButtonConfig.name = actDef.name;
@@ -5358,8 +5372,8 @@ var ItemHistory = /** @class */ (function (_super) {
     function ItemHistory() {
         var _this = _super.call(this) || this;
         _this.makeDef('item-history', 'ItemHistory', 'clock', true, false, {
-            inlineWindow: true,
-            fullScreen: true,
+            inlineWindow: function (context) { return true; },
+            fullScreen: function (context) { return true; },
         });
         return _this;
     }
@@ -5396,7 +5410,7 @@ var Layout = /** @class */ (function (_super) {
     function Layout() {
         var _this = _super.call(this) || this;
         _this.makeDef('layout', 'ChangeLayout', 'glasses', true, true, {
-            inlineWindow: true,
+            inlineWindow: function (context) { return true; },
         });
         return _this;
     }

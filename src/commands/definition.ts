@@ -12,17 +12,13 @@ export class Definition {
   dialog?(context: ContextOfButton): string;
   disabled?(context: ContextOfButton): boolean;
   dynamicClasses?(context: ContextOfButton): string;
+  fullScreen?(context: ContextOfButton): boolean;
   icon?(context: ContextOfButton): string;
+  inlineWindow?(context: ContextOfButton): boolean;
   newWindow?(context: ContextOfButton): boolean;
   params?(context: ContextOfButton): Params;
   partOfPage?(context: ContextOfButton): boolean;
   showCondition?(context: ContextOfButton): boolean;
   title?(context: ContextOfButton): string;
   uiActionOnly?(context: ContextOfButton): boolean;
-
-  // todo STV try to refactor so it is also (context)
-  inlineWindow?: boolean;
-
-  // todo STV try to refactor so it is also (context)
-  fullScreen?: boolean;
 }

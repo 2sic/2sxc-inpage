@@ -14,8 +14,8 @@ export class ItemHistory extends CommandBase {
       true,
       false,
       {
-        inlineWindow: true,
-        fullScreen: true,
+        inlineWindow: (context) => true,
+        fullScreen: (context) => true,
       });
   }
 }

@@ -12,7 +12,7 @@ export class Layout extends CommandBase {
       true,
       true,
       {
-        inlineWindow: true,
+        inlineWindow: (context) => true,
       });
   }
 }

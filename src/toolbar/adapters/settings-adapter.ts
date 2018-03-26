@@ -24,9 +24,24 @@ export function settingsAdapter(oldSettings: any): any {
     newSettings.dynamicClasses = evalPropOrFunction(oldSettings.dynamicClasses);
   }
 
+  // 'fullScreen',
+  if (oldSettings.fullScreen) {
+    newSettings.fullScreen = evalPropOrFunction(oldSettings.fullScreen);
+  }
+
   // 'icon',
   if (oldSettings.icon) {
     newSettings.icon = evalPropOrFunction(oldSettings.icon);
+  }
+
+  // 'inlineWindow',
+  if (oldSettings.inlineWindow) {
+    newSettings.inlineWindow = evalPropOrFunction(oldSettings.inlineWindow);
+  }
+
+  // 'newWindow',
+  if (oldSettings.newWindow) {
+    newSettings.newWindow = evalPropOrFunction(oldSettings.newWindow);
   }
 
   // partOfPage
