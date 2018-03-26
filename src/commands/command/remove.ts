@@ -21,7 +21,7 @@ export class Remove extends CommandBase {
             (context.button.action.params.useModuleList) &&
             (context.button.action.params.sortOrder !== -1);
         },
-        code(context, settings) {
+        code(context) {
           if (confirm(translate('Toolbar.ConfirmRemove'))) {
             removeFromList(context.sxc.sxc, context.button.action.params.sortOrder);
           }

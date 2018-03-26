@@ -12,17 +12,17 @@ export class Custom extends CommandBase {
       true,
       false,
       {
-        code(context, settings) {
+        code(context) {
           console.log('custom action with code - BETA feature, may change');
           if (!context.button.action.params.customCode) {
-            console.warn('custom code action, but no onclick found to run', settings);
+            console.warn('custom code action, but no onclick found to run', context.button.action.params);
             return;
           }
           try {
             const fn = new Function('context', 'event', 'sxc', context.button.action.params.customCode); // jshint ignore:line
             fn(context, event, context.sxc.sxc);
           } catch (err) {
-            console.error('error in custom button-code: ', settings);
+            console.error('error in custom button-code: ', context.button.action.params);
           }
         },
       });

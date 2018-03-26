@@ -19,7 +19,7 @@ export class MoveDown extends CommandBase {
             && (context.button.action.params.useModuleList)
             && (context.button.action.params.sortOrder !== -1);
         },
-        code(context, settings) {
+        code(context) {
           // TODO: make sure index is never greater than the amount of items
           changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
         },

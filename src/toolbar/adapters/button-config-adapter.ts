@@ -58,14 +58,14 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.code) {
-    partialButtonConfig.code = (context: ContextOfButton, settings: Settings, sxc: SxcInstanceWithInternals) => {
+    partialButtonConfig.code = (context: ContextOfButton) => {
 
       const modConfig = new ModConfig();
       // todo: stv .. .find this data
       //modConfig.target = ''; // todo
       //modConfig.isList = false; // todo
 
-      return actDef.code(settings, modConfig);
+      return actDef.code(context.button.action.params, modConfig);
     }
 
   }

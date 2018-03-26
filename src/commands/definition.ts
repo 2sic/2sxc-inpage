@@ -31,7 +31,7 @@ export class Definition {
   showCondition?(context: ContextOfButton): boolean;
 
   // todo STV try to refactor so it doesn't need settings
-    code?(context: ContextOfButton, settings: Settings): void;
+  code?(context: ContextOfButton): void;
 
   // todo STV try to refactor so it doesn't need settings
     dynamicClasses?(context: ContextOfButton, settings: Settings): string;

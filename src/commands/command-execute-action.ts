@@ -80,18 +80,18 @@ export function commandExecuteAction(
   }
 
   if (!context.button.code) {
-    context.button.code = (contextParam: ContextOfButton, settingsParam: Settings) => {
+    context.button.code = (contextParam: ContextOfButton) => {
       return commandOpenNgDialog(contextParam);
     }; // decide what action to perform
   }
 
   if (context.button.uiActionOnly) {
-    return context.button.code(context, settings, sxc);
+    return context.button.code(context);
   }
 
   // if more than just a UI-action, then it needs to be sure the content-group is created first
   return prepareToAddContent(
     sxc,
     settings.useModuleList)
-    .then(() => context.button.code(context, settings, sxc));
+    .then(() => context.button.code(context));
 }

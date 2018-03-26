@@ -22,7 +22,7 @@ export class Publish extends CommandBase {
         disabled: (context, settings) => {
           return !context.instance.allowPublish;
         },
-        code: (context, settings) => {
+        code: (context) => {
           if (context.button.action.params.isPublished) {
             return alert(translate('Toolbar.AlreadyPublished'));
           }

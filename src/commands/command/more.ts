@@ -12,7 +12,7 @@ export class More extends CommandBase {
       true,
       false,
       {
-        code(context, settings) {
+        code(context) {
           const btn: any = $(context.element);
           const fullMenu: any = btn.closest('ul.sc-menu');
           const oldState = Number(fullMenu.attr('data-state') || 0);

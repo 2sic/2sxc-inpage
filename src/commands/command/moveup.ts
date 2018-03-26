@@ -19,7 +19,7 @@ export class MoveUp extends CommandBase {
             (context.button.action.params.sortOrder !== -1) &&
             (context.button.action.params.sortOrder !== 0);
         },
-        code(context, settings) {
+        code(context) {
           changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
         },
       });
