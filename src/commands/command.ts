@@ -11,7 +11,7 @@ export class Command {
   params: Params;
 
 
-  constructor(public context: ContextOfButton, public Xsettings: Settings, public ngDialogUrl: string, public isDebug: string) {
+  constructor(public context: ContextOfButton, public ngDialogUrl: string, public isDebug: string) {
     this.sxc = context.sxc.sxc;
     //this.settings = settings;
     this.items = context.button.action.params.items || []; // use predefined or create empty array

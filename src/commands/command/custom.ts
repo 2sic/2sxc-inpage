@@ -14,13 +14,13 @@ export class Custom extends CommandBase {
       {
         code(context, settings) {
           console.log('custom action with code - BETA feature, may change');
-          if (!settings.customCode) {
+          if (!context.button.action.params.customCode) {
             console.warn('custom code action, but no onclick found to run', settings);
             return;
           }
           try {
-            const fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
-            fn(settings, event, context.sxc.sxc);
+            const fn = new Function('context', 'event', 'sxc', context.button.action.params.customCode); // jshint ignore:line
+            fn(context, event, context.sxc.sxc);
           } catch (err) {
             console.error('error in custom button-code: ', settings);
           }

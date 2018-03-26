@@ -81,9 +81,7 @@ export function commandExecuteAction(
 
   if (!context.button.code) {
     context.button.code = (contextParam: ContextOfButton, settingsParam: Settings) => {
-      return commandOpenNgDialog(
-        contextParam,
-        settingsParam);
+      return commandOpenNgDialog(contextParam);
     }; // decide what action to perform
   }
 

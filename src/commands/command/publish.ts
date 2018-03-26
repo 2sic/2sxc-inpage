@@ -23,13 +23,17 @@ export class Publish extends CommandBase {
           return !context.instance.allowPublish;
         },
         code: (context, settings) => {
-          if (settings.isPublished) return alert(translate('Toolbar.AlreadyPublished'));
+          if (context.button.action.params.isPublished) {
+            return alert(translate('Toolbar.AlreadyPublished'));
+          }
 
           // if we have an entity-id, publish based on that
-          if (settings.entityId) return publishId(context.sxc.sxc, settings.entityId);
+          if (context.button.action.params.entityId) {
+            return publishId(context.sxc.sxc, context.button.action.params.entityId);
+          }
 
-          const part: string = settings.sortOrder === -1 ? 'listcontent' : 'content';
-          const index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+          const part: string = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
+          const index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
           return publish(context.sxc.sxc, part, index);
         },
       });

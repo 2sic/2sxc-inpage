@@ -8,19 +8,14 @@ import { Settings } from './settings';
  * @param editContext
  * @param specialSettings
  */
-export function commandCreate(context: ContextOfButton, specialSettings: Settings): Command {
-
-
-  // todo: stv, !!! sxc.manage._instanceConfig
-  const settings = Object.assign(context.sxc.sxc.manage._instanceConfig, specialSettings) as Settings; // merge button with general toolbar-settings
-
+export function commandCreate(context: ContextOfButton): Command {
   const ngDialogUrl = context.sxc.editContext.Environment.SxcRootUrl +
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
     context.sxc.editContext.Environment.SxcVersion;
 
   const isDebug: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
 
-  const cmd = new Command(context, settings, ngDialogUrl, isDebug);
+  const cmd = new Command(context, ngDialogUrl, isDebug);
 
   return cmd;
 }

@@ -7,8 +7,8 @@ import { Settings } from './settings';
  * @param sxc
  * @param specialSettings
  */
-export function commandLinkToNgDialog(context: ContextOfButton, specialSettings: Settings): string {
-  const cmd = commandCreate(context, specialSettings);
+export function commandLinkToNgDialog(context: ContextOfButton): string {
+  const cmd = commandCreate(context);
 
   if (cmd.context.button.action.params.useModuleList) {
     cmd.addContentGroupItemSetsToEditList(true);

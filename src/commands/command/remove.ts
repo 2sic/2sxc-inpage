@@ -23,9 +23,7 @@ export class Remove extends CommandBase {
         },
         code(context, settings) {
           if (confirm(translate('Toolbar.ConfirmRemove'))) {
-            removeFromList(context.sxc.sxc, settings.sortOrder);
-            // sxc.manage.contentBlock
-            //    .removeFromList(settings.sortOrder);
+            removeFromList(context.sxc.sxc, context.button.action.params.sortOrder);
           }
         },
       });

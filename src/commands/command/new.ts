@@ -29,8 +29,9 @@ export class New extends CommandBase {
         },
         code(context, settings) {
           // todo - should refactor this to be a toolbarManager.contentBlock command
-          const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
-          commandOpenNgDialog(context, settingsExtend);
+          //const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
+          Object.assign(context.button.action.params, { sortOrder: context.button.action.params.sortOrder + 1 });
+          commandOpenNgDialog(context);
         },
       });
   }

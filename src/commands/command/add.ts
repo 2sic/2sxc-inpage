@@ -19,7 +19,7 @@ export class Add extends CommandBase {
           return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
         },
         code(context, settings) {
-          addItem(context.sxc.sxc, settings.sortOrder + 1);
+          addItem(context.sxc.sxc, context.button.action.params.sortOrder + 1);
         },
       });
   }

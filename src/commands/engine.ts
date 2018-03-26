@@ -14,7 +14,7 @@ export class Engine {
 
   // assemble an object which will store the configuration and execute it
   create = (context: ContextOfButton, specialSettings: Settings) => {
-    return commandCreate(context, specialSettings);
+    return commandCreate(context);
   }
 
   run = (nameOrSettings: any, eventOrSettings?: any, event?: any) => {

@@ -1741,7 +1741,7 @@ var Engine = /** @class */ (function () {
         this.commands = commands_1.Commands.getInstance;
         // assemble an object which will store the configuration and execute it
         this.create = function (context, specialSettings) {
-            return command_create_1.commandCreate(context, specialSettings);
+            return command_create_1.commandCreate(context);
         };
         this.run = function (nameOrSettings, eventOrSettings, event) {
             var tag = api_1.getTag(_this.sxc);
@@ -1805,14 +1805,14 @@ var command_1 = __webpack_require__(64);
  * @param editContext
  * @param specialSettings
  */
-function commandCreate(context, specialSettings) {
+function commandCreate(context) {
     // todo: stv, !!! sxc.manage._instanceConfig
-    var settings = Object.assign(context.sxc.sxc.manage._instanceConfig, specialSettings); // merge button with general toolbar-settings
+    // const settings = Object.assign(context.sxc.sxc.manage._instanceConfig, context.button.action.params) as Settings; // merge button with general toolbar-settings
     var ngDialogUrl = context.sxc.editContext.Environment.SxcRootUrl +
         'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
         context.sxc.editContext.Environment.SxcVersion;
     var isDebug = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-    var cmd = new command_1.Command(context, settings, ngDialogUrl, isDebug);
+    var cmd = new command_1.Command(context, ngDialogUrl, isDebug);
     return cmd;
 }
 exports.commandCreate = commandCreate;
@@ -2579,18 +2579,20 @@ var command_link_to_ng_dialog_1 = __webpack_require__(75);
  * @param sxc
  * @param editContext
  */
-function commandOpenNgDialog(context, settings) {
+function commandOpenNgDialog(context) {
     // the callback will handle events after closing the dialog
     // and reload the in-page view w/ajax or page reload
     var callback = function () {
         render_1.reloadAndReInitialize(context.sxc.sxc);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
     };
-    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context, settings); // the link contains everything to open a full dialog (lots of params added)
-    if (settings.inlineWindow)
-        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, settings.fullScreen /* settings.dialog === "item-history"*/, settings.dialog);
-    if (settings.newWindow /*|| (event && event.shiftKey)*/)
+    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
+    if (context.button.inlineWindow) {
+        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, context.button.fullScreen /* settings.dialog === "item-history"*/, context.button.dialog);
+    }
+    if (context.button.newWindow /*|| (event && event.shiftKey)*/) {
         return window.open(link);
+    }
     return $2sxc.totalPopup.open(link, callback);
 }
 exports.commandOpenNgDialog = commandOpenNgDialog;
@@ -3312,10 +3314,9 @@ exports.PageContext = PageContext;
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(8);
 var Command = /** @class */ (function () {
-    function Command(context, Xsettings, ngDialogUrl, isDebug) {
+    function Command(context, ngDialogUrl, isDebug) {
         var _this = this;
         this.context = context;
-        this.Xsettings = Xsettings;
         this.ngDialogUrl = ngDialogUrl;
         this.isDebug = isDebug;
         this.evalPropOrFunction = function (propOrFunction, context, fallback) {
@@ -3462,7 +3463,7 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
     }
     if (!context.button.code) {
         context.button.code = function (contextParam, settingsParam) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(contextParam, settingsParam);
+            return command_open_ng_dialog_1.commandOpenNgDialog(contextParam);
         }; // decide what action to perform
     }
     if (context.button.uiActionOnly) {
@@ -3879,8 +3880,8 @@ var command_create_1 = __webpack_require__(22);
  * @param sxc
  * @param specialSettings
  */
-function commandLinkToNgDialog(context, specialSettings) {
-    var cmd = command_create_1.commandCreate(context, specialSettings);
+function commandLinkToNgDialog(context) {
+    var cmd = command_create_1.commandCreate(context);
     if (cmd.context.button.action.params.useModuleList) {
         cmd.addContentGroupItemSetsToEditList(true);
     }
@@ -4822,7 +4823,7 @@ var Add = /** @class */ (function (_super) {
                 return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
             },
             code: function (context, settings) {
-                actions_1.addItem(context.sxc.sxc, settings.sortOrder + 1);
+                actions_1.addItem(context.sxc.sxc, context.button.action.params.sortOrder + 1);
             },
         });
         return _this;
@@ -5141,13 +5142,13 @@ var Custom = /** @class */ (function (_super) {
         _this.makeDef('custom', 'Custom', 'bomb', true, false, {
             code: function (context, settings) {
                 console.log('custom action with code - BETA feature, may change');
-                if (!settings.customCode) {
+                if (!context.button.action.params.customCode) {
                     console.warn('custom code action, but no onclick found to run', settings);
                     return;
                 }
                 try {
-                    var fn = new Function('settings', 'event', 'sxc', settings.customCode); // jshint ignore:line
-                    fn(settings, event, context.sxc.sxc);
+                    var fn = new Function('context', 'event', 'sxc', context.button.action.params.customCode); // jshint ignore:line
+                    fn(context, event, context.sxc.sxc);
                 }
                 catch (err) {
                     console.error('error in custom button-code: ', settings);
@@ -5204,7 +5205,7 @@ var Delete = /** @class */ (function (_super) {
                     && (!!context.button.action.params.entityTitle));
             },
             code: function (context, settings) {
-                item_commands_1.contentItems.delete(context.sxc.sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+                item_commands_1.contentItems.delete(context.sxc.sxc, context.button.action.params.entityId, context.button.action.params.entityGuid, context.button.action.params.entityTitle);
             },
         });
         return _this;
@@ -5412,7 +5413,7 @@ var Metadata = /** @class */ (function (_super) {
             dialog: 'edit',
             dynamicClasses: function (context, settings) {
                 // if it doesn't have data yet, make it less strong
-                return settings.entityId ? '' : 'empty';
+                return context.button.action.params.entityId ? '' : 'empty';
                 // return settings.items && settings.items[0].entityId ? "" : "empty";
             },
             showCondition: function (context) {
@@ -5516,7 +5517,7 @@ var MoveDown = /** @class */ (function (_super) {
             },
             code: function (context, settings) {
                 // TODO: make sure index is never greater than the amount of items
-                actions_1.changeOrder(context.sxc.sxc, settings.sortOrder, settings.sortOrder + 1);
+                actions_1.changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
             },
         });
         return _this;
@@ -5562,7 +5563,7 @@ var MoveUp = /** @class */ (function (_super) {
                     (context.button.action.params.sortOrder !== 0);
             },
             code: function (context, settings) {
-                actions_1.changeOrder(context.sxc.sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));
+                actions_1.changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
             },
         });
         return _this;
@@ -5616,8 +5617,9 @@ var New = /** @class */ (function (_super) {
             },
             code: function (context, settings) {
                 // todo - should refactor this to be a toolbarManager.contentBlock command
-                var settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 });
-                command_open_ng_dialog_1.commandOpenNgDialog(context, settingsExtend);
+                //const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
+                Object.assign(context.button.action.params, { sortOrder: context.button.action.params.sortOrder + 1 });
+                command_open_ng_dialog_1.commandOpenNgDialog(context);
             },
         });
         return _this;
