@@ -52,8 +52,7 @@ export class ButtonConfig {
 
   // disabled: boolean | (() => boolean) = false;
   disabled: ((context: ContextOfButton, settings: Settings) => boolean);
-  // dynamicClasses: (() => string);
-  dynamicClasses: ((context: ContextOfButton, settings: Settings) => string);
+  dynamicClasses: ((context: ContextOfButton) => string);
   dynamicDisabled: (() => boolean) = () => false; // maybe
   code: ((context: ContextOfButton) => void);
 

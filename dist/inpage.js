@@ -1503,7 +1503,7 @@ function renderButton(context, groupIndex) {
     }
     render_helpers_1.addClasses(button, buttonConfig.classes, ',');
     if (buttonConfig.dynamicClasses) {
-        var dynamicClasses = buttonConfig.dynamicClasses(context, buttonConfig);
+        var dynamicClasses = buttonConfig.dynamicClasses(context);
         render_helpers_1.addClasses(button, dynamicClasses, ' ');
     }
     button.setAttribute('onclick', onclick); // serialize JavaScript because of ajax
@@ -1806,8 +1806,6 @@ var command_1 = __webpack_require__(64);
  * @param specialSettings
  */
 function commandCreate(context) {
-    // todo: stv, !!! sxc.manage._instanceConfig
-    // const settings = Object.assign(context.sxc.sxc.manage._instanceConfig, context.button.action.params) as Settings; // merge button with general toolbar-settings
     var ngDialogUrl = context.sxc.editContext.Environment.SxcRootUrl +
         'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
         context.sxc.editContext.Environment.SxcVersion;
@@ -3462,16 +3460,16 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
         context.button.dialog = name; // old code uses "action" as the parameter, now use verb ? dialog
     }
     if (!context.button.code) {
-        context.button.code = function (contextParam, settingsParam) {
+        context.button.code = function (contextParam) {
             return command_open_ng_dialog_1.commandOpenNgDialog(contextParam);
         }; // decide what action to perform
     }
     if (context.button.uiActionOnly) {
-        return context.button.code(context, settings, sxc);
+        return context.button.code(context);
     }
     // if more than just a UI-action, then it needs to be sure the content-group is created first
     return templates_1.prepareToAddContent(sxc, settings.useModuleList)
-        .then(function () { return context.button.code(context, settings, sxc); });
+        .then(function () { return context.button.code(context); });
 }
 exports.commandExecuteAction = commandExecuteAction;
 
@@ -4290,8 +4288,8 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
         partialButtonConfig.classes = actDef.classes;
     }
     if (actDef.dynamicClasses) {
-        partialButtonConfig.dynamicClasses = function (context, settings) {
-            return actDef.dynamicClasses(settings);
+        partialButtonConfig.dynamicClasses = function (context) {
+            return actDef.dynamicClasses(context.button.action.params);
         };
     }
     if (actDef.showCondition) {
@@ -4316,12 +4314,12 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
         partialButtonConfig.uiActionOnly = actDef.uiActionOnly;
     }
     if (actDef.code) {
-        partialButtonConfig.code = function (context, settings, sxc) {
+        partialButtonConfig.code = function (context) {
             var modConfig = new mod_config_1.ModConfig();
             // todo: stv .. .find this data
             //modConfig.target = ''; // todo
             //modConfig.isList = false; // todo
-            return actDef.code(settings, modConfig);
+            return actDef.code(context.button.action.params, modConfig);
         };
     }
     if (actDef.name) {
@@ -4822,7 +4820,7 @@ var Add = /** @class */ (function (_super) {
             showCondition: function (context) {
                 return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
             },
-            code: function (context, settings) {
+            code: function (context) {
                 actions_1.addItem(context.sxc.sxc, context.button.action.params.sortOrder + 1);
             },
         });
@@ -4911,8 +4909,7 @@ var AppResources = /** @class */ (function (_super) {
             configureCommand: function (context, command) {
                 command.items = [{ EntityId: context.app.resourcesId }];
             },
-            // ReSharper disable once UnusedParameter
-            dynamicClasses: function (context, settings) {
+            dynamicClasses: function (context) {
                 return context.app.resourcesId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
             },
         });
@@ -4964,8 +4961,7 @@ var AppSettings = /** @class */ (function (_super) {
             configureCommand: function (context, command) {
                 command.items = [{ EntityId: context.app.settingsId }];
             },
-            // ReSharper disable once UnusedParameter
-            dynamicClasses: function (context, settings) {
+            dynamicClasses: function (context) {
                 return context.app.settingsId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
             },
         });
@@ -5140,10 +5136,10 @@ var Custom = /** @class */ (function (_super) {
     function Custom() {
         var _this = _super.call(this) || this;
         _this.makeDef('custom', 'Custom', 'bomb', true, false, {
-            code: function (context, settings) {
+            code: function (context) {
                 console.log('custom action with code - BETA feature, may change');
                 if (!context.button.action.params.customCode) {
-                    console.warn('custom code action, but no onclick found to run', settings);
+                    console.warn('custom code action, but no onclick found to run', context.button.action.params);
                     return;
                 }
                 try {
@@ -5151,7 +5147,7 @@ var Custom = /** @class */ (function (_super) {
                     fn(context, event, context.sxc.sxc);
                 }
                 catch (err) {
-                    console.error('error in custom button-code: ', settings);
+                    console.error('error in custom button-code: ', context.button.action.params);
                 }
             },
         });
@@ -5204,7 +5200,7 @@ var Delete = /** @class */ (function (_super) {
                     && (!!context.button.action.params.entityGuid)
                     && (!!context.button.action.params.entityTitle));
             },
-            code: function (context, settings) {
+            code: function (context) {
                 item_commands_1.contentItems.delete(context.sxc.sxc, context.button.action.params.entityId, context.button.action.params.entityGuid, context.button.action.params.entityTitle);
             },
         });
@@ -5411,7 +5407,7 @@ var Metadata = /** @class */ (function (_super) {
                 return { mode: 'new' };
             },
             dialog: 'edit',
-            dynamicClasses: function (context, settings) {
+            dynamicClasses: function (context) {
                 // if it doesn't have data yet, make it less strong
                 return context.button.action.params.entityId ? '' : 'empty';
                 // return settings.items && settings.items[0].entityId ? "" : "empty";
@@ -5462,7 +5458,7 @@ var More = /** @class */ (function (_super) {
     function More() {
         var _this = _super.call(this) || this;
         _this.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
-            code: function (context, settings) {
+            code: function (context) {
                 var btn = $(context.element);
                 var fullMenu = btn.closest('ul.sc-menu');
                 var oldState = Number(fullMenu.attr('data-state') || 0);
@@ -5515,7 +5511,7 @@ var MoveDown = /** @class */ (function (_super) {
                     && (context.button.action.params.useModuleList)
                     && (context.button.action.params.sortOrder !== -1);
             },
-            code: function (context, settings) {
+            code: function (context) {
                 // TODO: make sure index is never greater than the amount of items
                 actions_1.changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
             },
@@ -5562,7 +5558,7 @@ var MoveUp = /** @class */ (function (_super) {
                     (context.button.action.params.sortOrder !== -1) &&
                     (context.button.action.params.sortOrder !== 0);
             },
-            code: function (context, settings) {
+            code: function (context) {
                 actions_1.changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
             },
         });
@@ -5615,7 +5611,7 @@ var New = /** @class */ (function (_super) {
                 return (!!context.button.action.params.contentType) ||
                     ((context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1)); // don't provide new on the header-item
             },
-            code: function (context, settings) {
+            code: function (context) {
                 // todo - should refactor this to be a toolbarManager.contentBlock command
                 //const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
                 Object.assign(context.button.action.params, { sortOrder: context.button.action.params.sortOrder + 1 });
@@ -5667,14 +5663,16 @@ var Publish = /** @class */ (function (_super) {
             disabled: function (context, settings) {
                 return !context.instance.allowPublish;
             },
-            code: function (context, settings) {
-                if (settings.isPublished)
+            code: function (context) {
+                if (context.button.action.params.isPublished) {
                     return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
+                }
                 // if we have an entity-id, publish based on that
-                if (settings.entityId)
-                    return actions_1.publishId(context.sxc.sxc, settings.entityId);
-                var part = settings.sortOrder === -1 ? 'listcontent' : 'content';
-                var index = settings.sortOrder === -1 ? 0 : settings.sortOrder;
+                if (context.button.action.params.entityId) {
+                    return actions_1.publishId(context.sxc.sxc, context.button.action.params.entityId);
+                }
+                var part = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
+                var index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
                 return actions_1.publish(context.sxc.sxc, part, index);
             },
         });
@@ -5722,11 +5720,9 @@ var Remove = /** @class */ (function (_super) {
                     (context.button.action.params.useModuleList) &&
                     (context.button.action.params.sortOrder !== -1);
             },
-            code: function (context, settings) {
+            code: function (context) {
                 if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
-                    actions_1.removeFromList(context.sxc.sxc, settings.sortOrder);
-                    // sxc.manage.contentBlock
-                    //    .removeFromList(settings.sortOrder);
+                    actions_1.removeFromList(context.sxc.sxc, context.button.action.params.sortOrder);
                 }
             },
         });
@@ -5862,8 +5858,7 @@ var TemplateQuery = /** @class */ (function (_super) {
             showCondition: function (context) {
                 return (context.user.canDesign) && (!context.app.isContent);
             },
-            // ReSharper disable once UnusedParameter
-            dynamicClasses: function (context, settings) {
+            dynamicClasses: function (context) {
                 return context.contentBlock.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
             },
         });

@@ -25,8 +25,7 @@ export class AppResources extends CommandBase {
         configureCommand: (context, command) => {
           command.items = [{ EntityId: context.app.resourcesId }];
         },
-        // ReSharper disable once UnusedParameter
-        dynamicClasses: (context, settings) => {
+        dynamicClasses: (context) => {
           return context.app.resourcesId !== null ? '' : 'empty'; // if it doesn't have a query, make it less strong
         },
       });

@@ -27,14 +27,12 @@ export class Definition {
   // todo STV try to refactor so it is also (context)
     dialog?: string;
 
-  // todo STV try to refactor so it doesn't need settings
   showCondition?(context: ContextOfButton): boolean;
 
-  // todo STV try to refactor so it doesn't need settings
   code?(context: ContextOfButton): void;
 
   // todo STV try to refactor so it doesn't need settings
-    dynamicClasses?(context: ContextOfButton, settings: Settings): string;
+  dynamicClasses?(context: ContextOfButton): string;
 
   // todo STV try to refactor so it doesn't need settings
     disabled?(context: ContextOfButton, settings: Settings): boolean;

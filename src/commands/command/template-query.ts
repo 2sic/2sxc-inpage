@@ -26,8 +26,7 @@ export class TemplateQuery extends CommandBase {
         showCondition: (context) => {
           return (context.user.canDesign) && (!context.app.isContent);
         },
-        // ReSharper disable once UnusedParameter
-        dynamicClasses: (context, settings) => {
+        dynamicClasses: (context) => {
           return context.contentBlock.queryId ? '' : 'empty'; // if it doesn't have a query, make it less strong
         },
       });

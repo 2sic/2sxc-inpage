@@ -18,7 +18,7 @@ export class Metadata extends CommandBase {
           return { mode: 'new' };
         },
         dialog: 'edit', // don't use "new" (default) but use "edit"
-        dynamicClasses(context, settings): string {
+        dynamicClasses(context): string {
           // if it doesn't have data yet, make it less strong
           return context.button.action.params.entityId ? '' : 'empty';
           // return settings.items && settings.items[0].entityId ? "" : "empty";

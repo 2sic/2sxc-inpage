@@ -41,7 +41,7 @@ export function renderButton(context: ContextOfButton, groupIndex: number): HTML
   addClasses(button, buttonConfig.classes, ',');
 
   if (buttonConfig.dynamicClasses) {
-    const dynamicClasses = buttonConfig.dynamicClasses(context, buttonConfig as any);
+    const dynamicClasses = buttonConfig.dynamicClasses(context);
     addClasses(button, dynamicClasses, ' ');
   }
 

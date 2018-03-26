@@ -25,8 +25,8 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.dynamicClasses) {
-    partialButtonConfig.dynamicClasses = (context: ContextOfButton, settings: Settings) => {
-      return actDef.dynamicClasses(settings);
+    partialButtonConfig.dynamicClasses = (context: ContextOfButton) => {
+      return actDef.dynamicClasses(context.button.action.params);
     }
   }
 
