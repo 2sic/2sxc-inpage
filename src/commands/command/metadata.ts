@@ -29,7 +29,7 @@ export class Metadata extends CommandBase {
         configureCommand(context, command) {
           const itm = {
             Title: 'EditFormTitle.Metadata',
-            Metadata: Object.assign({ keyType: 'string', targetType: 10 }, command.settings.metadata),
+            Metadata: Object.assign({ keyType: 'string', targetType: 10 }, command.context.button.action.params.metadata),
           };
           Object.assign(command.items[0], itm);
         },

@@ -3312,9 +3312,10 @@ exports.PageContext = PageContext;
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(8);
 var Command = /** @class */ (function () {
-    function Command(context, settings, ngDialogUrl, isDebug) {
+    function Command(context, Xsettings, ngDialogUrl, isDebug) {
         var _this = this;
-        this.settings = settings;
+        this.context = context;
+        this.Xsettings = Xsettings;
         this.ngDialogUrl = ngDialogUrl;
         this.isDebug = isDebug;
         this.evalPropOrFunction = function (propOrFunction, context, fallback) {
@@ -3324,12 +3325,10 @@ var Command = /** @class */ (function () {
             return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
         };
         this.addSimpleItem = function () {
-            debugger;
             var item = {};
-            var ct = _this.settings.contentType ||
-                _this.settings.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-            if (_this.settings.entityId) {
-                item.EntityId = _this.settings.entityId;
+            var ct = _this.context.button.action.params.contentType || _this.context.button.action.params.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+            if (_this.context.button.action.params.entityId) {
+                item.EntityId = _this.context.button.action.params.entityId;
             }
             if (ct) {
                 item.ContentTypeName = ct;
@@ -3341,7 +3340,6 @@ var Command = /** @class */ (function () {
         };
         // this adds an item of the content-group, based on the group GUID and the sequence number
         this.addContentGroupItem = function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
-            debugger;
             _this.items.push({
                 Group: {
                     Guid: guid,
@@ -3354,38 +3352,35 @@ var Command = /** @class */ (function () {
         };
         // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
         this.addContentGroupItemSetsToEditList = function (withPresentation) {
-            debugger;
-            var isContentAndNotHeader = (_this.settings.sortOrder !== -1);
-            var index = isContentAndNotHeader ? _this.settings.sortOrder : 0;
+            var isContentAndNotHeader = (_this.context.button.action.params.sortOrder !== -1);
+            var index = isContentAndNotHeader ? _this.context.button.action.params.sortOrder : 0;
             var prefix = isContentAndNotHeader ? '' : 'List';
             var cTerm = prefix + 'Content';
             var pTerm = prefix + 'Presentation';
-            var isAdd = _this.settings.action === 'new';
-            var groupId = _this.settings.contentGroupId;
-            _this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, "EditFormTitle." + cTerm);
+            var isAdd = _this.context.button.action.name === 'new';
+            var groupId = _this.context.contentBlock.contentGroupId;
+            _this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, _this.context.contentBlock.isEntity, _this.context.contentBlock.id, "EditFormTitle." + cTerm);
             if (withPresentation) {
-                _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.settings.cbIsEntity, _this.settings.cbId, "EditFormTitle." + pTerm);
+                _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.context.contentBlock.isEntity, _this.context.contentBlock.id, "EditFormTitle." + pTerm);
             }
         };
         // build the link, combining specific params with global ones and put all in the url
         this.generateLink = function (context) {
-            debugger;
             // if there is no items-array, create an empty one (it's required later on)
-            if (!_this.settings.items) {
-                _this.settings.items = [];
+            if (!context.button.action.params.items) {
+                context.button.action.params.items = [];
             }
             //#region steps for all actions: prefill, serialize, open-dialog
             // when doing new, there may be a prefill in the link to initialize the new item
-            if (_this.settings.prefill) {
+            if (context.button.action.params.prefill) {
                 for (var i = 0; i < _this.items.length; i++) {
-                    _this.items[i].Prefill = _this.settings.prefill;
+                    _this.items[i].Prefill = context.button.action.params.prefill;
                 }
             }
             _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
             // clone the params and adjust parts based on partOfPage settings...
             var sharedParams = Object.assign({}, _this.sxc.manage._dialogParameters);
-            // console.log('stv: sharedParams', sharedParams);
-            if (!_this.settings.partOfPage) {
+            if (!_this.context.button.partOfPage) {
                 delete sharedParams.versioningRequirements;
                 delete sharedParams.publishing;
                 sharedParams.partOfPage = false;
@@ -3398,13 +3393,12 @@ var Command = /** @class */ (function () {
                 _this.isDebug;
             //#endregion
         };
-        debugger;
         this.sxc = context.sxc.sxc;
-        this.settings = settings;
-        this.items = settings.items || []; // use predefined or create empty array
+        //this.settings = settings;
+        this.items = context.button.action.params.items || []; // use predefined or create empty array
         this.params = Object.assign({
-            dialog: settings.dialog || settings.action,
-        }, this.evalPropOrFunction(settings.params, context, {}));
+            dialog: context.button.dialog || context.button.action.name,
+        }, this.evalPropOrFunction(context.button.params, context, {}));
     }
     return Command;
 }());
@@ -3471,10 +3465,9 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
             return command_open_ng_dialog_1.commandOpenNgDialog(contextParam, settingsParam);
         }; // decide what action to perform
     }
-    if (context.button.uiActionOnly)
+    if (context.button.uiActionOnly) {
         return context.button.code(context, settings, sxc);
-    console.log(settings, context.button);
-    debugger;
+    }
     // if more than just a UI-action, then it needs to be sure the content-group is created first
     return templates_1.prepareToAddContent(sxc, settings.useModuleList)
         .then(function () { return context.button.code(context, settings, sxc); });
@@ -3888,7 +3881,7 @@ var command_create_1 = __webpack_require__(22);
  */
 function commandLinkToNgDialog(context, specialSettings) {
     var cmd = command_create_1.commandCreate(context, specialSettings);
-    if (cmd.settings.useModuleList) {
+    if (cmd.context.button.action.params.useModuleList) {
         cmd.addContentGroupItemSetsToEditList(true);
     }
     else {
@@ -3896,8 +3889,8 @@ function commandLinkToNgDialog(context, specialSettings) {
     }
     ;
     // if the command has own configuration stuff, do that now
-    if (cmd.settings.configureCommand) {
-        cmd.settings.configureCommand(context, cmd);
+    if (cmd.context.button.configureCommand) {
+        cmd.context.button.configureCommand(context, cmd);
     }
     return cmd.generateLink(context);
 }
@@ -5056,13 +5049,13 @@ var ContentItems = /** @class */ (function (_super) {
                 return (context.user.canDesign) && ((!!context.button.action.params.contentType) || (!!context.contentBlock.contentTypeId));
             },
             configureCommand: function (context, command) {
-                if (command.settings.contentType)
-                    command.params.contentTypeName = command.settings.contentType;
+                if (command.context.button.action.params.contentType)
+                    command.params.contentTypeName = command.context.button.action.params.contentType;
                 // maybe: if item doesn't have a type, use that of template
                 // else if (cmdSpecs.contentTypeId)
                 //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
-                if (command.settings.filters) {
-                    var enc = JSON.stringify(command.settings.filters);
+                if (context.button.action.params.filters) {
+                    var enc = JSON.stringify(context.button.action.params.filters);
                     // special case - if it contains a "+" character, this won't survive
                     // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b
                     // so we're base64 encoding it - see https://github.com/2sic/2sxc/issues/1061
@@ -5428,7 +5421,7 @@ var Metadata = /** @class */ (function (_super) {
             configureCommand: function (context, command) {
                 var itm = {
                     Title: 'EditFormTitle.Metadata',
-                    Metadata: Object.assign({ keyType: 'string', targetType: 10 }, command.settings.metadata),
+                    Metadata: Object.assign({ keyType: 'string', targetType: 10 }, command.context.button.action.params.metadata),
                 };
                 Object.assign(command.items[0], itm);
             },

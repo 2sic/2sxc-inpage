@@ -19,13 +19,13 @@ export class ContentItems extends CommandBase {
           return (context.user.canDesign) && ((!!context.button.action.params.contentType) || (!!context.contentBlock.contentTypeId));
         },
         configureCommand: (context, command) => {
-          if (command.settings.contentType) // optionally override with custom type
-            command.params.contentTypeName = command.settings.contentType;
+          if (command.context.button.action.params.contentType) // optionally override with custom type
+            command.params.contentTypeName = command.context.button.action.params.contentType;
           // maybe: if item doesn't have a type, use that of template
           // else if (cmdSpecs.contentTypeId)
           //    cmd.params.contentTypeName = cmdSpecs.contentTypeId;
-          if (command.settings.filters) {
-            let enc = JSON.stringify(command.settings.filters);
+          if (context.button.action.params.filters) {
+            let enc = JSON.stringify(context.button.action.params.filters);
 
             // special case - if it contains a "+" character, this won't survive
             // encoding through the hash as it's always replaced with a space, even if it would be pre converted to %2b

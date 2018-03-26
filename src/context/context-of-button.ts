@@ -7,4 +7,5 @@ export class ContextOfButton extends ContextOfToolbar {
   // cmdSpec: CmdSpec;
   // enableTools: boolean;
   // isContent: boolean;
+
 }

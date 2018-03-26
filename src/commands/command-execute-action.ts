@@ -87,12 +87,9 @@ export function commandExecuteAction(
     }; // decide what action to perform
   }
 
-  if (context.button.uiActionOnly)
+  if (context.button.uiActionOnly) {
     return context.button.code(context, settings, sxc);
-
-  console.log(settings, context.button);
-  debugger;
-
+  }
 
   // if more than just a UI-action, then it needs to be sure the content-group is created first
   return prepareToAddContent(

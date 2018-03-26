@@ -4,4 +4,5 @@
   contentTypeName?: string;
   pipelineId?: number;
   filters?: string;
+  dialog?: string;
 }
