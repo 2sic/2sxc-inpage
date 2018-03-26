@@ -808,7 +808,7 @@ function disableButtons(context, btns, config) {
             btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, false);
         }
         else {
-            btns[i].disabled = (function (context, settings) { return false; });
+            btns[i].disabled = (function (context) { return false; });
         }
     }
 }
@@ -4302,7 +4302,7 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
         };
     }
     if (actDef.disabled) {
-        partialButtonConfig.disabled = function (context, settings) {
+        partialButtonConfig.disabled = function (context) {
             return actDef.disabled;
         };
     }
@@ -4898,7 +4898,7 @@ var AppResources = /** @class */ (function (_super) {
         _this.makeDef('app-resources', 'AppResources', 'language', true, false, {
             dialog: 'edit',
             // ReSharper disable UnusedParameter
-            disabled: function (context, settings) {
+            disabled: function (context) {
                 // ReSharper restore UnusedParameter
                 return context.app.resourcesId === null;
             },
@@ -4950,7 +4950,7 @@ var AppSettings = /** @class */ (function (_super) {
         _this.makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
             dialog: 'edit',
             // ReSharper disable UnusedParameter
-            disabled: function (context, settings) {
+            disabled: function (context) {
                 // ReSharper restore UnusedParameter
                 return context.app.settingsId === null;
             },
@@ -5660,7 +5660,7 @@ var Publish = /** @class */ (function (_super) {
             showCondition: function (context) {
                 return (context.button.action.params.isPublished === false);
             },
-            disabled: function (context, settings) {
+            disabled: function (context) {
                 return !context.instance.allowPublish;
             },
             code: function (context) {
@@ -5849,9 +5849,7 @@ var TemplateQuery = /** @class */ (function (_super) {
                 return { pipelineId: context.contentBlock.queryId };
             },
             newWindow: true,
-            // ReSharper disable UnusedParameter
-            disabled: function (context, settings) {
-                // ReSharper restore UnusedParameter
+            disabled: function (context) {
                 return context.app.settingsId === null;
             },
             title: function (context) { return "Toolbar.QueryEdit" + (context.contentBlock.queryId === null ? 'Disabled' : ''); },

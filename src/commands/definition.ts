@@ -31,14 +31,11 @@ export class Definition {
 
   code?(context: ContextOfButton): void;
 
-  // todo STV try to refactor so it doesn't need settings
   dynamicClasses?(context: ContextOfButton): string;
 
-  // todo STV try to refactor so it doesn't need settings
-    disabled?(context: ContextOfButton, settings: Settings): boolean;
+  disabled?(context: ContextOfButton): boolean;
 
-  // todo STV try to refactor so it doesn't need settings
-    configureCommand?(context: ContextOfButton, cmd: Command): void;
+  configureCommand?(context: ContextOfButton, cmd: Command): void;
 
   // todo STV try to refactor so it is also (context)
   newWindow?: boolean;

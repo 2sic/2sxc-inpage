@@ -105,7 +105,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
         config,
         false);
     } else {
-      btns[i].disabled = ((context: ContextOfButton, settings: Settings) => false);
+      btns[i].disabled = ((context: ContextOfButton,) => false);
     }
 
   }

@@ -17,9 +17,7 @@ export class TemplateQuery extends CommandBase {
           return { pipelineId: context.contentBlock.queryId };
         },
         newWindow: true,
-        // ReSharper disable UnusedParameter
-        disabled: (context, settings) => {
-          // ReSharper restore UnusedParameter
+        disabled: (context) => {
           return context.app.settingsId === null;
         },
         title: (context) => `Toolbar.QueryEdit${context.contentBlock.queryId === null ? 'Disabled' : ''}`,

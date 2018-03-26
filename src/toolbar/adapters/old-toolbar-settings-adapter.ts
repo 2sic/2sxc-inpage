@@ -1,4 +1,4 @@
-﻿import { ToolbarSettings } from "../toolbar/toolbar-settings";
+﻿import { ToolbarSettings } from '../toolbar/toolbar-settings';
 
 /**
  * removes autoAddMore and classes if are null or empty, to keep same behaviour like in v1

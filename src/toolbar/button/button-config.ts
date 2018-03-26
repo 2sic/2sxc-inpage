@@ -34,24 +34,7 @@ export class ButtonConfig {
     }
   }
 
-  //static fromNameAndParams(name: string, params: any, partialConfig?: Partial<ButtonConfig>): ButtonConfig {
-  //  const buttonConfig = new ButtonConfig();
-  //  buttonConfig.name = name;
-  //  buttonConfig.params = params;
-  //  // todo: look up command with this name
-  //  // todo: create an action for that command
-  //  // todo: use the commands tmpButtonDefaults as the initial value
-
-  //  // use the config? to override anything
-  //  if (partialConfig) {
-  //    Object.assign(buttonConfig, partialConfig);
-  //  }
-
-  //  return buttonConfig;
-  //}
-
-  // disabled: boolean | (() => boolean) = false;
-  disabled: ((context: ContextOfButton, settings: Settings) => boolean);
+  disabled: ((context: ContextOfButton) => boolean);
   dynamicClasses: ((context: ContextOfButton) => string);
   dynamicDisabled: (() => boolean) = () => false; // maybe
   code: ((context: ContextOfButton) => void);

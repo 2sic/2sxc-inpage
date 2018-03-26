@@ -1,6 +1,5 @@
-﻿import { Commands } from "../../commands/commands";
-import { Settings } from "../../commands/settings";
-import { ContextOfButton } from "../../context/context-of-button";
+﻿import { Commands } from '../../commands/commands';
+import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonAction } from '../button/button-action';
 import { ButtonDefinition } from '../button/button-definition';
 import { ButtonConfig } from '../button/button-config';
@@ -43,7 +42,7 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.disabled) {
-    partialButtonConfig.disabled = (context: ContextOfButton, settings: Settings) => {
+    partialButtonConfig.disabled = (context: ContextOfButton) => {
       return actDef.disabled;
     }
   }
