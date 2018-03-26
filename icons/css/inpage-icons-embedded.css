@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'inpage-icons';
   src: url('../font/inpage-icons.eot?28269433');
-  src: url('../font/inpage-icons.eot?28269433#iefix') format('embedded-opentype'),
-       url('../font/inpage-icons.svg?28269433#inpage-icons') format('svg');
+  src: url('../font/inpage-icons.eot?28269433#iefix') format('embedded-opentype');
+       /*url('../font/inpage-icons.svg?28269433#inpage-icons') format('svg');*/
   font-weight: normal;
   font-style: normal;
 }

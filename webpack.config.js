@@ -9,7 +9,7 @@ var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var entryJsFiles = glob.sync('./src/**/libs/*.js');
 var entryTsFiles = glob.sync('./src/**/*.ts');
 var entryFiles = entryJsFiles.concat(entryTsFiles);
-var entryCssFiles = glob.sync('./src/**/*.css');
+var entryCssFiles = glob.sync('./src/**/*.css').concat(glob.sync('./icons/**/*.css'));
 var nodeEnv = (process.env.NODE_ENV || 'development');
 var isProd = (nodeEnv === 'production');
 var generateTypedocDocumentation = false;
@@ -135,7 +135,7 @@ if (isProd) {
   config.resolve.extensions.push('.css');
   config.module.rules.push({
     test: /\.css$/,
-    include: /src/,
+    include:  [/src/,/icons/],
     use: ExtractTextPlugin.extract([{
       loader: 'css-loader',
       options: {
@@ -155,7 +155,7 @@ if (isProd) {
     }
   });
   config.module.rules.push({
-    test: /\.(woff|woff2|eot|ttf|svg)$/,
+    test: /\.(woff|eot|ttf)$/,
     exclude: /node_modules/,
     use: {
       loader: 'file-loader',

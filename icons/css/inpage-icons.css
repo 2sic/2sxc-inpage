@@ -2,10 +2,10 @@
   font-family: 'inpage-icons';
   src: url('../font/inpage-icons.eot?94958721');
   src: url('../font/inpage-icons.eot?94958721#iefix') format('embedded-opentype'),
-       url('../font/inpage-icons.woff2?94958721') format('woff2'),
+       /*url('../font/inpage-icons.woff2?94958721') format('woff2'),*/
        url('../font/inpage-icons.woff?94958721') format('woff'),
-       url('../font/inpage-icons.ttf?94958721') format('truetype'),
-       url('../font/inpage-icons.svg?94958721#inpage-icons') format('svg');
+       url('../font/inpage-icons.ttf?94958721') format('truetype');
+       /*url('../font/inpage-icons.svg?94958721#inpage-icons') format('svg');*/
   font-weight: normal;
   font-style: normal;
 }
