@@ -46,7 +46,7 @@ export function getButtonConfigDefaultsV1(name: string,
                                           more: Definition): Partial<ButtonConfig> {
   // stv: v1 code
   const partialButtonConfig = {
-    icon: `icon-sxc-${icon}`,
+    icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
     title: (context: ContextOfButton) => `Toolbar.${translateKey}`,
     uiActionOnly: uiOnly,
     partOfPage: partOfPage,

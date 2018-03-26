@@ -5,8 +5,7 @@ import { ButtonAction } from './button-action';
 
 export class ButtonConfig {
   name: string = '';
-  title: ((context: ContextOfButton) => string);
-  params: ((context: ContextOfButton) => any);
+
   // params: any;
 
   action: ButtonAction;
@@ -14,7 +13,7 @@ export class ButtonConfig {
   classes: string = '';
   dialog: string = '';
   fullScreen: boolean = null;
-  icon: string = '';
+
   inlineWindow: boolean = null;
   newWindow: boolean = null;
   partOfPage: boolean = null;
@@ -34,6 +33,9 @@ export class ButtonConfig {
     }
   }
 
+  icon: ((context: ContextOfButton) => string);
+  title: ((context: ContextOfButton) => string);
+  params: ((context: ContextOfButton) => any);
   disabled: ((context: ContextOfButton) => boolean);
   dynamicClasses: ((context: ContextOfButton) => string);
   dynamicDisabled: (() => boolean) = () => false; // maybe

@@ -13,8 +13,7 @@ export class Definition {
 
   title?(context: ContextOfButton): string;
 
-  // todo STV try to refactor so it is also (context)
-    icon?: string;
+  icon?(context: ContextOfButton): string;
 
   // todo STV try to refactor so it is also (context)
     uiActionOnly?: boolean;

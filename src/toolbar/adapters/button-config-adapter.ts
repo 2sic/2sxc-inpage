@@ -16,7 +16,7 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.icon) {
-    partialButtonConfig.icon = `icon-sxc-${actDef.icon}`;
+    partialButtonConfig.icon = (context: ContextOfButton) => `icon-sxc-${actDef.icon}`;
   }
 
   if (actDef.classes) {

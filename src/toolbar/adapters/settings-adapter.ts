@@ -12,7 +12,7 @@ export function settingsAdapter(oldSettings: any): any {
 
   // 'icon',
   if (oldSettings.icon) {
-    newSettings.icon = oldSettings.icon;
+    newSettings.icon = ((context: ContextOfButton) => oldSettings.icon);
   }
 
   // 'title',
