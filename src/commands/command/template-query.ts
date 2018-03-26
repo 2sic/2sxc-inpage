@@ -12,7 +12,7 @@ export class TemplateQuery extends CommandBase {
       true,
       false,
       {
-        dialog: 'pipeline-designer',
+        dialog: (context) => 'pipeline-designer',
         params: (context) => {
           return { pipelineId: context.contentBlock.queryId };
         },

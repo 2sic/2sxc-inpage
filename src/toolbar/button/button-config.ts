@@ -7,7 +7,6 @@ export class ButtonConfig {
   name: string = '';
   action: ButtonAction;
   classes: string = '';
-  dialog: string = '';
   fullScreen: boolean = null;
   inlineWindow: boolean = null;
   newWindow: boolean = null;
@@ -25,17 +24,18 @@ export class ButtonConfig {
     }
   }
 
-  code: ((context: ContextOfButton) => void);
-  configureCommand?(context: ContextOfButton, cmd: Command): void; // stv: todo ???
-  disabled: ((context: ContextOfButton) => boolean);
-  dynamicClasses: ((context: ContextOfButton) => string);
+  code: (context: ContextOfButton) => void;
+  configureCommand: (context: ContextOfButton, cmd: Command) => void;
+  dialog: (context: ContextOfButton) => string;
+  disabled: (context: ContextOfButton) => boolean;
+  dynamicClasses: (context: ContextOfButton) => string;
   dynamicDisabled: (() => boolean) = () => false; // maybe
-  icon: ((context: ContextOfButton) => string);
-  params: ((context: ContextOfButton) => any);
-  partOfPage: ((context: ContextOfButton) => boolean);
-  showCondition: ((context: ContextOfButton) => boolean);
-  title: ((context: ContextOfButton) => string);
-  uiActionOnly: ((context: ContextOfButton) => boolean);
+  icon: (context: ContextOfButton) => string;
+  params: (context: ContextOfButton) => any;
+  partOfPage: (context: ContextOfButton) => boolean;
+  showCondition: (context: ContextOfButton) => boolean;
+  title: (context: ContextOfButton) => string;
+  uiActionOnly: (context: ContextOfButton) => boolean;
 
   [propName: string]: any;
 }

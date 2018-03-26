@@ -6,34 +6,19 @@ import { Settings } from './settings';
 // todo: pls ensure these properties all have a typedoc
 // as it will be in the public API
 export class Definition {
-  /**
-    * 
-    */
   name?: string;
-
-  title?(context: ContextOfButton): string;
-
-  icon?(context: ContextOfButton): string;
-
-  uiActionOnly?(context: ContextOfButton): boolean;
-
-  partOfPage?(context: ContextOfButton): boolean;
-
-  params?(context: ContextOfButton): Params;
-
-  // todo STV try to refactor so it is also (context)
-    dialog?: string;
-
-  showCondition?(context: ContextOfButton): boolean;
-
   code?(context: ContextOfButton): void;
-
-  dynamicClasses?(context: ContextOfButton): string;
-
-  disabled?(context: ContextOfButton): boolean;
-
   configureCommand?(context: ContextOfButton, cmd: Command): void;
-
+  dialog?(context: ContextOfButton): string;
+  disabled?(context: ContextOfButton): boolean;
+  dynamicClasses?(context: ContextOfButton): string;
+  icon?(context: ContextOfButton): string;
+  params?(context: ContextOfButton): Params;
+  partOfPage?(context: ContextOfButton): boolean;
+  showCondition?(context: ContextOfButton): boolean;
+  title?(context: ContextOfButton): string;
+  uiActionOnly?(context: ContextOfButton): boolean;
+  
   // todo STV try to refactor so it is also (context)
   newWindow?: boolean;
 

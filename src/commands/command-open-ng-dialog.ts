@@ -25,7 +25,7 @@ export function commandOpenNgDialog(context: ContextOfButton) {
       link,
       callback,
       context.button.fullScreen /* settings.dialog === "item-history"*/,
-      context.button.dialog);
+      context.button.dialog(context).toString());
   }
 
   if (context.button.newWindow /*|| (event && event.shiftKey)*/) {

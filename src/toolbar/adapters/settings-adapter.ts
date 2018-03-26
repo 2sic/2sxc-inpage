@@ -10,9 +10,13 @@ export function settingsAdapter(oldSettings: any): any {
     newSettings.classes = oldSettings.classes;
   }
 
+  // 'dialog',
+  if (oldSettings.dialog) {
+    newSettings.dialog = oldSettings.dialog;
+  }
   // 'disabled'
   if (oldSettings.disabled) {
-    newSettings.disabled = ((context: ContextOfButton, settings: Settings) => oldSettings.disabled);
+    newSettings.disabled = oldSettings.disabled;
   }
 
   // 'dynamicClasses',
@@ -22,12 +26,12 @@ export function settingsAdapter(oldSettings: any): any {
 
   // 'icon',
   if (oldSettings.icon) {
-    newSettings.icon = ((context: ContextOfButton) => oldSettings.icon);
+    newSettings.icon = oldSettings.icon;
   }
 
   // partOfPage
   if (oldSettings.partOfPage) {
-    newSettings.partOfPage = ((context: ContextOfButton) => oldSettings.partOfPage);
+    newSettings.partOfPage = oldSettings.partOfPage;
   }
 
   // 'showCondition',
@@ -37,7 +41,7 @@ export function settingsAdapter(oldSettings: any): any {
 
   // 'title',
   if (oldSettings.title) {
-    newSettings.title = ((context: ContextOfButton) => oldSettings.title);
+    newSettings.title = oldSettings.title;
   }
 
   return newSettings;

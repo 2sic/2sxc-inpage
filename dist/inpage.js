@@ -1574,7 +1574,6 @@ var ButtonConfig = /** @class */ (function () {
     function ButtonConfig(action, partialConfig) {
         this.name = '';
         this.classes = '';
-        this.dialog = '';
         this.fullScreen = null;
         this.inlineWindow = null;
         this.newWindow = null;
@@ -2418,9 +2417,13 @@ function settingsAdapter(oldSettings) {
     if (oldSettings.classes) {
         newSettings.classes = oldSettings.classes;
     }
+    // 'dialog',
+    if (oldSettings.dialog) {
+        newSettings.dialog = oldSettings.dialog;
+    }
     // 'disabled'
     if (oldSettings.disabled) {
-        newSettings.disabled = (function (context, settings) { return oldSettings.disabled; });
+        newSettings.disabled = oldSettings.disabled;
     }
     // 'dynamicClasses',
     if (oldSettings.dynamicClasses) {
@@ -2428,11 +2431,11 @@ function settingsAdapter(oldSettings) {
     }
     // 'icon',
     if (oldSettings.icon) {
-        newSettings.icon = (function (context) { return oldSettings.icon; });
+        newSettings.icon = oldSettings.icon;
     }
     // partOfPage
     if (oldSettings.partOfPage) {
-        newSettings.partOfPage = (function (context) { return oldSettings.partOfPage; });
+        newSettings.partOfPage = oldSettings.partOfPage;
     }
     // 'showCondition',
     if (oldSettings.showCondition) {
@@ -2440,7 +2443,7 @@ function settingsAdapter(oldSettings) {
     }
     // 'title',
     if (oldSettings.title) {
-        newSettings.title = (function (context) { return oldSettings.title; });
+        newSettings.title = oldSettings.title;
     }
     return newSettings;
 }
@@ -2587,7 +2590,7 @@ function commandOpenNgDialog(context) {
     };
     var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
     if (context.button.inlineWindow) {
-        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, context.button.fullScreen /* settings.dialog === "item-history"*/, context.button.dialog);
+        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, context.button.fullScreen /* settings.dialog === "item-history"*/, context.button.dialog(context).toString());
     }
     if (context.button.newWindow /*|| (event && event.shiftKey)*/) {
         return window.open(link);
@@ -3312,6 +3315,7 @@ exports.PageContext = PageContext;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(8);
+var api_1 = __webpack_require__(1);
 var Command = /** @class */ (function () {
     function Command(context, ngDialogUrl, isDebug) {
         var _this = this;
@@ -3379,8 +3383,10 @@ var Command = /** @class */ (function () {
             }
             _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
             // clone the params and adjust parts based on partOfPage settings...
-            var sharedParams = Object.assign({}, _this.sxc.manage._dialogParameters);
-            if (!_this.context.button.partOfPage) {
+            var ngDialogParams = api_1.buildNgDialogParams(_this.sxc, _this.context.sxc.editContext);
+            var sharedParams = Object.assign({}, ngDialogParams);
+            var partOfPage = context.button.partOfPage(context);
+            if (!partOfPage) {
                 delete sharedParams.versioningRequirements;
                 delete sharedParams.publishing;
                 sharedParams.partOfPage = false;
@@ -3458,7 +3464,9 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
     context.button = Object.assign(newButtonConfig, newButtonAction.commandDefinition.buttonConfig, settings_adapter_1.settingsAdapter(settings)); // merge conf & settings, but settings has higher priority
     //context.button = newButtonConfig;
     if (!context.button.dialog) {
-        context.button.dialog = name; // old code uses "action" as the parameter, now use verb ? dialog
+        context.button.dialog = function (contextParam) {
+            return name;
+        }; // old code uses "action" as the parameter, now use verb ? dialog
     }
     if (!context.button.code) {
         context.button.code = function (contextParam) {
@@ -4297,7 +4305,9 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
         partialButtonConfig.classes = actDef.classes;
     }
     if (actDef.dialog) {
-        partialButtonConfig.dialog = actDef.dialog;
+        partialButtonConfig.dialog = function (context) {
+            return actDef.dialog;
+        };
     }
     if (actDef.disabled) {
         partialButtonConfig.disabled = function (context) {
@@ -4908,10 +4918,8 @@ var AppResources = /** @class */ (function (_super) {
     function AppResources() {
         var _this = _super.call(this) || this;
         _this.makeDef('app-resources', 'AppResources', 'language', true, false, {
-            dialog: 'edit',
-            // ReSharper disable UnusedParameter
+            dialog: function (context) { return 'edit'; },
             disabled: function (context) {
-                // ReSharper restore UnusedParameter
                 return context.app.resourcesId === null;
             },
             title: function (context) { return "Toolbar.AppResources" + (context.app.resourcesId === null ? 'Disabled' : ''); },
@@ -4960,10 +4968,8 @@ var AppSettings = /** @class */ (function (_super) {
     function AppSettings() {
         var _this = _super.call(this) || this;
         _this.makeDef('app-settings', 'AppSettings', 'sliders', true, false, {
-            dialog: 'edit',
-            // ReSharper disable UnusedParameter
+            dialog: function (context) { return 'edit'; },
             disabled: function (context) {
-                // ReSharper restore UnusedParameter
                 return context.app.settingsId === null;
             },
             title: function (context) { return "Toolbar.AppSettings" + (context.app.settingsId === null ? 'Disabled' : ''); },
@@ -5418,7 +5424,7 @@ var Metadata = /** @class */ (function (_super) {
             params: function (context) {
                 return { mode: 'new' };
             },
-            dialog: 'edit',
+            dialog: function (context) { return 'edit'; },
             dynamicClasses: function (context) {
                 // if it doesn't have data yet, make it less strong
                 return context.button.action.params.entityId ? '' : 'empty';
@@ -5618,7 +5624,7 @@ var New = /** @class */ (function (_super) {
             params: function (context) {
                 return { mode: 'new' };
             },
-            dialog: 'edit',
+            dialog: function (context) { return 'edit'; },
             showCondition: function (context) {
                 return (!!context.button.action.params.contentType) ||
                     ((context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1)); // don't provide new on the header-item
@@ -5813,7 +5819,7 @@ var TemplateDevelop = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('template-develop', 'Develop', 'code', true, false, {
             newWindow: true,
-            dialog: 'develop',
+            dialog: function (context) { return 'develop'; },
             showCondition: function (context) {
                 return (context.user.canDesign);
             },
@@ -5856,7 +5862,7 @@ var TemplateQuery = /** @class */ (function (_super) {
     function TemplateQuery() {
         var _this = _super.call(this) || this;
         _this.makeDef('template-query', 'QueryEdit', 'filter', true, false, {
-            dialog: 'pipeline-designer',
+            dialog: function (context) { return 'pipeline-designer'; },
             params: function (context) {
                 return { pipelineId: context.contentBlock.queryId };
             },
@@ -5907,7 +5913,7 @@ var TemplateSettings = /** @class */ (function (_super) {
     function TemplateSettings() {
         var _this = _super.call(this) || this;
         _this.makeDef('template-settings', 'TemplateSettings', 'sliders', true, false, {
-            dialog: 'edit',
+            dialog: function (context) { return 'edit'; },
             showCondition: function (context) {
                 return (context.user.canDesign) && (!context.app.isContent);
             },

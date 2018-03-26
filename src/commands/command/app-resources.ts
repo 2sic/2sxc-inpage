@@ -12,10 +12,8 @@ export class AppResources extends CommandBase {
       true,
       false,
       {
-        dialog: 'edit',
-        // ReSharper disable UnusedParameter
+        dialog: (context) => 'edit',
         disabled: (context) => {
-          // ReSharper restore UnusedParameter
           return context.app.resourcesId === null;
         },
         title: (context) => `Toolbar.AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,

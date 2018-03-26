@@ -76,7 +76,9 @@ export function commandExecuteAction(
   //context.button = newButtonConfig;
 
   if (!context.button.dialog) {
-    context.button.dialog = name; // old code uses "action" as the parameter, now use verb ? dialog
+    context.button.dialog = (contextParam: ContextOfButton) => {
+      return name;
+    }; // old code uses "action" as the parameter, now use verb ? dialog
   }
 
   if (!context.button.code) {

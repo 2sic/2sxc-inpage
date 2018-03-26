@@ -12,10 +12,8 @@ export class AppSettings extends CommandBase {
       true,
       false,
       {
-        dialog: 'edit',
-        // ReSharper disable UnusedParameter
+        dialog: (context) => 'edit',
         disabled: (context) => {
-          // ReSharper restore UnusedParameter
           return context.app.settingsId === null;
         },
         title: (context) => `Toolbar.AppSettings${context.app.settingsId === null ? 'Disabled' : ''}`,

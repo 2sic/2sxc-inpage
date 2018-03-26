@@ -4,6 +4,7 @@ import { translate } from '../translate/2sxc.translate';
 import { Params } from './params';
 import { Settings } from './settings';
 import { ButtonConfig } from '../toolbar/button/button-config';
+import { buildNgDialogParams } from '../manage/api';
 
 export class Command {
   sxc: SxcInstanceWithInternals;
@@ -109,9 +110,10 @@ export class Command {
     this.params.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
-    const sharedParams = Object.assign({}, this.sxc.manage._dialogParameters) as NgDialogParams;
-    
-    if (!this.context.button.partOfPage) {
+    var ngDialogParams = buildNgDialogParams(this.sxc, this.context.sxc.editContext);
+    const sharedParams = Object.assign({}, ngDialogParams) as NgDialogParams;
+    const partOfPage = context.button.partOfPage(context);
+    if (!partOfPage) {
       delete sharedParams.versioningRequirements;
       delete sharedParams.publishing;
       sharedParams.partOfPage = false;

@@ -34,7 +34,9 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.dialog) {
-    partialButtonConfig.dialog = actDef.dialog;
+    partialButtonConfig.dialog = (context: ContextOfButton) => {
+      return actDef.dialog;
+    };
   }
 
   if (actDef.disabled) {

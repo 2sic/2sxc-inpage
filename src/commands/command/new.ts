@@ -22,7 +22,7 @@ export class New extends CommandBase {
         params: (context) => {
           return { mode: 'new' };
         },
-        dialog: 'edit', // don't use "new" (default) but use "edit"
+        dialog: (context) => 'edit', // don't use "new" (default) but use "edit"
         showCondition(context) {
           return (!!context.button.action.params.contentType) ||
             ((context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1)); // don't provide new on the header-item
