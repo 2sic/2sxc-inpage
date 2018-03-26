@@ -14,4 +14,4 @@ class Manage {
   initInstance = initInstance;
 }
 
-export const _manage = new Manage();
+export const _manage = new Manage(); // used out of this project in ToSic.Sxc.Instance and 2sxc.api.js

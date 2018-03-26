@@ -17,7 +17,7 @@ describe('Toolbar test suite', function () {
 
   it('2 generate fallback toolbar', function () {
     const generatedHtml = generateFallbackToolbar()[0].outerHTML;
-    const expectedHtml = '<ul class="sc-menu" toolbar="" settings="{&quot;autoAddMore&quot;:&quot;end&quot;,&quot;hover&quot;:&quot;left&quot;,&quot;show&quot;:&quot;hover&quot;}"></ul>';
+    const expectedHtml = '<ul class="sc-menu" toolbar="" settings="{&quot;autoAddMore&quot;:&quot;start&quot;,&quot;hover&quot;:&quot;left&quot;,&quot;show&quot;:&quot;hover&quot;,&quot;classes&quot;:&quot;&quot;}"></ul>';
     expect(generatedHtml).toBe(expectedHtml);
   });
 
@@ -35,7 +35,7 @@ describe('Toolbar test suite', function () {
 
   it('3 mock standard toolbar', function () {
     const toolbarData: any = {};
-    const toolbarSettings: ToolbarSettings = {} as ToolbarSettings;
+    const toolbarSettings = {} as ToolbarSettings;
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -46,8 +46,7 @@ describe('Toolbar test suite', function () {
 
   it('4 mock standard toolbar with settings { "hover": "left" } to contain "sc-tb-hover-left"', function () {
     const toolbarData: any = {};
-    const toolbarSettings: ToolbarSettings = { "hover": "left" } as ToolbarSettings;
-    //toolbarSettings.hover = 'left';
+    const toolbarSettings = new ToolbarSettings({ "hover": "left" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -57,8 +56,7 @@ describe('Toolbar test suite', function () {
 
   it('5 mock standard toolbar with settings { "hover": "left" } ', function () {
     const toolbarData: any = {};
-    const toolbarSettings: ToolbarSettings = { "hover": "left" } as ToolbarSettings;
-    //toolbarSettings.hover = 'left';
+    const toolbarSettings = new ToolbarSettings({ "hover": "left" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -68,9 +66,7 @@ describe('Toolbar test suite', function () {
 
   it('6 mock standard toolbar with settings { "hover": "left", "autoAddMore": "start" } to contain button more as first button in toolbar', function () {
     const toolbarData: any = {};
-    const toolbarSettings: ToolbarSettings = { "hover": "left", "autoAddMore": "start" } as ToolbarSettings;
-    //toolbarSettings.hover = 'left';
-    //toolbarSettings.autoAddMore = 'end';
+    const toolbarSettings = new ToolbarSettings({ "hover": "left", "autoAddMore": "start" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -80,9 +76,7 @@ describe('Toolbar test suite', function () {
 
   it('7 mock standard toolbar with settings { "hover": "left", "autoAddMore": "start" } ', function () {
     const toolbarData: any = {};
-    const toolbarSettings: ToolbarSettings = { "hover": "left", "autoAddMore": "start" } as ToolbarSettings;
-    //toolbarSettings.hover = 'left';
-    //toolbarSettings.autoAddMore = 'end';
+    const toolbarSettings = new ToolbarSettings({ "hover": "left", "autoAddMore": "start" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -92,8 +86,7 @@ describe('Toolbar test suite', function () {
 
   it('8 mock toolbar with one button "new" and settings { "hover": "left" } to contain `sc-tb-hover-left`', function () {
     const toolbarData: any = [{ "action": "new", "contentType": "Dummy" }];
-    const toolbarSettings: ToolbarSettings = { "hover": "left" } as ToolbarSettings;
-    //toolbarSettings.hover = 'left';
+    const toolbarSettings = new ToolbarSettings({ "hover": "left" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -103,8 +96,7 @@ describe('Toolbar test suite', function () {
 
   it('9 mock toolbar with one button "new" and settings { "hover": "left" }', function () {
     const toolbarData: any = [{ "action": "new", "contentType": "Dummy" }];
-    const toolbarSettings: ToolbarSettings = { "hover": "left" } as ToolbarSettings;
-    //toolbarSettings.hover = 'left';
+    const toolbarSettings = new ToolbarSettings({ "hover": "left" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -127,8 +119,7 @@ describe('Toolbar test suite', function () {
       },
       "title": "create Author"
     }];
-    const toolbarSettings: ToolbarSettings = { "hover": "left", "show": "always" } as ToolbarSettings;
-    //toolbarSettings.hover = 'left';
+    const toolbarSettings = new ToolbarSettings({ "hover": "left", "show": "always" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -151,8 +142,7 @@ describe('Toolbar test suite', function () {
       },
       "title": "create Author"
     }];
-    const toolbarSettings: ToolbarSettings = { "hover": "left", "show": "always" } as ToolbarSettings;
-    //toolbarSettings.hover = 'left';
+    const toolbarSettings = new ToolbarSettings({ "hover": "left", "show": "always" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -171,7 +161,7 @@ describe('Toolbar test suite', function () {
         }]
       }]
     };
-    const toolbarSettings: ToolbarSettings = {} as ToolbarSettings;
+    const toolbarSettings = new ToolbarSettings({});
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -190,7 +180,7 @@ describe('Toolbar test suite', function () {
         }]
       }]
     };
-    const toolbarSettings: ToolbarSettings = {} as ToolbarSettings;
+    const toolbarSettings = new ToolbarSettings({});
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -200,7 +190,7 @@ describe('Toolbar test suite', function () {
 
   it('14 mock toolbar with one button "app" and defaults, plus settings to contain "group-pro"', function () {
     const toolbarData: any = { "groups": [{ "name": "default", "buttons": "app", "contentType": "Libraries" }], "defaults": { "title": "Libraries", "classes": "group-pro" } };
-    const toolbarSettings: ToolbarSettings = { "hover": "none", "show": "always" } as ToolbarSettings;
+    const toolbarSettings = new ToolbarSettings({ "hover": "none", "show": "always" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -210,7 +200,7 @@ describe('Toolbar test suite', function () {
 
   it('15 mock toolbar with one button "app" and defaults, plus settigns', function () {
     const toolbarData: any = { "groups": [{ "name": "default", "buttons": "app", "contentType": "Libraries" }], "defaults": { "title": "Libraries", "classes": "group-pro" } };
-    const toolbarSettings: ToolbarSettings = { "hover": "none", "show": "always" } as ToolbarSettings;
+    const toolbarSettings = new ToolbarSettings({ "hover": "none", "show": "always" });
     const cnt = getContextFromEditContext(editContext);
     cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
     const generatedHtml = renderToolbar(cnt);
@@ -220,7 +210,7 @@ describe('Toolbar test suite', function () {
 
   //it('16 mock toolbar with one button "app" and defaults, plus settings to contain "group-pro"', function () {
   //  const toolbarData: any = { "groups": [{ "name": "default", "buttons": "app", "contentType": "Libraries" }], "defaults": { "title": "Libraries", "classes": "group-pro" } };
-  //  const toolbarSettings: ToolbarSettings = { "hover": "none", "show": "always" } as ToolbarSettings;
+  //  const toolbarSettings = new ToolbarSettings({ "hover": "none", "show": "always" });
   //  const cnt = getContextFromEditContext(editContext);
   //  cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
   //  const generatedHtml = renderToolbar(cnt);
@@ -233,7 +223,7 @@ describe('Toolbar test suite', function () {
 
   //it('17 mock toolbar with one button "app" and defaults, plus settigns', function () {
   //  const toolbarData: any = { "groups": [{ "name": "default", "buttons": "app", "contentType": "Libraries" }], "defaults": { "title": "Libraries", "classes": "group-pro" } };
-  //  const toolbarSettings: ToolbarSettings = { "hover": "none", "show": "always" } as ToolbarSettings;
+  //  const toolbarSettings = new ToolbarSettings({ "hover": "none", "show": "always" });
   //  const cnt = getContextFromEditContext(editContext);
   //  cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings);
   //  const generatedHtml = renderToolbar(cnt);

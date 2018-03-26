@@ -66,6 +66,8 @@ export function buildQuickDialogConfig(editContext: DataEditContext): QucikDialo
  * @return {NgDialogParams} special object containing the ng-dialog parameters
  */
 export function buildNgDialogParams(sxc: SxcInstanceWithInternals, editContext: DataEditContext): NgDialogParams {
-  if (!editContext) editContext = getEditContext(sxc);
+  if (!editContext) {
+    editContext = getEditContext(sxc);
+  }
   return new NgDialogParams(sxc, editContext);
 }

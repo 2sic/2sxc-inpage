@@ -28,7 +28,7 @@ $2sxc._commands = commands_1.Commands.getInstance();
 // $2sxc.totalPopup
 // $2sxc._commands.definitions
 // $2sxc._toolbarManager = _toolbarManager;
-$2sxc._manage = manage_1._manage;
+$2sxc._manage = manage_1._manage; // used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
 // $2sxc.contentItems
 // window.i18next
 // window.i18nextXHRBackend

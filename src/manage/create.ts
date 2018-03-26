@@ -1,6 +1,6 @@
 ﻿import { Engine, instanceEngine } from '../commands/engine';
 import { manipulator } from '../contentBlock/manipulate';
-import { context } from '../context/context';
+import { context, getContextFromEditContext } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
@@ -11,6 +11,7 @@ import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
+import { ContextOfButton } from '../context/context-of-button';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -22,6 +23,8 @@ import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
  * - run(...)
  * - isEditMode
  * @param sxc
+ *
+ * we must keep signature of initInstance for compatibility because it is used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
  */
 export function initInstance(sxc: SxcInstanceWithInternals) {
   try {
@@ -35,12 +38,17 @@ export function initInstance(sxc: SxcInstanceWithInternals) {
 function _initInstance(sxc: SxcInstanceWithInternals) {
 
   const editContext = getEditContext(sxc);
+
+  const context = getContextFromEditContext(editContext);
+  context.sxc.sxc = sxc; // stv: this is temp
+  context.element = getTag(sxc); // HTMLElement
+
   // ReSharper disable AssignedValueIsNeverUsed
   const userInfo = getUserOfEditContext(editContext);
   const cmdEngine = instanceEngine(sxc);
   // ReSharper restore AssignedValueIsNeverUsed
 
-  const editManager = new EditManager(sxc, editContext, userInfo, cmdEngine);
+  const editManager = new EditManager(sxc, editContext, userInfo, cmdEngine, context);
   editManager.init();
   sxc.manage = editManager;
   return editManager;
@@ -51,7 +59,8 @@ class EditManager {
   constructor(private sxc: SxcInstanceWithInternals,
     private editContext: DataEditContext,
     private userInfo: UserOfEditContext,
-    private cmdEngine: Engine) {
+    private cmdEngine: Engine,
+    private context: ContextOfButton) {
   }
 
   //#region Official, public properties and commands, which are stable for use from the outside
@@ -73,16 +82,16 @@ class EditManager {
    * @returns {string} html of a button
    */
   getButton = (actDef: ButtonDefinition, groupIndex: number): string => {
-    const tag: any = getTag(this.sxc);
-    const myContext = context(tag);
+    //const tag: any = getTag(this.sxc);
+    //const myContext = context(tag);
 
     const newButtonConfig = buttonConfigAdapter(
-      myContext,
+      this.context,
       actDef,
       groupIndex);
  
     const button = renderButton(
-      myContext,
+      this.context,
       newButtonConfig,
       groupIndex);
 
@@ -96,16 +105,16 @@ class EditManager {
    * @returns {string} html of the current toolbar
    */
   getToolbar = (tbConfig: any, moreSettings: ToolbarSettings): string => {
-    const tag: any = getTag(this.sxc);
-    const myContext = context(tag);
+    //const tag: any = getTag(this.sxc);
+    //const myContext = context(tag);
     const toolbarConfig = expandToolbarConfig(
-      myContext,
+      this.context,
       tbConfig,
       moreSettings);
 
-    myContext.toolbar = toolbarConfig;
+    this.context.toolbar = toolbarConfig;
 
-    return renderToolbar(myContext);
+    return renderToolbar(this.context);
   };
 
   //#endregion official, public properties - everything below this can change at any time
@@ -177,17 +186,17 @@ class EditManager {
    * init this object
    */
   init = () => {
-    const tag = getTag(this.sxc);
+    //const tag = getTag(this.sxc);
     // enhance UI in case there are known errors / issues
     if (this.editContext.error.type)
-      this._handleErrors(this.editContext.error.type, tag);
+      this._handleErrors(this.editContext.error.type, this.context.element);
 
     // todo: move this to dialog-handling
     // display the dialog
     const openDialogId = LocalStorageHelper.getItemValue<number>('dia-cbid');
     if (this.editContext.error.type || !openDialogId || openDialogId !== this.sxc.cbid) return false;
     sessionStorage.removeItem('dia-cbid');
-    this.run2(context(tag), 'layout');
+    this.run2(this.context, 'layout');
     return true;
   }
 

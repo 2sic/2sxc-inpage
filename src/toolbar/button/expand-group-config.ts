@@ -122,7 +122,9 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
 
   // optionally add a more-button in each group
   if (settings.autoAddMore) {
-    if (settings.autoAddMore === 'end') {
+    if ((settings.autoAddMore === 'end')
+      || (settings.autoAddMore.toString() === 'right') // fallback for older v1 setting
+      ) {
       log.add('will add a more "..." button to end');
       btns.push('more');
     }

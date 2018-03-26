@@ -1,12 +1,12 @@
 ﻿import { DataEditContext } from '../../data-edit-context/data-edit-context';
+import { Log } from '../../logging/log';
 import { InstanceConfig } from '../../manage/instance-config';
+import { oldToolbarSettingsAddapter } from '../adapters/old-toolbar-settings-adapter';
 import { customize, removeDisableButtons } from '../button/expand-button-config';
 import { expandButtonGroups } from '../button/expand-group-config';
 import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
-import { toolbarStandardButtons } from './toolbar-standard-buttons';
-import { Log } from '../../logging/log';
-
+import { ToolbarConfigTemplates } from './toolbar-config-templates';
 
 export function expandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
   const log = new Log('Tlb.ExpTop', parentLog, 'expand start');
@@ -14,7 +14,7 @@ export function expandToolbarConfig(context: any, toolbarData: any, toolbarSetti
 
   if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings)) {
     log.add('no data or settings found, will use default toolbar');
-    toolbarSettings = settingsForEmptyToolbar;    
+    toolbarSettings = settingsForEmptyToolbar;
   }
 
   // if it has an action or is an array, keep that. Otherwise get standard buttons
@@ -23,7 +23,9 @@ export function expandToolbarConfig(context: any, toolbarData: any, toolbarSetti
   let unstructuredConfig = toolbarData;
   if (!toolbarData.action && !toolbarData.groups && !toolbarData.buttons && !Array.isArray(toolbarData)) {
     log.add('no toolbar details found, will use standard toolbar template');
-    unstructuredConfig = toolbarStandardButtons(editContext.User.CanDesign, toolbarData, log);
+    const toolbarTemplate = ToolbarConfigTemplates.Instance(log).get('default'); // use default toolbar template
+    unstructuredConfig = JSON.parse(JSON.stringify(toolbarTemplate)); // deep copy toolbar template
+    unstructuredConfig.params = ((toolbarData) && Array.isArray(toolbarData) && toolbarData[0]) || toolbarData; // these are the default command parameters
   }
 
   const instanceConfig = new InstanceConfig(editContext);
@@ -110,8 +112,7 @@ function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarS
   // toolbarConfig.groupConfig = new GroupConfig(original.groups as ButtonConfig[]);
   toolbarConfig.groups = unstructuredConfig.groups || []; // the groups of buttons
   toolbarConfig.params = unstructuredConfig.params || {}; // these are the default command parameters
-  toolbarConfig.settings =
-    Object.assign({}, defaultToolbarSettings, unstructuredConfig.settings, toolbarSettings) as ToolbarSettings;
+  toolbarConfig.settings = Object.assign({}, defaultToolbarSettings, unstructuredConfig.settings, oldToolbarSettingsAddapter(toolbarSettings)) as ToolbarSettings;
 
   // todo: old props, remove
   toolbarConfig.name = unstructuredConfig.name || 'toolbar'; // name, no real use
