@@ -13,11 +13,11 @@ export class MoveUp extends CommandBase {
       false,
       true,
       {
-        showCondition(context, settings) {
-          return context.contentBlock.isList &&
-            settings.useModuleList &&
-            settings.sortOrder !== -1 &&
-            settings.sortOrder !== 0;
+        showCondition(context) {
+          return (context.contentBlock.isList) &&
+            (context.button.action.params.useModuleList) &&
+            (context.button.action.params.sortOrder !== -1) &&
+            (context.button.action.params.sortOrder !== 0);
         },
         code(context, settings) {
           changeOrder(context.sxc.sxc, settings.sortOrder, Math.max(settings.sortOrder - 1, 0));

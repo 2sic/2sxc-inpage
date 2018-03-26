@@ -12,10 +12,8 @@ export class Zone extends CommandBase {
       true,
       false,
       {
-        // ReSharper disable UnusedParameter
-        showCondition: (context, settings) => {
-          // ReSharper restore UnusedParameter
-          return context.user.canDesign;
+        showCondition: (context) => {
+          return (context.user.canDesign);
         },
       });
   }

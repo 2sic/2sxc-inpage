@@ -19,10 +19,8 @@ export class AppSettings extends CommandBase {
           return context.app.settingsId === null;
         },
         title: (context) => `Toolbar.AppSettings${context.app.settingsId === null ? 'Disabled' : ''}`,
-        // ReSharper disable UnusedParameter
-        showCondition: (context, settings) => {
-          // ReSharper restore UnusedParameter
-          return context.user.canDesign && !context.app.isContent; // only if settings exist, or are 0 (to be created)
+        showCondition: (context) => {
+          return (context.user.canDesign) && (!context.app.isContent); // only if settings exist, or are 0 (to be created)
         },
         configureCommand: (context, command) => {
           command.items = [{ EntityId: context.app.settingsId }];

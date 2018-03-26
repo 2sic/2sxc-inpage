@@ -12,8 +12,10 @@ export class InstanceList extends CommandBase {
       false,
       true,
       {
-        showCondition(context, settings) {
-          return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
+        showCondition(context) {
+          return (context.contentBlock.isList)
+            && (context.button.action.params.useModuleList)
+            && (context.button.action.params.sortOrder !== -1);
         },
       });
   }

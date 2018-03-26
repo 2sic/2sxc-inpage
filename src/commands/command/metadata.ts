@@ -23,8 +23,8 @@ export class Metadata extends CommandBase {
           return settings.entityId ? '' : 'empty';
           // return settings.items && settings.items[0].entityId ? "" : "empty";
         },
-        showCondition(context, settings) {
-          return !!settings.metadata;
+        showCondition(context) {
+          return (!!context.button.action.params.metadata);
         }, // only add a metadata-button if it has metadata-infos
         configureCommand(context, command) {
           const itm = {

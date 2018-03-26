@@ -19,11 +19,8 @@ export class AppResources extends CommandBase {
           return context.app.resourcesId === null;
         },
         title: (context) => `Toolbar.AppResources${context.app.resourcesId === null ? 'Disabled' : ''}`,
-        // ReSharper disable UnusedParameter
-        showCondition: (context, settings) => {
-          // ReSharper restore UnusedParameter
-          return context.user.canDesign &&
-            !context.app.isContent; // only if resources exist or are 0 (to be created)...
+        showCondition: (context) => {
+          return (context.user.canDesign) && (!context.app.isContent); // only if resources exist or are 0 (to be created)...
         },
         configureCommand: (context, command) => {
           command.items = [{ EntityId: context.app.resourcesId }];

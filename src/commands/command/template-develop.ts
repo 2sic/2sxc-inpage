@@ -14,8 +14,8 @@ export class TemplateDevelop extends CommandBase {
       {
         newWindow: true,
         dialog: 'develop',
-        showCondition: (context, settings) => {
-          return context.user.canDesign;
+        showCondition: (context) => {
+          return (context.user.canDesign);
         },
         configureCommand: (context, command) => {
           command.items = [{ EntityId: context.contentBlock.templateId }];

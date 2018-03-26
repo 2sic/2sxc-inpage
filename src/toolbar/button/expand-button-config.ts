@@ -84,7 +84,8 @@ function removeUnfitButtons(context: any, btns: ButtonConfig[], config: any, log
     // if (add !== undefined)
     //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
     // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
-    if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, btns[i].action.params, config, true)) {
+    context.button = btns[i];
+    if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, config, true)) {
       removals += `#${i} "${btns[i].action.name}"; `;
       btns.splice(i--, 1);
     }
@@ -96,11 +97,11 @@ function removeUnfitButtons(context: any, btns: ButtonConfig[], config: any, log
 function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: any): void {
   for (let i = 0; i < btns.length; i++) {
     // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+    context.button = btns[i];
     if (btns[i].action) {
       btns[i].disabled = evalPropOrFunction(
         btns[i].disabled,
         context,
-        btns[i].action.params,
         config,
         false);
     } else {
@@ -110,12 +111,12 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
   }
 }
 
-function evalPropOrFunction(propOrFunction: any, context: ContextOfButton, settings: any, config: any, fallback: any): any {
+function evalPropOrFunction(propOrFunction: any, context: ContextOfButton, config: any, fallback: any): any {
   if (propOrFunction === undefined || propOrFunction === null) {
     return fallback;
   }
   if (typeof (propOrFunction) === 'function') {
-    return propOrFunction(context, settings, config);
+    return propOrFunction(context, config);
   } else {
     return propOrFunction;
   }

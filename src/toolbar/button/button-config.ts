@@ -59,7 +59,7 @@ export class ButtonConfig {
   configureCommand?(context: ContextOfButton, cmd: Command): void; // stv: todo ???
 
   // showCondition: boolean | (() => boolean) = true;
-  showCondition: ((context: ContextOfButton, settings: Settings) => boolean);
+  showCondition: ((context: ContextOfButton) => boolean);
 
   [propName: string]: any;
 }

@@ -28,7 +28,7 @@ export class Definition {
     dialog?: string;
 
   // todo STV try to refactor so it doesn't need settings
-  showCondition?(context: ContextOfButton, settings: Settings): boolean;
+  showCondition?(context: ContextOfButton): boolean;
 
   // todo STV try to refactor so it doesn't need settings
     code?(context: ContextOfButton, settings: Settings): void;

@@ -12,9 +12,7 @@ export class App extends CommandBase {
       true,
       false,
       {
-        // ReSharper disable UnusedParameter
-        showCondition: (context, settings) => {
-          // ReSharper restore UnusedParameter
+        showCondition: (context) => {
           return context.user.canDesign;
         },
       });

@@ -13,9 +13,11 @@ export class MoveDown extends CommandBase {
       false,
       true,
       {
-        showCondition(context, settings) {
+        showCondition(context) {
           // TODO: do not display if is last item in list
-          return context.contentBlock.isList && settings.useModuleList && settings.sortOrder !== -1;
+          return (context.contentBlock.isList)
+            && (context.button.action.params.useModuleList)
+            && (context.button.action.params.sortOrder !== -1);
         },
         code(context, settings) {
           // TODO: make sure index is never greater than the amount of items

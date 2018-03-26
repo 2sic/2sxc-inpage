@@ -12,8 +12,8 @@ export class Replace extends CommandBase {
       false,
       true,
       {
-        showCondition(context, settings) {
-          return settings.useModuleList;
+        showCondition(context) {
+          return (context.button.action.params.useModuleList);
         },
       });
   }

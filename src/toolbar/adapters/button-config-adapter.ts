@@ -31,14 +31,14 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.showCondition) {
-    partialButtonConfig.showCondition = (context: ContextOfButton, settings: Settings) => {
+    partialButtonConfig.showCondition = (context: ContextOfButton) => {
       const modConfig = new ModConfig();
 
       // todo: stv .. .find this data
       //modConfig.target = ''; // todo
       //modConfig.isList = false; // todo
 
-      return actDef.showCondition(settings, modConfig);
+      return actDef.showCondition(context.button.action.params, modConfig);
     }
   }
 

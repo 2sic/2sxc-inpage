@@ -16,16 +16,22 @@ export class Delete extends CommandBase {
       false,
       {
         // disabled: true,
-        showCondition(context, settings) {
+        showCondition(context) {
           // can never be used for a modulelist item, as it is always in use somewhere
-          if (settings.useModuleList)
+          if (context.button.action.params.useModuleList) {
             return false;
+          }
 
           // check if all data exists required for deleting
-          return ((!!settings.entityId) && (!!settings.entityGuid) && (!!settings.entityTitle));
+          return ((!!context.button.action.params.entityId)
+            && (!!context.button.action.params.entityGuid)
+            && (!!context.button.action.params.entityTitle));
         },
         code(context, settings) {
-          contentItems.delete(context.sxc.sxc, settings.entityId, settings.entityGuid, settings.entityTitle);
+          contentItems.delete(context.sxc.sxc,
+            settings.entityId,
+            settings.entityGuid,
+            settings.entityTitle);
         },
       });
   }

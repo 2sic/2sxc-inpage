@@ -13,8 +13,8 @@ export class TemplateSettings extends CommandBase {
       false,
       {
         dialog: 'edit',
-        showCondition: (context, settings) => {
-          return context.user.canDesign && !context.app.isContent;
+        showCondition: (context) => {
+          return (context.user.canDesign) && (!context.app.isContent);
         },
         configureCommand: (context, command) => {
           command.items = [{ EntityId: context.contentBlock.templateId }];

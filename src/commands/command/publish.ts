@@ -16,8 +16,8 @@ export class Publish extends CommandBase {
       false,
       false,
       {
-        showCondition(context, settings) {
-          return settings.isPublished === false;
+        showCondition(context) {
+          return (context.button.action.params.isPublished === false);
         },
         disabled: (context, settings) => {
           return !context.instance.allowPublish;

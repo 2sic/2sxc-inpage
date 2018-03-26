@@ -23,10 +23,8 @@ export class TemplateQuery extends CommandBase {
           return context.app.settingsId === null;
         },
         title: (context) => `Toolbar.QueryEdit${context.contentBlock.queryId === null ? 'Disabled' : ''}`,
-        // ReSharper disable UnusedParameter
-        showCondition: (context, settings) => {
-          // ReSharper restore UnusedParameter
-          return context.user.canDesign && !context.app.isContent;
+        showCondition: (context) => {
+          return (context.user.canDesign) && (!context.app.isContent);
         },
         // ReSharper disable once UnusedParameter
         dynamicClasses: (context, settings) => {
