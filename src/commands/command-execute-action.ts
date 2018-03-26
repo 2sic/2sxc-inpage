@@ -17,7 +17,7 @@ export function commandExecuteAction(
   eventOrSettings?: any,
   event?: any) {
 
-  const log = new Log('Tlb.ExecAct', null, 'start');
+  // const log = new Log('Tlb.ExecAct', null, 'start');
 
   const sxc = context.sxc.sxc;
 

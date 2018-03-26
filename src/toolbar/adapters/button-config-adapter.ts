@@ -15,9 +15,9 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
     partialButtonConfig.code = (context: ContextOfButton) => {
 
       const modConfig = new ModConfig();
-      // todo: stv .. .find this data
-      //modConfig.target = ''; // todo
-      //modConfig.isList = false; // todo
+      // todo: stv find this data
+      // modConfig.target = '';
+      // modConfig.isList = false;
 
       return actDef.code(context.button.action.params, modConfig);
     }
@@ -74,7 +74,7 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.params) {
-    // todo: stv ... test this...
+    // todo: stv test this...
     Object.assign(partialButtonConfig.params, actDef.params);
   }
 
@@ -88,9 +88,9 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
     partialButtonConfig.showCondition = (context: ContextOfButton) => {
       const modConfig = new ModConfig();
 
-      // todo: stv .. .find this data
-      //modConfig.target = ''; // todo
-      //modConfig.isList = false; // todo
+      // todo: stv find this data
+      // modConfig.target = '';
+      // modConfig.isList = false;
 
       return actDef.showCondition(context.button.action.params, modConfig);
     }

@@ -133,11 +133,7 @@ export function getContextFromEditContext(editContext: DataEditContext) {
   // fill externally
 
   // *** ContextOfButton ***
-  // contextOfButton.button = ButtonConfig; // todo: stv....
-
-  // contextOfButton.cmdSpec = cmdSpec;
-  // contextOfButton.enableTools = editContext.User.CanDesign;
-  // contextOfButton.isContent = editContext.ContentGroup.IsContent;
+  // fill externally
 
   return contextOfButton;
 }

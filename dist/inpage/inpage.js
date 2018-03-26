@@ -247,6 +247,168 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(1);
+var sxc_1 = __webpack_require__(7);
+var system_context_1 = __webpack_require__(47);
+var tenant_context_1 = __webpack_require__(48);
+var user_context_1 = __webpack_require__(49);
+var content_block_context_1 = __webpack_require__(50);
+var context_of_button_1 = __webpack_require__(51);
+var app_context_1 = __webpack_require__(59);
+var instance_context_1 = __webpack_require__(60);
+var sxc_context_1 = __webpack_require__(61);
+var item_context_1 = __webpack_require__(62);
+var page_context_1 = __webpack_require__(63);
+/**
+ * Primary API to get the context
+ * @param htmlElement
+ */
+function context(htmlElement) {
+    var sxc = sxc_1.getSxcInstance(htmlElement);
+    var editContext = api_1.getEditContext(sxc);
+    var contextOfButton = getContextFromEditContext(editContext);
+    contextOfButton.sxc.sxc = sxc; // stv: this is temp
+    contextOfButton.element = htmlElement; // HTMLElement
+    return contextOfButton;
+}
+exports.context = context;
+function getContextFromEditContext(editContext) {
+    var contextOfButton = new context_of_button_1.ContextOfButton();
+    // *** ContextOf ***
+    // this will be everything about the current system, like system / api -paths etc.
+    contextOfButton.system = new system_context_1.SystemContext();
+    if (editContext.error) {
+        contextOfButton.system.error = editContext.error.type;
+    }
+    // empty
+    // this will be something about the current tenant(the dnn portal)
+    contextOfButton.tenant = new tenant_context_1.TenantContext();
+    if (editContext.Environment) {
+        contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
+        contextOfButton.tenant.url = editContext.Environment.WebsiteUrl;
+    }
+    // things about the user
+    contextOfButton.user = new user_context_1.UserContext();
+    if (editContext.User) {
+        contextOfButton.user.canDesign = editContext.User.CanDesign;
+        contextOfButton.user.canDevelop = editContext.User.CanDevelop;
+    }
+    // *** ContextOfPage ***
+    // this will be information related to the current page
+    contextOfButton.page = new page_context_1.PageContext();
+    if (editContext.Environment) {
+        contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
+        contextOfButton.page.url = editContext.Environment.PageUrl;
+    }
+    // *** ContextOfInstance ***
+    // this will be something about the sxc - object, version, etc.
+    contextOfButton.sxc = new sxc_context_1.SxcContext();
+    if (editContext.Environment) {
+        contextOfButton.sxc.version = editContext.Environment.SxcVersion;
+        contextOfButton.sxc.parameters = editContext.Environment.parameters;
+        contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl;
+    }
+    // temp
+    contextOfButton.sxc.editContext = editContext; // stv: this is temp
+    // information related to the current DNN module, incl.instanceId, etc.
+    contextOfButton.instance = new instance_context_1.InstanceContext();
+    if (editContext.Environment) {
+        contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
+        contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
+    }
+    if (editContext.ContentBlock) {
+        contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;
+    }
+    // this will be about the current app, settings of the app, app - paths, etc.
+    contextOfButton.app = new app_context_1.AppContext();
+    if (editContext.ContentGroup) {
+        contextOfButton.app.id = editContext.ContentGroup.AppId;
+        contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
+        contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
+        contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
+        contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // ex: InstanceConfig.appPath
+        contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
+        contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
+        contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId;
+        contextOfButton.app.guid = editContext.ContentGroup.Guid;
+    }
+    if (editContext.Language) {
+        // languages
+        contextOfButton.app.currentLanguage = editContext.Language.Current;
+        contextOfButton.app.primaryLanguage = editContext.Language.Primary;
+        contextOfButton.app.allLanguages = editContext.Language.All;
+    }
+    // *** ContextOfContentBlock ***
+    // information related to the current contentBlock
+    contextOfButton.contentBlock = new content_block_context_1.ContentBlockContext();
+    if (editContext.ContentBlock) {
+        contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // ex: InstanceConfig.cbid
+        contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
+        contextOfButton.contentBlock.showTemplatePicker = editContext.ContentBlock.ShowTemplatePicker;
+        contextOfButton.contentBlock.versioningRequirements = editContext.ContentBlock.VersioningRequirements;
+        contextOfButton.contentBlock.parentFieldName = editContext.ContentBlock.ParentFieldName;
+        contextOfButton.contentBlock.parentFieldSortOrder = editContext.ContentBlock.ParentFieldSortOrder;
+        contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage;
+    }
+    if (editContext.ContentGroup) {
+        contextOfButton.contentBlock.isCreated = editContext.ContentGroup.IsCreated;
+        contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
+        contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
+        contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
+        contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
+        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
+    }
+    // *** ContextOfItem ***
+    // information about the current item
+    contextOfButton.item = new item_context_1.ItemContext();
+    // empty
+    // *** ContextOfToolbar ***
+    // fill externally
+    // *** ContextOfButton ***
+    // fill externally
+    return contextOfButton;
+}
+exports.getContextFromEditContext = getContextFromEditContext;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * selectors used all over the in-page-editing, centralized to ensure consistency
+ */
+exports.selectors = {
+    cb: {
+        id: 'cb',
+        class: 'sc-content-block',
+        selector: '.sc-content-block',
+        listSelector: '.sc-content-block-list',
+        context: 'data-list-context',
+        singleItem: 'single-item',
+    },
+    mod: {
+        id: 'mod',
+        class: 'DnnModule',
+        selector: '.DnnModule',
+        listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)',
+        context: null,
+    },
+    eitherCbOrMod: '.DnnModule, .sc-content-block',
+    selected: 'sc-cb-is-selected',
+};
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var entry_1 = __webpack_require__(42);
 var maxScopeLen = 3;
 var maxNameLen = 6;
@@ -395,171 +557,6 @@ var Log = /** @class */ (function () {
     return Log;
 }());
 exports.Log = Log;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
-var sxc_1 = __webpack_require__(7);
-var system_context_1 = __webpack_require__(47);
-var tenant_context_1 = __webpack_require__(48);
-var user_context_1 = __webpack_require__(49);
-var content_block_context_1 = __webpack_require__(50);
-var context_of_button_1 = __webpack_require__(51);
-var app_context_1 = __webpack_require__(59);
-var instance_context_1 = __webpack_require__(60);
-var sxc_context_1 = __webpack_require__(61);
-var item_context_1 = __webpack_require__(62);
-var page_context_1 = __webpack_require__(63);
-/**
- * Primary API to get the context
- * @param htmlElement
- */
-function context(htmlElement) {
-    var sxc = sxc_1.getSxcInstance(htmlElement);
-    var editContext = api_1.getEditContext(sxc);
-    var contextOfButton = getContextFromEditContext(editContext);
-    contextOfButton.sxc.sxc = sxc; // stv: this is temp
-    contextOfButton.element = htmlElement; // HTMLElement
-    return contextOfButton;
-}
-exports.context = context;
-function getContextFromEditContext(editContext) {
-    var contextOfButton = new context_of_button_1.ContextOfButton();
-    // *** ContextOf ***
-    // this will be everything about the current system, like system / api -paths etc.
-    contextOfButton.system = new system_context_1.SystemContext();
-    if (editContext.error) {
-        contextOfButton.system.error = editContext.error.type;
-    }
-    // empty
-    // this will be something about the current tenant(the dnn portal)
-    contextOfButton.tenant = new tenant_context_1.TenantContext();
-    if (editContext.Environment) {
-        contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
-        contextOfButton.tenant.url = editContext.Environment.WebsiteUrl;
-    }
-    // things about the user
-    contextOfButton.user = new user_context_1.UserContext();
-    if (editContext.User) {
-        contextOfButton.user.canDesign = editContext.User.CanDesign;
-        contextOfButton.user.canDevelop = editContext.User.CanDevelop;
-    }
-    // *** ContextOfPage ***
-    // this will be information related to the current page
-    contextOfButton.page = new page_context_1.PageContext();
-    if (editContext.Environment) {
-        contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
-        contextOfButton.page.url = editContext.Environment.PageUrl;
-    }
-    // *** ContextOfInstance ***
-    // this will be something about the sxc - object, version, etc.
-    contextOfButton.sxc = new sxc_context_1.SxcContext();
-    if (editContext.Environment) {
-        contextOfButton.sxc.version = editContext.Environment.SxcVersion;
-        contextOfButton.sxc.parameters = editContext.Environment.parameters;
-        contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl;
-    }
-    // temp
-    contextOfButton.sxc.editContext = editContext; // stv: this is temp
-    // information related to the current DNN module, incl.instanceId, etc.
-    contextOfButton.instance = new instance_context_1.InstanceContext();
-    if (editContext.Environment) {
-        contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
-        contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
-    }
-    if (editContext.ContentBlock) {
-        contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;
-    }
-    // this will be about the current app, settings of the app, app - paths, etc.
-    contextOfButton.app = new app_context_1.AppContext();
-    if (editContext.ContentGroup) {
-        contextOfButton.app.id = editContext.ContentGroup.AppId;
-        contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
-        contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
-        contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
-        contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // ex: InstanceConfig.appPath
-        contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
-        contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
-        contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId;
-        contextOfButton.app.guid = editContext.ContentGroup.Guid;
-    }
-    if (editContext.Language) {
-        // languages
-        contextOfButton.app.currentLanguage = editContext.Language.Current;
-        contextOfButton.app.primaryLanguage = editContext.Language.Primary;
-        contextOfButton.app.allLanguages = editContext.Language.All;
-    }
-    // *** ContextOfContentBlock ***
-    // information related to the current contentBlock
-    contextOfButton.contentBlock = new content_block_context_1.ContentBlockContext();
-    if (editContext.ContentBlock) {
-        contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // ex: InstanceConfig.cbid
-        contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
-        contextOfButton.contentBlock.showTemplatePicker = editContext.ContentBlock.ShowTemplatePicker;
-        contextOfButton.contentBlock.versioningRequirements = editContext.ContentBlock.VersioningRequirements;
-        contextOfButton.contentBlock.parentFieldName = editContext.ContentBlock.ParentFieldName;
-        contextOfButton.contentBlock.parentFieldSortOrder = editContext.ContentBlock.ParentFieldSortOrder;
-        contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage;
-    }
-    if (editContext.ContentGroup) {
-        contextOfButton.contentBlock.isCreated = editContext.ContentGroup.IsCreated;
-        contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
-        contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
-        contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
-        contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
-        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
-    }
-    // *** ContextOfItem ***
-    // information about the current item
-    contextOfButton.item = new item_context_1.ItemContext();
-    // empty
-    // *** ContextOfToolbar ***
-    // fill externally
-    // *** ContextOfButton ***
-    // contextOfButton.button = ButtonConfig; // todo: stv....
-    // contextOfButton.cmdSpec = cmdSpec;
-    // contextOfButton.enableTools = editContext.User.CanDesign;
-    // contextOfButton.isContent = editContext.ContentGroup.IsContent;
-    return contextOfButton;
-}
-exports.getContextFromEditContext = getContextFromEditContext;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * selectors used all over the in-page-editing, centralized to ensure consistency
- */
-exports.selectors = {
-    cb: {
-        id: 'cb',
-        class: 'sc-content-block',
-        selector: '.sc-content-block',
-        listSelector: '.sc-content-block-list',
-        context: 'data-list-context',
-        singleItem: 'single-item',
-    },
-    mod: {
-        id: 'mod',
-        class: 'DnnModule',
-        selector: '.DnnModule',
-        listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)',
-        context: null,
-    },
-    eitherCbOrMod: '.DnnModule, .sc-content-block',
-    selected: 'sc-cb-is-selected',
-};
 
 
 /***/ }),
@@ -724,7 +721,7 @@ exports.publishId = publishId;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
 // ReSharper disable once UnusedParameter
 function expandButtonConfig(original, sharedProps, parentLog) {
@@ -911,7 +908,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var main_content_block_1 = __webpack_require__(23);
 var render_1 = __webpack_require__(12);
 var templates_1 = __webpack_require__(14);
-var context_1 = __webpack_require__(4);
+var context_1 = __webpack_require__(3);
 var api_1 = __webpack_require__(1);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -1252,13 +1249,13 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(4);
+var context_1 = __webpack_require__(3);
 var api_1 = __webpack_require__(1);
 var render_toolbar_1 = __webpack_require__(15);
 var toolbar_manager_1 = __webpack_require__(27);
 var toolbar_expand_config_1 = __webpack_require__(30);
 var toolbar_settings_1 = __webpack_require__(33);
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 // quick debug - set to false if not needed for production
 var dbg = false;
 // generate an empty / fallback toolbar tag
@@ -1603,7 +1600,7 @@ var sxc_1 = __webpack_require__(7);
 var cmds_strategy_factory_1 = __webpack_require__(85);
 var mod_1 = __webpack_require__(37);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var selectors_instance_1 = __webpack_require__(4);
 /** add a clipboard to the quick edit */
 /**
  * perform copy and paste commands - needs the clipboard
@@ -1724,7 +1721,7 @@ $('a', quick_e_1.$quickE.selected).click(function () {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(4);
+var context_1 = __webpack_require__(3);
 var api_1 = __webpack_require__(1);
 var command_create_1 = __webpack_require__(22);
 var command_execute_action_1 = __webpack_require__(65);
@@ -1862,7 +1859,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = __webpack_require__(66);
 var positioning_1 = __webpack_require__(25);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var selectors_instance_1 = __webpack_require__(4);
 function enable() {
     // build all toolbar html-elements
     quick_e_1.prepareToolbarInDom();
@@ -1936,7 +1933,7 @@ exports.reset = reset;
 Object.defineProperty(exports, "__esModule", { value: true });
 var coords_1 = __webpack_require__(67);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var selectors_instance_1 = __webpack_require__(4);
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
@@ -2177,7 +2174,7 @@ exports._toolbarManager = sharedTbm; // new ToolbarManager();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 var HasLog = /** @class */ (function () {
     /**
      * initialize the logger
@@ -2272,7 +2269,7 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 var instance_config_1 = __webpack_require__(21);
 var old_toolbar_settings_adapter_1 = __webpack_require__(72);
 var expand_button_config_1 = __webpack_require__(10);
@@ -2665,7 +2662,7 @@ exports.Cb = Cb;
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(38);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var selectors_instance_1 = __webpack_require__(4);
 var Mod = /** @class */ (function () {
     function Mod() {
     }
@@ -3453,10 +3450,9 @@ var commands_1 = __webpack_require__(6);
 var button_action_1 = __webpack_require__(17);
 var button_config_1 = __webpack_require__(18);
 var settings_adapter_1 = __webpack_require__(32);
-var log_1 = __webpack_require__(3);
 // ToDo: remove dead code
 function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
-    var log = new log_1.Log('Tlb.ExecAct', null, 'start');
+    // const log = new Log('Tlb.ExecAct', null, 'start');
     var sxc = context.sxc.sxc;
     var settings = eventOrSettings;
     // cycle parameters, in case it was called with 2 params only
@@ -3510,7 +3506,7 @@ exports.commandExecuteAction = commandExecuteAction;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var selectors_instance_1 = __webpack_require__(4);
 var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
@@ -3752,7 +3748,7 @@ var settings_adapter_1 = __webpack_require__(32);
 var button_action_1 = __webpack_require__(17);
 var button_config_1 = __webpack_require__(18);
 var expand_button_config_1 = __webpack_require__(10);
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 /**
  * this will traverse a groups-tree and expand each group
  * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
@@ -4104,7 +4100,7 @@ exports._manage = new Manage(); // used out of this project in ToSic.Sxc.Instanc
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(20);
 var manipulate_1 = __webpack_require__(77);
-var context_1 = __webpack_require__(4);
+var context_1 = __webpack_require__(3);
 var render_button_1 = __webpack_require__(16);
 var render_toolbar_1 = __webpack_require__(15);
 var toolbar_expand_config_1 = __webpack_require__(30);
@@ -4309,9 +4305,9 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
     if (actDef.code) {
         partialButtonConfig.code = function (context) {
             var modConfig = new mod_config_1.ModConfig();
-            // todo: stv .. .find this data
-            //modConfig.target = ''; // todo
-            //modConfig.isList = false; // todo
+            // todo: stv find this data
+            // modConfig.target = '';
+            // modConfig.isList = false;
             return actDef.code(context.button.action.params, modConfig);
         };
     }
@@ -4357,7 +4353,7 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
         };
     }
     if (actDef.params) {
-        // todo: stv ... test this...
+        // todo: stv test this...
         Object.assign(partialButtonConfig.params, actDef.params);
     }
     if (actDef.partOfPage) {
@@ -4368,9 +4364,9 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
     if (actDef.showCondition) {
         partialButtonConfig.showCondition = function (context) {
             var modConfig = new mod_config_1.ModConfig();
-            // todo: stv .. .find this data
-            //modConfig.target = ''; // todo
-            //modConfig.isList = false; // todo
+            // todo: stv find this data
+            // modConfig.target = '';
+            // modConfig.isList = false;
             return actDef.showCondition(context.button.action.params, modConfig);
         };
     }
@@ -4469,13 +4465,13 @@ exports._translateInit = _translateInit;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(4);
+var context_1 = __webpack_require__(3);
 var api_1 = __webpack_require__(1);
 var quick_dialog_1 = __webpack_require__(11);
 var build_toolbars_1 = __webpack_require__(13);
 var _2sxc_translate_1 = __webpack_require__(8);
 var sxc_1 = __webpack_require__(7);
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -4677,7 +4673,7 @@ __webpack_require__(53);
 __webpack_require__(56);
 __webpack_require__(52);
 __webpack_require__(57);
-__webpack_require__(4);
+__webpack_require__(3);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
@@ -4707,7 +4703,7 @@ __webpack_require__(139);
 __webpack_require__(42);
 __webpack_require__(28);
 __webpack_require__(140);
-__webpack_require__(3);
+__webpack_require__(5);
 __webpack_require__(1);
 __webpack_require__(79);
 __webpack_require__(21);
@@ -4734,7 +4730,7 @@ __webpack_require__(37);
 __webpack_require__(148);
 __webpack_require__(25);
 __webpack_require__(2);
-__webpack_require__(5);
+__webpack_require__(4);
 __webpack_require__(149);
 __webpack_require__(150);
 __webpack_require__(24);
@@ -5656,7 +5652,6 @@ var New = /** @class */ (function (_super) {
             },
             code: function (context) {
                 // todo - should refactor this to be a toolbarManager.contentBlock command
-                //const settingsExtend = Object.assign(settings, { sortOrder: settings.sortOrder + 1 }) as Settings;
                 Object.assign(context.button.action.params, { sortOrder: context.button.action.params.sortOrder + 1 });
                 command_open_ng_dialog_1.commandOpenNgDialog(context);
             },
@@ -6217,7 +6212,7 @@ exports.User = User;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(4);
+var context_1 = __webpack_require__(3);
 var api_1 = __webpack_require__(1);
 var sxc_1 = __webpack_require__(7);
 /**
@@ -6281,7 +6276,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_1 = __webpack_require__(6);
-var context_1 = __webpack_require__(4);
+var context_1 = __webpack_require__(3);
 var manage_1 = __webpack_require__(78);
 var quick_e_1 = __webpack_require__(2);
 var start_1 = __webpack_require__(24);
@@ -6289,30 +6284,8 @@ var _2sxc__translateInit_1 = __webpack_require__(83);
 __webpack_require__(84);
 $2sxc.context = context_1.context; // primary API to get the context
 $2sxc._translateInit = _2sxc__translateInit_1._translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
-// const $2sxc = window.$2sxc as SxcControllerWithInternals;
-// import '/2sxc-api/js/2sxc.api';
-// TODO inpage globals
-// export let $2sxc = window.$2sxc as SxcControllerWithInternals;
-// let $2sxc: SxcControllerWithInternals = window.$2sxc = {} as SxcControllerWithInternals;
-// $2sxc.c = $2sxc.consts
-// $2sxc.system
 $2sxc._commands = commands_1.Commands.getInstance();
-// $2sxc._lib
-// $2sxc._commands.definitions = {};
-// $2sxc._contentBlock
-// $2sxc.translate
-// $2sxc.contentItems
-// $2sxc._commands.instanceEngine
-// ? $2sxc.urlParams
-// $2sxc._quickDialog
-// $2sxc.totalPopup
-// $2sxc._commands.definitions
-// $2sxc._toolbarManager = _toolbarManager;
 $2sxc._manage = manage_1._manage; // used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
-// $2sxc.contentItems
-// window.i18next
-// window.i18nextXHRBackend
-// window.$2sxc = $2sxc;
 window.$quickE = quick_e_1.$quickE;
 $(start_1.start); // run on-load
 
@@ -6512,7 +6485,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var cb_1 = __webpack_require__(36);
 var clipboard_1 = __webpack_require__(19);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var selectors_instance_1 = __webpack_require__(4);
 /**
  * content-block specific stuff like actions
  */
@@ -6560,7 +6533,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(19);
 var mod_manage_1 = __webpack_require__(38);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var selectors_instance_1 = __webpack_require__(4);
 /**
  * module specific stuff
  */
