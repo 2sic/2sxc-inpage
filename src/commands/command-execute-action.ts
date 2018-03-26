@@ -3,6 +3,12 @@ import { ContextOfButton } from '../context/context-of-button';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Commands } from './commands';
 import { Settings } from './settings';
+import { parametersAdapter } from '../toolbar/adapters/parameters-adapter';
+import { ButtonAction } from '../toolbar/button/button-action';
+import { ButtonConfig } from '../toolbar/button/button-config';
+import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
+import { addDefaultBtnSettings } from '../toolbar/button/expand-button-config';
+import { Log } from '../logging/log';
 
 // ToDo: remove dead code
 export function commandExecuteAction(
@@ -10,6 +16,8 @@ export function commandExecuteAction(
   nameOrSettings: any,
   eventOrSettings?: any,
   event?: any) {
+
+  const log = new Log('Tlb.ExecAct', null, 'start');
 
   const sxc = context.sxc.sxc;
 
@@ -31,38 +39,64 @@ export function commandExecuteAction(
     : nameOrSettings;
 
   const conf = Commands.getInstance().get(settings.action).buttonConfig;
-
   settings = Object.assign(
     {},
     conf,
     settings) as Settings; // merge conf & settings, but settings has higher priority
 
-  if (!settings.dialog) {
-    settings.dialog = settings.action; // old code uses "action" as the parameter, now use verb ? dialog
+
+  // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
+  const origEvent = event || window.event;
+
+  const name = settings.action;
+  const contentType = settings.contentType;
+
+  // parameters adapter from v1 to v2
+  //const params = parametersAdapter(settings);
+
+  // Toolbar API v2
+  const newButtonAction = new ButtonAction(name, contentType, settings);
+  newButtonAction.commandDefinition = Commands.getInstance().get(name);
+  const newButtonConfig = new ButtonConfig(newButtonAction);
+  newButtonConfig.name = name;
+
+  // settings adapter from v1 to v2
+  //Object.assign(newButtonConfig, settingsAdapter(settings));
+
+  //addDefaultBtnSettings(newButtonConfig,
+  //  null, //fullToolbarConfig.groups[g],
+  //  null, //fullToolbarConfig,
+  //  Commands.getInstance(),
+  //  log); // ensure all buttons have either own settings, or the fallback
+
+  context.button = Object.assign(newButtonConfig,
+    newButtonAction.commandDefinition.buttonConfig,
+    settingsAdapter(settings)) as ButtonConfig; // merge conf & settings, but settings has higher priority
+
+  //context.button = newButtonConfig;
+
+  if (!context.button.dialog) {
+    context.button.dialog = name; // old code uses "action" as the parameter, now use verb ? dialog
   }
 
-  if (!settings.code) {
-    settings.code = (contextParam: ContextOfButton, settingsParam: Settings) => {
+  if (!context.button.code) {
+    context.button.code = (contextParam: ContextOfButton, settingsParam: Settings) => {
       return commandOpenNgDialog(
         contextParam,
         settingsParam);
     }; // decide what action to perform
   }
 
-  // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-  // const origEvent = event || window.event;
+  if (context.button.uiActionOnly)
+    return context.button.code(context, settings, sxc);
 
-  if (conf.uiActionOnly)
-    return settings.code(
-      context,
-      settings);
+  console.log(settings, context.button);
+  debugger;
+
 
   // if more than just a UI-action, then it needs to be sure the content-group is created first
   return prepareToAddContent(
     sxc,
     settings.useModuleList)
-    .then(
-      () => settings.code(
-        context,
-        settings));
+    .then(() => context.button.code(context, settings, sxc));
 }

@@ -7,6 +7,7 @@ export class ButtonConfig {
   name: string = '';
   title: ((context: ContextOfButton) => string);
   params: ((context: ContextOfButton) => any);
+  // params: any;
 
   action: ButtonAction;
 
