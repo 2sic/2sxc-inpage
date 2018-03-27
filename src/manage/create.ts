@@ -41,7 +41,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
 
   const context = getContextFromEditContext(editContext);
   context.sxc.sxc = sxc; // stv: this is temp
-  context.element = getTag(sxc); // HTMLElement
+  // context.element = getTag(sxc); // HTMLElement
 
   const userInfo = getUserOfEditContext(editContext);
   const cmdEngine = instanceEngine(sxc);
@@ -184,10 +184,10 @@ class EditManager {
    * init this object
    */
   init = () => {
-    // const tag = getTag(this.sxc);
+    const tag = getTag(this.sxc);
     // enhance UI in case there are known errors / issues
     if (this.editContext.error.type) {
-      this._handleErrors(this.editContext.error.type, this.context.element);
+      this._handleErrors(this.editContext.error.type, tag);
     }
 
     // todo: move this to dialog-handling

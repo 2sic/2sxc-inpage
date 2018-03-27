@@ -12,20 +12,43 @@ import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 
+
+var contextCache: any = {};
 /**
  * Primary API to get the context
  * @param htmlElement
  */
-export function context(htmlElement: HTMLElement): ContextOfButton {
-  const sxc = getSxcInstance(htmlElement);
-  
-  const editContext = getEditContext(sxc);
-  const contextOfButton = getContextFromEditContext(editContext);
+export function context(htmlElementOrId: HTMLElement | number, cbid?: number): ContextOfButton {
 
-  contextOfButton.sxc.sxc = sxc; // stv: this is temp
-  contextOfButton.element = htmlElement; // HTMLElement
+  const sxc = getSxcInstance(htmlElementOrId);
 
+  // get from cache for reuse
+  let contextOfButton = getContextInstance(sxc.id, cbid);
+  if (!contextOfButton) {
+    // create new context if not in cache
+    const editContext = getEditContext(sxc);
+    contextOfButton = getContextFromEditContext(editContext);
+    contextOfButton.sxc.sxc = sxc; // stv: this is temp
+    //if (typeof htmlElementOrId !== 'number') {
+    //  contextOfButton.element = htmlElementOrId as HTMLElement; // HTMLElement
+    //}
+    
+    setContextInstance(contextOfButton, cbid);
+  }
   return contextOfButton;
+}
+
+function getContextInstance(id: number, cbid?: number): ContextOfButton {
+  const cacheKey = id + ':' + cbid;
+  if (contextCache[cacheKey]) {
+    return contextCache[cacheKey];
+  }
+  return null;
+}
+
+function setContextInstance(context: ContextOfButton, cbid?: number): void {
+  const cacheKey = context.instance.id + ':' + cbid;
+  contextCache[cacheKey] = context;
 }
 
 export function getContextFromEditContext(editContext: DataEditContext) {
@@ -136,3 +159,4 @@ export function getContextFromEditContext(editContext: DataEditContext) {
 
   return contextOfButton;
 }
+

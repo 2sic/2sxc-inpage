@@ -259,19 +259,39 @@ var instance_context_1 = __webpack_require__(60);
 var sxc_context_1 = __webpack_require__(61);
 var item_context_1 = __webpack_require__(62);
 var page_context_1 = __webpack_require__(63);
+var contextCache = {};
 /**
  * Primary API to get the context
  * @param htmlElement
  */
-function context(htmlElement) {
-    var sxc = sxc_1.getSxcInstance(htmlElement);
-    var editContext = api_1.getEditContext(sxc);
-    var contextOfButton = getContextFromEditContext(editContext);
-    contextOfButton.sxc.sxc = sxc; // stv: this is temp
-    contextOfButton.element = htmlElement; // HTMLElement
+function context(htmlElementOrId, cbid) {
+    var sxc = sxc_1.getSxcInstance(htmlElementOrId);
+    // get from cache for reuse
+    var contextOfButton = getContextInstance(sxc.id, cbid);
+    if (!contextOfButton) {
+        // create new context if not in cache
+        var editContext = api_1.getEditContext(sxc);
+        contextOfButton = getContextFromEditContext(editContext);
+        contextOfButton.sxc.sxc = sxc; // stv: this is temp
+        //if (typeof htmlElementOrId !== 'number') {
+        //  contextOfButton.element = htmlElementOrId as HTMLElement; // HTMLElement
+        //}
+        setContextInstance(contextOfButton, cbid);
+    }
     return contextOfButton;
 }
 exports.context = context;
+function getContextInstance(id, cbid) {
+    var cacheKey = id + ':' + cbid;
+    if (contextCache[cacheKey]) {
+        return contextCache[cacheKey];
+    }
+    return null;
+}
+function setContextInstance(context, cbid) {
+    var cacheKey = context.instance.id + ':' + cbid;
+    contextCache[cacheKey] = context;
+}
 function getContextFromEditContext(editContext) {
     var contextOfButton = new context_of_button_1.ContextOfButton();
     // *** ContextOf ***
@@ -1492,8 +1512,8 @@ function renderButton(context, groupIndex) {
     var oldParamsAdapter = old_parameters_adapter_1.oldParametersAdapter(buttonConfig.action);
     var onclick = '';
     if (!buttonConfig.disabled) {
-        // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
-        onclick = "$2sxc(" + context.instance.id + ", " + context.contentBlock.id + ").manage.run2($2sxc.context(this), " + JSON.stringify(oldParamsAdapter) + ", event);";
+        onclick = "$2sxc(" + context.instance.id + ", " + context.contentBlock.id + ").manage.run(" + JSON.stringify(oldParamsAdapter) + ", event);";
+        // onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
     }
     var button = document.createElement('a');
     if (buttonConfig.action) {
@@ -1745,8 +1765,8 @@ var Engine = /** @class */ (function () {
             _this.context = context_1.context(tag);
             return command_execute_action_1.commandExecuteAction(_this.context, nameOrSettings, eventOrSettings, event);
         };
-        this.run2 = function (context, nameOrSettings, eventOrSettings, event) {
-            return command_execute_action_1.commandExecuteAction(context, nameOrSettings, eventOrSettings, event);
+        this.run2 = function (contextOfButton, nameOrSettings, eventOrSettings, event) {
+            return command_execute_action_1.commandExecuteAction(contextOfButton, nameOrSettings, eventOrSettings, event);
         };
     }
     return Engine;
@@ -3345,8 +3365,8 @@ exports.PageContext = PageContext;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(8);
 var api_1 = __webpack_require__(1);
+var _2sxc_translate_1 = __webpack_require__(8);
 var Command = /** @class */ (function () {
     function Command(context, ngDialogUrl, isDebug) {
         var _this = this;
@@ -3431,7 +3451,7 @@ var Command = /** @class */ (function () {
             //#endregion
         };
         this.sxc = context.sxc.sxc;
-        //this.settings = settings;
+        // this.settings = settings;
         this.items = context.button.action.params.items || []; // use predefined or create empty array
         // todo: stv, clean this
         var params = this.evalPropOrFunction(context.button.params, context, {});
@@ -3486,23 +3506,25 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
     var newButtonConfig = new button_config_1.ButtonConfig(newButtonAction);
     newButtonConfig.name = name;
     context.button = Object.assign(newButtonConfig, newButtonAction.commandDefinition.buttonConfig, settings_adapter_1.settingsAdapter(settings)); // merge conf & settings, but settings has higher priority
+    // todo: stv, fix this in case that is function
     if (!context.button.dialog) {
         context.button.dialog = function (contextParam) {
             return name;
         }; // old code uses "action" as the parameter, now use verb ? dialog
     }
+    // todo: stv, fix this in case that is function
     if (!context.button.code) {
         context.button.code = function (contextParam) {
             return command_open_ng_dialog_1.commandOpenNgDialog(contextParam);
         }; // decide what action to perform
     }
     if (context.button.uiActionOnly(context)) {
-        return context.button.code(context);
+        return context.button.code(context, origEvent);
     }
     // if more than just a UI-action, then it needs to be sure the content-group is created first
     var prepare = templates_1.prepareToAddContent(sxc, settings.useModuleList, context)
         .then(function () {
-        context.button.code(context);
+        context.button.code(context, origEvent);
     });
     return prepare;
 }
@@ -4145,7 +4167,7 @@ function _initInstance(sxc) {
     var editContext = api_1.getEditContext(sxc);
     var context = context_1.getContextFromEditContext(editContext);
     context.sxc.sxc = sxc; // stv: this is temp
-    context.element = api_1.getTag(sxc); // HTMLElement
+    // context.element = getTag(sxc); // HTMLElement
     var userInfo = api_1.getUserOfEditContext(editContext);
     var cmdEngine = engine_1.instanceEngine(sxc);
     var editManager = new EditManager(sxc, editContext, userInfo, cmdEngine, context);
@@ -4255,10 +4277,10 @@ var EditManager = /** @class */ (function () {
          * init this object
          */
         this.init = function () {
-            // const tag = getTag(this.sxc);
+            var tag = api_1.getTag(_this.sxc);
             // enhance UI in case there are known errors / issues
             if (_this.editContext.error.type) {
-                _this._handleErrors(_this.editContext.error.type, _this.context.element);
+                _this._handleErrors(_this.editContext.error.type, tag);
             }
             // todo: move this to dialog-handling
             // display the dialog
@@ -5511,8 +5533,8 @@ var More = /** @class */ (function (_super) {
     function More() {
         var _this = _super.call(this) || this;
         _this.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
-            code: function (context) {
-                var btn = $(context.element);
+            code: function (context, event) {
+                var btn = $(event.target);
                 var fullMenu = btn.closest('ul.sc-menu');
                 var oldState = Number(fullMenu.attr('data-state') || 0);
                 var max = Number(fullMenu.attr('group-count'));

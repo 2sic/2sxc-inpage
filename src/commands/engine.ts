@@ -23,8 +23,8 @@ export class Engine {
     return commandExecuteAction(this.context, nameOrSettings, eventOrSettings, event);
   }
 
-  run2 = (context: ContextOfButton, nameOrSettings: any, eventOrSettings?: any, event?: any) => {
-    return commandExecuteAction(context, nameOrSettings, eventOrSettings, event);
+  run2 = (contextOfButton: ContextOfButton, nameOrSettings: any, eventOrSettings?: any, event?: any) => {
+    return commandExecuteAction(contextOfButton, nameOrSettings, eventOrSettings, event);
   }
 
 }

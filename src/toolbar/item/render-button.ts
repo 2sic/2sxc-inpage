@@ -22,8 +22,8 @@ export function renderButton(context: ContextOfButton, groupIndex: number): HTML
   let onclick: string = '';
 
   if (!buttonConfig.disabled){
-    // `$2sxc(${sxc.id}, ${sxc.cbid}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
-    onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
+    onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
+    // onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
   }
 
   const button = document.createElement('a');
