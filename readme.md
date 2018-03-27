@@ -49,7 +49,7 @@ C:\Projects\2sxc-inpage> karma start karma.config-webpack.js
 
 ## webpack static module bundler 
 
-After bounding, it will copy of all files from **./dist/** to **C:/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage** folder.
+After bounding, it will copy of all files from **./dist/** to **C:/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage**, **images** and **lib** folders.
 
 Our **webpack.config.js** supports bundling for Development or Production (depending on process.env.NODE_ENV, but 'development' is default).
 

@@ -1,4 +1,23 @@
-﻿var webpack = require('webpack');
+﻿/* webpack static module bundler
+
+After bounding, it will copy of all files from **./dist/** to **C:/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage, images and lib folders.
+Supports bundling for Development or Production (depending on process.env.NODE_ENV, but 'development' is default).
+
+Development
+- currently bundles only ts & js files to support watch mode
+- bundling of *.css, and other assets is skipped
+
+Production
+- bundles all ts/js and css files
+- currently all css files are minimized (only min.css have to be minimized)
+- currently do not work in watch mode
+
+TypeDoc
+Documentation can be auto-generated in ./docs folder, but you have to change variable enerateTypedocDocumentation* to true.
+For faster webpack execution during development it is not enabled by default.
+*/
+
+var webpack = require('webpack');
 var glob = require('glob');
 var TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 // var path = require('path');
