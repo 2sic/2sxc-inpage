@@ -3,6 +3,7 @@ import { hide } from '../quick-dialog/quick-dialog';
 import { isDisabled } from '../toolbar/build-toolbars';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
+import { ContextOfButton } from '../context/context-of-button';
 
 /**
  * prepare the instance so content can be added
@@ -10,7 +11,8 @@ import { saveTemplate } from './web-api-promises';
  * @param {} sxc
  * @returns {}
  */
-export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList: boolean) {
+
+export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList: boolean, context: ContextOfButton) {
   const isCreated: boolean = sxc.manage._editContext.ContentGroup.IsCreated;
   if (isCreated || !useModuleList) return $.when(null);
   // return persistTemplate(sxc, null);
@@ -25,7 +27,7 @@ export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList
   // if (groupExistsAndTemplateUnchanged) return $.when(null);
 
   // persist the template
-  return updateTemplate(sxc, templateId, true);
+  return updateTemplate(sxc, templateId, true, context);
 }
 
 /**
@@ -34,14 +36,15 @@ export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList
  * @param {*} templateId
  * @param {*} forceCreate
  */
-export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean) {
+export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean, context: ContextOfButton) {
   const contentGroup: ContentGroup = sxc.manage._editContext.ContentGroup;
   const showingAjaxPreview = isDisabled(sxc);
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
   // or just reset it, so it picks up the right values again ?
-  return updateTemplate(sxc, templateId, forceCreate)
+  return updateTemplate(sxc, templateId, forceCreate, context)
     .then(() => {
+      
       hide();
 
       // if it didn't have content, then it only has now...
@@ -56,9 +59,11 @@ export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId:
 /**
  * Update the template.
  */
-export function updateTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean) {
+export function updateTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean, context: ContextOfButton) {
+
   return saveTemplate(sxc, templateId, forceCreate)
-    .then((data: any, textStatus: any, xhr: any) => {
+    .then(function (data: any, textStatus: any, xhr: any) {
+      
 
       // error handling
       if (xhr.status !== 200) return alert('error - result not ok, was not able to create ContentGroup');
@@ -69,6 +74,6 @@ export function updateTemplate(sxc: SxcInstanceWithInternals, templateId: number
       const newGuid: string = data.replace(/[\",\']/g, '');
 
       if (console) console.log(`created content group {${newGuid}}`);
-      sxc.manage._updateContentGroupGuid(newGuid);
+      sxc.manage._updateContentGroupGuid(newGuid, context);
     });
 }

@@ -330,7 +330,7 @@ function getContextFromEditContext(editContext) {
         contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
         contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
         contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId;
-        contextOfButton.app.guid = editContext.ContentGroup.Guid;
+        contextOfButton.app.guid = editContext.ContentGroup.Guid; // todo: stv, it should not be 2 guid's #1/2
     }
     if (editContext.Language) {
         // languages
@@ -356,7 +356,7 @@ function getContextFromEditContext(editContext) {
         contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
         contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
         contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
-        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
+        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // // todo: stv, it should not be 2 guid's #1/2 ... ex: InstanceConfig.contentGroupId
     }
     // *** ContextOfItem ***
     // information about the current item
@@ -752,6 +752,7 @@ function expandButtonConfig(original, sharedProps, parentLog) {
 }
 exports.expandButtonConfig = expandButtonConfig;
 function getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more) {
+    // 
     // stv: v1 code
     var partialButtonConfig = {
         icon: function (context) { return "icon-sxc-" + icon; },
@@ -1080,7 +1081,7 @@ function extendIFrameWithSxcState(iFrame) {
         run: function (verb) { return reSxc().manage.run2(context_1.context(api_1.getTag(reSxc())), verb); },
         showMessage: function (message) { return render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
         reloadAndReInit: function () { return render_1.reloadAndReInitialize(reSxc(), true, true); },
-        saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(reSxc(), templateId, false); },
+        saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(reSxc(), templateId, false, context_1.context(api_1.getTag(reSxc()))); },
         previewTemplate: function (templateId) { return render_1.ajaxLoad(reSxc(), templateId, true); },
     });
     return newFrm;
@@ -1369,7 +1370,7 @@ var web_api_promises_1 = __webpack_require__(34);
  * @param {} sxc
  * @returns {}
  */
-function prepareToAddContent(sxc, useModuleList) {
+function prepareToAddContent(sxc, useModuleList, context) {
     var isCreated = sxc.manage._editContext.ContentGroup.IsCreated;
     if (isCreated || !useModuleList)
         return $.when(null);
@@ -1382,7 +1383,7 @@ function prepareToAddContent(sxc, useModuleList) {
     // template has not changed
     // if (groupExistsAndTemplateUnchanged) return $.when(null);
     // persist the template
-    return updateTemplate(sxc, templateId, true);
+    return updateTemplate(sxc, templateId, true, context);
 }
 exports.prepareToAddContent = prepareToAddContent;
 /**
@@ -1391,12 +1392,12 @@ exports.prepareToAddContent = prepareToAddContent;
  * @param {*} templateId
  * @param {*} forceCreate
  */
-function updateTemplateFromDia(sxc, templateId, forceCreate) {
+function updateTemplateFromDia(sxc, templateId, forceCreate, context) {
     var contentGroup = sxc.manage._editContext.ContentGroup;
     var showingAjaxPreview = build_toolbars_1.isDisabled(sxc);
     // todo: should move things like remembering undo etc. back into the contentBlock state manager
     // or just reset it, so it picks up the right values again ?
-    return updateTemplate(sxc, templateId, forceCreate)
+    return updateTemplate(sxc, templateId, forceCreate, context)
         .then(function () {
         quick_dialog_1.hide();
         // if it didn't have content, then it only has now...
@@ -1412,7 +1413,7 @@ exports.updateTemplateFromDia = updateTemplateFromDia;
 /**
  * Update the template.
  */
-function updateTemplate(sxc, templateId, forceCreate) {
+function updateTemplate(sxc, templateId, forceCreate, context) {
     return web_api_promises_1.saveTemplate(sxc, templateId, forceCreate)
         .then(function (data, textStatus, xhr) {
         // error handling
@@ -1424,7 +1425,7 @@ function updateTemplate(sxc, templateId, forceCreate) {
         var newGuid = data.replace(/[\",\']/g, '');
         if (console)
             console.log("created content group {" + newGuid + "}");
-        sxc.manage._updateContentGroupGuid(newGuid);
+        sxc.manage._updateContentGroupGuid(newGuid, context);
     });
 }
 exports.updateTemplate = updateTemplate;
@@ -3428,9 +3429,12 @@ var Command = /** @class */ (function () {
         this.sxc = context.sxc.sxc;
         //this.settings = settings;
         this.items = context.button.action.params.items || []; // use predefined or create empty array
+        // todo: stv, clean this
+        var params = this.evalPropOrFunction(context.button.params, context, {});
+        var dialog = this.evalPropOrFunction(context.button.dialog, context, {});
         this.params = Object.assign({
-            dialog: context.button.dialog || context.button.action.name,
-        }, this.evalPropOrFunction(context.button.params, context, {}));
+            dialog: dialog || context.button.action.name,
+        }, params);
     }
     return Command;
 }());
@@ -3488,12 +3492,15 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
             return command_open_ng_dialog_1.commandOpenNgDialog(contextParam);
         }; // decide what action to perform
     }
-    if (context.button.uiActionOnly) {
+    if (context.button.uiActionOnly(context)) {
         return context.button.code(context);
     }
     // if more than just a UI-action, then it needs to be sure the content-group is created first
-    return templates_1.prepareToAddContent(sxc, settings.useModuleList)
-        .then(function () { return context.button.code(context); });
+    var prepare = templates_1.prepareToAddContent(sxc, settings.useModuleList, context)
+        .then(function () {
+        context.button.code(context);
+    });
+    return prepare;
 }
 exports.commandExecuteAction = commandExecuteAction;
 
@@ -4233,9 +4240,12 @@ var EditManager = /** @class */ (function () {
         /**
          * change config by replacing the guid, and refreshing dependent sub-objects
          */
-        this._updateContentGroupGuid = function (newGuid) {
+        this._updateContentGroupGuid = function (newGuid, context) {
             _this.editContext.ContentGroup.Guid = newGuid;
             _this._instanceConfig = api_1.buildInstanceConfig(_this.editContext);
+            // todo: stv, it should not be 2 guid's
+            context.app.guid = newGuid;
+            context.contentBlock.contentGroupId = newGuid;
         };
         this._getCbManipulator = function () { return manipulate_1.manipulator(_this.sxc); };
         // ReSharper restore InconsistentNaming

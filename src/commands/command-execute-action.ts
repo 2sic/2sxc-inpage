@@ -18,7 +18,6 @@ export function commandExecuteAction(
   event?: any) {
 
   // const log = new Log('Tlb.ExecAct', null, 'start');
-
   const sxc = context.sxc.sxc;
 
   let settings: Settings = eventOrSettings;
@@ -72,13 +71,16 @@ export function commandExecuteAction(
     }; // decide what action to perform
   }
 
-  if (context.button.uiActionOnly) {
+  if (context.button.uiActionOnly(context)) {
     return context.button.code(context);
   }
-
+  
   // if more than just a UI-action, then it needs to be sure the content-group is created first
-  return prepareToAddContent(
-    sxc,
-    settings.useModuleList)
-    .then(() => context.button.code(context));
+  var prepare = prepareToAddContent(sxc, settings.useModuleList, context)
+    .then(() => {
+      
+      context.button.code(context);
+    });
+
+  return prepare;
 }

@@ -94,7 +94,7 @@ export function getContextFromEditContext(editContext: DataEditContext) {
     contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
     contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
     contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId;
-    contextOfButton.app.guid = editContext.ContentGroup.Guid;
+    contextOfButton.app.guid = editContext.ContentGroup.Guid; // todo: stv, it should not be 2 guid's #1/2
   }
   if (editContext.Language) {
     // languages
@@ -121,7 +121,7 @@ export function getContextFromEditContext(editContext: DataEditContext) {
     contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
     contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
     contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
-    contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
+    contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // // todo: stv, it should not be 2 guid's #1/2 ... ex: InstanceConfig.contentGroupId
   }
 
   // *** ContextOfItem ***

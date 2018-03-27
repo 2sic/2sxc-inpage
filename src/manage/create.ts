@@ -171,9 +171,13 @@ class EditManager {
   /**
    * change config by replacing the guid, and refreshing dependent sub-objects
    */
-  _updateContentGroupGuid = (newGuid: string) => {
+  _updateContentGroupGuid = (newGuid: string, context: ContextOfButton) => {
+    
     this.editContext.ContentGroup.Guid = newGuid;
     this._instanceConfig = buildInstanceConfig(this.editContext);
+    // todo: stv, it should not be 2 guid's
+    context.app.guid = newGuid;
+    context.contentBlock.contentGroupId = newGuid;
   }
 
   _getCbManipulator = () => manipulator(this.sxc);

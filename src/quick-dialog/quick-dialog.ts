@@ -187,7 +187,7 @@ function extendIFrameWithSxcState(iFrame: any) {
       run: (verb: string) => reSxc().manage.run2(context(getTag(reSxc())), verb),
       showMessage: (message: string) => showMessage(reSxc(), `<p class="no-live-preview-available">${message}</p>`),
       reloadAndReInit: () => reloadAndReInitialize(reSxc(), true, true),
-      saveTemplate: (templateId: number) => updateTemplateFromDia(reSxc(), templateId, false),
+      saveTemplate: (templateId: number) => updateTemplateFromDia(reSxc(), templateId, false, context(getTag(reSxc()))),
       previewTemplate: (templateId: number) => ajaxLoad(reSxc(), templateId, true),
     });
   return newFrm;

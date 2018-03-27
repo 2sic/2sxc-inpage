@@ -16,11 +16,13 @@ export class Command {
     this.sxc = context.sxc.sxc;
     //this.settings = settings;
     this.items = context.button.action.params.items || []; // use predefined or create empty array
+  // todo: stv, clean this
+    var params = this.evalPropOrFunction(context.button.params, context, {});
+    var dialog = this.evalPropOrFunction(context.button.dialog, context, {});
     this.params = Object.assign({
         dialog:
-          context.button.dialog || context.button.action.name, // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-      },
-      this.evalPropOrFunction(context.button.params, context, {})) as Params;
+          dialog || context.button.action.name, // the variable used to name the dialog changed in the history of 2sxc from action to dialog
+    }, params ) as Params;
   }
 
   private evalPropOrFunction = (propOrFunction: any, context: ContextOfButton, fallback: any) => {
