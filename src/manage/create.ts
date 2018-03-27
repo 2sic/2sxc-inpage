@@ -1,6 +1,6 @@
 ﻿import { Engine, instanceEngine } from '../commands/engine';
 import { manipulator } from '../contentBlock/manipulate';
-import { context, getContextFromEditContext } from '../context/context';
+import { getContextInstance } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
@@ -39,8 +39,8 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
 
   const editContext = getEditContext(sxc);
 
-  const context = getContextFromEditContext(editContext);
-  context.sxc.sxc = sxc; // stv: this is temp
+  const context = getContextInstance(sxc);
+  // context.sxc.sxc = sxc; // stv: this is temp
   // context.element = getTag(sxc); // HTMLElement
 
   const userInfo = getUserOfEditContext(editContext);
@@ -120,13 +120,15 @@ class EditManager {
   /**
    * internal method to find out if it's in edit-mode
    */
+  // _isEditMode = () => this.editContext.Environment.IsEditable;
   _isEditMode = () => this.editContext.Environment.IsEditable;
 
   /**
    * used for various dialogues
    */
-  _reloadWithAjax = this.editContext.ContentGroup.SupportsAjax;
-
+  // _reloadWithAjax = this.editContext.ContentGroup.SupportsAjax;
+  _reloadWithAjax = this.context.app.supportsAjax;
+  
   _dialogParameters = buildNgDialogParams(this.sxc, this.editContext);
 
   /**
@@ -171,7 +173,7 @@ class EditManager {
   /**
    * change config by replacing the guid, and refreshing dependent sub-objects
    */
-  _updateContentGroupGuid = (newGuid: string, context: ContextOfButton) => {
+  _updateContentGroupGuid(context: ContextOfButton, newGuid: string) {
     context.contentBlock.contentGroupId = newGuid;
     this.editContext.ContentGroup.Guid = newGuid;
     this._instanceConfig = buildInstanceConfig(this.editContext);

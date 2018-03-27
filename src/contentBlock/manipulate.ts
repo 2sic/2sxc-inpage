@@ -68,7 +68,6 @@ function move(parentId: number, field: string, indexFrom: number, indexTo: numbe
     indexTo: indexTo,
   };
 
-  // todo: need sxc!
   return sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
     .then(() => {
       console.log('done moving!');
@@ -83,12 +82,15 @@ function move(parentId: number, field: string, indexFrom: number, indexTo: numbe
  * @param index
  */
 function remove(parentId: number, field: string, index: number): any {
+
   if (!confirm(translate('QuickInsertMenu.ConfirmDelete'))) return null;
+
   const params: ManipulateParams = {
     parentId: parentId,
     field: field,
     index: index,
   };
+
   return sxcInstance.webApi.get({ url: 'view/module/RemoveItemInList', params: params })
     .then(() => {
       console.log('done deleting!');

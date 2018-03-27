@@ -18,7 +18,7 @@ export function commandExecuteAction(
   event?: any) {
 
   // const log = new Log('Tlb.ExecAct', null, 'start');
-  const sxc = context.sxc.sxc;
+  // const sxc = context.sxc.sxc;
 
   let settings: Settings = eventOrSettings;
 
@@ -78,7 +78,7 @@ export function commandExecuteAction(
   }
   
   // if more than just a UI-action, then it needs to be sure the content-group is created first
-  var prepare = prepareToAddContent(sxc, settings.useModuleList, context)
+  var prepare = prepareToAddContent(context, settings.useModuleList)
     .then(() => {
       context.button.code(context, origEvent);
     });

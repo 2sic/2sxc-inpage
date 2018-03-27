@@ -21,7 +21,7 @@ export class MoveDown extends CommandBase {
         },
         code(context) {
           // TODO: make sure index is never greater than the amount of items
-          changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
+          changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
         },
       });
   }

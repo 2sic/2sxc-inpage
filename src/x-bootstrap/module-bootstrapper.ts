@@ -63,8 +63,8 @@ function tryShowTemplatePicker(): boolean {
   };
 
   // show the template picker of this module
-  //const module = uninitializedModules.parent('div[data-edit-context]')[0];
-  //const sxc = getSxcInstance(module);
+  const module = uninitializedModules.parent('div[data-edit-context]')[0];
+  const sxc = getSxcInstance(module);
   sxc.manage.run('layout');
   openedTemplatePickerOnce = true;
   return true;

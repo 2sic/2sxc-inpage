@@ -1,4 +1,6 @@
 ﻿import { translate } from '../translate/2sxc.translate';
+import { ContextOfButton } from '../context/context-of-button';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
@@ -7,13 +9,13 @@
 // #region contentItem Commands
 export let contentItems = {
   // delete command - try to really delete a content-item
-  delete: (sxc: SxcInstanceWithInternals, itemId: number, itemGuid: string, itemTitle: string) => {
+  delete: (context: ContextOfButton, itemId: number, itemGuid: string, itemTitle: string) => {
     // first show main warning / get ok
     const ok = confirm(translate('Delete.Confirm')
       .replace('{id}', itemId.toString())
       .replace('{title}', itemTitle));
     if (!ok) return;
-
+    const sxc = getSxcInstance(context.instance.id);
     sxc.webApi.delete(`app-content/any/${itemGuid}`, null, null, true)
       .success(() => {
         location.reload();

@@ -103,6 +103,20 @@ exports.CommandBase = CommandBase;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+function getSxcInstance(module) {
+    var sxc = $2sxc(module);
+    return sxc;
+}
+exports.getSxcInstance = getSxcInstance;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var instance_config_1 = __webpack_require__(21);
 var ng_dialog_params_1 = __webpack_require__(44);
 var qucik_dialog_config_1 = __webpack_require__(45);
@@ -178,7 +192,7 @@ exports.buildNgDialogParams = buildNgDialogParams;
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -238,156 +252,6 @@ function prepareToolbarInDom() {
         .append(exports.$quickE.modActions);
 }
 exports.prepareToolbarInDom = prepareToolbarInDom;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
-var sxc_1 = __webpack_require__(7);
-var system_context_1 = __webpack_require__(47);
-var tenant_context_1 = __webpack_require__(48);
-var user_context_1 = __webpack_require__(49);
-var content_block_context_1 = __webpack_require__(50);
-var context_of_button_1 = __webpack_require__(51);
-var app_context_1 = __webpack_require__(59);
-var instance_context_1 = __webpack_require__(60);
-var sxc_context_1 = __webpack_require__(61);
-var item_context_1 = __webpack_require__(62);
-var page_context_1 = __webpack_require__(63);
-var contextCache = {};
-/**
- * Primary API to get the context
- * @param htmlElement
- */
-function context(htmlElementOrId, cbid) {
-    var sxc = sxc_1.getSxcInstance(htmlElementOrId);
-    // get from cache for reuse
-    var contextOfButton = getContextInstance(sxc.id, cbid);
-    if (!contextOfButton) {
-        // create new context if not in cache
-        var editContext = api_1.getEditContext(sxc);
-        contextOfButton = getContextFromEditContext(editContext);
-        contextOfButton.sxc.sxc = sxc; // stv: this is temp
-        //if (typeof htmlElementOrId !== 'number') {
-        //  contextOfButton.element = htmlElementOrId as HTMLElement; // HTMLElement
-        //}
-        setContextInstance(contextOfButton, cbid);
-    }
-    return contextOfButton;
-}
-exports.context = context;
-function getContextInstance(id, cbid) {
-    var cacheKey = id + ':' + cbid;
-    if (contextCache[cacheKey]) {
-        return contextCache[cacheKey];
-    }
-    return null;
-}
-function setContextInstance(context, cbid) {
-    var cacheKey = context.instance.id + ':' + cbid;
-    contextCache[cacheKey] = context;
-}
-function getContextFromEditContext(editContext) {
-    var contextOfButton = new context_of_button_1.ContextOfButton();
-    // *** ContextOf ***
-    // this will be everything about the current system, like system / api -paths etc.
-    contextOfButton.system = new system_context_1.SystemContext();
-    if (editContext.error) {
-        contextOfButton.system.error = editContext.error.type;
-    }
-    // empty
-    // this will be something about the current tenant(the dnn portal)
-    contextOfButton.tenant = new tenant_context_1.TenantContext();
-    if (editContext.Environment) {
-        contextOfButton.tenant.id = editContext.Environment.WebsiteId; // InstanceConfig.portalId
-        contextOfButton.tenant.url = editContext.Environment.WebsiteUrl; // NgDialogParams.portalroot
-    }
-    // things about the user
-    contextOfButton.user = new user_context_1.UserContext();
-    if (editContext.User) {
-        contextOfButton.user.canDesign = editContext.User.CanDesign;
-        contextOfButton.user.canDevelop = editContext.User.CanDevelop;
-    }
-    // *** ContextOfPage ***
-    // this will be information related to the current page
-    contextOfButton.page = new page_context_1.PageContext();
-    if (editContext.Environment) {
-        contextOfButton.page.id = editContext.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
-        contextOfButton.page.url = editContext.Environment.PageUrl;
-    }
-    // *** ContextOfInstance ***
-    // this will be something about the sxc - object, version, etc.
-    contextOfButton.sxc = new sxc_context_1.SxcContext();
-    if (editContext.Environment) {
-        contextOfButton.sxc.version = editContext.Environment.SxcVersion;
-        contextOfButton.sxc.parameters = editContext.Environment.parameters;
-        contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl; // NgDialogParams.websiteroot
-    }
-    // temp
-    contextOfButton.sxc.editContext = editContext; // stv: this is temp
-    // information related to the current DNN module, incl.instanceId, etc.
-    contextOfButton.instance = new instance_context_1.InstanceContext();
-    if (editContext.Environment) {
-        contextOfButton.instance.id = editContext.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
-        contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
-    }
-    if (editContext.ContentBlock) {
-        contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed; // NgDialogParams.publishing
-    }
-    // this will be about the current app, settings of the app, app - paths, etc.
-    contextOfButton.app = new app_context_1.AppContext();
-    if (editContext.ContentGroup) {
-        contextOfButton.app.id = editContext.ContentGroup.AppId; // or NgDialogParams.appId
-        contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
-        contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
-        contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
-        contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // InstanceConfig.appPath, NgDialogParams.approot, this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-        contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
-        contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
-        contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId; // or NgDialogParams.zoneId
-    }
-    if (editContext.Language) {
-        // languages
-        contextOfButton.app.currentLanguage = editContext.Language.Current; // NgDialogParams.lang
-        contextOfButton.app.primaryLanguage = editContext.Language.Primary; // NgDialogParams.langpri
-        contextOfButton.app.allLanguages = editContext.Language.All; // or NgDialogParams.langs
-    }
-    // *** ContextOfContentBlock ***
-    // information related to the current contentBlock
-    contextOfButton.contentBlock = new content_block_context_1.ContentBlockContext();
-    if (editContext.ContentBlock) {
-        contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
-        contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
-        contextOfButton.contentBlock.showTemplatePicker = editContext.ContentBlock.ShowTemplatePicker;
-        contextOfButton.contentBlock.versioningRequirements = editContext.ContentBlock.VersioningRequirements;
-        contextOfButton.contentBlock.parentFieldName = editContext.ContentBlock.ParentFieldName;
-        contextOfButton.contentBlock.parentFieldSortOrder = editContext.ContentBlock.ParentFieldSortOrder;
-        contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage; // NgDialogParams.partOfPage
-    }
-    if (editContext.ContentGroup) {
-        contextOfButton.contentBlock.isCreated = editContext.ContentGroup.IsCreated;
-        contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
-        contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
-        contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
-        contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
-        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
-    }
-    // *** ContextOfItem ***
-    // information about the current item
-    contextOfButton.item = new item_context_1.ItemContext();
-    // empty
-    // *** ContextOfToolbar ***
-    // fill externally
-    // *** ContextOfButton ***
-    // fill externally
-    return contextOfButton;
-}
-exports.getContextFromEditContext = getContextFromEditContext;
 
 
 /***/ }),
@@ -623,20 +487,6 @@ exports.Commands = Commands;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getSxcInstance(module) {
-    var sxc = $2sxc(module);
-    return sxc;
-}
-exports.getSxcInstance = getSxcInstance;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
  * @param key
@@ -649,6 +499,172 @@ exports.translate = translate;
 
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var api_1 = __webpack_require__(2);
+var sxc_1 = __webpack_require__(1);
+var system_context_1 = __webpack_require__(47);
+var tenant_context_1 = __webpack_require__(48);
+var user_context_1 = __webpack_require__(49);
+var content_block_context_1 = __webpack_require__(50);
+var context_of_button_1 = __webpack_require__(51);
+var app_context_1 = __webpack_require__(59);
+var instance_context_1 = __webpack_require__(60);
+var sxc_context_1 = __webpack_require__(61);
+var item_context_1 = __webpack_require__(62);
+var page_context_1 = __webpack_require__(63);
+var contextCache = {};
+/**
+ * Primary API to get the context (context is cached)
+ * @param htmlElement or Id (moduleId)
+ * @param cbid
+ */
+function context(htmlElementOrId, cbid) {
+    var sxc = sxc_1.getSxcInstance(htmlElementOrId);
+    var contextOfButton = getContextInstance(sxc, cbid);
+    return contextOfButton;
+}
+exports.context = context;
+/**
+ * Create copy of context, so it can be modified before use  (contextCopy is cached)
+ * @param htmlElement or Id (moduleId)
+ * @param cbid
+ */
+function contextCopy(htmlElementOrId, cbid) {
+    var sxc = sxc_1.getSxcInstance(htmlElementOrId);
+    var contextOfButton = getContextInstance(sxc, cbid);
+    // make a copy
+    var copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
+    return copyOfContext;
+}
+exports.contextCopy = contextCopy;
+/**
+ * Return existing context from cache or create new one
+ * @param sxc
+ * @param cbid
+ */
+function getContextInstance(sxc, cbid) {
+    // get from cache for reuse
+    var cacheKey = sxc.id + ':' + cbid;
+    if (!contextCache[cacheKey]) {
+        // create new context if not in cache
+        var editContext = api_1.getEditContext(sxc);
+        contextCache[cacheKey] = createContextFromEditContext(editContext);
+        // contextOfButton.sxc.sxc = sxc; // stv: this is temp
+        //if (typeof htmlElementOrId !== 'number') {
+        //  contextOfButton.element = htmlElementOrId as HTMLElement; // HTMLElement
+        //}
+    }
+    return contextCache[cacheKey];
+}
+exports.getContextInstance = getContextInstance;
+/**
+ * create part of context object (it is not cached)
+ * @param editContext
+ */
+function createContextFromEditContext(editContext) {
+    var contextOfButton = new context_of_button_1.ContextOfButton();
+    // *** ContextOf ***
+    // this will be everything about the current system, like system / api -paths etc.
+    contextOfButton.system = new system_context_1.SystemContext();
+    if (editContext.error) {
+        contextOfButton.system.error = editContext.error.type;
+    }
+    // empty
+    // this will be something about the current tenant(the dnn portal)
+    contextOfButton.tenant = new tenant_context_1.TenantContext();
+    if (editContext.Environment) {
+        contextOfButton.tenant.id = editContext.Environment.WebsiteId; // InstanceConfig.portalId
+        contextOfButton.tenant.url = editContext.Environment.WebsiteUrl; // NgDialogParams.portalroot
+    }
+    // things about the user
+    contextOfButton.user = new user_context_1.UserContext();
+    if (editContext.User) {
+        contextOfButton.user.canDesign = editContext.User.CanDesign;
+        contextOfButton.user.canDevelop = editContext.User.CanDevelop;
+    }
+    // *** ContextOfPage ***
+    // this will be information related to the current page
+    contextOfButton.page = new page_context_1.PageContext();
+    if (editContext.Environment) {
+        contextOfButton.page.id = editContext.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
+        contextOfButton.page.url = editContext.Environment.PageUrl;
+    }
+    // *** ContextOfInstance ***
+    // this will be something about the sxc - object, version, etc.
+    contextOfButton.sxc = new sxc_context_1.SxcContext();
+    if (editContext.Environment) {
+        contextOfButton.sxc.version = editContext.Environment.SxcVersion;
+        contextOfButton.sxc.parameters = editContext.Environment.parameters;
+        contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl; // NgDialogParams.websiteroot
+    }
+    // temp
+    contextOfButton.sxc.editContext = editContext; // stv: this is temp
+    // information related to the current DNN module, incl.instanceId, etc.
+    contextOfButton.instance = new instance_context_1.InstanceContext();
+    if (editContext.Environment) {
+        contextOfButton.instance.id = editContext.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
+        contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
+    }
+    if (editContext.ContentBlock) {
+        contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed; // NgDialogParams.publishing
+    }
+    // this will be about the current app, settings of the app, app - paths, etc.
+    contextOfButton.app = new app_context_1.AppContext();
+    if (editContext.ContentGroup) {
+        contextOfButton.app.id = editContext.ContentGroup.AppId; // or NgDialogParams.appId
+        contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
+        contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
+        contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
+        contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // InstanceConfig.appPath, NgDialogParams.approot, this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+        contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
+        contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
+        contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId; // or NgDialogParams.zoneId
+    }
+    if (editContext.Language) {
+        // languages
+        contextOfButton.app.currentLanguage = editContext.Language.Current; // NgDialogParams.lang
+        contextOfButton.app.primaryLanguage = editContext.Language.Primary; // NgDialogParams.langpri
+        contextOfButton.app.allLanguages = editContext.Language.All; // or NgDialogParams.langs
+    }
+    // *** ContextOfContentBlock ***
+    // information related to the current contentBlock
+    contextOfButton.contentBlock = new content_block_context_1.ContentBlockContext();
+    if (editContext.ContentBlock) {
+        contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
+        contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
+        contextOfButton.contentBlock.showTemplatePicker = editContext.ContentBlock.ShowTemplatePicker;
+        contextOfButton.contentBlock.versioningRequirements = editContext.ContentBlock.VersioningRequirements;
+        contextOfButton.contentBlock.parentFieldName = editContext.ContentBlock.ParentFieldName;
+        contextOfButton.contentBlock.parentFieldSortOrder = editContext.ContentBlock.ParentFieldSortOrder;
+        contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage; // NgDialogParams.partOfPage
+    }
+    if (editContext.ContentGroup) {
+        contextOfButton.contentBlock.isCreated = editContext.ContentGroup.IsCreated;
+        contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
+        contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
+        contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
+        contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
+        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
+    }
+    // *** ContextOfItem ***
+    // information about the current item
+    contextOfButton.item = new item_context_1.ItemContext();
+    // empty
+    // *** ContextOfToolbar ***
+    // fill externally
+    // *** ContextOfButton ***
+    // fill externally
+    return contextOfButton;
+}
+exports.createContextFromEditContext = createContextFromEditContext;
+
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -656,6 +672,7 @@ exports.translate = translate;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var render_1 = __webpack_require__(12);
+var sxc_1 = __webpack_require__(1);
 /*
  * this is a content block in the browser
  *
@@ -668,36 +685,37 @@ var render_1 = __webpack_require__(12);
  */
 /**
  * internal helper, to do something and reload the content block
- * @param sxc
+ * @param context
  * @param url
  * @param params
  * @returns {}
  */
-function getAndReload(sxc, url, params) {
+function getAndReload(context, url, params) {
+    var sxc = sxc_1.getSxcInstance(context.instance.id);
     return sxc.webApi.get({
         url: url,
         params: params,
-    }).then(function () { render_1.reloadAndReInitialize(sxc); });
+    }).then(function () { render_1.reloadAndReInitialize(context); });
 }
 /**
  * remove an item from a list, then reload
- * @param {} sxc
+ * @param {} context
  * @param {} sortOrder
  * @returns {}
  */
-function removeFromList(sxc, sortOrder) {
-    return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder });
+function removeFromList(context, sortOrder) {
+    return getAndReload(context, 'view/module/removefromlist', { sortOrder: sortOrder });
 }
 exports.removeFromList = removeFromList;
 /**
  * change the order of an item in a list, then reload
- * @param {} sxc
+ * @param {} context
  * @param {} initOrder
  * @param {} newOrder
  * @returns {}
  */
-function changeOrder(sxc, initOrder, newOrder) {
-    return getAndReload(sxc, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
+function changeOrder(context, initOrder, newOrder) {
+    return getAndReload(context, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
 }
 exports.changeOrder = changeOrder;
 /**
@@ -706,8 +724,8 @@ exports.changeOrder = changeOrder;
  * @param {} sortOrder
  * @returns {}
  */
-function addItem(sxc, sortOrder) {
-    return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder });
+function addItem(context, sortOrder) {
+    return getAndReload(context, 'view/module/additem', { sortOrder: sortOrder });
 }
 exports.addItem = addItem;
 /**
@@ -717,8 +735,8 @@ exports.addItem = addItem;
  * @param {} sortOrder
  * @returns {}
  */
-function publish(sxc, part, sortOrder) {
-    return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder });
+function publish(context, part, sortOrder) {
+    return getAndReload(context, 'view/module/publish', { part: part, sortOrder: sortOrder });
 }
 exports.publish = publish;
 /**
@@ -727,8 +745,8 @@ exports.publish = publish;
  * @param {} entityId
  * @returns {}
  */
-function publishId(sxc, entityId) {
-    return getAndReload(sxc, 'view/module/publish', { id: entityId });
+function publishId(context, entityId) {
+    return getAndReload(context, 'view/module/publish', { id: entityId });
 }
 exports.publishId = publishId;
 
@@ -928,8 +946,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var main_content_block_1 = __webpack_require__(23);
 var render_1 = __webpack_require__(12);
 var templates_1 = __webpack_require__(14);
-var context_1 = __webpack_require__(3);
-var api_1 = __webpack_require__(1);
+var context_1 = __webpack_require__(8);
+var api_1 = __webpack_require__(2);
+var sxc_1 = __webpack_require__(1);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -972,10 +991,10 @@ function cancel() {
 exports.cancel = cancel;
 /**
  * Remember dialog state across page-reload
- * @param {Object<any>} sxc - the sxc which is persisted for
+ * @param {Object<any>} context - the sxc which is persisted for
  */
-function persistDialog(sxc) {
-    sessionStorage.setItem('dia-cbid', sxc.cbid.toString());
+function persistDialog(context) {
+    sessionStorage.setItem('dia-cbid', context.contentBlock.id.toString());
 }
 exports.persistDialog = persistDialog;
 /**
@@ -1000,11 +1019,12 @@ function getIFrame(container) {
 exports.getIFrame = getIFrame;
 /**
  * check if the dialog is showing for the current sxc-instance
- * @param {Object<any>} sxc - sxc object
+ * @param {Object<any>} context object
  * @param {string} dialogName - name of dialog
  * @returns {boolean} true if it's currently showing for this sxc-instance
  */
-function isShowing(sxc, dialogName) {
+function isShowing(context, dialogName) {
+    var sxc = sxc_1.getSxcInstance(context.instance.id);
     return exports.current // there is a current dialog
         &&
             exports.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
@@ -1014,19 +1034,21 @@ function isShowing(sxc, dialogName) {
 exports.isShowing = isShowing;
 /**
  * show / reset the current iframe to use new url and callback
- * @param {any} sxc - sxc object
+ * @param {any} context object
  * @param {string} url - url to show
  * @param {function()} closeCallback - callback event
  * @param {boolean} fullScreen - if it should open full screen
  * @param {string} [dialogName] - optional name of dialog, to check if it's already open
  * @returns {any} jquery object of the iframe
  */
-function showOrToggle(sxc, url, closeCallback, fullScreen, dialogName) {
+function showOrToggle(context, url, closeCallback, fullScreen, dialogName) {
     setSize(fullScreen);
     var iFrame = getIFrame();
     // in case it's a toggle
-    if (dialogName && isShowing(sxc, dialogName))
+    if (dialogName && isShowing(context, dialogName)) {
         return hide();
+    }
+    var sxc = sxc_1.getSxcInstance(context.instance.id);
     iFrame.rewire(sxc, closeCallback, dialogName);
     iFrame.setAttribute('src', rewriteUrl(url));
     // if the window had already been loaded, re-init
@@ -1070,6 +1092,9 @@ function extendIFrameWithSxcState(iFrame) {
             throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
         return hiddenSxc.recreate();
     }
+    function getContext() {
+        return context_1.context(api_1.getTag(reSxc()));
+    }
     var newFrm = Object.assign(iFrame, {
         closeCallback: null,
         rewire: function (sxc, callback, dialogName) {
@@ -1082,7 +1107,7 @@ function extendIFrameWithSxcState(iFrame) {
         },
         getManageInfo: function () { return reSxc().manage._dialogParameters; },
         getAdditionalDashboardConfig: function () { return reSxc().manage._quickDialogConfig; },
-        persistDia: function () { return persistDialog(reSxc()); },
+        persistDia: function () { return persistDialog(getContext()); },
         scrollToTarget: function () {
             $('body').animate({
                 scrollTop: tagModule.offset().top - scrollTopOffset,
@@ -1097,11 +1122,11 @@ function extendIFrameWithSxcState(iFrame) {
             localStorage.setItem('cancelled-dialog', 'true');
             return newFrm.closeCallback();
         },
-        run: function (verb) { return reSxc().manage.run2(context_1.context(api_1.getTag(reSxc())), verb); },
-        showMessage: function (message) { return render_1.showMessage(reSxc(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
-        reloadAndReInit: function () { return render_1.reloadAndReInitialize(reSxc(), true, true); },
-        saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(reSxc(), templateId, false, context_1.context(api_1.getTag(reSxc()))); },
-        previewTemplate: function (templateId) { return render_1.ajaxLoad(reSxc(), templateId, true); },
+        run: function (verb) { return reSxc().manage.run(verb); },
+        showMessage: function (message) { return render_1.showMessage(getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
+        reloadAndReInit: function () { return render_1.reloadAndReInitialize(getContext(), true, true); },
+        saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(getContext(), templateId, false); },
+        previewTemplate: function (templateId) { return render_1.ajaxLoad(getContext(), templateId, true); },
     });
     return newFrm;
 }
@@ -1170,12 +1195,13 @@ function watchForResize(keepWatching) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(2);
 var quick_dialog_1 = __webpack_require__(11);
 var start_1 = __webpack_require__(24);
 var build_toolbars_1 = __webpack_require__(13);
 var main_content_block_1 = __webpack_require__(23);
 var web_api_promises_1 = __webpack_require__(34);
+var sxc_1 = __webpack_require__(1);
 /*
  * this is the content block manager in the browser
  *
@@ -1189,13 +1215,14 @@ var web_api_promises_1 = __webpack_require__(34);
 /**
  * ajax update/replace the content of the content-block
  * optionally also initialize the toolbar (if not just preview)
- * @param {Object<>} sxc
+ * @param {Object<>} context
  * @param {string} newContent
  * @param {boolean} justPreview
  * @returns {}
  */
-function replaceCb(sxc, newContent, justPreview) {
+function replaceCb(context, newContent, justPreview) {
     try {
+        var sxc = sxc_1.getSxcInstance(context.instance.id);
         var newStuff = $(newContent);
         // Must disable toolbar before we attach to DOM
         if (justPreview)
@@ -1210,23 +1237,24 @@ function replaceCb(sxc, newContent, justPreview) {
 }
 /**
  * Show a message where the content of a module should be - usually as placeholder till something else happens
- * @param {object} sxc
+ * @param {object} context
  * @param {string} newContent
  * @returns {} - nothing
  */
-function showMessage(sxc, newContent) {
+function showMessage(context, newContent) {
+    var sxc = sxc_1.getSxcInstance(context.instance.id);
     $(api_1.getTag(sxc)).html(newContent);
 }
 exports.showMessage = showMessage;
 /**
  * ajax-call, then replace
- * @param sxc
+ * @param context
  * @param alternateTemplateId
  * @param justPreview
  */
-function ajaxLoad(sxc, alternateTemplateId, justPreview) {
-    return web_api_promises_1.getPreviewWithTemplate(sxc, alternateTemplateId)
-        .then(function (result) { return replaceCb(sxc, result, justPreview); })
+function ajaxLoad(context, alternateTemplateId, justPreview) {
+    return web_api_promises_1.getPreviewWithTemplate(context, alternateTemplateId)
+        .then(function (result) { return replaceCb(context, result, justPreview); })
         .then(start_1.reset); // reset quick-edit, because the config could have changed
 }
 exports.ajaxLoad = ajaxLoad;
@@ -1236,12 +1264,13 @@ exports.ajaxLoad = ajaxLoad;
  * @param forceAjax
  * @param preview
  */
-function reloadAndReInitialize(sxc, forceAjax, preview) {
+function reloadAndReInitialize(context, forceAjax, preview) {
+    var sxc = sxc_1.getSxcInstance(context.instance.id);
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !sxc.manage._reloadWithAjax)
         return window.location.reload();
     // ReSharper disable once DoubleNegationOfBoolean
-    return ajaxLoad(sxc, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
+    return ajaxLoad(context, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
         .then(function () {
         // tell Evoq that page has changed if it has changed (Ajax call)
         if (window.dnn_tabVersioningEnabled)
@@ -1269,8 +1298,8 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(3);
-var api_1 = __webpack_require__(1);
+var context_1 = __webpack_require__(8);
+var api_1 = __webpack_require__(2);
 var render_toolbar_1 = __webpack_require__(15);
 var toolbar_manager_1 = __webpack_require__(27);
 var toolbar_expand_config_1 = __webpack_require__(30);
@@ -1383,13 +1412,14 @@ var quick_dialog_1 = __webpack_require__(11);
 var build_toolbars_1 = __webpack_require__(13);
 var render_1 = __webpack_require__(12);
 var web_api_promises_1 = __webpack_require__(34);
+var sxc_1 = __webpack_require__(1);
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
  * @param {} sxc
  * @returns {}
  */
-function prepareToAddContent(sxc, useModuleList, context) {
+function prepareToAddContent(context, useModuleList) {
     var isCreated = context.contentBlock.isCreated;
     if (isCreated || !useModuleList)
         return $.when(null);
@@ -1411,7 +1441,8 @@ exports.prepareToAddContent = prepareToAddContent;
  * @param {*} templateId
  * @param {*} forceCreate
  */
-function updateTemplateFromDia(sxc, templateId, forceCreate, context) {
+function updateTemplateFromDia(context, templateId, forceCreate) {
+    var sxc = sxc_1.getSxcInstance(context.instance.id);
     var contentGroup = sxc.manage._editContext.ContentGroup;
     var showingAjaxPreview = build_toolbars_1.isDisabled(sxc);
     // todo: should move things like remembering undo etc. back into the contentBlock state manager
@@ -1426,7 +1457,7 @@ function updateTemplateFromDia(sxc, templateId, forceCreate, context) {
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
         if (showingAjaxPreview) {
-            render_1.reloadAndReInitialize(sxc);
+            render_1.reloadAndReInitialize(context);
         }
     });
 }
@@ -1435,7 +1466,7 @@ exports.updateTemplateFromDia = updateTemplateFromDia;
  * Update the template.
  */
 function updateTemplate(context, templateId, forceCreate) {
-    return web_api_promises_1.saveTemplate(context.sxc.sxc, templateId, forceCreate)
+    return web_api_promises_1.saveTemplate(context, templateId, forceCreate)
         .then(function (data, textStatus, xhr) {
         // error handling
         if (xhr.status !== 200) {
@@ -1449,7 +1480,8 @@ function updateTemplate(context, templateId, forceCreate) {
         if (console) {
             console.log("created content group {" + newGuid + "}");
         }
-        context.sxc.sxc.manage._updateContentGroupGuid(newGuid, context);
+        context.contentBlock.contentGroupId = newGuid;
+        // $2sxc._manage._updateContentGroupGuid(context, newGuid);
     });
 }
 exports.updateTemplate = updateTemplate;
@@ -1621,10 +1653,10 @@ exports.ButtonConfig = ButtonConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = __webpack_require__(7);
+var sxc_1 = __webpack_require__(1);
 var cmds_strategy_factory_1 = __webpack_require__(85);
 var mod_1 = __webpack_require__(37);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 var selectors_instance_1 = __webpack_require__(4);
 /** add a clipboard to the quick edit */
 /**
@@ -1746,8 +1778,8 @@ $('a', quick_e_1.$quickE.selected).click(function () {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(3);
-var api_1 = __webpack_require__(1);
+var context_1 = __webpack_require__(8);
+var api_1 = __webpack_require__(2);
 var command_create_1 = __webpack_require__(22);
 var command_execute_action_1 = __webpack_require__(65);
 var commands_1 = __webpack_require__(6);
@@ -1883,7 +1915,7 @@ exports._contentBlock = new MainContentBlock();
 Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = __webpack_require__(66);
 var positioning_1 = __webpack_require__(25);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 var selectors_instance_1 = __webpack_require__(4);
 function enable() {
     // build all toolbar html-elements
@@ -1957,7 +1989,7 @@ exports.reset = reset;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var coords_1 = __webpack_require__(67);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 var selectors_instance_1 = __webpack_require__(4);
 /**
  * Module with everything related to positioning the quick-edit in-page editing
@@ -2536,6 +2568,7 @@ exports.settingsForEmptyToolbar = new ToolbarSettings({
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var sxc_1 = __webpack_require__(1);
 /*
  * this is a content block in the browser
  *
@@ -2570,7 +2603,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
-function saveTemplate(sxc, templateId, forceCreateContentGroup) {
+function saveTemplate(context, templateId, forceCreateContentGroup) {
+    var sxc = sxc_1.getSxcInstance(context.instance.id);
     var params = {
         templateId: templateId,
         forceCreateContentGroup: forceCreateContentGroup,
@@ -2588,7 +2622,8 @@ exports.saveTemplate = saveTemplate;
  * @param {int} templateId
  * @returns {promise} promise with the html in the result
  */
-function getPreviewWithTemplate(sxc, templateId) {
+function getPreviewWithTemplate(context, templateId) {
+    var sxc = sxc_1.getSxcInstance(context.instance.id);
     var ec = sxc.manage._editContext;
     templateId = templateId || -1; // fallback, meaning use saved ID
     var params = {
@@ -2629,7 +2664,7 @@ function commandOpenNgDialog(context) {
     // the callback will handle events after closing the dialog
     // and reload the in-page view w/ajax or page reload
     var callback = function () {
-        render_1.reloadAndReInitialize(context.sxc.sxc);
+        render_1.reloadAndReInitialize(context);
         // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
     };
     var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
@@ -2640,7 +2675,7 @@ function commandOpenNgDialog(context) {
                 fullScreen = context.button.fullScreen(context);
             }
         }
-        return quick_dialog_1.showOrToggle(context.sxc.sxc, link, callback, fullScreen, /* settings.dialog === "item-history"*/ context.button.dialog(context).toString());
+        return quick_dialog_1.showOrToggle(context, link, callback, fullScreen, /* settings.dialog === "item-history"*/ context.button.dialog(context).toString());
     }
     var origEvent = event || window.event;
     if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
@@ -2658,7 +2693,7 @@ exports.commandOpenNgDialog = commandOpenNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = __webpack_require__(7);
+var sxc_1 = __webpack_require__(1);
 /**
  * extend the quick edit with the core commands
  */
@@ -2686,7 +2721,7 @@ exports.Cb = Cb;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(38);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 var selectors_instance_1 = __webpack_require__(4);
 var Mod = /** @class */ (function () {
     function Mod() {
@@ -2725,7 +2760,7 @@ exports.Mod = Mod;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(19);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 /**
  * module specific stuff
  */
@@ -2918,7 +2953,7 @@ exports.CommandDefinition = CommandDefinition;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(2);
 var NgDialogParams = /** @class */ (function () {
     function NgDialogParams(sxc, editContext) {
         this.zoneId = editContext.ContentGroup.ZoneId;
@@ -2950,7 +2985,7 @@ exports.NgDialogParams = NgDialogParams;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(2);
 var QucikDialogConfig = /** @class */ (function () {
     function QucikDialogConfig(editContext) {
         this.appId = editContext.ContentGroup.AppId;
@@ -3365,8 +3400,9 @@ exports.PageContext = PageContext;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
-var _2sxc_translate_1 = __webpack_require__(8);
+var api_1 = __webpack_require__(2);
+var _2sxc_translate_1 = __webpack_require__(7);
+var sxc_1 = __webpack_require__(1);
 var Command = /** @class */ (function () {
     function Command(context, ngDialogUrl, isDebug) {
         var _this = this;
@@ -3450,7 +3486,7 @@ var Command = /** @class */ (function () {
                 _this.isDebug;
             //#endregion
         };
-        this.sxc = context.sxc.sxc;
+        this.sxc = sxc_1.getSxcInstance(context.instance.id);
         // this.settings = settings;
         this.items = context.button.action.params.items || []; // use predefined or create empty array
         // todo: stv, clean this
@@ -3481,7 +3517,7 @@ var settings_adapter_1 = __webpack_require__(32);
 // ToDo: remove dead code
 function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
     // const log = new Log('Tlb.ExecAct', null, 'start');
-    var sxc = context.sxc.sxc;
+    // const sxc = context.sxc.sxc;
     var settings = eventOrSettings;
     // cycle parameters, in case it was called with 2 params only
     if (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined') {
@@ -3522,7 +3558,7 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
         return context.button.code(context, origEvent);
     }
     // if more than just a UI-action, then it needs to be sure the content-group is created first
-    var prepare = templates_1.prepareToAddContent(sxc, settings.useModuleList, context)
+    var prepare = templates_1.prepareToAddContent(context, settings.useModuleList)
         .then(function () {
         context.button.code(context, origEvent);
     });
@@ -3538,7 +3574,7 @@ exports.commandExecuteAction = commandExecuteAction;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 var selectors_instance_1 = __webpack_require__(4);
 var configAttr = 'quick-edit-config';
 /**
@@ -3960,20 +3996,22 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(8);
+var _2sxc_translate_1 = __webpack_require__(7);
+var sxc_1 = __webpack_require__(1);
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
 // #region contentItem Commands
 exports.contentItems = {
     // delete command - try to really delete a content-item
-    delete: function (sxc, itemId, itemGuid, itemTitle) {
+    delete: function (context, itemId, itemGuid, itemTitle) {
         // first show main warning / get ok
         var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
             .replace('{id}', itemId.toString())
             .replace('{title}', itemTitle));
         if (!ok)
             return;
+        var sxc = sxc_1.getSxcInstance(context.instance.id);
         sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
             .success(function () {
             location.reload();
@@ -3998,8 +4036,8 @@ exports.contentItems = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var toolbar_manager_1 = __webpack_require__(27);
-var _2sxc_translate_1 = __webpack_require__(8);
-var sxc_1 = __webpack_require__(7);
+var _2sxc_translate_1 = __webpack_require__(7);
+var sxc_1 = __webpack_require__(1);
 /** contains commands to create/move/delete a contentBlock in a page */
 var sxcInstance;
 /**
@@ -4054,7 +4092,6 @@ function move(parentId, field, indexFrom, indexTo) {
         indexFrom: indexFrom,
         indexTo: indexTo,
     };
-    // todo: need sxc!
     return sxcInstance.webApi.get({ url: 'view/module/moveiteminlist', params: params })
         .then(function () {
         console.log('done moving!');
@@ -4133,11 +4170,11 @@ exports._manage = new Manage(); // used out of this project in ToSic.Sxc.Instanc
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(20);
 var manipulate_1 = __webpack_require__(77);
-var context_1 = __webpack_require__(3);
+var context_1 = __webpack_require__(8);
 var render_button_1 = __webpack_require__(16);
 var render_toolbar_1 = __webpack_require__(15);
 var toolbar_expand_config_1 = __webpack_require__(30);
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(2);
 var local_storage_helper_1 = __webpack_require__(80);
 var button_config_adapter_1 = __webpack_require__(81);
 /**
@@ -4165,8 +4202,8 @@ exports.initInstance = initInstance;
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc) {
     var editContext = api_1.getEditContext(sxc);
-    var context = context_1.getContextFromEditContext(editContext);
-    context.sxc.sxc = sxc; // stv: this is temp
+    var context = context_1.getContextInstance(sxc);
+    // context.sxc.sxc = sxc; // stv: this is temp
     // context.element = getTag(sxc); // HTMLElement
     var userInfo = api_1.getUserOfEditContext(editContext);
     var cmdEngine = engine_1.instanceEngine(sxc);
@@ -4224,11 +4261,13 @@ var EditManager = /** @class */ (function () {
         /**
          * internal method to find out if it's in edit-mode
          */
+        // _isEditMode = () => this.editContext.Environment.IsEditable;
         this._isEditMode = function () { return _this.editContext.Environment.IsEditable; };
         /**
          * used for various dialogues
          */
-        this._reloadWithAjax = this.editContext.ContentGroup.SupportsAjax;
+        // _reloadWithAjax = this.editContext.ContentGroup.SupportsAjax;
+        this._reloadWithAjax = this.context.app.supportsAjax;
         this._dialogParameters = api_1.buildNgDialogParams(this.sxc, this.editContext);
         /**
          * used to configure buttons / toolbars
@@ -4263,14 +4302,6 @@ var EditManager = /** @class */ (function () {
             errWrapper.append(toolbar);
             $(cbTag).append(errWrapper);
         };
-        /**
-         * change config by replacing the guid, and refreshing dependent sub-objects
-         */
-        this._updateContentGroupGuid = function (newGuid, context) {
-            context.contentBlock.contentGroupId = newGuid;
-            _this.editContext.ContentGroup.Guid = newGuid;
-            _this._instanceConfig = api_1.buildInstanceConfig(_this.editContext);
-        };
         this._getCbManipulator = function () { return manipulate_1.manipulator(_this.sxc); };
         // ReSharper restore InconsistentNaming
         /**
@@ -4289,10 +4320,18 @@ var EditManager = /** @class */ (function () {
                 return false;
             }
             sessionStorage.removeItem('dia-cbid');
-            _this.run2(_this.context, 'layout');
+            _this.run('layout');
             return true;
         };
     }
+    /**
+     * change config by replacing the guid, and refreshing dependent sub-objects
+     */
+    EditManager.prototype._updateContentGroupGuid = function (context, newGuid) {
+        context.contentBlock.contentGroupId = newGuid;
+        this.editContext.ContentGroup.Guid = newGuid;
+        this._instanceConfig = api_1.buildInstanceConfig(this.editContext);
+    };
     return EditManager;
 }());
 
@@ -4501,12 +4540,11 @@ exports._translateInit = _translateInit;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(3);
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(2);
 var quick_dialog_1 = __webpack_require__(11);
 var build_toolbars_1 = __webpack_require__(13);
-var _2sxc_translate_1 = __webpack_require__(8);
-var sxc_1 = __webpack_require__(7);
+var _2sxc_translate_1 = __webpack_require__(7);
+var sxc_1 = __webpack_require__(1);
 var log_1 = __webpack_require__(5);
 // import '/2sxc-api/js/2sxc.api';
 /**
@@ -4560,7 +4598,7 @@ function tryShowTemplatePicker() {
     // show the template picker of this module
     var module = uninitializedModules.parent('div[data-edit-context]')[0];
     var sxc = sxc_1.getSxcInstance(module);
-    sxc.manage.run2(context_1.context(module), 'layout');
+    sxc.manage.run('layout');
     openedTemplatePickerOnce = true;
     return true;
 }
@@ -4606,7 +4644,7 @@ function showGlassesButtonIfUninitialized(sxci) {
     // note: title is added on mouseover, as the translation isn't ready at page-load
     var btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
     btn.on('click', function () {
-        sxci.manage.run2(context_1.context(tag), 'layout');
+        sxci.manage.run('layout');
     });
     btn.on('mouseover', function () {
         btn.title = _2sxc_translate_1.translate(btn.title);
@@ -4635,6 +4673,7 @@ var CmdsStrategyFactory = /** @class */ (function () {
         return this.cmds[cliptype];
     };
     CmdsStrategyFactory.prototype.delete = function (clip) {
+        debugger;
         return this.cmds[clip.type].delete(clip);
     };
     return CmdsStrategyFactory;
@@ -4709,7 +4748,7 @@ __webpack_require__(53);
 __webpack_require__(56);
 __webpack_require__(52);
 __webpack_require__(57);
-__webpack_require__(3);
+__webpack_require__(8);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
@@ -4740,7 +4779,7 @@ __webpack_require__(42);
 __webpack_require__(28);
 __webpack_require__(140);
 __webpack_require__(5);
-__webpack_require__(1);
+__webpack_require__(2);
 __webpack_require__(79);
 __webpack_require__(21);
 __webpack_require__(80);
@@ -4765,7 +4804,7 @@ __webpack_require__(38);
 __webpack_require__(37);
 __webpack_require__(148);
 __webpack_require__(25);
-__webpack_require__(2);
+__webpack_require__(3);
 __webpack_require__(4);
 __webpack_require__(149);
 __webpack_require__(150);
@@ -4800,9 +4839,9 @@ __webpack_require__(74);
 __webpack_require__(30);
 __webpack_require__(33);
 __webpack_require__(83);
-__webpack_require__(8);
+__webpack_require__(7);
 __webpack_require__(84);
-module.exports = __webpack_require__(7);
+module.exports = __webpack_require__(1);
 
 
 /***/ }),
@@ -4900,7 +4939,7 @@ var Add = /** @class */ (function (_super) {
                 return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
             },
             code: function (context) {
-                actions_1.addItem(context.sxc.sxc, context.button.action.params.sortOrder + 1);
+                actions_1.addItem(context, context.button.action.params.sortOrder + 1);
             },
         });
         return _this;
@@ -5218,8 +5257,8 @@ var Custom = /** @class */ (function (_super) {
                     return;
                 }
                 try {
-                    var fn = new Function('context', 'event', 'sxc', context.button.action.params.customCode); // jshint ignore:line
-                    fn(context, event, context.sxc.sxc);
+                    var fn = new Function('context', 'event', context.button.action.params.customCode); // jshint ignore:line
+                    fn(context, event);
                 }
                 catch (err) {
                     console.error('error in custom button-code: ', context.button.action.params);
@@ -5276,7 +5315,7 @@ var Delete = /** @class */ (function (_super) {
                     && (!!context.button.action.params.entityTitle));
             },
             code: function (context) {
-                item_commands_1.contentItems.delete(context.sxc.sxc, context.button.action.params.entityId, context.button.action.params.entityGuid, context.button.action.params.entityTitle);
+                item_commands_1.contentItems.delete(context, context.button.action.params.entityId, context.button.action.params.entityGuid, context.button.action.params.entityTitle);
             },
         });
         return _this;
@@ -5588,7 +5627,7 @@ var MoveDown = /** @class */ (function (_super) {
             },
             code: function (context) {
                 // TODO: make sure index is never greater than the amount of items
-                actions_1.changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
+                actions_1.changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
             },
         });
         return _this;
@@ -5634,7 +5673,7 @@ var MoveUp = /** @class */ (function (_super) {
                     (context.button.action.params.sortOrder !== 0);
             },
             code: function (context) {
-                actions_1.changeOrder(context.sxc.sxc, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
+                actions_1.changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
             },
         });
         return _this;
@@ -5719,7 +5758,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(9);
-var _2sxc_translate_1 = __webpack_require__(8);
+var _2sxc_translate_1 = __webpack_require__(7);
 var command_base_1 = __webpack_require__(0);
 /**
  * todo: shouldn't be available if changes are not allowed
@@ -5743,11 +5782,11 @@ var Publish = /** @class */ (function (_super) {
                 }
                 // if we have an entity-id, publish based on that
                 if (context.button.action.params.entityId) {
-                    return actions_1.publishId(context.sxc.sxc, context.button.action.params.entityId);
+                    return actions_1.publishId(context, context.button.action.params.entityId);
                 }
                 var part = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
                 var index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
-                return actions_1.publish(context.sxc.sxc, part, index);
+                return actions_1.publish(context, part, index);
             },
         });
         return _this;
@@ -5777,7 +5816,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(9);
-var _2sxc_translate_1 = __webpack_require__(8);
+var _2sxc_translate_1 = __webpack_require__(7);
 var command_base_1 = __webpack_require__(0);
 /**
  * remove an item from the placeholder (usually for lists)
@@ -5796,7 +5835,7 @@ var Remove = /** @class */ (function (_super) {
             },
             code: function (context) {
                 if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
-                    actions_1.removeFromList(context.sxc.sxc, context.button.action.params.sortOrder);
+                    actions_1.removeFromList(context, context.button.action.params.sortOrder);
                 }
             },
         });
@@ -6248,24 +6287,23 @@ exports.User = User;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(3);
-var api_1 = __webpack_require__(1);
-var sxc_1 = __webpack_require__(7);
+var api_1 = __webpack_require__(2);
+var sxc_1 = __webpack_require__(1);
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
 var ActionMenuMapper = /** @class */ (function () {
     function ActionMenuMapper(moduleId) {
         var _this = this;
-        this.changeLayoutOrContent = function () { _this.run(context_1.context(_this.tag), 'layout'); };
-        this.addItem = function () { _this.run(context_1.context(_this.tag), 'add', { useModuleList: true, sortOrder: 0 }); };
-        this.edit = function () { _this.run(context_1.context(_this.tag), 'edit', { useModuleList: true, sortOrder: 0 }); };
-        this.adminApp = function () { _this.run(context_1.context(_this.tag), 'app'); };
-        this.adminZone = function () { _this.run(context_1.context(_this.tag), 'zone'); };
-        this.develop = function () { _this.run(context_1.context(_this.tag), 'template-develop'); };
+        this.changeLayoutOrContent = function () { _this.run('layout'); };
+        this.addItem = function () { _this.run('add', { useModuleList: true, sortOrder: 0 }); };
+        this.edit = function () { _this.run('edit', { useModuleList: true, sortOrder: 0 }); };
+        this.adminApp = function () { _this.run('app'); };
+        this.adminZone = function () { _this.run('zone'); };
+        this.develop = function () { _this.run('template-develop'); };
         var sxc = sxc_1.getSxcInstance(moduleId);
         this.tag = api_1.getTag(sxc);
-        this.run = sxc.manage.run2;
+        this.run = sxc.manage.run;
     }
     return ActionMenuMapper;
 }());
@@ -6312,9 +6350,9 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_1 = __webpack_require__(6);
-var context_1 = __webpack_require__(3);
+var context_1 = __webpack_require__(8);
 var manage_1 = __webpack_require__(78);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 var start_1 = __webpack_require__(24);
 var _2sxc__translateInit_1 = __webpack_require__(83);
 __webpack_require__(84);
@@ -6520,7 +6558,7 @@ exports.Conf = Conf;
 Object.defineProperty(exports, "__esModule", { value: true });
 var cb_1 = __webpack_require__(36);
 var clipboard_1 = __webpack_require__(19);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 var selectors_instance_1 = __webpack_require__(4);
 /**
  * content-block specific stuff like actions
@@ -6568,7 +6606,7 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(19);
 var mod_manage_1 = __webpack_require__(38);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(3);
 var selectors_instance_1 = __webpack_require__(4);
 /**
  * module specific stuff

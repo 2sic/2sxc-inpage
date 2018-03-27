@@ -29,12 +29,12 @@ export class Publish extends CommandBase {
 
           // if we have an entity-id, publish based on that
           if (context.button.action.params.entityId) {
-            return publishId(context.sxc.sxc, context.button.action.params.entityId);
+            return publishId(context, context.button.action.params.entityId);
           }
 
           const part: string = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
           const index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
-          return publish(context.sxc.sxc, part, index);
+          return publish(context, part, index);
         },
       });
   }

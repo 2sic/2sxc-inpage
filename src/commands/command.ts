@@ -3,6 +3,7 @@ import { buildNgDialogParams } from '../manage/api';
 import { NgDialogParams } from '../manage/ng-dialog-params';
 import { translate } from '../translate/2sxc.translate';
 import { Params } from './params';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 
 export class Command {
   sxc: SxcInstanceWithInternals;
@@ -10,7 +11,7 @@ export class Command {
   params: Params;
 
   constructor(public context: ContextOfButton, public ngDialogUrl: string, public isDebug: string) {
-    this.sxc = context.sxc.sxc;
+    this.sxc = getSxcInstance(context.instance.id);
     // this.settings = settings;
     this.items = context.button.action.params.items || []; // use predefined or create empty array
     // todo: stv, clean this
