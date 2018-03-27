@@ -42,8 +42,8 @@ export function getContextFromEditContext(editContext: DataEditContext) {
   // this will be something about the current tenant(the dnn portal)
   contextOfButton.tenant = new TenantContext();
   if (editContext.Environment) {
-    contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
-    contextOfButton.tenant.url = editContext.Environment.WebsiteUrl;
+    contextOfButton.tenant.id = editContext.Environment.WebsiteId; // InstanceConfig.portalId
+    contextOfButton.tenant.url = editContext.Environment.WebsiteUrl; // NgDialogParams.portalroot
   }
 
   // things about the user
@@ -57,7 +57,7 @@ export function getContextFromEditContext(editContext: DataEditContext) {
   // this will be information related to the current page
   contextOfButton.page = new PageContext();
   if (editContext.Environment) {
-    contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
+    contextOfButton.page.id = editContext.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
     contextOfButton.page.url = editContext.Environment.PageUrl;
   }
 
@@ -67,7 +67,7 @@ export function getContextFromEditContext(editContext: DataEditContext) {
   if (editContext.Environment) {
     contextOfButton.sxc.version = editContext.Environment.SxcVersion;
     contextOfButton.sxc.parameters = editContext.Environment.parameters;
-    contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl;
+    contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl;// NgDialogParams.websiteroot
   }
 
   // temp
@@ -76,44 +76,43 @@ export function getContextFromEditContext(editContext: DataEditContext) {
   // information related to the current DNN module, incl.instanceId, etc.
   contextOfButton.instance = new InstanceContext();
   if (editContext.Environment) {
-    contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
+    contextOfButton.instance.id = editContext.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
     contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
   }
   if (editContext.ContentBlock) {
-    contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;
+    contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;// NgDialogParams.publishing
   }
 
   // this will be about the current app, settings of the app, app - paths, etc.
   contextOfButton.app = new AppContext();
   if (editContext.ContentGroup) {
-    contextOfButton.app.id = editContext.ContentGroup.AppId;
+    contextOfButton.app.id = editContext.ContentGroup.AppId; // or NgDialogParams.appId
     contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
     contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
     contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
-    contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // ex: InstanceConfig.appPath
+    contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // InstanceConfig.appPath, NgDialogParams.approot, this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
     contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
     contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
-    contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId;
-    contextOfButton.app.guid = editContext.ContentGroup.Guid; // todo: stv, it should not be 2 guid's #1/2
+    contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId; // or NgDialogParams.zoneId
   }
   if (editContext.Language) {
     // languages
-    contextOfButton.app.currentLanguage = editContext.Language.Current;
-    contextOfButton.app.primaryLanguage = editContext.Language.Primary;
-    contextOfButton.app.allLanguages = editContext.Language.All;
+    contextOfButton.app.currentLanguage = editContext.Language.Current;  // NgDialogParams.lang
+    contextOfButton.app.primaryLanguage = editContext.Language.Primary; // NgDialogParams.langpri
+    contextOfButton.app.allLanguages = editContext.Language.All; // or NgDialogParams.langs
   }
 
   // *** ContextOfContentBlock ***
   // information related to the current contentBlock
   contextOfButton.contentBlock = new ContentBlockContext();
   if (editContext.ContentBlock) {
-    contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // ex: InstanceConfig.cbid
+    contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
     contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
     contextOfButton.contentBlock.showTemplatePicker = editContext.ContentBlock.ShowTemplatePicker;
     contextOfButton.contentBlock.versioningRequirements = editContext.ContentBlock.VersioningRequirements;
     contextOfButton.contentBlock.parentFieldName = editContext.ContentBlock.ParentFieldName;
     contextOfButton.contentBlock.parentFieldSortOrder = editContext.ContentBlock.ParentFieldSortOrder;
-    contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage;
+    contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage;// NgDialogParams.partOfPage
   }
   if (editContext.ContentGroup) {
     contextOfButton.contentBlock.isCreated = editContext.ContentGroup.IsCreated;
@@ -121,7 +120,7 @@ export function getContextFromEditContext(editContext: DataEditContext) {
     contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
     contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
     contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
-    contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // // todo: stv, it should not be 2 guid's #1/2 ... ex: InstanceConfig.contentGroupId
+    contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
   }
 
   // *** ContextOfItem ***

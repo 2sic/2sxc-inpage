@@ -11,7 +11,6 @@ export class AppContext {
   supportsAjax: boolean;
   zoneId: number;
   id: number; // appId
-  guid: string;
   // languages
   currentLanguage: string;
   primaryLanguage: string;

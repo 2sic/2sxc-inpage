@@ -172,12 +172,9 @@ class EditManager {
    * change config by replacing the guid, and refreshing dependent sub-objects
    */
   _updateContentGroupGuid = (newGuid: string, context: ContextOfButton) => {
-    
+    context.contentBlock.contentGroupId = newGuid;
     this.editContext.ContentGroup.Guid = newGuid;
     this._instanceConfig = buildInstanceConfig(this.editContext);
-    // todo: stv, it should not be 2 guid's
-    context.app.guid = newGuid;
-    context.contentBlock.contentGroupId = newGuid;
   }
 
   _getCbManipulator = () => manipulator(this.sxc);
@@ -187,17 +184,24 @@ class EditManager {
    * init this object
    */
   init = () => {
-    //const tag = getTag(this.sxc);
+    // const tag = getTag(this.sxc);
     // enhance UI in case there are known errors / issues
-    if (this.editContext.error.type)
+    if (this.editContext.error.type) {
       this._handleErrors(this.editContext.error.type, this.context.element);
+    }
 
     // todo: move this to dialog-handling
     // display the dialog
     const openDialogId = LocalStorageHelper.getItemValue<number>('dia-cbid');
-    if (this.editContext.error.type || !openDialogId || openDialogId !== this.sxc.cbid) return false;
+
+    if (this.editContext.error.type || !openDialogId || openDialogId !== this.sxc.cbid) {
+      return false;
+    }
+
     sessionStorage.removeItem('dia-cbid');
+
     this.run2(this.context, 'layout');
+
     return true;
   }
 

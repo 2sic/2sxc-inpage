@@ -1,9 +1,9 @@
-﻿import { ContentGroup } from '../data-edit-context/content-group';
+﻿import { ContextOfButton } from '../context/context-of-button';
+import { ContentGroup } from '../data-edit-context/content-group';
 import { hide } from '../quick-dialog/quick-dialog';
 import { isDisabled } from '../toolbar/build-toolbars';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
-import { ContextOfButton } from '../context/context-of-button';
 
 /**
  * prepare the instance so content can be added
@@ -13,7 +13,7 @@ import { ContextOfButton } from '../context/context-of-button';
  */
 
 export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList: boolean, context: ContextOfButton) {
-  const isCreated: boolean = sxc.manage._editContext.ContentGroup.IsCreated;
+  const isCreated: boolean = context.contentBlock.isCreated;
   if (isCreated || !useModuleList) return $.when(null);
   // return persistTemplate(sxc, null);
   // let manage = sxc.manage;
@@ -21,13 +21,13 @@ export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList
   // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
   // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
 
-  const templateId: number = sxc.manage._editContext.ContentGroup.TemplateId;
+  const templateId: number = context.contentBlock.templateId;
 
   // template has not changed
   // if (groupExistsAndTemplateUnchanged) return $.when(null);
 
   // persist the template
-  return updateTemplate(sxc, templateId, true, context);
+  return updateTemplate(context, templateId, true);
 }
 
 /**
@@ -42,38 +42,47 @@ export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId:
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
   // or just reset it, so it picks up the right values again ?
-  return updateTemplate(sxc, templateId, forceCreate, context)
+  return updateTemplate(context, templateId, forceCreate)
     .then(() => {
       
       hide();
 
       // if it didn't have content, then it only has now...
-      if (!contentGroup.HasContent) contentGroup.HasContent = forceCreate;
+      if (!contentGroup.HasContent) {
+        contentGroup.HasContent = forceCreate;
+      }
 
       // only reload on ajax, not on app as that was already re-loaded on the preview
       // necessary to show the original template again
-      if (showingAjaxPreview) reloadAndReInitialize(sxc);
+      if (showingAjaxPreview) {
+        reloadAndReInitialize(sxc);
+      }
     });
 }
 
 /**
  * Update the template.
  */
-export function updateTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean, context: ContextOfButton) {
+export function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean) {
 
-  return saveTemplate(sxc, templateId, forceCreate)
+  return saveTemplate(context.sxc.sxc, templateId, forceCreate)
     .then(function (data: any, textStatus: any, xhr: any) {
-      
-
       // error handling
-      if (xhr.status !== 200) return alert('error - result not ok, was not able to create ContentGroup');
+      if (xhr.status !== 200) {
+        return alert('error - result not ok, was not able to create ContentGroup');
+      }
 
-      if (!data) return;
+      if (!data) {
+        return;
+      }
 
       // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
       const newGuid: string = data.replace(/[\",\']/g, '');
 
-      if (console) console.log(`created content group {${newGuid}}`);
-      sxc.manage._updateContentGroupGuid(newGuid, context);
+      if (console) {
+        console.log(`created content group {${newGuid}}`);
+      }
+
+      context.sxc.sxc.manage._updateContentGroupGuid(newGuid, context);
     });
 }

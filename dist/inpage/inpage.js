@@ -284,8 +284,8 @@ function getContextFromEditContext(editContext) {
     // this will be something about the current tenant(the dnn portal)
     contextOfButton.tenant = new tenant_context_1.TenantContext();
     if (editContext.Environment) {
-        contextOfButton.tenant.id = editContext.Environment.WebsiteId; // ex: InstanceConfig.portalId
-        contextOfButton.tenant.url = editContext.Environment.WebsiteUrl;
+        contextOfButton.tenant.id = editContext.Environment.WebsiteId; // InstanceConfig.portalId
+        contextOfButton.tenant.url = editContext.Environment.WebsiteUrl; // NgDialogParams.portalroot
     }
     // things about the user
     contextOfButton.user = new user_context_1.UserContext();
@@ -297,7 +297,7 @@ function getContextFromEditContext(editContext) {
     // this will be information related to the current page
     contextOfButton.page = new page_context_1.PageContext();
     if (editContext.Environment) {
-        contextOfButton.page.id = editContext.Environment.PageId; // ex: InstanceConfig.tabId
+        contextOfButton.page.id = editContext.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
         contextOfButton.page.url = editContext.Environment.PageUrl;
     }
     // *** ContextOfInstance ***
@@ -306,49 +306,48 @@ function getContextFromEditContext(editContext) {
     if (editContext.Environment) {
         contextOfButton.sxc.version = editContext.Environment.SxcVersion;
         contextOfButton.sxc.parameters = editContext.Environment.parameters;
-        contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl;
+        contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl; // NgDialogParams.websiteroot
     }
     // temp
     contextOfButton.sxc.editContext = editContext; // stv: this is temp
     // information related to the current DNN module, incl.instanceId, etc.
     contextOfButton.instance = new instance_context_1.InstanceContext();
     if (editContext.Environment) {
-        contextOfButton.instance.id = editContext.Environment.InstanceId; // ex: InstanceConfig.moduleId
+        contextOfButton.instance.id = editContext.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
         contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
     }
     if (editContext.ContentBlock) {
-        contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;
+        contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed; // NgDialogParams.publishing
     }
     // this will be about the current app, settings of the app, app - paths, etc.
     contextOfButton.app = new app_context_1.AppContext();
     if (editContext.ContentGroup) {
-        contextOfButton.app.id = editContext.ContentGroup.AppId;
+        contextOfButton.app.id = editContext.ContentGroup.AppId; // or NgDialogParams.appId
         contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
         contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
         contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
-        contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // ex: InstanceConfig.appPath
+        contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // InstanceConfig.appPath, NgDialogParams.approot, this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
         contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
         contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
-        contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId;
-        contextOfButton.app.guid = editContext.ContentGroup.Guid; // todo: stv, it should not be 2 guid's #1/2
+        contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId; // or NgDialogParams.zoneId
     }
     if (editContext.Language) {
         // languages
-        contextOfButton.app.currentLanguage = editContext.Language.Current;
-        contextOfButton.app.primaryLanguage = editContext.Language.Primary;
-        contextOfButton.app.allLanguages = editContext.Language.All;
+        contextOfButton.app.currentLanguage = editContext.Language.Current; // NgDialogParams.lang
+        contextOfButton.app.primaryLanguage = editContext.Language.Primary; // NgDialogParams.langpri
+        contextOfButton.app.allLanguages = editContext.Language.All; // or NgDialogParams.langs
     }
     // *** ContextOfContentBlock ***
     // information related to the current contentBlock
     contextOfButton.contentBlock = new content_block_context_1.ContentBlockContext();
     if (editContext.ContentBlock) {
-        contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // ex: InstanceConfig.cbid
+        contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
         contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
         contextOfButton.contentBlock.showTemplatePicker = editContext.ContentBlock.ShowTemplatePicker;
         contextOfButton.contentBlock.versioningRequirements = editContext.ContentBlock.VersioningRequirements;
         contextOfButton.contentBlock.parentFieldName = editContext.ContentBlock.ParentFieldName;
         contextOfButton.contentBlock.parentFieldSortOrder = editContext.ContentBlock.ParentFieldSortOrder;
-        contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage;
+        contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage; // NgDialogParams.partOfPage
     }
     if (editContext.ContentGroup) {
         contextOfButton.contentBlock.isCreated = editContext.ContentGroup.IsCreated;
@@ -356,7 +355,7 @@ function getContextFromEditContext(editContext) {
         contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
         contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
         contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
-        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // // todo: stv, it should not be 2 guid's #1/2 ... ex: InstanceConfig.contentGroupId
+        contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
     }
     // *** ContextOfItem ***
     // information about the current item
@@ -1371,7 +1370,7 @@ var web_api_promises_1 = __webpack_require__(34);
  * @returns {}
  */
 function prepareToAddContent(sxc, useModuleList, context) {
-    var isCreated = sxc.manage._editContext.ContentGroup.IsCreated;
+    var isCreated = context.contentBlock.isCreated;
     if (isCreated || !useModuleList)
         return $.when(null);
     // return persistTemplate(sxc, null);
@@ -1379,11 +1378,11 @@ function prepareToAddContent(sxc, useModuleList, context) {
     // let contentGroup = manage._editContext.ContentGroup;
     // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
     // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
-    var templateId = sxc.manage._editContext.ContentGroup.TemplateId;
+    var templateId = context.contentBlock.templateId;
     // template has not changed
     // if (groupExistsAndTemplateUnchanged) return $.when(null);
     // persist the template
-    return updateTemplate(sxc, templateId, true, context);
+    return updateTemplate(context, templateId, true);
 }
 exports.prepareToAddContent = prepareToAddContent;
 /**
@@ -1397,35 +1396,40 @@ function updateTemplateFromDia(sxc, templateId, forceCreate, context) {
     var showingAjaxPreview = build_toolbars_1.isDisabled(sxc);
     // todo: should move things like remembering undo etc. back into the contentBlock state manager
     // or just reset it, so it picks up the right values again ?
-    return updateTemplate(sxc, templateId, forceCreate, context)
+    return updateTemplate(context, templateId, forceCreate)
         .then(function () {
         quick_dialog_1.hide();
         // if it didn't have content, then it only has now...
-        if (!contentGroup.HasContent)
+        if (!contentGroup.HasContent) {
             contentGroup.HasContent = forceCreate;
+        }
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
-        if (showingAjaxPreview)
+        if (showingAjaxPreview) {
             render_1.reloadAndReInitialize(sxc);
+        }
     });
 }
 exports.updateTemplateFromDia = updateTemplateFromDia;
 /**
  * Update the template.
  */
-function updateTemplate(sxc, templateId, forceCreate, context) {
-    return web_api_promises_1.saveTemplate(sxc, templateId, forceCreate)
+function updateTemplate(context, templateId, forceCreate) {
+    return web_api_promises_1.saveTemplate(context.sxc.sxc, templateId, forceCreate)
         .then(function (data, textStatus, xhr) {
         // error handling
-        if (xhr.status !== 200)
+        if (xhr.status !== 200) {
             return alert('error - result not ok, was not able to create ContentGroup');
-        if (!data)
+        }
+        if (!data) {
             return;
+        }
         // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
         var newGuid = data.replace(/[\",\']/g, '');
-        if (console)
+        if (console) {
             console.log("created content group {" + newGuid + "}");
-        sxc.manage._updateContentGroupGuid(newGuid, context);
+        }
+        context.sxc.sxc.manage._updateContentGroupGuid(newGuid, context);
     });
 }
 exports.updateTemplate = updateTemplate;
@@ -4241,11 +4245,9 @@ var EditManager = /** @class */ (function () {
          * change config by replacing the guid, and refreshing dependent sub-objects
          */
         this._updateContentGroupGuid = function (newGuid, context) {
+            context.contentBlock.contentGroupId = newGuid;
             _this.editContext.ContentGroup.Guid = newGuid;
             _this._instanceConfig = api_1.buildInstanceConfig(_this.editContext);
-            // todo: stv, it should not be 2 guid's
-            context.app.guid = newGuid;
-            context.contentBlock.contentGroupId = newGuid;
         };
         this._getCbManipulator = function () { return manipulate_1.manipulator(_this.sxc); };
         // ReSharper restore InconsistentNaming
@@ -4253,15 +4255,17 @@ var EditManager = /** @class */ (function () {
          * init this object
          */
         this.init = function () {
-            //const tag = getTag(this.sxc);
+            // const tag = getTag(this.sxc);
             // enhance UI in case there are known errors / issues
-            if (_this.editContext.error.type)
+            if (_this.editContext.error.type) {
                 _this._handleErrors(_this.editContext.error.type, _this.context.element);
+            }
             // todo: move this to dialog-handling
             // display the dialog
             var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
-            if (_this.editContext.error.type || !openDialogId || openDialogId !== _this.sxc.cbid)
+            if (_this.editContext.error.type || !openDialogId || openDialogId !== _this.sxc.cbid) {
                 return false;
+            }
             sessionStorage.removeItem('dia-cbid');
             _this.run2(_this.context, 'layout');
             return true;
