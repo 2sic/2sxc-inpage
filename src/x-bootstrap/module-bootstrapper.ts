@@ -65,7 +65,7 @@ function tryShowTemplatePicker(): boolean {
   // show the template picker of this module
   const module = uninitializedModules.parent('div[data-edit-context]')[0];
   const sxc = getSxcInstance(module);
-  sxc.manage.run2(context(module), 'layout');
+  sxc.manage.run('layout');
   openedTemplatePickerOnce = true;
   return true;
 }
@@ -119,7 +119,7 @@ function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals) {
 
   btn.on('click',
     (): void => {
-      sxci.manage.run2(context(tag), 'layout');
+      sxci.manage.run('layout');
     });
 
   btn.on('mouseover',

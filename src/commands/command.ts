@@ -1,28 +1,27 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
+import { buildNgDialogParams } from '../manage/api';
 import { NgDialogParams } from '../manage/ng-dialog-params';
 import { translate } from '../translate/2sxc.translate';
 import { Params } from './params';
-import { Settings } from './settings';
-import { ButtonConfig } from '../toolbar/button/button-config';
-import { buildNgDialogParams } from '../manage/api';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 
 export class Command {
   sxc: SxcInstanceWithInternals;
   items: any;
   params: Params;
 
-
   constructor(public context: ContextOfButton, public ngDialogUrl: string, public isDebug: string) {
-    this.sxc = context.sxc.sxc;
-    //this.settings = settings;
+    this.sxc = getSxcInstance(context.instance.id);
+    // this.settings = settings;
     this.items = context.button.action.params.items || []; // use predefined or create empty array
-  // todo: stv, clean this
+    // todo: stv, clean this
     var params = this.evalPropOrFunction(context.button.params, context, {});
     var dialog = this.evalPropOrFunction(context.button.dialog, context, {});
     this.params = Object.assign({
-        dialog:
-          dialog || context.button.action.name, // the variable used to name the dialog changed in the history of 2sxc from action to dialog
-    }, params ) as Params;
+      dialog:
+        dialog || context.button.action.name, // the variable used to name the dialog changed in the history of 2sxc from action to dialog
+    }, params) as Params;
+
   }
 
   private evalPropOrFunction = (propOrFunction: any, context: ContextOfButton, fallback: any) => {

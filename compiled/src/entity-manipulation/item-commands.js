@@ -1,19 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
+var sxc_1 = require("../x-bootstrap/sxc");
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
 // #region contentItem Commands
 exports.contentItems = {
     // delete command - try to really delete a content-item
-    delete: function (sxc, itemId, itemGuid, itemTitle) {
+    delete: function (context, itemId, itemGuid, itemTitle) {
         // first show main warning / get ok
         var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
             .replace('{id}', itemId.toString())
             .replace('{title}', itemTitle));
         if (!ok)
             return;
+        var sxc = sxc_1.getSxcInstance(context.instance.id);
         sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
             .success(function () {
             location.reload();

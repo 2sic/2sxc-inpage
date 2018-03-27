@@ -12,8 +12,8 @@ export class More extends CommandBase {
       true,
       false,
       {
-        code(context) {
-          const btn: any = $(context.element);
+        code(context, event) {
+          const btn: any = $(event.target);
           const fullMenu: any = btn.closest('ul.sc-menu');
           const oldState = Number(fullMenu.attr('data-state') || 0);
           const max = Number(fullMenu.attr('group-count'));

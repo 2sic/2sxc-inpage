@@ -12,23 +12,56 @@ import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 
+var contextCache: any = {};
 /**
- * Primary API to get the context
- * @param htmlElement
+ * Primary API to get the context (context is cached)
+ * @param htmlElement or Id (moduleId)
+ * @param cbid
  */
-export function context(htmlElement: HTMLElement): ContextOfButton {
-  const sxc = getSxcInstance(htmlElement);
-  
-  const editContext = getEditContext(sxc);
-  const contextOfButton = getContextFromEditContext(editContext);
-
-  contextOfButton.sxc.sxc = sxc; // stv: this is temp
-  contextOfButton.element = htmlElement; // HTMLElement
-
+export function context(htmlElementOrId: HTMLElement | number, cbid?: number): ContextOfButton {
+  const sxc = getSxcInstance(htmlElementOrId);
+  const contextOfButton = getContextInstance(sxc, cbid);
   return contextOfButton;
 }
 
-export function getContextFromEditContext(editContext: DataEditContext) {
+/**
+ * Create copy of context, so it can be modified before use  (contextCopy is cached)
+ * @param htmlElement or Id (moduleId)
+ * @param cbid
+ */
+export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextOfButton {
+  const sxc = getSxcInstance(htmlElementOrId);
+  const contextOfButton = getContextInstance(sxc, cbid);
+  // make a copy
+  const copyOfContext = JSON.parse(JSON.stringify(contextOfButton)); 
+  return copyOfContext;
+}
+
+/**
+ * Return existing context from cache or create new one
+ * @param sxc
+ * @param cbid
+ */
+export function getContextInstance(sxc: SxcInstanceWithInternals, cbid?: number): ContextOfButton {
+  // get from cache for reuse
+  const cacheKey = sxc.id + ':' + cbid;
+  if (!contextCache[cacheKey]) {
+    // create new context if not in cache
+    const editContext = getEditContext(sxc);
+    contextCache[cacheKey] = createContextFromEditContext(editContext);
+    // contextOfButton.sxc.sxc = sxc; // stv: this is temp
+    //if (typeof htmlElementOrId !== 'number') {
+    //  contextOfButton.element = htmlElementOrId as HTMLElement; // HTMLElement
+    //}
+  }
+  return contextCache[cacheKey];
+}
+
+/**
+ * create part of context object (it is not cached)
+ * @param editContext
+ */
+export function createContextFromEditContext(editContext: DataEditContext) {
   const contextOfButton = new ContextOfButton();
 
   // *** ContextOf ***
@@ -136,3 +169,4 @@ export function getContextFromEditContext(editContext: DataEditContext) {
 
   return contextOfButton;
 }
+

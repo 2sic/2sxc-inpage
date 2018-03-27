@@ -23,7 +23,7 @@ export class Remove extends CommandBase {
         },
         code(context) {
           if (confirm(translate('Toolbar.ConfirmRemove'))) {
-            removeFromList(context.sxc.sxc, context.button.action.params.sortOrder);
+            removeFromList(context, context.button.action.params.sortOrder);
           }
         },
       });

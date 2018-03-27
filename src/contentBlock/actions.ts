@@ -1,5 +1,7 @@
 ﻿import { ActionParams } from './action-params';
 import { reloadAndReInitialize } from './render';
+import { ContextOfButton } from '../context/context-of-button';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 /*
  * this is a content block in the browser
  *
@@ -13,37 +15,40 @@ import { reloadAndReInitialize } from './render';
 
 /**
  * internal helper, to do something and reload the content block
- * @param sxc
+ * @param context
  * @param url
  * @param params
  * @returns {}
  */
-function getAndReload(sxc: SxcInstanceWithInternals, url: string, params: ActionParams): any {
+function getAndReload(context: ContextOfButton, url: string, params: ActionParams): any {
+  const sxc = getSxcInstance(context.instance.id);
   return sxc.webApi.get({
     url: url,
     params: params,
-  }).then(() => { reloadAndReInitialize(sxc); });
+  }).then(() => { reloadAndReInitialize(context); });
 }
 
 /**
  * remove an item from a list, then reload
- * @param {} sxc
+ * @param {} context
  * @param {} sortOrder
  * @returns {}
  */
-export function removeFromList(sxc: SxcInstanceWithInternals, sortOrder: number): any {
-  return getAndReload(sxc, 'view/module/removefromlist', { sortOrder: sortOrder } as ActionParams);
+export function removeFromList(context: ContextOfButton, sortOrder: number): any {
+  return getAndReload(context,
+    'view/module/removefromlist',
+    { sortOrder: sortOrder } as ActionParams);
 }
 
 /**
  * change the order of an item in a list, then reload
- * @param {} sxc
+ * @param {} context
  * @param {} initOrder
  * @param {} newOrder
  * @returns {}
  */
-export function changeOrder(sxc: SxcInstanceWithInternals, initOrder: number, newOrder: number): any {
-  return getAndReload(sxc,
+export function changeOrder(context: ContextOfButton, initOrder: number, newOrder: number): any {
+  return getAndReload(context,
     'view/module/changeorder',
     { sortOrder: initOrder, destinationSortOrder: newOrder } as ActionParams);
 }
@@ -54,8 +59,10 @@ export function changeOrder(sxc: SxcInstanceWithInternals, initOrder: number, ne
  * @param {} sortOrder
  * @returns {}
  */
-export function addItem(sxc: SxcInstanceWithInternals, sortOrder: number): any {
-  return getAndReload(sxc, 'view/module/additem', { sortOrder: sortOrder } as ActionParams);
+export function addItem(context: ContextOfButton, sortOrder: number): any {
+  return getAndReload(context,
+    'view/module/additem',
+    { sortOrder: sortOrder } as ActionParams);
 }
 
 /**
@@ -65,8 +72,10 @@ export function addItem(sxc: SxcInstanceWithInternals, sortOrder: number): any {
  * @param {} sortOrder
  * @returns {}
  */
-export function publish(sxc: SxcInstanceWithInternals, part: string, sortOrder: number): any {
-  return getAndReload(sxc, 'view/module/publish', { part: part, sortOrder: sortOrder } as ActionParams);
+export function publish(context: ContextOfButton, part: string, sortOrder: number): any {
+  return getAndReload(context,
+    'view/module/publish',
+    { part: part, sortOrder: sortOrder } as ActionParams);
 }
 
 /**
@@ -75,6 +84,8 @@ export function publish(sxc: SxcInstanceWithInternals, part: string, sortOrder: 
  * @param {} entityId
  * @returns {}
  */
-export function publishId(sxc: SxcInstanceWithInternals, entityId: number): any {
-  return getAndReload(sxc, 'view/module/publish', { id: entityId } as ActionParams);
+export function publishId(context: ContextOfButton, entityId: number): any {
+  return getAndReload(context,
+    'view/module/publish',
+    { id: entityId } as ActionParams);
 }

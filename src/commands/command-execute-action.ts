@@ -18,7 +18,7 @@ export function commandExecuteAction(
   event?: any) {
 
   // const log = new Log('Tlb.ExecAct', null, 'start');
-  const sxc = context.sxc.sxc;
+  // const sxc = context.sxc.sxc;
 
   let settings: Settings = eventOrSettings;
 
@@ -59,12 +59,14 @@ export function commandExecuteAction(
     newButtonAction.commandDefinition.buttonConfig,
     settingsAdapter(settings)) as ButtonConfig; // merge conf & settings, but settings has higher priority
 
+  // todo: stv, fix this in case that is function
   if (!context.button.dialog) {
     context.button.dialog = (contextParam: ContextOfButton) => {
       return name;
     }; // old code uses "action" as the parameter, now use verb ? dialog
   }
 
+  // todo: stv, fix this in case that is function
   if (!context.button.code) {
     context.button.code = (contextParam: ContextOfButton) => {
       return commandOpenNgDialog(contextParam);
@@ -72,14 +74,13 @@ export function commandExecuteAction(
   }
 
   if (context.button.uiActionOnly(context)) {
-    return context.button.code(context);
+    return context.button.code(context, origEvent);
   }
   
   // if more than just a UI-action, then it needs to be sure the content-group is created first
-  var prepare = prepareToAddContent(sxc, settings.useModuleList, context)
+  var prepare = prepareToAddContent(context, settings.useModuleList)
     .then(() => {
-      
-      context.button.code(context);
+      context.button.code(context, origEvent);
     });
 
   return prepare;

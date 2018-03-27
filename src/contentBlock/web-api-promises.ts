@@ -1,4 +1,6 @@
 ﻿import { WebApiParams } from './web-api-params';
+import { ContextOfButton } from '../context/context-of-button';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 /*
  * this is a content block in the browser
  *
@@ -36,7 +38,8 @@
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
-export function saveTemplate(sxc: SxcInstanceWithInternals, templateId: number, forceCreateContentGroup: boolean): any {
+export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): any {
+  const sxc = getSxcInstance(context.instance.id);
   const params: WebApiParams = {
     templateId: templateId,
     forceCreateContentGroup: forceCreateContentGroup,
@@ -54,7 +57,8 @@ export function saveTemplate(sxc: SxcInstanceWithInternals, templateId: number, 
  * @param {int} templateId
  * @returns {promise} promise with the html in the result
  */
-export function getPreviewWithTemplate(sxc: SxcInstanceWithInternals, templateId: number): any {
+export function getPreviewWithTemplate(context: ContextOfButton, templateId: number): any {
+  const sxc = getSxcInstance(context.instance.id);
   const ec = sxc.manage._editContext;
   templateId = templateId || -1; // fallback, meaning use saved ID
   const params: WebApiParams = {

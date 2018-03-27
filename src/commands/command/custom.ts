@@ -19,8 +19,8 @@ export class Custom extends CommandBase {
             return;
           }
           try {
-            const fn = new Function('context', 'event', 'sxc', context.button.action.params.customCode); // jshint ignore:line
-            fn(context, event, context.sxc.sxc);
+            const fn = new Function('context', 'event', context.button.action.params.customCode); // jshint ignore:line
+            fn(context, event);
           } catch (err) {
             console.error('error in custom button-code: ', context.button.action.params);
           }

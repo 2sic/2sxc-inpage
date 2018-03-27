@@ -3,6 +3,8 @@ import { ajaxLoad, reloadAndReInitialize, showMessage } from '../contentBlock/re
 import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
 import { getTag } from '../manage/api';
+import { ContextOfButton } from '../context/context-of-button';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -47,10 +49,10 @@ export function cancel(): void {
 
 /**
  * Remember dialog state across page-reload
- * @param {Object<any>} sxc - the sxc which is persisted for
+ * @param {Object<any>} context - the sxc which is persisted for
  */
-export function persistDialog(sxc: SxcInstanceWithInternals): void {
-  sessionStorage.setItem('dia-cbid', sxc.cbid.toString());
+export function persistDialog(context: ContextOfButton): void {
+  sessionStorage.setItem('dia-cbid', context.contentBlock.id.toString());
 }
 
 /**
@@ -74,11 +76,12 @@ export function getIFrame(container?: any): any {
 
 /**
  * check if the dialog is showing for the current sxc-instance
- * @param {Object<any>} sxc - sxc object
+ * @param {Object<any>} context object
  * @param {string} dialogName - name of dialog
  * @returns {boolean} true if it's currently showing for this sxc-instance
  */
-export function isShowing(sxc: SxcInstanceWithInternals, dialogName: string): any {
+export function isShowing(context: ContextOfButton, dialogName: string): any {
+  const sxc = getSxcInstance(context.instance.id);
   return current // there is a current dialog
     &&
     current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
@@ -88,14 +91,14 @@ export function isShowing(sxc: SxcInstanceWithInternals, dialogName: string): an
 
 /**
  * show / reset the current iframe to use new url and callback
- * @param {any} sxc - sxc object
+ * @param {any} context object
  * @param {string} url - url to show
  * @param {function()} closeCallback - callback event
  * @param {boolean} fullScreen - if it should open full screen
  * @param {string} [dialogName] - optional name of dialog, to check if it's already open
  * @returns {any} jquery object of the iframe
  */
-export function showOrToggle(sxc: SxcInstanceWithInternals,
+export function showOrToggle(context: ContextOfButton,
                              url: string,
                              closeCallback: any,
                              fullScreen: boolean,
@@ -104,9 +107,10 @@ export function showOrToggle(sxc: SxcInstanceWithInternals,
   const iFrame: any = getIFrame();
 
   // in case it's a toggle
-  if (dialogName && isShowing(sxc, dialogName))
+  if (dialogName && isShowing(context, dialogName)) {
     return hide();
-
+  }
+  const sxc = getSxcInstance(context.instance.id);
   iFrame.rewire(sxc, closeCallback, dialogName);
   iFrame.setAttribute('src', rewriteUrl(url));
   // if the window had already been loaded, re-init
@@ -156,6 +160,10 @@ function extendIFrameWithSxcState(iFrame: any) {
     return hiddenSxc.recreate();
   }
 
+  function getContext(): ContextOfButton {
+    return context(getTag(reSxc()));
+  }
+
   const newFrm: any = Object.assign(iFrame,
     {
       closeCallback: null,
@@ -168,7 +176,7 @@ function extendIFrameWithSxcState(iFrame: any) {
       },
       getManageInfo: () => reSxc().manage._dialogParameters,
       getAdditionalDashboardConfig: () => reSxc().manage._quickDialogConfig,
-      persistDia: () => persistDialog(reSxc()),
+      persistDia: () => persistDialog(getContext()),
       scrollToTarget: () => {
         $('body').animate({
           scrollTop: tagModule.offset().top - scrollTopOffset,
@@ -184,11 +192,11 @@ function extendIFrameWithSxcState(iFrame: any) {
         localStorage.setItem('cancelled-dialog', 'true');
         return newFrm.closeCallback();
       },
-      run: (verb: string) => reSxc().manage.run2(context(getTag(reSxc())), verb),
-      showMessage: (message: string) => showMessage(reSxc(), `<p class="no-live-preview-available">${message}</p>`),
-      reloadAndReInit: () => reloadAndReInitialize(reSxc(), true, true),
-      saveTemplate: (templateId: number) => updateTemplateFromDia(reSxc(), templateId, false, context(getTag(reSxc()))),
-      previewTemplate: (templateId: number) => ajaxLoad(reSxc(), templateId, true),
+      run: (verb: string) => reSxc().manage.run(verb),
+      showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
+      reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
+      saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
+      previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
     });
   return newFrm;
 }

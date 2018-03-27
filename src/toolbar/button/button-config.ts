@@ -21,7 +21,7 @@ export class ButtonConfig {
     }
   }
 
-  code: (context: ContextOfButton) => void;
+  code: (context: ContextOfButton, event: any) => void;
   configureCommand: (context: ContextOfButton, cmd: Command) => void;
   dialog: (context: ContextOfButton) => string;
   disabled: (context: ContextOfButton) => boolean;

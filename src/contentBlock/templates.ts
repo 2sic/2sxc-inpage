@@ -4,6 +4,7 @@ import { hide } from '../quick-dialog/quick-dialog';
 import { isDisabled } from '../toolbar/build-toolbars';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * prepare the instance so content can be added
@@ -12,7 +13,7 @@ import { saveTemplate } from './web-api-promises';
  * @returns {}
  */
 
-export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList: boolean, context: ContextOfButton) {
+export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean) {
   const isCreated: boolean = context.contentBlock.isCreated;
   if (isCreated || !useModuleList) return $.when(null);
   // return persistTemplate(sxc, null);
@@ -36,7 +37,8 @@ export function prepareToAddContent(sxc: SxcInstanceWithInternals, useModuleList
  * @param {*} templateId
  * @param {*} forceCreate
  */
-export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId: number, forceCreate: boolean, context: ContextOfButton) {
+export function updateTemplateFromDia(context: ContextOfButton, templateId: number, forceCreate: boolean) {
+  const sxc = getSxcInstance(context.instance.id);
   const contentGroup: ContentGroup = sxc.manage._editContext.ContentGroup;
   const showingAjaxPreview = isDisabled(sxc);
 
@@ -55,7 +57,7 @@ export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId:
       // only reload on ajax, not on app as that was already re-loaded on the preview
       // necessary to show the original template again
       if (showingAjaxPreview) {
-        reloadAndReInitialize(sxc);
+        reloadAndReInitialize(context);
       }
     });
 }
@@ -65,7 +67,7 @@ export function updateTemplateFromDia(sxc: SxcInstanceWithInternals, templateId:
  */
 export function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean) {
 
-  return saveTemplate(context.sxc.sxc, templateId, forceCreate)
+  return saveTemplate(context, templateId, forceCreate)
     .then(function (data: any, textStatus: any, xhr: any) {
       // error handling
       if (xhr.status !== 200) {
@@ -83,6 +85,7 @@ export function updateTemplate(context: ContextOfButton, templateId: number, for
         console.log(`created content group {${newGuid}}`);
       }
 
-      context.sxc.sxc.manage._updateContentGroupGuid(newGuid, context);
+      context.contentBlock.contentGroupId = newGuid;
+      // $2sxc._manage._updateContentGroupGuid(context, newGuid);
     });
 }

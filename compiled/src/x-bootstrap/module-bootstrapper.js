@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = require("../context/context");
 var api_1 = require("../manage/api");
 var quick_dialog_1 = require("../quick-dialog/quick-dialog");
 var build_toolbars_1 = require("../toolbar/build-toolbars");
@@ -59,7 +58,7 @@ function tryShowTemplatePicker() {
     // show the template picker of this module
     var module = uninitializedModules.parent('div[data-edit-context]')[0];
     var sxc = sxc_1.getSxcInstance(module);
-    sxc.manage.run2(context_1.context(module), 'layout');
+    sxc.manage.run('layout');
     openedTemplatePickerOnce = true;
     return true;
 }
@@ -105,7 +104,7 @@ function showGlassesButtonIfUninitialized(sxci) {
     // note: title is added on mouseover, as the translation isn't ready at page-load
     var btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
     btn.on('click', function () {
-        sxci.manage.run2(context_1.context(tag), 'layout');
+        sxci.manage.run('layout');
     });
     btn.on('mouseover', function () {
         btn.title = _2sxc_translate_1.translate(btn.title);

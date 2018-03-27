@@ -9,6 +9,6 @@ export class SxcContext {
   parameters: ParametersEntity[] | null;
   sxcRootUrl: string;
   // tmp
-  sxc: SxcInstanceWithInternals; // todo: stv remove this
+  // sxc: SxcInstanceWithInternals; // todo: stv remove this
   editContext: DataEditContext; // todo: stv remove this, should be part of context
 }
