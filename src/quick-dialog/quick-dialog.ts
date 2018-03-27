@@ -184,7 +184,7 @@ function extendIFrameWithSxcState(iFrame: any) {
         localStorage.setItem('cancelled-dialog', 'true');
         return newFrm.closeCallback();
       },
-      run: (verb: string) => reSxc().manage.run2(context(getTag(reSxc())), verb),
+      run: (verb: string) => reSxc().manage.run(verb),
       showMessage: (message: string) => showMessage(reSxc(), `<p class="no-live-preview-available">${message}</p>`),
       reloadAndReInit: () => reloadAndReInitialize(reSxc(), true, true),
       saveTemplate: (templateId: number) => updateTemplateFromDia(reSxc(), templateId, false, context(getTag(reSxc()))),

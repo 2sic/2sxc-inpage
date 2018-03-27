@@ -200,7 +200,7 @@ class EditManager {
 
     sessionStorage.removeItem('dia-cbid');
 
-    this.run2(this.context, 'layout');
+    this.run('layout');
 
     return true;
   }

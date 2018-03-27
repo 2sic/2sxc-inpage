@@ -2,10 +2,6 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
-    "iis": {
-      "applicationUrl": "http://2sxc-dnn742.dnndev.me/Default.aspx",
-      "sslPort": 0
-    },
     "iisExpress": {
       "applicationUrl": "http://localhost:9194/",
       "sslPort": 0
@@ -20,10 +16,8 @@
       }
     },
     "2sxc-inpage": {
-      "commandName": "IIS",
-      "workingDirectory": "C:\\Projects\\2sxc-inpage\\src",
+      "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://2sxc-dnn742.dnndev.me/Default.aspx?debug=true",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

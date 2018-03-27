@@ -12,20 +12,20 @@ export class ActionMenuMapper {
   constructor(moduleId: number) {
     const sxc = getSxcInstance(moduleId) as SxcInstanceWithInternals;
     this.tag = getTag(sxc);
-    this.run = sxc.manage.run2;
+    this.run = sxc.manage.run;
   }
 
-  changeLayoutOrContent = () => { this.run(context(this.tag), 'layout'); };
+  changeLayoutOrContent = () => { this.run('layout'); };
 
-  addItem = () => { this.run(context(this.tag), 'add', { useModuleList: true, sortOrder: 0 }); };
+  addItem = () => { this.run('add', { useModuleList: true, sortOrder: 0 }); };
 
-  edit = () => { this.run(context(this.tag), 'edit', { useModuleList: true, sortOrder: 0 }); };
+  edit = () => { this.run('edit', { useModuleList: true, sortOrder: 0 }); };
 
-  adminApp = () => { this.run(context(this.tag), 'app'); };
+  adminApp = () => { this.run('app'); };
 
-  adminZone = () => { this.run(context(this.tag), 'zone'); };
+  adminZone = () => { this.run('zone'); };
 
-  develop = () => { this.run(context(this.tag), 'template-develop'); };
+  develop = () => { this.run('template-develop'); };
 }
 
 window.$2sxcActionMenuMapper = (moduleId: number) => {
