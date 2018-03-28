@@ -27,10 +27,10 @@ export class New extends CommandBase {
           return (!!context.button.action.params.contentType) ||
             ((context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1)); // don't provide new on the header-item
         },
-        code(context) {
+        code(context, event) {
           // todo - should refactor this to be a toolbarManager.contentBlock command
           Object.assign(context.button.action.params, { sortOrder: context.button.action.params.sortOrder + 1 });
-          commandOpenNgDialog(context);
+          commandOpenNgDialog(context, event);
         },
       });
   }
