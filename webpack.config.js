@@ -34,6 +34,8 @@ var entryCssFiles = glob.sync('./src/**/*.css').concat(glob.sync('./icons/**/*.c
 var nodeEnv = (process.env.NODE_ENV || 'development');
 var isProd = (nodeEnv === 'production');
 var generateTypedocDocumentation = false;
+var package = require('./package.json');
+var version = package.version;
 
 var plugins = [
   new webpack.DefinePlugin({
@@ -183,8 +185,7 @@ if (isProd) {
     use: {
       loader: 'file-loader',
       options: {
-        // todo STV - ensure it uses the version from the package.json
-        name: 'assets/[name].[ext]?09.15.00'
+        name: 'assets/[name].[ext]?' + version // package.json version
       }
     }
   });
