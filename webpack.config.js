@@ -92,7 +92,7 @@ if (!isProd) {
             { source: './dist/inpage/inpage.min.css', destination: './dist/inpage/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
             { source: './dist/inpage/inpage.min.css.map', destination: './dist/inpage/inpage.css.map' }, // just copy min because can't generate full and minified css.map boundle files in one pass
             { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' },
-            { source: './dist/images/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/images' },
+            //{ source: './dist/images/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/images' },
             { source: './dist/lib/fonts/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/lib/fonts' }
           ]
         }
@@ -173,7 +173,7 @@ if (isProd) {
     use: {
       loader: 'file-loader',
       options: {
-        name: '../images/[name].[ext]'
+        name: '../../[name].[ext]'
       }
     }
   });

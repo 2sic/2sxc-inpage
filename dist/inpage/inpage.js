@@ -1788,6 +1788,7 @@ var Engine = /** @class */ (function () {
         var _this = this;
         this.sxc = sxc;
         this.commands = commands_1.Commands.getInstance;
+        // todo: stv, check this specialSettings
         // assemble an object which will store the configuration and execute it
         this.create = function (context, specialSettings) {
             return command_create_1.commandCreate(context);

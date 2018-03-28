@@ -96,6 +96,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="src\quick-edit\images\" />
     <Folder Include="src\translate\libs\" />
   </ItemGroup>
 

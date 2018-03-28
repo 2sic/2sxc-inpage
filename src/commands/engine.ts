@@ -12,6 +12,7 @@ export class Engine {
 
   constructor(private sxc: SxcInstanceWithInternals) {  }
 
+  // todo: stv, check this specialSettings
   // assemble an object which will store the configuration and execute it
   create = (context: ContextOfButton, specialSettings: Settings) => {
     return commandCreate(context);
