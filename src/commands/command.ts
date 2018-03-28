@@ -111,7 +111,7 @@ export class Command {
     this.params.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
-    var ngDialogParams = buildNgDialogParams(this.sxc, this.context.sxc.editContext);
+    var ngDialogParams = buildNgDialogParams(context);
     const sharedParams = Object.assign({}, ngDialogParams) as NgDialogParams;
     const partOfPage = context.button.partOfPage(context);
     if (!partOfPage) {

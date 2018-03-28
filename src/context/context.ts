@@ -1,4 +1,5 @@
-﻿import { getEditContext } from '../manage/api';
+﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
+import { getEditContext } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';
@@ -10,9 +11,7 @@ import { InstanceContext } from './instance-context/instance-context';
 import { SxcContext } from './instance-context/sxc-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
 
-var contextCache: any = {};
 /**
  * Primary API to get the context (context is cached)
  * @param htmlElement or Id (moduleId)
@@ -25,36 +24,32 @@ export function context(htmlElementOrId: HTMLElement | number, cbid?: number): C
 }
 
 /**
- * Create copy of context, so it can be modified before use  (contextCopy is cached)
+ * Create copy of context, so it can be modified before use
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
 export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextOfButton {
   const sxc = getSxcInstance(htmlElementOrId);
   const contextOfButton = getContextInstance(sxc, cbid);
+  // set sxc to null because of cyclic reference, so we can serialize it
+  contextOfButton.sxc = null;
   // make a copy
-  const copyOfContext = JSON.parse(JSON.stringify(contextOfButton)); 
+  const copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
+  // bring sxc back to context
+  contextOfButton.sxc = sxc;
   return copyOfContext;
 }
 
 /**
- * Return existing context from cache or create new one
+ * Create new context
  * @param sxc
  * @param cbid
  */
 export function getContextInstance(sxc: SxcInstanceWithInternals, cbid?: number): ContextOfButton {
-  // get from cache for reuse
-  const cacheKey = sxc.id + ':' + cbid;
-  if (!contextCache[cacheKey]) {
-    // create new context if not in cache
-    const editContext = getEditContext(sxc);
-    contextCache[cacheKey] = createContextFromEditContext(editContext);
-    // contextOfButton.sxc.sxc = sxc; // stv: this is temp
-    //if (typeof htmlElementOrId !== 'number') {
-    //  contextOfButton.element = htmlElementOrId as HTMLElement; // HTMLElement
-    //}
-  }
-  return contextCache[cacheKey];
+  const editContext = getEditContext(sxc);
+  const context = createContextFromEditContext(editContext);
+  context.sxc = sxc;
+  return context;
 }
 
 /**
@@ -95,22 +90,15 @@ export function createContextFromEditContext(editContext: DataEditContext) {
   }
 
   // *** ContextOfInstance ***
-  // this will be something about the sxc - object, version, etc.
-  contextOfButton.sxc = new SxcContext();
-  if (editContext.Environment) {
-    contextOfButton.sxc.version = editContext.Environment.SxcVersion;
-    contextOfButton.sxc.parameters = editContext.Environment.parameters;
-    contextOfButton.sxc.sxcRootUrl = editContext.Environment.SxcRootUrl;// NgDialogParams.websiteroot
-  }
-
-  // temp
-  contextOfButton.sxc.editContext = editContext; // stv: this is temp
-
   // information related to the current DNN module, incl.instanceId, etc.
   contextOfButton.instance = new InstanceContext();
   if (editContext.Environment) {
     contextOfButton.instance.id = editContext.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
     contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
+    // sxc
+    contextOfButton.instance.sxcVersion = editContext.Environment.SxcVersion;
+    contextOfButton.instance.parameters = editContext.Environment.parameters;
+    contextOfButton.instance.sxcRootUrl = editContext.Environment.SxcRootUrl;// NgDialogParams.websiteroot
   }
   if (editContext.ContentBlock) {
     contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;// NgDialogParams.publishing

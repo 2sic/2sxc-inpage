@@ -9,9 +9,9 @@ import { Settings } from './settings';
  * @param specialSettings
  */
 export function commandCreate(context: ContextOfButton): Command {
-  const ngDialogUrl = context.sxc.editContext.Environment.SxcRootUrl +
+  const ngDialogUrl = context.instance.sxcRootUrl +
     'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-    context.sxc.editContext.Environment.SxcVersion;
+    context.instance.sxcRootUrl;
 
   const isDebug: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
 

@@ -3,6 +3,7 @@ import { InstanceConfig } from './instance-config';
 import { NgDialogParams } from './ng-dialog-params';
 import { QucikDialogConfig } from './qucik-dialog-config';
 import { UserOfEditContext } from './user-of-edit-context';
+import { ContextOfButton } from '../context/context-of-button';
 
 /**
  * Get a html tag of the current sxc instance
@@ -34,40 +35,36 @@ export function getEditContext(sxc: SxcInstanceWithInternals): DataEditContext {
 
 /**
  * builds a config object used in the toolbar system
- * @param {DataEditContext} editContext
+ * @param {ContextOfButton} context
  * @returns {InstanceConfig} object containing various properties for this current sxc-instance
  */
-export function buildInstanceConfig(editContext: DataEditContext): InstanceConfig {
-  return new InstanceConfig(editContext);
+export function buildInstanceConfig(context: ContextOfButton): InstanceConfig {
+  return InstanceConfig.fromContext(context);
 }
 
 /**
  * builds UserOfEditcontext object
- * @param {DataEditContext} editContext
+ * @param {ContextOfButton} context
  * @returns {UserOfEditContext} object containing user of edit context
  */
-export function getUserOfEditContext(editContext: DataEditContext): UserOfEditContext {
-  return new UserOfEditContext(editContext);
+export function getUserOfEditContext(context: ContextOfButton): UserOfEditContext {
+  return UserOfEditContext.fromContext(context);
 }
 
 /**
  * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
- * @param {DataEditContext} editContext
+ * @param {ContextOfButton} context
  * @returns {QucikDialogConfig} object containing the quick dialog config
  */
-export function buildQuickDialogConfig(editContext: DataEditContext): QucikDialogConfig {
-  return new QucikDialogConfig(editContext);
+export function buildQuickDialogConfig(context: ContextOfButton): QucikDialogConfig {
+  return QucikDialogConfig.fromContext(context);
 }
 
 /**
  * get all parameters needed by NG dialogues from an sxc
- * @param {SxcInstanceWithInternals} sxc
- * @param {DataEditContext} [editContext]
+ * @param {ContextOfButton} context
  * @return {NgDialogParams} special object containing the ng-dialog parameters
  */
-export function buildNgDialogParams(sxc: SxcInstanceWithInternals, editContext: DataEditContext): NgDialogParams {
-  if (!editContext) {
-    editContext = getEditContext(sxc);
-  }
-  return new NgDialogParams(sxc, editContext);
+export function buildNgDialogParams(context: ContextOfButton): NgDialogParams {
+  return NgDialogParams.fromContext(context);
 }

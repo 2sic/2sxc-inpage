@@ -43,7 +43,7 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
   // context.sxc.sxc = sxc; // stv: this is temp
   // context.element = getTag(sxc); // HTMLElement
 
-  const userInfo = getUserOfEditContext(editContext);
+  const userInfo = getUserOfEditContext(context);
   const cmdEngine = instanceEngine(sxc);
 
   const editManager = new EditManager(sxc, editContext, userInfo, cmdEngine, context);
@@ -129,12 +129,12 @@ class EditManager {
   // _reloadWithAjax = this.editContext.ContentGroup.SupportsAjax;
   _reloadWithAjax = this.context.app.supportsAjax;
   
-  _dialogParameters = buildNgDialogParams(this.sxc, this.editContext);
-
+  // 
+  _dialogParameters = buildNgDialogParams(this.context);
   /**
    * used to configure buttons / toolbars
    */
-  _instanceConfig = buildInstanceConfig(this.editContext);
+  _instanceConfig = buildInstanceConfig(this.context);
 
   /**
    * metadata necessary to know what/how to edit
@@ -144,7 +144,7 @@ class EditManager {
   /**
    * used for in-page dialogues
    */
-  _quickDialogConfig = buildQuickDialogConfig(this.editContext);
+  _quickDialogConfig = buildQuickDialogConfig(this.context);
 
   /**
    * used to handle the commands for this content-block
@@ -176,7 +176,7 @@ class EditManager {
   _updateContentGroupGuid(context: ContextOfButton, newGuid: string) {
     context.contentBlock.contentGroupId = newGuid;
     this.editContext.ContentGroup.Guid = newGuid;
-    this._instanceConfig = buildInstanceConfig(this.editContext);
+    this._instanceConfig = buildInstanceConfig(context);
   }
 
   _getCbManipulator = () => manipulator(this.sxc);

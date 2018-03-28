@@ -1,5 +1,6 @@
 ﻿import { DataEditContext } from '../../data-edit-context/data-edit-context';
 import { Log } from '../../logging/log';
+import { getEditContext } from '../../manage/api';
 import { InstanceConfig } from '../../manage/instance-config';
 import { oldToolbarSettingsAddapter } from '../adapters/old-toolbar-settings-adapter';
 import { customize, removeDisableButtons } from '../button/expand-button-config';
@@ -7,10 +8,10 @@ import { expandButtonGroups } from '../button/expand-group-config';
 import { ToolbarConfig } from './toolbar-config';
 import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 import { ToolbarConfigTemplates } from './toolbar-config-templates';
+import { ContextOfButton } from '../../context/context-of-button';
 
-export function expandToolbarConfig(context: any, toolbarData: any, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
+export function expandToolbarConfig(context: ContextOfButton, toolbarData: any, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
   const log = new Log('Tlb.ExpTop', parentLog, 'expand start');
-  const editContext: DataEditContext = context.sxc.editContext;
 
   if (toolbarData === {} && toolbarSettings === ({} as ToolbarSettings)) {
     log.add('no data or settings found, will use default toolbar');
@@ -28,9 +29,9 @@ export function expandToolbarConfig(context: any, toolbarData: any, toolbarSetti
     unstructuredConfig.params = ((toolbarData) && Array.isArray(toolbarData) && toolbarData[0]) || toolbarData; // these are the default command parameters
   }
 
-  const instanceConfig = new InstanceConfig(editContext);
+  const instanceConfig = InstanceConfig.fromContext(context);
 
-  // whatever we had, if more settings were provided, override with these...
+ // whatever we had, if more settings were provided, override with these...
   const config = buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings, log);
 
   log.add('expand done');
@@ -51,7 +52,7 @@ export function expandToolbarConfig(context: any, toolbarData: any, toolbarSetti
  * @param instanceConfig
  * @param toolbarSettings
  */
-function buildFullDefinition(context: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings, parentLog : Log) {
+function buildFullDefinition(toolbarContext: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings, parentLog : Log) {
     const log = new Log('Tlb.BldFul', parentLog, 'start');
     const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings, log);
 
@@ -60,7 +61,7 @@ function buildFullDefinition(context: any, unstructuredConfig: any, instanceConf
 
     expandButtonGroups(fullConfig, log);
 
-    removeDisableButtons(context, fullConfig, instanceConfig, log);
+    removeDisableButtons(toolbarContext, fullConfig, instanceConfig, log);
 
     if (fullConfig.debug) console.log('after remove: ', fullConfig);
 
