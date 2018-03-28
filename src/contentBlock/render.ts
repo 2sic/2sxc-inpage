@@ -3,7 +3,7 @@ import { getTag } from '../manage/api';
 import { hide } from '../quick-dialog/quick-dialog';
 import { reset } from '../quick-edit/start';
 import { disable } from '../toolbar/build-toolbars';
-import { _contentBlock, MainContentBlock } from './main-content-block';
+import { MainContentBlock } from './main-content-block';
 import { getPreviewWithTemplate } from './web-api-promises';
 
 /*
