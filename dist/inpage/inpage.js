@@ -2660,7 +2660,7 @@ var command_link_to_ng_dialog_1 = __webpack_require__(75);
  * @param sxc
  * @param editContext
  */
-function commandOpenNgDialog(context) {
+function commandOpenNgDialog(context, event) {
     // the callback will handle events after closing the dialog
     // and reload the in-page view w/ajax or page reload
     var callback = function () {
@@ -3550,8 +3550,8 @@ function commandExecuteAction(context, nameOrSettings, eventOrSettings, event) {
     }
     // todo: stv, fix this in case that is function
     if (!context.button.code) {
-        context.button.code = function (contextParam) {
-            return command_open_ng_dialog_1.commandOpenNgDialog(contextParam);
+        context.button.code = function (contextParam, event) {
+            return command_open_ng_dialog_1.commandOpenNgDialog(contextParam, event);
         }; // decide what action to perform
     }
     if (context.button.uiActionOnly(context)) {
@@ -5725,10 +5725,10 @@ var New = /** @class */ (function (_super) {
                 return (!!context.button.action.params.contentType) ||
                     ((context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1)); // don't provide new on the header-item
             },
-            code: function (context) {
+            code: function (context, event) {
                 // todo - should refactor this to be a toolbarManager.contentBlock command
                 Object.assign(context.button.action.params, { sortOrder: context.button.action.params.sortOrder + 1 });
-                command_open_ng_dialog_1.commandOpenNgDialog(context);
+                command_open_ng_dialog_1.commandOpenNgDialog(context, event);
             },
         });
         return _this;

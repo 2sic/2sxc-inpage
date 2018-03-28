@@ -11,7 +11,7 @@ import { Settings } from './settings';
  * @param sxc
  * @param editContext
  */
-export function commandOpenNgDialog(context: ContextOfButton) {
+export function commandOpenNgDialog(context: ContextOfButton, event: any) {
   // the callback will handle events after closing the dialog
   // and reload the in-page view w/ajax or page reload
   const callback = () => {

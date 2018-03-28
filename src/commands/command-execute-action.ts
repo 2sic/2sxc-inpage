@@ -68,8 +68,8 @@ export function commandExecuteAction(
 
   // todo: stv, fix this in case that is function
   if (!context.button.code) {
-    context.button.code = (contextParam: ContextOfButton) => {
-      return commandOpenNgDialog(contextParam);
+    context.button.code = (contextParam: ContextOfButton, event: any) => {
+      return commandOpenNgDialog(contextParam, event);
     }; // decide what action to perform
   }
 
