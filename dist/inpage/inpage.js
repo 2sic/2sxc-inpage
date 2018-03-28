@@ -105,7 +105,7 @@ exports.CommandBase = CommandBase;
 Object.defineProperty(exports, "__esModule", { value: true });
 var instance_config_1 = __webpack_require__(22);
 var ng_dialog_params_1 = __webpack_require__(45);
-var qucik_dialog_config_1 = __webpack_require__(46);
+var quick_dialog_config_1 = __webpack_require__(46);
 var user_of_edit_context_1 = __webpack_require__(14);
 /**
  * Get a html tag of the current sxc instance
@@ -159,7 +159,7 @@ exports.getUserOfEditContext = getUserOfEditContext;
  * @returns {QucikDialogConfig} object containing the quick dialog config
  */
 function buildQuickDialogConfig(context) {
-    return qucik_dialog_config_1.QucikDialogConfig.fromContext(context);
+    return quick_dialog_config_1.QuickDialogConfig.fromContext(context);
 }
 exports.buildQuickDialogConfig = buildQuickDialogConfig;
 /**
@@ -3028,8 +3028,8 @@ exports.NgDialogParams = NgDialogParams;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_of_edit_context_1 = __webpack_require__(14);
-var QucikDialogConfig = /** @class */ (function () {
-    function QucikDialogConfig() {
+var QuickDialogConfig = /** @class */ (function () {
+    function QuickDialogConfig() {
     }
     //constructor(editContext: DataEditContext) {
     //  this.appId = editContext.ContentGroup.AppId;
@@ -3042,8 +3042,8 @@ var QucikDialogConfig = /** @class */ (function () {
     //  this.user = getUserOfEditContext(editContext);
     //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
     //}
-    QucikDialogConfig.fromContext = function (context) {
-        var config = new QucikDialogConfig();
+    QuickDialogConfig.fromContext = function (context) {
+        var config = new QuickDialogConfig();
         config.appId = context.app.id;
         config.isContent = context.app.isContent;
         config.hasContent = context.app.hasContent;
@@ -3055,9 +3055,9 @@ var QucikDialogConfig = /** @class */ (function () {
         config.supportsAjax = context.app.supportsAjax;
         return config;
     };
-    return QucikDialogConfig;
+    return QuickDialogConfig;
 }());
-exports.QucikDialogConfig = QucikDialogConfig;
+exports.QuickDialogConfig = QuickDialogConfig;
 
 
 /***/ }),

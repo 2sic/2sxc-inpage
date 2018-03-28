@@ -1,9 +1,7 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { getUserOfEditContext } from './api';
 import { UserOfEditContext } from './user-of-edit-context';
 
-export class QucikDialogConfig {
+export class QuickDialogConfig {
   appId: number;
   isContent: boolean;
   hasContent: boolean;
@@ -26,8 +24,8 @@ export class QucikDialogConfig {
   //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
   //}
 
-  static fromContext(context: ContextOfButton): QucikDialogConfig {
-    const config = new QucikDialogConfig();
+  static fromContext(context: ContextOfButton): QuickDialogConfig {
+    const config = new QuickDialogConfig();
     config.appId = context.app.id;
     config.isContent = context.app.isContent;
     config.hasContent = context.app.hasContent;

@@ -1,7 +1,7 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { InstanceConfig } from './instance-config';
 import { NgDialogParams } from './ng-dialog-params';
-import { QucikDialogConfig } from './qucik-dialog-config';
+import { QuickDialogConfig } from './quick-dialog-config';
 import { UserOfEditContext } from './user-of-edit-context';
 import { ContextOfButton } from '../context/context-of-button';
 
@@ -56,8 +56,8 @@ export function getUserOfEditContext(context: ContextOfButton): UserOfEditContex
  * @param {ContextOfButton} context
  * @returns {QucikDialogConfig} object containing the quick dialog config
  */
-export function buildQuickDialogConfig(context: ContextOfButton): QucikDialogConfig {
-  return QucikDialogConfig.fromContext(context);
+export function buildQuickDialogConfig(context: ContextOfButton): QuickDialogConfig {
+  return QuickDialogConfig.fromContext(context);
 }
 
 /**
