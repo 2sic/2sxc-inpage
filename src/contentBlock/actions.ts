@@ -1,7 +1,6 @@
 ﻿import { ActionParams } from './action-params';
 import { reloadAndReInitialize } from './render';
 import { ContextOfButton } from '../context/context-of-button';
-import { getSxcInstance } from '../x-bootstrap/sxc';
 /*
  * this is a content block in the browser
  *
@@ -15,14 +14,13 @@ import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * internal helper, to do something and reload the content block
- * @param context
- * @param url
- * @param params
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {string} url
+ * @param {ActionParams} params
+ * @returns {any}
  */
 function getAndReload(context: ContextOfButton, url: string, params: ActionParams): any {
-  const sxc = getSxcInstance(context.instance.id);
-  return sxc.webApi.get({
+  return context.sxc.webApi.get({
     url: url,
     params: params,
   }).then(() => { reloadAndReInitialize(context); });
@@ -30,9 +28,9 @@ function getAndReload(context: ContextOfButton, url: string, params: ActionParam
 
 /**
  * remove an item from a list, then reload
- * @param {} context
- * @param {} sortOrder
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {number} sortOrder
+ * @returns {any}
  */
 export function removeFromList(context: ContextOfButton, sortOrder: number): any {
   return getAndReload(context,
@@ -42,10 +40,10 @@ export function removeFromList(context: ContextOfButton, sortOrder: number): any
 
 /**
  * change the order of an item in a list, then reload
- * @param {} context
- * @param {} initOrder
- * @param {} newOrder
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {number} initOrder
+ * @param {number} newOrder
+ * @returns {any}
  */
 export function changeOrder(context: ContextOfButton, initOrder: number, newOrder: number): any {
   return getAndReload(context,
@@ -55,9 +53,9 @@ export function changeOrder(context: ContextOfButton, initOrder: number, newOrde
 
 /**
  * add an item to the list at this position
- * @param {} sxc
- * @param {} sortOrder
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {number} sortOrder
+ * @returns {any}
  */
 export function addItem(context: ContextOfButton, sortOrder: number): any {
   return getAndReload(context,
@@ -67,10 +65,10 @@ export function addItem(context: ContextOfButton, sortOrder: number): any {
 
 /**
  * set a content-item in this block to published, then reload
- * @param {} sxc
- * @param {} part
- * @param {} sortOrder
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {string} part
+ * @param {number} sortOrder
+ * @returns {any}
  */
 export function publish(context: ContextOfButton, part: string, sortOrder: number): any {
   return getAndReload(context,
@@ -80,9 +78,9 @@ export function publish(context: ContextOfButton, part: string, sortOrder: numbe
 
 /**
  * publish an item using it's ID
- * @param {} sxc
- * @param {} entityId
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {number} entityId
+ * @returns {any}
  */
 export function publishId(context: ContextOfButton, entityId: number): any {
   return getAndReload(context,

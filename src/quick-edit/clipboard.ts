@@ -21,8 +21,8 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
   switch (cbAction) {
     case 'select':
       mark(newClip);
-
       break;
+
     case 'paste':
       const from = data.index;
       const to = newClip.index;

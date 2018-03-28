@@ -72,7 +72,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var expand_button_config_1 = __webpack_require__(10);
 var command_definition_1 = __webpack_require__(44);
-var commands_1 = __webpack_require__(6);
+var commands_1 = __webpack_require__(5);
 var CommandBase = /** @class */ (function () {
     function CommandBase() {
         this.commandDefinition = new command_definition_1.CommandDefinition();
@@ -98,20 +98,6 @@ exports.CommandBase = CommandBase;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-function getSxcInstance(module) {
-    var sxc = $2sxc(module);
-    return sxc;
-}
-exports.getSxcInstance = getSxcInstance;
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -188,7 +174,7 @@ exports.buildNgDialogParams = buildNgDialogParams;
 
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -251,7 +237,7 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -282,7 +268,7 @@ exports.selectors = {
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -439,7 +425,7 @@ exports.Log = Log;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -477,6 +463,20 @@ exports.Commands = Commands;
 
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function getSxcInstance(module) {
+    var sxc = $2sxc(module);
+    return sxc;
+}
+exports.getSxcInstance = getSxcInstance;
+
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -501,8 +501,8 @@ exports.translate = translate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(2);
-var sxc_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(1);
+var sxc_1 = __webpack_require__(6);
 var system_context_1 = __webpack_require__(47);
 var tenant_context_1 = __webpack_require__(48);
 var user_context_1 = __webpack_require__(49);
@@ -529,14 +529,13 @@ exports.context = context;
  * @param cbid
  */
 function contextCopy(htmlElementOrId, cbid) {
-    var sxc = sxc_1.getSxcInstance(htmlElementOrId);
-    var contextOfButton = getContextInstance(sxc, cbid);
+    var contextOfButton = context(htmlElementOrId, cbid);
     // set sxc to null because of cyclic reference, so we can serialize it
     contextOfButton.sxc = null;
     // make a copy
     var copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
     // bring sxc back to context
-    contextOfButton.sxc = sxc;
+    contextOfButton.sxc = sxc_1.getSxcInstance(htmlElementOrId);
     return copyOfContext;
 }
 exports.contextCopy = contextCopy;
@@ -657,7 +656,6 @@ exports.createContextFromEditContext = createContextFromEditContext;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var render_1 = __webpack_require__(12);
-var sxc_1 = __webpack_require__(1);
 /*
  * this is a content block in the browser
  *
@@ -670,23 +668,22 @@ var sxc_1 = __webpack_require__(1);
  */
 /**
  * internal helper, to do something and reload the content block
- * @param context
- * @param url
- * @param params
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {string} url
+ * @param {ActionParams} params
+ * @returns {any}
  */
 function getAndReload(context, url, params) {
-    var sxc = sxc_1.getSxcInstance(context.instance.id);
-    return sxc.webApi.get({
+    return context.sxc.webApi.get({
         url: url,
         params: params,
     }).then(function () { render_1.reloadAndReInitialize(context); });
 }
 /**
  * remove an item from a list, then reload
- * @param {} context
- * @param {} sortOrder
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {number} sortOrder
+ * @returns {any}
  */
 function removeFromList(context, sortOrder) {
     return getAndReload(context, 'view/module/removefromlist', { sortOrder: sortOrder });
@@ -694,10 +691,10 @@ function removeFromList(context, sortOrder) {
 exports.removeFromList = removeFromList;
 /**
  * change the order of an item in a list, then reload
- * @param {} context
- * @param {} initOrder
- * @param {} newOrder
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {number} initOrder
+ * @param {number} newOrder
+ * @returns {any}
  */
 function changeOrder(context, initOrder, newOrder) {
     return getAndReload(context, 'view/module/changeorder', { sortOrder: initOrder, destinationSortOrder: newOrder });
@@ -705,9 +702,9 @@ function changeOrder(context, initOrder, newOrder) {
 exports.changeOrder = changeOrder;
 /**
  * add an item to the list at this position
- * @param {} sxc
- * @param {} sortOrder
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {number} sortOrder
+ * @returns {any}
  */
 function addItem(context, sortOrder) {
     return getAndReload(context, 'view/module/additem', { sortOrder: sortOrder });
@@ -715,10 +712,10 @@ function addItem(context, sortOrder) {
 exports.addItem = addItem;
 /**
  * set a content-item in this block to published, then reload
- * @param {} sxc
- * @param {} part
- * @param {} sortOrder
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {string} part
+ * @param {number} sortOrder
+ * @returns {any}
  */
 function publish(context, part, sortOrder) {
     return getAndReload(context, 'view/module/publish', { part: part, sortOrder: sortOrder });
@@ -726,9 +723,9 @@ function publish(context, part, sortOrder) {
 exports.publish = publish;
 /**
  * publish an item using it's ID
- * @param {} sxc
- * @param {} entityId
- * @returns {}
+ * @param {ContextOfButton} context
+ * @param {number} entityId
+ * @returns {any}
  */
 function publishId(context, entityId) {
     return getAndReload(context, 'view/module/publish', { id: entityId });
@@ -743,7 +740,7 @@ exports.publishId = publishId;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(5);
+var log_1 = __webpack_require__(4);
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
 // ReSharper disable once UnusedParameter
 function expandButtonConfig(original, sharedProps, parentLog) {
@@ -932,8 +929,7 @@ var main_content_block_1 = __webpack_require__(24);
 var render_1 = __webpack_require__(12);
 var templates_1 = __webpack_require__(15);
 var context_1 = __webpack_require__(8);
-var api_1 = __webpack_require__(2);
-var sxc_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(1);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -1004,22 +1000,21 @@ function getIFrame(container) {
 exports.getIFrame = getIFrame;
 /**
  * check if the dialog is showing for the current sxc-instance
- * @param {Object<any>} context object
+ * @param {ContextOfButton} context object
  * @param {string} dialogName - name of dialog
  * @returns {boolean} true if it's currently showing for this sxc-instance
  */
 function isShowing(context, dialogName) {
-    var sxc = sxc_1.getSxcInstance(context.instance.id);
     return exports.current // there is a current dialog
         &&
-            exports.current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
+            exports.current.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
         &&
             exports.current.dialogName === dialogName; // the view is the same as previously
 }
 exports.isShowing = isShowing;
 /**
  * show / reset the current iframe to use new url and callback
- * @param {any} context object
+ * @param {ContextOfButton} context object
  * @param {string} url - url to show
  * @param {function()} closeCallback - callback event
  * @param {boolean} fullScreen - if it should open full screen
@@ -1033,8 +1028,7 @@ function showOrToggle(context, url, closeCallback, fullScreen, dialogName) {
     if (dialogName && isShowing(context, dialogName)) {
         return hide();
     }
-    var sxc = sxc_1.getSxcInstance(context.instance.id);
-    iFrame.rewire(sxc, closeCallback, dialogName);
+    iFrame.rewire(context.sxc, closeCallback, dialogName);
     iFrame.setAttribute('src', rewriteUrl(url));
     // if the window had already been loaded, re-init
     if (iFrame.contentWindow && iFrame.contentWindow.reboot)
@@ -1057,12 +1051,20 @@ function buildContainerAndIFrame() {
     watchForResize();
     return container;
 }
+/**
+ * set container css for size
+ * @param {boolean} fullScreen
+ */
 function setSize(fullScreen) {
     var container = getContainer();
     // set container height
     container.css('min-height', fullScreen ? '100%' : '225px');
     isFullscreen = fullScreen;
 }
+/**
+ * extend IFrame with Sxc state
+ * @param iFrame
+ */
 function extendIFrameWithSxcState(iFrame) {
     var hiddenSxc = null;
     // ReSharper disable once UnusedLocals
@@ -1180,13 +1182,12 @@ function watchForResize(keepWatching) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(1);
 var quick_dialog_1 = __webpack_require__(11);
 var start_1 = __webpack_require__(25);
 var build_toolbars_1 = __webpack_require__(13);
 var main_content_block_1 = __webpack_require__(24);
 var web_api_promises_1 = __webpack_require__(35);
-var sxc_1 = __webpack_require__(1);
 /*
  * this is the content block manager in the browser
  *
@@ -1200,21 +1201,20 @@ var sxc_1 = __webpack_require__(1);
 /**
  * ajax update/replace the content of the content-block
  * optionally also initialize the toolbar (if not just preview)
- * @param {Object<>} context
+ * @param {ContextOfButton} context
  * @param {string} newContent
  * @param {boolean} justPreview
  * @returns {}
  */
 function replaceCb(context, newContent, justPreview) {
     try {
-        var sxc = sxc_1.getSxcInstance(context.instance.id);
         var newStuff = $(newContent);
         // Must disable toolbar before we attach to DOM
         if (justPreview)
             build_toolbars_1.disable(newStuff);
-        $(api_1.getTag(sxc)).replaceWith(newStuff);
+        $(api_1.getTag(context.sxc)).replaceWith(newStuff);
         // reset the cache, so the sxc-object is refreshed
-        sxc.recreate(true);
+        context.sxc.recreate(true);
     }
     catch (e) {
         console.log('Error while rendering template:', e);
@@ -1222,20 +1222,19 @@ function replaceCb(context, newContent, justPreview) {
 }
 /**
  * Show a message where the content of a module should be - usually as placeholder till something else happens
- * @param {object} context
+ * @param {ContextOfButton} context
  * @param {string} newContent
- * @returns {} - nothing
+ * @returns {} nothing
  */
 function showMessage(context, newContent) {
-    var sxc = sxc_1.getSxcInstance(context.instance.id);
-    $(api_1.getTag(sxc)).html(newContent);
+    $(api_1.getTag(context.sxc)).html(newContent);
 }
 exports.showMessage = showMessage;
 /**
  * ajax-call, then replace
- * @param context
- * @param alternateTemplateId
- * @param justPreview
+ * @param {ContextOfButton} context
+ * @param {number} alternateTemplateId
+ * @param {boolean} justPreview
  */
 function ajaxLoad(context, alternateTemplateId, justPreview) {
     return web_api_promises_1.getPreviewWithTemplate(context, alternateTemplateId)
@@ -1245,17 +1244,17 @@ function ajaxLoad(context, alternateTemplateId, justPreview) {
 exports.ajaxLoad = ajaxLoad;
 /**
  * this one assumes a replace / change has already happened, but now must be finalized...
- * @param sxc
- * @param forceAjax
- * @param preview
+ * @param {ContextOfButton} context
+ * @param {boolean} forceAjax
+ * @param {boolean} preview
  */
 function reloadAndReInitialize(context, forceAjax, preview) {
-    var sxc = sxc_1.getSxcInstance(context.instance.id);
     // if ajax is not supported, we must reload the whole page
-    if (!forceAjax && !sxc.manage._reloadWithAjax)
+    if (!forceAjax && !context.app.supportsAjax) {
         return window.location.reload();
+    }
     // ReSharper disable once DoubleNegationOfBoolean
-    return ajaxLoad(context, main_content_block_1._contentBlock.cUseExistingTemplate, !!preview)
+    return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
         .then(function () {
         // tell Evoq that page has changed if it has changed (Ajax call)
         if (window.dnn_tabVersioningEnabled)
@@ -1284,12 +1283,12 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = __webpack_require__(8);
-var api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(1);
 var render_toolbar_1 = __webpack_require__(16);
 var toolbar_manager_1 = __webpack_require__(28);
 var toolbar_expand_config_1 = __webpack_require__(31);
 var toolbar_settings_1 = __webpack_require__(34);
-var log_1 = __webpack_require__(5);
+var log_1 = __webpack_require__(4);
 // quick debug - set to false if not needed for production
 var dbg = false;
 // generate an empty / fallback toolbar tag
@@ -1425,12 +1424,11 @@ var quick_dialog_1 = __webpack_require__(11);
 var build_toolbars_1 = __webpack_require__(13);
 var render_1 = __webpack_require__(12);
 var web_api_promises_1 = __webpack_require__(35);
-var sxc_1 = __webpack_require__(1);
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
- * @param {} sxc
- * @returns {}
+ * @param {ContextOfButton} context
+ * @returns {any}
  */
 function prepareToAddContent(context, useModuleList) {
     var isCreated = context.contentBlock.isCreated;
@@ -1450,22 +1448,20 @@ function prepareToAddContent(context, useModuleList) {
 exports.prepareToAddContent = prepareToAddContent;
 /**
  * Update the template and adjust UI accordingly.
- * @param {*} sxc
- * @param {*} templateId
- * @param {*} forceCreate
+ * @param {ContextOfButton} context
+ * @param {number} templateId
+ * @param {boolean} forceCreate
  */
 function updateTemplateFromDia(context, templateId, forceCreate) {
-    var sxc = sxc_1.getSxcInstance(context.instance.id);
-    var contentGroup = sxc.manage._editContext.ContentGroup;
-    var showingAjaxPreview = build_toolbars_1.isDisabled(sxc);
+    var showingAjaxPreview = build_toolbars_1.isDisabled(context.sxc);
     // todo: should move things like remembering undo etc. back into the contentBlock state manager
     // or just reset it, so it picks up the right values again ?
     return updateTemplate(context, templateId, forceCreate)
         .then(function () {
         quick_dialog_1.hide();
         // if it didn't have content, then it only has now...
-        if (!contentGroup.HasContent) {
-            contentGroup.HasContent = forceCreate;
+        if (!context.app.hasContent) {
+            context.app.hasContent = forceCreate;
         }
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
@@ -1666,11 +1662,11 @@ exports.ButtonConfig = ButtonConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = __webpack_require__(1);
+var sxc_1 = __webpack_require__(6);
 var cmds_strategy_factory_1 = __webpack_require__(84);
 var mod_1 = __webpack_require__(38);
-var quick_e_1 = __webpack_require__(3);
-var selectors_instance_1 = __webpack_require__(4);
+var quick_e_1 = __webpack_require__(2);
+var selectors_instance_1 = __webpack_require__(3);
 /** add a clipboard to the quick edit */
 /**
  * perform copy and paste commands - needs the clipboard
@@ -1792,10 +1788,10 @@ $('a', quick_e_1.$quickE.selected).click(function () {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = __webpack_require__(8);
-var api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(1);
 var command_create_1 = __webpack_require__(23);
 var command_execute_action_1 = __webpack_require__(64);
-var commands_1 = __webpack_require__(6);
+var commands_1 = __webpack_require__(5);
 var Engine = /** @class */ (function () {
     function Engine(sxc) {
         var _this = this;
@@ -1919,12 +1915,12 @@ var templates_1 = __webpack_require__(15);
  */
 var MainContentBlock = /** @class */ (function () {
     function MainContentBlock() {
-        // constants
-        this.cViewWithoutContent = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
-        this.cUseExistingTemplate = -1;
         this.prepareToAddContent = templates_1.prepareToAddContent;
         this.updateTemplateFromDia = templates_1.updateTemplateFromDia;
     }
+    // constants
+    MainContentBlock.cViewWithoutContent = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
+    MainContentBlock.cUseExistingTemplate = -1;
     return MainContentBlock;
 }());
 exports.MainContentBlock = MainContentBlock;
@@ -1944,8 +1940,8 @@ exports._contentBlock = new MainContentBlock();
 Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = __webpack_require__(65);
 var positioning_1 = __webpack_require__(26);
-var quick_e_1 = __webpack_require__(3);
-var selectors_instance_1 = __webpack_require__(4);
+var quick_e_1 = __webpack_require__(2);
+var selectors_instance_1 = __webpack_require__(3);
 function enable() {
     // build all toolbar html-elements
     quick_e_1.prepareToolbarInDom();
@@ -2018,8 +2014,8 @@ exports.reset = reset;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var coords_1 = __webpack_require__(66);
-var quick_e_1 = __webpack_require__(3);
-var selectors_instance_1 = __webpack_require__(4);
+var quick_e_1 = __webpack_require__(2);
+var selectors_instance_1 = __webpack_require__(3);
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
@@ -2260,7 +2256,7 @@ exports._toolbarManager = sharedTbm; // new ToolbarManager();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(5);
+var log_1 = __webpack_require__(4);
 var HasLog = /** @class */ (function () {
     /**
      * initialize the logger
@@ -2355,7 +2351,7 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(5);
+var log_1 = __webpack_require__(4);
 var instance_config_1 = __webpack_require__(22);
 var old_toolbar_settings_adapter_1 = __webpack_require__(71);
 var expand_button_config_1 = __webpack_require__(10);
@@ -2596,7 +2592,6 @@ exports.settingsForEmptyToolbar = new ToolbarSettings({
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = __webpack_require__(1);
 /*
  * this is a content block in the browser
  *
@@ -2626,19 +2621,18 @@ var sxc_1 = __webpack_require__(1);
 // };
 /**
  * Save the template configuration for this instance
- * @param {object} sxc
- * @param {int} templateId
+ * @param {ContextOfButton} context
+ * @param {number} templateId
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
 function saveTemplate(context, templateId, forceCreateContentGroup) {
-    var sxc = sxc_1.getSxcInstance(context.instance.id);
     var params = {
         templateId: templateId,
         forceCreateContentGroup: forceCreateContentGroup,
         newTemplateChooserState: false,
     };
-    return sxc.webApi.get({
+    return context.sxc.webApi.get({
         url: 'view/module/savetemplateid',
         params: params,
     });
@@ -2646,22 +2640,20 @@ function saveTemplate(context, templateId, forceCreateContentGroup) {
 exports.saveTemplate = saveTemplate;
 /**
  * Retrieve the preview from the web-api
- * @param {object} sxc
- * @param {int} templateId
+ * @param {ContextOfButton} context
+ * @param {number} templateId
  * @returns {promise} promise with the html in the result
  */
 function getPreviewWithTemplate(context, templateId) {
-    var sxc = sxc_1.getSxcInstance(context.instance.id);
-    var ec = sxc.manage._editContext;
     templateId = templateId || -1; // fallback, meaning use saved ID
     var params = {
         templateId: templateId,
-        lang: ec.Language.Current,
-        cbisentity: ec.ContentBlock.IsEntity,
-        cbid: ec.ContentBlock.Id,
-        originalparameters: JSON.stringify(ec.Environment.parameters),
+        lang: context.app.currentLanguage,
+        cbisentity: context.contentBlock.isEntity,
+        cbid: context.contentBlock.id,
+        originalparameters: JSON.stringify(context.instance.parameters),
     };
-    return sxc.webApi.get({
+    return context.sxc.webApi.get({
         url: 'view/module/rendertemplate',
         params: params,
         dataType: 'html',
@@ -2721,7 +2713,7 @@ exports.commandOpenNgDialog = commandOpenNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = __webpack_require__(1);
+var sxc_1 = __webpack_require__(6);
 /**
  * extend the quick edit with the core commands
  */
@@ -2749,8 +2741,8 @@ exports.Cb = Cb;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(39);
-var quick_e_1 = __webpack_require__(3);
-var selectors_instance_1 = __webpack_require__(4);
+var quick_e_1 = __webpack_require__(2);
+var selectors_instance_1 = __webpack_require__(3);
 var Mod = /** @class */ (function () {
     function Mod() {
     }
@@ -2788,7 +2780,7 @@ exports.Mod = Mod;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(20);
-var quick_e_1 = __webpack_require__(3);
+var quick_e_1 = __webpack_require__(2);
 /**
  * module specific stuff
  */
@@ -3430,9 +3422,8 @@ exports.PageContext = PageContext;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(1);
 var _2sxc_translate_1 = __webpack_require__(7);
-var sxc_1 = __webpack_require__(1);
 var Command = /** @class */ (function () {
     function Command(context, ngDialogUrl, isDebug) {
         var _this = this;
@@ -3516,7 +3507,6 @@ var Command = /** @class */ (function () {
                 _this.isDebug;
             //#endregion
         };
-        this.sxc = sxc_1.getSxcInstance(context.instance.id);
         // this.settings = settings;
         this.items = context.button.action.params.items || []; // use predefined or create empty array
         // todo: stv, clean this
@@ -3540,7 +3530,7 @@ exports.Command = Command;
 Object.defineProperty(exports, "__esModule", { value: true });
 var templates_1 = __webpack_require__(15);
 var command_open_ng_dialog_1 = __webpack_require__(36);
-var commands_1 = __webpack_require__(6);
+var commands_1 = __webpack_require__(5);
 var button_action_1 = __webpack_require__(18);
 var button_config_1 = __webpack_require__(19);
 var settings_adapter_1 = __webpack_require__(33);
@@ -3604,8 +3594,8 @@ exports.commandExecuteAction = commandExecuteAction;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var quick_e_1 = __webpack_require__(3);
-var selectors_instance_1 = __webpack_require__(4);
+var quick_e_1 = __webpack_require__(2);
+var selectors_instance_1 = __webpack_require__(3);
 var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
@@ -3841,13 +3831,13 @@ exports.oldToolbarSettingsAddapter = oldToolbarSettingsAddapter;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(6);
+var commands_1 = __webpack_require__(5);
 var parameters_adapter_1 = __webpack_require__(32);
 var settings_adapter_1 = __webpack_require__(33);
 var button_action_1 = __webpack_require__(18);
 var button_config_1 = __webpack_require__(19);
 var expand_button_config_1 = __webpack_require__(10);
-var log_1 = __webpack_require__(5);
+var log_1 = __webpack_require__(4);
 /**
  * this will traverse a groups-tree and expand each group
  * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
@@ -4027,7 +4017,6 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = __webpack_require__(7);
-var sxc_1 = __webpack_require__(1);
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
@@ -4041,8 +4030,7 @@ exports.contentItems = {
             .replace('{title}', itemTitle));
         if (!ok)
             return;
-        var sxc = sxc_1.getSxcInstance(context.instance.id);
-        sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
+        context.sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
             .success(function () {
             location.reload();
         }).error(function (error) {
@@ -4067,7 +4055,7 @@ exports.contentItems = {
 Object.defineProperty(exports, "__esModule", { value: true });
 var toolbar_manager_1 = __webpack_require__(28);
 var _2sxc_translate_1 = __webpack_require__(7);
-var sxc_1 = __webpack_require__(1);
+var sxc_1 = __webpack_require__(6);
 /** contains commands to create/move/delete a contentBlock in a page */
 var sxcInstance;
 /**
@@ -4204,7 +4192,7 @@ var context_1 = __webpack_require__(8);
 var render_button_1 = __webpack_require__(17);
 var render_toolbar_1 = __webpack_require__(16);
 var toolbar_expand_config_1 = __webpack_require__(31);
-var api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(1);
 var local_storage_helper_1 = __webpack_require__(79);
 var button_config_adapter_1 = __webpack_require__(80);
 /**
@@ -4400,7 +4388,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(6);
+var commands_1 = __webpack_require__(5);
 var button_action_1 = __webpack_require__(18);
 var button_config_1 = __webpack_require__(19);
 var expand_button_config_1 = __webpack_require__(10);
@@ -4571,12 +4559,12 @@ exports._translateInit = _translateInit;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(2);
+var api_1 = __webpack_require__(1);
 var quick_dialog_1 = __webpack_require__(11);
 var build_toolbars_1 = __webpack_require__(13);
 var _2sxc_translate_1 = __webpack_require__(7);
-var sxc_1 = __webpack_require__(1);
-var log_1 = __webpack_require__(5);
+var sxc_1 = __webpack_require__(6);
+var log_1 = __webpack_require__(4);
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -4753,7 +4741,7 @@ __webpack_require__(109);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(6);
+__webpack_require__(5);
 __webpack_require__(113);
 __webpack_require__(21);
 __webpack_require__(114);
@@ -4809,8 +4797,8 @@ __webpack_require__(139);
 __webpack_require__(43);
 __webpack_require__(29);
 __webpack_require__(140);
-__webpack_require__(5);
-__webpack_require__(2);
+__webpack_require__(4);
+__webpack_require__(1);
 __webpack_require__(78);
 __webpack_require__(22);
 __webpack_require__(79);
@@ -4835,8 +4823,8 @@ __webpack_require__(39);
 __webpack_require__(38);
 __webpack_require__(148);
 __webpack_require__(26);
+__webpack_require__(2);
 __webpack_require__(3);
-__webpack_require__(4);
 __webpack_require__(149);
 __webpack_require__(150);
 __webpack_require__(25);
@@ -4872,7 +4860,7 @@ __webpack_require__(34);
 __webpack_require__(82);
 __webpack_require__(7);
 __webpack_require__(83);
-module.exports = __webpack_require__(1);
+module.exports = __webpack_require__(6);
 
 
 /***/ }),
@@ -6336,8 +6324,8 @@ exports.User = User;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(2);
-var sxc_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(1);
+var sxc_1 = __webpack_require__(6);
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
@@ -6398,10 +6386,10 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(6);
+var commands_1 = __webpack_require__(5);
 var context_1 = __webpack_require__(8);
 var manage_1 = __webpack_require__(77);
-var quick_e_1 = __webpack_require__(3);
+var quick_e_1 = __webpack_require__(2);
 var start_1 = __webpack_require__(25);
 var _2sxc__translateInit_1 = __webpack_require__(82);
 __webpack_require__(83);
@@ -6607,8 +6595,8 @@ exports.Conf = Conf;
 Object.defineProperty(exports, "__esModule", { value: true });
 var cb_1 = __webpack_require__(37);
 var clipboard_1 = __webpack_require__(20);
-var quick_e_1 = __webpack_require__(3);
-var selectors_instance_1 = __webpack_require__(4);
+var quick_e_1 = __webpack_require__(2);
+var selectors_instance_1 = __webpack_require__(3);
 /**
  * content-block specific stuff like actions
  */
@@ -6655,8 +6643,8 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(20);
 var mod_manage_1 = __webpack_require__(39);
-var quick_e_1 = __webpack_require__(3);
-var selectors_instance_1 = __webpack_require__(4);
+var quick_e_1 = __webpack_require__(2);
+var selectors_instance_1 = __webpack_require__(3);
 /**
  * module specific stuff
  */

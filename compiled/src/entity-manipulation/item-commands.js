@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
-var sxc_1 = require("../x-bootstrap/sxc");
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
@@ -15,8 +14,7 @@ exports.contentItems = {
             .replace('{title}', itemTitle));
         if (!ok)
             return;
-        var sxc = sxc_1.getSxcInstance(context.instance.id);
-        sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
+        context.sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
             .success(function () {
             location.reload();
         }).error(function (error) {

@@ -1,16 +1,14 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { ContentGroup } from '../data-edit-context/content-group';
 import { hide } from '../quick-dialog/quick-dialog';
 import { isDisabled } from '../toolbar/build-toolbars';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
-import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
- * @param {} sxc
- * @returns {}
+ * @param {ContextOfButton} context
+ * @returns {any}
  */
 
 export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean) {
@@ -33,14 +31,12 @@ export function prepareToAddContent(context: ContextOfButton, useModuleList: boo
 
 /**
  * Update the template and adjust UI accordingly.
- * @param {*} sxc
- * @param {*} templateId
- * @param {*} forceCreate
+ * @param {ContextOfButton} context
+ * @param {number} templateId
+ * @param {boolean} forceCreate
  */
 export function updateTemplateFromDia(context: ContextOfButton, templateId: number, forceCreate: boolean) {
-  const sxc = getSxcInstance(context.instance.id);
-  const contentGroup: ContentGroup = sxc.manage._editContext.ContentGroup;
-  const showingAjaxPreview = isDisabled(sxc);
+  const showingAjaxPreview = isDisabled(context.sxc);
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
   // or just reset it, so it picks up the right values again ?
@@ -50,8 +46,8 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
       hide();
 
       // if it didn't have content, then it only has now...
-      if (!contentGroup.HasContent) {
-        contentGroup.HasContent = forceCreate;
+      if (!context.app.hasContent) {
+        context.app.hasContent = forceCreate;
       }
 
       // only reload on ajax, not on app as that was already re-loaded on the preview

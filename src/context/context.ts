@@ -29,14 +29,13 @@ export function context(htmlElementOrId: HTMLElement | number, cbid?: number): C
  * @param cbid
  */
 export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number): ContextOfButton {
-  const sxc = getSxcInstance(htmlElementOrId);
-  const contextOfButton = getContextInstance(sxc, cbid);
+  const contextOfButton = context(htmlElementOrId, cbid);
   // set sxc to null because of cyclic reference, so we can serialize it
   contextOfButton.sxc = null;
   // make a copy
   const copyOfContext = JSON.parse(JSON.stringify(contextOfButton));
   // bring sxc back to context
-  contextOfButton.sxc = sxc;
+  contextOfButton.sxc = getSxcInstance(htmlElementOrId);
   return copyOfContext;
 }
 

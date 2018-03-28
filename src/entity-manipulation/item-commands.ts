@@ -1,6 +1,5 @@
 ﻿import { translate } from '../translate/2sxc.translate';
 import { ContextOfButton } from '../context/context-of-button';
-import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
@@ -15,8 +14,7 @@ export let contentItems = {
       .replace('{id}', itemId.toString())
       .replace('{title}', itemTitle));
     if (!ok) return;
-    const sxc = getSxcInstance(context.instance.id);
-    sxc.webApi.delete(`app-content/any/${itemGuid}`, null, null, true)
+    context.sxc.webApi.delete(`app-content/any/${itemGuid}`, null, null, true)
       .success(() => {
         location.reload();
       }).error((error: any) => {
