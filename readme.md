@@ -62,7 +62,7 @@ Our **webpack.config.js** supports bundling for Development or Production (depen
 
 - bundles all ts/js and css files
 - currently all css files are minimized (but only min.css have to be minimized)
-- copy 4 icon*.png images to C:\Projects as side effect of publish, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
+- copy 4 icon*.png images to C:\Projects as side effect of Run-Production, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
 - currently do not work in watch mode
 
 ### TypeDoc
