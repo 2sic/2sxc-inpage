@@ -8,7 +8,6 @@ import { ContentBlockContext } from './content-block-context/content-block-conte
 import { ContextOfButton } from './context-of-button';
 import { AppContext } from './instance-context/app-context';
 import { InstanceContext } from './instance-context/instance-context';
-import { SxcContext } from './instance-context/sxc-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
 

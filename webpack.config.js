@@ -30,7 +30,7 @@ var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var entryJsFiles = glob.sync('./src/**/libs/*.js');
 var entryTsFiles = glob.sync('./src/**/*.ts');
 var entryFiles = entryJsFiles.concat(entryTsFiles);
-var entryCssFiles = glob.sync('./src/**/*.css').concat(glob.sync('./icons/**/*.css'));
+var entryCssFiles = glob.sync('./src/**/*.css').concat(['./icons/css/inpage-icons-codes.css']);
 var nodeEnv = (process.env.NODE_ENV || 'development');
 var isProd = (nodeEnv === 'production');
 var generateTypedocDocumentation = false;
