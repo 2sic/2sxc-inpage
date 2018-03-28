@@ -1,6 +1,6 @@
 ﻿/* webpack static module bundler
 
-After bounding, it will copy of all files from **./dist/** to **C:/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage, images and lib folders.
+After bounding, it will copy of all files from **./dist/** to **C:/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage folder.
 Supports bundling for Development or Production (depending on process.env.NODE_ENV, but 'development' is default).
 
 Development
@@ -10,6 +10,7 @@ Development
 Production
 - bundles all ts/js and css files
 - currently all css files are minimized (only min.css have to be minimized)
+- copy 4 icon*.png images to C:\Projects as side effect of publish, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
 - currently do not work in watch mode
 
 TypeDoc
@@ -183,6 +184,7 @@ if (isProd) {
     use: {
       loader: 'file-loader',
       options: {
+        // todo STV - ensure it uses the version from the package.json
         name: '../lib/fonts/[name].[ext]?09.15.00'
       }
     }
