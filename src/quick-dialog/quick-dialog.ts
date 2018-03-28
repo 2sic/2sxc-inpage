@@ -4,13 +4,11 @@ import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { ContextOfButton } from '../context/context-of-button';
-import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
  */
-
 const resizeInterval: number = 200;
 const scrollTopOffset: number = 80;
 let resizeWatcher: any = null;
@@ -76,22 +74,21 @@ export function getIFrame(container?: any): any {
 
 /**
  * check if the dialog is showing for the current sxc-instance
- * @param {Object<any>} context object
+ * @param {ContextOfButton} context object
  * @param {string} dialogName - name of dialog
  * @returns {boolean} true if it's currently showing for this sxc-instance
  */
-export function isShowing(context: ContextOfButton, dialogName: string): any {
-  const sxc = getSxcInstance(context.instance.id);
+export function isShowing(context: ContextOfButton, dialogName: string): boolean {
   return current // there is a current dialog
     &&
-    current.sxcCacheKey === sxc.cacheKey // the iframe is showing for the current sxc
+    current.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
     &&
     current.dialogName === dialogName; // the view is the same as previously
 }
 
 /**
  * show / reset the current iframe to use new url and callback
- * @param {any} context object
+ * @param {ContextOfButton} context object
  * @param {string} url - url to show
  * @param {function()} closeCallback - callback event
  * @param {boolean} fullScreen - if it should open full screen
@@ -110,8 +107,7 @@ export function showOrToggle(context: ContextOfButton,
   if (dialogName && isShowing(context, dialogName)) {
     return hide();
   }
-  const sxc = getSxcInstance(context.instance.id);
-  iFrame.rewire(sxc, closeCallback, dialogName);
+  iFrame.rewire(context.sxc, closeCallback, dialogName);
   iFrame.setAttribute('src', rewriteUrl(url));
   // if the window had already been loaded, re-init
   if (iFrame.contentWindow && iFrame.contentWindow.reboot)
@@ -138,6 +134,10 @@ function buildContainerAndIFrame(): any {
   return container;
 }
 
+/**
+ * set container css for size
+ * @param {boolean} fullScreen
+ */
 function setSize(fullScreen: boolean): void {
   const container = getContainer();
   // set container height
@@ -145,6 +145,10 @@ function setSize(fullScreen: boolean): void {
   isFullscreen = fullScreen;
 }
 
+/**
+ * extend IFrame with Sxc state
+ * @param iFrame
+ */
 function extendIFrameWithSxcState(iFrame: any) {
   let hiddenSxc: SxcInstanceWithInternals = null;
   // ReSharper disable once UnusedLocals

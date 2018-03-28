@@ -1,6 +1,6 @@
 ﻿import { WebApiParams } from './web-api-params';
 import { ContextOfButton } from '../context/context-of-button';
-import { getSxcInstance } from '../x-bootstrap/sxc';
+
 /*
  * this is a content block in the browser
  *
@@ -33,19 +33,18 @@ import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * Save the template configuration for this instance
- * @param {object} sxc
- * @param {int} templateId
+ * @param {ContextOfButton} context
+ * @param {number} templateId
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
 export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): any {
-  const sxc = getSxcInstance(context.instance.id);
   const params: WebApiParams = {
     templateId: templateId,
     forceCreateContentGroup: forceCreateContentGroup,
     newTemplateChooserState: false,
   };
-  return sxc.webApi.get({
+  return context.sxc.webApi.get({
     url: 'view/module/savetemplateid',
     params: params,
   });
@@ -53,22 +52,20 @@ export function saveTemplate(context: ContextOfButton, templateId: number, force
 
 /**
  * Retrieve the preview from the web-api
- * @param {object} sxc
- * @param {int} templateId
+ * @param {ContextOfButton} context
+ * @param {number} templateId
  * @returns {promise} promise with the html in the result
  */
 export function getPreviewWithTemplate(context: ContextOfButton, templateId: number): any {
-  const sxc = getSxcInstance(context.instance.id);
-  const ec = sxc.manage._editContext;
   templateId = templateId || -1; // fallback, meaning use saved ID
   const params: WebApiParams = {
     templateId: templateId,
-    lang: ec.Language.Current,
-    cbisentity: ec.ContentBlock.IsEntity,
-    cbid: ec.ContentBlock.Id,
-    originalparameters: JSON.stringify(ec.Environment.parameters),
+    lang: context.app.currentLanguage,
+    cbisentity: context.contentBlock.isEntity,
+    cbid: context.contentBlock.id,
+    originalparameters: JSON.stringify(context.instance.parameters),
   };
-  return sxc.webApi.get({
+  return context.sxc.webApi.get({
     url: 'view/module/rendertemplate',
     params: params,
     dataType: 'html',

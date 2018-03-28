@@ -1,12 +1,10 @@
-﻿import { getTag } from '../manage/api';
+﻿import { ContextOfButton } from '../context/context-of-button';
+import { getTag } from '../manage/api';
 import { hide } from '../quick-dialog/quick-dialog';
 import { reset } from '../quick-edit/start';
 import { disable } from '../toolbar/build-toolbars';
-import { _contentBlock } from './main-content-block';
+import { _contentBlock, MainContentBlock } from './main-content-block';
 import { getPreviewWithTemplate } from './web-api-promises';
-import { ContextOfButton } from '../context/context-of-button';
-import { getSxcInstance } from '../x-bootstrap/sxc';
-
 
 /*
  * this is the content block manager in the browser
@@ -22,25 +20,22 @@ import { getSxcInstance } from '../x-bootstrap/sxc';
 /**
  * ajax update/replace the content of the content-block
  * optionally also initialize the toolbar (if not just preview)
- * @param {Object<>} context
+ * @param {ContextOfButton} context
  * @param {string} newContent
  * @param {boolean} justPreview
  * @returns {}
  */
-
 function replaceCb(context: ContextOfButton, newContent: any, justPreview: boolean): void {
   try {
-    const sxc = getSxcInstance(context.instance.id);
-
     const newStuff = $(newContent);
 
     // Must disable toolbar before we attach to DOM
     if (justPreview) disable(newStuff);
 
-    $(getTag(sxc)).replaceWith(newStuff);
+    $(getTag(context.sxc)).replaceWith(newStuff);
     // reset the cache, so the sxc-object is refreshed
 
-    sxc.recreate(true);
+    context.sxc.recreate(true);
   } catch (e) {
     console.log('Error while rendering template:', e);
   }
@@ -48,20 +43,19 @@ function replaceCb(context: ContextOfButton, newContent: any, justPreview: boole
 
 /**
  * Show a message where the content of a module should be - usually as placeholder till something else happens
- * @param {object} context
+ * @param {ContextOfButton} context
  * @param {string} newContent
- * @returns {} - nothing
+ * @returns {} nothing
  */
 export function showMessage(context: ContextOfButton, newContent: any): void {
-  const sxc = getSxcInstance(context.instance.id);
-  $(getTag(sxc)).html(newContent);
+  $(getTag(context.sxc)).html(newContent);
 }
 
 /**
  * ajax-call, then replace
- * @param context
- * @param alternateTemplateId
- * @param justPreview
+ * @param {ContextOfButton} context
+ * @param {number} alternateTemplateId
+ * @param {boolean} justPreview
  */
 export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, justPreview: boolean): any {
   return getPreviewWithTemplate(context, alternateTemplateId)
@@ -71,17 +65,18 @@ export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, 
 
 /**
  * this one assumes a replace / change has already happened, but now must be finalized...
- * @param sxc
- * @param forceAjax
- * @param preview
+ * @param {ContextOfButton} context
+ * @param {boolean} forceAjax
+ * @param {boolean} preview
  */
 export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): any {
-  const sxc = getSxcInstance(context.instance.id);
   // if ajax is not supported, we must reload the whole page
-  if (!forceAjax && !sxc.manage._reloadWithAjax) return window.location.reload();
+  if (!forceAjax && !context.app.supportsAjax) {
+    return window.location.reload();
+  }
 
   // ReSharper disable once DoubleNegationOfBoolean
-  return ajaxLoad(context, _contentBlock.cUseExistingTemplate, !!preview)
+  return ajaxLoad(context, MainContentBlock.cUseExistingTemplate, !!preview)
     .then(() => {
 
       // tell Evoq that page has changed if it has changed (Ajax call)
