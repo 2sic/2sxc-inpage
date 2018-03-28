@@ -183,6 +183,7 @@ if (isProd) {
     use: {
       loader: 'file-loader',
       options: {
+        // todo STV - ensure it uses the version from the package.json
         name: '../lib/fonts/[name].[ext]?09.15.00'
       }
     }
