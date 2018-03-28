@@ -116,6 +116,8 @@ class EditManager {
 
   //#endregion official, public properties - everything below this can change at any time
 
+  _context = this.context;
+
   // ReSharper disable InconsistentNaming
   /**
    * internal method to find out if it's in edit-mode

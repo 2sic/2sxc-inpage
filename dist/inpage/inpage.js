@@ -72,7 +72,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var expand_button_config_1 = __webpack_require__(10);
 var command_definition_1 = __webpack_require__(44);
-var commands_1 = __webpack_require__(5);
+var commands_1 = __webpack_require__(6);
 var CommandBase = /** @class */ (function () {
     function CommandBase() {
         this.commandDefinition = new command_definition_1.CommandDefinition();
@@ -243,6 +243,20 @@ exports.prepareToolbarInDom = prepareToolbarInDom;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+function getSxcInstance(module) {
+    var sxc = $2sxc(module);
+    return sxc;
+}
+exports.getSxcInstance = getSxcInstance;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * selectors used all over the in-page-editing, centralized to ensure consistency
  */
@@ -268,7 +282,7 @@ exports.selectors = {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -425,7 +439,7 @@ exports.Log = Log;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -463,46 +477,14 @@ exports.Commands = Commands;
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-function getSxcInstance(module) {
-    var sxc = $2sxc(module);
-    return sxc;
-}
-exports.getSxcInstance = getSxcInstance;
-
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
- * @param key
- */
-function translate(key) {
-    // return key;
-    return ($.t && $.t(key)) || key;
-}
-exports.translate = translate;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(1);
-var sxc_1 = __webpack_require__(6);
+var sxc_1 = __webpack_require__(3);
 var system_context_1 = __webpack_require__(47);
 var tenant_context_1 = __webpack_require__(48);
 var user_context_1 = __webpack_require__(49);
@@ -649,6 +631,24 @@ exports.createContextFromEditContext = createContextFromEditContext;
 
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
+ * @param key
+ */
+function translate(key) {
+    // return key;
+    return ($.t && $.t(key)) || key;
+}
+exports.translate = translate;
+
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -740,7 +740,7 @@ exports.publishId = publishId;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(4);
+var log_1 = __webpack_require__(5);
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
 // ReSharper disable once UnusedParameter
 function expandButtonConfig(original, sharedProps, parentLog) {
@@ -928,7 +928,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var main_content_block_1 = __webpack_require__(24);
 var render_1 = __webpack_require__(12);
 var templates_1 = __webpack_require__(15);
-var context_1 = __webpack_require__(8);
+var context_1 = __webpack_require__(7);
 var api_1 = __webpack_require__(1);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -1282,13 +1282,13 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(8);
+var context_1 = __webpack_require__(7);
 var api_1 = __webpack_require__(1);
 var render_toolbar_1 = __webpack_require__(16);
 var toolbar_manager_1 = __webpack_require__(28);
 var toolbar_expand_config_1 = __webpack_require__(31);
 var toolbar_settings_1 = __webpack_require__(34);
-var log_1 = __webpack_require__(4);
+var log_1 = __webpack_require__(5);
 // quick debug - set to false if not needed for production
 var dbg = false;
 // generate an empty / fallback toolbar tag
@@ -1662,11 +1662,11 @@ exports.ButtonConfig = ButtonConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = __webpack_require__(6);
+var sxc_1 = __webpack_require__(3);
 var cmds_strategy_factory_1 = __webpack_require__(84);
 var mod_1 = __webpack_require__(38);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(3);
+var selectors_instance_1 = __webpack_require__(4);
 /** add a clipboard to the quick edit */
 /**
  * perform copy and paste commands - needs the clipboard
@@ -1787,11 +1787,11 @@ $('a', quick_e_1.$quickE.selected).click(function () {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(8);
+var context_1 = __webpack_require__(7);
 var api_1 = __webpack_require__(1);
 var command_create_1 = __webpack_require__(23);
 var command_execute_action_1 = __webpack_require__(64);
-var commands_1 = __webpack_require__(5);
+var commands_1 = __webpack_require__(6);
 var Engine = /** @class */ (function () {
     function Engine(sxc) {
         var _this = this;
@@ -1941,7 +1941,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = __webpack_require__(65);
 var positioning_1 = __webpack_require__(26);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(3);
+var selectors_instance_1 = __webpack_require__(4);
 function enable() {
     // build all toolbar html-elements
     quick_e_1.prepareToolbarInDom();
@@ -2015,7 +2015,7 @@ exports.reset = reset;
 Object.defineProperty(exports, "__esModule", { value: true });
 var coords_1 = __webpack_require__(66);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(3);
+var selectors_instance_1 = __webpack_require__(4);
 /**
  * Module with everything related to positioning the quick-edit in-page editing
  */
@@ -2256,7 +2256,7 @@ exports._toolbarManager = sharedTbm; // new ToolbarManager();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(4);
+var log_1 = __webpack_require__(5);
 var HasLog = /** @class */ (function () {
     /**
      * initialize the logger
@@ -2351,7 +2351,7 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(4);
+var log_1 = __webpack_require__(5);
 var instance_config_1 = __webpack_require__(22);
 var old_toolbar_settings_adapter_1 = __webpack_require__(71);
 var expand_button_config_1 = __webpack_require__(10);
@@ -2713,7 +2713,7 @@ exports.commandOpenNgDialog = commandOpenNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sxc_1 = __webpack_require__(6);
+var sxc_1 = __webpack_require__(3);
 /**
  * extend the quick edit with the core commands
  */
@@ -2742,7 +2742,7 @@ exports.Cb = Cb;
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(39);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(3);
+var selectors_instance_1 = __webpack_require__(4);
 var Mod = /** @class */ (function () {
     function Mod() {
     }
@@ -3423,7 +3423,7 @@ exports.PageContext = PageContext;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(1);
-var _2sxc_translate_1 = __webpack_require__(7);
+var _2sxc_translate_1 = __webpack_require__(8);
 var Command = /** @class */ (function () {
     function Command(context, ngDialogUrl, isDebug) {
         var _this = this;
@@ -3530,7 +3530,7 @@ exports.Command = Command;
 Object.defineProperty(exports, "__esModule", { value: true });
 var templates_1 = __webpack_require__(15);
 var command_open_ng_dialog_1 = __webpack_require__(36);
-var commands_1 = __webpack_require__(5);
+var commands_1 = __webpack_require__(6);
 var button_action_1 = __webpack_require__(18);
 var button_config_1 = __webpack_require__(19);
 var settings_adapter_1 = __webpack_require__(33);
@@ -3595,7 +3595,7 @@ exports.commandExecuteAction = commandExecuteAction;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(3);
+var selectors_instance_1 = __webpack_require__(4);
 var configAttr = 'quick-edit-config';
 /**
  * the initial configuration
@@ -3831,13 +3831,13 @@ exports.oldToolbarSettingsAddapter = oldToolbarSettingsAddapter;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(5);
+var commands_1 = __webpack_require__(6);
 var parameters_adapter_1 = __webpack_require__(32);
 var settings_adapter_1 = __webpack_require__(33);
 var button_action_1 = __webpack_require__(18);
 var button_config_1 = __webpack_require__(19);
 var expand_button_config_1 = __webpack_require__(10);
-var log_1 = __webpack_require__(4);
+var log_1 = __webpack_require__(5);
 /**
  * this will traverse a groups-tree and expand each group
  * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
@@ -4016,7 +4016,7 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var _2sxc_translate_1 = __webpack_require__(7);
+var _2sxc_translate_1 = __webpack_require__(8);
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
  */
@@ -4054,8 +4054,8 @@ exports.contentItems = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var toolbar_manager_1 = __webpack_require__(28);
-var _2sxc_translate_1 = __webpack_require__(7);
-var sxc_1 = __webpack_require__(6);
+var _2sxc_translate_1 = __webpack_require__(8);
+var sxc_1 = __webpack_require__(3);
 /** contains commands to create/move/delete a contentBlock in a page */
 var sxcInstance;
 /**
@@ -4188,7 +4188,7 @@ exports._manage = new Manage(); // used out of this project in ToSic.Sxc.Instanc
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(21);
 var manipulate_1 = __webpack_require__(76);
-var context_1 = __webpack_require__(8);
+var context_1 = __webpack_require__(7);
 var render_button_1 = __webpack_require__(17);
 var render_toolbar_1 = __webpack_require__(16);
 var toolbar_expand_config_1 = __webpack_require__(31);
@@ -4275,6 +4275,7 @@ var EditManager = /** @class */ (function () {
             return render_toolbar_1.renderToolbar(_this.context);
         };
         //#endregion official, public properties - everything below this can change at any time
+        this._context = this.context;
         // ReSharper disable InconsistentNaming
         /**
          * internal method to find out if it's in edit-mode
@@ -4388,7 +4389,7 @@ exports.LocalStorageHelper = LocalStorageHelper;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(5);
+var commands_1 = __webpack_require__(6);
 var button_action_1 = __webpack_require__(18);
 var button_config_1 = __webpack_require__(19);
 var expand_button_config_1 = __webpack_require__(10);
@@ -4515,6 +4516,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var i18next = __webpack_require__(40);
 var i18nextXHRBackend = __webpack_require__(41);
 var jqueryI18next = __webpack_require__(42);
+var context_1 = __webpack_require__(7);
+var sxc_1 = __webpack_require__(3);
+var api_1 = __webpack_require__(1);
 /**
  * initialize the translation system; ensure toolbars etc. are translated
  */
@@ -4523,18 +4527,35 @@ window.i18nextXHRBackend = i18nextXHRBackend;
 var initialized = false;
 // ReSharper disable once InconsistentNaming
 function _translateInit(manage) {
-    if (initialized)
+    if (initialized) {
         return;
+    }
+    var context = manage._context;
+    if (!context) {
+        initialized = true; // getScxInstance is calling _translate so that we can skip the loop...
+        // trying to get context...
+        var htmlElementOrId = $('div[data-cb-id]')[0];
+        var sxc = sxc_1.getSxcInstance(htmlElementOrId);
+        initialized = false; // for real, it is not initialized...
+        var editContext = api_1.getEditContext(sxc);
+        context = context_1.createContextFromEditContext(editContext);
+        context.sxc = sxc;
+    }
+    //console.log('stv: compare #1',
+    //  manage._editContext.Language.Current.substr(0, 2),
+    //  context.app.currentLanguage.substr(0, 2));
+    //console.log('stv: compare #2',
+    //  manage._editContext.Environment.SxcRootUrl,
+    //  context.instance.sxcRootUrl);
     window.i18next
         .use(i18nextXHRBackend)
         .init({
-        lng: manage._editContext.Language.Current.substr(0, 2),
+        lng: context.app.currentLanguage.substr(0, 2),
         fallbackLng: 'en',
         whitelist: ['en', 'de', 'fr', 'it', 'uk', 'nl'],
         preload: ['en'],
         backend: {
-            loadPath: manage._editContext.Environment.SxcRootUrl +
-                'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js',
+            loadPath: context.instance.sxcRootUrl + 'desktopmodules/tosic_sexycontent/dist/i18n/inpage-{{lng}}.js',
         },
     }, function (err, t) {
         // ReSharper restore UnusedParameter
@@ -4562,9 +4583,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(1);
 var quick_dialog_1 = __webpack_require__(11);
 var build_toolbars_1 = __webpack_require__(13);
-var _2sxc_translate_1 = __webpack_require__(7);
-var sxc_1 = __webpack_require__(6);
-var log_1 = __webpack_require__(4);
+var _2sxc_translate_1 = __webpack_require__(8);
+var sxc_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -4741,7 +4762,7 @@ __webpack_require__(109);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(5);
+__webpack_require__(6);
 __webpack_require__(113);
 __webpack_require__(21);
 __webpack_require__(114);
@@ -4767,7 +4788,7 @@ __webpack_require__(53);
 __webpack_require__(56);
 __webpack_require__(52);
 __webpack_require__(57);
-__webpack_require__(8);
+__webpack_require__(7);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(119);
@@ -4797,7 +4818,7 @@ __webpack_require__(139);
 __webpack_require__(43);
 __webpack_require__(29);
 __webpack_require__(140);
-__webpack_require__(4);
+__webpack_require__(5);
 __webpack_require__(1);
 __webpack_require__(78);
 __webpack_require__(22);
@@ -4824,7 +4845,7 @@ __webpack_require__(38);
 __webpack_require__(148);
 __webpack_require__(26);
 __webpack_require__(2);
-__webpack_require__(3);
+__webpack_require__(4);
 __webpack_require__(149);
 __webpack_require__(150);
 __webpack_require__(25);
@@ -4858,9 +4879,9 @@ __webpack_require__(73);
 __webpack_require__(31);
 __webpack_require__(34);
 __webpack_require__(82);
-__webpack_require__(7);
+__webpack_require__(8);
 __webpack_require__(83);
-module.exports = __webpack_require__(6);
+module.exports = __webpack_require__(3);
 
 
 /***/ }),
@@ -5777,7 +5798,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(9);
-var _2sxc_translate_1 = __webpack_require__(7);
+var _2sxc_translate_1 = __webpack_require__(8);
 var command_base_1 = __webpack_require__(0);
 /**
  * todo: shouldn't be available if changes are not allowed
@@ -5835,7 +5856,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var actions_1 = __webpack_require__(9);
-var _2sxc_translate_1 = __webpack_require__(7);
+var _2sxc_translate_1 = __webpack_require__(8);
 var command_base_1 = __webpack_require__(0);
 /**
  * remove an item from the placeholder (usually for lists)
@@ -6325,7 +6346,7 @@ exports.User = User;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(1);
-var sxc_1 = __webpack_require__(6);
+var sxc_1 = __webpack_require__(3);
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
  */
@@ -6386,8 +6407,8 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(5);
-var context_1 = __webpack_require__(8);
+var commands_1 = __webpack_require__(6);
+var context_1 = __webpack_require__(7);
 var manage_1 = __webpack_require__(77);
 var quick_e_1 = __webpack_require__(2);
 var start_1 = __webpack_require__(25);
@@ -6596,7 +6617,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var cb_1 = __webpack_require__(37);
 var clipboard_1 = __webpack_require__(20);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(3);
+var selectors_instance_1 = __webpack_require__(4);
 /**
  * content-block specific stuff like actions
  */
@@ -6644,7 +6665,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(20);
 var mod_manage_1 = __webpack_require__(39);
 var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(3);
+var selectors_instance_1 = __webpack_require__(4);
 /**
  * module specific stuff
  */
