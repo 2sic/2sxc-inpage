@@ -6,6 +6,7 @@ var build_toolbars_1 = require("../toolbar/build-toolbars");
 var _2sxc_translate_1 = require("../translate/2sxc.translate");
 var sxc_1 = require("./sxc");
 var log_1 = require("../logging/log");
+var log_utils_1 = require("../logging/log-utils");
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -84,8 +85,7 @@ function initModule(module, isFirstRun) {
         // use a logger for each iteration
         var log = new log_1.Log('Bts.Module');
         build_toolbars_1.buildToolbars(log, module);
-        if ($2sxc.debug.load)
-            console.log(log.dump());
+        log_utils_1.LogUtils.logDump(log);
     }
     ;
     return true;

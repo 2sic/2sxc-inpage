@@ -45,6 +45,7 @@
     <None Remove="src\globals.d.ts" />
     <None Remove="src\interfaces\hashtable.ts" />
     <None Remove="src\lib-helpers\jquery.ts" />
+    <None Remove="src\logging\log-utils.ts" />
     <None Remove="src\manage\local-storage-helper.ts" />
     <None Remove="src\quick-edit\cb-or-mod.ts" />
     <None Remove="src\quick-edit\selectors-instance.ts" />
@@ -111,6 +112,7 @@
     <TypeScriptCompile Include="src\context\context.ts" />
     <TypeScriptCompile Include="src\interfaces\hashtable.ts" />
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
+    <TypeScriptCompile Include="src\logging\log-utils.ts" />
     <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
     <TypeScriptCompile Include="src\quick-edit\cb-or-mod.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors-instance.ts" />

@@ -5,6 +5,7 @@ import { buildToolbars} from '../toolbar/build-toolbars';
 import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from './sxc';
 import { Log } from '../logging/log';
+import { LogUtils } from '../logging/log-utils';
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -95,8 +96,7 @@ function initModule(module: any, isFirstRun: boolean) {
     // use a logger for each iteration
     const log = new Log('Bts.Module');
     buildToolbars(log, module);
-    if ($2sxc.debug.load)
-      console.log(log.dump());
+    LogUtils.logDump(log);
   };
 
   return true;

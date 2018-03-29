@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 85);
+/******/ 	return __webpack_require__(__webpack_require__.s = 86);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1663,7 +1663,7 @@ exports.ButtonConfig = ButtonConfig;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(3);
-var cmds_strategy_factory_1 = __webpack_require__(84);
+var cmds_strategy_factory_1 = __webpack_require__(85);
 var mod_1 = __webpack_require__(38);
 var quick_e_1 = __webpack_require__(2);
 var selectors_instance_1 = __webpack_require__(4);
@@ -4241,6 +4241,7 @@ var EditManager = /** @class */ (function () {
         //#region Official, public properties and commands, which are stable for use from the outside
         /**
          * run a command - command used in toolbars and custom buttons
+         * it is publicly used out of inpage, so take a care to preserve function signature
          */
         this.run = this.cmdEngine.run;
         /**
@@ -4252,6 +4253,7 @@ var EditManager = /** @class */ (function () {
          * @param {Object<any>} actDef - settings, an object containing the spec for the expected button
          * @param {int} groupIndex - number what button-group it's in'
          * @returns {string} html of a button
+         * it is publicly used out of inpage, so take a care to preserve function signature
          */
         this.getButton = function (actDef, groupIndex) {
             //const tag: any = getTag(this.sxc);
@@ -4266,6 +4268,8 @@ var EditManager = /** @class */ (function () {
          * @param {Object<any>} tbConfig - general toolbar config
          * @param {Object<any>} moreSettings - additional / override settings
          * @returns {string} html of the current toolbar
+         *
+         * it is publicly used out of inpage, so take a care to preserve function signature
          */
         this.getToolbar = function (tbConfig, moreSettings) {
             //const tag: any = getTag(this.sxc);
@@ -4448,7 +4452,8 @@ function buttonConfigAdapter(context, actDef, groupIndex) {
         };
     }
     if (actDef.params) {
-        // todo: stv test this...
+        // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
+        // we need parameter adapter to do this...
         Object.assign(partialButtonConfig.params, actDef.params);
     }
     if (actDef.partOfPage) {
@@ -4586,6 +4591,7 @@ var build_toolbars_1 = __webpack_require__(13);
 var _2sxc_translate_1 = __webpack_require__(8);
 var sxc_1 = __webpack_require__(3);
 var log_1 = __webpack_require__(5);
+var log_utils_1 = __webpack_require__(84);
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -4664,8 +4670,7 @@ function initModule(module, isFirstRun) {
         // use a logger for each iteration
         var log = new log_1.Log('Bts.Module');
         build_toolbars_1.buildToolbars(log, module);
-        if ($2sxc.debug.load)
-            console.log(log.dump());
+        log_utils_1.LogUtils.logDump(log);
     }
     ;
     return true;
@@ -4701,6 +4706,39 @@ function showGlassesButtonIfUninitialized(sxci) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * logDump - to write whole log to console if is enabled
+ */
+var LogUtils = /** @class */ (function () {
+    function LogUtils() {
+    }
+    /**
+     * Dump log to console, when debug logging is enabled by url query string parameters
+     * @param log
+     */
+    LogUtils.logDump = function (log) {
+        // 'jslog' is additional query string url parameter, to enable log dump (debug=true is required)
+        // in the future would support more variations like jslog = toolbar etc
+        var jsLogUrlParam = $2sxc.urlParams.get('jslog');
+        //if ($2sxc.debug.load) {
+        //  console.log(log.dump());
+        //}
+        if (jsLogUrlParam) {
+            console.log(log.dump());
+        }
+    };
+    return LogUtils;
+}());
+exports.LogUtils = LogUtils;
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var cb_1 = __webpack_require__(37);
 var mod_1 = __webpack_require__(38);
 var CmdsStrategyFactory = /** @class */ (function () {
@@ -4722,14 +4760,14 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(40);
 __webpack_require__(41);
 __webpack_require__(42);
-__webpack_require__(86);
 __webpack_require__(87);
+__webpack_require__(88);
 __webpack_require__(0);
 __webpack_require__(23);
 __webpack_require__(44);
@@ -4737,7 +4775,6 @@ __webpack_require__(64);
 __webpack_require__(74);
 __webpack_require__(36);
 __webpack_require__(63);
-__webpack_require__(88);
 __webpack_require__(89);
 __webpack_require__(90);
 __webpack_require__(91);
@@ -4762,19 +4799,20 @@ __webpack_require__(109);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(6);
 __webpack_require__(113);
-__webpack_require__(21);
+__webpack_require__(6);
 __webpack_require__(114);
+__webpack_require__(21);
 __webpack_require__(115);
 __webpack_require__(116);
+__webpack_require__(117);
 __webpack_require__(9);
 __webpack_require__(24);
-__webpack_require__(117);
+__webpack_require__(118);
 __webpack_require__(76);
 __webpack_require__(12);
 __webpack_require__(15);
-__webpack_require__(118);
+__webpack_require__(119);
 __webpack_require__(35);
 __webpack_require__(58);
 __webpack_require__(47);
@@ -4791,10 +4829,9 @@ __webpack_require__(57);
 __webpack_require__(7);
 __webpack_require__(59);
 __webpack_require__(60);
-__webpack_require__(119);
+__webpack_require__(120);
 __webpack_require__(61);
 __webpack_require__(62);
-__webpack_require__(120);
 __webpack_require__(121);
 __webpack_require__(122);
 __webpack_require__(123);
@@ -4804,8 +4841,8 @@ __webpack_require__(126);
 __webpack_require__(127);
 __webpack_require__(128);
 __webpack_require__(129);
-__webpack_require__(75);
 __webpack_require__(130);
+__webpack_require__(75);
 __webpack_require__(131);
 __webpack_require__(132);
 __webpack_require__(133);
@@ -4815,9 +4852,11 @@ __webpack_require__(136);
 __webpack_require__(137);
 __webpack_require__(138);
 __webpack_require__(139);
+__webpack_require__(140);
 __webpack_require__(43);
 __webpack_require__(29);
-__webpack_require__(140);
+__webpack_require__(141);
+__webpack_require__(84);
 __webpack_require__(5);
 __webpack_require__(1);
 __webpack_require__(78);
@@ -4827,27 +4866,27 @@ __webpack_require__(77);
 __webpack_require__(45);
 __webpack_require__(46);
 __webpack_require__(14);
-__webpack_require__(141);
 __webpack_require__(142);
-__webpack_require__(11);
 __webpack_require__(143);
+__webpack_require__(11);
+__webpack_require__(144);
 __webpack_require__(37);
 __webpack_require__(20);
-__webpack_require__(84);
-__webpack_require__(144);
-__webpack_require__(65);
+__webpack_require__(85);
 __webpack_require__(145);
-__webpack_require__(66);
+__webpack_require__(65);
 __webpack_require__(146);
+__webpack_require__(66);
 __webpack_require__(147);
+__webpack_require__(148);
 __webpack_require__(39);
 __webpack_require__(38);
-__webpack_require__(148);
+__webpack_require__(149);
 __webpack_require__(26);
 __webpack_require__(2);
 __webpack_require__(4);
-__webpack_require__(149);
 __webpack_require__(150);
+__webpack_require__(151);
 __webpack_require__(25);
 __webpack_require__(80);
 __webpack_require__(68);
@@ -4857,23 +4896,23 @@ __webpack_require__(33);
 __webpack_require__(13);
 __webpack_require__(18);
 __webpack_require__(19);
-__webpack_require__(151);
+__webpack_require__(152);
 __webpack_require__(10);
 __webpack_require__(72);
-__webpack_require__(152);
-__webpack_require__(81);
 __webpack_require__(153);
+__webpack_require__(81);
+__webpack_require__(154);
 __webpack_require__(17);
 __webpack_require__(67);
 __webpack_require__(27);
 __webpack_require__(16);
-__webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(28);
 __webpack_require__(156);
+__webpack_require__(28);
+__webpack_require__(157);
 __webpack_require__(69);
 __webpack_require__(70);
-__webpack_require__(157);
+__webpack_require__(158);
 __webpack_require__(30);
 __webpack_require__(73);
 __webpack_require__(31);
@@ -4885,7 +4924,7 @@ module.exports = __webpack_require__(3);
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports) {
 
 if (window.$2sxc && !window.$2sxc.consts) {
@@ -4922,7 +4961,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports) {
 
 /** this enhances the $2sxc client controller with stuff only needed when logged in */
@@ -4947,7 +4986,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4992,7 +5031,7 @@ var cmd = new Add();
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5029,7 +5068,7 @@ var cmd = new AppImport();
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5079,7 +5118,7 @@ var cmd = new AppResources();
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5129,7 +5168,7 @@ var cmd = new AppSettings();
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5168,7 +5207,7 @@ var cmd = new App();
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5226,7 +5265,7 @@ var cmd = new ContentItems();
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5265,7 +5304,7 @@ var cmd = new ContentType();
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5315,7 +5354,7 @@ var cmd = new Custom();
 
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5368,7 +5407,7 @@ var cmd = new Delete();
 
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5412,7 +5451,7 @@ var cmd = new Edit();
 
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5453,7 +5492,7 @@ var cmd = new InstanceList();
 
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5493,7 +5532,7 @@ var cmd = new ItemHistory();
 
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5530,7 +5569,7 @@ var cmd = new Layout();
 
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5587,7 +5626,7 @@ var cmd = new Metadata();
 
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5633,7 +5672,7 @@ var cmd = new More();
 
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5680,7 +5719,7 @@ var cmd = new MoveDown();
 
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5726,7 +5765,7 @@ var cmd = new MoveUp();
 
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5781,7 +5820,7 @@ var cmd = new New();
 
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5839,7 +5878,7 @@ var cmd = new Publish();
 
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5889,7 +5928,7 @@ var cmd = new Remove();
 
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5928,7 +5967,7 @@ var cmd = new Replace();
 
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5972,7 +6011,7 @@ var cmd = new TemplateDevelop();
 
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6023,7 +6062,7 @@ var cmd = new TemplateQuery();
 
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6066,7 +6105,7 @@ var cmd = new TemplateSettings();
 
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6105,7 +6144,7 @@ var cmd = new Zone();
 
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6123,7 +6162,7 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6138,7 +6177,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6153,7 +6192,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6171,7 +6210,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6186,7 +6225,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6201,7 +6240,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6219,7 +6258,7 @@ exports.SxcContext = SxcContext;
 
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6234,7 +6273,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6249,7 +6288,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6264,7 +6303,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6279,7 +6318,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6294,7 +6333,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6309,7 +6348,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6324,7 +6363,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6339,7 +6378,7 @@ exports.User = User;
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6372,7 +6411,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6401,7 +6440,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6423,12 +6462,6 @@ $(start_1.start); // run on-load
 
 
 /***/ }),
-/* 131 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 132 */
 /***/ (function(module, exports) {
 
@@ -6438,13 +6471,13 @@ $(start_1.start); // run on-load
 /* 133 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming
 
 
 /***/ }),
 /* 134 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -6467,6 +6500,12 @@ $(start_1.start); // run on-load
 
 /***/ }),
 /* 138 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6488,13 +6527,13 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6503,7 +6542,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -6547,7 +6586,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -6575,7 +6614,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6593,7 +6632,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6608,7 +6647,7 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6644,12 +6683,6 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 146 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 147 */
 /***/ (function(module, exports) {
 
@@ -6657,6 +6690,12 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 /***/ }),
 /* 148 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6689,7 +6728,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6707,7 +6746,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6722,13 +6761,16 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-/** Button Definition v1. from old API */
+/**
+ * Button Definition v1. from old API
+ * it is publicly used out of inpage, so take a care to preserve its signature
+ */
 var ButtonDefinition = /** @class */ (function () {
     function ButtonDefinition() {
     }
@@ -6738,7 +6780,7 @@ exports.ButtonDefinition = ButtonDefinition;
 
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6762,7 +6804,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6777,7 +6819,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports) {
 
 /*
@@ -6880,7 +6922,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -6888,7 +6930,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -6903,7 +6945,7 @@ $(function () {
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
