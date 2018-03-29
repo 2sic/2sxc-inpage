@@ -65,6 +65,7 @@ class EditManager {
 
   /**
    * run a command - command used in toolbars and custom buttons
+   * it is publicly used out of inpage, so take a care to preserve function signature
    */
   run = this.cmdEngine.run;
 
@@ -78,6 +79,7 @@ class EditManager {
    * @param {Object<any>} actDef - settings, an object containing the spec for the expected button
    * @param {int} groupIndex - number what button-group it's in'
    * @returns {string} html of a button
+   * it is publicly used out of inpage, so take a care to preserve function signature
    */
   getButton = (actDef: ButtonDefinition, groupIndex: number): string => {
     //const tag: any = getTag(this.sxc);
@@ -100,6 +102,8 @@ class EditManager {
    * @param {Object<any>} tbConfig - general toolbar config
    * @param {Object<any>} moreSettings - additional / override settings
    * @returns {string} html of the current toolbar
+   *
+   * it is publicly used out of inpage, so take a care to preserve function signature
    */
   getToolbar = (tbConfig: any, moreSettings: ToolbarSettings): string => {
     //const tag: any = getTag(this.sxc);

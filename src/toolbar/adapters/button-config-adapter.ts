@@ -74,7 +74,8 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.params) {
-    // todo: stv test this...
+    // todo: stv, this do not looking good, because old simple parameters become methods with context as parameter,
+    // we need parameter adapter to do this...
     Object.assign(partialButtonConfig.params, actDef.params);
   }
 

@@ -2,7 +2,10 @@
 import { Params } from '../../commands/params';
 import { ModConfig } from './mod-config';
 
-/** Button Definition v1. from old API */
+/**
+ * Button Definition v1. from old API
+ * it is publicly used out of inpage, so take a care to preserve its signature
+ */
 export class ButtonDefinition {
   // object command the internal command which will be called, should contain both the name and the parameters like { action: "new", contentType: "BlogPost"}
   command?: any;
