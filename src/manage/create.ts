@@ -72,7 +72,7 @@ class EditManager {
   /**
    * run2 a command - new command used in toolbars and custom buttons
    */
-  run2 = this.cmdEngine.run2;
+  //run2 = this.cmdEngine.run2;
 
   /**
    * Generate a button (an <a>-tag) for one specific toolbar-action.

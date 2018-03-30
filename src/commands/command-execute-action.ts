@@ -3,85 +3,135 @@ import { ContextOfButton } from '../context/context-of-button';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Commands } from './commands';
 import { Settings } from './settings';
-import { parametersAdapter } from '../toolbar/adapters/parameters-adapter';
 import { ButtonAction } from '../toolbar/button/button-action';
 import { ButtonConfig } from '../toolbar/button/button-config';
 import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
-import { addDefaultBtnSettings } from '../toolbar/button/expand-button-config';
 import { Log } from '../logging/log';
+import { HasLog } from '../logging/has-log';
 
 // ToDo: remove dead code
-export function commandExecuteAction(
+
+export function runDynamic(
   context: ContextOfButton,
-  nameOrSettings: any,
-  eventOrSettings?: any,
-  event?: any) {
+  nameOrSettings: string | Partial<Settings>,
+  eventOrSettings: Partial<Settings> | Event,
+  event?: Event) {
 
-  // const log = new Log('Tlb.ExecAct', null, 'start');
-  // const sxc = context.sxc.sxc;
+  const log = new Log('Cmd.Run', null, 'start');
 
-  let settings: Settings = eventOrSettings;
+  let settings: Partial<Settings>;
 
-  // cycle parameters, in case it was called with 2 params only
-  if (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined') { // no event param, but settings contains the event-object
-    event = eventOrSettings; // move it to the correct variable
-    settings = {} as Settings; // clear the settings variable, as none was provided
+  const thirdParamIsEvent = (!event && eventOrSettings && typeof (eventOrSettings as MouseEvent).altKey !== 'undefined');
+  log.add(`might cycle parameters, in case not all were given. args count=${arguments.length}, third is event=${thirdParamIsEvent}`);
+  if (thirdParamIsEvent) { // no event param, but settings contains the event-object
+    log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
+    event = eventOrSettings as Event; // move it to the correct variable
+    settings = (nameOrSettings || {}) as Partial<Settings>; 
+  } else
+    settings = (eventOrSettings || {}) as Partial<Settings>;
+
+  // ensure we have the right event despite browser differences
+  event = event || window.event;
+
+  return new Engine2(log).run(context, settings, event);
+  
+}
+
+
+export class Engine2 extends HasLog {
+
+  constructor(parentLog?: Log) {
+    super('Cmd.Exec', parentLog);
   }
 
-  // check if name is name (string) or object (settings)
-  settings = (typeof nameOrSettings === 'string')
-    ? Object.assign(
-      settings || {},
-      {
-        action: nameOrSettings,
-      }) // place the name as an action-name into a command-object
-    : nameOrSettings;
 
-  const conf = Commands.getInstance().get(settings.action).buttonConfig;
-  settings = Object.assign(
-    {},
-    conf,
-    settings) as Settings; // merge conf & settings, but settings has higher priority
+  /**
+   * run a command 
+   * this method expects a clear order of parameters
+   * @param context
+   * @param settings
+   * @param event
+   */
+  run(
+    context: ContextOfButton,
+    settings: string | Partial<Settings>,
+    event: Event) {
 
-  // pre-save event because afterwards we have a promise, so the event-object changes; funky syntax is because of browser differences
-  const origEvent = event || window.event;
+    settings = this.expandSettingsWithDefaults(settings);
 
-  const name = settings.action;
-  const contentType = settings.contentType;
+    const origEvent = event;
+    const name = settings.action;
+    const contentType = settings.contentType;
+    this.log.add(`run command ${name} for type ${contentType}`);
 
-  // Toolbar API v2
-  const newButtonAction = new ButtonAction(name, contentType, settings);
-  newButtonAction.commandDefinition = Commands.getInstance().get(name);
-  const newButtonConfig = new ButtonConfig(newButtonAction);
-  newButtonConfig.name = name;
+    // Toolbar API v2
+    const newButtonAction = new ButtonAction(name, contentType, settings);
+    newButtonAction.commandDefinition = Commands.getInstance().get(name);
+    const newButtonConfig = new ButtonConfig(newButtonAction);
+    newButtonConfig.name = name;
 
-  context.button = Object.assign(newButtonConfig,
-    newButtonAction.commandDefinition.buttonConfig,
-    settingsAdapter(settings)) as ButtonConfig; // merge conf & settings, but settings has higher priority
+    const button = context.button = Object.assign(newButtonConfig,
+      newButtonAction.commandDefinition.buttonConfig,
+      settingsAdapter(settings)) as ButtonConfig; // merge conf & settings, but settings has higher priority
 
-  // todo: stv, fix this in case that is function
-  if (!context.button.dialog) {
-    context.button.dialog = (contextParam: ContextOfButton) => {
-      return name;
-    }; // old code uses "action" as the parameter, now use verb ? dialog
+    // todo: stv, fix this in case that is function
+    if (!button.dialog) {
+      this.log.add(`button.dialog method missing, must be old implementation which used the action-name - generating method`);
+      button.dialog = () => { return name; };
+    }
+
+    // todo: stv, fix this in case that is function
+    if (!button.code) {
+      this.log.add(`simple button without code - generating code to open standard dialog`);
+      button.code = (contextParam: ContextOfButton, event: Event) => {
+        return commandOpenNgDialog(contextParam, event);
+      };
+    }
+
+    if (button.uiActionOnly(context)) {
+      this.log.add(`just a UI command, will not run pre-flight to ensure content-block - now running the code`);
+      return button.code(context, origEvent);
+    }
+
+    // if more than just a UI-action, then it needs to be sure the content-group is created first
+    this.log.add(`command might change data, will wrap in pre-flight to ensure content-block`);
+    const prepare = prepareToAddContent(context, settings.useModuleList)
+      .then(() => {
+        context.button.code(context, origEvent);
+      });
+
+    return prepare;
+
   }
 
-  // todo: stv, fix this in case that is function
-  if (!context.button.code) {
-    context.button.code = (contextParam: ContextOfButton, event: any) => {
-      return commandOpenNgDialog(contextParam, event);
-    }; // decide what action to perform
-  }
 
-  if (context.button.uiActionOnly(context)) {
-    return context.button.code(context, origEvent);
+
+
+  /**
+   * Take a settings-name or partial settings object, 
+   * and return a full settings object with all defaults from 
+   * the command definition
+   * @param log
+   * @param settings
+   * @param nameOrSettings
+   */
+  expandSettingsWithDefaults(nameOrSettings: string | Partial<Settings>): Settings {
+    const nameIsString = typeof nameOrSettings === 'string';
+    this.log.add(`expanding settings; name is string: ${nameIsString}; name = ${nameOrSettings}`);
+
+    // check if name is name (string) or object (settings)
+    const settings = (nameIsString
+      ? Object.assign(nameOrSettings || {},
+        { action: nameOrSettings }) // place the name as an action-name into a command-object
+      : nameOrSettings) as Partial<Settings>;
+
+    const name = settings.action;
+    this.log.add(`will add defaults for ${name} from buttonConfig`);
+    const conf = Commands.getInstance().get(name).buttonConfig;
+    const full = Object.assign({}, conf, settings) as Settings; // merge conf & settings, but settings has higher priority
+
+    return full;
   }
   
-  // if more than just a UI-action, then it needs to be sure the content-group is created first
-  var prepare = prepareToAddContent(context, settings.useModuleList)
-    .then(() => {
-      context.button.code(context, origEvent);
-    });
-
-  return prepare;
 }
+

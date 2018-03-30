@@ -2,7 +2,7 @@
 import { ContextOfButton } from '../context/context-of-button';
 import { getTag } from '../manage/api';
 import { commandCreate } from './command-create';
-import { commandExecuteAction } from './command-execute-action';
+import { runDynamic as commandExecuteAction } from './command-execute-action';
 import { Commands } from './commands';
 import { Settings } from './settings';
 
@@ -24,9 +24,9 @@ export class Engine {
     return commandExecuteAction(this.context, nameOrSettings, eventOrSettings, event);
   }
 
-  run2 = (contextOfButton: ContextOfButton, nameOrSettings: any, eventOrSettings?: any, event?: any) => {
-    return commandExecuteAction(contextOfButton, nameOrSettings, eventOrSettings, event);
-  }
+  //run2 = (contextOfButton: ContextOfButton, nameOrSettings: any, eventOrSettings?: any, event?: any) => {
+  //  return commandExecuteAction(contextOfButton, nameOrSettings, eventOrSettings, event);
+  //}
 
 }
 
