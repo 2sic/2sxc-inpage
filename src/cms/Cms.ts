@@ -1,18 +1,20 @@
 ﻿
-import { runDynamic as runWithOptionalParameters } from '../commands/command-execute-action';
+import { Engine } from '../commands/engine';
 import { ContextOfButton } from '../context/context-of-button';
 import { Settings } from '../commands/settings';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
 
 const logId = 'Cms.Api';
+const dumpLog = true;
 
 export class Cms extends HasLog {
   /**
    * if true (default) will reset the log everytime something is done
    * if false, will preserve the log over multiple calls
    */
-  alwaysResetLog: boolean = true;
+  autoReset: boolean = true;
+  autoDump: boolean = dumpLog;
 
   constructor() {
     super(logId, null);
@@ -22,7 +24,7 @@ export class Cms extends HasLog {
    * reset / clear the log
    */
   resetLog() {
-    this.log = new Log(logId);
+    this.log = new Log(logId, null, 'log was reset');
   };
 
 
@@ -31,7 +33,7 @@ export class Cms extends HasLog {
     eventOrSettings?: Partial<Settings> | Event,
     event?: Event) {
 
-    this.do(() => runWithOptionalParameters(context, nameOrSettings, eventOrSettings, event));
+    this.do(() => new Engine(this.log).detectParamsAndRun(context, nameOrSettings, eventOrSettings, event));
 
   }
 
@@ -39,9 +41,12 @@ export class Cms extends HasLog {
    * reset/clear the log if alwaysResetLog is true
    */
   private do(innerCall : Function) {
-    if (this.alwaysResetLog)
-      this.resetLog();
-    return innerCall();
+    if (this.autoReset) this.resetLog();
+    console.log('before');
+    const result = innerCall();
+    console.log('after');
+    if (this.autoDump) console.log(this.log.dump());
+    return result;
   }
 
 }
