@@ -1,4 +1,4 @@
-﻿import { Engine, instanceEngine } from '../commands/engine';
+﻿import { InstanceEngine } from '../commands/instance-engine';
 import { manipulator } from '../contentBlock/manipulate';
 import { getContextInstance } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
@@ -6,7 +6,7 @@ import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
-import { buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig, getEditContext, getTag, getUserOfEditContext } from './api';
+import { /*buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig,*/ getEditContext, getTag/*, getUserOfEditContext */} from './api';
 import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
@@ -43,8 +43,8 @@ function _initInstance(sxc: SxcInstanceWithInternals) {
   // context.sxc.sxc = sxc; // stv: this is temp
   // context.element = getTag(sxc); // HTMLElement
 
-  const userInfo = getUserOfEditContext(context);
-  const cmdEngine = instanceEngine(sxc);
+  const userInfo = UserOfEditContext.fromContext(context);// 2dm simplified getUserOfEditContext(context);
+  const cmdEngine = new InstanceEngine(sxc);
 
   const editManager = new EditManager(sxc, editContext, userInfo, cmdEngine, context);
   editManager.init();
@@ -57,7 +57,7 @@ class EditManager {
   constructor(private sxc: SxcInstanceWithInternals,
     private editContext: DataEditContext,
     private userInfo: UserOfEditContext,
-    private cmdEngine: Engine,
+    private cmdEngine: InstanceEngine,
     private context: ContextOfButton) {
   }
 
@@ -134,23 +134,30 @@ class EditManager {
    */
   // _reloadWithAjax = this.editContext.ContentGroup.SupportsAjax;
   _reloadWithAjax = this.context.app.supportsAjax;
-  
+
+  // 2dm disabled
+  // todo q2stv - I think we don't need this any more
   // 
-  _dialogParameters = buildNgDialogParams(this.context);
-  /**
+  //_dialogParameters = buildNgDialogParams(this.context);
+
+   // 2dm disabled
+  // todo q2stv - I think we don't need this any more
+ /**
    * used to configure buttons / toolbars
    */
-  _instanceConfig = buildInstanceConfig(this.context);
+  //_instanceConfig = buildInstanceConfig(this.context);
 
   /**
    * metadata necessary to know what/how to edit
    */
   _editContext = this.editContext;
 
+  // 2dm disabled
+  // todo q2stv - I think we don't need this any more
   /**
    * used for in-page dialogues
    */
-  _quickDialogConfig = buildQuickDialogConfig(this.context);
+  //_quickDialogConfig = buildQuickDialogConfig(this.context);
 
   /**
    * used to handle the commands for this content-block
@@ -182,7 +189,9 @@ class EditManager {
   _updateContentGroupGuid(context: ContextOfButton, newGuid: string) {
     context.contentBlock.contentGroupId = newGuid;
     this.editContext.ContentGroup.Guid = newGuid;
-    this._instanceConfig = buildInstanceConfig(context);
+    // 2dm disabled, doesn't seem used - 
+    // todo q2stv - pls confirm
+    //this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
   }
 
   _getCbManipulator = () => manipulator(this.sxc);

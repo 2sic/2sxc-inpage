@@ -1,6 +1,6 @@
-﻿import { DataEditContext } from '../../data-edit-context/data-edit-context';
+﻿//import { DataEditContext } from '../../data-edit-context/data-edit-context';
 import { Log } from '../../logging/log';
-import { getEditContext } from '../../manage/api';
+//import { getEditContext } from '../../manage/api';
 import { InstanceConfig } from '../../manage/instance-config';
 import { oldToolbarSettingsAddapter } from '../adapters/old-toolbar-settings-adapter';
 import { customize, removeDisableButtons } from '../button/expand-button-config';

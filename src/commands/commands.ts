@@ -1,5 +1,5 @@
 ﻿import { CommandDefinition } from './command-definition';
-import { instanceEngine } from './engine';
+//import { instanceEngine } from './instance-engine';
 
 // import all commands here to stop optimizers from excluding code that was not called form other module
 import { Add } from './command/add';
@@ -56,6 +56,8 @@ export class Commands {
     }
   }
 
-  instanceEngine = instanceEngine;
+  // 2dm disabled, unclear what this would be for
+  // todo q2stv - do we need this?
+  //instanceEngine = instanceEngine;
 
 }

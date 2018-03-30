@@ -1,5 +1,5 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { buildNgDialogParams } from '../manage/api';
+//import { buildNgDialogParams } from '../manage/api';
 import { NgDialogParams } from '../manage/ng-dialog-params';
 import { translate } from '../translate/2sxc.translate';
 import { Params } from './params';
@@ -108,7 +108,7 @@ export class Command {
     this.params.items = JSON.stringify(this.items); // Serialize/json-ify the complex items-list
 
     // clone the params and adjust parts based on partOfPage settings...
-    var ngDialogParams = buildNgDialogParams(context);
+    var ngDialogParams = NgDialogParams.fromContext(context);// 2dm simplified buildNgDialogParams(context);
     const sharedParams = Object.assign({}, ngDialogParams) as NgDialogParams;
     const partOfPage = context.button.partOfPage(context);
     if (!partOfPage) {

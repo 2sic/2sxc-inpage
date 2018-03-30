@@ -4,6 +4,8 @@ import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { ContextOfButton } from '../context/context-of-button';
+import { QuickDialogConfig } from '../manage/quick-dialog-config';
+import { NgDialogParams } from '../manage/ng-dialog-params';
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -178,8 +180,8 @@ function extendIFrameWithSxcState(iFrame: any) {
         newFrm.closeCallback = callback;
         if (dialogName) newFrm.dialogName = dialogName;
       },
-      getManageInfo: () => reSxc().manage._dialogParameters,
-      getAdditionalDashboardConfig: () => reSxc().manage._quickDialogConfig,
+      getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),// ._dialogParameters,
+      getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),// ._quickDialogConfig,
       persistDia: () => persistDialog(getContext()),
       scrollToTarget: () => {
         $('body').animate({

@@ -10,17 +10,21 @@ import { AppContext } from './instance-context/app-context';
 import { InstanceContext } from './instance-context/instance-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
+import { isSxcInstance } from '../plumbing/is';
 
 /**
  * Primary API to get the context (context is cached)
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-export function context(htmlElementOrId: HTMLElement | number, cbid?: number): ContextOfButton {
-  const sxc = getSxcInstance(htmlElementOrId);
+export function context(htmlElementOrId: SxcInstanceWithInternals | HTMLElement | number, cbid?: number): ContextOfButton {
+  const sxc = isSxcInstance(htmlElementOrId)
+    ? htmlElementOrId
+    : getSxcInstance(htmlElementOrId);
   const contextOfButton = getContextInstance(sxc, cbid);
   return contextOfButton;
 }
+
 
 /**
  * Create copy of context, so it can be modified before use
