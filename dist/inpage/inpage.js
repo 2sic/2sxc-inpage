@@ -308,6 +308,7 @@ exports.selectors = {
 Object.defineProperty(exports, "__esModule", { value: true });
 function getSxcInstance(module) {
     var sxc = $2sxc(module);
+    sxc.cms = $2sxc.cms;
     return sxc;
 }
 exports.getSxcInstance = getSxcInstance;
@@ -657,9 +658,7 @@ var Commands = /** @class */ (function () {
         var _this = this;
         this.commandList = [];
         this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
-        this.get = function (name) {
-            return _this.list[name];
-        }; // a specific action definition
+        this.get = function (name) { return _this.list[name]; }; // a specific action definition
         this.addDef = function (def) {
             if (!_this.list[def.name]) {
                 // add
@@ -1896,7 +1895,6 @@ var Cms = /** @class */ (function (_super) {
          */
         _this.autoReset = true;
         _this.autoDump = dumpLog;
-        debugger;
         return _this;
     }
     /**
@@ -3021,7 +3019,6 @@ var Engine = /** @class */ (function (_super) {
         return _super.call(this, 'Cmd.Exec', parentLog) || this;
     }
     Engine.prototype.detectParamsAndRun = function (context, nameOrSettings, eventOrSettings, event) {
-        debugger;
         this.log.add("detecting params and running - has " + arguments.length + " params");
         var settings;
         var thirdParamIsEvent = (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined');
@@ -5068,9 +5065,10 @@ __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
 __webpack_require__(144);
+__webpack_require__(145);
 __webpack_require__(65);
 __webpack_require__(14);
-__webpack_require__(145);
+__webpack_require__(146);
 __webpack_require__(87);
 __webpack_require__(6);
 __webpack_require__(3);
@@ -5082,27 +5080,27 @@ __webpack_require__(35);
 __webpack_require__(72);
 __webpack_require__(21);
 __webpack_require__(62);
-__webpack_require__(146);
+__webpack_require__(147);
 __webpack_require__(1);
 __webpack_require__(11);
-__webpack_require__(147);
+__webpack_require__(148);
 __webpack_require__(37);
 __webpack_require__(22);
 __webpack_require__(88);
-__webpack_require__(148);
-__webpack_require__(44);
 __webpack_require__(149);
-__webpack_require__(45);
+__webpack_require__(44);
 __webpack_require__(150);
+__webpack_require__(45);
 __webpack_require__(151);
+__webpack_require__(152);
 __webpack_require__(39);
 __webpack_require__(38);
-__webpack_require__(152);
+__webpack_require__(153);
 __webpack_require__(26);
 __webpack_require__(2);
 __webpack_require__(4);
-__webpack_require__(153);
 __webpack_require__(154);
+__webpack_require__(155);
 __webpack_require__(25);
 __webpack_require__(83);
 __webpack_require__(64);
@@ -5112,23 +5110,23 @@ __webpack_require__(32);
 __webpack_require__(13);
 __webpack_require__(19);
 __webpack_require__(20);
-__webpack_require__(155);
+__webpack_require__(156);
 __webpack_require__(15);
 __webpack_require__(70);
-__webpack_require__(156);
-__webpack_require__(84);
 __webpack_require__(157);
+__webpack_require__(84);
+__webpack_require__(158);
 __webpack_require__(18);
 __webpack_require__(63);
 __webpack_require__(27);
 __webpack_require__(17);
-__webpack_require__(158);
 __webpack_require__(159);
-__webpack_require__(28);
 __webpack_require__(160);
+__webpack_require__(28);
+__webpack_require__(161);
 __webpack_require__(66);
 __webpack_require__(67);
-__webpack_require__(161);
+__webpack_require__(162);
 __webpack_require__(29);
 __webpack_require__(71);
 __webpack_require__(30);
@@ -6730,10 +6728,17 @@ $2sxc.cms = new Cms_1.Cms();
 /* 142 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
 /* 143 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6755,13 +6760,13 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6770,7 +6775,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -6814,7 +6819,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6832,7 +6837,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6847,7 +6852,7 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6883,12 +6888,6 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 150 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 151 */
 /***/ (function(module, exports) {
 
@@ -6896,6 +6895,12 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 /***/ }),
 /* 152 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6928,7 +6933,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6946,7 +6951,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6961,7 +6966,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6980,7 +6985,7 @@ exports.ButtonDefinition = ButtonDefinition;
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7004,7 +7009,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7019,7 +7024,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports) {
 
 /*
@@ -7122,7 +7127,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -7130,7 +7135,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -7145,7 +7150,7 @@ $(function () {
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

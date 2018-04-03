@@ -68,7 +68,6 @@ export class Engine extends HasLog {
       settings = nameOrSettings as Partial<Settings>;
     }
 
-
     settings = this.expandSettingsWithDefaults(settings);
 
     const origEvent = event;

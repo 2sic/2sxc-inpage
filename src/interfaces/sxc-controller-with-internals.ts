@@ -15,6 +15,7 @@ interface SxcControllerWithInternals {
   system: any;
   translate: any;
   context: any;
+  cms: any;
 }
 // ReSharper restore InconsistentNaming
 

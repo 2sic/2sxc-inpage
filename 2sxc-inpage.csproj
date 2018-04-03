@@ -48,6 +48,7 @@
     <None Remove="src\context\context.ts" />
     <None Remove="src\globals.d.ts" />
     <None Remove="src\interfaces\hashtable.ts" />
+    <None Remove="src\interfaces\sxc-instance-with-internals.ts" />
     <None Remove="src\lib-helpers\jquery.ts" />
     <None Remove="src\logging\log-utils.ts" />
     <None Remove="src\manage\local-storage-helper.ts" />
@@ -115,6 +116,7 @@
     <TypeScriptCompile Include="src\contentBlock\web-api-params.ts" />
     <TypeScriptCompile Include="src\context\context.ts" />
     <TypeScriptCompile Include="src\interfaces\hashtable.ts" />
+    <TypeScriptCompile Include="src\interfaces\sxc-instance-with-internals.ts" />
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
     <TypeScriptCompile Include="src\logging\log-utils.ts" />
     <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
