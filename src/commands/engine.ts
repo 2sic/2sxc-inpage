@@ -34,15 +34,15 @@ export class Engine extends HasLog {
     if (thirdParamIsEvent) { // no event param, but settings contains the event-object
       this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
       event = eventOrSettings as Event; // move it to the correct variable
-      settings = (nameOrSettings || {}) as Partial<Settings>;
-    } else
-      settings = (eventOrSettings || {}) as Partial<Settings>;
+      settings = this.nameOrSettingsAddapter(nameOrSettings);
+    } else {
+      settings = Object.assign(eventOrSettings || {}, this.nameOrSettingsAddapter(nameOrSettings)) as Partial<Settings>;
+    }
 
     // ensure we have the right event despite browser differences
     event = event || window.event;
 
     return this.run(context, settings, event);
-
   }
 
   /**
@@ -54,8 +54,20 @@ export class Engine extends HasLog {
    */
   run(
     context: ContextOfButton,
-    settings: string | Partial<Settings>,
+    nameOrSettings: string | Partial<Settings>,
     event: Event) {
+
+    const nameIsString = typeof nameOrSettings === 'string';
+    this.log.add(`expanding settings; name is string: ${nameIsString}; name = ${nameOrSettings}`);
+
+    // check if name is name (string) or object (settings)
+    let settings: Partial<Settings>;
+    if (nameIsString) {
+      settings = Object.assign({}, { action: nameOrSettings }) as Partial<Settings>; // place the name as an action-name into a command-object
+    } else {
+      settings = nameOrSettings as Partial<Settings>;
+    }
+
 
     settings = this.expandSettingsWithDefaults(settings);
 
@@ -104,27 +116,33 @@ export class Engine extends HasLog {
 
   }
 
+  /**
+   * name or settings adapter to settings
+   * @param nameOrSettings
+   * @returns settings
+   */
+  nameOrSettingsAddapter(nameOrSettings: string | Partial<Settings>): Partial<Settings> {
+    let settings: Partial<Settings>;
+    // check if name is name (string) or object (settings)
+    const nameIsString = typeof nameOrSettings === 'string';
+    this.log.add(`adapting settings; name is string: ${nameIsString}; name = ${nameOrSettings}`);
 
+    if (nameIsString) {
+      settings = Object.assign({}, { action: nameOrSettings }) as Partial<Settings>; // place the name as an action-name into a command-object
+    } else {
+      settings = nameOrSettings as Partial<Settings>;
+    }
 
+    return settings;
+  }
 
   /**
    * Take a settings-name or partial settings object, 
    * and return a full settings object with all defaults from 
    * the command definition
-   * @param log
    * @param settings
-   * @param nameOrSettings
    */
-  expandSettingsWithDefaults(nameOrSettings: string | Partial<Settings>): Settings {
-    const nameIsString = typeof nameOrSettings === 'string';
-    this.log.add(`expanding settings; name is string: ${nameIsString}; name = ${nameOrSettings}`);
-
-    // check if name is name (string) or object (settings)
-    const settings = (nameIsString
-      ? Object.assign(nameOrSettings || {},
-        { action: nameOrSettings }) // place the name as an action-name into a command-object
-      : nameOrSettings) as Partial<Settings>;
-
+  expandSettingsWithDefaults(settings: Partial<Settings>): Settings {
     const name = settings.action;
     this.log.add(`will add defaults for ${name} from buttonConfig`);
     const conf = Commands.getInstance().get(name).buttonConfig;
@@ -132,6 +150,7 @@ export class Engine extends HasLog {
 
     return full;
   }
+
   
 }
 

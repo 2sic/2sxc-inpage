@@ -1,6 +1,6 @@
 {
   "name": "2sxc-inpage",
-  "version": "9.15.01",
+  "version": "9.20.00",
   "description": "",
   "main": "webpack.config.js",
   "dependencies": {
@@ -17,7 +17,6 @@
     "@types/jasminewd2": "^2.0.3",
     "@types/node": "^9.3.0",
     "concurrently": "^3.5.1",
-    "core-js": "^2.5.4",
     "css-loader": "^0.28.11",
     "deep-equal": "^1.0.1",
     "extract-css-chunks-webpack-plugin": "^2.0.18",

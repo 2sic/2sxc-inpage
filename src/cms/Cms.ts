@@ -1,5 +1,4 @@
-﻿
-import { Engine } from '../commands/engine';
+﻿import { Engine } from '../commands/engine';
 import { ContextOfButton } from '../context/context-of-button';
 import { Settings } from '../commands/settings';
 import { HasLog } from '../logging/has-log';

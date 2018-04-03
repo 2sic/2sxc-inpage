@@ -657,7 +657,9 @@ var Commands = /** @class */ (function () {
         var _this = this;
         this.commandList = [];
         this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
-        this.get = function (name) { return _this.list[name]; }; // a specific action definition
+        this.get = function (name) {
+            return _this.list[name];
+        }; // a specific action definition
         this.addDef = function (def) {
             if (!_this.list[def.name]) {
                 // add
@@ -1894,6 +1896,7 @@ var Cms = /** @class */ (function (_super) {
          */
         _this.autoReset = true;
         _this.autoDump = dumpLog;
+        debugger;
         return _this;
     }
     /**
@@ -3018,6 +3021,7 @@ var Engine = /** @class */ (function (_super) {
         return _super.call(this, 'Cmd.Exec', parentLog) || this;
     }
     Engine.prototype.detectParamsAndRun = function (context, nameOrSettings, eventOrSettings, event) {
+        debugger;
         this.log.add("detecting params and running - has " + arguments.length + " params");
         var settings;
         var thirdParamIsEvent = (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined');
@@ -3025,10 +3029,11 @@ var Engine = /** @class */ (function (_super) {
         if (thirdParamIsEvent) {
             this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
             event = eventOrSettings; // move it to the correct variable
-            settings = (nameOrSettings || {});
+            settings = this.nameOrSettingsAddapter(nameOrSettings);
         }
-        else
-            settings = (eventOrSettings || {});
+        else {
+            settings = Object.assign(eventOrSettings || {}, this.nameOrSettingsAddapter(nameOrSettings));
+        }
         // ensure we have the right event despite browser differences
         event = event || window.event;
         return this.run(context, settings, event);
@@ -3040,7 +3045,17 @@ var Engine = /** @class */ (function (_super) {
      * @param settings
      * @param event
      */
-    Engine.prototype.run = function (context, settings, event) {
+    Engine.prototype.run = function (context, nameOrSettings, event) {
+        var nameIsString = typeof nameOrSettings === 'string';
+        this.log.add("expanding settings; name is string: " + nameIsString + "; name = " + nameOrSettings);
+        // check if name is name (string) or object (settings)
+        var settings;
+        if (nameIsString) {
+            settings = Object.assign({}, { action: nameOrSettings }); // place the name as an action-name into a command-object
+        }
+        else {
+            settings = nameOrSettings;
+        }
         settings = this.expandSettingsWithDefaults(settings);
         var origEvent = event;
         var name = settings.action;
@@ -3077,20 +3092,30 @@ var Engine = /** @class */ (function (_super) {
         return prepare;
     };
     /**
+     * name or settings adapter to settings
+     * @param nameOrSettings
+     * @returns settings
+     */
+    Engine.prototype.nameOrSettingsAddapter = function (nameOrSettings) {
+        var settings;
+        // check if name is name (string) or object (settings)
+        var nameIsString = typeof nameOrSettings === 'string';
+        this.log.add("adapting settings; name is string: " + nameIsString + "; name = " + nameOrSettings);
+        if (nameIsString) {
+            settings = Object.assign({}, { action: nameOrSettings }); // place the name as an action-name into a command-object
+        }
+        else {
+            settings = nameOrSettings;
+        }
+        return settings;
+    };
+    /**
      * Take a settings-name or partial settings object,
      * and return a full settings object with all defaults from
      * the command definition
-     * @param log
      * @param settings
-     * @param nameOrSettings
      */
-    Engine.prototype.expandSettingsWithDefaults = function (nameOrSettings) {
-        var nameIsString = typeof nameOrSettings === 'string';
-        this.log.add("expanding settings; name is string: " + nameIsString + "; name = " + nameOrSettings);
-        // check if name is name (string) or object (settings)
-        var settings = (nameIsString
-            ? Object.assign(nameOrSettings || {}, { action: nameOrSettings }) // place the name as an action-name into a command-object
-            : nameOrSettings);
+    Engine.prototype.expandSettingsWithDefaults = function (settings) {
         var name = settings.action;
         this.log.add("will add defaults for " + name + " from buttonConfig");
         var conf = commands_1.Commands.getInstance().get(name).buttonConfig;
@@ -6648,13 +6673,13 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var commands_1 = __webpack_require__(9);
+var Cms_1 = __webpack_require__(23);
 var context_1 = __webpack_require__(7);
 var manage_1 = __webpack_require__(80);
 var quick_e_1 = __webpack_require__(2);
 var start_1 = __webpack_require__(25);
 var _2sxc__translateInit_1 = __webpack_require__(85);
 __webpack_require__(86);
-var Cms_1 = __webpack_require__(23);
 $2sxc.context = context_1.context; // primary API to get the context
 $2sxc._translateInit = _2sxc__translateInit_1._translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
 $2sxc._commands = commands_1.Commands.getInstance();

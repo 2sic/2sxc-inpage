@@ -1,11 +1,11 @@
 ﻿import { Commands } from './commands/commands';
+import { Cms } from './cms/Cms';
 import { context } from './context/context';
 import { _manage } from './manage/manage';
 import { $quickE } from './quick-edit/quick-e';
 import { start } from './quick-edit/start';
 import { _translateInit } from './translate/2sxc._translateInit';
 import './x-bootstrap/module-bootstrapper';
-import { Cms } from './cms/Cms';
 
 $2sxc.context = context; // primary API to get the context
 $2sxc._translateInit = _translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
