@@ -33,7 +33,7 @@ export class Engine extends HasLog {
       event = eventOrSettings as Event; // move it to the correct variable
       settings = (nameOrSettings || {}) as Partial<Settings>;
     } else
-      settings = (eventOrSettings || {}) as Partial<Settings>;
+      settings = Object.assign(eventOrSettings || {}, { action: nameOrSettings }) as Partial<Settings>;
 
     // ensure we have the right event despite browser differences
     event = event || window.event;

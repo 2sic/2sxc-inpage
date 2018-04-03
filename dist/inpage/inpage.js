@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 85);
+/******/ 	return __webpack_require__(__webpack_require__.s = 88);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,9 +70,9 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var expand_button_config_1 = __webpack_require__(11);
-var command_definition_1 = __webpack_require__(44);
-var commands_1 = __webpack_require__(6);
+var expand_button_config_1 = __webpack_require__(14);
+var command_definition_1 = __webpack_require__(75);
+var commands_1 = __webpack_require__(8);
 var CommandBase = /** @class */ (function () {
     function CommandBase() {
         this.commandDefinition = new command_definition_1.CommandDefinition();
@@ -98,6 +98,69 @@ exports.CommandBase = CommandBase;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var positioning_1 = __webpack_require__(25);
+/**
+ * the quick-edit object
+ * the quick-insert object
+ */
+var QuickE = /** @class */ (function () {
+    function QuickE() {
+        var _this = this;
+        this.body = $('body');
+        this.win = $(window);
+        this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
+        this.template = "<a class='sc-content-block-menu-addcontent sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a><a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>" + btn('select', 'ok', 'Select', true) + btn('paste', 'paste', 'Paste', true, true);
+        this.selected = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
+            .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>");
+        // will be populated later in the module section
+        this.contentBlocks = null;
+        this.cachedPanes = null;
+        this.modules = null;
+        this.nearestCb = null;
+        this.nearestMod = null;
+        this.modManage = null;
+        // add stuff which depends on other values to create
+        this.cbActions = $(this.template);
+        this.modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
+            .attr('data-context', 'module')
+            .addClass('sc-content-block-menu-module');
+        this.selected.toggle = function (target) {
+            if (!target || target.length === 0) {
+                _this.selected.hide();
+            }
+            else {
+                var coords = positioning_1.getCoordinates(target);
+                coords.yh = coords.y + 20;
+                positioning_1.positionAndAlign(_this.selected, coords);
+                _this.selected.target = target;
+            }
+        };
+    }
+    return QuickE;
+}());
+exports.$quickE = new QuickE();
+function btn(action, icon, i18N, invisible, unavailable, classes) {
+    return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + " " + (invisible ? ' sc-invisible ' : '') + (unavailable ? ' sc-unavailable ' : '') + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
+}
+/**
+ * build the toolbar (hidden, but ready to show)
+ */
+function prepareToolbarInDom() {
+    exports.$quickE.body.append(exports.$quickE.main)
+        .append(exports.$quickE.selected);
+    exports.$quickE.main.append(exports.$quickE.cbActions)
+        .append(exports.$quickE.modActions);
+}
+exports.prepareToolbarInDom = prepareToolbarInDom;
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -178,76 +241,58 @@ exports.getEditContext = getEditContext;
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var positioning_1 = __webpack_require__(35);
-/**
- * the quick-edit object
- * the quick-insert object
- */
-var QuickE = /** @class */ (function () {
-    function QuickE() {
-        var _this = this;
-        this.body = $('body');
-        this.win = $(window);
-        this.main = $("<div class='sc-content-block-menu sc-content-block-quick-insert sc-i18n'></div>");
-        this.template = "<a class='sc-content-block-menu-addcontent sc-invisible' data-type='Default' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockContent'>x</a><a class='sc-content-block-menu-addapp sc-invisible' data-type='' data-i18n='[titleTemplate]QuickInsertMenu.AddBlockApp'>x</a>" + btn('select', 'ok', 'Select', true) + btn('paste', 'paste', 'Paste', true, true);
-        this.selected = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
-            .append(btn('delete', 'trash-empty', 'Delete'), btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'), "<div id='paneList'></div>");
-        // will be populated later in the module section
-        this.contentBlocks = null;
-        this.cachedPanes = null;
-        this.modules = null;
-        this.nearestCb = null;
-        this.nearestMod = null;
-        this.modManage = null;
-        // add stuff which depends on other values to create
-        this.cbActions = $(this.template);
-        this.modActions = $(this.template.replace(/QuickInsertMenu.AddBlock/g, 'QuickInsertMenu.AddModule'))
-            .attr('data-context', 'module')
-            .addClass('sc-content-block-menu-module');
-        this.selected.toggle = function (target) {
-            if (!target || target.length === 0) {
-                _this.selected.hide();
-            }
-            else {
-                var coords = positioning_1.getCoordinates(target);
-                coords.yh = coords.y + 20;
-                positioning_1.positionAndAlign(_this.selected, coords);
-                _this.selected.target = target;
-            }
-        };
-    }
-    return QuickE;
-}());
-exports.$quickE = new QuickE();
-function btn(action, icon, i18N, invisible, unavailable, classes) {
-    return "<a class='sc-content-block-menu-btn sc-cb-action icon-sxc-" + icon + " " + (invisible ? ' sc-invisible ' : '') + (unavailable ? ' sc-unavailable ' : '') + classes + "' data-action='" + action + "' data-i18n='[title]QuickInsertMenu." + i18N + "'></a>";
-}
-/**
- * build the toolbar (hidden, but ready to show)
- */
-function prepareToolbarInDom() {
-    exports.$quickE.body.append(exports.$quickE.main)
-        .append(exports.$quickE.selected);
-    exports.$quickE.main.append(exports.$quickE.cbActions)
-        .append(exports.$quickE.modActions);
-}
-exports.prepareToolbarInDom = prepareToolbarInDom;
-
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var entry_1 = __webpack_require__(43);
+/**
+ * selectors used all over the in-page-editing, centralized to ensure consistency
+ */
+exports.selectors = {
+    cb: {
+        id: 'cb',
+        class: 'sc-content-block',
+        selector: '.sc-content-block',
+        listSelector: '.sc-content-block-list',
+        context: 'data-list-context',
+        singleItem: 'single-item',
+    },
+    mod: {
+        id: 'mod',
+        class: 'DnnModule',
+        selector: '.DnnModule',
+        listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)',
+        context: null,
+    },
+    eitherCbOrMod: '.DnnModule, .sc-content-block',
+    selected: 'sc-cb-is-selected',
+};
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function getSxcInstance(module) {
+    var sxc = $2sxc(module);
+    return sxc;
+}
+exports.getSxcInstance = getSxcInstance;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var entry_1 = __webpack_require__(64);
 var maxScopeLen = 3;
 var maxNameLen = 6;
 var liveDump = false;
@@ -398,123 +443,24 @@ exports.Log = Log;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-function getSxcInstance(module) {
-    var sxc = $2sxc(module);
-    return sxc;
-}
-exports.getSxcInstance = getSxcInstance;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * selectors used all over the in-page-editing, centralized to ensure consistency
- */
-exports.selectors = {
-    cb: {
-        id: 'cb',
-        class: 'sc-content-block',
-        selector: '.sc-content-block',
-        listSelector: '.sc-content-block-list',
-        context: 'data-list-context',
-        singleItem: 'single-item',
-    },
-    mod: {
-        id: 'mod',
-        class: 'DnnModule',
-        selector: '.DnnModule',
-        listSelector: '.DNNEmptyPane, .dnnDropEmptyPanes, :has(>.DnnModule)',
-        context: null,
-    },
-    eitherCbOrMod: '.DnnModule, .sc-content-block',
-    selected: 'sc-cb-is-selected',
-};
-
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Commands = /** @class */ (function () {
-    function Commands() {
-        var _this = this;
-        this.commandList = [];
-        this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
-        this.get = function (name) { return _this.list[name]; }; // a specific action definition
-        this.addDef = function (def) {
-            if (!_this.list[def.name]) {
-                // add
-                _this.commandList.push(def);
-                _this.list[def.name] = def;
-            }
-            else if (_this.list[def.name] !== def) {
-                // update
-                _this.list[def.name] = def;
-            }
-        };
-    }
-    Commands.getInstance = function () {
-        if (!Commands.instance) {
-            Commands.instance = new Commands();
-        }
-        return Commands.instance;
-    };
-    return Commands;
-}());
-exports.Commands = Commands;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
- * @param key
- */
-function translate(key) {
-    // return key;
-    return ($.t && $.t(key)) || key;
-}
-exports.translate = translate;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(2);
 var sxc_1 = __webpack_require__(4);
-var system_context_1 = __webpack_require__(49);
-var tenant_context_1 = __webpack_require__(50);
-var user_context_1 = __webpack_require__(51);
-var content_block_context_1 = __webpack_require__(52);
-var context_of_button_1 = __webpack_require__(53);
-var app_context_1 = __webpack_require__(61);
-var instance_context_1 = __webpack_require__(62);
-var item_context_1 = __webpack_require__(63);
-var page_context_1 = __webpack_require__(64);
-var is_1 = __webpack_require__(160);
+var system_context_1 = __webpack_require__(45);
+var tenant_context_1 = __webpack_require__(46);
+var user_context_1 = __webpack_require__(47);
+var content_block_context_1 = __webpack_require__(48);
+var context_of_button_1 = __webpack_require__(49);
+var app_context_1 = __webpack_require__(57);
+var instance_context_1 = __webpack_require__(58);
+var item_context_1 = __webpack_require__(59);
+var page_context_1 = __webpack_require__(60);
+var is_1 = __webpack_require__(61);
 /**
  * Primary API to get the context (context is cached)
  * @param htmlElement or Id (moduleId)
@@ -654,13 +600,67 @@ exports.createContextFromEditContext = createContextFromEditContext;
 
 
 /***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * provide an official translate API for 2sxc - currently internally using a jQuery library, but this may change
+ * @param key
+ */
+function translate(key) {
+    // return key;
+    return ($.t && $.t(key)) || key;
+}
+exports.translate = translate;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Commands = /** @class */ (function () {
+    function Commands() {
+        var _this = this;
+        this.commandList = [];
+        this.list = {}; // hash - table of action definitions, to be used a list()["action - name"]
+        this.get = function (name) { return _this.list[name]; }; // a specific action definition
+        this.addDef = function (def) {
+            if (!_this.list[def.name]) {
+                // add
+                _this.commandList.push(def);
+                _this.list[def.name] = def;
+            }
+            else if (_this.list[def.name] !== def) {
+                // update
+                _this.list[def.name] = def;
+            }
+        };
+    }
+    Commands.getInstance = function () {
+        if (!Commands.instance) {
+            Commands.instance = new Commands();
+        }
+        return Commands.instance;
+    };
+    return Commands;
+}());
+exports.Commands = Commands;
+
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(12);
+var render_1 = __webpack_require__(11);
 /*
  * this is a content block in the browser
  *
@@ -745,339 +745,13 @@ exports.publishId = publishId;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(3);
-var HasLog = /** @class */ (function () {
-    /**
-     * initialize the logger
-     * ideally it has a parent-logger to attach to
-     * @param logName name to show in the logger
-     * @param parentLog parent-logger to attach to
-     * @param initialMessage optional start-message to log
-     */
-    function HasLog(logName, parentLog, initialMessage) {
-        var _this = this;
-        this.parentLog = parentLog;
-        this.initLog = function (name, parentLog, initialMessage) { return _this.initLogInternal(name, parentLog, initialMessage); };
-        this.logId = 'unknwn';
-        this.linkLog = function (parentLog) { return _this.log.linkLog(parentLog); };
-        this.initLogInternal(logName, parentLog, initialMessage);
-    }
-    HasLog.prototype.initLogInternal = function (name, parentLog, initialMessage) {
-        if (this.log == null)
-            // standard & most common case: just create log
-            this.log = new log_1.Log(name, parentLog, initialMessage);
-        else {
-            // late-init case, where the log was already created - just reconfig keeping what was in it
-            this.log.rename(name);
-            this.linkLog(parentLog);
-            if (initialMessage != null)
-                this.log.add(initialMessage);
-        }
-    };
-    return HasLog;
-}());
-exports.HasLog = HasLog;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var log_1 = __webpack_require__(3);
-// takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
-// ReSharper disable once UnusedParameter
-function expandButtonConfig(original, sharedProps, parentLog) {
-    var log = new log_1.Log('Tlb.ExpBtn', parentLog, 'start');
-    // prevent multiple inits
-    if (original._expanded || original.command) {
-        log.add("already expanded, won't modify");
-        return original;
-    }
-    ;
-    // if just a name, turn into a command
-    if (typeof original === 'string') {
-        log.add("name \"" + original + "\" found, will re-map to .command.action");
-        original = { command: { action: original.trim() } };
-    }
-    ;
-    // if it's a command w/action, wrap into command + trim
-    if (typeof original.action === 'string') {
-        log.add("action found, will move down to .command");
-        original.action = original.action.trim();
-        original = { command: original };
-    }
-    // some clean-up
-    delete original.action; // remove the action property
-    original._expanded = true;
-    log.add('done');
-    return original;
-}
-exports.expandButtonConfig = expandButtonConfig;
-function getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more) {
-    // 
-    // stv: v1 code
-    var partialButtonConfig = {
-        icon: function (context) { return "icon-sxc-" + icon; },
-        title: function (context) { return "Toolbar." + translateKey; },
-        uiActionOnly: function (context) { return uiOnly; },
-        partOfPage: function (context) { return partOfPage; },
-    };
-    Object.assign(partialButtonConfig, more);
-    return partialButtonConfig;
-}
-exports.getButtonConfigDefaultsV1 = getButtonConfigDefaultsV1;
-// remove buttons which are not valid based on add condition
-function removeDisableButtons(context, full, config, parentLog) {
-    var log = new log_1.Log("Tlb.RmvDsb', parentLog, 'start remove disabled buttons for " + full.groups.length + " groups");
-    var btnGroups = full.groups;
-    for (var g = 0; g < btnGroups.length; g++) {
-        var btns = btnGroups[g].buttons;
-        removeUnfitButtons(context, btns, config, log);
-        log.add('will disable appropriate buttons');
-        disableButtons(context, btns, config);
-        // remove the group, if no buttons left, or only "more"
-        // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
-        if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more')) {
-            log.add("found no more buttons except for the \"more\" - will remove that too");
-            btnGroups.splice(g--, 1);
-        } // remove, and decrement counter
-    }
-}
-exports.removeDisableButtons = removeDisableButtons;
-function removeUnfitButtons(context, btns, config, log) {
-    var removals = '';
-    for (var i = 0; i < btns.length; i++) {
-        // let add = btns[i].showCondition;
-        // if (add !== undefined)
-        //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
-        // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
-        context.button = btns[i];
-        if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, config, true)) {
-            removals += "#" + i + " \"" + btns[i].action.name + "\"; ";
-            btns.splice(i--, 1);
-        }
-    }
-    if (removals)
-        log.add("removed buttons: " + removals);
-}
-function disableButtons(context, btns, config) {
-    for (var i = 0; i < btns.length; i++) {
-        // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
-        context.button = btns[i];
-        if (btns[i].action) {
-            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, false);
-        }
-        else {
-            btns[i].disabled = (function (context) { return false; });
-        }
-    }
-}
-function evalPropOrFunction(propOrFunction, context, config, fallback) {
-    if (propOrFunction === undefined || propOrFunction === null) {
-        return fallback;
-    }
-    if (typeof (propOrFunction) === 'function') {
-        return propOrFunction(context, config);
-    }
-    else {
-        return propOrFunction;
-    }
-}
-/**
- * enhance button-object with default icons, etc.
- * @param btn
- * @param group
- * @param fullToolbarConfig
- * @param actions
- */
-function addDefaultBtnSettings(btn, group, fullToolbarConfig, actions, log) {
-    // log.add(`adding default btn settings for ${btn.action.name}`);
-    log.add("adding default btn settings for " + function () { return btn.action.name; });
-    for (var d = 0; d < btnProperties.length; d++) {
-        fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
-    }
-}
-exports.addDefaultBtnSettings = addDefaultBtnSettings;
-var btnProperties = [
-    'classes',
-    'icon',
-    'title',
-    'dynamicClasses',
-    'showCondition',
-    'disabled'
-];
-var prvProperties = [
-    'defaults',
-    'params',
-    'name'
-];
-/**
- * configure missing button properties with various fallback options
- * @param btn
- * @param group
- * @param fullToolbarConfig
- * @param actions
- * @param propName
- */
-function fallbackBtnSetting(btn, group, fullToolbarConfig, actions, propName) {
-    if (btn[propName]) {
-        // if already defined, use the already defined property
-        btn[propName] = btn[propName];
-    }
-    else if (group.defaults &&
-        group.defaults[propName]) {
-        // if the group has defaults, try use that property
-        btn[propName] = group.defaults[propName];
-    }
-    else if (fullToolbarConfig &&
-        fullToolbarConfig.defaults &&
-        fullToolbarConfig.defaults[propName]) {
-        // if the toolbar has defaults, try use that property
-        btn[propName] = fullToolbarConfig.defaults[propName];
-    }
-    else if (btn.action &&
-        btn.action.name &&
-        actions.get(btn.action.name) &&
-        actions.get(btn.action.name).buttonConfig &&
-        actions.get(btn.action.name).buttonConfig[propName]) {
-        // if there is an action, try to use that property name
-        btn[propName] = actions.get(btn.action.name).buttonConfig[propName];
-    }
-}
-// ReSharper disable once UnusedParameter
-function customize(toolbar) {
-    // if (!toolbar.settings) return;
-    // let set = toolbar.settings;
-    // if (set.autoAddMore) {
-    //    console.log("auto-more");
-    //    let grps = toolbar.groups;
-    //    for (let g = 0; g < grps.length; g++) {
-    //        let btns = grps[g];
-    //        for (let i = 0; i < btns.length; i++) {
-    //        }
-    //    }
-    // }
-}
-exports.customize = customize;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
-var quick_dialog_1 = __webpack_require__(13);
-var start_1 = __webpack_require__(34);
-var build_toolbars_1 = __webpack_require__(14);
-var main_content_block_1 = __webpack_require__(25);
-var web_api_promises_1 = __webpack_require__(33);
-/*
- * this is the content block manager in the browser
- *
- * A Content Block is a stand alone unit of content, with it's own definition of
- * 1. content items
- * 2. template
- * + some other stuff
- *
- * it should be able to render itself
- */
-/**
- * ajax update/replace the content of the content-block
- * optionally also initialize the toolbar (if not just preview)
- * @param {ContextOfButton} context
- * @param {string} newContent
- * @param {boolean} justPreview
- * @returns {}
- */
-function replaceCb(context, newContent, justPreview) {
-    try {
-        var newStuff = $(newContent);
-        // Must disable toolbar before we attach to DOM
-        if (justPreview)
-            build_toolbars_1.disable(newStuff);
-        $(api_1.getTag(context.sxc)).replaceWith(newStuff);
-        // reset the cache, so the sxc-object is refreshed
-        context.sxc.recreate(true);
-    }
-    catch (e) {
-        console.log('Error while rendering template:', e);
-    }
-}
-/**
- * Show a message where the content of a module should be - usually as placeholder till something else happens
- * @param {ContextOfButton} context
- * @param {string} newContent
- * @returns {} nothing
- */
-function showMessage(context, newContent) {
-    $(api_1.getTag(context.sxc)).html(newContent);
-}
-exports.showMessage = showMessage;
-/**
- * ajax-call, then replace
- * @param {ContextOfButton} context
- * @param {number} alternateTemplateId
- * @param {boolean} justPreview
- */
-function ajaxLoad(context, alternateTemplateId, justPreview) {
-    return web_api_promises_1.getPreviewWithTemplate(context, alternateTemplateId)
-        .then(function (result) { return replaceCb(context, result, justPreview); })
-        .then(start_1.reset); // reset quick-edit, because the config could have changed
-}
-exports.ajaxLoad = ajaxLoad;
-/**
- * this one assumes a replace / change has already happened, but now must be finalized...
- * @param {ContextOfButton} context
- * @param {boolean} forceAjax
- * @param {boolean} preview
- */
-function reloadAndReInitialize(context, forceAjax, preview) {
-    // if ajax is not supported, we must reload the whole page
-    if (!forceAjax && !context.app.supportsAjax) {
-        return window.location.reload();
-    }
-    // ReSharper disable once DoubleNegationOfBoolean
-    return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
-        .then(function () {
-        // tell Evoq that page has changed if it has changed (Ajax call)
-        if (window.dnn_tabVersioningEnabled)
-            try {
-                window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
-            }
-            catch (e) {
-                // sink
-            }
-        // maybe check if already publish
-        // compare to HTML module
-        // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
-        // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
-        // must check for side-effects, which would need the manager to re-build the configuration
-        quick_dialog_1.hide();
-    });
-}
-exports.reloadAndReInitialize = reloadAndReInitialize;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var main_content_block_1 = __webpack_require__(25);
-var render_1 = __webpack_require__(12);
-var templates_1 = __webpack_require__(16);
-var context_1 = __webpack_require__(8);
-var api_1 = __webpack_require__(1);
-var quick_dialog_config_1 = __webpack_require__(47);
-var ng_dialog_params_1 = __webpack_require__(46);
+var main_content_block_1 = __webpack_require__(23);
+var render_1 = __webpack_require__(11);
+var templates_1 = __webpack_require__(15);
+var context_1 = __webpack_require__(6);
+var api_1 = __webpack_require__(2);
+var quick_dialog_config_1 = __webpack_require__(71);
+var ng_dialog_params_1 = __webpack_require__(34);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -1324,19 +998,119 @@ function watchForResize(keepWatching) {
 
 
 /***/ }),
-/* 14 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(8);
-var api_1 = __webpack_require__(1);
-var render_toolbar_1 = __webpack_require__(17);
+var api_1 = __webpack_require__(2);
+var quick_dialog_1 = __webpack_require__(10);
+var start_1 = __webpack_require__(24);
+var build_toolbars_1 = __webpack_require__(12);
+var main_content_block_1 = __webpack_require__(23);
+var web_api_promises_1 = __webpack_require__(33);
+/*
+ * this is the content block manager in the browser
+ *
+ * A Content Block is a stand alone unit of content, with it's own definition of
+ * 1. content items
+ * 2. template
+ * + some other stuff
+ *
+ * it should be able to render itself
+ */
+/**
+ * ajax update/replace the content of the content-block
+ * optionally also initialize the toolbar (if not just preview)
+ * @param {ContextOfButton} context
+ * @param {string} newContent
+ * @param {boolean} justPreview
+ * @returns {}
+ */
+function replaceCb(context, newContent, justPreview) {
+    try {
+        var newStuff = $(newContent);
+        // Must disable toolbar before we attach to DOM
+        if (justPreview)
+            build_toolbars_1.disable(newStuff);
+        $(api_1.getTag(context.sxc)).replaceWith(newStuff);
+        // reset the cache, so the sxc-object is refreshed
+        context.sxc.recreate(true);
+    }
+    catch (e) {
+        console.log('Error while rendering template:', e);
+    }
+}
+/**
+ * Show a message where the content of a module should be - usually as placeholder till something else happens
+ * @param {ContextOfButton} context
+ * @param {string} newContent
+ * @returns {} nothing
+ */
+function showMessage(context, newContent) {
+    $(api_1.getTag(context.sxc)).html(newContent);
+}
+exports.showMessage = showMessage;
+/**
+ * ajax-call, then replace
+ * @param {ContextOfButton} context
+ * @param {number} alternateTemplateId
+ * @param {boolean} justPreview
+ */
+function ajaxLoad(context, alternateTemplateId, justPreview) {
+    return web_api_promises_1.getPreviewWithTemplate(context, alternateTemplateId)
+        .then(function (result) { return replaceCb(context, result, justPreview); })
+        .then(start_1.reset); // reset quick-edit, because the config could have changed
+}
+exports.ajaxLoad = ajaxLoad;
+/**
+ * this one assumes a replace / change has already happened, but now must be finalized...
+ * @param {ContextOfButton} context
+ * @param {boolean} forceAjax
+ * @param {boolean} preview
+ */
+function reloadAndReInitialize(context, forceAjax, preview) {
+    // if ajax is not supported, we must reload the whole page
+    if (!forceAjax && !context.app.supportsAjax) {
+        return window.location.reload();
+    }
+    // ReSharper disable once DoubleNegationOfBoolean
+    return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
+        .then(function () {
+        // tell Evoq that page has changed if it has changed (Ajax call)
+        if (window.dnn_tabVersioningEnabled)
+            try {
+                window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
+            }
+            catch (e) {
+                // sink
+            }
+        // maybe check if already publish
+        // compare to HTML module
+        // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
+        // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
+        // must check for side-effects, which would need the manager to re-build the configuration
+        quick_dialog_1.hide();
+    });
+}
+exports.reloadAndReInitialize = reloadAndReInitialize;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var context_1 = __webpack_require__(6);
+var api_1 = __webpack_require__(2);
+var render_toolbar_1 = __webpack_require__(16);
 var toolbar_manager_1 = __webpack_require__(27);
 var toolbar_expand_config_1 = __webpack_require__(29);
 var toolbar_settings_1 = __webpack_require__(32);
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 // quick debug - set to false if not needed for production
 var dbg = false;
 // generate an empty / fallback toolbar tag
@@ -1434,43 +1208,241 @@ exports.isDisabled = isDisabled;
 
 
 /***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var log_1 = __webpack_require__(5);
+var HasLog = /** @class */ (function () {
+    /**
+     * initialize the logger
+     * ideally it has a parent-logger to attach to
+     * @param logName name to show in the logger
+     * @param parentLog parent-logger to attach to
+     * @param initialMessage optional start-message to log
+     */
+    function HasLog(logName, parentLog, initialMessage) {
+        var _this = this;
+        this.parentLog = parentLog;
+        this.initLog = function (name, parentLog, initialMessage) { return _this.initLogInternal(name, parentLog, initialMessage); };
+        this.logId = 'unknwn';
+        this.linkLog = function (parentLog) { return _this.log.linkLog(parentLog); };
+        this.initLogInternal(logName, parentLog, initialMessage);
+    }
+    HasLog.prototype.initLogInternal = function (name, parentLog, initialMessage) {
+        if (this.log == null)
+            // standard & most common case: just create log
+            this.log = new log_1.Log(name, parentLog, initialMessage);
+        else {
+            // late-init case, where the log was already created - just reconfig keeping what was in it
+            this.log.rename(name);
+            this.linkLog(parentLog);
+            if (initialMessage != null)
+                this.log.add(initialMessage);
+        }
+    };
+    return HasLog;
+}());
+exports.HasLog = HasLog;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var log_1 = __webpack_require__(5);
+// takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
+// ReSharper disable once UnusedParameter
+function expandButtonConfig(original, sharedProps, parentLog) {
+    var log = new log_1.Log('Tlb.ExpBtn', parentLog, 'start');
+    // prevent multiple inits
+    if (original._expanded || original.command) {
+        log.add("already expanded, won't modify");
+        return original;
+    }
+    ;
+    // if just a name, turn into a command
+    if (typeof original === 'string') {
+        log.add("name \"" + original + "\" found, will re-map to .command.action");
+        original = { command: { action: original.trim() } };
+    }
+    ;
+    // if it's a command w/action, wrap into command + trim
+    if (typeof original.action === 'string') {
+        log.add("action found, will move down to .command");
+        original.action = original.action.trim();
+        original = { command: original };
+    }
+    // some clean-up
+    delete original.action; // remove the action property
+    original._expanded = true;
+    log.add('done');
+    return original;
+}
+exports.expandButtonConfig = expandButtonConfig;
+function getButtonConfigDefaultsV1(name, icon, translateKey, uiOnly, partOfPage, more) {
+    // 
+    // stv: v1 code
+    var partialButtonConfig = {
+        icon: function (context) { return "icon-sxc-" + icon; },
+        title: function (context) { return "Toolbar." + translateKey; },
+        uiActionOnly: function (context) { return uiOnly; },
+        partOfPage: function (context) { return partOfPage; },
+    };
+    Object.assign(partialButtonConfig, more);
+    return partialButtonConfig;
+}
+exports.getButtonConfigDefaultsV1 = getButtonConfigDefaultsV1;
+// remove buttons which are not valid based on add condition
+function removeDisableButtons(context, full, config, parentLog) {
+    var log = new log_1.Log("Tlb.RmvDsb', parentLog, 'start remove disabled buttons for " + full.groups.length + " groups");
+    var btnGroups = full.groups;
+    for (var g = 0; g < btnGroups.length; g++) {
+        var btns = btnGroups[g].buttons;
+        removeUnfitButtons(context, btns, config, log);
+        log.add('will disable appropriate buttons');
+        disableButtons(context, btns, config);
+        // remove the group, if no buttons left, or only "more"
+        // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
+        if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more')) {
+            log.add("found no more buttons except for the \"more\" - will remove that too");
+            btnGroups.splice(g--, 1);
+        } // remove, and decrement counter
+    }
+}
+exports.removeDisableButtons = removeDisableButtons;
+function removeUnfitButtons(context, btns, config, log) {
+    var removals = '';
+    for (var i = 0; i < btns.length; i++) {
+        // let add = btns[i].showCondition;
+        // if (add !== undefined)
+        //    if (typeof (add) === "function" ? !add(btns[i].command, config) : !add)
+        // if (!evalPropOrFunction(btns[i].showCondition, btns[i].command, config, true))
+        context.button = btns[i];
+        if (btns[i].action && !evalPropOrFunction(btns[i].showCondition, context, config, true)) {
+            removals += "#" + i + " \"" + btns[i].action.name + "\"; ";
+            btns.splice(i--, 1);
+        }
+    }
+    if (removals)
+        log.add("removed buttons: " + removals);
+}
+function disableButtons(context, btns, config) {
+    for (var i = 0; i < btns.length; i++) {
+        // btns[i].disabled = evalPropOrFunction(btns[i].disabled, btns[i].command, config, false);
+        context.button = btns[i];
+        if (btns[i].action) {
+            btns[i].disabled = evalPropOrFunction(btns[i].disabled, context, config, false);
+        }
+        else {
+            btns[i].disabled = (function (context) { return false; });
+        }
+    }
+}
+function evalPropOrFunction(propOrFunction, context, config, fallback) {
+    if (propOrFunction === undefined || propOrFunction === null) {
+        return fallback;
+    }
+    if (typeof (propOrFunction) === 'function') {
+        return propOrFunction(context, config);
+    }
+    else {
+        return propOrFunction;
+    }
+}
+/**
+ * enhance button-object with default icons, etc.
+ * @param btn
+ * @param group
+ * @param fullToolbarConfig
+ * @param actions
+ */
+function addDefaultBtnSettings(btn, group, fullToolbarConfig, actions, log) {
+    // log.add(`adding default btn settings for ${btn.action.name}`);
+    log.add("adding default btn settings for " + function () { return btn.action.name; });
+    for (var d = 0; d < btnProperties.length; d++) {
+        fallbackBtnSetting(btn, group, fullToolbarConfig, actions, btnProperties[d]);
+    }
+}
+exports.addDefaultBtnSettings = addDefaultBtnSettings;
+var btnProperties = [
+    'classes',
+    'icon',
+    'title',
+    'dynamicClasses',
+    'showCondition',
+    'disabled'
+];
+var prvProperties = [
+    'defaults',
+    'params',
+    'name'
+];
+/**
+ * configure missing button properties with various fallback options
+ * @param btn
+ * @param group
+ * @param fullToolbarConfig
+ * @param actions
+ * @param propName
+ */
+function fallbackBtnSetting(btn, group, fullToolbarConfig, actions, propName) {
+    if (btn[propName]) {
+        // if already defined, use the already defined property
+        btn[propName] = btn[propName];
+    }
+    else if (group.defaults &&
+        group.defaults[propName]) {
+        // if the group has defaults, try use that property
+        btn[propName] = group.defaults[propName];
+    }
+    else if (fullToolbarConfig &&
+        fullToolbarConfig.defaults &&
+        fullToolbarConfig.defaults[propName]) {
+        // if the toolbar has defaults, try use that property
+        btn[propName] = fullToolbarConfig.defaults[propName];
+    }
+    else if (btn.action &&
+        btn.action.name &&
+        actions.get(btn.action.name) &&
+        actions.get(btn.action.name).buttonConfig &&
+        actions.get(btn.action.name).buttonConfig[propName]) {
+        // if there is an action, try to use that property name
+        btn[propName] = actions.get(btn.action.name).buttonConfig[propName];
+    }
+}
+// ReSharper disable once UnusedParameter
+function customize(toolbar) {
+    // if (!toolbar.settings) return;
+    // let set = toolbar.settings;
+    // if (set.autoAddMore) {
+    //    console.log("auto-more");
+    //    let grps = toolbar.groups;
+    //    for (let g = 0; g < grps.length; g++) {
+    //        let btns = grps[g];
+    //        for (let i = 0; i < btns.length; i++) {
+    //        }
+    //    }
+    // }
+}
+exports.customize = customize;
+
+
+/***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var UserOfEditContext = /** @class */ (function () {
-    function UserOfEditContext() {
-    }
-    // todo: stv, constructor should be removed after refactoring
-    //constructor(editContext?: DataEditContext) {
-    //  if (editContext) {
-    //    this.canDesign = editContext.User.CanDesign;
-    //    this.canDevelop = editContext.User.CanDesign;
-    //  }
-    //}
-    UserOfEditContext.fromContext = function (context) {
-        var user = new UserOfEditContext();
-        user.canDesign = context.user.canDesign;
-        user.canDevelop = context.user.canDevelop;
-        return user;
-    };
-    return UserOfEditContext;
-}());
-exports.UserOfEditContext = UserOfEditContext;
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var quick_dialog_1 = __webpack_require__(13);
-var build_toolbars_1 = __webpack_require__(14);
-var render_1 = __webpack_require__(12);
+var quick_dialog_1 = __webpack_require__(10);
+var build_toolbars_1 = __webpack_require__(12);
+var render_1 = __webpack_require__(11);
 var web_api_promises_1 = __webpack_require__(33);
 /**
  * prepare the instance so content can be added
@@ -1545,13 +1517,13 @@ exports.updateTemplate = updateTemplate;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_groups_1 = __webpack_require__(65);
+var render_groups_1 = __webpack_require__(62);
 var render_helpers_1 = __webpack_require__(26);
 function renderToolbar(context) {
     // render groups of buttons
@@ -1579,13 +1551,13 @@ exports.renderToolbar = renderToolbar;
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var old_parameters_adapter_1 = __webpack_require__(66);
+var old_parameters_adapter_1 = __webpack_require__(63);
 var render_helpers_1 = __webpack_require__(26);
 /**
  * generate the html for a button
@@ -1654,7 +1626,7 @@ function flattenActionDefinition(actDef) {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1677,7 +1649,7 @@ exports.ButtonAction = ButtonAction;
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1704,6 +1676,34 @@ exports.ButtonConfig = ButtonConfig;
 
 
 /***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var UserOfEditContext = /** @class */ (function () {
+    function UserOfEditContext() {
+    }
+    // todo: stv, constructor should be removed after refactoring
+    //constructor(editContext?: DataEditContext) {
+    //  if (editContext) {
+    //    this.canDesign = editContext.User.CanDesign;
+    //    this.canDevelop = editContext.User.CanDesign;
+    //  }
+    //}
+    UserOfEditContext.fromContext = function (context) {
+        var user = new UserOfEditContext();
+        user.canDesign = context.user.canDesign;
+        user.canDevelop = context.user.canDevelop;
+        return user;
+    };
+    return UserOfEditContext;
+}());
+exports.UserOfEditContext = UserOfEditContext;
+
+
+/***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1711,10 +1711,10 @@ exports.ButtonConfig = ButtonConfig;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(4);
-var cmds_strategy_factory_1 = __webpack_require__(84);
+var cmds_strategy_factory_1 = __webpack_require__(87);
 var mod_1 = __webpack_require__(37);
-var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var quick_e_1 = __webpack_require__(1);
+var selectors_instance_1 = __webpack_require__(3);
 /** add a clipboard to the quick edit */
 /**
  * perform copy and paste commands - needs the clipboard
@@ -1834,23 +1834,61 @@ $('a', quick_e_1.$quickE.selected).click(function () {
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_1 = __webpack_require__(45);
-/**
- * assemble an object which will store the configuration and execute it
- * @param sxc
- * @param editContext
- * @param specialSettings
- */
-function commandCreate(context) {
-    var ngDialogUrl = context.instance.sxcRootUrl +
-        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-        context.instance.sxcVersion;
-    var isDebug = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
-    var cmd = new command_1.Command(context, ngDialogUrl, isDebug);
-    return cmd;
-}
-exports.commandCreate = commandCreate;
+var engine_1 = __webpack_require__(42);
+var has_log_1 = __webpack_require__(13);
+var log_1 = __webpack_require__(5);
+var logId = 'Cms.Api';
+var dumpLog = true;
+var Cms = /** @class */ (function (_super) {
+    __extends(Cms, _super);
+    function Cms() {
+        var _this = _super.call(this, logId, null) || this;
+        /**
+         * if true (default) will reset the log everytime something is done
+         * if false, will preserve the log over multiple calls
+         */
+        _this.autoReset = true;
+        _this.autoDump = dumpLog;
+        return _this;
+    }
+    /**
+     * reset / clear the log
+     */
+    Cms.prototype.resetLog = function () {
+        this.log = new log_1.Log(logId, null, 'log was reset');
+    };
+    ;
+    Cms.prototype.run = function (context, nameOrSettings, eventOrSettings, event) {
+        var _this = this;
+        this.do(function () { return new engine_1.Engine(_this.log).detectParamsAndRun(context, nameOrSettings, eventOrSettings, event); });
+    };
+    /**
+     * reset/clear the log if alwaysResetLog is true
+     */
+    Cms.prototype.do = function (innerCall) {
+        if (this.autoReset)
+            this.resetLog();
+        console.log('before');
+        var result = innerCall();
+        console.log('after');
+        if (this.autoDump)
+            console.log(this.log.dump());
+        return result;
+    };
+    return Cms;
+}(has_log_1.HasLog));
+exports.Cms = Cms;
 
 
 /***/ }),
@@ -1860,95 +1898,7 @@ exports.commandCreate = commandCreate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * used to build instance config
- */
-var InstanceConfig = /** @class */ (function () {
-    function InstanceConfig() {
-    }
-    //constructor(editContext: DataEditContext) {
-    //  const ce = editContext.Environment;
-    //  const cg = editContext.ContentGroup;
-    //  const cb = editContext.ContentBlock;
-    //  this.portalId = ce.WebsiteId;
-    //  this.tabId = ce.PageId;
-    //  this.moduleId = ce.InstanceId;
-    //  this.version = ce.SxcVersion;
-    //  this.contentGroupId = cg.Guid;
-    //  this.cbIsEntity = cb.IsEntity;
-    //  this.cbId = cb.Id;
-    //  this.appPath = cg.AppUrl;
-    //  this.isList = cg.IsList;
-    //}
-    InstanceConfig.fromContext = function (contextOfButton) {
-        var config = new InstanceConfig();
-        config.portalId = contextOfButton.tenant.id;
-        config.tabId = contextOfButton.page.id;
-        config.moduleId = contextOfButton.instance.id;
-        config.version = contextOfButton.instance.sxcVersion;
-        config.contentGroupId = contextOfButton.contentBlock.contentGroupId;
-        config.cbIsEntity = contextOfButton.contentBlock.isEntity;
-        config.cbId = contextOfButton.contentBlock.id;
-        config.appPath = contextOfButton.app.appPath;
-        config.isList = contextOfButton.contentBlock.isList;
-        return config;
-    };
-    return InstanceConfig;
-}());
-exports.InstanceConfig = InstanceConfig;
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(12);
-var quick_dialog_1 = __webpack_require__(13);
-var command_link_to_ng_dialog_1 = __webpack_require__(48);
-/**
- * open a new dialog of the angular-ui
- * @param settings
- * @param event
- * @param sxc
- * @param editContext
- */
-function commandOpenNgDialog(context, event) {
-    // the callback will handle events after closing the dialog
-    // and reload the in-page view w/ajax or page reload
-    var callback = function () {
-        render_1.reloadAndReInitialize(context);
-        // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
-    };
-    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
-    if (context.button.inlineWindow) {
-        var fullScreen = false;
-        if (!!context.button.fullScreen) {
-            if (typeof (context.button.fullScreen) === 'function') {
-                fullScreen = context.button.fullScreen(context);
-            }
-        }
-        return quick_dialog_1.showOrToggle(context, link, callback, fullScreen, /* settings.dialog === "item-history"*/ context.button.dialog(context).toString());
-    }
-    var origEvent = event || window.event;
-    if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-        return window.open(link);
-    }
-    return $2sxc.totalPopup.open(link, callback);
-}
-exports.commandOpenNgDialog = commandOpenNgDialog;
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(16);
+var templates_1 = __webpack_require__(15);
 /*
  * this is a content block in the browser
  *
@@ -1980,6 +1930,244 @@ exports.MainContentBlock = MainContentBlock;
  */
 // ReSharper disable once InconsistentNaming
 exports._contentBlock = new MainContentBlock();
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var config_1 = __webpack_require__(43);
+var positioning_1 = __webpack_require__(25);
+var quick_e_1 = __webpack_require__(1);
+var selectors_instance_1 = __webpack_require__(3);
+function enable() {
+    // build all toolbar html-elements
+    quick_e_1.prepareToolbarInDom();
+    // Cache the panes (because panes can't change dynamically)
+    initPanes();
+}
+/**
+ * start watching for mouse-move
+ */
+function watchMouse() {
+    var refreshTimeout = null;
+    $('body').on('mousemove', function (e) {
+        if (refreshTimeout === null)
+            refreshTimeout = window.setTimeout(function () {
+                requestAnimationFrame(function () {
+                    positioning_1.refresh(e);
+                    refreshTimeout = null;
+                });
+            }, 20);
+    });
+}
+function start() {
+    try {
+        config_1._readPageConfig();
+        if (quick_e_1.$quickE.config.enable) {
+            // initialize first body-offset
+            quick_e_1.$quickE.bodyOffset = positioning_1.getBodyPosition();
+            enable();
+            toggleParts();
+            watchMouse();
+        }
+    }
+    catch (e) {
+        console.error("couldn't start quick-edit", e);
+    }
+}
+exports.start = start;
+/**
+ * cache the panes which can contain modules
+ */
+function initPanes() {
+    quick_e_1.$quickE.cachedPanes = $(selectors_instance_1.selectors.mod.listSelector);
+    quick_e_1.$quickE.cachedPanes.addClass('sc-cb-pane-glow');
+}
+/**
+ * enable/disable module/content-blocks as configured
+ */
+function toggleParts() {
+    //// content blocks actions
+    // quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
+    //// module actions
+    // quickE.modActions.hide(quickE.config.modules.enable);
+}
+/**
+ * reset the quick-edit
+ * for example after ajax-loading a content-block, which may cause changed configurations
+ */
+function reset() {
+    config_1._readPageConfig();
+    toggleParts();
+}
+exports.reset = reset;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var coords_1 = __webpack_require__(44);
+var quick_e_1 = __webpack_require__(1);
+var selectors_instance_1 = __webpack_require__(3);
+/**
+ * Module with everything related to positioning the quick-edit in-page editing
+ */
+/**
+ * Point is used as return type to store X,Y coordinates
+ */
+/**
+ * Prepare offset calculation based on body positioning
+ * @returns Point
+ */
+function getBodyPosition() {
+    var bodyPos = quick_e_1.$quickE.body.css('position');
+    return bodyPos === 'relative' || bodyPos === 'absolute'
+        ? new coords_1.Coords(quick_e_1.$quickE.body.offset().left, quick_e_1.$quickE.body.offset().top)
+        : new coords_1.Coords(0, 0);
+}
+exports.getBodyPosition = getBodyPosition;
+/**
+ * Refresh content block and modules elements
+ */
+function refreshDomObjects() {
+    quick_e_1.$quickE.bodyOffset =
+        getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
+    //// Cache the panes (because panes can't change dynamically)
+    // if (!quickE.cachedPanes)
+    //    quickE.cachedPanes = $(selectors.mod.listSelector);
+    if (quick_e_1.$quickE.config.innerBlocks.enable) {
+        // get all content-block lists which are empty, or which allow multiple child-items
+        var lists = $(selectors_instance_1.selectors.cb.listSelector).filter(":not(." + selectors_instance_1.selectors.cb.singleItem + "), :empty");
+        quick_e_1.$quickE.contentBlocks = lists // $(selectors.cb.listSelector)
+            .find(selectors_instance_1.selectors.cb.selector)
+            .add(lists); // selectors.cb.listSelector);
+    }
+    if (quick_e_1.$quickE.config.modules.enable)
+        quick_e_1.$quickE.modules = quick_e_1.$quickE.cachedPanes
+            .find(selectors_instance_1.selectors.mod.selector)
+            .add(quick_e_1.$quickE.cachedPanes);
+}
+/**
+ * Last time when contentblock and modules are refreshed.
+ * Helps to skip unnecessary calls to refresh(e).
+ */
+(function (refreshDomObjects) {
+})(refreshDomObjects || (refreshDomObjects = {}));
+/**
+ * position, align and show a menu linked to another item
+ */
+function positionAndAlign(element, coords) {
+    return element.css({
+        left: coords.x - quick_e_1.$quickE.bodyOffset.x,
+        top: coords.yh - quick_e_1.$quickE.bodyOffset.y,
+        width: coords.element.width(),
+    }).show();
+}
+exports.positionAndAlign = positionAndAlign;
+/**
+ * Refresh positioning / visibility of the quick-insert bar
+ * @param e
+ */
+function refresh(e) {
+    var highlightClass = 'sc-cb-highlight-for-insert';
+    var newDate = new Date();
+    if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
+        // console.log('refreshed contentblock and modules');
+        refreshDomObjects.lastCall = newDate;
+        refreshDomObjects();
+    }
+    if (quick_e_1.$quickE.config.innerBlocks.enable && quick_e_1.$quickE.contentBlocks) {
+        quick_e_1.$quickE.nearestCb = findNearest(quick_e_1.$quickE.contentBlocks, new coords_1.Coords(e.clientX, e.clientY));
+    }
+    if (quick_e_1.$quickE.config.modules.enable && quick_e_1.$quickE.modules) {
+        quick_e_1.$quickE.nearestMod = findNearest(quick_e_1.$quickE.modules, new coords_1.Coords(e.clientX, e.clientY));
+    }
+    quick_e_1.$quickE.modActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestMod === null);
+    quick_e_1.$quickE.cbActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestCb === null);
+    var oldParent = quick_e_1.$quickE.main.parentContainer;
+    if (quick_e_1.$quickE.nearestCb !== null || quick_e_1.$quickE.nearestMod !== null) {
+        var alignTo = quick_e_1.$quickE.nearestCb || quick_e_1.$quickE.nearestMod;
+        // find parent pane to highlight
+        var parentPane = $(alignTo.element).closest(selectors_instance_1.selectors.mod.listSelector);
+        var parentCbList = $(alignTo.element).closest(selectors_instance_1.selectors.cb.listSelector);
+        var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
+        // put part of the pane-name into the button-labels
+        if (parentPane.length > 0) {
+            var paneName_1 = parentPane.attr('id') || '';
+            if (paneName_1.length > 4)
+                paneName_1 = paneName_1.substr(4);
+            quick_e_1.$quickE.modActions.filter('[titleTemplate]').each(function () {
+                var t = $(this);
+                t.attr('title', t.attr('titleTemplate').replace('{0}', paneName_1));
+            });
+        }
+        positionAndAlign(quick_e_1.$quickE.main, alignTo);
+        // Keep current block as current on menu
+        quick_e_1.$quickE.main.actionsForCb = quick_e_1.$quickE.nearestCb ? quick_e_1.$quickE.nearestCb.element : null;
+        quick_e_1.$quickE.main.actionsForModule = quick_e_1.$quickE.nearestMod ? quick_e_1.$quickE.nearestMod.element : null;
+        quick_e_1.$quickE.main.parentContainer = parentContainer;
+        $(parentContainer).addClass(highlightClass);
+    }
+    else {
+        quick_e_1.$quickE.main.parentContainer = null;
+        quick_e_1.$quickE.main.hide();
+    }
+    // if previously a parent-pane was highlighted, un-highlight it now
+    if (oldParent && oldParent !== quick_e_1.$quickE.main.parentContainer)
+        $(oldParent).removeClass(highlightClass);
+}
+exports.refresh = refresh;
+/**
+ * Return the nearest element to the mouse cursor from elements (jQuery elements)
+ * @param elements
+ * @param position
+ */
+function findNearest(elements, position) {
+    var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
+    var nearestItem = null;
+    var nearestDistance = maxDistance;
+    var posX = position.x + quick_e_1.$quickE.win.scrollLeft();
+    var posY = position.y + quick_e_1.$quickE.win.scrollTop();
+    // Find nearest element
+    elements.each(function () {
+        var e = getCoordinates($(this));
+        // First check x coordinates - must be within container
+        if (posX < e.x || posX > e.x + e.w)
+            return;
+        // Check if y coordinates are within boundaries
+        var distance = Math.abs(posY - e.yh);
+        if (distance < maxDistance && distance < nearestDistance) {
+            nearestItem = e;
+            nearestDistance = distance;
+        }
+    });
+    return nearestItem;
+}
+exports.findNearest = findNearest;
+function getCoordinates(element) {
+    // sometimes element.length === 0 and element.offset() = undefined
+    // console.log("element.offset():", element.offset());
+    // console.log("element.length:", element.length);
+    var coords = {
+        element: element,
+        x: element.offset().left,
+        w: element.width(),
+        y: element.offset().top,
+        // For content-block ITEMS, the menu must be visible at the end
+        // For content-block-LISTS, the menu must be at top
+        yh: element.offset().top + (element.is(selectors_instance_1.selectors.eitherCbOrMod) ? element.height() : 0),
+    };
+    return coords;
+}
+exports.getCoordinates = getCoordinates;
 
 
 /***/ }),
@@ -2025,10 +2213,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var has_log_1 = __webpack_require__(10);
-var build_toolbars_1 = __webpack_require__(14);
-var render_button_1 = __webpack_require__(18);
-var render_toolbar_1 = __webpack_require__(17);
+var has_log_1 = __webpack_require__(13);
+var build_toolbars_1 = __webpack_require__(12);
+var render_button_1 = __webpack_require__(17);
+var render_toolbar_1 = __webpack_require__(16);
 var toolbar_config_templates_1 = __webpack_require__(28);
 /**
  * Toolbar manager for the whole page - basically a set of APIs
@@ -2079,9 +2267,9 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var default_toolbar_template_1 = __webpack_require__(67);
-var left_toolbar_template_1 = __webpack_require__(68);
-var has_log_1 = __webpack_require__(10);
+var default_toolbar_template_1 = __webpack_require__(65);
+var left_toolbar_template_1 = __webpack_require__(66);
+var has_log_1 = __webpack_require__(13);
 var ToolbarConfigTemplates = /** @class */ (function (_super) {
     __extends(ToolbarConfigTemplates, _super);
     function ToolbarConfigTemplates(parentLog) {
@@ -2124,13 +2312,13 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 //import { DataEditContext } from '../../data-edit-context/data-edit-context';
-var log_1 = __webpack_require__(3);
+var log_1 = __webpack_require__(5);
 //import { getEditContext } from '../../manage/api';
-var instance_config_1 = __webpack_require__(23);
-var old_toolbar_settings_adapter_1 = __webpack_require__(69);
-var expand_button_config_1 = __webpack_require__(11);
-var expand_group_config_1 = __webpack_require__(70);
-var toolbar_config_1 = __webpack_require__(71);
+var instance_config_1 = __webpack_require__(67);
+var old_toolbar_settings_adapter_1 = __webpack_require__(68);
+var expand_button_config_1 = __webpack_require__(14);
+var expand_group_config_1 = __webpack_require__(69);
+var toolbar_config_1 = __webpack_require__(70);
 var toolbar_settings_1 = __webpack_require__(32);
 var toolbar_config_templates_1 = __webpack_require__(28);
 function expandToolbarConfig(context, toolbarData, toolbarSettings, parentLog) {
@@ -2444,72 +2632,51 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var config_1 = __webpack_require__(72);
-var positioning_1 = __webpack_require__(35);
-var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
-function enable() {
-    // build all toolbar html-elements
-    quick_e_1.prepareToolbarInDom();
-    // Cache the panes (because panes can't change dynamically)
-    initPanes();
-}
-/**
- * start watching for mouse-move
- */
-function watchMouse() {
-    var refreshTimeout = null;
-    $('body').on('mousemove', function (e) {
-        if (refreshTimeout === null)
-            refreshTimeout = window.setTimeout(function () {
-                requestAnimationFrame(function () {
-                    positioning_1.refresh(e);
-                    refreshTimeout = null;
-                });
-            }, 20);
-    });
-}
-function start() {
-    try {
-        config_1._readPageConfig();
-        if (quick_e_1.$quickE.config.enable) {
-            // initialize first body-offset
-            quick_e_1.$quickE.bodyOffset = positioning_1.getBodyPosition();
-            enable();
-            toggleParts();
-            watchMouse();
-        }
+var user_of_edit_context_1 = __webpack_require__(20);
+var NgDialogParams = /** @class */ (function () {
+    function NgDialogParams() {
     }
-    catch (e) {
-        console.error("couldn't start quick-edit", e);
-    }
-}
-exports.start = start;
-/**
- * cache the panes which can contain modules
- */
-function initPanes() {
-    quick_e_1.$quickE.cachedPanes = $(selectors_instance_1.selectors.mod.listSelector);
-    quick_e_1.$quickE.cachedPanes.addClass('sc-cb-pane-glow');
-}
-/**
- * enable/disable module/content-blocks as configured
- */
-function toggleParts() {
-    //// content blocks actions
-    // quickE.cbActions.toggle(quickE.config.innerBlocks.enable);
-    //// module actions
-    // quickE.modActions.hide(quickE.config.modules.enable);
-}
-/**
- * reset the quick-edit
- * for example after ajax-loading a content-block, which may cause changed configurations
- */
-function reset() {
-    config_1._readPageConfig();
-    toggleParts();
-}
-exports.reset = reset;
+    //constructor(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
+    //  this.zoneId = editContext.ContentGroup.ZoneId;
+    //  this.appId = editContext.ContentGroup.AppId;
+    //  this.tid = editContext.Environment.PageId;
+    //  this.mid = editContext.Environment.InstanceId;
+    //  this.cbid = sxc.cbid;
+    //  this.lang = editContext.Language.Current;
+    //  this.langpri = editContext.Language.Primary;
+    //  this.langs = JSON.stringify(editContext.Language.All);
+    //  this.portalroot = editContext.Environment.WebsiteUrl;
+    //  this.websiteroot = editContext.Environment.SxcRootUrl;
+    //  this.partOfPage = editContext.ContentBlock.PartOfPage;
+    //  // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+    //  this.publishing = editContext.ContentBlock.VersioningRequirements;
+    //  // todo= probably move the user into the dashboard info
+    //  this.user = getUserOfEditContext(editContext);
+    //  this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+    //}
+    NgDialogParams.fromContext = function (context) {
+        var params = new NgDialogParams();
+        params.zoneId = context.app.zoneId;
+        params.appId = context.app.id;
+        params.tid = context.page.id;
+        params.mid = context.instance.id;
+        params.cbid = context.contentBlock.id;
+        params.lang = context.app.currentLanguage;
+        params.langpri = context.app.primaryLanguage;
+        params.langs = JSON.stringify(context.app.allLanguages);
+        params.portalroot = context.tenant.url;
+        params.websiteroot = context.instance.sxcRootUrl;
+        params.partOfPage = context.contentBlock.partOfPage;
+        // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+        params.publishing = context.contentBlock.versioningRequirements;
+        // todo= probably move the user into the dashboard info
+        params.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
+        params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+        return params;
+    };
+    return NgDialogParams;
+}());
+exports.NgDialogParams = NgDialogParams;
 
 
 /***/ }),
@@ -2519,160 +2686,40 @@ exports.reset = reset;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var coords_1 = __webpack_require__(73);
-var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var render_1 = __webpack_require__(11);
+var quick_dialog_1 = __webpack_require__(10);
+var command_link_to_ng_dialog_1 = __webpack_require__(72);
 /**
- * Module with everything related to positioning the quick-edit in-page editing
+ * open a new dialog of the angular-ui
+ * @param settings
+ * @param event
+ * @param sxc
+ * @param editContext
  */
-/**
- * Point is used as return type to store X,Y coordinates
- */
-/**
- * Prepare offset calculation based on body positioning
- * @returns Point
- */
-function getBodyPosition() {
-    var bodyPos = quick_e_1.$quickE.body.css('position');
-    return bodyPos === 'relative' || bodyPos === 'absolute'
-        ? new coords_1.Coords(quick_e_1.$quickE.body.offset().left, quick_e_1.$quickE.body.offset().top)
-        : new coords_1.Coords(0, 0);
-}
-exports.getBodyPosition = getBodyPosition;
-/**
- * Refresh content block and modules elements
- */
-function refreshDomObjects() {
-    quick_e_1.$quickE.bodyOffset =
-        getBodyPosition(); // must update this, as sometimes after finishing page load the position changes, like when dnn adds the toolbar
-    //// Cache the panes (because panes can't change dynamically)
-    // if (!quickE.cachedPanes)
-    //    quickE.cachedPanes = $(selectors.mod.listSelector);
-    if (quick_e_1.$quickE.config.innerBlocks.enable) {
-        // get all content-block lists which are empty, or which allow multiple child-items
-        var lists = $(selectors_instance_1.selectors.cb.listSelector).filter(":not(." + selectors_instance_1.selectors.cb.singleItem + "), :empty");
-        quick_e_1.$quickE.contentBlocks = lists // $(selectors.cb.listSelector)
-            .find(selectors_instance_1.selectors.cb.selector)
-            .add(lists); // selectors.cb.listSelector);
-    }
-    if (quick_e_1.$quickE.config.modules.enable)
-        quick_e_1.$quickE.modules = quick_e_1.$quickE.cachedPanes
-            .find(selectors_instance_1.selectors.mod.selector)
-            .add(quick_e_1.$quickE.cachedPanes);
-}
-/**
- * Last time when contentblock and modules are refreshed.
- * Helps to skip unnecessary calls to refresh(e).
- */
-(function (refreshDomObjects) {
-})(refreshDomObjects || (refreshDomObjects = {}));
-/**
- * position, align and show a menu linked to another item
- */
-function positionAndAlign(element, coords) {
-    return element.css({
-        left: coords.x - quick_e_1.$quickE.bodyOffset.x,
-        top: coords.yh - quick_e_1.$quickE.bodyOffset.y,
-        width: coords.element.width(),
-    }).show();
-}
-exports.positionAndAlign = positionAndAlign;
-/**
- * Refresh positioning / visibility of the quick-insert bar
- * @param e
- */
-function refresh(e) {
-    var highlightClass = 'sc-cb-highlight-for-insert';
-    var newDate = new Date();
-    if ((!refreshDomObjects.lastCall) || (newDate.getTime() - refreshDomObjects.lastCall.getTime() > 1000)) {
-        // console.log('refreshed contentblock and modules');
-        refreshDomObjects.lastCall = newDate;
-        refreshDomObjects();
-    }
-    if (quick_e_1.$quickE.config.innerBlocks.enable && quick_e_1.$quickE.contentBlocks) {
-        quick_e_1.$quickE.nearestCb = findNearest(quick_e_1.$quickE.contentBlocks, new coords_1.Coords(e.clientX, e.clientY));
-    }
-    if (quick_e_1.$quickE.config.modules.enable && quick_e_1.$quickE.modules) {
-        quick_e_1.$quickE.nearestMod = findNearest(quick_e_1.$quickE.modules, new coords_1.Coords(e.clientX, e.clientY));
-    }
-    quick_e_1.$quickE.modActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestMod === null);
-    quick_e_1.$quickE.cbActions.toggleClass('sc-invisible', quick_e_1.$quickE.nearestCb === null);
-    var oldParent = quick_e_1.$quickE.main.parentContainer;
-    if (quick_e_1.$quickE.nearestCb !== null || quick_e_1.$quickE.nearestMod !== null) {
-        var alignTo = quick_e_1.$quickE.nearestCb || quick_e_1.$quickE.nearestMod;
-        // find parent pane to highlight
-        var parentPane = $(alignTo.element).closest(selectors_instance_1.selectors.mod.listSelector);
-        var parentCbList = $(alignTo.element).closest(selectors_instance_1.selectors.cb.listSelector);
-        var parentContainer = (parentCbList.length ? parentCbList : parentPane)[0];
-        // put part of the pane-name into the button-labels
-        if (parentPane.length > 0) {
-            var paneName_1 = parentPane.attr('id') || '';
-            if (paneName_1.length > 4)
-                paneName_1 = paneName_1.substr(4);
-            quick_e_1.$quickE.modActions.filter('[titleTemplate]').each(function () {
-                var t = $(this);
-                t.attr('title', t.attr('titleTemplate').replace('{0}', paneName_1));
-            });
-        }
-        positionAndAlign(quick_e_1.$quickE.main, alignTo);
-        // Keep current block as current on menu
-        quick_e_1.$quickE.main.actionsForCb = quick_e_1.$quickE.nearestCb ? quick_e_1.$quickE.nearestCb.element : null;
-        quick_e_1.$quickE.main.actionsForModule = quick_e_1.$quickE.nearestMod ? quick_e_1.$quickE.nearestMod.element : null;
-        quick_e_1.$quickE.main.parentContainer = parentContainer;
-        $(parentContainer).addClass(highlightClass);
-    }
-    else {
-        quick_e_1.$quickE.main.parentContainer = null;
-        quick_e_1.$quickE.main.hide();
-    }
-    // if previously a parent-pane was highlighted, un-highlight it now
-    if (oldParent && oldParent !== quick_e_1.$quickE.main.parentContainer)
-        $(oldParent).removeClass(highlightClass);
-}
-exports.refresh = refresh;
-/**
- * Return the nearest element to the mouse cursor from elements (jQuery elements)
- * @param elements
- * @param position
- */
-function findNearest(elements, position) {
-    var maxDistance = 30; // Defines the maximal distance of the cursor when the menu is displayed
-    var nearestItem = null;
-    var nearestDistance = maxDistance;
-    var posX = position.x + quick_e_1.$quickE.win.scrollLeft();
-    var posY = position.y + quick_e_1.$quickE.win.scrollTop();
-    // Find nearest element
-    elements.each(function () {
-        var e = getCoordinates($(this));
-        // First check x coordinates - must be within container
-        if (posX < e.x || posX > e.x + e.w)
-            return;
-        // Check if y coordinates are within boundaries
-        var distance = Math.abs(posY - e.yh);
-        if (distance < maxDistance && distance < nearestDistance) {
-            nearestItem = e;
-            nearestDistance = distance;
-        }
-    });
-    return nearestItem;
-}
-exports.findNearest = findNearest;
-function getCoordinates(element) {
-    // sometimes element.length === 0 and element.offset() = undefined
-    // console.log("element.offset():", element.offset());
-    // console.log("element.length:", element.length);
-    var coords = {
-        element: element,
-        x: element.offset().left,
-        w: element.width(),
-        y: element.offset().top,
-        // For content-block ITEMS, the menu must be visible at the end
-        // For content-block-LISTS, the menu must be at top
-        yh: element.offset().top + (element.is(selectors_instance_1.selectors.eitherCbOrMod) ? element.height() : 0),
+function commandOpenNgDialog(context, event) {
+    // the callback will handle events after closing the dialog
+    // and reload the in-page view w/ajax or page reload
+    var callback = function () {
+        render_1.reloadAndReInitialize(context);
+        // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
     };
-    return coords;
+    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
+    if (context.button.inlineWindow) {
+        var fullScreen = false;
+        if (!!context.button.fullScreen) {
+            if (typeof (context.button.fullScreen) === 'function') {
+                fullScreen = context.button.fullScreen(context);
+            }
+        }
+        return quick_dialog_1.showOrToggle(context, link, callback, fullScreen, /* settings.dialog === "item-history"*/ context.button.dialog(context).toString());
+    }
+    var origEvent = event || window.event;
+    if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
+        return window.open(link);
+    }
+    return $2sxc.totalPopup.open(link, callback);
 }
-exports.getCoordinates = getCoordinates;
+exports.commandOpenNgDialog = commandOpenNgDialog;
 
 
 /***/ }),
@@ -2710,8 +2757,8 @@ exports.Cb = Cb;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var mod_manage_1 = __webpack_require__(38);
-var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var quick_e_1 = __webpack_require__(1);
+var selectors_instance_1 = __webpack_require__(3);
 var Mod = /** @class */ (function () {
     function Mod() {
     }
@@ -2749,7 +2796,7 @@ exports.Mod = Mod;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(21);
-var quick_e_1 = __webpack_require__(2);
+var quick_e_1 = __webpack_require__(1);
 /**
  * module specific stuff
  */
@@ -2918,50 +2965,101 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var engine_1 = __webpack_require__(114);
-var has_log_1 = __webpack_require__(10);
-var log_1 = __webpack_require__(3);
-var logId = 'Cms.Api';
-var dumpLog = true;
-var Cms = /** @class */ (function (_super) {
-    __extends(Cms, _super);
-    function Cms() {
-        var _this = _super.call(this, logId, null) || this;
-        /**
-         * if true (default) will reset the log everytime something is done
-         * if false, will preserve the log over multiple calls
-         */
-        _this.autoReset = true;
-        _this.autoDump = dumpLog;
-        return _this;
+var templates_1 = __webpack_require__(15);
+var command_open_ng_dialog_1 = __webpack_require__(35);
+var commands_1 = __webpack_require__(8);
+var button_action_1 = __webpack_require__(18);
+var button_config_1 = __webpack_require__(19);
+var settings_adapter_1 = __webpack_require__(31);
+var has_log_1 = __webpack_require__(13);
+var Engine = /** @class */ (function (_super) {
+    __extends(Engine, _super);
+    function Engine(parentLog) {
+        return _super.call(this, 'Cmd.Exec', parentLog) || this;
     }
+    Engine.prototype.detectParamsAndRun = function (context, nameOrSettings, eventOrSettings, event) {
+        this.log.add("detecting params and running - has " + arguments.length + " params");
+        var settings;
+        var thirdParamIsEvent = (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined');
+        this.log.add("might cycle parameters, in case not all were given. third is event=" + thirdParamIsEvent);
+        if (thirdParamIsEvent) {
+            this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
+            event = eventOrSettings; // move it to the correct variable
+            settings = (nameOrSettings || {});
+        }
+        else
+            settings = Object.assign(eventOrSettings || {}, { action: nameOrSettings });
+        // ensure we have the right event despite browser differences
+        event = event || window.event;
+        return this.run(context, settings, event);
+    };
     /**
-     * reset / clear the log
+     * run a command
+     * this method expects a clear order of parameters
+     * @param context
+     * @param settings
+     * @param event
      */
-    Cms.prototype.resetLog = function () {
-        this.log = new log_1.Log(logId, null, 'log was reset');
-    };
-    ;
-    Cms.prototype.run = function (context, nameOrSettings, eventOrSettings, event) {
-        var _this = this;
-        this.do(function () { return new engine_1.Engine(_this.log).detectParamsAndRun(context, nameOrSettings, eventOrSettings, event); });
+    Engine.prototype.run = function (context, settings, event) {
+        settings = this.expandSettingsWithDefaults(settings);
+        var origEvent = event;
+        var name = settings.action;
+        var contentType = settings.contentType;
+        this.log.add("run command " + name + " for type " + contentType);
+        // Toolbar API v2
+        var newButtonAction = new button_action_1.ButtonAction(name, contentType, settings);
+        newButtonAction.commandDefinition = commands_1.Commands.getInstance().get(name);
+        var newButtonConfig = new button_config_1.ButtonConfig(newButtonAction);
+        newButtonConfig.name = name;
+        var button = context.button = Object.assign(newButtonConfig, newButtonAction.commandDefinition.buttonConfig, settings_adapter_1.settingsAdapter(settings)); // merge conf & settings, but settings has higher priority
+        // todo: stv, fix this in case that is function
+        if (!button.dialog) {
+            this.log.add("button.dialog method missing, must be old implementation which used the action-name - generating method");
+            button.dialog = function () { return name; };
+        }
+        // todo: stv, fix this in case that is function
+        if (!button.code) {
+            this.log.add("simple button without code - generating code to open standard dialog");
+            button.code = function (contextParam, event) {
+                return command_open_ng_dialog_1.commandOpenNgDialog(contextParam, event);
+            };
+        }
+        if (button.uiActionOnly(context)) {
+            this.log.add("just a UI command, will not run pre-flight to ensure content-block - now running the code");
+            return button.code(context, origEvent);
+        }
+        // if more than just a UI-action, then it needs to be sure the content-group is created first
+        this.log.add("command might change data, will wrap in pre-flight to ensure content-block");
+        var prepare = templates_1.prepareToAddContent(context, settings.useModuleList)
+            .then(function () {
+            context.button.code(context, origEvent);
+        });
+        return prepare;
     };
     /**
-     * reset/clear the log if alwaysResetLog is true
+     * Take a settings-name or partial settings object,
+     * and return a full settings object with all defaults from
+     * the command definition
+     * @param log
+     * @param settings
+     * @param nameOrSettings
      */
-    Cms.prototype.do = function (innerCall) {
-        if (this.autoReset)
-            this.resetLog();
-        console.log('before');
-        var result = innerCall();
-        console.log('after');
-        if (this.autoDump)
-            console.log(this.log.dump());
-        return result;
+    Engine.prototype.expandSettingsWithDefaults = function (nameOrSettings) {
+        var nameIsString = typeof nameOrSettings === 'string';
+        this.log.add("expanding settings; name is string: " + nameIsString + "; name = " + nameOrSettings);
+        // check if name is name (string) or object (settings)
+        var settings = (nameIsString
+            ? Object.assign(nameOrSettings || {}, { action: nameOrSettings }) // place the name as an action-name into a command-object
+            : nameOrSettings);
+        var name = settings.action;
+        this.log.add("will add defaults for " + name + " from buttonConfig");
+        var conf = commands_1.Commands.getInstance().get(name).buttonConfig;
+        var full = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
+        return full;
     };
-    return Cms;
+    return Engine;
 }(has_log_1.HasLog));
-exports.Cms = Cms;
+exports.Engine = Engine;
 
 
 /***/ }),
@@ -2971,16 +3069,51 @@ exports.Cms = Cms;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Entry = /** @class */ (function () {
-    function Entry(log, message) {
-        var _this = this;
-        this.log = log;
-        this.message = message;
-        this.source = function () { return _this.log.fullIdentifier(); };
+var quick_e_1 = __webpack_require__(1);
+var selectors_instance_1 = __webpack_require__(3);
+var configAttr = 'quick-edit-config';
+/**
+ * the initial configuration
+ */
+var conf = quick_e_1.$quickE.config = {
+    enable: true,
+    innerBlocks: {
+        enable: null,
+    },
+    modules: {
+        enable: null,
+    },
+};
+function _readPageConfig() {
+    var configs = $("[" + configAttr + "]");
+    var confJ;
+    // any inner blocks found? will currently affect if modules can be inserted...
+    var hasInnerCBs = ($(selectors_instance_1.selectors.cb.listSelector).length > 0);
+    if (configs.length > 0) {
+        // go through reverse list, as the last is the most important...
+        var finalConfig = {};
+        for (var c = configs.length; c >= 0; c--) {
+            confJ = configs[0].getAttribute(configAttr);
+            try {
+                var confO = void 0;
+                confO = JSON.parse(confJ);
+                Object.assign(finalConfig, confO);
+            }
+            catch (e) {
+                console.warn('had trouble with json', e);
+            }
+        }
+        Object.assign(conf, finalConfig);
     }
-    return Entry;
-}());
-exports.Entry = Entry;
+    // re-check "auto" or "null"
+    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
+    if (conf.modules.enable === null || conf.modules.enable === 'auto')
+        conf.modules.enable = !hasInnerCBs;
+    // for now, ContentBlocks are only enabled if they exist on the page
+    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
+        conf.innerBlocks.enable = hasInnerCBs;
+}
+exports._readPageConfig = _readPageConfig;
 
 
 /***/ }),
@@ -2990,248 +3123,21 @@ exports.Entry = Entry;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var CommandDefinition = /** @class */ (function () {
-    function CommandDefinition() {
+var Coords = /** @class */ (function () {
+    function Coords(x, y, w, yh, element) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.yh = yh;
+        this.element = element;
     }
-    return CommandDefinition;
+    return Coords;
 }());
-exports.CommandDefinition = CommandDefinition;
+exports.Coords = Coords;
 
 
 /***/ }),
 /* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-//import { buildNgDialogParams } from '../manage/api';
-var ng_dialog_params_1 = __webpack_require__(46);
-var _2sxc_translate_1 = __webpack_require__(7);
-var Command = /** @class */ (function () {
-    function Command(context, ngDialogUrl, isDebug) {
-        var _this = this;
-        this.context = context;
-        this.ngDialogUrl = ngDialogUrl;
-        this.isDebug = isDebug;
-        this.evalPropOrFunction = function (propOrFunction, context, fallback) {
-            if (propOrFunction === undefined || propOrFunction === null) {
-                return fallback;
-            }
-            return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
-        };
-        this.addSimpleItem = function () {
-            var item = {};
-            var ct = _this.context.button.action.params.contentType || _this.context.button.action.params.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
-            if (_this.context.button.action.params.entityId) {
-                item.EntityId = _this.context.button.action.params.entityId;
-            }
-            if (ct) {
-                item.ContentTypeName = ct;
-            }
-            // only add if there was stuff to add
-            if (item.EntityId || item.ContentTypeName) {
-                _this.items.push(item);
-            }
-        };
-        // this adds an item of the content-group, based on the group GUID and the sequence number
-        this.addContentGroupItem = function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
-            _this.items.push({
-                Group: {
-                    Guid: guid,
-                    Index: index,
-                    Part: part,
-                    Add: isAdd,
-                },
-                Title: _2sxc_translate_1.translate(sectionLanguageKey),
-            });
-        };
-        // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
-        this.addContentGroupItemSetsToEditList = function (withPresentation) {
-            var isContentAndNotHeader = (_this.context.button.action.params.sortOrder !== -1);
-            var index = isContentAndNotHeader ? _this.context.button.action.params.sortOrder : 0;
-            var prefix = isContentAndNotHeader ? '' : 'List';
-            var cTerm = prefix + 'Content';
-            var pTerm = prefix + 'Presentation';
-            var isAdd = _this.context.button.action.name === 'new';
-            var groupId = _this.context.contentBlock.contentGroupId;
-            _this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, _this.context.contentBlock.isEntity, _this.context.contentBlock.id, "EditFormTitle." + cTerm);
-            if (withPresentation) {
-                _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.context.contentBlock.isEntity, _this.context.contentBlock.id, "EditFormTitle." + pTerm);
-            }
-        };
-        // build the link, combining specific params with global ones and put all in the url
-        this.generateLink = function (context) {
-            // if there is no items-array, create an empty one (it's required later on)
-            if (!context.button.action.params.items) {
-                context.button.action.params.items = [];
-            }
-            //#region steps for all actions: prefill, serialize, open-dialog
-            // when doing new, there may be a prefill in the link to initialize the new item
-            if (context.button.action.params.prefill) {
-                for (var i = 0; i < _this.items.length; i++) {
-                    _this.items[i].Prefill = context.button.action.params.prefill;
-                }
-            }
-            _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
-            // clone the params and adjust parts based on partOfPage settings...
-            var ngDialogParams = ng_dialog_params_1.NgDialogParams.fromContext(context); // 2dm simplified buildNgDialogParams(context);
-            var sharedParams = Object.assign({}, ngDialogParams);
-            var partOfPage = context.button.partOfPage(context);
-            if (!partOfPage) {
-                delete sharedParams.versioningRequirements;
-                delete sharedParams.publishing;
-                sharedParams.partOfPage = false;
-            }
-            return _this.ngDialogUrl +
-                '#' +
-                $.param(sharedParams) +
-                '&' +
-                $.param(_this.params) +
-                _this.isDebug;
-            //#endregion
-        };
-        // this.settings = settings;
-        this.items = context.button.action.params.items || []; // use predefined or create empty array
-        // todo: stv, clean this
-        var params = this.evalPropOrFunction(context.button.params, context, {});
-        var dialog = this.evalPropOrFunction(context.button.dialog, context, {});
-        this.params = Object.assign({
-            dialog: dialog || context.button.action.name,
-        }, params);
-    }
-    return Command;
-}());
-exports.Command = Command;
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var user_of_edit_context_1 = __webpack_require__(15);
-var NgDialogParams = /** @class */ (function () {
-    function NgDialogParams() {
-    }
-    //constructor(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
-    //  this.zoneId = editContext.ContentGroup.ZoneId;
-    //  this.appId = editContext.ContentGroup.AppId;
-    //  this.tid = editContext.Environment.PageId;
-    //  this.mid = editContext.Environment.InstanceId;
-    //  this.cbid = sxc.cbid;
-    //  this.lang = editContext.Language.Current;
-    //  this.langpri = editContext.Language.Primary;
-    //  this.langs = JSON.stringify(editContext.Language.All);
-    //  this.portalroot = editContext.Environment.WebsiteUrl;
-    //  this.websiteroot = editContext.Environment.SxcRootUrl;
-    //  this.partOfPage = editContext.ContentBlock.PartOfPage;
-    //  // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-    //  this.publishing = editContext.ContentBlock.VersioningRequirements;
-    //  // todo= probably move the user into the dashboard info
-    //  this.user = getUserOfEditContext(editContext);
-    //  this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-    //}
-    NgDialogParams.fromContext = function (context) {
-        var params = new NgDialogParams();
-        params.zoneId = context.app.zoneId;
-        params.appId = context.app.id;
-        params.tid = context.page.id;
-        params.mid = context.instance.id;
-        params.cbid = context.contentBlock.id;
-        params.lang = context.app.currentLanguage;
-        params.langpri = context.app.primaryLanguage;
-        params.langs = JSON.stringify(context.app.allLanguages);
-        params.portalroot = context.tenant.url;
-        params.websiteroot = context.instance.sxcRootUrl;
-        params.partOfPage = context.contentBlock.partOfPage;
-        // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-        params.publishing = context.contentBlock.versioningRequirements;
-        // todo= probably move the user into the dashboard info
-        params.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
-        params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-        return params;
-    };
-    return NgDialogParams;
-}());
-exports.NgDialogParams = NgDialogParams;
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var user_of_edit_context_1 = __webpack_require__(15);
-var QuickDialogConfig = /** @class */ (function () {
-    function QuickDialogConfig() {
-    }
-    //constructor(editContext: DataEditContext) {
-    //  this.appId = editContext.ContentGroup.AppId;
-    //  this.isContent = editContext.ContentGroup.IsContent;
-    //  this.hasContent = editContext.ContentGroup.HasContent;
-    //  this.isList = editContext.ContentGroup.IsList;
-    //  this.templateId = editContext.ContentGroup.TemplateId;
-    //  this.contentTypeId = editContext.ContentGroup.ContentTypeName;
-    //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
-    //  this.user = getUserOfEditContext(editContext);
-    //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
-    //}
-    QuickDialogConfig.fromContext = function (context) {
-        var config = new QuickDialogConfig();
-        config.appId = context.app.id;
-        config.isContent = context.app.isContent;
-        config.hasContent = context.app.hasContent;
-        config.isList = context.contentBlock.isList;
-        config.templateId = context.contentBlock.templateId;
-        config.contentTypeId = context.contentBlock.contentTypeId;
-        config.templateChooserVisible = context.contentBlock.showTemplatePicker; // todo = maybe move to content-group
-        config.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
-        config.supportsAjax = context.app.supportsAjax;
-        return config;
-    };
-    return QuickDialogConfig;
-}());
-exports.QuickDialogConfig = QuickDialogConfig;
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var command_create_1 = __webpack_require__(22);
-/**
- * create a dialog link
- * @param sxc
- * @param specialSettings
- */
-function commandLinkToNgDialog(context) {
-    var cmd = command_create_1.commandCreate(context);
-    if (cmd.context.button.action.params.useModuleList) {
-        cmd.addContentGroupItemSetsToEditList(true);
-    }
-    else {
-        cmd.addSimpleItem();
-    }
-    ;
-    // if the command has own configuration stuff, do that now
-    if (cmd.context.button.configureCommand) {
-        cmd.context.button.configureCommand(context, cmd);
-    }
-    return cmd.generateLink(context);
-}
-exports.commandLinkToNgDialog = commandLinkToNgDialog;
-
-
-/***/ }),
-/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3249,7 +3155,7 @@ exports.SystemContext = SystemContext;
 
 
 /***/ }),
-/* 50 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3267,7 +3173,7 @@ exports.TenantContext = TenantContext;
 
 
 /***/ }),
-/* 51 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3285,7 +3191,7 @@ exports.UserContext = UserContext;
 
 
 /***/ }),
-/* 52 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3300,6 +3206,118 @@ var ContentBlockContext = /** @class */ (function () {
     return ContentBlockContext;
 }());
 exports.ContentBlockContext = ContentBlockContext;
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var context_of_toolbar_1 = __webpack_require__(50);
+var ContextOfButton = /** @class */ (function (_super) {
+    __extends(ContextOfButton, _super);
+    function ContextOfButton() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ContextOfButton;
+}(context_of_toolbar_1.ContextOfToolbar));
+exports.ContextOfButton = ContextOfButton;
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var context_of_item_1 = __webpack_require__(51);
+var ContextOfToolbar = /** @class */ (function (_super) {
+    __extends(ContextOfToolbar, _super);
+    function ContextOfToolbar() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ContextOfToolbar;
+}(context_of_item_1.ContextOfItem));
+exports.ContextOfToolbar = ContextOfToolbar;
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var context_of_content_block_1 = __webpack_require__(52);
+var ContextOfItem = /** @class */ (function (_super) {
+    __extends(ContextOfItem, _super);
+    function ContextOfItem() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ContextOfItem;
+}(context_of_content_block_1.ContextOfContentBlock));
+exports.ContextOfItem = ContextOfItem;
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var context_of_instance_1 = __webpack_require__(53);
+var ContextOfContentBlock = /** @class */ (function (_super) {
+    __extends(ContextOfContentBlock, _super);
+    function ContextOfContentBlock() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ContextOfContentBlock;
+}(context_of_instance_1.ContextOfInstance));
+exports.ContextOfContentBlock = ContextOfContentBlock;
 
 
 /***/ }),
@@ -3319,15 +3337,15 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_toolbar_1 = __webpack_require__(54);
-var ContextOfButton = /** @class */ (function (_super) {
-    __extends(ContextOfButton, _super);
-    function ContextOfButton() {
+var context_of_page_1 = __webpack_require__(54);
+var ContextOfInstance = /** @class */ (function (_super) {
+    __extends(ContextOfInstance, _super);
+    function ContextOfInstance() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return ContextOfButton;
-}(context_of_toolbar_1.ContextOfToolbar));
-exports.ContextOfButton = ContextOfButton;
+    return ContextOfInstance;
+}(context_of_page_1.ContextOfPage));
+exports.ContextOfInstance = ContextOfInstance;
 
 
 /***/ }),
@@ -3347,15 +3365,15 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_item_1 = __webpack_require__(55);
-var ContextOfToolbar = /** @class */ (function (_super) {
-    __extends(ContextOfToolbar, _super);
-    function ContextOfToolbar() {
+var context_of_1 = __webpack_require__(55);
+var ContextOfPage = /** @class */ (function (_super) {
+    __extends(ContextOfPage, _super);
+    function ContextOfPage() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return ContextOfToolbar;
-}(context_of_item_1.ContextOfItem));
-exports.ContextOfToolbar = ContextOfToolbar;
+    return ContextOfPage;
+}(context_of_1.ContextOf));
+exports.ContextOfPage = ContextOfPage;
 
 
 /***/ }),
@@ -3375,119 +3393,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_content_block_1 = __webpack_require__(56);
-var ContextOfItem = /** @class */ (function (_super) {
-    __extends(ContextOfItem, _super);
-    function ContextOfItem() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ContextOfItem;
-}(context_of_content_block_1.ContextOfContentBlock));
-exports.ContextOfItem = ContextOfItem;
-
-
-/***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_instance_1 = __webpack_require__(57);
-var ContextOfContentBlock = /** @class */ (function (_super) {
-    __extends(ContextOfContentBlock, _super);
-    function ContextOfContentBlock() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ContextOfContentBlock;
-}(context_of_instance_1.ContextOfInstance));
-exports.ContextOfContentBlock = ContextOfContentBlock;
-
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_page_1 = __webpack_require__(58);
-var ContextOfInstance = /** @class */ (function (_super) {
-    __extends(ContextOfInstance, _super);
-    function ContextOfInstance() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ContextOfInstance;
-}(context_of_page_1.ContextOfPage));
-exports.ContextOfInstance = ContextOfInstance;
-
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_1 = __webpack_require__(59);
-var ContextOfPage = /** @class */ (function (_super) {
-    __extends(ContextOfPage, _super);
-    function ContextOfPage() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ContextOfPage;
-}(context_of_1.ContextOf));
-exports.ContextOfPage = ContextOfPage;
-
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var base_context_1 = __webpack_require__(60);
+var base_context_1 = __webpack_require__(56);
 var ContextOf = /** @class */ (function (_super) {
     __extends(ContextOf, _super);
     function ContextOf() {
@@ -3499,7 +3405,7 @@ exports.ContextOf = ContextOf;
 
 
 /***/ }),
-/* 60 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3514,7 +3420,7 @@ exports.BaseContext = BaseContext;
 
 
 /***/ }),
-/* 61 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3532,7 +3438,7 @@ exports.AppContext = AppContext;
 
 
 /***/ }),
-/* 62 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3550,7 +3456,7 @@ exports.InstanceContext = InstanceContext;
 
 
 /***/ }),
-/* 63 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3568,7 +3474,7 @@ exports.ItemContext = ItemContext;
 
 
 /***/ }),
-/* 64 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3586,13 +3492,26 @@ exports.PageContext = PageContext;
 
 
 /***/ }),
-/* 65 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_button_1 = __webpack_require__(18);
+function isSxcInstance(thing) {
+    return thing.showDetailedHttpError !== undefined;
+}
+exports.isSxcInstance = isSxcInstance;
+
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var render_button_1 = __webpack_require__(17);
 /**
  * render groups of buttons in toolbar
  * @param sxc
@@ -3619,7 +3538,7 @@ exports.renderGroups = renderGroups;
 
 
 /***/ }),
-/* 66 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3641,7 +3560,26 @@ exports.oldParametersAdapter = oldParametersAdapter;
 
 
 /***/ }),
-/* 67 */
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Entry = /** @class */ (function () {
+    function Entry(log, message) {
+        var _this = this;
+        this.log = log;
+        this.message = message;
+        this.source = function () { return _this.log.fullIdentifier(); };
+    }
+    return Entry;
+}());
+exports.Entry = Entry;
+
+
+/***/ }),
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3683,7 +3621,7 @@ exports.defaultToolbarTemplate = {
 
 
 /***/ }),
-/* 68 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3725,7 +3663,52 @@ exports.leftToolbarTemplate = {
 
 
 /***/ }),
-/* 69 */
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * used to build instance config
+ */
+var InstanceConfig = /** @class */ (function () {
+    function InstanceConfig() {
+    }
+    //constructor(editContext: DataEditContext) {
+    //  const ce = editContext.Environment;
+    //  const cg = editContext.ContentGroup;
+    //  const cb = editContext.ContentBlock;
+    //  this.portalId = ce.WebsiteId;
+    //  this.tabId = ce.PageId;
+    //  this.moduleId = ce.InstanceId;
+    //  this.version = ce.SxcVersion;
+    //  this.contentGroupId = cg.Guid;
+    //  this.cbIsEntity = cb.IsEntity;
+    //  this.cbId = cb.Id;
+    //  this.appPath = cg.AppUrl;
+    //  this.isList = cg.IsList;
+    //}
+    InstanceConfig.fromContext = function (contextOfButton) {
+        var config = new InstanceConfig();
+        config.portalId = contextOfButton.tenant.id;
+        config.tabId = contextOfButton.page.id;
+        config.moduleId = contextOfButton.instance.id;
+        config.version = contextOfButton.instance.sxcVersion;
+        config.contentGroupId = contextOfButton.contentBlock.contentGroupId;
+        config.cbIsEntity = contextOfButton.contentBlock.isEntity;
+        config.cbId = contextOfButton.contentBlock.id;
+        config.appPath = contextOfButton.app.appPath;
+        config.isList = contextOfButton.contentBlock.isList;
+        return config;
+    };
+    return InstanceConfig;
+}());
+exports.InstanceConfig = InstanceConfig;
+
+
+/***/ }),
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3749,19 +3732,19 @@ exports.oldToolbarSettingsAddapter = oldToolbarSettingsAddapter;
 
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(6);
+var commands_1 = __webpack_require__(8);
 var parameters_adapter_1 = __webpack_require__(30);
 var settings_adapter_1 = __webpack_require__(31);
-var button_action_1 = __webpack_require__(19);
-var button_config_1 = __webpack_require__(20);
-var expand_button_config_1 = __webpack_require__(11);
-var log_1 = __webpack_require__(3);
+var button_action_1 = __webpack_require__(18);
+var button_config_1 = __webpack_require__(19);
+var expand_button_config_1 = __webpack_require__(14);
+var log_1 = __webpack_require__(5);
 /**
  * this will traverse a groups-tree and expand each group
  * so if groups were just strings like "edit,new" or compact buttons, they will be expanded afterwards
@@ -3883,7 +3866,7 @@ function expandButtonList(root, settings, parentLog) {
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3903,57 +3886,74 @@ exports.ToolbarConfig = ToolbarConfig;
 
 
 /***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var user_of_edit_context_1 = __webpack_require__(20);
+var QuickDialogConfig = /** @class */ (function () {
+    function QuickDialogConfig() {
+    }
+    //constructor(editContext: DataEditContext) {
+    //  this.appId = editContext.ContentGroup.AppId;
+    //  this.isContent = editContext.ContentGroup.IsContent;
+    //  this.hasContent = editContext.ContentGroup.HasContent;
+    //  this.isList = editContext.ContentGroup.IsList;
+    //  this.templateId = editContext.ContentGroup.TemplateId;
+    //  this.contentTypeId = editContext.ContentGroup.ContentTypeName;
+    //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
+    //  this.user = getUserOfEditContext(editContext);
+    //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
+    //}
+    QuickDialogConfig.fromContext = function (context) {
+        var config = new QuickDialogConfig();
+        config.appId = context.app.id;
+        config.isContent = context.app.isContent;
+        config.hasContent = context.app.hasContent;
+        config.isList = context.contentBlock.isList;
+        config.templateId = context.contentBlock.templateId;
+        config.contentTypeId = context.contentBlock.contentTypeId;
+        config.templateChooserVisible = context.contentBlock.showTemplatePicker; // todo = maybe move to content-group
+        config.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
+        config.supportsAjax = context.app.supportsAjax;
+        return config;
+    };
+    return QuickDialogConfig;
+}());
+exports.QuickDialogConfig = QuickDialogConfig;
+
+
+/***/ }),
 /* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
-var configAttr = 'quick-edit-config';
+var command_create_1 = __webpack_require__(73);
 /**
- * the initial configuration
+ * create a dialog link
+ * @param sxc
+ * @param specialSettings
  */
-var conf = quick_e_1.$quickE.config = {
-    enable: true,
-    innerBlocks: {
-        enable: null,
-    },
-    modules: {
-        enable: null,
-    },
-};
-function _readPageConfig() {
-    var configs = $("[" + configAttr + "]");
-    var confJ;
-    // any inner blocks found? will currently affect if modules can be inserted...
-    var hasInnerCBs = ($(selectors_instance_1.selectors.cb.listSelector).length > 0);
-    if (configs.length > 0) {
-        // go through reverse list, as the last is the most important...
-        var finalConfig = {};
-        for (var c = configs.length; c >= 0; c--) {
-            confJ = configs[0].getAttribute(configAttr);
-            try {
-                var confO = void 0;
-                confO = JSON.parse(confJ);
-                Object.assign(finalConfig, confO);
-            }
-            catch (e) {
-                console.warn('had trouble with json', e);
-            }
-        }
-        Object.assign(conf, finalConfig);
+function commandLinkToNgDialog(context) {
+    var cmd = command_create_1.commandCreate(context);
+    if (cmd.context.button.action.params.useModuleList) {
+        cmd.addContentGroupItemSetsToEditList(true);
     }
-    // re-check "auto" or "null"
-    // if it has inner-content, then it's probably a details page, where quickly adding modules would be a problem, so for now, disable modules in this case
-    if (conf.modules.enable === null || conf.modules.enable === 'auto')
-        conf.modules.enable = !hasInnerCBs;
-    // for now, ContentBlocks are only enabled if they exist on the page
-    if (conf.innerBlocks.enable === null || conf.innerBlocks.enable === 'auto')
-        conf.innerBlocks.enable = hasInnerCBs;
+    else {
+        cmd.addSimpleItem();
+    }
+    ;
+    // if the command has own configuration stuff, do that now
+    if (cmd.context.button.configureCommand) {
+        cmd.context.button.configureCommand(context, cmd);
+    }
+    return cmd.generateLink(context);
 }
-exports._readPageConfig = _readPageConfig;
+exports.commandLinkToNgDialog = commandLinkToNgDialog;
 
 
 /***/ }),
@@ -3963,21 +3963,148 @@ exports._readPageConfig = _readPageConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Coords = /** @class */ (function () {
-    function Coords(x, y, w, yh, element) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.yh = yh;
-        this.element = element;
-    }
-    return Coords;
-}());
-exports.Coords = Coords;
+var command_1 = __webpack_require__(74);
+/**
+ * assemble an object which will store the configuration and execute it
+ * @param sxc
+ * @param editContext
+ * @param specialSettings
+ */
+function commandCreate(context) {
+    var ngDialogUrl = context.instance.sxcRootUrl +
+        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
+        context.instance.sxcVersion;
+    var isDebug = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+    var cmd = new command_1.Command(context, ngDialogUrl, isDebug);
+    return cmd;
+}
+exports.commandCreate = commandCreate;
 
 
 /***/ }),
 /* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//import { buildNgDialogParams } from '../manage/api';
+var ng_dialog_params_1 = __webpack_require__(34);
+var _2sxc_translate_1 = __webpack_require__(7);
+var Command = /** @class */ (function () {
+    function Command(context, ngDialogUrl, isDebug) {
+        var _this = this;
+        this.context = context;
+        this.ngDialogUrl = ngDialogUrl;
+        this.isDebug = isDebug;
+        this.evalPropOrFunction = function (propOrFunction, context, fallback) {
+            if (propOrFunction === undefined || propOrFunction === null) {
+                return fallback;
+            }
+            return (typeof (propOrFunction) === 'function' ? propOrFunction(context) : propOrFunction);
+        };
+        this.addSimpleItem = function () {
+            var item = {};
+            var ct = _this.context.button.action.params.contentType || _this.context.button.action.params.attributeSetName; // two ways to name the content-type-name this, v 7.2+ and older
+            if (_this.context.button.action.params.entityId) {
+                item.EntityId = _this.context.button.action.params.entityId;
+            }
+            if (ct) {
+                item.ContentTypeName = ct;
+            }
+            // only add if there was stuff to add
+            if (item.EntityId || item.ContentTypeName) {
+                _this.items.push(item);
+            }
+        };
+        // this adds an item of the content-group, based on the group GUID and the sequence number
+        this.addContentGroupItem = function (guid, index, part, isAdd, isEntity, cbid, sectionLanguageKey) {
+            _this.items.push({
+                Group: {
+                    Guid: guid,
+                    Index: index,
+                    Part: part,
+                    Add: isAdd,
+                },
+                Title: _2sxc_translate_1.translate(sectionLanguageKey),
+            });
+        };
+        // this will tell the command to edit a item from the sorted list in the group, optionally together with the presentation item
+        this.addContentGroupItemSetsToEditList = function (withPresentation) {
+            var isContentAndNotHeader = (_this.context.button.action.params.sortOrder !== -1);
+            var index = isContentAndNotHeader ? _this.context.button.action.params.sortOrder : 0;
+            var prefix = isContentAndNotHeader ? '' : 'List';
+            var cTerm = prefix + 'Content';
+            var pTerm = prefix + 'Presentation';
+            var isAdd = _this.context.button.action.name === 'new';
+            var groupId = _this.context.contentBlock.contentGroupId;
+            _this.addContentGroupItem(groupId, index, cTerm.toLowerCase(), isAdd, _this.context.contentBlock.isEntity, _this.context.contentBlock.id, "EditFormTitle." + cTerm);
+            if (withPresentation) {
+                _this.addContentGroupItem(groupId, index, pTerm.toLowerCase(), isAdd, _this.context.contentBlock.isEntity, _this.context.contentBlock.id, "EditFormTitle." + pTerm);
+            }
+        };
+        // build the link, combining specific params with global ones and put all in the url
+        this.generateLink = function (context) {
+            // if there is no items-array, create an empty one (it's required later on)
+            if (!context.button.action.params.items) {
+                context.button.action.params.items = [];
+            }
+            //#region steps for all actions: prefill, serialize, open-dialog
+            // when doing new, there may be a prefill in the link to initialize the new item
+            if (context.button.action.params.prefill) {
+                for (var i = 0; i < _this.items.length; i++) {
+                    _this.items[i].Prefill = context.button.action.params.prefill;
+                }
+            }
+            _this.params.items = JSON.stringify(_this.items); // Serialize/json-ify the complex items-list
+            // clone the params and adjust parts based on partOfPage settings...
+            var ngDialogParams = ng_dialog_params_1.NgDialogParams.fromContext(context); // 2dm simplified buildNgDialogParams(context);
+            var sharedParams = Object.assign({}, ngDialogParams);
+            var partOfPage = context.button.partOfPage(context);
+            if (!partOfPage) {
+                delete sharedParams.versioningRequirements;
+                delete sharedParams.publishing;
+                sharedParams.partOfPage = false;
+            }
+            return _this.ngDialogUrl +
+                '#' +
+                $.param(sharedParams) +
+                '&' +
+                $.param(_this.params) +
+                _this.isDebug;
+            //#endregion
+        };
+        // this.settings = settings;
+        this.items = context.button.action.params.items || []; // use predefined or create empty array
+        // todo: stv, clean this
+        var params = this.evalPropOrFunction(context.button.params, context, {});
+        var dialog = this.evalPropOrFunction(context.button.dialog, context, {});
+        this.params = Object.assign({
+            dialog: dialog || context.button.action.name,
+        }, params);
+    }
+    return Command;
+}());
+exports.Command = Command;
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CommandDefinition = /** @class */ (function () {
+    function CommandDefinition() {
+    }
+    return CommandDefinition;
+}());
+exports.CommandDefinition = CommandDefinition;
+
+
+/***/ }),
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4014,7 +4141,43 @@ exports.contentItems = {
 
 
 /***/ }),
-/* 75 */
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var context_1 = __webpack_require__(6);
+var Cms_1 = __webpack_require__(22);
+var InstanceEngine = /** @class */ (function () {
+    //commands = Commands.getInstance;
+    //context: ContextOfButton;
+    function InstanceEngine(sxc) {
+        this.sxc = sxc;
+    }
+    // 2dm - don't think this is ever used, disabled for now
+    // todo q2stv - do we need this?
+    //// todo: stv, check this specialSettings
+    //// assemble an object which will store the configuration and execute it
+    //create = (context: ContextOfButton, specialSettings: Settings) => {
+    //  return commandCreate(context);
+    //}
+    InstanceEngine.prototype.run = function (nameOrSettings, eventOrSettings, event) {
+        var cntx = context_1.context(this.sxc);
+        return new Cms_1.Cms().run(cntx, nameOrSettings, eventOrSettings, event);
+    };
+    return InstanceEngine;
+}());
+exports.InstanceEngine = InstanceEngine;
+// 2dm - not sure why we would create a second constructor, doesn't seem to make sense
+// todo q2stv - why would we have a second constructor?
+//export function instanceEngine(sxc: SxcInstanceWithInternals): InstanceEngine {
+//  return new InstanceEngine(sxc);
+//}
+
+
+/***/ }),
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4120,13 +4283,13 @@ exports.manipulator = manipulator;
 
 
 /***/ }),
-/* 76 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = __webpack_require__(77);
+var create_1 = __webpack_require__(80);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -4147,22 +4310,22 @@ exports._manage = new Manage(); // used out of this project in ToSic.Sxc.Instanc
 
 
 /***/ }),
-/* 77 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var instance_engine_1 = __webpack_require__(115);
-var manipulate_1 = __webpack_require__(75);
-var context_1 = __webpack_require__(8);
-var render_button_1 = __webpack_require__(18);
-var render_toolbar_1 = __webpack_require__(17);
+var instance_engine_1 = __webpack_require__(77);
+var manipulate_1 = __webpack_require__(78);
+var context_1 = __webpack_require__(6);
+var render_button_1 = __webpack_require__(17);
+var render_toolbar_1 = __webpack_require__(16);
 var toolbar_expand_config_1 = __webpack_require__(29);
-var api_1 = __webpack_require__(1);
-var local_storage_helper_1 = __webpack_require__(78);
-var user_of_edit_context_1 = __webpack_require__(15);
-var button_config_adapter_1 = __webpack_require__(79);
+var api_1 = __webpack_require__(2);
+var local_storage_helper_1 = __webpack_require__(81);
+var user_of_edit_context_1 = __webpack_require__(20);
+var button_config_adapter_1 = __webpack_require__(82);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -4337,7 +4500,7 @@ var EditManager = /** @class */ (function () {
 
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4363,17 +4526,17 @@ exports.LocalStorageHelper = LocalStorageHelper;
 
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(6);
-var button_action_1 = __webpack_require__(19);
-var button_config_1 = __webpack_require__(20);
-var expand_button_config_1 = __webpack_require__(11);
-var mod_config_1 = __webpack_require__(80);
+var commands_1 = __webpack_require__(8);
+var button_action_1 = __webpack_require__(18);
+var button_config_1 = __webpack_require__(19);
+var expand_button_config_1 = __webpack_require__(14);
+var mod_config_1 = __webpack_require__(83);
 var parameters_adapter_1 = __webpack_require__(30);
 function buttonConfigAdapter(context, actDef, groupIndex) {
     var partialButtonConfig = {};
@@ -4473,7 +4636,7 @@ exports.buttonConfigAdapter = buttonConfigAdapter;
 
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4488,7 +4651,7 @@ exports.ModConfig = ModConfig;
 
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4497,9 +4660,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var i18next = __webpack_require__(39);
 var i18nextXHRBackend = __webpack_require__(40);
 var jqueryI18next = __webpack_require__(41);
-var context_1 = __webpack_require__(8);
+var context_1 = __webpack_require__(6);
 var sxc_1 = __webpack_require__(4);
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(2);
 /**
  * initialize the translation system; ensure toolbars etc. are translated
  */
@@ -4555,19 +4718,19 @@ exports._translateInit = _translateInit;
 
 
 /***/ }),
-/* 82 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
-var quick_dialog_1 = __webpack_require__(13);
-var build_toolbars_1 = __webpack_require__(14);
+var api_1 = __webpack_require__(2);
+var quick_dialog_1 = __webpack_require__(10);
+var build_toolbars_1 = __webpack_require__(12);
 var _2sxc_translate_1 = __webpack_require__(7);
 var sxc_1 = __webpack_require__(4);
-var log_1 = __webpack_require__(3);
-var log_utils_1 = __webpack_require__(83);
+var log_1 = __webpack_require__(5);
+var log_utils_1 = __webpack_require__(86);
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -4676,7 +4839,7 @@ function showGlassesButtonIfUninitialized(sxci) {
 
 
 /***/ }),
-/* 83 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4709,7 +4872,7 @@ exports.LogUtils = LogUtils;
 
 
 /***/ }),
-/* 84 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4736,24 +4899,21 @@ exports.CmdsStrategyFactory = CmdsStrategyFactory;
 
 
 /***/ }),
-/* 85 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(39);
 __webpack_require__(40);
 __webpack_require__(41);
-__webpack_require__(86);
-__webpack_require__(87);
-__webpack_require__(42);
-__webpack_require__(0);
-__webpack_require__(22);
-__webpack_require__(44);
-__webpack_require__(48);
-__webpack_require__(24);
-__webpack_require__(45);
-__webpack_require__(88);
 __webpack_require__(89);
 __webpack_require__(90);
+__webpack_require__(22);
+__webpack_require__(0);
+__webpack_require__(73);
+__webpack_require__(75);
+__webpack_require__(72);
+__webpack_require__(35);
+__webpack_require__(74);
 __webpack_require__(91);
 __webpack_require__(92);
 __webpack_require__(93);
@@ -4776,41 +4936,43 @@ __webpack_require__(109);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
-__webpack_require__(6);
 __webpack_require__(113);
 __webpack_require__(114);
 __webpack_require__(115);
+__webpack_require__(8);
 __webpack_require__(116);
 __webpack_require__(117);
+__webpack_require__(42);
+__webpack_require__(77);
 __webpack_require__(118);
-__webpack_require__(9);
-__webpack_require__(25);
 __webpack_require__(119);
-__webpack_require__(75);
-__webpack_require__(12);
-__webpack_require__(16);
 __webpack_require__(120);
+__webpack_require__(9);
+__webpack_require__(23);
+__webpack_require__(121);
+__webpack_require__(78);
+__webpack_require__(11);
+__webpack_require__(15);
+__webpack_require__(122);
 __webpack_require__(33);
-__webpack_require__(60);
+__webpack_require__(56);
+__webpack_require__(45);
+__webpack_require__(46);
+__webpack_require__(47);
+__webpack_require__(48);
 __webpack_require__(49);
-__webpack_require__(50);
-__webpack_require__(51);
 __webpack_require__(52);
 __webpack_require__(53);
-__webpack_require__(56);
-__webpack_require__(57);
-__webpack_require__(55);
-__webpack_require__(58);
+__webpack_require__(51);
 __webpack_require__(54);
-__webpack_require__(59);
-__webpack_require__(8);
-__webpack_require__(61);
-__webpack_require__(62);
-__webpack_require__(121);
-__webpack_require__(63);
-__webpack_require__(64);
-__webpack_require__(122);
+__webpack_require__(50);
+__webpack_require__(55);
+__webpack_require__(6);
+__webpack_require__(57);
+__webpack_require__(58);
 __webpack_require__(123);
+__webpack_require__(59);
+__webpack_require__(60);
 __webpack_require__(124);
 __webpack_require__(125);
 __webpack_require__(126);
@@ -4819,9 +4981,9 @@ __webpack_require__(128);
 __webpack_require__(129);
 __webpack_require__(130);
 __webpack_require__(131);
-__webpack_require__(74);
 __webpack_require__(132);
 __webpack_require__(133);
+__webpack_require__(76);
 __webpack_require__(134);
 __webpack_require__(135);
 __webpack_require__(136);
@@ -4830,78 +4992,81 @@ __webpack_require__(138);
 __webpack_require__(139);
 __webpack_require__(140);
 __webpack_require__(141);
-__webpack_require__(43);
-__webpack_require__(10);
 __webpack_require__(142);
-__webpack_require__(83);
-__webpack_require__(3);
-__webpack_require__(1);
-__webpack_require__(77);
-__webpack_require__(23);
-__webpack_require__(78);
-__webpack_require__(76);
-__webpack_require__(46);
-__webpack_require__(47);
-__webpack_require__(15);
 __webpack_require__(143);
-__webpack_require__(144);
+__webpack_require__(64);
 __webpack_require__(13);
+__webpack_require__(144);
+__webpack_require__(86);
+__webpack_require__(5);
+__webpack_require__(2);
+__webpack_require__(80);
+__webpack_require__(67);
+__webpack_require__(81);
+__webpack_require__(79);
+__webpack_require__(34);
+__webpack_require__(71);
+__webpack_require__(20);
+__webpack_require__(61);
 __webpack_require__(145);
+__webpack_require__(146);
+__webpack_require__(10);
+__webpack_require__(147);
 __webpack_require__(36);
 __webpack_require__(21);
-__webpack_require__(84);
-__webpack_require__(146);
-__webpack_require__(72);
-__webpack_require__(147);
-__webpack_require__(73);
+__webpack_require__(87);
 __webpack_require__(148);
+__webpack_require__(43);
 __webpack_require__(149);
+__webpack_require__(44);
+__webpack_require__(150);
+__webpack_require__(151);
 __webpack_require__(38);
 __webpack_require__(37);
-__webpack_require__(150);
-__webpack_require__(35);
-__webpack_require__(2);
-__webpack_require__(5);
-__webpack_require__(151);
 __webpack_require__(152);
-__webpack_require__(34);
-__webpack_require__(79);
-__webpack_require__(66);
-__webpack_require__(69);
+__webpack_require__(25);
+__webpack_require__(1);
+__webpack_require__(3);
+__webpack_require__(153);
+__webpack_require__(154);
+__webpack_require__(24);
+__webpack_require__(82);
+__webpack_require__(63);
+__webpack_require__(68);
 __webpack_require__(30);
 __webpack_require__(31);
-__webpack_require__(14);
-__webpack_require__(19);
-__webpack_require__(20);
-__webpack_require__(153);
-__webpack_require__(11);
-__webpack_require__(70);
-__webpack_require__(154);
-__webpack_require__(80);
-__webpack_require__(155);
+__webpack_require__(12);
 __webpack_require__(18);
-__webpack_require__(65);
-__webpack_require__(26);
-__webpack_require__(17);
+__webpack_require__(19);
+__webpack_require__(155);
+__webpack_require__(14);
+__webpack_require__(69);
 __webpack_require__(156);
+__webpack_require__(83);
 __webpack_require__(157);
-__webpack_require__(27);
+__webpack_require__(17);
+__webpack_require__(62);
+__webpack_require__(26);
+__webpack_require__(16);
 __webpack_require__(158);
-__webpack_require__(67);
-__webpack_require__(68);
 __webpack_require__(159);
+__webpack_require__(27);
+__webpack_require__(160);
+__webpack_require__(65);
+__webpack_require__(66);
+__webpack_require__(161);
 __webpack_require__(28);
-__webpack_require__(71);
+__webpack_require__(70);
 __webpack_require__(29);
 __webpack_require__(32);
-__webpack_require__(81);
+__webpack_require__(84);
 __webpack_require__(7);
-__webpack_require__(82);
+__webpack_require__(85);
 module.exports = __webpack_require__(4);
 
 
 /***/ }),
-/* 86 */
+/* 89 */
 /***/ (function(module, exports) {
 
 if (window.$2sxc && !window.$2sxc.consts) {
@@ -4938,7 +5103,7 @@ if (window.$2sxc && !window.$2sxc.consts) {
 
 
 /***/ }),
-/* 87 */
+/* 90 */
 /***/ (function(module, exports) {
 
 /** this enhances the $2sxc client controller with stuff only needed when logged in */
@@ -4963,7 +5128,7 @@ function finishUpgrade(domElement) {
 
 
 /***/ }),
-/* 88 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5008,7 +5173,7 @@ var cmd = new Add();
 
 
 /***/ }),
-/* 89 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5045,7 +5210,7 @@ var cmd = new AppImport();
 
 
 /***/ }),
-/* 90 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5095,7 +5260,7 @@ var cmd = new AppResources();
 
 
 /***/ }),
-/* 91 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5145,7 +5310,7 @@ var cmd = new AppSettings();
 
 
 /***/ }),
-/* 92 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5184,7 +5349,7 @@ var cmd = new App();
 
 
 /***/ }),
-/* 93 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5242,7 +5407,7 @@ var cmd = new ContentItems();
 
 
 /***/ }),
-/* 94 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5281,7 +5446,7 @@ var cmd = new ContentType();
 
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5331,7 +5496,7 @@ var cmd = new Custom();
 
 
 /***/ }),
-/* 96 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5347,7 +5512,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_commands_1 = __webpack_require__(74);
+var item_commands_1 = __webpack_require__(76);
 var command_base_1 = __webpack_require__(0);
 /**
  * todo: work in progress related to https://github.com/2sic/2sxc/issues/618
@@ -5384,7 +5549,7 @@ var cmd = new Delete();
 
 
 /***/ }),
-/* 97 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5428,7 +5593,7 @@ var cmd = new Edit();
 
 
 /***/ }),
-/* 98 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5469,7 +5634,7 @@ var cmd = new InstanceList();
 
 
 /***/ }),
-/* 99 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5509,7 +5674,7 @@ var cmd = new ItemHistory();
 
 
 /***/ }),
-/* 100 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5546,7 +5711,7 @@ var cmd = new Layout();
 
 
 /***/ }),
-/* 101 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5603,7 +5768,7 @@ var cmd = new Metadata();
 
 
 /***/ }),
-/* 102 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5649,7 +5814,7 @@ var cmd = new More();
 
 
 /***/ }),
-/* 103 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5696,7 +5861,7 @@ var cmd = new MoveDown();
 
 
 /***/ }),
-/* 104 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5742,7 +5907,7 @@ var cmd = new MoveUp();
 
 
 /***/ }),
-/* 105 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5759,7 +5924,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_base_1 = __webpack_require__(0);
-var command_open_ng_dialog_1 = __webpack_require__(24);
+var command_open_ng_dialog_1 = __webpack_require__(35);
 /**
  * new is a dialog to add something, and will not add if cancelled
  * new can also be used for mini-toolbars which just add an entity not attached to a module
@@ -5797,7 +5962,7 @@ var cmd = new New();
 
 
 /***/ }),
-/* 106 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5855,7 +6020,7 @@ var cmd = new Publish();
 
 
 /***/ }),
-/* 107 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5905,7 +6070,7 @@ var cmd = new Remove();
 
 
 /***/ }),
-/* 108 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5944,7 +6109,7 @@ var cmd = new Replace();
 
 
 /***/ }),
-/* 109 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5988,7 +6153,7 @@ var cmd = new TemplateDevelop();
 
 
 /***/ }),
-/* 110 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6039,7 +6204,7 @@ var cmd = new TemplateQuery();
 
 
 /***/ }),
-/* 111 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6082,7 +6247,7 @@ var cmd = new TemplateSettings();
 
 
 /***/ }),
-/* 112 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6121,7 +6286,7 @@ var cmd = new Zone();
 
 
 /***/ }),
-/* 113 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6139,157 +6304,13 @@ exports.Definition = Definition;
 
 
 /***/ }),
-/* 114 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 117 */
+/***/ (function(module, exports) {
 
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(16);
-var command_open_ng_dialog_1 = __webpack_require__(24);
-var commands_1 = __webpack_require__(6);
-var button_action_1 = __webpack_require__(19);
-var button_config_1 = __webpack_require__(20);
-var settings_adapter_1 = __webpack_require__(31);
-var has_log_1 = __webpack_require__(10);
-var Engine = /** @class */ (function (_super) {
-    __extends(Engine, _super);
-    function Engine(parentLog) {
-        return _super.call(this, 'Cmd.Exec', parentLog) || this;
-    }
-    Engine.prototype.detectParamsAndRun = function (context, nameOrSettings, eventOrSettings, event) {
-        this.log.add("detecting params and running - has " + arguments.length + " params");
-        var settings;
-        var thirdParamIsEvent = (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined');
-        this.log.add("might cycle parameters, in case not all were given. third is event=" + thirdParamIsEvent);
-        if (thirdParamIsEvent) {
-            this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
-            event = eventOrSettings; // move it to the correct variable
-            settings = (nameOrSettings || {});
-        }
-        else
-            settings = (eventOrSettings || {});
-        // ensure we have the right event despite browser differences
-        event = event || window.event;
-        return this.run(context, settings, event);
-    };
-    /**
-     * run a command
-     * this method expects a clear order of parameters
-     * @param context
-     * @param settings
-     * @param event
-     */
-    Engine.prototype.run = function (context, settings, event) {
-        settings = this.expandSettingsWithDefaults(settings);
-        var origEvent = event;
-        var name = settings.action;
-        var contentType = settings.contentType;
-        this.log.add("run command " + name + " for type " + contentType);
-        // Toolbar API v2
-        var newButtonAction = new button_action_1.ButtonAction(name, contentType, settings);
-        newButtonAction.commandDefinition = commands_1.Commands.getInstance().get(name);
-        var newButtonConfig = new button_config_1.ButtonConfig(newButtonAction);
-        newButtonConfig.name = name;
-        var button = context.button = Object.assign(newButtonConfig, newButtonAction.commandDefinition.buttonConfig, settings_adapter_1.settingsAdapter(settings)); // merge conf & settings, but settings has higher priority
-        // todo: stv, fix this in case that is function
-        if (!button.dialog) {
-            this.log.add("button.dialog method missing, must be old implementation which used the action-name - generating method");
-            button.dialog = function () { return name; };
-        }
-        // todo: stv, fix this in case that is function
-        if (!button.code) {
-            this.log.add("simple button without code - generating code to open standard dialog");
-            button.code = function (contextParam, event) {
-                return command_open_ng_dialog_1.commandOpenNgDialog(contextParam, event);
-            };
-        }
-        if (button.uiActionOnly(context)) {
-            this.log.add("just a UI command, will not run pre-flight to ensure content-block - now running the code");
-            return button.code(context, origEvent);
-        }
-        // if more than just a UI-action, then it needs to be sure the content-group is created first
-        this.log.add("command might change data, will wrap in pre-flight to ensure content-block");
-        var prepare = templates_1.prepareToAddContent(context, settings.useModuleList)
-            .then(function () {
-            context.button.code(context, origEvent);
-        });
-        return prepare;
-    };
-    /**
-     * Take a settings-name or partial settings object,
-     * and return a full settings object with all defaults from
-     * the command definition
-     * @param log
-     * @param settings
-     * @param nameOrSettings
-     */
-    Engine.prototype.expandSettingsWithDefaults = function (nameOrSettings) {
-        var nameIsString = typeof nameOrSettings === 'string';
-        this.log.add("expanding settings; name is string: " + nameIsString + "; name = " + nameOrSettings);
-        // check if name is name (string) or object (settings)
-        var settings = (nameIsString
-            ? Object.assign(nameOrSettings || {}, { action: nameOrSettings }) // place the name as an action-name into a command-object
-            : nameOrSettings);
-        var name = settings.action;
-        this.log.add("will add defaults for " + name + " from buttonConfig");
-        var conf = commands_1.Commands.getInstance().get(name).buttonConfig;
-        var full = Object.assign({}, conf, settings); // merge conf & settings, but settings has higher priority
-        return full;
-    };
-    return Engine;
-}(has_log_1.HasLog));
-exports.Engine = Engine;
 
 
 /***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var context_1 = __webpack_require__(8);
-var Cms_1 = __webpack_require__(42);
-var InstanceEngine = /** @class */ (function () {
-    //commands = Commands.getInstance;
-    //context: ContextOfButton;
-    function InstanceEngine(sxc) {
-        this.sxc = sxc;
-    }
-    // 2dm - don't think this is ever used, disabled for now
-    // todo q2stv - do we need this?
-    //// todo: stv, check this specialSettings
-    //// assemble an object which will store the configuration and execute it
-    //create = (context: ContextOfButton, specialSettings: Settings) => {
-    //  return commandCreate(context);
-    //}
-    InstanceEngine.prototype.run = function (nameOrSettings, eventOrSettings, event) {
-        var cntx = context_1.context(this.sxc);
-        return new Cms_1.Cms().run(cntx, nameOrSettings, eventOrSettings, event);
-    };
-    return InstanceEngine;
-}());
-exports.InstanceEngine = InstanceEngine;
-// 2dm - not sure why we would create a second constructor, doesn't seem to make sense
-// todo q2stv - why would we have a second constructor?
-//export function instanceEngine(sxc: SxcInstanceWithInternals): InstanceEngine {
-//  return new InstanceEngine(sxc);
-//}
-
-
-/***/ }),
-/* 116 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6304,7 +6325,7 @@ exports.Params = Params;
 
 
 /***/ }),
-/* 117 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6319,7 +6340,7 @@ exports.Settings = Settings;
 
 
 /***/ }),
-/* 118 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6337,7 +6358,7 @@ exports.ActionParams = ActionParams;
 
 
 /***/ }),
-/* 119 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6352,7 +6373,7 @@ exports.ManipulateParams = ManipulateParams;
 
 
 /***/ }),
-/* 120 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6367,7 +6388,7 @@ exports.WebApiParams = WebApiParams;
 
 
 /***/ }),
-/* 121 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6385,7 +6406,7 @@ exports.SxcContext = SxcContext;
 
 
 /***/ }),
-/* 122 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6400,7 +6421,7 @@ exports.ContentBlock = ContentBlock;
 
 
 /***/ }),
-/* 123 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6415,7 +6436,7 @@ exports.ContentGroup = ContentGroup;
 
 
 /***/ }),
-/* 124 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6430,7 +6451,7 @@ exports.DataEditContext = DataEditContext;
 
 
 /***/ }),
-/* 125 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6445,7 +6466,7 @@ exports.Environment = Environment;
 
 
 /***/ }),
-/* 126 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6460,7 +6481,7 @@ exports.Error = Error;
 
 
 /***/ }),
-/* 127 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6475,7 +6496,7 @@ exports.Language = Language;
 
 
 /***/ }),
-/* 128 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6490,7 +6511,7 @@ exports.ParametersEntity = ParametersEntity;
 
 
 /***/ }),
-/* 129 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6505,13 +6526,13 @@ exports.User = User;
 
 
 /***/ }),
-/* 130 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = __webpack_require__(1);
+var api_1 = __webpack_require__(2);
 var sxc_1 = __webpack_require__(4);
 /**
  * Maps actions of the module menu to JS actions - needed because onclick event can't be set (actually, a bug in DNN)
@@ -6538,7 +6559,7 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 131 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6567,20 +6588,20 @@ window.$2sxcActionMenuMapper = function (moduleId) {
 
 
 /***/ }),
-/* 132 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var commands_1 = __webpack_require__(6);
-var context_1 = __webpack_require__(8);
-var manage_1 = __webpack_require__(76);
-var quick_e_1 = __webpack_require__(2);
-var start_1 = __webpack_require__(34);
-var _2sxc__translateInit_1 = __webpack_require__(81);
-__webpack_require__(82);
-var Cms_1 = __webpack_require__(42);
+var commands_1 = __webpack_require__(8);
+var context_1 = __webpack_require__(6);
+var manage_1 = __webpack_require__(79);
+var quick_e_1 = __webpack_require__(1);
+var start_1 = __webpack_require__(24);
+var _2sxc__translateInit_1 = __webpack_require__(84);
+__webpack_require__(85);
+var Cms_1 = __webpack_require__(22);
 $2sxc.context = context_1.context; // primary API to get the context
 $2sxc._translateInit = _2sxc__translateInit_1._translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
 $2sxc._commands = commands_1.Commands.getInstance();
@@ -6591,22 +6612,9 @@ $2sxc.cms = new Cms_1.Cms();
 
 
 /***/ }),
-/* 133 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 134 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 135 */
 /***/ (function(module, exports) {
 
-// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -6619,6 +6627,7 @@ $2sxc.cms = new Cms_1.Cms();
 /* 137 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
@@ -6635,6 +6644,18 @@ $2sxc.cms = new Cms_1.Cms();
 
 /***/ }),
 /* 140 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6656,13 +6677,13 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 141 */
+/* 143 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 142 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6671,7 +6692,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 143 */
+/* 145 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -6715,7 +6736,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 144 */
+/* 146 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -6743,7 +6764,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 145 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6761,7 +6782,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 146 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6776,7 +6797,7 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 147 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6784,8 +6805,8 @@ exports.Conf = Conf;
 Object.defineProperty(exports, "__esModule", { value: true });
 var cb_1 = __webpack_require__(36);
 var clipboard_1 = __webpack_require__(21);
-var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var quick_e_1 = __webpack_require__(1);
+var selectors_instance_1 = __webpack_require__(3);
 /**
  * content-block specific stuff like actions
  */
@@ -6812,19 +6833,19 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 148 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-/* 149 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 150 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6832,8 +6853,8 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(21);
 var mod_manage_1 = __webpack_require__(38);
-var quick_e_1 = __webpack_require__(2);
-var selectors_instance_1 = __webpack_require__(5);
+var quick_e_1 = __webpack_require__(1);
+var selectors_instance_1 = __webpack_require__(3);
 /**
  * module specific stuff
  */
@@ -6857,7 +6878,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 151 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6875,7 +6896,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 152 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6890,7 +6911,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 153 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6909,7 +6930,7 @@ exports.ButtonDefinition = ButtonDefinition;
 
 
 /***/ }),
-/* 154 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6933,7 +6954,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 155 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6948,7 +6969,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 156 */
+/* 158 */
 /***/ (function(module, exports) {
 
 /*
@@ -7051,7 +7072,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 157 */
+/* 159 */
 /***/ (function(module, exports) {
 
 // prevent propagation of the click (if menu was clicked)
@@ -7059,7 +7080,7 @@ $($2sxc.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagati
 
 
 /***/ }),
-/* 158 */
+/* 160 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -7074,7 +7095,7 @@ $(function () {
 
 
 /***/ }),
-/* 159 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7096,19 +7117,6 @@ var item = /** @class */ (function () {
     }
     return item;
 }());
-
-
-/***/ }),
-/* 160 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-function isSxcInstance(thing) {
-    return thing.showDetailedHttpError !== undefined;
-}
-exports.isSxcInstance = isSxcInstance;
 
 
 /***/ })
