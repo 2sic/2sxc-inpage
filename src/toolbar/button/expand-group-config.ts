@@ -1,5 +1,6 @@
-﻿import { ContextOfButton } from '../../context/context-of-button';
-import { Settings } from '../../commands/settings';
+﻿// polyfills
+import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
+
 import { Commands } from '../../commands/commands';
 import { parametersAdapter } from '../adapters/parameters-adapter';
 import { settingsAdapter } from '../adapters/settings-adapter';

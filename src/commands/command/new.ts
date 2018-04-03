@@ -1,4 +1,7 @@
-﻿import { CommandBase } from '../command-base';
+﻿// polyfills
+import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
+
+import { CommandBase } from '../command-base';
 import { commandOpenNgDialog } from '../command-open-ng-dialog';
 import { Settings } from '../settings';
 

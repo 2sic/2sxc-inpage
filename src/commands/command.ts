@@ -1,4 +1,7 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿// polyfills
+import '../polyfills/Object.assign'; // fix for IE11 Object.assign
+
+import { ContextOfButton } from '../context/context-of-button';
 //import { buildNgDialogParams } from '../manage/api';
 import { NgDialogParams } from '../manage/ng-dialog-params';
 import { translate } from '../translate/2sxc.translate';

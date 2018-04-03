@@ -1,4 +1,7 @@
-﻿import { _contentBlock } from '../contentBlock/main-content-block';
+﻿// polyfills
+import '../polyfills/Object.assign'; // fix for IE11 Object.assign
+
+import { _contentBlock } from '../contentBlock/main-content-block';
 import { ajaxLoad, reloadAndReInitialize, showMessage } from '../contentBlock/render';
 import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';

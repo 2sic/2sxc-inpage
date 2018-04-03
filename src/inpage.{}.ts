@@ -15,5 +15,4 @@ $2sxc._manage = _manage; // used out of this project in ToSic.Sxc.Instance and 2
 window.$quickE = $quickE;
 $(start); // run on-load
 
-
 ($2sxc as any).cms = new Cms();

@@ -15,7 +15,6 @@ export class CmdsStrategyFactory {
   }
 
   delete(clip: any): Delete {
-    debugger;
     return this.cmds[clip.type].delete(clip);
   }
 }

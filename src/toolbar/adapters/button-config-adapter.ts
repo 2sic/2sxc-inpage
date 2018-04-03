@@ -1,4 +1,7 @@
-﻿import { Commands } from '../../commands/commands';
+﻿// polyfills
+import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
+
+import { Commands } from '../../commands/commands';
 import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonAction } from '../button/button-action';
 import { ButtonDefinition } from '../button/button-definition';

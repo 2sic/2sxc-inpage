@@ -1,4 +1,7 @@
-﻿//import { DataEditContext } from '../../data-edit-context/data-edit-context';
+﻿// polyfills
+import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
+
+//import { DataEditContext } from '../../data-edit-context/data-edit-context';
 import { Log } from '../../logging/log';
 //import { getEditContext } from '../../manage/api';
 import { InstanceConfig } from '../../manage/instance-config';

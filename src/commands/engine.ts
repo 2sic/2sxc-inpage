@@ -1,4 +1,7 @@
-﻿import { prepareToAddContent } from '../contentBlock/templates';
+﻿// polyfills
+import '../polyfills/Object.assign'; // fix for IE11 Object.assign
+
+import { prepareToAddContent } from '../contentBlock/templates';
 import { ContextOfButton } from '../context/context-of-button';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Commands } from './commands';
