@@ -98,7 +98,8 @@
     <None Remove="src\toolbar\toolbar\toolbar-expand-config.ts" />
     <None Remove="src\toolbar\toolbar\toolbar-settings.ts" />
     <None Remove="src\x-bootstrap\sxc.ts" />
-    <None Remove="test\toolbar.ts" />
+    <None Remove="test\t100-toolbar.ts" />
+    <None Remove="test\t200-commands.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -171,7 +172,8 @@
     <TypeScriptCompile Include="src\toolbar\toolbar\toolbar-config-templates.ts" />
     <TypeScriptCompile Include="src\toolbar\toolbar\toolbar-config.ts" />
     <TypeScriptCompile Include="src\x-bootstrap\sxc.ts" />
-    <TypeScriptCompile Include="test\toolbar.ts" />
+    <TypeScriptCompile Include="test\t200-commands.ts" />
+    <TypeScriptCompile Include="test\t100-toolbar.ts" />
   </ItemGroup>
 
   <ItemGroup>
