@@ -55,26 +55,6 @@ if (!isProd) {
         sourceMap: true
       }));
   plugins.push(new ExtractTextPlugin('./inpage/inpage.css'));
-  plugins.push(new FileManagerPlugin(
-    {
-      onStart: [
-        {
-          delete: [
-            './dist/inpage/*.js'
-          ]
-        }
-      ],
-      onEnd: [
-        {
-          copy: [
-            { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' }
-          ],
-          delete: [
-            './dist/inpage/inpage.css.map'
-          ]
-        }
-      ]
-    }));
 } else {
   // production
   plugins.push(
@@ -84,29 +64,31 @@ if (!isProd) {
         sourceMap: false
       }));
   plugins.push(new ExtractTextPlugin('./inpage/inpage.min.css'));
-  plugins.push(new FileManagerPlugin(
-    {
-      onStart: [
-        {
-          delete: [
-            './dist/inpage/*.js'
-          ]
-        }
-      ],
-      onEnd: [
-        {
-          copy: [
-            // { source: './dist/inpage/inpage.min.css', destination: './dist/inpage/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
-            { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' },
-            { source: './dist/assets/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets' }
-          ],
-          delete: [
-            './dist/inpage/inpage.css.map'
-          ]
-        }
-      ]
-    }));
 }
+
+plugins.push(new FileManagerPlugin(
+  {
+    onStart: [
+      {
+        delete: [
+          './dist/inpage/*.js'
+        ]
+      }
+    ],
+    onEnd: [
+      {
+        copy: [
+          // { source: './dist/inpage/inpage.min.css', destination: './dist/inpage/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
+          { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' },
+          { source: './dist/assets/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets' }
+        ],
+        delete: [
+          './dist/inpage/inpage.css.map',
+          '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/inpage.css.map'
+        ]
+      }
+    ]
+  }));
 
 if (generateTypedocDocumentation) {
   plugins.push(new TypedocWebpackPlugin({
