@@ -3043,16 +3043,7 @@ var Engine = /** @class */ (function (_super) {
      * @param event
      */
     Engine.prototype.run = function (context, nameOrSettings, event) {
-        var nameIsString = typeof nameOrSettings === 'string';
-        this.log.add("expanding settings; name is string: " + nameIsString + "; name = " + nameOrSettings);
-        // check if name is name (string) or object (settings)
-        var settings;
-        if (nameIsString) {
-            settings = Object.assign({}, { action: nameOrSettings }); // place the name as an action-name into a command-object
-        }
-        else {
-            settings = nameOrSettings;
-        }
+        var settings = this.nameOrSettingsAddapter(nameOrSettings);
         settings = this.expandSettingsWithDefaults(settings);
         var origEvent = event;
         var name = settings.action;
@@ -3095,7 +3086,7 @@ var Engine = /** @class */ (function (_super) {
      */
     Engine.prototype.nameOrSettingsAddapter = function (nameOrSettings) {
         var settings;
-        // check if name is name (string) or object (settings)
+        // check if nameOrString is name (string) or object (settings)
         var nameIsString = typeof nameOrSettings === 'string';
         this.log.add("adapting settings; name is string: " + nameIsString + "; name = " + nameOrSettings);
         if (nameIsString) {

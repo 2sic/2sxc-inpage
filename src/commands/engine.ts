@@ -57,16 +57,7 @@ export class Engine extends HasLog {
     nameOrSettings: string | Partial<Settings>,
     event: Event) {
 
-    const nameIsString = typeof nameOrSettings === 'string';
-    this.log.add(`expanding settings; name is string: ${nameIsString}; name = ${nameOrSettings}`);
-
-    // check if name is name (string) or object (settings)
-    let settings: Partial<Settings>;
-    if (nameIsString) {
-      settings = Object.assign({}, { action: nameOrSettings }) as Partial<Settings>; // place the name as an action-name into a command-object
-    } else {
-      settings = nameOrSettings as Partial<Settings>;
-    }
+    let settings = this.nameOrSettingsAddapter(nameOrSettings);
 
     settings = this.expandSettingsWithDefaults(settings);
 
@@ -122,7 +113,7 @@ export class Engine extends HasLog {
    */
   nameOrSettingsAddapter(nameOrSettings: string | Partial<Settings>): Partial<Settings> {
     let settings: Partial<Settings>;
-    // check if name is name (string) or object (settings)
+    // check if nameOrString is name (string) or object (settings)
     const nameIsString = typeof nameOrSettings === 'string';
     this.log.add(`adapting settings; name is string: ${nameIsString}; name = ${nameOrSettings}`);
 
