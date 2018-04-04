@@ -195,6 +195,7 @@ _/
 .vs/slnx.sqlite-journal
 
 /.idea
+/compiled
 /docs
 /karma
 icons/config.json
