@@ -4,13 +4,14 @@ var i18next = require("./libs/i18next.min");
 var i18nextXHRBackend = require("./libs/i18nextXHRBackend.min");
 var jqueryI18next = require("./libs/jquery-i18next.min");
 var context_1 = require("../context/context");
-var sxc_1 = require("../x-bootstrap/sxc");
+var window_in_page_1 = require("../interfaces/window-in-page");
 var api_1 = require("../manage/api");
+var sxc_1 = require("../x-bootstrap/sxc");
 /**
  * initialize the translation system; ensure toolbars etc. are translated
  */
-window.i18next = i18next;
-window.i18nextXHRBackend = i18nextXHRBackend;
+window_in_page_1.windowInPage.i18next = i18next;
+window_in_page_1.windowInPage.i18nextXHRBackend = i18nextXHRBackend;
 var initialized = false;
 // ReSharper disable once InconsistentNaming
 function _translateInit(manage) {
@@ -34,7 +35,7 @@ function _translateInit(manage) {
     //console.log('stv: compare #2',
     //  manage._editContext.Environment.SxcRootUrl,
     //  context.instance.sxcRootUrl);
-    window.i18next
+    window_in_page_1.windowInPage.i18next
         .use(i18nextXHRBackend)
         .init({
         lng: context.app.currentLanguage.substr(0, 2),

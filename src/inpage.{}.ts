@@ -1,4 +1,6 @@
-﻿import { Commands } from './commands/commands';
+﻿import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
+import { windowInPage as window } from './interfaces/window-in-page';
+import { Commands } from './commands/commands';
 import { Cms } from './cms/Cms';
 import { context } from './context/context';
 import { _manage } from './manage/manage';

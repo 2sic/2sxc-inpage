@@ -1,4 +1,6 @@
-﻿/** this enhances the $2sxc client controller with stuff only needed when logged in */
+﻿import { windowInPage as window } from '../interfaces/window-in-page';
+
+/** this enhances the $2sxc client controller with stuff only needed when logged in */
 if (window.$2sxc && !window.$2sxc.system) {
   window.$2sxc.system = {
     finishUpgrade: finishUpgrade,

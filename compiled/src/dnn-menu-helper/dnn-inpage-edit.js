@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var window_in_page_1 = require("../interfaces/window-in-page");
 var api_1 = require("../manage/api");
 var sxc_1 = require("../x-bootstrap/sxc");
 /**
@@ -21,7 +22,7 @@ var ActionMenuMapper = /** @class */ (function () {
     return ActionMenuMapper;
 }());
 exports.ActionMenuMapper = ActionMenuMapper;
-window.$2sxcActionMenuMapper = function (moduleId) {
+window_in_page_1.windowInPage.$2sxcActionMenuMapper = function (moduleId) {
     return new ActionMenuMapper(moduleId);
 };
 //# sourceMappingURL=dnn-inpage-edit.js.map

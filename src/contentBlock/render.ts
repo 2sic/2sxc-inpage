@@ -1,4 +1,5 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
+import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
 import { hide } from '../quick-dialog/quick-dialog';
 import { reset } from '../quick-edit/start';

@@ -1,8 +1,11 @@
-﻿/**
+﻿import { Cms } from '../cms/Cms';
+import { windowInPage as window } from './window-in-page';
+
+/**
  * $2sxc interface declaration merging for in-page
  */
 // ReSharper disable InconsistentNaming
-interface SxcControllerWithInternals {
+export interface SxcControllerInPage extends SxcControllerWithInternals {
   api: any;
   _commands: any;
   _contentBlock: any;
@@ -15,8 +18,8 @@ interface SxcControllerWithInternals {
   system: any;
   translate: any;
   context: any;
-  cms: any;
+  cms: Cms;
 }
 // ReSharper restore InconsistentNaming
 
-declare let $2sxc: SxcControllerWithInternals;
+export const $2sxcInPage: SxcControllerInPage = window.$2sxc;

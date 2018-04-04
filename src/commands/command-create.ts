@@ -1,6 +1,6 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
+import { windowInPage as window } from '../interfaces/window-in-page';
 import { Command } from './command';
-import { Settings } from './settings';
 
 /**
  * assemble an object which will store the configuration and execute it

@@ -1,4 +1,4 @@
-﻿import { context } from '../context/context';
+﻿import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 

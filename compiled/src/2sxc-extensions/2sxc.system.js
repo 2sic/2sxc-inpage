@@ -1,12 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var window_in_page_1 = require("../interfaces/window-in-page");
 /** this enhances the $2sxc client controller with stuff only needed when logged in */
-if (window.$2sxc && !window.$2sxc.system) {
-    window.$2sxc.system = {
+if (window_in_page_1.windowInPage.$2sxc && !window_in_page_1.windowInPage.$2sxc.system) {
+    window_in_page_1.windowInPage.$2sxc.system = {
         finishUpgrade: finishUpgrade,
     };
 }
 // upgrade command - started when an error contains a link to start this
 function finishUpgrade(domElement) {
-    var mc = window.$2sxc(domElement);
+    var mc = window_in_page_1.windowInPage.$2sxc(domElement);
     $.ajax({
         type: 'get',
         url: mc.resolveServiceUrl('view/module/finishinstallation'),

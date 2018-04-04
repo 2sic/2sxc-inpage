@@ -1,8 +1,9 @@
 ﻿import { reloadAndReInitialize } from '../contentBlock/render';
 import { ContextOfButton } from '../context/context-of-button';
+import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
+import { windowInPage as window } from '../interfaces/window-in-page';
 import { showOrToggle } from '../quick-dialog/quick-dialog';
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
-import { Settings } from './settings';
 
 /**
  * open a new dialog of the angular-ui

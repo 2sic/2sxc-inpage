@@ -1,4 +1,5 @@
 ﻿import { context } from '../context/context';
+import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { getTag } from '../manage/api';
 import { renderToolbar } from './item/render-toolbar';
 import { disableToolbarAttribute } from './toolbar-manager';

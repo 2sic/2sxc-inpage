@@ -2,8 +2,9 @@
 import * as i18nextXHRBackend from './libs/i18nextXHRBackend.min';
 import * as jqueryI18next from './libs/jquery-i18next.min';
 import { createContextFromEditContext } from '../context/context';
-import { getSxcInstance } from '../x-bootstrap/sxc';
+import { windowInPage as window } from '../interfaces/window-in-page';
 import { getEditContext } from '../manage/api';
+import { getSxcInstance } from '../x-bootstrap/sxc';
 
 /**
  * initialize the translation system; ensure toolbars etc. are translated
