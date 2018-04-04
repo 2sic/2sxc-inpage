@@ -28,11 +28,16 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
 
 .sc-menu { list-style-type:none; margin:0; padding:0;display: inline;z-index: 1499; }
 .sc-menu li { list-style-type:none; padding:0!important; margin:0!important; display:inline; }
-/* hide all links by default, later show them group-wise*/
-.sc-menu a { display:none; margin-right:4px!important;cursor: pointer;margin-left: 0 !important; }
+.sc-menu a {
+  margin-right: 4px !important;
+  cursor: pointer;
+  margin-left: 0 !important;
+}
 
 /* this one is for buttons which can have a full/empty state */
-.sc-menu li a.empty i {opacity: 0.4} 
+.sc-menu li a.empty i {
+  opacity: 0.4
+} 
 /* this one is for buttons which can be disabled, like publish */
 .sc-menu li a.disabled i {opacity: 0.4}
 
@@ -63,13 +68,37 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
   vertical-align: text-bottom;
 }
 
-/* 2016-10-11 new show/hide */
-.group-0 a.group-0 {display: inline-block}
-.group-1 a.group-1 {display: inline-block}
-.group-2 a.group-2 {display: inline-block}
-.group-3 a.group-3 {display: inline-block}
-.group-4 a.group-4 {display: inline-block}
-.group-5 a.group-5 {display: inline-block}
+/* 2018-04-04 sbs new show/hide */
+/* Because of IE11 issue with cascading class there need to be .sc-menu.group-X on each group declaration */
+/* hide all links by default */
+.sc-menu.group-0 a,
+.sc-menu.group-1 a,
+.sc-menu.group-2 a,
+.sc-menu.group-3 a,
+.sc-menu.group-4 a,
+.sc-menu.group-5 a {
+  display: none;
+}
+
+/* show them group-wise */
+.sc-menu.group-0 a.group-0 {
+  display: inline-block;
+}
+.sc-menu.group-1 a.group-1 {
+  display: inline-block;
+}
+.sc-menu.group-2 a.group-2 {
+  display: inline-block;
+}
+.sc-menu.group-3 a.group-3 {
+  display: inline-block;
+}
+.sc-menu.group-4 a.group-4 {
+  display: inline-block;
+}
+.sc-menu.group-5 a.group-5 {
+  display: inline-block;
+}
 
 .sc-menu a.group-default div {
   background-color: #0088f4

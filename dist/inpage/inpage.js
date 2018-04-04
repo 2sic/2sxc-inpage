@@ -1589,7 +1589,8 @@ function renderToolbar(context) {
     var groups = render_groups_1.renderGroups(context);
     // render toolbar
     var toolbar = document.createElement('ul');
-    (_a = toolbar.classList).add.apply(_a, ['sc-menu', 'group-0']);
+    toolbar.classList.add('sc-menu');
+    toolbar.classList.add('group-0'); // IE11 fix, add each class separately
     // add behaviour classes
     toolbar.classList.add("sc-tb-hover-" + context.toolbar.settings.hover);
     toolbar.classList.add("sc-tb-show-" + context.toolbar.settings.show);
@@ -1604,7 +1605,6 @@ function renderToolbar(context) {
         toolbar.appendChild(groups[g]);
     }
     return toolbar.outerHTML;
-    var _a;
 }
 exports.renderToolbar = renderToolbar;
 

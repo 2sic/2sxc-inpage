@@ -8,7 +8,8 @@ export function renderToolbar(context: ContextOfButton): string {
 
   // render toolbar
   const toolbar = document.createElement('ul');
-  toolbar.classList.add(...['sc-menu', 'group-0']);
+  toolbar.classList.add('sc-menu');
+  toolbar.classList.add('group-0'); // IE11 fix, add each class separately
 
   // add behaviour classes
   toolbar.classList.add(`sc-tb-hover-${context.toolbar.settings.hover}`);
