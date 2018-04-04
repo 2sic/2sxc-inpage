@@ -1,0 +1,9 @@
+C:\Projects\2sxc-inpage\bin\Debug\net461\2sxc-inpage.deps.json
+C:\Projects\2sxc-inpage\bin\Debug\net461\2sxc-inpage.dll
+C:\Projects\2sxc-inpage\bin\Debug\net461\2sxc-inpage.pdb
+C:\Projects\2sxc-inpage\obj\Debug\net461\2sxc-inpage.csprojResolveAssemblyReference.cache
+C:\Projects\2sxc-inpage\obj\Debug\net461\2sxc-inpage.csproj.CoreCompileInputs.cache
+C:\Projects\2sxc-inpage\obj\Debug\net461\2sxc-inpage.AssemblyInfoInputs.cache
+C:\Projects\2sxc-inpage\obj\Debug\net461\2sxc-inpage.AssemblyInfo.cs
+C:\Projects\2sxc-inpage\obj\Debug\net461\2sxc-inpage.dll
+C:\Projects\2sxc-inpage\obj\Debug\net461\2sxc-inpage.pdb
