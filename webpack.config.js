@@ -54,6 +54,7 @@ if (!isProd) {
         include: /\.min\.js$/,
         sourceMap: true
       }));
+  plugins.push(new ExtractTextPlugin('./inpage/inpage.css'));
   plugins.push(new FileManagerPlugin(
     {
       onStart: [
@@ -67,6 +68,9 @@ if (!isProd) {
         {
           copy: [
             { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' }
+          ],
+          delete: [
+            './dist/inpage/inpage.css.map'
           ]
         }
       ]
@@ -92,10 +96,12 @@ if (!isProd) {
       onEnd: [
         {
           copy: [
-            { source: './dist/inpage/inpage.min.css', destination: './dist/inpage/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
-            { source: './dist/inpage/inpage.min.css.map', destination: './dist/inpage/inpage.css.map' }, // just copy min because can't generate full and minified css.map boundle files in one pass
+            // { source: './dist/inpage/inpage.min.css', destination: './dist/inpage/inpage.css' }, // just copy min because can't generate full and minified css boundle files in one pass
             { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' },
             { source: './dist/assets/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets' }
+          ],
+          delete: [
+            './dist/inpage/inpage.css.map'
           ]
         }
       ]
@@ -149,17 +155,34 @@ var config = {
     ]
   },
 
-  resolve: { extensions: ['.ts', '.js'] },
+  resolve: { extensions: ['.ts', '.js', '.css'] },
 
   plugins: plugins
 }
 
-if (isProd) {
-  config.entry['inpage/inpage.min.css'] = entryCssFiles;
-  config.resolve.extensions.push('.css');
+
+if (!isProd) {
+  config.entry['inpage/inpage.css'] = entryCssFiles;
   config.module.rules.push({
     test: /\.css$/,
-    include:  [/src/,/icons/],
+    include: [/src/, /icons/],
+    use: ExtractTextPlugin.extract(
+      [
+        {
+          loader: 'css-loader',
+          options: {
+            minimize: false,
+            sourceMap: false,
+            name: './inpage/[name].[ext]'
+          }
+        }
+      ])
+  });
+} else {
+  config.entry['inpage/inpage.min.css'] = entryCssFiles;
+  config.module.rules.push({
+    test: /\.css$/,
+    include: [/src/, /icons/],
     use: ExtractTextPlugin.extract([{
       loader: 'css-loader',
       options: {
@@ -169,26 +192,27 @@ if (isProd) {
       }
     }])
   });
-  config.module.rules.push({
-    test: /\.png$/,
-    exclude: /node_modules/,
-    use: {
-      loader: 'file-loader',
-      options: {
-        name: '../../[name].[ext]' // copy 4 icon*.png images to C:\Projects as side effect of Run-Production, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
-      }
-    }
-  });
-  config.module.rules.push({
-    test: /\.(woff|eot|ttf)$/,
-    exclude: /node_modules/,
-    use: {
-      loader: 'file-loader',
-      options: {
-        name: 'assets/[name].[ext]?' + version // package.json version
-      }
-    }
-  });
 }
+
+config.module.rules.push({
+  test: /\.png$/,
+  exclude: /node_modules/,
+  use: {
+    loader: 'file-loader',
+    options: {
+      name: '../../[name].[ext]' // copy 4 icon*.png images to C:\Projects as side effect of Run-Production, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
+    }
+  }
+});
+config.module.rules.push({
+  test: /\.(woff|eot|ttf)$/,
+  exclude: /node_modules/,
+  use: {
+    loader: 'file-loader',
+    options: {
+      name: 'assets/[name].[ext]?' + version // package.json version
+    }
+  }
+});
 
 module.exports = config;
