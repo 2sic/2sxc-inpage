@@ -55,7 +55,7 @@
     "lint": "tslint ./src/**/*.ts -t verbose",
     "test": "karma start",
     "test-once": "karma start --single-run",
-    "webpack4dist": "@ECHO *** 2sxc-inpage webpack build for DEVELOPMENT ***&& SET NODE_ENV=development&& webpack --color --display-error-details --bail&& @ECHO ***  2sxc-inpage webpack build for PRODUCTION ***&& SET NODE_ENV=production&& webpack --color --display-error-details --bail&& @ECHO *** END ***"
+    "dist": "@ECHO *** 2sxc-inpage webpack build for DEVELOPMENT ***&& SET NODE_ENV=development&& webpack --color --display-error-details --bail&& @ECHO ***  2sxc-inpage webpack build for PRODUCTION ***&& SET NODE_ENV=production&& webpack --color --display-error-details --bail&& @ECHO *** END ***"
   },
   "repository": {
     "type": "git",
