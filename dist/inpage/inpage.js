@@ -4419,18 +4419,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = __webpack_require__(8);
 var Cms_1 = __webpack_require__(24);
 var InstanceEngine = /** @class */ (function () {
-    //commands = Commands.getInstance;
-    //context: ContextOfButton;
     function InstanceEngine(sxc) {
         this.sxc = sxc;
     }
-    // 2dm - don't think this is ever used, disabled for now
-    // todo q2stv - do we need this?
-    //// todo: stv, check this specialSettings
-    //// assemble an object which will store the configuration and execute it
-    //create = (context: ContextOfButton, specialSettings: Settings) => {
-    //  return commandCreate(context);
-    //}
     InstanceEngine.prototype.run = function (nameOrSettings, eventOrSettings, event) {
         var cntx = context_1.context(this.sxc);
         return new Cms_1.Cms().run(cntx, nameOrSettings, eventOrSettings, event);
@@ -4438,11 +4429,6 @@ var InstanceEngine = /** @class */ (function () {
     return InstanceEngine;
 }());
 exports.InstanceEngine = InstanceEngine;
-// 2dm - not sure why we would create a second constructor, doesn't seem to make sense
-// todo q2stv - why would we have a second constructor?
-//export function instanceEngine(sxc: SxcInstanceWithInternals): InstanceEngine {
-//  return new InstanceEngine(sxc);
-//}
 
 
 /***/ }),
@@ -6702,13 +6688,15 @@ var ActionMenuMapper = /** @class */ (function () {
         var _this = this;
         this.changeLayoutOrContent = function () { _this.run('layout'); };
         this.addItem = function () { _this.run('add', { useModuleList: true, sortOrder: 0 }); };
-        this.edit = function () { _this.run('edit', { useModuleList: true, sortOrder: 0 }); };
+        this.edit = function () {
+            _this.run('edit', { useModuleList: true, sortOrder: 0 });
+        };
         this.adminApp = function () { _this.run('app'); };
         this.adminZone = function () { _this.run('zone'); };
         this.develop = function () { _this.run('template-develop'); };
-        var sxc = sxc_1.getSxcInstance(moduleId);
-        this.tag = api_1.getTag(sxc);
-        this.run = sxc.manage.run;
+        this.sxc = sxc_1.getSxcInstance(moduleId);
+        this.tag = api_1.getTag(this.sxc);
+        this.run = this.sxc.manage.run;
     }
     return ActionMenuMapper;
 }());
