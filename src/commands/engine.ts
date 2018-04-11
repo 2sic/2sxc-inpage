@@ -1,7 +1,4 @@
-﻿// polyfills
-import '../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { prepareToAddContent } from '../contentBlock/templates';
+﻿import { prepareToAddContent } from '../contentBlock/templates';
 import { ContextOfButton } from '../context/context-of-button';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Commands } from './commands';
@@ -11,6 +8,7 @@ import { ButtonConfig } from '../toolbar/button/button-config';
 import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
 import { Log } from '../logging/log';
 import { HasLog } from '../logging/has-log';
+
 
 
 export class Engine extends HasLog {

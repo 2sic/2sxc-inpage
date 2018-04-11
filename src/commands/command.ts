@@ -1,11 +1,11 @@
-﻿// polyfills
-import '../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { ContextOfButton } from '../context/context-of-button';
-//import { buildNgDialogParams } from '../manage/api';
+﻿import { ContextOfButton } from '../context/context-of-button';
 import { NgDialogParams } from '../manage/ng-dialog-params';
 import { translate } from '../translate/2sxc.translate';
 import { Params } from './params';
+
+
+
+
 
 export class Command {
   items: any;

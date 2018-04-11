@@ -1,9 +1,7 @@
-﻿// polyfills
-import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { CommandBase } from '../command-base';
+﻿import { CommandBase } from '../command-base';
 import { commandOpenNgDialog } from '../command-open-ng-dialog';
-import { Settings } from '../settings';
+
+
 
 /**
  * new is a dialog to add something, and will not add if cancelled

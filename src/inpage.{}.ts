@@ -1,4 +1,6 @@
-﻿import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
+﻿import './polyfills/include-polyfills';
+
+import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
 import { windowInPage as window } from './interfaces/window-in-page';
 import { Commands } from './commands/commands';
 import { Cms } from './cms/Cms';

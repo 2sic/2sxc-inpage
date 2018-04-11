@@ -1,7 +1,4 @@
-﻿// polyfills
-import '../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { Conf } from './conf';
+﻿import { Conf } from './conf';
 import { $quickE as quickE } from './quick-e';
 import { selectors } from './selectors-instance';
 

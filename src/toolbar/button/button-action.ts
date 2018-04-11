@@ -1,7 +1,4 @@
-﻿// polyfills
-import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { CommandDefinition } from '../../commands/command-definition';
+﻿import { CommandDefinition } from '../../commands/command-definition';
 
 export class ButtonAction {
   // name: string; // the command name from the action list

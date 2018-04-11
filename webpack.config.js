@@ -29,8 +29,8 @@ var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // var merge = require('webpack-merge');
 
 var entryJsFiles = glob.sync('./src/**/libs/*.js');
-var entryTsFiles = glob.sync('./src/**/*.ts');
-var entryFiles = entryJsFiles.concat(entryTsFiles);
+var entryTsFiles = glob.sync('./src/**/*.ts', { ignore: ['./src/inpage.{}.ts'] });
+var entryFiles = ['./src/inpage.{}.ts'].concat (entryJsFiles.concat(entryTsFiles));
 var entryCssFiles = glob.sync('./src/**/*.css').concat(['./icons/css/inpage-icons-codes.css']);
 
 var nodeEnv = (process.env.NODE_ENV || 'development');

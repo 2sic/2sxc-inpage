@@ -1,7 +1,4 @@
-﻿// polyfills
-import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-export function oldParametersAdapter(action: any): any {
+﻿export function oldParametersAdapter(action: any): any {
 
   let params: any = {};
 
