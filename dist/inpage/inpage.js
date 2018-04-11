@@ -4820,7 +4820,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = __webpack_require__(5);
 var quick_dialog_1 = __webpack_require__(13);
 var build_toolbars_1 = __webpack_require__(15);
-var _2sxc_translate_1 = __webpack_require__(10);
 var sxc_1 = __webpack_require__(7);
 var log_1 = __webpack_require__(8);
 var log_utils_1 = __webpack_require__(89);
@@ -4919,12 +4918,9 @@ function showGlassesButtonIfUninitialized(sxci) {
         return false;
     }
     // note: title is added on mouseover, as the translation isn't ready at page-load
-    var btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+    var btn = $('<div class="sc-uninitialized"  onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
     btn.on('click', function () {
         sxci.manage.run('layout');
-    });
-    btn.on('mouseover', function () {
-        btn.title = _2sxc_translate_1.translate(btn.title);
     });
     tag.append(btn);
     return true;
@@ -6710,9 +6706,11 @@ var manage_1 = __webpack_require__(82);
 var quick_e_1 = __webpack_require__(3);
 var start_1 = __webpack_require__(27);
 var _2sxc__translateInit_1 = __webpack_require__(87);
+var _2sxc_translate_1 = __webpack_require__(10);
 __webpack_require__(88);
 sxc_controller_in_page_1.$2sxcInPage.context = context_1.context; // primary API to get the context
 sxc_controller_in_page_1.$2sxcInPage._translateInit = _2sxc__translateInit_1._translateInit; // reference in ./2sxc-api/js/ToSic.Sxc.Instance.ts
+sxc_controller_in_page_1.$2sxcInPage.translate = _2sxc_translate_1.translate; // provide an official translate API for 2sxc
 sxc_controller_in_page_1.$2sxcInPage._commands = commands_1.Commands.getInstance();
 sxc_controller_in_page_1.$2sxcInPage._manage = manage_1._manage; // used out of this project in ToSic.Sxc.Instance and 2sxc.api.js
 window_in_page_1.windowInPage.$quickE = quick_e_1.$quickE;

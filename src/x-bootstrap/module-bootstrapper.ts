@@ -115,16 +115,11 @@ function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals) {
   }
 
   // note: title is added on mouseover, as the translation isn't ready at page-load
-  const btn = $('<div class="sc-uninitialized" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+  const btn = $('<div class="sc-uninitialized"  onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
 
   btn.on('click',
     (): void => {
       sxci.manage.run('layout');
-    });
-
-  btn.on('mouseover',
-    (): void => {
-      btn.title = translate(btn.title);
     });
 
   tag.append(btn);
