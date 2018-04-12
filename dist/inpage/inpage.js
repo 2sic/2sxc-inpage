@@ -2758,8 +2758,8 @@ function commandOpenNgDialog(context, event) {
         // the callback will handle events after closing the dialog
         // and reload the in-page view w/ajax or page reload
         var callback = function () {
-            render_1.reloadAndReInitialize(context);
             resolve(context);
+            render_1.reloadAndReInitialize(context);
             // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
         };
         // the link contains everything to open a full dialog (lots of params added)
