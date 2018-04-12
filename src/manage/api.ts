@@ -19,7 +19,7 @@ export function getTag(sxci: SxcInstanceWithInternals): any {
  * @param {any} htmlTag
  * @return {DataEditContext} edit-context object
  */
-/*export*/ function getEditContextOfTag(htmlTag: any): DataEditContext {
+export function getEditContextOfTag(htmlTag: any): DataEditContext {
   const attr = htmlTag.getAttribute('data-edit-context');
   return JSON.parse(attr || '') as DataEditContext;
 }

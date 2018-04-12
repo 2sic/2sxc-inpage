@@ -208,10 +208,11 @@ exports.getTag = getTag;
  * @param {any} htmlTag
  * @return {DataEditContext} edit-context object
  */
-/*export*/ function getEditContextOfTag(htmlTag) {
+function getEditContextOfTag(htmlTag) {
     var attr = htmlTag.getAttribute('data-edit-context');
     return JSON.parse(attr || '');
 }
+exports.getEditContextOfTag = getEditContextOfTag;
 /**
  * get edit-context info of an sxc-object
  * @param {SxcInstanceWithInternals} sxc
@@ -302,8 +303,8 @@ exports.selectors = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_controller_in_page_1 = __webpack_require__(3);
-function getSxcInstance(module) {
-    var sxc = sxc_controller_in_page_1.$2sxcInPage(module);
+function getSxcInstance(module, cbid) {
+    var sxc = sxc_controller_in_page_1.$2sxcInPage(module, cbid);
     return sxc;
 }
 exports.getSxcInstance = getSxcInstance;
@@ -492,10 +493,28 @@ var is_1 = __webpack_require__(63);
  * @param cbid
  */
 function context(htmlElementOrId, cbid) {
-    var sxc = is_1.isSxcInstance(htmlElementOrId)
-        ? htmlElementOrId
-        : sxc_1.getSxcInstance(htmlElementOrId);
-    var contextOfButton = getContextInstance(sxc, cbid);
+    var sxc = null;
+    var containerTag = null;
+    if (is_1.isSxcInstance(htmlElementOrId)) {
+        // it is SxcInstance
+        sxc = htmlElementOrId;
+    }
+    else if (typeof htmlElementOrId == 'number') {
+        // it is number
+        sxc = sxc_1.getSxcInstance(htmlElementOrId, cbid);
+    }
+    else {
+        // it is HTMLElement
+        containerTag = $(htmlElementOrId).closest('.sc-content-block')[0]; // todo: stv, move this to getEditContext, getEditContextOfTag, getTag
+        if (containerTag) {
+            var iid = containerTag.getAttribute('data-cb-instance');
+            var cbidint = containerTag.getAttribute('data-cb-id');
+            cbid = !!cbidint ? cbidint : cbid;
+            sxc = sxc_1.getSxcInstance(iid, cbid);
+        }
+    }
+    ;
+    var contextOfButton = getContextInstance(sxc, cbid, containerTag);
     return contextOfButton;
 }
 exports.context = context;
@@ -520,8 +539,15 @@ exports.contextCopy = contextCopy;
  * @param sxc
  * @param cbid
  */
-function getContextInstance(sxc, cbid) {
-    var editContext = api_1.getEditContext(sxc);
+function getContextInstance(sxc, cbid, htmlElement) {
+    var editContext;
+    if (htmlElement) {
+        editContext = api_1.getEditContextOfTag(htmlElement);
+    }
+    else {
+        // it is number
+        editContext = api_1.getEditContext(sxc);
+    }
     var context = createContextFromEditContext(editContext);
     context.sxc = sxc;
     return context;
