@@ -30,16 +30,18 @@ export class Cms extends HasLog {
   run(context: ContextOfButton,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings?: Partial<Settings> | Event,
-    event?: Event) {
+    event?: Event) : Promise<any> {
 
-    this.do(() => new Engine(this.log).detectParamsAndRun(context, nameOrSettings, eventOrSettings, event));
+    return this.do(() => new Engine(this.log)
+      .detectParamsAndRun(context, nameOrSettings, eventOrSettings, event)
+    );
 
   }
 
   /**
    * reset/clear the log if alwaysResetLog is true
    */
-  private do(innerCall : Function) {
+  private do(innerCall : () => Promise<any>) : Promise<any> {
     if (this.autoReset) this.resetLog();
     console.log('before');
     const result = innerCall();

@@ -1023,7 +1023,7 @@ function watchForResize(keepWatching) {
         return null;
     }
     var cont = getContainer();
-    if (!resizeWatcher)
+    if (!resizeWatcher) // only add a timer if not already running
         resizeWatcher = setInterval(function () {
             try {
                 var frm = getIFrame(cont);
@@ -1131,7 +1131,7 @@ function reloadAndReInitialize(context, forceAjax, preview) {
     return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
         .then(function () {
         // tell Evoq that page has changed if it has changed (Ajax call)
-        if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled)
+        if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled) // this only exists in evoq or on new DNNs with tabVersioning
             try {
                 window_in_page_1.windowInPage.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
             }
@@ -1196,7 +1196,7 @@ function buildToolbars(parentLog, parentTag, optionalId) {
     // let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
     var toolbars = getToolbarTags(parentTag);
     // no toolbars found, must help a bit because otherwise editing is hard
-    if (toolbars.length === 0) {
+    if (toolbars.length === 0) { // && !disableAutoAdd) {
         if (dbg) {
             console.log("didn't find toolbar, so will auto-create", parentTag);
         }
@@ -1548,7 +1548,8 @@ exports.updateTemplateFromDia = updateTemplateFromDia;
  * Update the template.
  */
 function updateTemplate(context, templateId, forceCreate) {
-    return web_api_promises_1.saveTemplate(context, templateId, forceCreate)
+    var savePromise = web_api_promises_1.saveTemplate(context, templateId, forceCreate);
+    var promiseWithMessage = savePromise
         .then(function (data, textStatus, xhr) {
         // error handling
         if (xhr.status !== 200) {
@@ -1565,6 +1566,7 @@ function updateTemplate(context, templateId, forceCreate) {
         context.contentBlock.contentGroupId = newGuid;
         // $2sxc._manage._updateContentGroupGuid(context, newGuid);
     });
+    return promiseWithMessage;
 }
 exports.updateTemplate = updateTemplate;
 
@@ -1789,7 +1791,7 @@ function copyPasteInPage(cbAction, list, index, type) {
             // check that we only move block-to-block or module to module
             if (exports.data.type !== newClip.type)
                 return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
-            if (isNaN(from) || isNaN(to) || from === to)
+            if (isNaN(from) || isNaN(to) || from === to) // || from + 1 === to) // this moves it to the same spot, so ignore
                 return clear(); // don't do anything
             // cb-numbering is a bit different, because the selector is at the bottom
             // only there we should also skip on +1;
@@ -1924,7 +1926,8 @@ var Cms = /** @class */ (function (_super) {
     ;
     Cms.prototype.run = function (context, nameOrSettings, eventOrSettings, event) {
         var _this = this;
-        this.do(function () { return new engine_1.Engine(_this.log).detectParamsAndRun(context, nameOrSettings, eventOrSettings, event); });
+        return this.do(function () { return new engine_1.Engine(_this.log)
+            .detectParamsAndRun(context, nameOrSettings, eventOrSettings, event); });
     };
     /**
      * reset/clear the log if alwaysResetLog is true
@@ -2645,10 +2648,10 @@ function saveTemplate(context, templateId, forceCreateContentGroup) {
         forceCreateContentGroup: forceCreateContentGroup,
         newTemplateChooserState: false,
     };
-    return context.sxc.webApi.get({
+    return /*Promise.resolve(*/ context.sxc.webApi.get({
         url: 'view/module/savetemplateid',
         params: params,
-    });
+    }) /*)*/;
 }
 exports.saveTemplate = saveTemplate;
 /**
@@ -2666,11 +2669,11 @@ function getPreviewWithTemplate(context, templateId) {
         cbid: context.contentBlock.id,
         originalparameters: JSON.stringify(context.instance.parameters),
     };
-    return context.sxc.webApi.get({
+    return /*Promise.resolve(*/ context.sxc.webApi.get({
         url: 'view/module/rendertemplate',
         params: params,
         dataType: 'html',
-    });
+    }) /*)*/;
 }
 exports.getPreviewWithTemplate = getPreviewWithTemplate;
 //#endregion
@@ -2750,27 +2753,39 @@ var command_link_to_ng_dialog_1 = __webpack_require__(74);
  * @param editContext
  */
 function commandOpenNgDialog(context, event) {
-    // the callback will handle events after closing the dialog
-    // and reload the in-page view w/ajax or page reload
-    var callback = function () {
-        render_1.reloadAndReInitialize(context);
-        // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
-    };
-    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
-    if (context.button.inlineWindow) {
-        var fullScreen = false;
-        if (!!context.button.fullScreen) {
-            if (typeof (context.button.fullScreen) === 'function') {
-                fullScreen = context.button.fullScreen(context);
+    // testing this - ideally it should now work as a promise...
+    return new Promise(function (resolve, reject) {
+        // the callback will handle events after closing the dialog
+        // and reload the in-page view w/ajax or page reload
+        var callback = function () {
+            render_1.reloadAndReInitialize(context);
+            resolve(context);
+            // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
+        };
+        // the link contains everything to open a full dialog (lots of params added)
+        var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context);
+        if (context.button.inlineWindow) {
+            var fullScreen = false;
+            if (!!context.button.fullScreen) {
+                if (typeof (context.button.fullScreen) === 'function') {
+                    fullScreen = context.button.fullScreen(context);
+                }
             }
+            /*return*/ quick_dialog_1.showOrToggle(context, link, callback, fullScreen, context.button.dialog(context).toString());
         }
-        return quick_dialog_1.showOrToggle(context, link, callback, fullScreen, /* settings.dialog === "item-history"*/ context.button.dialog(context).toString());
-    }
-    var origEvent = event || window_in_page_1.windowInPage.event;
-    if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-        return window_in_page_1.windowInPage.open(link);
-    }
-    return sxc_controller_in_page_1.$2sxcInPage.totalPopup.open(link, callback);
+        else {
+            var origEvent = event || window_in_page_1.windowInPage.event;
+            if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
+                /*return*/
+                window_in_page_1.windowInPage.open(link);
+                resolve(context);
+                //return;
+            }
+            else
+                /*return*/
+                sxc_controller_in_page_1.$2sxcInPage.totalPopup.open(link, callback);
+        }
+    });
 }
 exports.commandOpenNgDialog = commandOpenNgDialog;
 
@@ -3004,7 +3019,7 @@ if (!Array.prototype.find) {
     Object.defineProperty(Array.prototype, 'find', {
         value: function (predicate) {
             // 1. Let O be ? ToObject(this value).
-            if (this == null) {
+            if (this == null) { // jshint ignore:line
                 throw new TypeError('"this" is null or not defined');
             }
             var o = Object(this);
@@ -3046,13 +3061,13 @@ if (typeof Object.assign != 'function') {
     // ReSharper disable once UnusedParameter
     Object.assign = function (target, varArgs) {
         'use strict';
-        if (target === null) {
+        if (target === null) { // TypeError if undefined or null
             throw new TypeError('Cannot convert undefined or null to object');
         }
         var to = Object(target);
         for (var index = 1; index < arguments.length; index++) {
             var nextSource = arguments[index];
-            if (nextSource !== null) {
+            if (nextSource !== null) { // Skip over if undefined or null
                 for (var nextKey in nextSource) {
                     // Avoid bugs when hasOwnProperty is shadowed
                     if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
@@ -3100,7 +3115,7 @@ var Engine = /** @class */ (function (_super) {
         var settings;
         var thirdParamIsEvent = (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined');
         this.log.add("might cycle parameters, in case not all were given. third is event=" + thirdParamIsEvent);
-        if (thirdParamIsEvent) {
+        if (thirdParamIsEvent) { // no event param, but settings contains the event-object
             this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
             event = eventOrSettings; // move it to the correct variable
             settings = this.nameOrSettingsAddapter(nameOrSettings);
@@ -3150,9 +3165,11 @@ var Engine = /** @class */ (function (_super) {
         }
         // if more than just a UI-action, then it needs to be sure the content-group is created first
         this.log.add("command might change data, will wrap in pre-flight to ensure content-block");
-        var prepare = templates_1.prepareToAddContent(context, settings.useModuleList)
-            .then(function () {
-            context.button.code(context, origEvent);
+        var prepare = new Promise(function (resolve, reject) {
+            templates_1.prepareToAddContent(context, settings.useModuleList)
+                .then(function () {
+                resolve(context.button.code(context, origEvent));
+            });
         });
         return prepare;
     };
@@ -4500,7 +4517,7 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
         if (cblockList.length > 0 && index > 0)
             $(cblockList[cblockList.length > index - 1 ? index - 1 : cblockList.length - 1])
                 .after(newTag);
-        else
+        else // ...or just at the beginning?
             listTag.prepend(newTag);
         // ReSharper disable once UnusedLocals
         var sxcNew = sxc_1.getSxcInstance(newTag);
@@ -5552,7 +5569,7 @@ var ContentItems = /** @class */ (function (_super) {
                 return (context.user.canDesign) && ((!!context.button.action.params.contentType) || (!!context.contentBlock.contentTypeId));
             },
             configureCommand: function (context, command) {
-                if (command.context.button.action.params.contentType)
+                if (command.context.button.action.params.contentType) // optionally override with custom type
                     command.params.contentTypeName = command.context.button.action.params.contentType;
                 // maybe: if item doesn't have a type, use that of template
                 // else if (cmdSpecs.contentTypeId)
@@ -6120,7 +6137,7 @@ var New = /** @class */ (function (_super) {
             code: function (context, event) {
                 // todo - should refactor this to be a toolbarManager.contentBlock command
                 Object.assign(context.button.action.params, { sortOrder: context.button.action.params.sortOrder + 1 });
-                command_open_ng_dialog_1.commandOpenNgDialog(context, event);
+                return command_open_ng_dialog_1.commandOpenNgDialog(context, event);
             },
         });
         return _this;
