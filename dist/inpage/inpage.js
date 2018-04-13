@@ -189,13 +189,33 @@ exports.$2sxcInPage = window_in_page_1.windowInPage.$2sxc;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-//import { InstanceConfig } from './instance-config';
-//import { NgDialogParams } from './ng-dialog-params';
-//import { QuickDialogConfig } from './quick-dialog-config';
-//import { UserOfEditContext } from './user-of-edit-context';
-//import { ContextOfButton } from '../context/context-of-button';
 /**
- * Get a html tag of the current sxc instance
+ * get edit-context info of html element or sxc-object
+ * @param {SxcInstanceWithInternals} sxc
+ * @param {HTMLElement} htmlElement
+ * @return {DataEditContext} edit context info
+ */
+function getEditContext(sxc, htmlElement) {
+    var editContextTag;
+    if (htmlElement) {
+        editContextTag = getContainerTag(htmlElement);
+    }
+    else {
+        editContextTag = getTag(sxc);
+    }
+    return getEditContextOfTag(editContextTag);
+}
+exports.getEditContext = getEditContext;
+/**
+ * get nearest html tag of the sxc instance with data-edit-context
+ * @param htmlTag
+ */
+function getContainerTag(htmlTag) {
+    return $(htmlTag).closest('div[data-edit-context]')[0];
+}
+exports.getContainerTag = getContainerTag;
+/**
+ * get a html tag of the sxc instance
  * @param {SxcInstanceWithInternals} sxci
  * @return {jquery} - resulting html
  */
@@ -210,58 +230,9 @@ exports.getTag = getTag;
  */
 function getEditContextOfTag(htmlTag) {
     var attr = htmlTag.getAttribute('data-edit-context');
-    return JSON.parse(attr || '');
+    return JSON.parse(attr || '{ }');
 }
 exports.getEditContextOfTag = getEditContextOfTag;
-/**
- * get edit-context info of an sxc-object
- * @param {SxcInstanceWithInternals} sxc
- * @return {DataEditContext} edit context info
- */
-function getEditContext(sxc) {
-    return getEditContextOfTag(getTag(sxc));
-}
-exports.getEditContext = getEditContext;
-// 2dm disabled
-// todo q2stv - I think we don't need this any more
-///**
-// * builds a config object used in the toolbar system
-// * @param {ContextOfButton} context
-// * @returns {InstanceConfig} object containing various properties for this current sxc-instance
-// */
-//export function buildInstanceConfig(context: ContextOfButton): InstanceConfig {
-//  return InstanceConfig.fromContext(context);
-//}
-// 2dm disabled
-// todo q2stv - I think we don't need this any more
-///**
-// * builds UserOfEditcontext object
-// * @param {ContextOfButton} context
-// * @returns {UserOfEditContext} object containing user of edit context
-// */
-//export function getUserOfEditContext(context: ContextOfButton): UserOfEditContext {
-//  return UserOfEditContext.fromContext(context);
-//}
-// 2dm disabled
-// todo q2stv - I think we don't need this any more
-///**
-// * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
-// * @param {ContextOfButton} context
-// * @returns {QucikDialogConfig} object containing the quick dialog config
-// */
-//export function buildQuickDialogConfig(context: ContextOfButton): QuickDialogConfig {
-//  return QuickDialogConfig.fromContext(context);
-//}
-// 2dm disabled
-// todo q2stv - I think we don't need this any more
-///**
-// * get all parameters needed by NG dialogues from an sxc
-// * @param {ContextOfButton} context
-// * @return {NgDialogParams} special object containing the ng-dialog parameters
-// */
-//export function buildNgDialogParams(context: ContextOfButton): NgDialogParams {
-//  return NgDialogParams.fromContext(context);
-//}
 
 
 /***/ }),
@@ -496,25 +467,18 @@ function context(htmlElementOrId, cbid) {
     var sxc = null;
     var containerTag = null;
     if (is_1.isSxcInstance(htmlElementOrId)) {
-        // it is SxcInstance
         sxc = htmlElementOrId;
     }
-    else if (typeof htmlElementOrId == 'number') {
-        // it is number
+    else if (typeof htmlElementOrId === 'number') {
         sxc = sxc_1.getSxcInstance(htmlElementOrId, cbid);
     }
     else {
-        // it is HTMLElement
-        containerTag = $(htmlElementOrId).closest('.sc-content-block')[0]; // todo: stv, move this to getEditContext, getEditContextOfTag, getTag
-        if (containerTag) {
-            var iid = containerTag.getAttribute('data-cb-instance');
-            var cbidint = containerTag.getAttribute('data-cb-id');
-            cbid = !!cbidint ? cbidint : cbid;
-            sxc = sxc_1.getSxcInstance(iid, cbid);
-        }
+        sxc = sxc_1.getSxcInstance(htmlElementOrId);
+        containerTag = api_1.getContainerTag(htmlElementOrId);
     }
     ;
-    var contextOfButton = getContextInstance(sxc, cbid, containerTag);
+    var contextOfButton = getContextInstance(sxc, containerTag);
+    contextOfButton.sxc = sxc;
     return contextOfButton;
 }
 exports.context = context;
@@ -537,20 +501,11 @@ exports.contextCopy = contextCopy;
 /**
  * Create new context
  * @param sxc
- * @param cbid
+ * @param htmlElement
  */
-function getContextInstance(sxc, cbid, htmlElement) {
-    var editContext;
-    if (htmlElement) {
-        editContext = api_1.getEditContextOfTag(htmlElement);
-    }
-    else {
-        // it is number
-        editContext = api_1.getEditContext(sxc);
-    }
-    var context = createContextFromEditContext(editContext);
-    context.sxc = sxc;
-    return context;
+function getContextInstance(sxc, htmlElement) {
+    var editContext = api_1.getEditContext(sxc, htmlElement);
+    return createContextFromEditContext(editContext);
 }
 exports.getContextInstance = getContextInstance;
 /**
@@ -1023,7 +978,7 @@ function watchForResize(keepWatching) {
         return null;
     }
     var cont = getContainer();
-    if (!resizeWatcher) // only add a timer if not already running
+    if (!resizeWatcher)
         resizeWatcher = setInterval(function () {
             try {
                 var frm = getIFrame(cont);
@@ -1131,7 +1086,7 @@ function reloadAndReInitialize(context, forceAjax, preview) {
     return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
         .then(function () {
         // tell Evoq that page has changed if it has changed (Ajax call)
-        if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled) // this only exists in evoq or on new DNNs with tabVersioning
+        if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled)
             try {
                 window_in_page_1.windowInPage.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
             }
@@ -1196,7 +1151,7 @@ function buildToolbars(parentLog, parentTag, optionalId) {
     // let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
     var toolbars = getToolbarTags(parentTag);
     // no toolbars found, must help a bit because otherwise editing is hard
-    if (toolbars.length === 0) { // && !disableAutoAdd) {
+    if (toolbars.length === 0) {
         if (dbg) {
             console.log("didn't find toolbar, so will auto-create", parentTag);
         }
@@ -1791,7 +1746,7 @@ function copyPasteInPage(cbAction, list, index, type) {
             // check that we only move block-to-block or module to module
             if (exports.data.type !== newClip.type)
                 return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
-            if (isNaN(from) || isNaN(to) || from === to) // || from + 1 === to) // this moves it to the same spot, so ignore
+            if (isNaN(from) || isNaN(to) || from === to)
                 return clear(); // don't do anything
             // cb-numbering is a bit different, because the selector is at the bottom
             // only there we should also skip on +1;
@@ -3019,7 +2974,7 @@ if (!Array.prototype.find) {
     Object.defineProperty(Array.prototype, 'find', {
         value: function (predicate) {
             // 1. Let O be ? ToObject(this value).
-            if (this == null) { // jshint ignore:line
+            if (this == null) {
                 throw new TypeError('"this" is null or not defined');
             }
             var o = Object(this);
@@ -3061,13 +3016,13 @@ if (typeof Object.assign != 'function') {
     // ReSharper disable once UnusedParameter
     Object.assign = function (target, varArgs) {
         'use strict';
-        if (target === null) { // TypeError if undefined or null
+        if (target === null) {
             throw new TypeError('Cannot convert undefined or null to object');
         }
         var to = Object(target);
         for (var index = 1; index < arguments.length; index++) {
             var nextSource = arguments[index];
-            if (nextSource !== null) { // Skip over if undefined or null
+            if (nextSource !== null) {
                 for (var nextKey in nextSource) {
                     // Avoid bugs when hasOwnProperty is shadowed
                     if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
@@ -3115,7 +3070,7 @@ var Engine = /** @class */ (function (_super) {
         var settings;
         var thirdParamIsEvent = (!event && eventOrSettings && typeof eventOrSettings.altKey !== 'undefined');
         this.log.add("might cycle parameters, in case not all were given. third is event=" + thirdParamIsEvent);
-        if (thirdParamIsEvent) { // no event param, but settings contains the event-object
+        if (thirdParamIsEvent) {
             this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
             event = eventOrSettings; // move it to the correct variable
             settings = this.nameOrSettingsAddapter(nameOrSettings);
@@ -4303,13 +4258,11 @@ function initInstance(sxc) {
 exports.initInstance = initInstance;
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc) {
-    var editContext = api_1.getEditContext(sxc);
-    var context = context_1.getContextInstance(sxc);
-    // context.sxc.sxc = sxc; // stv: this is temp
-    // context.element = getTag(sxc); // HTMLElement
-    var userInfo = user_of_edit_context_1.UserOfEditContext.fromContext(context); // 2dm simplified getUserOfEditContext(context);
-    var cmdEngine = new instance_engine_1.InstanceEngine(sxc);
-    var editManager = new EditManager(sxc, editContext, userInfo, cmdEngine, context);
+    var myContext = context_1.context(sxc);
+    var editContext = api_1.getEditContext(myContext.sxc);
+    var userInfo = user_of_edit_context_1.UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
+    var cmdEngine = new instance_engine_1.InstanceEngine(myContext.sxc);
+    var editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
     editManager.init();
     sxc.manage = editManager;
     return editManager;
@@ -4424,13 +4377,13 @@ var EditManager = /** @class */ (function () {
         this.init = function () {
             var tag = api_1.getTag(_this.sxc);
             // enhance UI in case there are known errors / issues
-            if (_this.editContext.error.type) {
+            if (_this.editContext && _this.editContext.error && _this.editContext.error.type) {
                 _this._handleErrors(_this.editContext.error.type, tag);
             }
             // todo: move this to dialog-handling
             // display the dialog
             var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
-            if (_this.editContext.error.type || !openDialogId || openDialogId !== _this.sxc.cbid) {
+            if ((_this.editContext && _this.editContext.error && _this.editContext.error.type) || !openDialogId || openDialogId !== _this.sxc.cbid) {
                 return false;
             }
             sessionStorage.removeItem('dia-cbid');
@@ -4517,7 +4470,7 @@ function create(parentId, fieldName, index, appName, container, newGuid) {
         if (cblockList.length > 0 && index > 0)
             $(cblockList[cblockList.length > index - 1 ? index - 1 : cblockList.length - 1])
                 .after(newTag);
-        else // ...or just at the beginning?
+        else
             listTag.prepend(newTag);
         // ReSharper disable once UnusedLocals
         var sxcNew = sxc_1.getSxcInstance(newTag);
@@ -4916,7 +4869,7 @@ function initModule(module, isFirstRun) {
 }
 function showGlassesButtonIfUninitialized(sxci) {
     // already initialized
-    if (sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
+    if (sxci && sxci.manage && sxci.manage._editContext && sxci.manage._editContext.ContentGroup && sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
         return false;
     }
     ;
@@ -5569,7 +5522,7 @@ var ContentItems = /** @class */ (function (_super) {
                 return (context.user.canDesign) && ((!!context.button.action.params.contentType) || (!!context.contentBlock.contentTypeId));
             },
             configureCommand: function (context, command) {
-                if (command.context.button.action.params.contentType) // optionally override with custom type
+                if (command.context.button.action.params.contentType)
                     command.params.contentTypeName = command.context.button.action.params.contentType;
                 // maybe: if item doesn't have a type, use that of template
                 // else if (cmdSpecs.contentTypeId)

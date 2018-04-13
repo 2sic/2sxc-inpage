@@ -104,7 +104,7 @@ function initModule(module: any, isFirstRun: boolean) {
 
 function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals) {
   // already initialized
-  if (sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
+  if (sxci && sxci.manage && sxci.manage._editContext && sxci.manage._editContext.ContentGroup && sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
     return false;
   };
 
