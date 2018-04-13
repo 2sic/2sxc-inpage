@@ -11,7 +11,7 @@ import { saveTemplate } from './web-api-promises';
  * @returns {any}
  */
 
-export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean) {
+export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean) /*: Promise<any>*/ {
   const isCreated: boolean = context.contentBlock.isCreated;
   if (isCreated || !useModuleList) return $.when(null);
   // return persistTemplate(sxc, null);
@@ -61,9 +61,11 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
 /**
  * Update the template.
  */
-export function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean) {
+export function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean)  /*: Promise<any>*/ {
 
-  return saveTemplate(context, templateId, forceCreate)
+  const savePromise = saveTemplate(context, templateId, forceCreate);
+
+  const promiseWithMessage = (savePromise as any)
     .then(function (data: any, textStatus: any, xhr: any) {
       // error handling
       if (xhr.status !== 200) {
@@ -84,4 +86,6 @@ export function updateTemplate(context: ContextOfButton, templateId: number, for
       context.contentBlock.contentGroupId = newGuid;
       // $2sxc._manage._updateContentGroupGuid(context, newGuid);
     });
+
+  return promiseWithMessage;
 }

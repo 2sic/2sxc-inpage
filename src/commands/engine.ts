@@ -21,7 +21,7 @@ export class Engine extends HasLog {
     context: ContextOfButton,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings: Partial<Settings> | Event,
-    event?: Event) {
+    event?: Event) : Promise<any> {
 
     this.log.add(`detecting params and running - has ${arguments.length} params`);
 
@@ -53,7 +53,7 @@ export class Engine extends HasLog {
   run(
     context: ContextOfButton,
     nameOrSettings: string | Partial<Settings>,
-    event: Event) {
+    event: Event) : Promise<any> { // | any is temporary, just to get it to work; should be improved to only give a promise
 
     let settings = this.nameOrSettingsAddapter(nameOrSettings);
 
@@ -83,7 +83,7 @@ export class Engine extends HasLog {
     // todo: stv, fix this in case that is function
     if (!button.code) {
       this.log.add(`simple button without code - generating code to open standard dialog`);
-      button.code = (contextParam: ContextOfButton, event: Event) => {
+      button.code = (contextParam: ContextOfButton, event: Event) : Promise<any> => {
         return commandOpenNgDialog(contextParam, event);
       };
     }
@@ -95,10 +95,12 @@ export class Engine extends HasLog {
 
     // if more than just a UI-action, then it needs to be sure the content-group is created first
     this.log.add(`command might change data, will wrap in pre-flight to ensure content-block`);
-    const prepare = prepareToAddContent(context, settings.useModuleList)
-      .then(() => {
-        context.button.code(context, origEvent);
+    const prepare = new Promise<any>((resolve, reject) => {
+      prepareToAddContent(context, settings.useModuleList)
+        .then(() => {
+          resolve(context.button.code(context, origEvent));
       });
+    });
 
     return prepare;
 

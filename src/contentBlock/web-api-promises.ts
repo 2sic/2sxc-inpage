@@ -38,16 +38,16 @@ import { ContextOfButton } from '../context/context-of-button';
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
-export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): any {
+export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): any /*Promise<any>*/ {
   const params: WebApiParams = {
     templateId: templateId,
     forceCreateContentGroup: forceCreateContentGroup,
     newTemplateChooserState: false,
   };
-  return context.sxc.webApi.get({
+  return /*Promise.resolve(*/context.sxc.webApi.get({
     url: 'view/module/savetemplateid',
     params: params,
-  });
+  })/*)*/;
 }
 
 /**
@@ -56,7 +56,7 @@ export function saveTemplate(context: ContextOfButton, templateId: number, force
  * @param {number} templateId
  * @returns {promise} promise with the html in the result
  */
-export function getPreviewWithTemplate(context: ContextOfButton, templateId: number): any {
+export function getPreviewWithTemplate(context: ContextOfButton, templateId: number) /*: Promise<any>*/ {
   templateId = templateId || -1; // fallback, meaning use saved ID
   const params: WebApiParams = {
     templateId: templateId,
@@ -65,10 +65,10 @@ export function getPreviewWithTemplate(context: ContextOfButton, templateId: num
     cbid: context.contentBlock.id,
     originalparameters: JSON.stringify(context.instance.parameters),
   };
-  return context.sxc.webApi.get({
+  return /*Promise.resolve(*/context.sxc.webApi.get({
     url: 'view/module/rendertemplate',
     params: params,
     dataType: 'html',
-  });
+  })/*)*/;
 }
 //#endregion
