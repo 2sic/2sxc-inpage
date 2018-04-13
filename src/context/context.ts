@@ -12,6 +12,7 @@ import { InstanceContext } from './instance-context/instance-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
 import { isSxcInstance } from '../plumbing/is';
+import { UiContext } from './instance-context/ui-context';
 
 /**
  * Primary API to get the context (context is cached)
@@ -129,9 +130,15 @@ export function createContextFromEditContext(editContext: DataEditContext) {
   }
   if (editContext.Language) {
     // languages
-    contextOfButton.app.currentLanguage = editContext.Language.Current;  // NgDialogParams.lang
+    contextOfButton.app.currentLanguage = editContext.Language.Current; // NgDialogParams.lang
     contextOfButton.app.primaryLanguage = editContext.Language.Primary; // NgDialogParams.langpri
     contextOfButton.app.allLanguages = editContext.Language.All; // or NgDialogParams.langs
+  }
+
+  // ensure that the UI will load the correct assets to enable editing
+  contextOfButton.ui = new UiContext();
+  if (editContext.Ui) {
+    contextOfButton.ui.autoToolbar = editContext.Ui.AutoToolbar; // toolbar auto-show
   }
 
   // *** ContextOfContentBlock ***
