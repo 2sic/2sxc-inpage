@@ -9,3 +9,11 @@ export class ContextOfInstance extends ContextOfPage {
   instance: InstanceContext; // information related to the current DNN module, incl.instanceId, etc.
   app: AppContext; // this will be about the current app, settings of the app, app - paths, etc.
 }
+
+
+
+export function isContextOfInstance(thing: any): thing is ContextOfInstance {
+  const maybeButton = thing as ContextOfInstance;
+  return maybeButton.sxc !== undefined && maybeButton.instance !== undefined;
+}
+

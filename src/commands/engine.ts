@@ -8,6 +8,7 @@ import { ButtonConfig } from '../toolbar/button/button-config';
 import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
 import { Log } from '../logging/log';
 import { HasLog } from '../logging/has-log';
+import { ContextOfInstance } from '../context/context-of-instance';
 
 
 
@@ -18,7 +19,7 @@ export class Engine extends HasLog {
   }
 
   detectParamsAndRun(
-    context: ContextOfButton,
+    context: ContextOfInstance,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings: Partial<Settings> | Event,
     event?: Event) : Promise<any> {
@@ -40,7 +41,7 @@ export class Engine extends HasLog {
     // ensure we have the right event despite browser differences
     event = event || window.event;
 
-    return this.run(context, settings, event);
+    return this.run(context as ContextOfButton, settings, event);
   }
 
   /**
