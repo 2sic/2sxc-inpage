@@ -189,13 +189,33 @@ exports.$2sxcInPage = window_in_page_1.windowInPage.$2sxc;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-//import { InstanceConfig } from './instance-config';
-//import { NgDialogParams } from './ng-dialog-params';
-//import { QuickDialogConfig } from './quick-dialog-config';
-//import { UserOfEditContext } from './user-of-edit-context';
-//import { ContextOfButton } from '../context/context-of-button';
 /**
- * Get a html tag of the current sxc instance
+ * get edit-context info of html element or sxc-object
+ * @param {SxcInstanceWithInternals} sxc
+ * @param {HTMLElement} htmlElement
+ * @return {DataEditContext} edit context info
+ */
+function getEditContext(sxc, htmlElement) {
+    var editContextTag;
+    if (htmlElement) {
+        editContextTag = getContainerTag(htmlElement);
+    }
+    else {
+        editContextTag = getTag(sxc);
+    }
+    return getEditContextOfTag(editContextTag);
+}
+exports.getEditContext = getEditContext;
+/**
+ * get nearest html tag of the sxc instance with data-edit-context
+ * @param htmlTag
+ */
+function getContainerTag(htmlTag) {
+    return $(htmlTag).closest('div[data-edit-context]')[0];
+}
+exports.getContainerTag = getContainerTag;
+/**
+ * get a html tag of the sxc instance
  * @param {SxcInstanceWithInternals} sxci
  * @return {jquery} - resulting html
  */
@@ -210,58 +230,9 @@ exports.getTag = getTag;
  */
 function getEditContextOfTag(htmlTag) {
     var attr = htmlTag.getAttribute('data-edit-context');
-    return JSON.parse(attr || '');
+    return JSON.parse(attr || '{ }');
 }
 exports.getEditContextOfTag = getEditContextOfTag;
-/**
- * get edit-context info of an sxc-object
- * @param {SxcInstanceWithInternals} sxc
- * @return {DataEditContext} edit context info
- */
-function getEditContext(sxc) {
-    return getEditContextOfTag(getTag(sxc));
-}
-exports.getEditContext = getEditContext;
-// 2dm disabled
-// todo q2stv - I think we don't need this any more
-///**
-// * builds a config object used in the toolbar system
-// * @param {ContextOfButton} context
-// * @returns {InstanceConfig} object containing various properties for this current sxc-instance
-// */
-//export function buildInstanceConfig(context: ContextOfButton): InstanceConfig {
-//  return InstanceConfig.fromContext(context);
-//}
-// 2dm disabled
-// todo q2stv - I think we don't need this any more
-///**
-// * builds UserOfEditcontext object
-// * @param {ContextOfButton} context
-// * @returns {UserOfEditContext} object containing user of edit context
-// */
-//export function getUserOfEditContext(context: ContextOfButton): UserOfEditContext {
-//  return UserOfEditContext.fromContext(context);
-//}
-// 2dm disabled
-// todo q2stv - I think we don't need this any more
-///**
-// * create a config-object for the quick-dialog, with all settings which the quick-dialog will need
-// * @param {ContextOfButton} context
-// * @returns {QucikDialogConfig} object containing the quick dialog config
-// */
-//export function buildQuickDialogConfig(context: ContextOfButton): QuickDialogConfig {
-//  return QuickDialogConfig.fromContext(context);
-//}
-// 2dm disabled
-// todo q2stv - I think we don't need this any more
-///**
-// * get all parameters needed by NG dialogues from an sxc
-// * @param {ContextOfButton} context
-// * @return {NgDialogParams} special object containing the ng-dialog parameters
-// */
-//export function buildNgDialogParams(context: ContextOfButton): NgDialogParams {
-//  return NgDialogParams.fromContext(context);
-//}
 
 
 /***/ }),
@@ -496,25 +467,18 @@ function context(htmlElementOrId, cbid) {
     var sxc = null;
     var containerTag = null;
     if (is_1.isSxcInstance(htmlElementOrId)) {
-        // it is SxcInstance
         sxc = htmlElementOrId;
     }
-    else if (typeof htmlElementOrId == 'number') {
-        // it is number
+    else if (typeof htmlElementOrId === 'number') {
         sxc = sxc_1.getSxcInstance(htmlElementOrId, cbid);
     }
     else {
-        // it is HTMLElement
-        containerTag = $(htmlElementOrId).closest('.sc-content-block')[0]; // todo: stv, move this to getEditContext, getEditContextOfTag, getTag
-        if (containerTag) {
-            var iid = containerTag.getAttribute('data-cb-instance');
-            var cbidint = containerTag.getAttribute('data-cb-id');
-            cbid = !!cbidint ? cbidint : cbid;
-            sxc = sxc_1.getSxcInstance(iid, cbid);
-        }
+        sxc = sxc_1.getSxcInstance(htmlElementOrId);
+        containerTag = api_1.getContainerTag(htmlElementOrId);
     }
     ;
-    var contextOfButton = getContextInstance(sxc, cbid, containerTag);
+    var contextOfButton = getContextInstance(sxc, containerTag);
+    contextOfButton.sxc = sxc;
     return contextOfButton;
 }
 exports.context = context;
@@ -537,20 +501,11 @@ exports.contextCopy = contextCopy;
 /**
  * Create new context
  * @param sxc
- * @param cbid
+ * @param htmlElement
  */
-function getContextInstance(sxc, cbid, htmlElement) {
-    var editContext;
-    if (htmlElement) {
-        editContext = api_1.getEditContextOfTag(htmlElement);
-    }
-    else {
-        // it is number
-        editContext = api_1.getEditContext(sxc);
-    }
-    var context = createContextFromEditContext(editContext);
-    context.sxc = sxc;
-    return context;
+function getContextInstance(sxc, htmlElement) {
+    var editContext = api_1.getEditContext(sxc, htmlElement);
+    return createContextFromEditContext(editContext);
 }
 exports.getContextInstance = getContextInstance;
 /**
@@ -4303,13 +4258,11 @@ function initInstance(sxc) {
 exports.initInstance = initInstance;
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc) {
-    var editContext = api_1.getEditContext(sxc);
-    var context = context_1.getContextInstance(sxc);
-    // context.sxc.sxc = sxc; // stv: this is temp
-    // context.element = getTag(sxc); // HTMLElement
-    var userInfo = user_of_edit_context_1.UserOfEditContext.fromContext(context); // 2dm simplified getUserOfEditContext(context);
-    var cmdEngine = new instance_engine_1.InstanceEngine(sxc);
-    var editManager = new EditManager(sxc, editContext, userInfo, cmdEngine, context);
+    var myContext = context_1.context(sxc);
+    var editContext = api_1.getEditContext(myContext.sxc);
+    var userInfo = user_of_edit_context_1.UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
+    var cmdEngine = new instance_engine_1.InstanceEngine(myContext.sxc);
+    var editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
     editManager.init();
     sxc.manage = editManager;
     return editManager;
@@ -4424,13 +4377,13 @@ var EditManager = /** @class */ (function () {
         this.init = function () {
             var tag = api_1.getTag(_this.sxc);
             // enhance UI in case there are known errors / issues
-            if (_this.editContext.error.type) {
+            if (_this.editContext && _this.editContext.error && _this.editContext.error.type) {
                 _this._handleErrors(_this.editContext.error.type, tag);
             }
             // todo: move this to dialog-handling
             // display the dialog
             var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
-            if (_this.editContext.error.type || !openDialogId || openDialogId !== _this.sxc.cbid) {
+            if ((_this.editContext && _this.editContext.error && _this.editContext.error.type) || !openDialogId || openDialogId !== _this.sxc.cbid) {
                 return false;
             }
             sessionStorage.removeItem('dia-cbid');
@@ -4916,7 +4869,7 @@ function initModule(module, isFirstRun) {
 }
 function showGlassesButtonIfUninitialized(sxci) {
     // already initialized
-    if (sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
+    if (sxci && sxci.manage && sxci.manage._editContext && sxci.manage._editContext.ContentGroup && sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
         return false;
     }
     ;

@@ -1,6 +1,6 @@
 ﻿import { InstanceEngine } from '../commands/instance-engine';
 import { manipulator } from '../contentBlock/manipulate';
-import { getContextInstance } from '../context/context';
+import { getContextInstance, context } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
@@ -36,17 +36,13 @@ export function initInstance(sxc: SxcInstanceWithInternals) {
 
 // ReSharper disable once InconsistentNaming
 function _initInstance(sxc: SxcInstanceWithInternals) {
+  const myContext = context(sxc);
+  const editContext = getEditContext(myContext.sxc);
 
-  const editContext = getEditContext(sxc);
+  const userInfo = UserOfEditContext.fromContext(myContext);// 2dm simplified getUserOfEditContext(context);
+  const cmdEngine = new InstanceEngine(myContext.sxc);
 
-  const context = getContextInstance(sxc);
-  // context.sxc.sxc = sxc; // stv: this is temp
-  // context.element = getTag(sxc); // HTMLElement
-
-  const userInfo = UserOfEditContext.fromContext(context);// 2dm simplified getUserOfEditContext(context);
-  const cmdEngine = new InstanceEngine(sxc);
-
-  const editManager = new EditManager(sxc, editContext, userInfo, cmdEngine, context);
+  const editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
   editManager.init();
   sxc.manage = editManager;
   return editManager;
@@ -203,7 +199,7 @@ class EditManager {
   init = () => {
     const tag = getTag(this.sxc);
     // enhance UI in case there are known errors / issues
-    if (this.editContext.error.type) {
+    if (this.editContext && this.editContext.error && this.editContext.error.type) {
       this._handleErrors(this.editContext.error.type, tag);
     }
 
@@ -211,7 +207,7 @@ class EditManager {
     // display the dialog
     const openDialogId = LocalStorageHelper.getItemValue<number>('dia-cbid');
 
-    if (this.editContext.error.type || !openDialogId || openDialogId !== this.sxc.cbid) {
+    if ((this.editContext && this.editContext.error && this.editContext.error.type) || !openDialogId || openDialogId !== this.sxc.cbid) {
       return false;
     }
 

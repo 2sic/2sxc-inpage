@@ -1,6 +1,6 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
-import { getEditContext, getEditContextOfTag } from '../manage/api';
+import { getEditContext, getEditContextOfTag, getContainerTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';
@@ -19,30 +19,23 @@ import { isSxcInstance } from '../plumbing/is';
  * @param cbid
  */
 export function context(htmlElementOrId: SxcInstanceWithInternals | HTMLElement | number, cbid?: number): ContextOfButton {
-
   let sxc: SxcInstanceWithInternals = null;
   let containerTag: any = null;
-  if (isSxcInstance(htmlElementOrId)) {
-    // it is SxcInstance
-    sxc = htmlElementOrId as SxcInstanceWithInternals;
-  } else if (typeof htmlElementOrId == 'number') {
-    // it is number
+
+  if (isSxcInstance(htmlElementOrId)) { // it is SxcInstance
+    sxc = htmlElementOrId;
+  } else if (typeof htmlElementOrId === 'number') { // it is number
     sxc = getSxcInstance(htmlElementOrId, cbid);
-  } else {
-    // it is HTMLElement
-    containerTag = $(htmlElementOrId).closest('.sc-content-block')[0]; // todo: stv, move this to getEditContext, getEditContextOfTag, getTag
-    if (containerTag) {
-      const iid = containerTag.getAttribute('data-cb-instance');
-      const cbidint = containerTag.getAttribute('data-cb-id');
-      cbid = !!cbidint ? cbidint : cbid;
-      sxc = getSxcInstance(iid, cbid);
-    }
+  } else { // it is HTMLElement
+    sxc = getSxcInstance(htmlElementOrId);
+    containerTag = getContainerTag(htmlElementOrId);
   };
 
-  const contextOfButton = getContextInstance(sxc, cbid, containerTag);
+  const contextOfButton = getContextInstance(sxc, containerTag);
+  contextOfButton.sxc = sxc;
+  
   return contextOfButton;
 }
-
 
 /**
  * Create copy of context, so it can be modified before use
@@ -63,20 +56,11 @@ export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number
 /**
  * Create new context
  * @param sxc
- * @param cbid
+ * @param htmlElement
  */
-export function getContextInstance(sxc: SxcInstanceWithInternals, cbid?: number, htmlElement?: HTMLElement): ContextOfButton {
-  let editContext: DataEditContext;
-  if (htmlElement) {
-    editContext = getEditContextOfTag(htmlElement);
-  } else {
-    // it is number
-    editContext = getEditContext(sxc);
-  } 
-  
-  const context = createContextFromEditContext(editContext);
-  context.sxc = sxc;
-  return context;
+export function getContextInstance(sxc: SxcInstanceWithInternals, htmlElement?: HTMLElement): ContextOfButton {
+  const editContext = getEditContext(sxc, htmlElement);
+  return createContextFromEditContext(editContext);
 }
 
 /**
