@@ -16,7 +16,7 @@ export class Definition {
    * @param context
    */
   // todo STV - change to Promise<any> as soon as possible
-  code?(context: ContextOfButton, event: any): void;
+  code?(context: ContextOfButton, event: any): Promise<any>;
 
   /**
    * command

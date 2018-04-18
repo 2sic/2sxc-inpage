@@ -28,7 +28,7 @@ export class Delete extends CommandBase {
             && (!!context.button.action.params.entityTitle));
         },
         code(context) {
-          contentItems.delete(context,
+          return contentItems.delete(context,
             context.button.action.params.entityId,
             context.button.action.params.entityGuid,
             context.button.action.params.entityTitle);

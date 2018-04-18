@@ -2651,10 +2651,10 @@ function saveTemplate(context, templateId, forceCreateContentGroup) {
         forceCreateContentGroup: forceCreateContentGroup,
         newTemplateChooserState: false,
     };
-    return /*Promise.resolve(*/ context.sxc.webApi.get({
+    return Promise.resolve(context.sxc.webApi.get({
         url: 'view/module/savetemplateid',
         params: params,
-    }) /*)*/;
+    }));
 }
 exports.saveTemplate = saveTemplate;
 /**
@@ -2672,11 +2672,11 @@ function getPreviewWithTemplate(context, templateId) {
         cbid: context.contentBlock.id,
         originalparameters: JSON.stringify(context.instance.parameters),
     };
-    return /*Promise.resolve(*/ context.sxc.webApi.get({
+    return Promise.resolve(context.sxc.webApi.get({
         url: 'view/module/rendertemplate',
         params: params,
         dataType: 'html',
-    }) /*)*/;
+    }));
 }
 exports.getPreviewWithTemplate = getPreviewWithTemplate;
 //#endregion
@@ -5004,23 +5004,36 @@ var _2sxc_translate_1 = __webpack_require__(9);
 exports.contentItems = {
     // delete command - try to really delete a content-item
     delete: function (context, itemId, itemGuid, itemTitle) {
-        // first show main warning / get ok
-        var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
-            .replace('{id}', itemId.toString())
-            .replace('{title}', itemTitle));
-        if (!ok)
-            return;
-        context.sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
-            .success(function () {
-            location.reload();
-        }).error(function (error) {
-            var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
-            console.log(error);
-            // check if it's a permission config problem
-            if (error.status === 401)
-                alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
-            if (error.status === 400)
-                alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
+        return new Promise(function (resolve, reject) {
+            // first show main warning / get ok
+            var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
+                .replace('{id}', itemId.toString())
+                .replace('{title}', itemTitle));
+            if (!ok) {
+                return resolve();
+            }
+            // convert jQuery ajax promise object to ES6 promise
+            var deletePromise = new Promise(function (resolve, reject) {
+                context.sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
+                    .success(function () {
+                    resolve();
+                }).error(function (error) {
+                    reject(error);
+                });
+            });
+            return deletePromise
+                .then(function () {
+                location.reload();
+            })
+                .catch(function (error) {
+                var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
+                console.log(error);
+                // check if it's a permission config problem
+                if (error.status === 401)
+                    alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
+                if (error.status === 400)
+                    alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
+            });
         });
     },
 };
@@ -6756,7 +6769,7 @@ var Add = /** @class */ (function (_super) {
                 return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
             },
             code: function (context) {
-                actions_1.addItem(context, context.button.action.params.sortOrder + 1);
+                return actions_1.addItem(context, context.button.action.params.sortOrder + 1);
             },
         });
         return _this;
@@ -7068,18 +7081,21 @@ var Custom = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('custom', 'Custom', 'bomb', true, false, {
             code: function (context) {
-                console.log('custom action with code - BETA feature, may change');
-                if (!context.button.action.params.customCode) {
-                    console.warn('custom code action, but no onclick found to run', context.button.action.params);
-                    return;
-                }
-                try {
-                    var fn = new Function('context', 'event', context.button.action.params.customCode); // jshint ignore:line
-                    fn(context, event);
-                }
-                catch (err) {
-                    console.error('error in custom button-code: ', context.button.action.params);
-                }
+                return new Promise(function (resolve, reject) {
+                    console.log('custom action with code - BETA feature, may change');
+                    if (!context.button.action.params.customCode) {
+                        console.warn('custom code action, but no onclick found to run', context.button.action.params);
+                        resolve();
+                    }
+                    try {
+                        var fn = new Function('context', 'event', context.button.action.params.customCode); // jshint ignore:line
+                        resolve(fn(context, event));
+                    }
+                    catch (err) {
+                        console.error('error in custom button-code: ', context.button.action.params);
+                        reject(err);
+                    }
+                });
             },
         });
         return _this;
@@ -7132,7 +7148,7 @@ var Delete = /** @class */ (function (_super) {
                     && (!!context.button.action.params.entityTitle));
             },
             code: function (context) {
-                item_commands_1.contentItems.delete(context, context.button.action.params.entityId, context.button.action.params.entityGuid, context.button.action.params.entityTitle);
+                return item_commands_1.contentItems.delete(context, context.button.action.params.entityId, context.button.action.params.entityGuid, context.button.action.params.entityTitle);
             },
         });
         return _this;
@@ -7390,14 +7406,17 @@ var More = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
             code: function (context, event) {
-                var btn = $(event.target);
-                var fullMenu = btn.closest('ul.sc-menu');
-                var oldState = Number(fullMenu.attr('data-state') || 0);
-                var max = Number(fullMenu.attr('group-count'));
-                var newState = (oldState + 1) % max;
-                fullMenu.removeClass("group-" + oldState)
-                    .addClass("group-" + newState)
-                    .attr('data-state', newState);
+                return new Promise(function (resolve, reject) {
+                    var btn = $(event.target);
+                    var fullMenu = btn.closest('ul.sc-menu');
+                    var oldState = Number(fullMenu.attr('data-state') || 0);
+                    var max = Number(fullMenu.attr('group-count'));
+                    var newState = (oldState + 1) % max;
+                    fullMenu.removeClass("group-" + oldState)
+                        .addClass("group-" + newState)
+                        .attr('data-state', newState);
+                    resolve();
+                });
             },
         });
         return _this;
@@ -7444,7 +7463,7 @@ var MoveDown = /** @class */ (function (_super) {
             },
             code: function (context) {
                 // TODO: make sure index is never greater than the amount of items
-                actions_1.changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
+                return actions_1.changeOrder(context, context.button.action.params.sortOrder, context.button.action.params.sortOrder + 1);
             },
         });
         return _this;
@@ -7490,7 +7509,7 @@ var MoveUp = /** @class */ (function (_super) {
                     (context.button.action.params.sortOrder !== 0);
             },
             code: function (context) {
-                actions_1.changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
+                return actions_1.changeOrder(context, context.button.action.params.sortOrder, Math.max(context.button.action.params.sortOrder - 1, 0));
             },
         });
         return _this;
@@ -7593,17 +7612,20 @@ var Publish = /** @class */ (function (_super) {
             disabled: function (context) {
                 return !context.instance.allowPublish;
             },
-            code: function (context) {
-                if (context.button.action.params.isPublished) {
-                    return alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
-                }
-                // if we have an entity-id, publish based on that
-                if (context.button.action.params.entityId) {
-                    return actions_1.publishId(context, context.button.action.params.entityId);
-                }
-                var part = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
-                var index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
-                return actions_1.publish(context, part, index);
+            code: function (context, event) {
+                return new Promise(function (resolve, reject) {
+                    if (context.button.action.params.isPublished) {
+                        alert(_2sxc_translate_1.translate('Toolbar.AlreadyPublished'));
+                        return resolve();
+                    }
+                    // if we have an entity-id, publish based on that
+                    if (context.button.action.params.entityId) {
+                        return actions_1.publishId(context, context.button.action.params.entityId);
+                    }
+                    var part = context.button.action.params.sortOrder === -1 ? 'listcontent' : 'content';
+                    var index = context.button.action.params.sortOrder === -1 ? 0 : context.button.action.params.sortOrder;
+                    return actions_1.publish(context, part, index);
+                });
             },
         });
         return _this;
@@ -7651,9 +7673,12 @@ var Remove = /** @class */ (function (_super) {
                     (context.button.action.params.sortOrder !== -1);
             },
             code: function (context) {
-                if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
-                    actions_1.removeFromList(context, context.button.action.params.sortOrder);
-                }
+                return new Promise(function (resolve, reject) {
+                    if (confirm(_2sxc_translate_1.translate('Toolbar.ConfirmRemove'))) {
+                        return actions_1.removeFromList(context, context.button.action.params.sortOrder);
+                    }
+                    return resolve();
+                });
             },
         });
         return _this;

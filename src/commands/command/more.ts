@@ -13,15 +13,19 @@ export class More extends CommandBase {
       false,
       {
         code(context, event) {
-          const btn: any = $(event.target);
-          const fullMenu: any = btn.closest('ul.sc-menu');
-          const oldState = Number(fullMenu.attr('data-state') || 0);
-          const max = Number(fullMenu.attr('group-count'));
-          const newState = (oldState + 1) % max;
+          return new Promise((resolve, reject) => {
+              const btn: any = $(event.target);
+              const fullMenu: any = btn.closest('ul.sc-menu');
+              const oldState = Number(fullMenu.attr('data-state') || 0);
+              const max = Number(fullMenu.attr('group-count'));
+              const newState = (oldState + 1) % max;
 
-          fullMenu.removeClass(`group-${oldState}`)
-            .addClass(`group-${newState}`)
-            .attr('data-state', newState);
+              fullMenu.removeClass(`group-${oldState}`)
+                .addClass(`group-${newState}`)
+              .attr('data-state', newState);
+
+              resolve();
+          });
         },
       });
   }

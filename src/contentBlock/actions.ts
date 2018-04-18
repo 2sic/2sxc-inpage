@@ -19,7 +19,7 @@ import { ContextOfButton } from '../context/context-of-button';
  * @param {ActionParams} params
  * @returns {any}
  */
-function getAndReload(context: ContextOfButton, url: string, params: ActionParams): any {
+function getAndReload(context: ContextOfButton, url: string, params: ActionParams): Promise<any> {
   return context.sxc.webApi.get({
     url: url,
     params: params,
@@ -32,7 +32,7 @@ function getAndReload(context: ContextOfButton, url: string, params: ActionParam
  * @param {number} sortOrder
  * @returns {any}
  */
-export function removeFromList(context: ContextOfButton, sortOrder: number): any {
+export function removeFromList(context: ContextOfButton, sortOrder: number): Promise<any> {
   return getAndReload(context,
     'view/module/removefromlist',
     { sortOrder: sortOrder } as ActionParams);
@@ -45,7 +45,7 @@ export function removeFromList(context: ContextOfButton, sortOrder: number): any
  * @param {number} newOrder
  * @returns {any}
  */
-export function changeOrder(context: ContextOfButton, initOrder: number, newOrder: number): any {
+export function changeOrder(context: ContextOfButton, initOrder: number, newOrder: number): Promise<any> {
   return getAndReload(context,
     'view/module/changeorder',
     { sortOrder: initOrder, destinationSortOrder: newOrder } as ActionParams);
@@ -57,7 +57,7 @@ export function changeOrder(context: ContextOfButton, initOrder: number, newOrde
  * @param {number} sortOrder
  * @returns {any}
  */
-export function addItem(context: ContextOfButton, sortOrder: number): any {
+export function addItem(context: ContextOfButton, sortOrder: number): Promise<any> {
   return getAndReload(context,
     'view/module/additem',
     { sortOrder: sortOrder } as ActionParams);
@@ -70,7 +70,7 @@ export function addItem(context: ContextOfButton, sortOrder: number): any {
  * @param {number} sortOrder
  * @returns {any}
  */
-export function publish(context: ContextOfButton, part: string, sortOrder: number): any {
+export function publish(context: ContextOfButton, part: string, sortOrder: number): Promise<any> {
   return getAndReload(context,
     'view/module/publish',
     { part: part, sortOrder: sortOrder } as ActionParams);
@@ -82,7 +82,7 @@ export function publish(context: ContextOfButton, part: string, sortOrder: numbe
  * @param {number} entityId
  * @returns {any}
  */
-export function publishId(context: ContextOfButton, entityId: number): any {
+export function publishId(context: ContextOfButton, entityId: number): Promise<any> {
   return getAndReload(context,
     'view/module/publish',
     { id: entityId } as ActionParams);
