@@ -691,9 +691,11 @@ var render_1 = __webpack_require__(13);
  * @returns {any}
  */
 function getAndReload(context, url, params) {
-    return context.sxc.webApi.get({
-        url: url,
-        params: params,
+    return new Promise(function (resolve, reject) {
+        context.sxc.webApi.get({
+            url: url,
+            params: params,
+        }).done(resolve).fail(reject);
     }).then(function () { render_1.reloadAndReInitialize(context); });
 }
 /**
@@ -1086,7 +1088,7 @@ exports.ajaxLoad = ajaxLoad;
 function reloadAndReInitialize(context, forceAjax, preview) {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !context.app.supportsAjax) {
-        return window_in_page_1.windowInPage.location.reload();
+        return Promise.resolve(window_in_page_1.windowInPage.location.reload());
     }
     // ReSharper disable once DoubleNegationOfBoolean
     return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
@@ -1104,7 +1106,7 @@ function reloadAndReInitialize(context, forceAjax, preview) {
         // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
         // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
         // must check for side-effects, which would need the manager to re-build the configuration
-        quick_dialog_1.hide();
+        return quick_dialog_1.hide();
     });
 }
 exports.reloadAndReInitialize = reloadAndReInitialize;
@@ -1506,6 +1508,7 @@ function updateTemplateFromDia(context, templateId, forceCreate) {
         if (showingAjaxPreview) {
             render_1.reloadAndReInitialize(context);
         }
+        return;
     });
 }
 exports.updateTemplateFromDia = updateTemplateFromDia;
@@ -1513,13 +1516,7 @@ exports.updateTemplateFromDia = updateTemplateFromDia;
  * Update the template.
  */
 function updateTemplate(context, templateId, forceCreate) {
-    var savePromise = web_api_promises_1.saveTemplate(context, templateId, forceCreate);
-    var promiseWithMessage = savePromise
-        .then(function (data, textStatus, xhr) {
-        // error handling
-        if (xhr.status !== 200) {
-            return alert('error - result not ok, was not able to create ContentGroup');
-        }
+    return web_api_promises_1.saveTemplate(context, templateId, forceCreate).then(function (data) {
         if (!data) {
             return;
         }
@@ -1528,10 +1525,14 @@ function updateTemplate(context, templateId, forceCreate) {
         if (console) {
             console.log("created content group {" + newGuid + "}");
         }
-        context.contentBlock.contentGroupId = newGuid;
+        return context.contentBlock.contentGroupId = newGuid;
         // $2sxc._manage._updateContentGroupGuid(context, newGuid);
+    }).catch(function (xhr) {
+        // error handling
+        if (xhr.status !== 200) {
+            return alert('error - result not ok, was not able to create ContentGroup');
+        }
     });
-    return promiseWithMessage;
 }
 exports.updateTemplate = updateTemplate;
 
@@ -2651,10 +2652,12 @@ function saveTemplate(context, templateId, forceCreateContentGroup) {
         forceCreateContentGroup: forceCreateContentGroup,
         newTemplateChooserState: false,
     };
-    return Promise.resolve(context.sxc.webApi.get({
-        url: 'view/module/savetemplateid',
-        params: params,
-    }));
+    return new Promise(function (resolve, reject) {
+        context.sxc.webApi.get({
+            url: 'view/module/savetemplateid',
+            params: params,
+        }).done(resolve).fail(reject);
+    });
 }
 exports.saveTemplate = saveTemplate;
 /**
@@ -2672,11 +2675,13 @@ function getPreviewWithTemplate(context, templateId) {
         cbid: context.contentBlock.id,
         originalparameters: JSON.stringify(context.instance.parameters),
     };
-    return Promise.resolve(context.sxc.webApi.get({
-        url: 'view/module/rendertemplate',
-        params: params,
-        dataType: 'html',
-    }));
+    return new Promise(function (resolve, reject) {
+        context.sxc.webApi.get({
+            url: 'view/module/rendertemplate',
+            params: params,
+            dataType: 'html',
+        }).done(resolve).fail(reject);
+    });
 }
 exports.getPreviewWithTemplate = getPreviewWithTemplate;
 //#endregion
@@ -3169,13 +3174,10 @@ var Engine = /** @class */ (function (_super) {
         }
         // if more than just a UI-action, then it needs to be sure the content-group is created first
         this.log.add("command might change data, will wrap in pre-flight to ensure content-block");
-        var prepare = new Promise(function (resolve, reject) {
-            templates_1.prepareToAddContent(context, settings.useModuleList)
-                .then(function () {
-                resolve(context.button.code(context, origEvent));
-            });
+        return templates_1.prepareToAddContent(context, settings.useModuleList)
+            .then(function () {
+            return context.button.code(context, origEvent);
         });
-        return prepare;
     };
     /**
      * name or settings adapter to settings
@@ -5013,19 +5015,13 @@ exports.contentItems = {
                 return resolve();
             }
             // convert jQuery ajax promise object to ES6 promise
-            var deletePromise = new Promise(function (resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 context.sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
-                    .success(function () {
-                    resolve();
-                }).error(function (error) {
-                    reject(error);
-                });
-            });
-            return deletePromise
-                .then(function () {
+                    .done(resolve)
+                    .fail(reject);
+            }).then(function () {
                 location.reload();
-            })
-                .catch(function (error) {
+            }).catch(function (error) {
                 var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
                 console.log(error);
                 // check if it's a permission config problem

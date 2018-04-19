@@ -20,10 +20,13 @@ import { ContextOfButton } from '../context/context-of-button';
  * @returns {any}
  */
 function getAndReload(context: ContextOfButton, url: string, params: ActionParams): Promise<any> {
-  return context.sxc.webApi.get({
-    url: url,
-    params: params,
-  }).then(() => { reloadAndReInitialize(context); });
+  return new Promise((resolve, reject) => {
+      context.sxc.webApi.get(
+        {
+          url: url,
+          params: params,
+        }).done(resolve).fail(reject);
+    }).then(() => { reloadAndReInitialize(context); });
 }
 
 /**

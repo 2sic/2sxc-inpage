@@ -44,10 +44,14 @@ export function saveTemplate(context: ContextOfButton, templateId: number, force
     forceCreateContentGroup: forceCreateContentGroup,
     newTemplateChooserState: false,
   };
-  return Promise.resolve(context.sxc.webApi.get({
-    url: 'view/module/savetemplateid',
-    params: params,
-  }));
+  return new Promise(
+    (resolve, reject) => {
+      context.sxc.webApi.get(
+        {
+          url: 'view/module/savetemplateid',
+          params: params,
+        }).done(resolve).fail(reject);
+    });
 }
 
 /**
@@ -65,10 +69,13 @@ export function getPreviewWithTemplate(context: ContextOfButton, templateId: num
     cbid: context.contentBlock.id,
     originalparameters: JSON.stringify(context.instance.parameters),
   };
-  return Promise.resolve(context.sxc.webApi.get({
-    url: 'view/module/rendertemplate',
-    params: params,
-    dataType: 'html',
-  }));
+  return new Promise(
+    (resolve, reject) => {
+      context.sxc.webApi.get({
+        url: 'view/module/rendertemplate',
+        params: params,
+        dataType: 'html',
+      }).done(resolve).fail(reject);
+    });
 }
 //#endregion
