@@ -6,6 +6,7 @@ import { getTag } from '../manage/api';
 import { ContextOfButton } from '../context/context-of-button';
 import { QuickDialogConfig } from '../manage/quick-dialog-config';
 import { NgDialogParams } from '../manage/ng-dialog-params';
+import { Dialog } from '../settings/dialog';
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -215,8 +216,8 @@ function extendIFrameWithSxcState(iFrame: any) {
  */
 function rewriteUrl(url: string): string {
   // change default url-schema from the primary angular-app to the quick-dialog
-  // url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
-  url = url.replace('dist/ng-edit/index?', 'dist/ng/ui.html?');
+  url = url.replace(Dialog.ng1, Dialog.quickDialog)
+    .replace(Dialog.ng5, Dialog.quickDialog);
   // special debug-code when running on local ng-serve
   // this is only activated if the developer manually sets a value in the localStorage
   try {

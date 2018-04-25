@@ -1,5 +1,6 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
 import { windowInPage as window } from '../interfaces/window-in-page';
+import { Dialog } from '../settings/dialog';
 import { Command } from './command';
 
 /**
@@ -9,13 +10,11 @@ import { Command } from './command';
  * @param specialSettings
  */
 export function commandCreate(context: ContextOfButton): Command {
-  //const ngDialogUrl = context.instance.sxcRootUrl +
-  //  'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
-  //  context.instance.sxcVersion;
 
   const ngDialogUrl = context.instance.sxcRootUrl +
-    'desktopmodules/tosic_sexycontent/dist/ng-edit/index.html?sxcver=' +
-    context.instance.sxcVersion;
+    'desktopmodules/tosic_sexycontent/' +
+    ((context.ui.form === 'ng5' && context.button.dialog(context) === 'edit') ? Dialog.ng5 : Dialog.ng1) +
+    '?sxcver=' + context.instance.sxcVersion;
 
   const isDebug: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
 
