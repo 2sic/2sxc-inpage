@@ -215,14 +215,16 @@ function extendIFrameWithSxcState(iFrame: any) {
  */
 function rewriteUrl(url: string): string {
   // change default url-schema from the primary angular-app to the quick-dialog
-  url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
-
+  // url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
+  url = url.replace('dist/ng-edit/index?', 'dist/ng/ui.html?');
   // special debug-code when running on local ng-serve
   // this is only activated if the developer manually sets a value in the localStorage
   try {
     const devMode = localStorage.getItem('devMode');
-    if (devMode && ~~devMode)
+    if (devMode && ~~devMode) {
       url = url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
+    }
+
   } catch (e) {
     // ignore
   }

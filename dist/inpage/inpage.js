@@ -959,13 +959,15 @@ function extendIFrameWithSxcState(iFrame) {
  */
 function rewriteUrl(url) {
     // change default url-schema from the primary angular-app to the quick-dialog
-    url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
+    // url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
+    url = url.replace('dist/ng-edit/index?', 'dist/ng/ui.html?');
     // special debug-code when running on local ng-serve
     // this is only activated if the developer manually sets a value in the localStorage
     try {
         var devMode = localStorage.getItem('devMode');
-        if (devMode && ~~devMode)
+        if (devMode && ~~devMode) {
             url = url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
+        }
     }
     catch (e) {
         // ignore
@@ -4125,8 +4127,11 @@ var command_1 = __webpack_require__(77);
  * @param specialSettings
  */
 function commandCreate(context) {
+    //const ngDialogUrl = context.instance.sxcRootUrl +
+    //  'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
+    //  context.instance.sxcVersion;
     var ngDialogUrl = context.instance.sxcRootUrl +
-        'desktopmodules/tosic_sexycontent/dist/dnn/ui.html?sxcver=' +
+        'desktopmodules/tosic_sexycontent/dist/ng-edit/index.html?sxcver=' +
         context.instance.sxcVersion;
     var isDebug = window_in_page_1.windowInPage.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
     var cmd = new command_1.Command(context, ngDialogUrl, isDebug);
