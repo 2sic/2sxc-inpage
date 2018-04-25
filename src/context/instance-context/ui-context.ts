@@ -7,4 +7,5 @@ export class UiContext {
   // context?: boolean; // if context should be added, to ensure in-instance data editing
   autoToolbar?: boolean; // toolbar auto-show
   // styles?: boolean;
+  form: string; // decide which dialog opens, eg ng5
 }
