@@ -405,6 +405,8 @@ function createContextFromEditContext(editContext) {
     contextOfButton.ui = new ui_context_1.UiContext();
     if (editContext.Ui) {
         contextOfButton.ui.autoToolbar = editContext.Ui.AutoToolbar; // toolbar auto-show
+        if (editContext.Ui.Form)
+            contextOfButton.ui.form = editContext.Ui.Form; // decide which dialog opens, eg ng5
     }
     // *** ContextOfContentBlock ***
     // information related to the current contentBlock

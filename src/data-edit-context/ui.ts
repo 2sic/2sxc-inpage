@@ -1,4 +1,4 @@
 ﻿export class Ui {
   AutoToolbar: boolean; // toolbar auto-show (Ability to disable auto-toolbar generation within 2sxc content-blocks #1518)
-  From: string; // decide which dialog opens
+  Form: string; // decide which dialog opens
 }
