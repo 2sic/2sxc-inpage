@@ -20,13 +20,24 @@ import { ContextOfButton } from '../context/context-of-button';
  * @returns {any}
  */
 function getAndReload(context: ContextOfButton, url: string, params: ActionParams): Promise<any> {
-  return new Promise((resolve, reject) => {
-      context.sxc.webApi.get(
-        {
-          url: url,
-          params: params,
-        }).done(resolve).fail(reject);
-    }).then(() => { reloadAndReInitialize(context); });
+  return new Promise((resolve: any, reject: any) => {
+    context.sxc.webApi.get(
+      {
+        url: url,
+        params: params,
+      }).done((data: any, textStatus: string, jqXHR: any) => {
+        if (jqXHR.status === 204 || jqXHR.status === 200) {
+          // resolve the promise with the response text
+          resolve(data);
+        } else {
+          // otherwise reject with the status text
+          // which will hopefully be a meaningful error
+          reject(Error(textStatus));
+        }
+      }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+        reject(Error(errorThrown));
+      });;
+  }).then(() => { reloadAndReInitialize(context); });
 }
 
 /**

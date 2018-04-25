@@ -695,7 +695,20 @@ function getAndReload(context, url, params) {
         context.sxc.webApi.get({
             url: url,
             params: params,
-        }).done(resolve).fail(reject);
+        }).done(function (data, textStatus, jqXHR) {
+            if (jqXHR.status === 204 || jqXHR.status === 200) {
+                // resolve the promise with the response text
+                resolve(data);
+            }
+            else {
+                // otherwise reject with the status text
+                // which will hopefully be a meaningful error
+                reject(Error(textStatus));
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            reject(Error(errorThrown));
+        });
+        ;
     }).then(function () { render_1.reloadAndReInitialize(context); });
 }
 /**
@@ -1473,7 +1486,7 @@ var web_api_promises_1 = __webpack_require__(36);
 function prepareToAddContent(context, useModuleList) {
     var isCreated = context.contentBlock.isCreated;
     if (isCreated || !useModuleList)
-        return $.when(null);
+        return Promise.resolve(); //$.when(null);
     // return persistTemplate(sxc, null);
     // let manage = sxc.manage;
     // let contentGroup = manage._editContext.ContentGroup;
@@ -1506,7 +1519,7 @@ function updateTemplateFromDia(context, templateId, forceCreate) {
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
         if (showingAjaxPreview) {
-            render_1.reloadAndReInitialize(context);
+            return render_1.reloadAndReInitialize(context);
         }
         return;
     });
@@ -1527,11 +1540,9 @@ function updateTemplate(context, templateId, forceCreate) {
         }
         return context.contentBlock.contentGroupId = newGuid;
         // $2sxc._manage._updateContentGroupGuid(context, newGuid);
-    }).catch(function (xhr) {
+    }).catch(function () {
         // error handling
-        if (xhr.status !== 200) {
-            return alert('error - result not ok, was not able to create ContentGroup');
-        }
+        return alert('error - result not ok, was not able to create ContentGroup');
     });
 }
 exports.updateTemplate = updateTemplate;
@@ -2656,7 +2667,19 @@ function saveTemplate(context, templateId, forceCreateContentGroup) {
         context.sxc.webApi.get({
             url: 'view/module/savetemplateid',
             params: params,
-        }).done(resolve).fail(reject);
+        }).done(function (data, textStatus, jqXHR) {
+            if (jqXHR.status === 204 || jqXHR.status === 200) {
+                // resolve the promise with the response text
+                resolve(data);
+            }
+            else {
+                // otherwise reject with the status text
+                // which will hopefully be a meaningful error
+                reject(Error(textStatus));
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            reject(Error(errorThrown));
+        });
     });
 }
 exports.saveTemplate = saveTemplate;
@@ -2680,7 +2703,19 @@ function getPreviewWithTemplate(context, templateId) {
             url: 'view/module/rendertemplate',
             params: params,
             dataType: 'html',
-        }).done(resolve).fail(reject);
+        }).done(function (data, textStatus, jqXHR) {
+            if (jqXHR.status === 204 || jqXHR.status === 200) {
+                // resolve the promise with the response text
+                resolve(data);
+            }
+            else {
+                // otherwise reject with the status text
+                // which will hopefully be a meaningful error
+                reject(Error(textStatus));
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            reject(Error(errorThrown));
+        });
     });
 }
 exports.getPreviewWithTemplate = getPreviewWithTemplate;
@@ -5006,30 +5041,39 @@ var _2sxc_translate_1 = __webpack_require__(9);
 exports.contentItems = {
     // delete command - try to really delete a content-item
     delete: function (context, itemId, itemGuid, itemTitle) {
+        // first show main warning / get ok
+        var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
+            .replace('{id}', String(itemId))
+            .replace('{title}', itemTitle));
+        if (!ok) {
+            return Promise.resolve();
+        }
+        // convert jQuery ajax promise object to ES6 promise
         return new Promise(function (resolve, reject) {
-            // first show main warning / get ok
-            var ok = confirm(_2sxc_translate_1.translate('Delete.Confirm')
-                .replace('{id}', itemId.toString())
-                .replace('{title}', itemTitle));
-            if (!ok) {
-                return resolve();
-            }
-            // convert jQuery ajax promise object to ES6 promise
-            return new Promise(function (resolve, reject) {
-                context.sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
-                    .done(resolve)
-                    .fail(reject);
-            }).then(function () {
-                location.reload();
-            }).catch(function (error) {
-                var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
-                console.log(error);
-                // check if it's a permission config problem
-                if (error.status === 401)
-                    alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
-                if (error.status === 400)
-                    alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
+            context.sxc.webApi.delete("app-content/any/" + itemGuid, null, null, true)
+                .done(function (data, textStatus, jqXHR) {
+                if (jqXHR.status === 204 || jqXHR.status === 200) {
+                    // resolve the promise with the response text
+                    resolve(data);
+                }
+                else {
+                    // check if it's a permission config problem
+                    var msgJs = _2sxc_translate_1.translate('Delete.ErrCheckConsole');
+                    if (jqXHR.status === 401)
+                        alert(_2sxc_translate_1.translate('Delete.ErrPermission') + msgJs);
+                    if (jqXHR.status === 400)
+                        alert(_2sxc_translate_1.translate('Delete.ErrInUse') + msgJs);
+                    // otherwise reject with the status text
+                    // which will hopefully be a meaningful error
+                    reject(Error(textStatus));
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                reject(Error(errorThrown));
             });
+        }).then(function (result) {
+            location.reload();
+        }).catch(function (error) {
+            console.log(error);
         });
     },
 };

@@ -45,12 +45,23 @@ export function saveTemplate(context: ContextOfButton, templateId: number, force
     newTemplateChooserState: false,
   };
   return new Promise(
-    (resolve, reject) => {
+    (resolve: any, reject: any) => {
       context.sxc.webApi.get(
         {
           url: 'view/module/savetemplateid',
           params: params,
-        }).done(resolve).fail(reject);
+        }).done((data: any, textStatus: string, jqXHR: any) => {
+          if (jqXHR.status === 204 || jqXHR.status === 200) {
+            // resolve the promise with the response text
+            resolve(data);
+          } else {
+            // otherwise reject with the status text
+            // which will hopefully be a meaningful error
+            reject(Error(textStatus));
+          }
+        }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+          reject(Error(errorThrown));
+        });
     });
 }
 
@@ -70,12 +81,23 @@ export function getPreviewWithTemplate(context: ContextOfButton, templateId: num
     originalparameters: JSON.stringify(context.instance.parameters),
   };
   return new Promise(
-    (resolve, reject) => {
+    (resolve: any, reject: any) => {
       context.sxc.webApi.get({
         url: 'view/module/rendertemplate',
         params: params,
         dataType: 'html',
-      }).done(resolve).fail(reject);
+      }).done((data: any, textStatus: string, jqXHR: any) => {
+        if (jqXHR.status === 204 || jqXHR.status === 200) {
+          // resolve the promise with the response text
+          resolve(data);
+        } else {
+          // otherwise reject with the status text
+          // which will hopefully be a meaningful error
+          reject(Error(textStatus));
+        }
+      }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+        reject(Error(errorThrown));
+      });
     });
 }
 //#endregion

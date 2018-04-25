@@ -13,7 +13,7 @@ import { saveTemplate } from './web-api-promises';
 
 export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean): Promise<any> {
   const isCreated: boolean = context.contentBlock.isCreated;
-  if (isCreated || !useModuleList) return $.when(null);
+  if (isCreated || !useModuleList) return Promise.resolve(); //$.when(null);
   // return persistTemplate(sxc, null);
   // let manage = sxc.manage;
   // let contentGroup = manage._editContext.ContentGroup;
@@ -53,7 +53,7 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
       // only reload on ajax, not on app as that was already re-loaded on the preview
       // necessary to show the original template again
       if (showingAjaxPreview) {
-        reloadAndReInitialize(context);
+        return reloadAndReInitialize(context);
       }
 
       return;
@@ -79,10 +79,8 @@ export function updateTemplate(context: ContextOfButton, templateId: number, for
 
     return context.contentBlock.contentGroupId = newGuid;
     // $2sxc._manage._updateContentGroupGuid(context, newGuid);
-  }).catch((xhr) => {
+  }).catch(() => {
     // error handling
-    if (xhr.status !== 200) {
-      return alert('error - result not ok, was not able to create ContentGroup');
-    }
+    return alert('error - result not ok, was not able to create ContentGroup');
   });
 }
