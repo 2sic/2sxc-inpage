@@ -22,9 +22,12 @@ export class Remove extends CommandBase {
             (context.button.action.params.sortOrder !== -1);
         },
         code(context) {
-          if (confirm(translate('Toolbar.ConfirmRemove'))) {
-            removeFromList(context, context.button.action.params.sortOrder);
-          }
+          return new Promise((resolve, reject) => {
+            if (confirm(translate('Toolbar.ConfirmRemove'))) {
+              return removeFromList(context, context.button.action.params.sortOrder);
+            }
+            return resolve();
+          });
         },
       });
   }

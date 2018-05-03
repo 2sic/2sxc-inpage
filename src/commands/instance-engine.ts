@@ -9,7 +9,7 @@ export class InstanceEngine {
 
   constructor(private sxc: SxcInstanceWithInternals) {  }
 
-  run(nameOrSettings: string | Partial<Settings>, eventOrSettings?: Partial<Settings> | Event, event?: Event) {
+  run(nameOrSettings: string | Partial<Settings>, eventOrSettings?: Partial<Settings> | Event, event?: Event): Promise<any> {
     const cntx = context(this.sxc);
     return new Cms().run(cntx, nameOrSettings, eventOrSettings, event);
   }

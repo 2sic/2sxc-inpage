@@ -12,6 +12,7 @@ import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
  * @param sxc
  * @param editContext
  */
+
 export function commandOpenNgDialog(context: ContextOfButton, event: any) : Promise<any> {
 
   // testing this - ideally it should now work as a promise...
@@ -47,13 +48,14 @@ export function commandOpenNgDialog(context: ContextOfButton, event: any) : Prom
 
       if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
         /*return*/
-        window.open(link);
         resolve(context);
+        window.open(link);
         //return;
-      }
-      else
+      } else {
       /*return*/
-      $2sxc.totalPopup.open(link, callback);
+        $2sxc.totalPopup.open(link, callback);
+      }
+
     }
   });
 }

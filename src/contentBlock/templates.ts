@@ -11,9 +11,9 @@ import { saveTemplate } from './web-api-promises';
  * @returns {any}
  */
 
-export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean) /*: Promise<any>*/ {
+export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean): Promise<any> {
   const isCreated: boolean = context.contentBlock.isCreated;
-  if (isCreated || !useModuleList) return $.when(null);
+  if (isCreated || !useModuleList) return Promise.resolve(); //$.when(null);
   // return persistTemplate(sxc, null);
   // let manage = sxc.manage;
   // let contentGroup = manage._editContext.ContentGroup;
@@ -35,14 +35,14 @@ export function prepareToAddContent(context: ContextOfButton, useModuleList: boo
  * @param {number} templateId
  * @param {boolean} forceCreate
  */
-export function updateTemplateFromDia(context: ContextOfButton, templateId: number, forceCreate: boolean) {
+export function updateTemplateFromDia(context: ContextOfButton, templateId: number, forceCreate: boolean): Promise<any> {
   const showingAjaxPreview = isDisabled(context.sxc);
 
   // todo: should move things like remembering undo etc. back into the contentBlock state manager
   // or just reset it, so it picks up the right values again ?
   return updateTemplate(context, templateId, forceCreate)
     .then(() => {
-      
+
       hide();
 
       // if it didn't have content, then it only has now...
@@ -55,37 +55,32 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
       if (showingAjaxPreview) {
         reloadAndReInitialize(context);
       }
+
+      return;
     });
 }
 
 /**
  * Update the template.
  */
-export function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean)  /*: Promise<any>*/ {
+export function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean): Promise<any> {
 
-  const savePromise = saveTemplate(context, templateId, forceCreate);
+  return saveTemplate(context, templateId, forceCreate).then((data) => {
+    if (!data) {
+      return;
+    }
 
-  const promiseWithMessage = (savePromise as any)
-    .then(function (data: any, textStatus: any, xhr: any) {
-      // error handling
-      if (xhr.status !== 200) {
-        return alert('error - result not ok, was not able to create ContentGroup');
-      }
+    // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
+    const newGuid: string = data.replace(/[\",\']/g, '');
 
-      if (!data) {
-        return;
-      }
+    if (console) {
+      console.log(`created content group {${newGuid}}`);
+    }
 
-      // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
-      const newGuid: string = data.replace(/[\",\']/g, '');
-
-      if (console) {
-        console.log(`created content group {${newGuid}}`);
-      }
-
-      context.contentBlock.contentGroupId = newGuid;
-      // $2sxc._manage._updateContentGroupGuid(context, newGuid);
-    });
-
-  return promiseWithMessage;
+    return context.contentBlock.contentGroupId = newGuid;
+    // $2sxc._manage._updateContentGroupGuid(context, newGuid);
+  }).catch(() => {
+    // error handling
+    return alert('error - result not ok, was not able to create ContentGroup');
+  });
 }

@@ -134,7 +134,7 @@ describe('Commands test suite', function () {
           return (context.contentBlock.isList) && (context.button.action.params.useModuleList) && (context.button.action.params.sortOrder !== -1);
         },
         code(context) {
-          addItem(context, context.button.action.params.sortOrder + 1);
+          return addItem(context, context.button.action.params.sortOrder + 1);
         },
       } as Definition;
 

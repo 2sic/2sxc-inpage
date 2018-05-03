@@ -58,10 +58,15 @@ export function showMessage(context: ContextOfButton, newContent: any): void {
  * @param {number} alternateTemplateId
  * @param {boolean} justPreview
  */
-export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, justPreview: boolean): any {
+export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, justPreview: boolean): Promise<any> {
   return getPreviewWithTemplate(context, alternateTemplateId)
-    .then((result: any) => replaceCb(context, result, justPreview))
-    .then(reset); // reset quick-edit, because the config could have changed
+    .then((result: any) => {
+      replaceCb(context, result, justPreview);
+    })
+    .then(() => {
+      reset();
+    }
+  ); // reset quick-edit, because the config could have changed
 }
 
 /**
@@ -70,24 +75,24 @@ export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, 
  * @param {boolean} forceAjax
  * @param {boolean} preview
  */
-export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): any {
+export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): void {
   // if ajax is not supported, we must reload the whole page
   if (!forceAjax && !context.app.supportsAjax) {
-    return window.location.reload();
+    window.location.reload();
   }
 
   // ReSharper disable once DoubleNegationOfBoolean
-  return ajaxLoad(context, MainContentBlock.cUseExistingTemplate, !!preview)
-    .then(() => {
+  ajaxLoad(context, MainContentBlock.cUseExistingTemplate, !!preview)
+    .then((rez) => {
 
       // tell Evoq that page has changed if it has changed (Ajax call)
-      if (window.dnn_tabVersioningEnabled) // this only exists in evoq or on new DNNs with tabVersioning
+      if (window.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
         try {
           window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
         } catch (e) {
           // sink
         }
-
+      }
       // maybe check if already publish
       // compare to HTML module
       // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
@@ -95,5 +100,8 @@ export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: bool
       // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
       // must check for side-effects, which would need the manager to re-build the configuration
       hide();
+      return rez;
+    }).catch((error) => {
+      console.log('Error in reloadAndReInitialize', error);
     });
 }

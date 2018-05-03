@@ -96,15 +96,10 @@ export class Engine extends HasLog {
 
     // if more than just a UI-action, then it needs to be sure the content-group is created first
     this.log.add(`command might change data, will wrap in pre-flight to ensure content-block`);
-    const prepare = new Promise<any>((resolve, reject) => {
-      prepareToAddContent(context, settings.useModuleList)
+    return prepareToAddContent(context, settings.useModuleList)
         .then(() => {
-          resolve(context.button.code(context, origEvent));
+          return context.button.code(context, origEvent);
       });
-    });
-
-    return prepare;
-
   }
 
   /**
