@@ -1564,13 +1564,8 @@ function renderToolbar(context) {
         toolbar.classList.add('listContent');
     }
     render_helpers_1.addClasses(toolbar, context.toolbar.settings.classes, ' ');
-    //toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; console.log("stv: ul-menu click", e.screenX, e.screenY, e.target); e.preventDefault();'); // serialize JavaScript because of ajax
-    //// e.target.style.opacity = "1";
-    //toolbar.setAttribute('onmouseenter', 'var e = arguments[0] || window.event; console.log("stv: mouseenter", e.screenX, e.screenY, e.target); e.target.style.opacity = "1"'); // serialize JavaScript because of ajax
-    //toolbar.setAttribute('onmousover', 'var e = arguments[0] || window.event; console.log("stv: mouseover", e.screenX, e.screenY, e.target);'); // serialize JavaScript because of ajax
-    //toolbar.setAttribute('onmouseleave', 'var e = arguments[0] || window.event; console.log("stv: mouseleave", e.screenX, e.screenY, e.target); if (e.screenX!=0 && e.screenY!=0) e.target.style.opacity = "0";'); // serialize JavaScript because of ajax
-    //toolbar.setAttribute('onmouseout', 'var e = arguments[0] || window.event; console.log("stv: mouseout", e.screenX, e.screenY, e.target);'); // serialize JavaScript because of ajax
-    //toolbar.setAttribute('onresize', 'var e = arguments[0] || window.event; console.log("stv: resize", e.screenX, e.screenY, e.target);'); // serialize JavaScript because of ajax
+    // stv: commented because I do not see that we need click event
+    // toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; e.preventDefault();'); // serialize JavaScript because of ajax
     // add button groups to toolbar
     toolbar.setAttribute('group-count', context.toolbar.groups.length.toString());
     for (var g = 0; g < groups.length; g++) {
@@ -6039,19 +6034,7 @@ var More = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.makeDef('more', 'MoreActions', 'options btn-mode', true, false, {
             code: function (context, event) {
-                // jQuery varsion
-                //const btn: any = $(event.target);
-                //const fullMenu: any = btn.closest('ul.sc-menu');
-                //const oldState = Number(fullMenu.attr('data-state') || 0);
-                //const max = Number(fullMenu.attr('group-count'));
-                //const newState = (oldState + 1) % max;
-                //fullMenu.removeClass(`group-${oldState}`)
-                //  .addClass(`group-${newState}`)
-                //  .attr('data-state', newState);
-                // JavaScript native version
                 var btn2 = event.target;
-                if (!btn2.closest)
-                    return;
                 var fullMenu2 = btn2.closest('ul.sc-menu');
                 var oldState2 = Number(fullMenu2.getAttribute('data-state') || 0);
                 var max2 = Number(fullMenu2.getAttribute('group-count'));
@@ -6059,60 +6042,30 @@ var More = /** @class */ (function (_super) {
                 fullMenu2.classList.remove("group-" + oldState2);
                 fullMenu2.classList.add("group-" + newState2);
                 fullMenu2.setAttribute('data-state', String(newState2));
-                //(fullMenu2 as HTMLElement).style.opacity = '1';
-                //(fullMenu2 as HTMLElement).style.backgroundColor = 'red';
-                //console.log('stv: more click ', event.target);
                 event.preventDefault();
+                // because of issue in Chrome we need to override CSS rules in edit.css for toolbar toggle on mouse hover
                 var scElement = fullMenu2.closest('.sc-element');
                 function mouseenterHandler(e) {
-                    // remove this handler
-                    //scElement.removeEventListener('mouseenter', mouseenterHandler);
-                    //console.log('stv: scElement mouseenter removed');
                     fullMenu2.style.opacity = '1';
-                    // console.log('stv: scElement mouseenter ', e.target);
                 }
                 function mouseleaveHandler(e) {
-                    //console.log("stv: scElement mouseleave", e.screenX, e.screenY, e.target); 
                     if (e.screenX != 0 && e.screenY != 0) {
-                        // remove this handler
-                        //scElement.removeEventListener('mouseleave', mouseleaveHandler);
-                        //console.log('stv: scElement mouseleave removed');
+                        // hidde toolbar on mouseleave
                         fullMenu2.style.opacity = '0';
-                        // console.log('stv: menu hidden');
                     }
                     else {
+                        // this is fix for Chrome issue
+                        // ensure to show toolbar because X=0 and Y=0
                         fullMenu2.style.opacity = '1';
-                        console.log('stv: workaround toolbar hide onmouseleave', e.screenX, e.screenY, e.target);
+                        console.log('workaround for toolbar hide onmouseleave issue', e.screenX, e.screenY, e.target);
                     }
                 }
+                // add mouseenter and mouseleave events to parent sc-element if not already added
                 if (fullMenu2.getAttribute('listener') !== 'true') {
-                    fullMenu2.setAttribute('listener', 'true');
                     scElement.addEventListener('mouseenter', mouseenterHandler);
-                    // console.log('stv: scElement mouseenter added');
                     scElement.addEventListener('mouseleave', mouseleaveHandler);
-                    // console.log('stv: scElement mouseleave added');
+                    fullMenu2.setAttribute('listener', 'true'); // flag that events are added
                 }
-                //fullMenu2.classList.remove('sc-tb-show-hover');
-                //fullMenu2.classList.add('sc-tb-show-hover');
-                //.removeClass('sc-tb-show-hover')
-                //.addClass('sc-tb-show-hover');
-                //let offset = btn.offset();
-                //let eventMouseDown = $.Event("mousedown", {
-                //  which: 1,
-                //  pageX: offset.left,
-                //  pageY: offset.top
-                //});
-                //btn.trigger(eventMouseDown);
-                //debugger;
-                //return new Promise(function(resolve, reject) {
-                //  fullMenu.removeClass(`group-${oldState}`)
-                //    .addClass(`group-${newState}`)
-                //    .attr('data-state', newState);
-                //}).then(function (rez) {
-                //  return fullMenu.children().children(`group-${oldState}`).css('z-index', 1499).css('display', 'none');
-                //}).then(function(rez) {
-                //  return fullMenu.children().children(`group-${newState}`).css('z-index', 1500).css('display', 'inline-block');
-                //});
             },
         });
         return _this;
@@ -7297,7 +7250,7 @@ $(function () {
         $(document.body).toggleClass('sc-tb-show-all');
     }
     // start shake-event monitoring, which will then generate a window-event
-    //(new Shake({ callback: toggleAllToolbars })).start();
+    (new Shake({ callback: toggleAllToolbars })).start();
 });
 
 
