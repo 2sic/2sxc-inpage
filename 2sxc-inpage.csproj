@@ -53,10 +53,12 @@
     <None Remove="src\lib-helpers\jquery.ts" />
     <None Remove="src\logging\log-utils.ts" />
     <None Remove="src\manage\local-storage-helper.ts" />
+    <None Remove="src\polyfills\Element.closest.ts" />
     <None Remove="src\polyfills\include-polyfills.ts" />
     <None Remove="src\quick-edit\cb-or-mod.ts" />
     <None Remove="src\quick-edit\selectors-instance.ts" />
     <None Remove="src\quick-edit\selectors.ts" />
+    <None Remove="src\settings\dialog.ts" />
     <None Remove="src\toolbar\adapters\button-config-adapter.ts" />
     <None Remove="src\toolbar\adapters\old-parameters-adapter.ts" />
     <None Remove="src\toolbar\adapters\parameters-adapter.ts" />
@@ -123,10 +125,12 @@
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
     <TypeScriptCompile Include="src\logging\log-utils.ts" />
     <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
+    <TypeScriptCompile Include="src\polyfills\Element.closest.ts" />
     <TypeScriptCompile Include="src\polyfills\include-polyfills.ts" />
     <TypeScriptCompile Include="src\quick-edit\cb-or-mod.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors-instance.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors.ts" />
+    <TypeScriptCompile Include="src\settings\dialog.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\button-config-adapter.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\old-parameters-adapter.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\parameters-adapter.ts" />

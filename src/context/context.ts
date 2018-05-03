@@ -139,6 +139,7 @@ export function createContextFromEditContext(editContext: DataEditContext) {
   contextOfButton.ui = new UiContext();
   if (editContext.Ui) {
     contextOfButton.ui.autoToolbar = editContext.Ui.AutoToolbar; // toolbar auto-show
+    if (editContext.Ui.Form) contextOfButton.ui.form = editContext.Ui.Form; // decide which dialog opens, eg ng5
   }
 
   // *** ContextOfContentBlock ***
