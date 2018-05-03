@@ -28,6 +28,9 @@ export class More extends CommandBase {
 
           // JavaScript native version
           const btn2: Element = event.target;
+
+          if (!btn2.closest) return;
+
           const fullMenu2: Element = btn2.closest('ul.sc-menu');
           const oldState2 = Number(fullMenu2.getAttribute('data-state') || 0);
           const max2 = Number(fullMenu2.getAttribute('group-count'));
@@ -37,8 +40,8 @@ export class More extends CommandBase {
           fullMenu2.classList.add(`group-${newState2}`);
           fullMenu2.setAttribute('data-state', String(newState2));
           //(fullMenu2 as HTMLElement).style.opacity = '1';
-          (fullMenu2 as HTMLElement).style.backgroundColor = 'red';
-          console.log('stv: more click ', event.target);
+          //(fullMenu2 as HTMLElement).style.backgroundColor = 'red';
+          //console.log('stv: more click ', event.target);
 
           event.preventDefault();
 
@@ -49,17 +52,20 @@ export class More extends CommandBase {
             //scElement.removeEventListener('mouseenter', mouseenterHandler);
             //console.log('stv: scElement mouseenter removed');
             (fullMenu2 as HTMLElement).style.opacity = '1';
-            console.log('stv: scElement mouseenter ', e.target);
+            // console.log('stv: scElement mouseenter ', e.target);
           }
 
           function mouseleaveHandler(e: MouseEvent) {
-            console.log("stv: scElement mouseleave", e.screenX, e.screenY, e.target); 
+            //console.log("stv: scElement mouseleave", e.screenX, e.screenY, e.target); 
             if (e.screenX != 0 && e.screenY != 0) {
               // remove this handler
               //scElement.removeEventListener('mouseleave', mouseleaveHandler);
               //console.log('stv: scElement mouseleave removed');
               (fullMenu2 as HTMLElement).style.opacity = '0';
-              console.log('stv: menu hidden');
+              // console.log('stv: menu hidden');
+            } else {
+              (fullMenu2 as HTMLElement).style.opacity = '1';
+              console.log('stv: workaround toolbar hide onmouseleave', e.screenX, e.screenY, e.target); 
             }
            
           }
@@ -67,9 +73,9 @@ export class More extends CommandBase {
           if (fullMenu2.getAttribute('listener') !== 'true') {
             fullMenu2.setAttribute('listener', 'true');
             scElement.addEventListener('mouseenter', mouseenterHandler);
-            console.log('stv: scElement mouseenter added');
+            // console.log('stv: scElement mouseenter added');
             scElement.addEventListener('mouseleave', mouseleaveHandler);
-            console.log('stv: scElement mouseleave added');
+            // console.log('stv: scElement mouseleave added');
           }
 
 
