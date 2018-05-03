@@ -60,8 +60,15 @@ export function showMessage(context: ContextOfButton, newContent: any): void {
  */
 export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, justPreview: boolean): Promise<any> {
   return getPreviewWithTemplate(context, alternateTemplateId)
-    .then((result: any) => replaceCb(context, result, justPreview))
-    .then(reset); // reset quick-edit, because the config could have changed
+    .then((result: any) => {
+      debugger;
+      return replaceCb(context, result, justPreview);
+    })
+    .then(() => {
+      debugger;
+      return reset();
+    }
+  ); // reset quick-edit, because the config could have changed
 }
 
 /**
