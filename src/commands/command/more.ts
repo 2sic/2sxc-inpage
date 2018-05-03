@@ -42,27 +42,37 @@ export class More extends CommandBase {
 
           event.preventDefault();
 
-          //function mouseenterHandler(e: Event) {
-          //  // remove this handler
-          //  // fullMenu2.removeEventListener('mouseenter', mouseenterHandler);
-          //  // console.log('stv: mouseenter removed');
-          //  (fullMenu2 as HTMLElement).style.opacity = '1';
-          //  console.log('stv: mouseenter ', e.target);
-          //}
+          const scElement: Element = fullMenu2.closest('.sc-element');
 
-          //fullMenu2.addEventListener('mouseenter', mouseenterHandler);
-          //console.log('stv: mouseenter added');
+          function mouseenterHandler(e: MouseEvent) {
+            // remove this handler
+            //scElement.removeEventListener('mouseenter', mouseenterHandler);
+            //console.log('stv: scElement mouseenter removed');
+            (fullMenu2 as HTMLElement).style.opacity = '1';
+            console.log('stv: scElement mouseenter ', e.target);
+          }
 
-          //function mouseleaveHandler(e: Event) {
-          //  // remove this handler
-          //  // fullMenu2.removeEventListener('mouseleave', mouseleaveHandler);
-          //  // console.log('stv: mouseleave removed');
-          //  (fullMenu2 as HTMLElement).style.opacity = '0';
-          //  console.log('stv: mouseleave', e.target);
-          //}
+          function mouseleaveHandler(e: MouseEvent) {
+            console.log("stv: scElement mouseleave", e.screenX, e.screenY, e.target); 
+            if (e.screenX != 0 && e.screenY != 0) {
+              // remove this handler
+              //scElement.removeEventListener('mouseleave', mouseleaveHandler);
+              //console.log('stv: scElement mouseleave removed');
+              (fullMenu2 as HTMLElement).style.opacity = '0';
+              console.log('stv: menu hidden');
+            }
+           
+          }
 
-          //fullMenu2.addEventListener('mouseleave', mouseleaveHandler);
-          //console.log('stv: mouseleave added');
+          if (fullMenu2.getAttribute('listener') !== 'true') {
+            fullMenu2.setAttribute('listener', 'true');
+            scElement.addEventListener('mouseenter', mouseenterHandler);
+            console.log('stv: scElement mouseenter added');
+            scElement.addEventListener('mouseleave', mouseleaveHandler);
+            console.log('stv: scElement mouseleave added');
+          }
+
+
 
           //fullMenu2.classList.remove('sc-tb-show-hover');
           //fullMenu2.classList.add('sc-tb-show-hover');

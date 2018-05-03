@@ -6038,24 +6038,31 @@ var More = /** @class */ (function (_super) {
                 fullMenu2.style.backgroundColor = 'red';
                 console.log('stv: more click ', event.target);
                 event.preventDefault();
-                //function mouseenterHandler(e: Event) {
-                //  // remove this handler
-                //  // fullMenu2.removeEventListener('mouseenter', mouseenterHandler);
-                //  // console.log('stv: mouseenter removed');
-                //  (fullMenu2 as HTMLElement).style.opacity = '1';
-                //  console.log('stv: mouseenter ', e.target);
-                //}
-                //fullMenu2.addEventListener('mouseenter', mouseenterHandler);
-                //console.log('stv: mouseenter added');
-                //function mouseleaveHandler(e: Event) {
-                //  // remove this handler
-                //  // fullMenu2.removeEventListener('mouseleave', mouseleaveHandler);
-                //  // console.log('stv: mouseleave removed');
-                //  (fullMenu2 as HTMLElement).style.opacity = '0';
-                //  console.log('stv: mouseleave', e.target);
-                //}
-                //fullMenu2.addEventListener('mouseleave', mouseleaveHandler);
-                //console.log('stv: mouseleave added');
+                var scElement = fullMenu2.closest('.sc-element');
+                function mouseenterHandler(e) {
+                    // remove this handler
+                    //scElement.removeEventListener('mouseenter', mouseenterHandler);
+                    //console.log('stv: scElement mouseenter removed');
+                    fullMenu2.style.opacity = '1';
+                    console.log('stv: scElement mouseenter ', e.target);
+                }
+                function mouseleaveHandler(e) {
+                    console.log("stv: scElement mouseleave", e.screenX, e.screenY, e.target);
+                    if (e.screenX != 0 && e.screenY != 0) {
+                        // remove this handler
+                        //scElement.removeEventListener('mouseleave', mouseleaveHandler);
+                        //console.log('stv: scElement mouseleave removed');
+                        fullMenu2.style.opacity = '0';
+                        console.log('stv: menu hidden');
+                    }
+                }
+                if (fullMenu2.getAttribute('listener') !== 'true') {
+                    fullMenu2.setAttribute('listener', 'true');
+                    scElement.addEventListener('mouseenter', mouseenterHandler);
+                    console.log('stv: scElement mouseenter added');
+                    scElement.addEventListener('mouseleave', mouseleaveHandler);
+                    console.log('stv: scElement mouseleave added');
+                }
                 //fullMenu2.classList.remove('sc-tb-show-hover');
                 //fullMenu2.classList.add('sc-tb-show-hover');
                 //.removeClass('sc-tb-show-hover')
