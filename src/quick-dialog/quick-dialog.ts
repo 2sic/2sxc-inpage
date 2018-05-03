@@ -179,7 +179,9 @@ function extendIFrameWithSxcState(iFrame: any) {
         tagModule = $($(getTag(sxc)).parent().eq(0));
         newFrm.sxcCacheKey = sxc.cacheKey;
         newFrm.closeCallback = callback;
-        if (dialogName) newFrm.dialogName = dialogName;
+        if (dialogName) {
+          newFrm.dialogName = dialogName;
+        }
       },
       getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),// ._dialogParameters,
       getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),// ._quickDialogConfig,
@@ -194,7 +196,6 @@ function extendIFrameWithSxcState(iFrame: any) {
         newFrm.toggle(false);
         // todo: only re-init if something was changed?
         // return cbApi.reloadAndReInitialize(reSxc());
-
         // cancel the dialog
         localStorage.setItem('cancelled-dialog', 'true');
         return newFrm.closeCallback();

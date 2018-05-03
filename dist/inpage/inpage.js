@@ -941,8 +941,9 @@ function extendIFrameWithSxcState(iFrame) {
             tagModule = $($(api_1.getTag(sxc)).parent().eq(0));
             newFrm.sxcCacheKey = sxc.cacheKey;
             newFrm.closeCallback = callback;
-            if (dialogName)
+            if (dialogName) {
                 newFrm.dialogName = dialogName;
+            }
         },
         getManageInfo: function () { return ng_dialog_params_1.NgDialogParams.fromContext(reSxc().manage.context); },
         getAdditionalDashboardConfig: function () { return quick_dialog_config_1.QuickDialogConfig.fromContext(reSxc().manage.context); },
@@ -1094,12 +1095,10 @@ exports.showMessage = showMessage;
 function ajaxLoad(context, alternateTemplateId, justPreview) {
     return web_api_promises_1.getPreviewWithTemplate(context, alternateTemplateId)
         .then(function (result) {
-        debugger;
-        return replaceCb(context, result, justPreview);
+        replaceCb(context, result, justPreview);
     })
         .then(function () {
-        debugger;
-        return start_1.reset();
+        start_1.reset();
     }); // reset quick-edit, because the config could have changed
 }
 exports.ajaxLoad = ajaxLoad;
@@ -1112,25 +1111,29 @@ exports.ajaxLoad = ajaxLoad;
 function reloadAndReInitialize(context, forceAjax, preview) {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !context.app.supportsAjax) {
-        return Promise.resolve(window_in_page_1.windowInPage.location.reload());
+        window_in_page_1.windowInPage.location.reload();
     }
     // ReSharper disable once DoubleNegationOfBoolean
-    return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
-        .then(function () {
+    ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
+        .then(function (rez) {
         // tell Evoq that page has changed if it has changed (Ajax call)
-        if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled)
+        if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled) {
             try {
                 window_in_page_1.windowInPage.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
             }
             catch (e) {
                 // sink
             }
+        }
         // maybe check if already publish
         // compare to HTML module
         // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
         // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
         // must check for side-effects, which would need the manager to re-build the configuration
-        return quick_dialog_1.hide();
+        quick_dialog_1.hide();
+        return rez;
+    }).catch(function (error) {
+        console.log('Error in reloadAndReInitialize', error);
     });
 }
 exports.reloadAndReInitialize = reloadAndReInitialize;
@@ -1530,7 +1533,7 @@ function updateTemplateFromDia(context, templateId, forceCreate) {
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
         if (showingAjaxPreview) {
-            return render_1.reloadAndReInitialize(context);
+            render_1.reloadAndReInitialize(context);
         }
         return;
     });
@@ -2823,32 +2826,6 @@ var command_link_to_ng_dialog_1 = __webpack_require__(77);
  * @param editContext
  */
 function commandOpenNgDialog(context, event) {
-    // the callback will handle events after closing the dialog
-    // and reload the in-page view w/ajax or page reload
-    var callback = function () {
-        debugger;
-        render_1.reloadAndReInitialize(context);
-        // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
-    };
-    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
-    if (context.button.inlineWindow) {
-        var fullScreen = false;
-        if (!!context.button.fullScreen) {
-            if (typeof (context.button.fullScreen) === 'function') {
-                fullScreen = context.button.fullScreen(context);
-            }
-        }
-        return Promise.resolve(quick_dialog_1.showOrToggle(context, link, callback, fullScreen, /* settings.dialog === "item-history"*/ context.button.dialog(context).toString()));
-    }
-    var origEvent = event || window_in_page_1.windowInPage.event;
-    if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-        return Promise.resolve(window_in_page_1.windowInPage.open(link));
-    }
-    return Promise.resolve(sxc_controller_in_page_1.$2sxcInPage.totalPopup.open(link, callback));
-}
-exports.commandOpenNgDialog = commandOpenNgDialog;
-// todo: stv - temporary function is not used
-function TODOcommandOpenNgDialog(context, event) {
     // testing this - ideally it should now work as a promise...
     return new Promise(function (resolve, reject) {
         // the callback will handle events after closing the dialog
@@ -2873,17 +2850,18 @@ function TODOcommandOpenNgDialog(context, event) {
             var origEvent = event || window_in_page_1.windowInPage.event;
             if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
                 /*return*/
-                window_in_page_1.windowInPage.open(link);
                 resolve(context);
+                window_in_page_1.windowInPage.open(link);
                 //return;
             }
-            else
+            else {
                 /*return*/
                 sxc_controller_in_page_1.$2sxcInPage.totalPopup.open(link, callback);
+            }
         }
     });
 }
-exports.TODOcommandOpenNgDialog = TODOcommandOpenNgDialog;
+exports.commandOpenNgDialog = commandOpenNgDialog;
 
 
 /***/ }),

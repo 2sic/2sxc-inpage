@@ -53,7 +53,7 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
       // only reload on ajax, not on app as that was already re-loaded on the preview
       // necessary to show the original template again
       if (showingAjaxPreview) {
-        return reloadAndReInitialize(context);
+        reloadAndReInitialize(context);
       }
 
       return;

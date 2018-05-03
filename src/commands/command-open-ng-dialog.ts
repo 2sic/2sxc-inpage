@@ -12,44 +12,8 @@ import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
  * @param sxc
  * @param editContext
  */
-export function commandOpenNgDialog(context: ContextOfButton, event: any): Promise<any> {
-  // the callback will handle events after closing the dialog
-  // and reload the in-page view w/ajax or page reload
-  const callback = () => {
-    debugger;
-    reloadAndReInitialize(context);
-    // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
-  };
-  const link = commandLinkToNgDialog(context); // the link contains everything to open a full dialog (lots of params added)
 
-  if (context.button.inlineWindow) {
-
-    let fullScreen = false;
-    if (!!context.button.fullScreen) {
-      if (typeof (context.button.fullScreen) === 'function') {
-        fullScreen = context.button.fullScreen(context);
-      }
-    }
-
-    return Promise.resolve(showOrToggle(context,
-      link,
-      callback,
-      fullScreen, /* settings.dialog === "item-history"*/
-      context.button.dialog(context).toString()));
-  }
-
-  const origEvent: any = event || window.event;
-
-  if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-    return Promise.resolve(window.open(link));
-  }
-
-  return Promise.resolve($2sxc.totalPopup.open(link, callback));
-}
-
-
-// todo: stv - temporary function is not used
-export function TODOcommandOpenNgDialog(context: ContextOfButton, event: any) : Promise<any> {
+export function commandOpenNgDialog(context: ContextOfButton, event: any) : Promise<any> {
 
   // testing this - ideally it should now work as a promise...
   return new Promise<any>((resolve, reject) => {
@@ -84,13 +48,14 @@ export function TODOcommandOpenNgDialog(context: ContextOfButton, event: any) : 
 
       if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
         /*return*/
-        window.open(link);
         resolve(context);
+        window.open(link);
         //return;
-      }
-      else
+      } else {
       /*return*/
-      $2sxc.totalPopup.open(link, callback);
+        $2sxc.totalPopup.open(link, callback);
+      }
+
     }
   });
 }

@@ -80,8 +80,7 @@ export function getPreviewWithTemplate(context: ContextOfButton, templateId: num
     cbid: context.contentBlock.id,
     originalparameters: JSON.stringify(context.instance.parameters),
   };
-  return new Promise(
-    (resolve: any, reject: any) => {
+  return new Promise((resolve: any, reject: any) => {
       context.sxc.webApi.get({
         url: 'view/module/rendertemplate',
         params: params,
@@ -95,8 +94,8 @@ export function getPreviewWithTemplate(context: ContextOfButton, templateId: num
           // which will hopefully be a meaningful error
           reject(Error(textStatus));
         }
-      }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
-        reject(Error(errorThrown));
+        }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+          reject(Error(errorThrown));
       });
     });
 }
