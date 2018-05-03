@@ -18,8 +18,8 @@ export function renderToolbar(context: ContextOfButton): string {
     toolbar.classList.add('listContent');
   }
   addClasses(toolbar, context.toolbar.settings.classes, ' ');
-  toolbar.setAttribute('onclick',
-    'var e = arguments[0] || window.event; e.stopPropagation();'); // serialize JavaScript because of ajax
+  // stv: commented because I do not see that we need click event
+  // toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; e.preventDefault();'); // serialize JavaScript because of ajax
 
   // add button groups to toolbar
   toolbar.setAttribute('group-count', context.toolbar.groups.length.toString());
