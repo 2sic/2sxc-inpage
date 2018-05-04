@@ -1,6 +1,6 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
-import { getEditContext } from '../manage/api';
+import { getEditContext, getEditContextOfTag, getContainerTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';
@@ -12,6 +12,7 @@ import { InstanceContext } from './instance-context/instance-context';
 import { ItemContext } from './item-context/item-context';
 import { PageContext } from './page-context/page-context';
 import { isSxcInstance } from '../plumbing/is';
+import { UiContext } from './instance-context/ui-context';
 
 /**
  * Primary API to get the context (context is cached)
@@ -19,13 +20,23 @@ import { isSxcInstance } from '../plumbing/is';
  * @param cbid
  */
 export function context(htmlElementOrId: SxcInstanceWithInternals | HTMLElement | number, cbid?: number): ContextOfButton {
-  const sxc = isSxcInstance(htmlElementOrId)
-    ? htmlElementOrId
-    : getSxcInstance(htmlElementOrId);
-  const contextOfButton = getContextInstance(sxc, cbid);
+  let sxc: SxcInstanceWithInternals = null;
+  let containerTag: any = null;
+
+  if (isSxcInstance(htmlElementOrId)) { // it is SxcInstance
+    sxc = htmlElementOrId;
+  } else if (typeof htmlElementOrId === 'number') { // it is number
+    sxc = getSxcInstance(htmlElementOrId, cbid);
+  } else { // it is HTMLElement
+    sxc = getSxcInstance(htmlElementOrId);
+    containerTag = getContainerTag(htmlElementOrId);
+  };
+
+  const contextOfButton = getContextInstance(sxc, containerTag);
+  contextOfButton.sxc = sxc;
+  
   return contextOfButton;
 }
-
 
 /**
  * Create copy of context, so it can be modified before use
@@ -46,13 +57,11 @@ export function contextCopy(htmlElementOrId: HTMLElement | number, cbid?: number
 /**
  * Create new context
  * @param sxc
- * @param cbid
+ * @param htmlElement
  */
-export function getContextInstance(sxc: SxcInstanceWithInternals, cbid?: number): ContextOfButton {
-  const editContext = getEditContext(sxc);
-  const context = createContextFromEditContext(editContext);
-  context.sxc = sxc;
-  return context;
+export function getContextInstance(sxc: SxcInstanceWithInternals, htmlElement?: HTMLElement): ContextOfButton {
+  const editContext = getEditContext(sxc, htmlElement);
+  return createContextFromEditContext(editContext);
 }
 
 /**
@@ -121,9 +130,16 @@ export function createContextFromEditContext(editContext: DataEditContext) {
   }
   if (editContext.Language) {
     // languages
-    contextOfButton.app.currentLanguage = editContext.Language.Current;  // NgDialogParams.lang
+    contextOfButton.app.currentLanguage = editContext.Language.Current; // NgDialogParams.lang
     contextOfButton.app.primaryLanguage = editContext.Language.Primary; // NgDialogParams.langpri
     contextOfButton.app.allLanguages = editContext.Language.All; // or NgDialogParams.langs
+  }
+
+  // ensure that the UI will load the correct assets to enable editing
+  contextOfButton.ui = new UiContext();
+  if (editContext.Ui) {
+    contextOfButton.ui.autoToolbar = editContext.Ui.AutoToolbar; // toolbar auto-show
+    if (editContext.Ui.Form) contextOfButton.ui.form = editContext.Ui.Form; // decide which dialog opens, eg ng5
   }
 
   // *** ContextOfContentBlock ***

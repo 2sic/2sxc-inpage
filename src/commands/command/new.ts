@@ -1,9 +1,7 @@
-﻿// polyfills
-import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { CommandBase } from '../command-base';
+﻿import { CommandBase } from '../command-base';
 import { commandOpenNgDialog } from '../command-open-ng-dialog';
-import { Settings } from '../settings';
+
+
 
 /**
  * new is a dialog to add something, and will not add if cancelled
@@ -33,7 +31,7 @@ export class New extends CommandBase {
         code(context, event) {
           // todo - should refactor this to be a toolbarManager.contentBlock command
           Object.assign(context.button.action.params, { sortOrder: context.button.action.params.sortOrder + 1 });
-          commandOpenNgDialog(context, event);
+          return commandOpenNgDialog(context, event);
         },
       });
   }

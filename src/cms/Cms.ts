@@ -1,8 +1,9 @@
 ﻿import { Engine } from '../commands/engine';
-import { ContextOfButton } from '../context/context-of-button';
 import { Settings } from '../commands/settings';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
+import { context as getContext} from '../context/context';
+import { ContextOfInstance, isContextOfInstance } from '../context/context-of-instance';
 
 const logId = 'Cms.Api';
 const dumpLog = true;
@@ -27,19 +28,25 @@ export class Cms extends HasLog {
   };
 
 
-  run(context: ContextOfButton,
+  run(context: ContextOfInstance | HTMLElement,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings?: Partial<Settings> | Event,
-    event?: Event) {
+    event?: Event) : Promise<any> {
 
-    this.do(() => new Engine(this.log).detectParamsAndRun(context, nameOrSettings, eventOrSettings, event));
+    const realContext = (isContextOfInstance(context))
+      ? context
+      : getContext(context);
+
+    return this.do(() => new Engine(this.log)
+      .detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event)
+    );
 
   }
 
   /**
    * reset/clear the log if alwaysResetLog is true
    */
-  private do(innerCall : Function) {
+  private do(innerCall : () => Promise<any>) : Promise<any> {
     if (this.autoReset) this.resetLog();
     console.log('before');
     const result = innerCall();

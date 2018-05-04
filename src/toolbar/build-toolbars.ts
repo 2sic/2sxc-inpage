@@ -57,7 +57,12 @@ export function buildToolbars(parentLog: Log, parentTag: any, optionalId?: numbe
     const contentTag: any = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
     contentTag.addClass($2sxc.c.cls.scElm); // "sc-element");
 
-    contentTag.prepend(generateFallbackToolbar());
+    // auto toolbar
+    const cnt = context(contentTag);
+    if (cnt.ui.autoToolbar !== false) {
+      contentTag.prepend(generateFallbackToolbar());
+    }
+    
     toolbars = getToolbarTags(parentTag);
   }
 

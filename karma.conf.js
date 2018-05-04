@@ -18,6 +18,7 @@ module.exports = function (config) {
     files: [
       '../2sxc-dnn742/Website/Resources/Libraries/jQuery/01_09_01/jquery.js', // resolve $
       '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/Js/2sxc.api.min.js', // resolve $2sxc
+      './src/polyfills/es6-promise.auto.js',
       './src/**/libs/*.js',
       './src/**/*.ts',
       './test/*.ts'
@@ -33,8 +34,18 @@ module.exports = function (config) {
     ],
 
     typings: [
-      './typings/**/*.d.ts'
+      './typings/**/*.d.ts',
+      '.node_modules/es6-promise/es6-promise.d.ts'
     ],
+
+    karmaTypescriptConfig: {
+      bundlerOptions: {
+        noParse: ['clear'] // fix for "SyntaxError: Octal literal in strict mode"
+      },
+      compilerOptions: {
+        lib: ['es2015.promise', 'es5', 'dom'] // fix for "'Promise' only refers to a type"
+      }
+    },
 
     plugins: ['karma-*'],
 

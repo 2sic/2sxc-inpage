@@ -1,7 +1,4 @@
-﻿// polyfills
-import '../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { _contentBlock } from '../contentBlock/main-content-block';
+﻿import { _contentBlock } from '../contentBlock/main-content-block';
 import { ajaxLoad, reloadAndReInitialize, showMessage } from '../contentBlock/render';
 import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
@@ -9,6 +6,7 @@ import { getTag } from '../manage/api';
 import { ContextOfButton } from '../context/context-of-button';
 import { QuickDialogConfig } from '../manage/quick-dialog-config';
 import { NgDialogParams } from '../manage/ng-dialog-params';
+import { Dialog } from '../settings/dialog';
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -181,7 +179,9 @@ function extendIFrameWithSxcState(iFrame: any) {
         tagModule = $($(getTag(sxc)).parent().eq(0));
         newFrm.sxcCacheKey = sxc.cacheKey;
         newFrm.closeCallback = callback;
-        if (dialogName) newFrm.dialogName = dialogName;
+        if (dialogName) {
+          newFrm.dialogName = dialogName;
+        }
       },
       getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),// ._dialogParameters,
       getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),// ._quickDialogConfig,
@@ -196,7 +196,6 @@ function extendIFrameWithSxcState(iFrame: any) {
         newFrm.toggle(false);
         // todo: only re-init if something was changed?
         // return cbApi.reloadAndReInitialize(reSxc());
-
         // cancel the dialog
         localStorage.setItem('cancelled-dialog', 'true');
         return newFrm.closeCallback();
@@ -218,14 +217,16 @@ function extendIFrameWithSxcState(iFrame: any) {
  */
 function rewriteUrl(url: string): string {
   // change default url-schema from the primary angular-app to the quick-dialog
-  url = url.replace('dist/dnn/ui.html?', 'dist/ng/ui.html?');
-
+  url = url.replace(Dialog.ng1, Dialog.quickDialog)
+    .replace(Dialog.ng5, Dialog.quickDialog);
   // special debug-code when running on local ng-serve
   // this is only activated if the developer manually sets a value in the localStorage
   try {
     const devMode = localStorage.getItem('devMode');
-    if (devMode && ~~devMode)
+    if (devMode && ~~devMode) {
       url = url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
+    }
+
   } catch (e) {
     // ignore
   }

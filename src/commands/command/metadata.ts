@@ -1,7 +1,4 @@
-﻿// polyfills
-import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { CommandBase } from '../command-base';
+﻿import { CommandBase } from '../command-base';
 
 /**
  * create a metadata toolbar

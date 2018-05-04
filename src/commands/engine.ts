@@ -1,7 +1,4 @@
-﻿// polyfills
-import '../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-import { prepareToAddContent } from '../contentBlock/templates';
+﻿import { prepareToAddContent } from '../contentBlock/templates';
 import { ContextOfButton } from '../context/context-of-button';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Commands } from './commands';
@@ -11,6 +8,8 @@ import { ButtonConfig } from '../toolbar/button/button-config';
 import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
 import { Log } from '../logging/log';
 import { HasLog } from '../logging/has-log';
+import { ContextOfInstance } from '../context/context-of-instance';
+
 
 
 export class Engine extends HasLog {
@@ -20,10 +19,10 @@ export class Engine extends HasLog {
   }
 
   detectParamsAndRun(
-    context: ContextOfButton,
+    context: ContextOfInstance,
     nameOrSettings: string | Partial<Settings>,
     eventOrSettings: Partial<Settings> | Event,
-    event?: Event) {
+    event?: Event) : Promise<any> {
 
     this.log.add(`detecting params and running - has ${arguments.length} params`);
 
@@ -42,7 +41,7 @@ export class Engine extends HasLog {
     // ensure we have the right event despite browser differences
     event = event || window.event;
 
-    return this.run(context, settings, event);
+    return this.run(context as ContextOfButton, settings, event);
   }
 
   /**
@@ -55,7 +54,7 @@ export class Engine extends HasLog {
   run(
     context: ContextOfButton,
     nameOrSettings: string | Partial<Settings>,
-    event: Event) {
+    event: Event) : Promise<any> { // | any is temporary, just to get it to work; should be improved to only give a promise
 
     let settings = this.nameOrSettingsAddapter(nameOrSettings);
 
@@ -85,7 +84,7 @@ export class Engine extends HasLog {
     // todo: stv, fix this in case that is function
     if (!button.code) {
       this.log.add(`simple button without code - generating code to open standard dialog`);
-      button.code = (contextParam: ContextOfButton, event: Event) => {
+      button.code = (contextParam: ContextOfButton, event: Event) : Promise<any> => {
         return commandOpenNgDialog(contextParam, event);
       };
     }
@@ -97,13 +96,10 @@ export class Engine extends HasLog {
 
     // if more than just a UI-action, then it needs to be sure the content-group is created first
     this.log.add(`command might change data, will wrap in pre-flight to ensure content-block`);
-    const prepare = prepareToAddContent(context, settings.useModuleList)
-      .then(() => {
-        context.button.code(context, origEvent);
+    return prepareToAddContent(context, settings.useModuleList)
+        .then(() => {
+          return context.button.code(context, origEvent);
       });
-
-    return prepare;
-
   }
 
   /**

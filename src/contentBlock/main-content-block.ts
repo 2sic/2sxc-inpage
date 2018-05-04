@@ -19,8 +19,8 @@ export class MainContentBlock {
   // constants
   static cViewWithoutContent: string = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
   static cUseExistingTemplate = -1;
-  prepareToAddContent: any = prepareToAddContent;
-  updateTemplateFromDia: any = updateTemplateFromDia;
+  prepareToAddContent = prepareToAddContent;
+  updateTemplateFromDia = updateTemplateFromDia;
 }
 
 /**

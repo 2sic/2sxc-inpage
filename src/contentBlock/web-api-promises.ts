@@ -38,16 +38,31 @@ import { ContextOfButton } from '../context/context-of-button';
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
-export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): any {
+export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): Promise<any> {
   const params: WebApiParams = {
     templateId: templateId,
     forceCreateContentGroup: forceCreateContentGroup,
     newTemplateChooserState: false,
   };
-  return context.sxc.webApi.get({
-    url: 'view/module/savetemplateid',
-    params: params,
-  });
+  return new Promise(
+    (resolve: any, reject: any) => {
+      context.sxc.webApi.get(
+        {
+          url: 'view/module/savetemplateid',
+          params: params,
+        }).done((data: any, textStatus: string, jqXHR: any) => {
+          if (jqXHR.status === 204 || jqXHR.status === 200) {
+            // resolve the promise with the response text
+            resolve(data);
+          } else {
+            // otherwise reject with the status text
+            // which will hopefully be a meaningful error
+            reject(Error(textStatus));
+          }
+        }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+          reject(Error(errorThrown));
+        });
+    });
 }
 
 /**
@@ -56,7 +71,7 @@ export function saveTemplate(context: ContextOfButton, templateId: number, force
  * @param {number} templateId
  * @returns {promise} promise with the html in the result
  */
-export function getPreviewWithTemplate(context: ContextOfButton, templateId: number): any {
+export function getPreviewWithTemplate(context: ContextOfButton, templateId: number): Promise<any> {
   templateId = templateId || -1; // fallback, meaning use saved ID
   const params: WebApiParams = {
     templateId: templateId,
@@ -65,10 +80,23 @@ export function getPreviewWithTemplate(context: ContextOfButton, templateId: num
     cbid: context.contentBlock.id,
     originalparameters: JSON.stringify(context.instance.parameters),
   };
-  return context.sxc.webApi.get({
-    url: 'view/module/rendertemplate',
-    params: params,
-    dataType: 'html',
-  });
+  return new Promise((resolve: any, reject: any) => {
+      context.sxc.webApi.get({
+        url: 'view/module/rendertemplate',
+        params: params,
+        dataType: 'html',
+      }).done((data: any, textStatus: string, jqXHR: any) => {
+        if (jqXHR.status === 204 || jqXHR.status === 200) {
+          // resolve the promise with the response text
+          resolve(data);
+        } else {
+          // otherwise reject with the status text
+          // which will hopefully be a meaningful error
+          reject(Error(textStatus));
+        }
+        }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+          reject(Error(errorThrown));
+      });
+    });
 }
 //#endregion

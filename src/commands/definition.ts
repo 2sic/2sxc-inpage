@@ -15,7 +15,7 @@ export class Definition {
    * custom code
    * @param context
    */
-  code?(context: ContextOfButton, event: any): void;
+  code?(context: ContextOfButton, event: any): Promise<any>;
 
   /**
    * command

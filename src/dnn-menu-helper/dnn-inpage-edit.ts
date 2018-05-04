@@ -8,18 +8,21 @@ import { getSxcInstance } from '../x-bootstrap/sxc';
 export class ActionMenuMapper {
   private run: any;
   private tag: HTMLElement;
+  private sxc: SxcInstanceWithInternals;
 
   constructor(moduleId: number) {
-    const sxc = getSxcInstance(moduleId) as SxcInstanceWithInternals;
-    this.tag = getTag(sxc);
-    this.run = sxc.manage.run;
+    this.sxc = getSxcInstance(moduleId) as SxcInstanceWithInternals;
+    this.tag = getTag(this.sxc);
+    this.run = this.sxc.manage.run;
   }
 
   changeLayoutOrContent = () => { this.run('layout'); };
 
   addItem = () => { this.run('add', { useModuleList: true, sortOrder: 0 }); };
 
-  edit = () => { this.run('edit', { useModuleList: true, sortOrder: 0 }); };
+  edit = () => {
+    this.run('edit', { useModuleList: true, sortOrder: 0 });
+  };
 
   adminApp = () => { this.run('app'); };
 

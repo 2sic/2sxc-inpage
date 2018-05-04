@@ -1,7 +1,4 @@
-﻿// polyfills
-import '../../polyfills/Object.assign'; // fix for IE11 Object.assign
-
-/** contains toolbar behaviour settings like float, etc. */
+﻿/** contains toolbar behaviour settings like float, etc. */
 export class ToolbarSettings {
   autoAddMore: null | 'start' | 'end' | true = null; //  [true: used to be right/start]
   hover: 'left' | 'right' | 'none' = 'right';
