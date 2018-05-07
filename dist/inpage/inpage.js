@@ -1111,7 +1111,7 @@ exports.ajaxLoad = ajaxLoad;
 function reloadAndReInitialize(context, forceAjax, preview) {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !context.app.supportsAjax) {
-        window_in_page_1.windowInPage.location.reload();
+        return window_in_page_1.windowInPage.location.reload();
     }
     // ReSharper disable once DoubleNegationOfBoolean
     ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
