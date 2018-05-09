@@ -55,6 +55,7 @@
     <None Remove="src\manage\local-storage-helper.ts" />
     <None Remove="src\polyfills\Element.closest.ts" />
     <None Remove="src\polyfills\include-polyfills.ts" />
+    <None Remove="src\polyfills\Symbol.ts" />
     <None Remove="src\quick-edit\cb-or-mod.ts" />
     <None Remove="src\quick-edit\selectors-instance.ts" />
     <None Remove="src\quick-edit\selectors.ts" />
@@ -127,6 +128,7 @@
     <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
     <TypeScriptCompile Include="src\polyfills\Element.closest.ts" />
     <TypeScriptCompile Include="src\polyfills\include-polyfills.ts" />
+    <TypeScriptCompile Include="src\polyfills\Symbol.ts" />
     <TypeScriptCompile Include="src\quick-edit\cb-or-mod.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors-instance.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors.ts" />
