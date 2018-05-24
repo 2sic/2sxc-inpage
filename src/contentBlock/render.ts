@@ -78,7 +78,7 @@ export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, 
 export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): void {
   // if ajax is not supported, we must reload the whole page
   if (!forceAjax && !context.app.supportsAjax) {
-    window.location.reload();
+    return window.location.reload();
   }
 
   // ReSharper disable once DoubleNegationOfBoolean
