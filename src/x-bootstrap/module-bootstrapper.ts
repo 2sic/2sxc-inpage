@@ -6,6 +6,7 @@ import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from './sxc';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
+import { Node } from 'highlight.js';
 // import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -16,6 +17,18 @@ let openedTemplatePickerOnce = false;
 let cancelledDialog: string;
 
 // const builder = new Build(null);
+
+// Callback function to execute when mutations are observed
+let callback = function (mutationsList: any) {
+  initAllModules(false)
+  // debounceDOMSubtreeModifiedEvent(() => initAllModules(false), 1000, true);
+};
+
+// Create an observer instance linked to the callback function
+var observer = new MutationObserver(callback);
+
+// Later, you can stop observing
+//observer.disconnect();
 
 $(document).ready(() => {
 
@@ -30,8 +43,10 @@ $(document).ready(() => {
   // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
   // ReSharper disable once UnusedParameter
   // document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(false), false);
-  document.body.addEventListener('DOMSubtreeModified', (event) => debounceDOMSubtreeModifiedEvent(() => initAllModules(false), 100, false), false);
+  // document.body.addEventListener('DOMSubtreeModified', (event) => debounceDOMSubtreeModifiedEvent(() => initAllModules(false), 100, false), false);
 
+  // Start observing the target node for configured mutations
+  observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 });
 
 // Returns a function, that, as long as it continues to be invoked, will not
