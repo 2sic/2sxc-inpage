@@ -4972,7 +4972,6 @@ var build_toolbars_1 = __webpack_require__(14);
 var sxc_1 = __webpack_require__(7);
 var log_1 = __webpack_require__(8);
 var log_utils_1 = __webpack_require__(93);
-// import '/2sxc-api/js/2sxc.api';
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
@@ -4980,16 +4979,12 @@ var log_utils_1 = __webpack_require__(93);
 var initializedModules = [];
 var openedTemplatePickerOnce = false;
 var cancelledDialog;
-// const builder = new Build(null);
-// Callback function to execute when mutations are observed
-var callback = function (mutationsList) {
+// callback function to execute when mutations are observed
+var initAllModulesCallback = function (mutationsList) {
     initAllModules(false);
-    // debounceDOMSubtreeModifiedEvent(() => initAllModules(false), 1000, true);
 };
-// Create an observer instance linked to the callback function
-var observer = new MutationObserver(callback);
-// Later, you can stop observing
-//observer.disconnect();
+// create an observer instance linked to the callback function
+var observer = new MutationObserver(initAllModulesCallback);
 $(document).ready(function () {
     cancelledDialog = localStorage.getItem('cancelled-dialog');
     if (cancelledDialog) {
@@ -4997,34 +4992,9 @@ $(document).ready(function () {
     }
     ;
     initAllModules(true);
-    // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-    // ReSharper disable once UnusedParameter
-    // document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(false), false);
-    // document.body.addEventListener('DOMSubtreeModified', (event) => debounceDOMSubtreeModifiedEvent(() => initAllModules(false), 100, false), false);
-    // Start observing the target node for configured mutations
+    // start observing the body for configured mutations
     observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 });
-// Returns a function, that, as long as it continues to be invoked, will not
-// be triggered. The function will be called after it stops being called for
-// N milliseconds. If `immediate` is passed, trigger the function on the
-// leading edge, instead of the trailing.
-function debounceDOMSubtreeModifiedEvent(func, wait, immediate) {
-    var timeout;
-    return function () {
-        var context = this, args = arguments;
-        var later = function () {
-            timeout = null;
-            if (!immediate)
-                func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow)
-            func.apply(context, args);
-    };
-}
-;
 function initAllModules(isFirstRun) {
     $('div[data-edit-context]').each(function () {
         initModule(this, isFirstRun);
