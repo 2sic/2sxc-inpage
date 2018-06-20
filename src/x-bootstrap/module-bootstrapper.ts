@@ -6,7 +6,8 @@ import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from './sxc';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
-// import '/2sxc-api/js/2sxc.api';
+import { Node } from 'highlight.js';
+
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
@@ -15,7 +16,13 @@ const initializedModules: any[] = [];
 let openedTemplatePickerOnce = false;
 let cancelledDialog: string;
 
-// const builder = new Build(null);
+// callback function to execute when mutations are observed
+let initAllModulesCallback = (mutationsList: any) => {
+  initAllModules(false);
+};
+
+// create an observer instance linked to the callback function
+let observer = new MutationObserver(initAllModulesCallback);
 
 $(document).ready(() => {
 
@@ -27,9 +34,8 @@ $(document).ready(() => {
 
   initAllModules(true);
 
-  // watch for ajax reloads on edit or view-changes, to re-init the toolbars etc.
-  // ReSharper disable once UnusedParameter
-  document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(false), false);
+  // start observing the body for configured mutations
+  observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 });
 
 function initAllModules(isFirstRun: boolean): void {
