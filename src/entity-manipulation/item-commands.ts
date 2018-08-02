@@ -1,5 +1,6 @@
 ﻿import { translate } from '../translate/2sxc.translate';
 import { ContextOfButton } from '../context/context-of-button';
+import { WebApiParams } from '../contentBlock/web-api-params';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
@@ -18,9 +19,15 @@ export let contentItems = {
       return Promise.resolve();
     }
 
-    // convert jQuery ajax promise object to ES6 promise
+    const params: WebApiParams = {
+      lang: context.app.currentLanguage,
+      cbisentity: context.contentBlock.isEntity,
+      cbid: context.contentBlock.id,
+      originalparameters: JSON.stringify(context.instance.parameters),
+    };
+
     return new Promise((resolve: any, reject: any) => {
-      context.sxc.webApi.delete(`app-content/any/${itemGuid}`, null, null, true)
+      context.sxc.webApi.delete(`app-content/any/${itemGuid}`, params, null, true)
         .done((data: any, textStatus: string, jqXHR: any) => {
           if (jqXHR.status === 204 || jqXHR.status === 200) {
             // resolve the promise with the response text

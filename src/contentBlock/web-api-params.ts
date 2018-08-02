@@ -1,5 +1,5 @@
 ﻿export class WebApiParams {
-  templateId: number;
+  templateId?: number;
   lang?: string;
   cbisentity?: boolean;
   cbid?: number;
