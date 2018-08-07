@@ -6,4 +6,6 @@
   originalparameters?: any;
   forceCreateContentGroup?: boolean;
   newTemplateChooserState?: boolean;
+  zoneId?: number;
+  appId?: number;
 }

@@ -20,6 +20,8 @@ export let contentItems = {
     }
 
     const params: WebApiParams = {
+      zoneId: context.app.zoneId,
+      appId: context.app.id,
       lang: context.app.currentLanguage,
       cbisentity: context.contentBlock.isEntity,
       cbid: context.contentBlock.id,
