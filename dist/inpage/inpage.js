@@ -5162,13 +5162,15 @@ exports.contentItems = {
         if (!ok) {
             return Promise.resolve();
         }
+        /**
+         * ZoneId and AppId are sent becase of rare, special case that is not default
+         * (default is that 2sxc is finding ZoneId and AppId on server side from ModuleId)
+         * when we need to delete entity from other app or zone, than current one.
+         * TODO: send this params, only when is necesary (value change detection for ZoneId, AppId)
+         */
         var params = {
             zoneId: context.app.zoneId,
-            appId: context.app.id,
-            lang: context.app.currentLanguage,
-            cbisentity: context.contentBlock.isEntity,
-            cbid: context.contentBlock.id,
-            originalparameters: JSON.stringify(context.instance.parameters),
+            appId: context.app.id
         };
         return new Promise(function (resolve, reject) {
             context.sxc.webApi.delete("app-content/any/" + itemGuid, params, null, true)
