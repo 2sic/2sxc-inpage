@@ -6,6 +6,4 @@ export class ActionParams {
   part?: string;
   sortOrder?: number;
   destinationSortOrder?: number;
-  zoneId?: number;
-  appId?: number;
 }

@@ -721,9 +721,7 @@ function getAndReload(context, url, params) {
  */
 function removeFromList(context, sortOrder) {
     return getAndReload(context, 'view/module/removefromlist', {
-        sortOrder: sortOrder,
-        zoneId: context.app.zoneId,
-        appId: context.app.id,
+        sortOrder: sortOrder
     });
 }
 exports.removeFromList = removeFromList;
@@ -737,9 +735,7 @@ exports.removeFromList = removeFromList;
 function changeOrder(context, initOrder, newOrder) {
     return getAndReload(context, 'view/module/changeorder', {
         sortOrder: initOrder,
-        destinationSortOrder: newOrder,
-        zoneId: context.app.zoneId,
-        appId: context.app.id,
+        destinationSortOrder: newOrder
     });
 }
 exports.changeOrder = changeOrder;
@@ -751,9 +747,7 @@ exports.changeOrder = changeOrder;
  */
 function addItem(context, sortOrder) {
     return getAndReload(context, 'view/module/additem', {
-        sortOrder: sortOrder,
-        zoneId: context.app.zoneId,
-        appId: context.app.id,
+        sortOrder: sortOrder
     });
 }
 exports.addItem = addItem;
@@ -767,9 +761,7 @@ exports.addItem = addItem;
 function publish(context, part, sortOrder) {
     return getAndReload(context, 'view/module/publish', {
         part: part,
-        sortOrder: sortOrder,
-        zoneId: context.app.zoneId,
-        appId: context.app.id,
+        sortOrder: sortOrder
     });
 }
 exports.publish = publish;
@@ -781,9 +773,7 @@ exports.publish = publish;
  */
 function publishId(context, entityId) {
     return getAndReload(context, 'view/module/publish', {
-        id: entityId,
-        zoneId: context.app.zoneId,
-        appId: context.app.id,
+        id: entityId
     });
 }
 exports.publishId = publishId;

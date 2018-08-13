@@ -49,9 +49,7 @@ function getAndReload(context: ContextOfButton, url: string, params: ActionParam
 export function removeFromList(context: ContextOfButton, sortOrder: number): Promise<any> {
   return getAndReload(context,
     'view/module/removefromlist', {
-      sortOrder: sortOrder,
-      zoneId: context.app.zoneId,
-      appId: context.app.id,
+      sortOrder: sortOrder
     } as ActionParams);
 }
 
@@ -66,9 +64,7 @@ export function changeOrder(context: ContextOfButton, initOrder: number, newOrde
   return getAndReload(context,
     'view/module/changeorder', {
       sortOrder: initOrder,
-      destinationSortOrder: newOrder,
-      zoneId: context.app.zoneId,
-      appId: context.app.id,
+      destinationSortOrder: newOrder
     } as ActionParams);
 }
 
@@ -81,9 +77,7 @@ export function changeOrder(context: ContextOfButton, initOrder: number, newOrde
 export function addItem(context: ContextOfButton, sortOrder: number): Promise<any> {
   return getAndReload(context,
     'view/module/additem', {
-      sortOrder: sortOrder,
-      zoneId: context.app.zoneId,
-      appId: context.app.id,
+      sortOrder: sortOrder
     } as ActionParams);
 }
 
@@ -98,9 +92,7 @@ export function publish(context: ContextOfButton, part: string, sortOrder: numbe
   return getAndReload(context,
     'view/module/publish', {
       part: part,
-      sortOrder: sortOrder,
-      zoneId: context.app.zoneId,
-      appId: context.app.id,
+      sortOrder: sortOrder
     } as ActionParams);
 }
 
@@ -113,8 +105,6 @@ export function publish(context: ContextOfButton, part: string, sortOrder: numbe
 export function publishId(context: ContextOfButton, entityId: number): Promise<any> {
   return getAndReload(context,
     'view/module/publish', {
-      id: entityId,
-      zoneId: context.app.zoneId,
-      appId: context.app.id,
+      id: entityId
     } as ActionParams);
 }
