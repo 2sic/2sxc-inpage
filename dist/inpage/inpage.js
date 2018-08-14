@@ -958,7 +958,7 @@ function extendIFrameWithSxcState(iFrame) {
         run: function (verb) { return reSxc().manage.run(verb); },
         getManageInfo: function () { return ng_dialog_params_1.NgDialogParams.fromContext(reSxc().manage.context); },
         showMessage: function (message) { return render_1.showMessage(getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
-        reloadAndReInit: function () { return render_1.reloadAndReInitialize(getContext(), true, true); },
+        reloadAndReInit: function () { return render_1.reloadAndReInitialize(getContext(), true, false); },
         saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(getContext(), templateId, false); },
         previewTemplate: function (templateId) { return render_1.ajaxLoad(getContext(), templateId, true); },
     };
