@@ -99,10 +99,10 @@ export function isShowing(context: ContextOfButton, dialogName: string): boolean
  * @returns {any} jquery object of the iframe
  */
 export function showOrToggle(context: ContextOfButton,
-                             url: string,
-                             closeCallback: any,
-                             fullScreen: boolean,
-                             dialogName: string): any {
+  url: string,
+  closeCallback: any,
+  fullScreen: boolean,
+  dialogName: string): any {
   setSize(fullScreen);
   const iFrame: any = getIFrame();
 
@@ -148,6 +148,25 @@ function setSize(fullScreen: boolean): void {
   isFullscreen = fullScreen;
 }
 
+
+/**
+ * copy interface from C:\Projects\2sxc-ui\angular\quick-dialog\src\app\core\dialog-frame-element.ts
+ */
+interface IDialogFrameElement /*extends HTMLIFrameElement*/ {
+  getAdditionalDashboardConfig(): QuickDialogConfig; // HACK: it was `any` in original
+  // isDirty(): boolean; // HACK: we do not have it here
+  scrollToTarget(): void;
+  persistDia(): void;
+  //sxc: any;
+  toggle(action: boolean): void;
+  run(verb: string): void;
+  getManageInfo(): any;
+  showMessage(message: string): void;
+  reloadAndReInit(): Promise<any>;
+  saveTemplate(templateId: number): Promise<any>;
+  previewTemplate(templateId: number): Promise<any>;
+}
+
 /**
  * extend IFrame with Sxc state
  * @param iFrame
@@ -171,7 +190,26 @@ function extendIFrameWithSxcState(iFrame: any) {
     return context(getTag(reSxc()));
   }
 
-  const newFrm: any = Object.assign(iFrame,
+  const frameElement: IDialogFrameElement = {
+    getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),// ._quickDialogConfig,
+    scrollToTarget: () => {
+      $('body').animate({
+        scrollTop: tagModule.offset().top - scrollTopOffset,
+      });
+    },
+    persistDia: () => persistDialog(getContext()),
+    toggle: (show: boolean) => toggle(show),
+    run: (verb: string) => reSxc().manage.run(verb),
+    getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),// ._dialogParameters,
+    showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
+    reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
+    saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
+    previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
+  };
+
+  const newFrm: any = Object.assign(
+    iFrame,
+    frameElement,
     {
       closeCallback: null,
       rewire: (sxc: SxcInstanceWithInternals, callback: any, dialogName: string) => {
@@ -183,15 +221,6 @@ function extendIFrameWithSxcState(iFrame: any) {
           newFrm.dialogName = dialogName;
         }
       },
-      getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),// ._dialogParameters,
-      getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),// ._quickDialogConfig,
-      persistDia: () => persistDialog(getContext()),
-      scrollToTarget: () => {
-        $('body').animate({
-          scrollTop: tagModule.offset().top - scrollTopOffset,
-        });
-      },
-      toggle: (show: boolean) => toggle(show),
       cancel: () => {
         newFrm.toggle(false);
         // todo: only re-init if something was changed?
@@ -200,12 +229,9 @@ function extendIFrameWithSxcState(iFrame: any) {
         localStorage.setItem('cancelled-dialog', 'true');
         return newFrm.closeCallback();
       },
-      run: (verb: string) => reSxc().manage.run(verb),
-      showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
-      reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
-      saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
-      previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
-    });
+    }
+  );
+
   return newFrm;
 }
 
@@ -248,22 +274,22 @@ function watchForResize(keepWatching?: boolean): any {
   const cont: any = getContainer();
   if (!resizeWatcher) // only add a timer if not already running
     resizeWatcher = setInterval(() => {
-        try {
-          const frm: any = getIFrame(cont);
-          if (!frm) return;
-          const height: number = frm.contentDocument.body.offsetHeight;
-          if (frm.previousHeight === height) return;
-          frm.style.minHeight = cont.css('min-height');
-          frm.style.height = height + 'px';
-          frm.previousHeight = height;
-          if (isFullscreen) {
-            frm.style.height = '100%';
-            frm.style.position = 'absolute';
-          }
-        } catch (e) {
-          // ignore
+      try {
+        const frm: any = getIFrame(cont);
+        if (!frm) return;
+        const height: number = frm.contentDocument.body.offsetHeight;
+        if (frm.previousHeight === height) return;
+        frm.style.minHeight = cont.css('min-height');
+        frm.style.height = height + 'px';
+        frm.previousHeight = height;
+        if (isFullscreen) {
+          frm.style.height = '100%';
+          frm.style.position = 'absolute';
         }
-      },
+      } catch (e) {
+        // ignore
+      }
+    },
       resizeInterval);
   return resizeWatcher;
 }

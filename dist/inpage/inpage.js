@@ -946,7 +946,23 @@ function extendIFrameWithSxcState(iFrame) {
     function getContext() {
         return context_1.context(api_1.getTag(reSxc()));
     }
-    var newFrm = Object.assign(iFrame, {
+    var frameElement = {
+        getAdditionalDashboardConfig: function () { return quick_dialog_config_1.QuickDialogConfig.fromContext(reSxc().manage.context); },
+        scrollToTarget: function () {
+            $('body').animate({
+                scrollTop: tagModule.offset().top - scrollTopOffset,
+            });
+        },
+        persistDia: function () { return persistDialog(getContext()); },
+        toggle: function (show) { return toggle(show); },
+        run: function (verb) { return reSxc().manage.run(verb); },
+        getManageInfo: function () { return ng_dialog_params_1.NgDialogParams.fromContext(reSxc().manage.context); },
+        showMessage: function (message) { return render_1.showMessage(getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
+        reloadAndReInit: function () { return render_1.reloadAndReInitialize(getContext(), true, true); },
+        saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(getContext(), templateId, false); },
+        previewTemplate: function (templateId) { return render_1.ajaxLoad(getContext(), templateId, true); },
+    };
+    var newFrm = Object.assign(iFrame, frameElement, {
         closeCallback: null,
         rewire: function (sxc, callback, dialogName) {
             hiddenSxc = sxc;
@@ -957,15 +973,6 @@ function extendIFrameWithSxcState(iFrame) {
                 newFrm.dialogName = dialogName;
             }
         },
-        getManageInfo: function () { return ng_dialog_params_1.NgDialogParams.fromContext(reSxc().manage.context); },
-        getAdditionalDashboardConfig: function () { return quick_dialog_config_1.QuickDialogConfig.fromContext(reSxc().manage.context); },
-        persistDia: function () { return persistDialog(getContext()); },
-        scrollToTarget: function () {
-            $('body').animate({
-                scrollTop: tagModule.offset().top - scrollTopOffset,
-            });
-        },
-        toggle: function (show) { return toggle(show); },
         cancel: function () {
             newFrm.toggle(false);
             // todo: only re-init if something was changed?
@@ -974,11 +981,6 @@ function extendIFrameWithSxcState(iFrame) {
             localStorage.setItem('cancelled-dialog', 'true');
             return newFrm.closeCallback();
         },
-        run: function (verb) { return reSxc().manage.run(verb); },
-        showMessage: function (message) { return render_1.showMessage(getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>"); },
-        reloadAndReInit: function () { return render_1.reloadAndReInitialize(getContext(), true, true); },
-        saveTemplate: function (templateId) { return templates_1.updateTemplateFromDia(getContext(), templateId, false); },
-        previewTemplate: function (templateId) { return render_1.ajaxLoad(getContext(), templateId, true); },
     });
     return newFrm;
 }
@@ -1123,10 +1125,10 @@ exports.ajaxLoad = ajaxLoad;
 function reloadAndReInitialize(context, forceAjax, preview) {
     // if ajax is not supported, we must reload the whole page
     if (!forceAjax && !context.app.supportsAjax) {
-        return window_in_page_1.windowInPage.location.reload();
+        window_in_page_1.windowInPage.location.reload();
+        return Promise.resolve();
     }
-    // ReSharper disable once DoubleNegationOfBoolean
-    ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, !!preview)
+    return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, preview)
         .then(function (rez) {
         // tell Evoq that page has changed if it has changed (Ajax call)
         if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
@@ -5004,6 +5006,7 @@ $(document).ready(function () {
     }
     ;
     initAllModules(true);
+    // document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(false), false);
     // start observing the body for configured mutations
     observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 });

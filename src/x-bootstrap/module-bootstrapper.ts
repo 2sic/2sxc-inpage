@@ -34,6 +34,7 @@ $(document).ready(() => {
 
   initAllModules(true);
 
+  // document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(false), false);
   // start observing the body for configured mutations
   observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 });

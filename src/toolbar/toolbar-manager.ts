@@ -13,8 +13,7 @@ export class ToolbarManager extends HasLog {
   constructor(parentLog :Log) {
     super('Tlb.Mngr', parentLog, 'init');
   }
-
-
+  
   // internal constants
   //cDisableAttrName: string = 'data-disable-toolbar';
   // build toolbars

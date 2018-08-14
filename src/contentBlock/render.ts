@@ -65,8 +65,7 @@ export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, 
     })
     .then(() => {
       reset();
-    }
-  ); // reset quick-edit, because the config could have changed
+    }); // reset quick-edit, because the config could have changed
 }
 
 /**
@@ -75,16 +74,15 @@ export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, 
  * @param {boolean} forceAjax
  * @param {boolean} preview
  */
-export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): void {
+export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: boolean, preview?: boolean): Promise<any> {
   // if ajax is not supported, we must reload the whole page
   if (!forceAjax && !context.app.supportsAjax) {
-    return window.location.reload();
+    window.location.reload();
+    return Promise.resolve();
   }
 
-  // ReSharper disable once DoubleNegationOfBoolean
-  ajaxLoad(context, MainContentBlock.cUseExistingTemplate, !!preview)
+  return ajaxLoad(context, MainContentBlock.cUseExistingTemplate, preview)
     .then((rez) => {
-
       // tell Evoq that page has changed if it has changed (Ajax call)
       if (window.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
         try {
