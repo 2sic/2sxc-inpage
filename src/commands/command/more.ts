@@ -27,9 +27,6 @@ export class More extends CommandBase {
 
             event.preventDefault();
 
-            // because of issue in Chrome we need to override CSS rules in edit.css for toolbar toggle on mouse hover
-            const scElement: Element = fullMenu2.closest('.sc-element');
-
             function mouseenterHandler(e: MouseEvent) {
               (fullMenu2 as HTMLElement).style.opacity = '1';
             }
@@ -42,12 +39,14 @@ export class More extends CommandBase {
                 // this is fix for Chrome issue
                 // ensure to show toolbar because X=0 and Y=0
                 (fullMenu2 as HTMLElement).style.opacity = '1';
-                console.log('workaround for toolbar hide onmouseleave issue', e.screenX, e.screenY, e.target);
+                console.warn('workaround for toolbar hide onmouseleave issue', e.screenX, e.screenY, e.target);
               }
             }
 
+            // because of issue in Chrome we need to override CSS rules in edit.css for toolbar toggle on mouse hover
+            const scElement: Element = fullMenu2.closest('.sc-element');
             // add mouseenter and mouseleave events to parent sc-element if not already added
-            if (fullMenu2.getAttribute('listener') !== 'true') {
+            if (scElement && fullMenu2.getAttribute('listener') !== 'true') {
               scElement.addEventListener('mouseenter', mouseenterHandler);
               scElement.addEventListener('mouseleave', mouseleaveHandler);
               fullMenu2.setAttribute('listener', 'true'); // flag that events are added
