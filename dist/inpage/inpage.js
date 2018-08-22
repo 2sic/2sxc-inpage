@@ -3273,10 +3273,10 @@ var Engine = /** @class */ (function (_super) {
         if (thirdParamIsEvent) { // no event param, but settings contains the event-object
             this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
             event = eventOrSettings; // move it to the correct variable
-            settings = this.nameOrSettingsAddapter(nameOrSettings);
+            settings = this.nameOrSettingsAdapter(nameOrSettings);
         }
         else {
-            settings = Object.assign(eventOrSettings || {}, this.nameOrSettingsAddapter(nameOrSettings));
+            settings = Object.assign(eventOrSettings || {}, this.nameOrSettingsAdapter(nameOrSettings));
         }
         // ensure we have the right event despite browser differences
         event = event || window.event;
@@ -3290,7 +3290,7 @@ var Engine = /** @class */ (function (_super) {
      * @param event
      */
     Engine.prototype.run = function (context, nameOrSettings, event) {
-        var settings = this.nameOrSettingsAddapter(nameOrSettings);
+        var settings = this.nameOrSettingsAdapter(nameOrSettings);
         settings = this.expandSettingsWithDefaults(settings);
         var origEvent = event;
         var name = settings.action;
@@ -3330,7 +3330,7 @@ var Engine = /** @class */ (function (_super) {
      * @param nameOrSettings
      * @returns settings
      */
-    Engine.prototype.nameOrSettingsAddapter = function (nameOrSettings) {
+    Engine.prototype.nameOrSettingsAdapter = function (nameOrSettings) {
         var settings;
         // check if nameOrString is name (string) or object (settings)
         var nameIsString = typeof nameOrSettings === 'string';
