@@ -7250,7 +7250,7 @@ var Custom = /** @class */ (function (_super) {
     function Custom() {
         var _this = _super.call(this) || this;
         _this.makeDef('custom', 'Custom', 'bomb', true, false, {
-            code: function (context) {
+            code: function (context, event) {
                 return new Promise(function (resolve, reject) {
                     console.log('custom action with code - BETA feature, may change');
                     if (!context.button.action.params.customCode) {

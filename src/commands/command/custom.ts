@@ -12,7 +12,7 @@ export class Custom extends CommandBase {
       true,
       false,
       {
-        code(context) {
+        code(context, event) {
           return new Promise((resolve, reject) => {
             console.log('custom action with code - BETA feature, may change');
             if (!context.button.action.params.customCode) {
