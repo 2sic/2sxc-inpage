@@ -202,7 +202,7 @@ function extendIFrameWithSxcState(iFrame: any) {
     run: (verb: string) => reSxc().manage.run(verb),
     getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),// ._dialogParameters,
     showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
-    reloadAndReInit: () => reloadAndReInitialize(getContext(), true, false),
+    reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
     saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
     previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
   };
