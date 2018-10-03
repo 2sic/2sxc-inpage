@@ -7,6 +7,7 @@ import { ToolbarConfig } from '../toolbar/toolbar-config';
 import { ToolbarSettings } from '../toolbar/toolbar-settings';
 import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-config';
 import { Log } from '../../logging/log';
+import { flattenActionDefinition } from '../adapters/flatten-action-definition';
 
 /**
  * this will traverse a groups-tree and expand each group
@@ -23,6 +24,7 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
   for (let g = 0; g < fullToolbarConfig.groups.length; g++) {
     // expand a verb-list like "edit,new" into objects like [{ action: "edit" }, {action: "new"}]
     expandButtonList(fullToolbarConfig.groups[g], fullToolbarConfig.settings, log);
+
     // fix all the buttons
     const btns = fullToolbarConfig.groups[g].buttons;
 
@@ -40,6 +42,9 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
 
         const name = btn.command.action;
         const contentType = btn.command.contentType;
+
+        // if the button belongs to a content-item, move the specs up to the item into the settings-object
+        flattenActionDefinition(btn.command);
 
         // parameters adapter from v1 to v2
         const params = parametersAdapter(btn.command);
@@ -92,9 +97,10 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
     log.add(`detected array of btns (${root.buttons.length}), will ensure it's an object`);
     for (let b = 0; b < root.buttons.length; b++) {
       const btn = root.buttons[b];
-      if (typeof btn.action === 'string' && btn.action.indexOf(',') > -1) {
+      const actionString: string = btn.action;
+      if (typeof actionString === 'string' && actionString.indexOf(',') > -1) {
         log.add(`button def "${btn} is string of many names, will expand into array with action-properties"`);
-        const acts = btn.action.split(',');
+        const acts = actionString.split(',');
         for (let a = 0; a < acts.length; a++) {
           btns.push($.extend(true, {}, btn, { action: acts[a] }));
         }
@@ -139,7 +145,6 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
     btns[v] = expandButtonConfig(btns[v], sharedProperties, log);
     // todo: refactor this out, not needed any more as they are all together now
     // btns[v].group = root;// grp;    // attach group reference, needed for fallback etc.
-
   }
 
   root.buttons = btns; // ensure the internal def is also an array now

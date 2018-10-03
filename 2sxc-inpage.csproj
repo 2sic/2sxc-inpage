@@ -61,6 +61,7 @@
     <None Remove="src\quick-edit\selectors.ts" />
     <None Remove="src\settings\dialog.ts" />
     <None Remove="src\toolbar\adapters\button-config-adapter.ts" />
+    <None Remove="src\toolbar\adapters\flatten-action-definition.ts" />
     <None Remove="src\toolbar\adapters\old-parameters-adapter.ts" />
     <None Remove="src\toolbar\adapters\parameters-adapter.ts" />
     <None Remove="src\toolbar\adapters\settings-adapter.ts" />
@@ -135,6 +136,7 @@
     <TypeScriptCompile Include="src\settings\dialog.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\button-config-adapter.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\old-parameters-adapter.ts" />
+    <TypeScriptCompile Include="src\toolbar\adapters\flatten-action-definition.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\parameters-adapter.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\settings-adapter.ts" />
     <TypeScriptCompile Include="src\toolbar\button\button-action.ts" />

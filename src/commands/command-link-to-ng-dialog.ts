@@ -1,6 +1,5 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
 import { commandCreate } from './command-create';
-import { Settings } from './settings';
 
 /**
  * create a dialog link

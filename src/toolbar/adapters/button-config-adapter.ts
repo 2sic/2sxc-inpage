@@ -5,12 +5,13 @@ import { ButtonDefinition } from '../button/button-definition';
 import { ButtonConfig } from '../button/button-config';
 import { expandButtonConfig } from '../button/expand-button-config';
 import { ModConfig } from '../button/mod-config';
+import { flattenActionDefinition } from './flatten-action-definition';
 import { parametersAdapter } from './parameters-adapter';
 
 export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefinition, groupIndex: number): ButtonConfig {
 
   const partialButtonConfig: Partial<ButtonConfig> = {};
-
+  
   if (actDef.code) {
     partialButtonConfig.code = (context: ContextOfButton) => {
 
@@ -113,6 +114,9 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
 
   const name = actDef.command.action;
   const contentType = actDef.command.contentType;
+
+  // if the button belongs to a content-item, move the specs up to the item into the settings-object
+  flattenActionDefinition(actDef.command);
 
   // parameters adapter from v1 to v2
   const params = parametersAdapter(actDef.command);

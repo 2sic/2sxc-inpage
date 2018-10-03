@@ -2,6 +2,8 @@
 import { oldParametersAdapter } from '../adapters/old-parameters-adapter';
 import { ButtonConfig } from '../button/button-config';
 import { addClasses } from './render-helpers';
+import { Settings } from '../../commands/settings';
+import { ButtonDefinition } from '../button/button-definition';
 
 /**
  * generate the html for a button
@@ -12,9 +14,6 @@ import { addClasses } from './render-helpers';
 export function renderButton(context: ContextOfButton, groupIndex: number): HTMLElement {
 
   const buttonConfig = context.button;
-
-  // if the button belongs to a content-item, move the specs up to the item into the settings-object
-  flattenActionDefinition(buttonConfig);
 
   // retrieve configuration for this button
   const oldParamsAdapter: any = oldParametersAdapter(buttonConfig.action);
@@ -65,28 +64,4 @@ export function renderButton(context: ContextOfButton, groupIndex: number): HTML
   button.appendChild(box);
 
   return button;
-}
-
-/**
- * does some clean-up work on a button-definition object
- * because the target item could be specified directly, or in a complex internal object called entity
- * @param actDef
- */
-function flattenActionDefinition(actDef: any) {
-  if (!actDef.entity || !actDef.entity._2sxcEditInformation) {
-    return;
-  }
-
-  const editInfo = actDef.entity._2sxcEditInformation;
-  actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
-
-  if (editInfo.entityId !== undefined) {
-    actDef.entityId = editInfo.entityId;
-  }
-
-  if (editInfo.sortOrder !== undefined) {
-    actDef.sortOrder = editInfo.sortOrder;
-  }
-
-  delete actDef.entity; // clean up edit-info
 }
