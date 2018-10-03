@@ -7,11 +7,11 @@ import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
 import { /*buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig,*/ getEditContext, getTag/*, getUserOfEditContext */} from './api';
-import { LocalStorageHelper } from './local-storage-helper';
 import { UserOfEditContext } from './user-of-edit-context';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
 import { ContextOfButton } from '../context/context-of-button';
+import { SessionStorageHelper } from './session-storage-helper';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -205,9 +205,9 @@ class EditManager {
 
     // todo: move this to dialog-handling
     // display the dialog
-    const openDialogId = LocalStorageHelper.getItemValue<number>('dia-cbid');
+    const openDialogId = SessionStorageHelper.getItemValue<number>('dia-cbid');
 
-    if ((this.editContext && this.editContext.error && this.editContext.error.type) || !openDialogId || openDialogId !== this.sxc.cbid) {
+    if ((this.editContext && this.editContext.error && this.editContext.error.type) || !openDialogId || openDialogId != this.sxc.cbid) {
       return false;
     }
 

@@ -4446,9 +4446,9 @@ var render_button_1 = __webpack_require__(19);
 var render_toolbar_1 = __webpack_require__(18);
 var toolbar_expand_config_1 = __webpack_require__(32);
 var api_1 = __webpack_require__(4);
-var local_storage_helper_1 = __webpack_require__(86);
 var user_of_edit_context_1 = __webpack_require__(22);
-var button_config_adapter_1 = __webpack_require__(87);
+var button_config_adapter_1 = __webpack_require__(86);
+var session_storage_helper_1 = __webpack_require__(88);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -4597,8 +4597,8 @@ var EditManager = /** @class */ (function () {
             }
             // todo: move this to dialog-handling
             // display the dialog
-            var openDialogId = local_storage_helper_1.LocalStorageHelper.getItemValue('dia-cbid');
-            if ((_this.editContext && _this.editContext.error && _this.editContext.error.type) || !openDialogId || openDialogId !== _this.sxc.cbid) {
+            var openDialogId = session_storage_helper_1.SessionStorageHelper.getItemValue('dia-cbid');
+            if ((_this.editContext && _this.editContext.error && _this.editContext.error.type) || !openDialogId || openDialogId != _this.sxc.cbid) {
                 return false;
             }
             sessionStorage.removeItem('dia-cbid');
@@ -4755,37 +4755,11 @@ exports.manipulator = manipulator;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * local storage helper to get typed values from it
- */
-var LocalStorageHelper = /** @class */ (function () {
-    function LocalStorageHelper() {
-    }
-    LocalStorageHelper.getItemValueString = function (key) {
-        var value = localStorage.getItem(key);
-        return value;
-    };
-    LocalStorageHelper.getItemValue = function (key) {
-        var value = localStorage.getItem(key);
-        return JSON.parse(value);
-    };
-    return LocalStorageHelper;
-}());
-exports.LocalStorageHelper = LocalStorageHelper;
-
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var commands_1 = __webpack_require__(10);
 var button_action_1 = __webpack_require__(20);
 var button_config_1 = __webpack_require__(21);
 var expand_button_config_1 = __webpack_require__(16);
-var mod_config_1 = __webpack_require__(88);
+var mod_config_1 = __webpack_require__(87);
 var flatten_action_definition_1 = __webpack_require__(35);
 var parameters_adapter_1 = __webpack_require__(33);
 function buttonConfigAdapter(context, actDef, groupIndex) {
@@ -4888,7 +4862,7 @@ exports.buttonConfigAdapter = buttonConfigAdapter;
 
 
 /***/ }),
-/* 88 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4900,6 +4874,32 @@ var ModConfig = /** @class */ (function () {
     return ModConfig;
 }());
 exports.ModConfig = ModConfig;
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * session storage helper to get typed values from it
+ */
+var SessionStorageHelper = /** @class */ (function () {
+    function SessionStorageHelper() {
+    }
+    SessionStorageHelper.getItemValueString = function (key) {
+        var value = sessionStorage.getItem(key);
+        return value;
+    };
+    SessionStorageHelper.getItemValue = function (key) {
+        var value = sessionStorage.getItem(key);
+        return JSON.parse(value);
+    };
+    return SessionStorageHelper;
+}());
+exports.SessionStorageHelper = SessionStorageHelper;
 
 
 /***/ }),
@@ -5352,40 +5352,41 @@ __webpack_require__(8);
 __webpack_require__(4);
 __webpack_require__(83);
 __webpack_require__(74);
-__webpack_require__(86);
+__webpack_require__(156);
 __webpack_require__(82);
 __webpack_require__(38);
 __webpack_require__(78);
+__webpack_require__(88);
 __webpack_require__(22);
 __webpack_require__(67);
 __webpack_require__(45);
 __webpack_require__(47);
 __webpack_require__(44);
 __webpack_require__(46);
-__webpack_require__(156);
+__webpack_require__(157);
 __webpack_require__(48);
 __webpack_require__(12);
-__webpack_require__(157);
+__webpack_require__(158);
 __webpack_require__(41);
 __webpack_require__(23);
 __webpack_require__(97);
-__webpack_require__(158);
-__webpack_require__(50);
 __webpack_require__(159);
-__webpack_require__(51);
+__webpack_require__(50);
 __webpack_require__(160);
+__webpack_require__(51);
 __webpack_require__(161);
+__webpack_require__(162);
 __webpack_require__(43);
 __webpack_require__(42);
-__webpack_require__(162);
+__webpack_require__(163);
 __webpack_require__(27);
 __webpack_require__(2);
 __webpack_require__(5);
-__webpack_require__(163);
 __webpack_require__(164);
+__webpack_require__(165);
 __webpack_require__(26);
 __webpack_require__(39);
-__webpack_require__(87);
+__webpack_require__(86);
 __webpack_require__(35);
 __webpack_require__(70);
 __webpack_require__(75);
@@ -5394,23 +5395,23 @@ __webpack_require__(34);
 __webpack_require__(14);
 __webpack_require__(20);
 __webpack_require__(21);
-__webpack_require__(165);
+__webpack_require__(166);
 __webpack_require__(16);
 __webpack_require__(76);
-__webpack_require__(166);
-__webpack_require__(88);
 __webpack_require__(167);
+__webpack_require__(87);
+__webpack_require__(168);
 __webpack_require__(19);
 __webpack_require__(69);
 __webpack_require__(29);
 __webpack_require__(18);
-__webpack_require__(168);
 __webpack_require__(169);
-__webpack_require__(30);
 __webpack_require__(170);
+__webpack_require__(30);
+__webpack_require__(171);
 __webpack_require__(72);
 __webpack_require__(73);
-__webpack_require__(171);
+__webpack_require__(172);
 __webpack_require__(31);
 __webpack_require__(77);
 __webpack_require__(32);
@@ -8489,6 +8490,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 156 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * local storage helper to get typed values from it
+ */
+var LocalStorageHelper = /** @class */ (function () {
+    function LocalStorageHelper() {
+    }
+    LocalStorageHelper.getItemValueString = function (key) {
+        var value = localStorage.getItem(key);
+        return value;
+    };
+    LocalStorageHelper.getItemValue = function (key) {
+        var value = localStorage.getItem(key);
+        return JSON.parse(value);
+    };
+    return LocalStorageHelper;
+}());
+exports.LocalStorageHelper = LocalStorageHelper;
+
+
+/***/ }),
+/* 157 */
 /***/ (function(module, exports) {
 
 /**
@@ -8498,7 +8525,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8516,7 +8543,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8531,7 +8558,7 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8567,12 +8594,6 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 160 */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 /* 161 */
 /***/ (function(module, exports) {
 
@@ -8580,6 +8601,12 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 /***/ }),
 /* 162 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8612,7 +8639,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8630,7 +8657,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8645,7 +8672,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8664,7 +8691,7 @@ exports.ButtonDefinition = ButtonDefinition;
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8688,7 +8715,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8703,7 +8730,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports) {
 
 /*
@@ -8806,7 +8833,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8818,7 +8845,7 @@ $(sxc_controller_in_page_1.$2sxcInPage.c.sel.scMenu /*".sc-menu"*/).click(functi
 
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -8833,7 +8860,7 @@ $(function () {
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
