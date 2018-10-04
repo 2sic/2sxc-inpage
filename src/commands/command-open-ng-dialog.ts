@@ -2,8 +2,8 @@
 import { ContextOfButton } from '../context/context-of-button';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { showOrToggle } from '../quick-dialog/quick-dialog';
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
+import { quickDialog } from '../quick-dialog/quick-dialog';
 
 /**
  * open a new dialog of the angular-ui
@@ -38,7 +38,7 @@ export function commandOpenNgDialog(context: ContextOfButton, event: any) : Prom
         }
       }
 
-      /*return*/ showOrToggle(context,
+      /*return*/ quickDialog.showOrToggle(context,
         link,
         callback,
         fullScreen,

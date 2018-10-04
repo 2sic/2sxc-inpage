@@ -1,79 +1,73 @@
-﻿import { _contentBlock } from '../contentBlock/main-content-block';
-import { ajaxLoad, reloadAndReInitialize, showMessage } from '../contentBlock/render';
-import { updateTemplateFromDia } from '../contentBlock/templates';
-import { context } from '../context/context';
-import { getTag } from '../manage/api';
-import { ContextOfButton } from '../context/context-of-button';
-import { QuickDialogConfig } from '../manage/quick-dialog-config';
-import { NgDialogParams } from '../manage/ng-dialog-params';
+﻿import { ContextOfButton } from '../context/context-of-button';
 import { Dialog } from '../settings/dialog';
+import Container = require('./container');
+
+console.log('quick diag 2018-10-04 22:38');
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
  */
-const resizeInterval: number = 200;
-const scrollTopOffset: number = 80;
-let resizeWatcher: any = null;
+//const resizeInterval: number = 200;
+//let resizeWatcher: any = null;
 const diagShowClass: string = 'dia-select';
-let isFullscreen: boolean = false;
+//let isFullscreen: boolean = false;
 
 /**
  * dialog manager - the currently active dialog object
  */
 // let diagManager = twoSxc._quickDialog = {}
-export let current: any = null;
+let current: any = null;
+
+export let quickDialog = {
+  hide: hide,
+  showOrToggle: showOrToggle,
+  isShowing: () => current != null,
+}
+
+export let quickDialogInternals = {
+  toggle: toggle
+}
 
 /**
  * toggle visibility
  * @param {boolean} [show] true/false optional
  */
-export function toggle(show: boolean): void {
-  const cont = $(getContainer());
+function toggle(show: boolean): void {
+  const cont = $(Container.getOrCreateContainer());
   if (show === undefined)
     show = !cont.hasClass(diagShowClass);
   // show/hide visually
   cont.toggleClass(diagShowClass, show);
-  current = show ? getIFrame() : null;
+  current = show ? Container.getIFrame() : null;
 }
 
-export function hide(): void {
+function hide(): void {
   if (current) toggle(false);
 }
 
-/**
- * cancel the current dialog
- */
-export function cancel(): void {
-  if (current) current.cancel(); // cancel & hide
-}
 
-/**
- * Remember dialog state across page-reload
- * @param {Object<any>} context - the sxc which is persisted for
- */
-export function persistDialog(context: ContextOfButton): void {
-  sessionStorage.setItem('dia-cbid', context.contentBlock.id.toString());
-}
+//const containerClass = 'inpage-frame-wrapper';
+//const iframeClass = 'inpage-frame';
 
-/**
- * get the current container
- * @returns {element} html element of the div
- */
-export function getContainer(): any {
-  const container = $('.inpage-frame-wrapper');
-  return container.length > 0 ? container : buildContainerAndIFrame();
-}
+///**
+// * get the current container
+// * @returns {element} html element of the div
+// */
+//function getOrCreateContainer(): any {
+//  const container = $(`.${containerClass}`);
+//  return container.length > 0 ? container : buildContainerAndIFrame();
+//}
 
-/**
- * find the iframe which hosts the dialog
- * @param {html} [container] - html-container as jQuery object
- * @returns {html} iframe object
- */
-export function getIFrame(container?: any): any {
-  if (!container) container = getContainer();
-  return container.find('iframe')[0];
-}
+///**
+// * find the iframe which hosts the dialog
+// * @param {html} [container] - html-container as jQuery object
+// * @returns {html} iframe object
+// */
+//function getIFrame(container?: any): any {
+//  if (!container) container = getOrCreateContainer();
+//  return container.find('iframe')[0];
+//}
 
 /**
  * check if the dialog is showing for the current sxc-instance
@@ -81,12 +75,10 @@ export function getIFrame(container?: any): any {
  * @param {string} dialogName - name of dialog
  * @returns {boolean} true if it's currently showing for this sxc-instance
  */
-export function isShowing(context: ContextOfButton, dialogName: string): boolean {
+function isShowing(context: ContextOfButton, dialogName: string): boolean {
   return current // there is a current dialog
-    &&
-    current.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
-    &&
-    current.dialogName === dialogName; // the view is the same as previously
+    && current.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
+    && current.dialogName === dialogName; // the view is the same as previously
 }
 
 /**
@@ -98,13 +90,14 @@ export function isShowing(context: ContextOfButton, dialogName: string): boolean
  * @param {string} [dialogName] - optional name of dialog, to check if it's already open
  * @returns {any} jquery object of the iframe
  */
-export function showOrToggle(context: ContextOfButton,
+function showOrToggle(context: ContextOfButton,
   url: string,
   closeCallback: any,
   fullScreen: boolean,
-  dialogName: string): any {
-  setSize(fullScreen);
-  const iFrame: any = getIFrame();
+  dialogName: string): any
+{
+  Container.setSize(fullScreen);
+  const iFrame: any = Container.getIFrame();
 
   // in case it's a toggle
   if (dialogName && isShowing(context, dialogName)) {
@@ -122,118 +115,32 @@ export function showOrToggle(context: ContextOfButton,
 }
 
 
-/**
- * build the container in the dom w/iframe for re-use
- * @return {jquery} jquery dom-object
- */
-function buildContainerAndIFrame(): any {
-  const container = $('<div class="inpage-frame-wrapper"><div class="inpage-frame"></div></div>');
-  let newIFrame: any = document.createElement('iframe');
-  newIFrame = extendIFrameWithSxcState(newIFrame);
-  container.find('.inpage-frame').html(newIFrame);
-  $('body').append(container);
+///**
+// * build the container in the dom w/iframe for re-use
+// * @return {jquery} jquery dom-object
+// */
+//function buildContainerAndIFrame(): any {
+//  const container = $(`<div class="${containerClass}"><div class="${iframeClass}"></div></div>`);
+//  let newIFrame: any = document.createElement('iframe');
+//  newIFrame = Iframebridge.connectIframeToSxcInstance(newIFrame);
+//  container.find(`.${iframeClass}`).html(newIFrame);
+//  $('body').append(container);
 
-  watchForResize();
-  return container;
-}
+//  watchForResize();
+//  return container;
+//}
 
-/**
- * set container css for size
- * @param {boolean} fullScreen
- */
-function setSize(fullScreen: boolean): void {
-  const container = getContainer();
-  // set container height
-  container.css('min-height', fullScreen ? '100%' : '225px');
-  isFullscreen = fullScreen;
-}
+///**
+// * set container css for size
+// * @param {boolean} fullScreen
+// */
+//function setSize(fullScreen: boolean): void {
+//  const container = getOrCreateContainer();
+//  // set container height
+//  container.css('min-height', fullScreen ? '100%' : '225px');
+//  isFullscreen = fullScreen;
+//}
 
-
-/**
- * copy interface from C:\Projects\2sxc-ui\angular\quick-dialog\src\app\core\dialog-frame-element.ts
- */
-interface IDialogFrameElement /*extends HTMLIFrameElement*/ {
-  getAdditionalDashboardConfig(): QuickDialogConfig; // HACK: it was `any` in original
-  // isDirty(): boolean; // HACK: we do not have it here
-  scrollToTarget(): void;
-  persistDia(): void;
-  //sxc: any;
-  toggle(action: boolean): void;
-  run(verb: string): void;
-  getManageInfo(): any;
-  showMessage(message: string): void;
-  reloadAndReInit(): Promise<any>;
-  saveTemplate(templateId: number): Promise<any>;
-  previewTemplate(templateId: number): Promise<any>;
-}
-
-/**
- * extend IFrame with Sxc state
- * @param iFrame
- */
-function extendIFrameWithSxcState(iFrame: any) {
-  let hiddenSxc: SxcInstanceWithInternals = null;
-  // ReSharper disable once UnusedLocals
-  const cbApi = _contentBlock;
-  let tagModule: any = null;
-
-  /**
-   * get the sxc-object of this iframe
-   * @returns {Object<any>} refreshed sxc-object
-   */
-  function reSxc(): SxcInstanceWithInternals {
-    if (!hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-    return hiddenSxc.recreate();
-  }
-
-  function getContext(): ContextOfButton {
-    return context(getTag(reSxc()));
-  }
-
-  const frameElement: IDialogFrameElement = {
-    getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),// ._quickDialogConfig,
-    scrollToTarget: () => {
-      $('body').animate({
-        scrollTop: tagModule.offset().top - scrollTopOffset,
-      });
-    },
-    persistDia: () => persistDialog(getContext()),
-    toggle: (show: boolean) => toggle(show),
-    run: (verb: string) => reSxc().manage.run(verb),
-    getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),// ._dialogParameters,
-    showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
-    reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
-    saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
-    previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
-  };
-
-  const newFrm: any = Object.assign(
-    iFrame,
-    frameElement,
-    {
-      closeCallback: null,
-      rewire: (sxc: SxcInstanceWithInternals, callback: any, dialogName: string) => {
-        hiddenSxc = sxc;
-        tagModule = $($(getTag(sxc)).parent().eq(0));
-        newFrm.sxcCacheKey = sxc.cacheKey;
-        newFrm.closeCallback = callback;
-        if (dialogName) {
-          newFrm.dialogName = dialogName;
-        }
-      },
-      cancel: () => {
-        newFrm.toggle(false);
-        // todo: only re-init if something was changed?
-        // return cbApi.reloadAndReInitialize(reSxc());
-        // cancel the dialog
-        localStorage.setItem('cancelled-dialog', 'true');
-        return newFrm.closeCallback();
-      },
-    }
-  );
-
-  return newFrm;
-}
 
 /**
  * rewrite the url to fit the quick-dialog situation
@@ -259,37 +166,37 @@ function rewriteUrl(url: string): string {
   return url;
 }
 
-/**
- * create watcher which monitors the iframe size and adjusts the container as needed
- * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
- * @returns {null} nothing
- */
-function watchForResize(keepWatching?: boolean): any {
-  if ((keepWatching === null || keepWatching === false) && resizeWatcher) {
-    clearInterval(resizeWatcher);
-    resizeWatcher = null;
-    return null;
-  }
+///**
+// * create watcher which monitors the iframe size and adjusts the container as needed
+// * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
+// * @returns {null} nothing
+// */
+//function watchForResize(keepWatching?: boolean): any {
+//  if ((keepWatching === null || keepWatching === false) && resizeWatcher) {
+//    clearInterval(resizeWatcher);
+//    resizeWatcher = null;
+//    return null;
+//  }
 
-  const cont: any = getContainer();
-  if (!resizeWatcher) // only add a timer if not already running
-    resizeWatcher = setInterval(() => {
-      try {
-        const frm: any = getIFrame(cont);
-        if (!frm) return;
-        const height: number = frm.contentDocument.body.offsetHeight;
-        if (frm.previousHeight === height) return;
-        frm.style.minHeight = cont.css('min-height');
-        frm.style.height = height + 'px';
-        frm.previousHeight = height;
-        if (isFullscreen) {
-          frm.style.height = '100%';
-          frm.style.position = 'absolute';
-        }
-      } catch (e) {
-        // ignore
-      }
-    },
-      resizeInterval);
-  return resizeWatcher;
-}
+//  const cont: any = getOrCreateContainer();
+//  if (!resizeWatcher) // only add a timer if not already running
+//    resizeWatcher = setInterval(() => {
+//      try {
+//        const frm: any = getIFrame(cont);
+//        if (!frm) return;
+//        const height: number = frm.contentDocument.body.offsetHeight;
+//        if (frm.previousHeight === height) return;
+//        frm.style.minHeight = cont.css('min-height');
+//        frm.style.height = height + 'px';
+//        frm.previousHeight = height;
+//        if (isFullscreen) {
+//          frm.style.height = '100%';
+//          frm.style.position = 'absolute';
+//        }
+//      } catch (e) {
+//        // ignore
+//      }
+//    },
+//      resizeInterval);
+//  return resizeWatcher;
+//}

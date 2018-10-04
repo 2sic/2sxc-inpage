@@ -1,12 +1,9 @@
-﻿import { context } from '../context/context';
-import { getTag } from '../manage/api';
-import { current } from '../quick-dialog/quick-dialog';
+﻿import { getTag } from '../manage/api';
 import { buildToolbars} from '../toolbar/build-toolbars';
-import { translate } from '../translate/2sxc.translate';
 import { getSxcInstance } from './sxc';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
-import { Node } from 'highlight.js';
+import { quickDialog } from '../quick-dialog/quick-dialog';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -61,7 +58,7 @@ function tryShowTemplatePicker(): boolean {
   };
 
   // already showing a dialog
-  if (current !== null) {
+  if (quickDialog.isShowing()) {// (current !== null) {
     return false;
   };
 

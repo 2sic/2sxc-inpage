@@ -1,11 +1,11 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { getTag } from '../manage/api';
-import { hide } from '../quick-dialog/quick-dialog';
 import { reset } from '../quick-edit/start';
 import { disable } from '../toolbar/build-toolbars';
 import { MainContentBlock } from './main-content-block';
 import { getPreviewWithTemplate } from './web-api-promises';
+import { quickDialog } from '../quick-dialog/quick-dialog';
 
 /*
  * this is the content block manager in the browser
@@ -97,7 +97,7 @@ export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: bool
 
       // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
       // must check for side-effects, which would need the manager to re-build the configuration
-      hide();
+      quickDialog.hide();
       return rez;
     }).catch((error) => {
       console.log('Error in reloadAndReInitialize', error);

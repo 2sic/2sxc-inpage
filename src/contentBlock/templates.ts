@@ -1,8 +1,8 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { hide } from '../quick-dialog/quick-dialog';
 import { isDisabled } from '../toolbar/build-toolbars';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
+import { quickDialog } from '../quick-dialog/quick-dialog';
 
 /**
  * prepare the instance so content can be added
@@ -43,7 +43,7 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
   return updateTemplate(context, templateId, forceCreate)
     .then(() => {
 
-      hide();
+      quickDialog.hide();
 
       // if it didn't have content, then it only has now...
       if (!context.app.hasContent) {

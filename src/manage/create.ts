@@ -1,17 +1,17 @@
 ﻿import { InstanceEngine } from '../commands/instance-engine';
 import { manipulator } from '../contentBlock/manipulate';
-import { getContextInstance, context } from '../context/context';
+import { context } from '../context/context';
 import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { ButtonDefinition } from '../toolbar/button/button-definition';
 import { renderButton } from '../toolbar/item/render-button';
 import { renderToolbar } from '../toolbar/item/render-toolbar';
 import { expandToolbarConfig } from '../toolbar/toolbar/toolbar-expand-config';
-import { /*buildInstanceConfig, buildNgDialogParams, buildQuickDialogConfig,*/ getEditContext, getTag/*, getUserOfEditContext */} from './api';
+import { getEditContext, getTag} from './api';
 import { UserOfEditContext } from './user-of-edit-context';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
 import { ContextOfButton } from '../context/context-of-button';
-import { SessionStorageHelper } from './session-storage-helper';
+import { quickEditState } from '../quick-dialog/dialog-state';
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -205,13 +205,14 @@ class EditManager {
 
     // todo: move this to dialog-handling
     // display the dialog
-    const openDialogId = SessionStorageHelper.getItemValue<number>('dia-cbid');
+    const openDialogId = quickEditState.get(); // SessionStorageHelper.getItemValue<number>('dia-cbid');
 
     if ((this.editContext && this.editContext.error && this.editContext.error.type) || !openDialogId || openDialogId != this.sxc.cbid) {
       return false;
     }
 
-    sessionStorage.removeItem('dia-cbid');
+    quickEditState.remove();
+    //sessionStorage.removeItem('dia-cbid');
 
     this.run('layout');
 
