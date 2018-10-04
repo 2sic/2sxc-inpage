@@ -4,6 +4,7 @@ import { getSxcInstance } from './sxc';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
 import { quickDialog } from '../quick-dialog/quick-dialog';
+import QuickEditState = require('../quick-dialog/quick-edit-state');
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -11,7 +12,7 @@ import { quickDialog } from '../quick-dialog/quick-dialog';
  */
 const initializedModules: any[] = [];
 let openedTemplatePickerOnce = false;
-let cancelledDialog: string;
+let cancelledDialog: boolean;
 
 // callback function to execute when mutations are observed
 let initAllModulesCallback = (mutationsList: any) => {
@@ -23,10 +24,11 @@ let observer = new MutationObserver(initAllModulesCallback);
 
 $(document).ready(() => {
 
-  cancelledDialog = localStorage.getItem('cancelled-dialog');
+  cancelledDialog = QuickEditState.cancelled.get(); // localStorage.getItem('cancelled-dialog');
 
   if (cancelledDialog) {
-    localStorage.removeItem('cancelled-dialog');
+    QuickEditState.cancelled.remove();
+    //localStorage.removeItem('cancelled-dialog');
   };
 
   initAllModules(true);

@@ -8,8 +8,9 @@ import { QuickDialogConfig } from '../manage/quick-dialog-config';
 import { NgDialogParams } from '../manage/ng-dialog-params';
 import DialogFrameElement = require('./iDialogFrameElement');
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
-import { quickEditState } from './dialog-state';
 import { quickDialogInternals } from './quick-dialog';
+import IDialogWithIFrameDefinition = DialogFrameElement.IDialogWithIFrameDefinition;
+import QuickEditState = require('./quick-edit-state');
 
 const scrollTopOffset: number = 80;
 
@@ -17,7 +18,7 @@ const scrollTopOffset: number = 80;
  * extend IFrame with Sxc state
  * @param iFrame
  */
-export function connectIframeToSxcInstance(iFrame: any) {
+export function connectIframeToSxcInstance(iFrame: any): IDialogWithIFrameDefinition {
   let hiddenSxc: SxcInstanceWithInternals = null;
   // ReSharper disable once UnusedLocals
   const cbApi = _contentBlock;
@@ -43,7 +44,7 @@ export function connectIframeToSxcInstance(iFrame: any) {
         scrollTop: tagModule.offset().top - scrollTopOffset,
       });
     },
-    persistDia: () => quickEditState.persist(getContext().contentBlock.id.toString()),// persistDialog(getContext()),
+    persistDia: () => QuickEditState.cbId.set(getContext().contentBlock.id.toString()),// persistDialog(getContext()),
     toggle: (show: boolean) => quickDialogInternals.toggle(show),
     run: (verb: string) => reSxc().manage.run(verb),
     getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),// ._dialogParameters,
@@ -51,32 +52,36 @@ export function connectIframeToSxcInstance(iFrame: any) {
     reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
     saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
     previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
+    cancel: null
   };
 
-  const newFrm: any = Object.assign(
+  const newFrm = Object.assign(
     iFrame,
     frameElement,
     {
       closeCallback: null,
-      rewire: (sxc: SxcInstanceWithInternals, callback: any, dialogName: string) => {
-        hiddenSxc = sxc;
-        tagModule = $($(getTag(sxc)).parent().eq(0));
-        newFrm.sxcCacheKey = sxc.cacheKey;
-        newFrm.closeCallback = callback;
-        if (dialogName) {
-          newFrm.dialogName = dialogName;
-        }
-      },
-      cancel: () => {
-        newFrm.toggle(false);
-        // todo: only re-init if something was changed?
-        // return cbApi.reloadAndReInitialize(reSxc());
-        // cancel the dialog
-        localStorage.setItem('cancelled-dialog', 'true');
-        return newFrm.closeCallback();
-      },
     }
-  );
+  ) as IDialogWithIFrameDefinition;
+
+  newFrm.rewire = (sxc: SxcInstanceWithInternals, callback: () => void, dialogName: string) => {
+    hiddenSxc = sxc;
+    tagModule = $($(getTag(sxc)).parent().eq(0));
+    newFrm.sxcCacheKey = sxc.cacheKey;
+    newFrm.closeCallback = callback;
+    if (dialogName) {
+      newFrm.dialogName = dialogName;
+    }
+  };
+
+  newFrm.cancel = () => {
+    newFrm.toggle(false);
+    // todo: only re-init if something was changed?
+    // return cbApi.reloadAndReInitialize(reSxc());
+    // cancel the dialog
+    QuickEditState.cancelled.set('true');
+    //localStorage.setItem('cancelled-dialog', 'true');
+    newFrm.closeCallback();
+  };
 
   return newFrm;
 }

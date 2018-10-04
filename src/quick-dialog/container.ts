@@ -6,7 +6,6 @@
  * it always has a reference to the latest dialog created by any module instance
  */
 const resizeInterval: number = 200;
-let resizeWatcher: any = null;
 let isFullscreen: boolean = false;
 
 const containerClass = 'inpage-frame-wrapper';
@@ -16,7 +15,7 @@ const iframeClass = 'inpage-frame';
  * get the current container
  * @returns {element} html element of the div
  */
-export function getOrCreateContainer(): any {
+export function getOrCreateContainer(): JQuery {
   const container = $(`.${containerClass}`);
   return container.length > 0 ? container : buildContainerAndIFrame();
 }
@@ -26,7 +25,7 @@ export function getOrCreateContainer(): any {
  * @param {html} [container] - html-container as jQuery object
  * @returns {html} iframe object
  */
-export function getIFrame(container?: any): any {
+export function getIFrame(container?: JQuery): HTMLElement {
   if (!container) container = getOrCreateContainer();
   return container.find('iframe')[0];
 }
@@ -38,9 +37,9 @@ export function getIFrame(container?: any): any {
  */
 function buildContainerAndIFrame(): JQuery {
   const container = $(`<div class="${containerClass}"><div class="${iframeClass}"></div></div>`);
-  let newIFrame: any = document.createElement('iframe');
-  newIFrame = Iframebridge.connectIframeToSxcInstance(newIFrame);
-  container.find(`.${iframeClass}`).html(newIFrame);
+  const newIFrame = document.createElement('iframe');
+  const extendedIFrame = Iframebridge.connectIframeToSxcInstance(newIFrame);
+  container.find(`.${iframeClass}`).html(extendedIFrame);
   $('body').append(container);
 
   watchForResize();
@@ -59,21 +58,23 @@ export function setSize(fullScreen: boolean): void {
 }
 
 
+let resizeWatcher: number = null;
+
 /**
  * create watcher which monitors the iframe size and adjusts the container as needed
  * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
  * @returns {null} nothing
  */
-function watchForResize(keepWatching?: boolean): any {
+function watchForResize(keepWatching?: boolean): void {
   if ((keepWatching === null || keepWatching === false) && resizeWatcher) {
     clearInterval(resizeWatcher);
     resizeWatcher = null;
     return null;
   }
 
-  const cont: any = getOrCreateContainer();
+  const cont = getOrCreateContainer();
   if (!resizeWatcher) // only add a timer if not already running
-    resizeWatcher = setInterval(() => {
+    resizeWatcher = window.setInterval(() => {
       try {
         const frm: any = getIFrame(cont);
         if (!frm) return;
@@ -89,7 +90,6 @@ function watchForResize(keepWatching?: boolean): any {
       } catch (e) {
         // ignore
       }
-    },
-      resizeInterval);
-  return resizeWatcher;
+    }, resizeInterval);
+  //return resizeWatcher;
 }

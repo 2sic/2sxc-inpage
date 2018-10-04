@@ -52,8 +52,7 @@
     <None Remove="src\interfaces\hashtable.ts" />
     <None Remove="src\lib-helpers\jquery.ts" />
     <None Remove="src\logging\log-utils.ts" />
-    <None Remove="src\manage\local-storage-helper.ts" />
-    <None Remove="src\manage\session-storage-helper.ts" />
+    <None Remove="src\manage\session-state-handler.ts" />
     <None Remove="src\polyfills\Element.closest.ts" />
     <None Remove="src\polyfills\include-polyfills.ts" />
     <None Remove="src\polyfills\Symbol.ts" />
@@ -127,8 +126,7 @@
     <TypeScriptCompile Include="src\interfaces\hashtable.ts" />
     <TypeScriptCompile Include="src\lib-helpers\jquery.ts" />
     <TypeScriptCompile Include="src\logging\log-utils.ts" />
-    <TypeScriptCompile Include="src\manage\session-storage-helper.ts" />
-    <TypeScriptCompile Include="src\manage\local-storage-helper.ts" />
+    <TypeScriptCompile Include="src\manage\session-state-handler.ts" />
     <TypeScriptCompile Include="src\polyfills\Element.closest.ts" />
     <TypeScriptCompile Include="src\polyfills\include-polyfills.ts" />
     <TypeScriptCompile Include="src\polyfills\Symbol.ts" />

@@ -11,7 +11,7 @@ import { UserOfEditContext } from './user-of-edit-context';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
 import { ContextOfButton } from '../context/context-of-button';
-import { quickEditState } from '../quick-dialog/dialog-state';
+import QuickEditState = require('../quick-dialog/quick-edit-state');
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -205,13 +205,13 @@ class EditManager {
 
     // todo: move this to dialog-handling
     // display the dialog
-    const openDialogId = quickEditState.get(); // SessionStorageHelper.getItemValue<number>('dia-cbid');
+    const openDialogId = QuickEditState.cbId.get(); // SessionStorageHelper.getItemValue<number>('dia-cbid');
 
     if ((this.editContext && this.editContext.error && this.editContext.error.type) || !openDialogId || openDialogId != this.sxc.cbid) {
       return false;
     }
 
-    quickEditState.remove();
+    QuickEditState.cbId.remove();
     //sessionStorage.removeItem('dia-cbid');
 
     this.run('layout');

@@ -16,4 +16,14 @@ export interface IDialogFrameElement /*extends HTMLIFrameElement*/ {
   reloadAndReInit(): Promise<any>;
   saveTemplate(templateId: number): Promise<any>;
   previewTemplate(templateId: number): Promise<any>;
+
+  /**
+   * the cancel callback to close this dialog cancelling changes
+   */
+  cancel(): void;
+}
+
+export interface IDialogWithIFrameDefinition extends HTMLIFrameElement, IDialogFrameElement {
+  closeCallback(): void,
+  rewire(sxc: SxcInstanceWithInternals, callback: any, dialogName: string): void,
 }
