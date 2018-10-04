@@ -18,7 +18,7 @@ const conf = quickE.config = {
 } as Conf;
 
 export function _readPageConfig() {
-  const configs: Conf[] = $(`[${configAttr}]`);
+  const configs /*: Conf[]*/ = $(`[${configAttr}]`);
   let confJ: string;
 
   // any inner blocks found? will currently affect if modules can be inserted...

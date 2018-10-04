@@ -10,7 +10,7 @@
     "@types/i18next-xhr-backend": "^1.4.1",
     "@types/jasmine": "^2.8.7",
     "@types/jasminewd2": "^2.0.3",
-    "@types/jquery": "^3.3.11",
+    "@types/jquery": "^1.10.27",
     "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.11",
