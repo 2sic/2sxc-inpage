@@ -59,7 +59,7 @@
     <None Remove="src\quick-edit\cb-or-mod.ts" />
     <None Remove="src\quick-edit\selectors-instance.ts" />
     <None Remove="src\quick-edit\selectors.ts" />
-    <None Remove="src\settings\dialog.ts" />
+    <None Remove="src\settings\DialogPaths.ts" />
     <None Remove="src\toolbar\adapters\button-config-adapter.ts" />
     <None Remove="src\toolbar\adapters\flatten-action-definition.ts" />
     <None Remove="src\toolbar\adapters\old-parameters-adapter.ts" />
@@ -133,7 +133,7 @@
     <TypeScriptCompile Include="src\quick-edit\cb-or-mod.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors-instance.ts" />
     <TypeScriptCompile Include="src\quick-edit\selectors.ts" />
-    <TypeScriptCompile Include="src\settings\dialog.ts" />
+    <TypeScriptCompile Include="src\settings\DialogPaths.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\button-config-adapter.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\old-parameters-adapter.ts" />
     <TypeScriptCompile Include="src\toolbar\adapters\flatten-action-definition.ts" />

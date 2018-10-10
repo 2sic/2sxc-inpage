@@ -3,7 +3,9 @@
 /**
  * copy interface from C:\Projects\2sxc-ui\angular\quick-dialog\src\app\core\dialog-frame-element.ts
  */
-export interface IDialogFrameElement /*extends HTMLIFrameElement*/ {
+
+
+interface IIFrameExtensionShared {
   getAdditionalDashboardConfig(): QuickDialogConfig; // HACK: it was `any` in original
   // isDirty(): boolean; // HACK: we do not have it here
   scrollToTarget(): void;
@@ -23,7 +25,14 @@ export interface IDialogFrameElement /*extends HTMLIFrameElement*/ {
   cancel(): void;
 }
 
-export interface IDialogWithIFrameDefinition extends HTMLIFrameElement, IDialogFrameElement {
+export interface IIFrameExtensions extends IIFrameExtensionShared {
+
+  // stuff we need here, not in the angular project
   closeCallback(): void,
   rewire(sxc: SxcInstanceWithInternals, callback: any, dialogName: string): void,
+
+}
+
+export interface IDialogFrameElement extends HTMLIFrameElement, IIFrameExtensions {
+
 }

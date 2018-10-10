@@ -1,21 +1,25 @@
-﻿import Iframebridge = require('./iframe-bridge');
+﻿import Iframebridge = require('./iframe');
+import ContainerSize = require('./container-size');
+import IFrame = Iframebridge.build;
+import DialogFrameElement = require('./iDialogFrameElement');
+import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
  */
-const resizeInterval: number = 200;
-let isFullscreen: boolean = false;
 
 const containerClass = 'inpage-frame-wrapper';
 const iframeClass = 'inpage-frame';
+const iframeTag = 'iframe';
+const containerTemplate = `<div class="${containerClass}"><div class="${iframeClass}"></div></div>`;
 
 /**
  * get the current container
  * @returns {element} html element of the div
  */
-export function getOrCreateContainer(): JQuery {
+export function getOrCreate(): JQuery<HTMLElement> {
   const container = $(`.${containerClass}`);
   return container.length > 0 ? container : buildContainerAndIFrame();
 }
@@ -25,9 +29,9 @@ export function getOrCreateContainer(): JQuery {
  * @param {html} [container] - html-container as jQuery object
  * @returns {html} iframe object
  */
-export function getIFrame(container?: JQuery): HTMLElement {
-  if (!container) container = getOrCreateContainer();
-  return container.find('iframe')[0];
+export function getIFrame(container?: JQuery): IDialogFrameElement {
+  if (!container) container = getOrCreate();
+  return container.find(iframeTag)[0] as IDialogFrameElement;
 }
 
 
@@ -35,61 +39,12 @@ export function getIFrame(container?: JQuery): HTMLElement {
  * build the container in the dom w/iframe for re-use
  * @return {jquery} jquery dom-object
  */
-function buildContainerAndIFrame(): JQuery {
-  const container = $(`<div class="${containerClass}"><div class="${iframeClass}"></div></div>`);
-  const newIFrame = document.createElement('iframe');
-  const extendedIFrame = Iframebridge.connectIframeToSxcInstance(newIFrame);
-  container.find(`.${iframeClass}`).html(extendedIFrame);
+function buildContainerAndIFrame(): JQuery<HTMLElement> {
+  const container = $(containerTemplate);
+  const newIFrame = document.createElement(iframeTag);
+  const extendedIFrame = IFrame(newIFrame);// Iframebridge.connectIframeToSxcInstance(newIFrame);
+  container.find(`.${iframeClass}`).append(extendedIFrame);
   $('body').append(container);
-
-  watchForResize();
+  ContainerSize.watchForResize(container);
   return container;
-}
-
-/**
- * set container css for size
- * @param {boolean} fullScreen
- */
-export function setSize(fullScreen: boolean): void {
-  const container = getOrCreateContainer();
-  // set container height
-  container.css('min-height', fullScreen ? '100%' : '225px');
-  isFullscreen = fullScreen;
-}
-
-
-let resizeWatcher: number = null;
-
-/**
- * create watcher which monitors the iframe size and adjusts the container as needed
- * @param {boolean} [keepWatching] optional true/false to start/stop the watcher
- * @returns {null} nothing
- */
-function watchForResize(keepWatching?: boolean): void {
-  if ((keepWatching === null || keepWatching === false) && resizeWatcher) {
-    clearInterval(resizeWatcher);
-    resizeWatcher = null;
-    return null;
-  }
-
-  const cont = getOrCreateContainer();
-  if (!resizeWatcher) // only add a timer if not already running
-    resizeWatcher = window.setInterval(() => {
-      try {
-        const frm: any = getIFrame(cont);
-        if (!frm) return;
-        const height: number = frm.contentDocument.body.offsetHeight;
-        if (frm.previousHeight === height) return;
-        frm.style.minHeight = cont.css('min-height');
-        frm.style.height = height + 'px';
-        frm.previousHeight = height;
-        if (isFullscreen) {
-          frm.style.height = '100%';
-          frm.style.position = 'absolute';
-        }
-      } catch (e) {
-        // ignore
-      }
-    }, resizeInterval);
-  //return resizeWatcher;
 }

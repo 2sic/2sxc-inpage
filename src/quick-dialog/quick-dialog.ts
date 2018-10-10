@@ -1,22 +1,19 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { Dialog } from '../settings/dialog';
 import Container = require('./container');
+import ContainerSize = require('./container-size');
+import UrlHandler = require('./url-handler');
 
-console.log('quick diag 2018-10-04 22:38');
+console.log('quick diag 2018-10-10 16:16');
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
  */
-//const resizeInterval: number = 200;
-//let resizeWatcher: any = null;
 const diagShowClass: string = 'dia-select';
-//let isFullscreen: boolean = false;
 
 /**
  * dialog manager - the currently active dialog object
  */
-// let diagManager = twoSxc._quickDialog = {}
 let current: any = null;
 
 export let quickDialog = {
@@ -34,7 +31,7 @@ export let quickDialogInternals = {
  * @param {boolean} [show] true/false optional
  */
 function toggle(show: boolean): void {
-  const cont = $(Container.getOrCreateContainer());
+  const cont = Container.getOrCreate();
   if (show === undefined)
     show = !cont.hasClass(diagShowClass);
   // show/hide visually
@@ -73,45 +70,21 @@ function showOrToggle(context: ContextOfButton,
   fullScreen: boolean,
   dialogName: string): any
 {
-  Container.setSize(fullScreen);
-  const iFrame: any = Container.getIFrame();
+  ContainerSize.setSize(fullScreen);
+  const iFrame = Container.getIFrame();
 
   // in case it's a toggle
   if (dialogName && isShowing(context, dialogName)) {
     return hide();
-  }
+  } 
+
   iFrame.rewire(context.sxc, closeCallback, dialogName);
-  iFrame.setAttribute('src', rewriteUrl(url));
+  iFrame.setAttribute('src', UrlHandler.rewriteUrl(url));
   // if the window had already been loaded, re-init
-  if (iFrame.contentWindow && iFrame.contentWindow.reboot)
-    iFrame.contentWindow.reboot();
+  if (iFrame.contentWindow && (iFrame.contentWindow as any).reboot)
+    (iFrame.contentWindow as any).reboot();
 
   // make sure it's visible'
   iFrame.toggle(true);
   return iFrame;
-}
-
-
-/**
- * rewrite the url to fit the quick-dialog situation
- * optionally with a live-compiled version from ng-serve
- * @param {string} url - original url pointing to the "wrong" dialog
- * @returns {string} new url
- */
-function rewriteUrl(url: string): string {
-  // change default url-schema from the primary angular-app to the quick-dialog
-  url = url.replace(Dialog.ng1, Dialog.quickDialog)
-    .replace(Dialog.ng5, Dialog.quickDialog);
-  // special debug-code when running on local ng-serve
-  // this is only activated if the developer manually sets a value in the localStorage
-  try {
-    const devMode = localStorage.getItem('devMode');
-    if (devMode && ~~devMode) {
-      url = url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
-    }
-
-  } catch (e) {
-    // ignore
-  }
-  return url;
 }

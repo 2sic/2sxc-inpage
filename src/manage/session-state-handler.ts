@@ -1,9 +1,9 @@
 ﻿
 /**
  * This object helps persist / load / reset 
- * one info in the quick-edit
+ * a setting in the session-state
  * */
-class SessionStateHandler<T> {
+export class SessionStateHandler<T> {
   constructor(private readonly key: string) { }
 
   set(value: string): void { sessionStorage.setItem(this.key, value); };
