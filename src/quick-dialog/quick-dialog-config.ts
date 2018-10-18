@@ -1,9 +1,12 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
-import { UserOfEditContext } from './user-of-edit-context';
+import { UserOfEditContext } from '../manage/user-of-edit-context';
+import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 
-export class QuickDialogConfig {
+
+export class QuickDialogConfig implements IQuickDialogConfig {
   appId: number;
   isContent: boolean;
+  isInnerContent: boolean;
   hasContent: boolean;
   isList: boolean;
   templateId: number;
@@ -28,6 +31,7 @@ export class QuickDialogConfig {
     const config = new QuickDialogConfig();
     config.appId = context.app.id;
     config.isContent = context.app.isContent;
+    config.isInnerContent = context.instance.id !== context.contentBlock.id; // if it differs, it's inner
     config.hasContent = context.app.hasContent;
     config.isList = context.contentBlock.isList;
     config.templateId = context.contentBlock.templateId;

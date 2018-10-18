@@ -4,7 +4,7 @@ import { getSxcInstance } from './sxc';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
 import { quickDialog } from '../quick-dialog/quick-dialog';
-import QuickEditState = require('../quick-dialog/quick-edit-state');
+import QuickEditState = require('../quick-dialog/state');
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)

@@ -2,8 +2,10 @@
 import Container = require('./container');
 import ContainerSize = require('./container-size');
 import UrlHandler = require('./url-handler');
+import DialogFrameElement = require('./iDialogFrameElement');
+import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
-console.log('quick diag 2018-10-10 16:16');
+console.log('quick diag 2018-10-16 21:26');
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -14,7 +16,7 @@ const diagShowClass: string = 'dia-select';
 /**
  * dialog manager - the currently active dialog object
  */
-let current: any = null;
+let current: IDialogFrameElement = null;
 
 export let quickDialog = {
   hide: hide,
@@ -51,8 +53,10 @@ function hide(): void {
  */
 function isShowing(context: ContextOfButton, dialogName: string): boolean {
   return current // there is a current dialog
-    && current.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
-    && current.dialogName === dialogName; // the view is the same as previously
+
+    //todo next: unclear where thes should be set, probably move to bridge?
+    && current.bridge.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
+    && current.bridge.dialogName === dialogName; // the view is the same as previously
 }
 
 /**
@@ -78,13 +82,13 @@ function showOrToggle(context: ContextOfButton,
     return hide();
   } 
 
-  iFrame.rewire(context.sxc, closeCallback, dialogName);
+  iFrame.bridge.rewire(context.sxc, closeCallback, dialogName);
   iFrame.setAttribute('src', UrlHandler.rewriteUrl(url));
   // if the window had already been loaded, re-init
   if (iFrame.contentWindow && (iFrame.contentWindow as any).reboot)
     (iFrame.contentWindow as any).reboot();
 
   // make sure it's visible'
-  iFrame.toggle(true);
+  iFrame.bridge.toggle(true);
   return iFrame;
 }

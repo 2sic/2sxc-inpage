@@ -3,30 +3,33 @@ import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { ContextOfButton } from '../context/context-of-button';
-import { QuickDialogConfig } from '../manage/quick-dialog-config';
 import { NgDialogParams } from '../manage/ng-dialog-params';
-import DialogFrameElement = require('./iDialogFrameElement');
 import { quickDialogInternals } from './quick-dialog';
-import QuickEditState = require('./quick-edit-state');
-import IIFrameExtensions = DialogFrameElement.IIFrameExtensions;
-import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
+import QuickEditState = require('./state');
+import { IDialogFrameElement } from './iDialogFrameElement';
+import { IIFrameExtensions } from './iiframe-extensions';
+import { QuickDialogConfig } from './quick-dialog-config';
 
 const scrollTopOffset: number = 80;
 const animationTime: number = 400;
 
 export function build(iFrame: HTMLIFrameElement): IDialogFrameElement {
   console.log('prot: ', DialogIFrame.prototype);
-  const extensions = new DialogIFrame();
-  console.log('extensions: ', extensions);
-  const merged = Object.assign(iFrame, DialogIFrame.prototype) as IDialogFrameElement;
-  console.log('merged: ', merged);
-  return merged;
+  const iFrameExtended = iFrame as IDialogFrameElement;
+  iFrameExtended.bridge = new DialogIFrame();
+  console.log('extensions: ', iFrameExtended.bridge);
+  //const merged = Object.assign(iFrame, DialogIFrame.prototype) as IDialogFrameElement;
+  //console.log('merged: ', merged);
+  return iFrameExtended;// merged;
 }
 
 /**
  * 
  */
 export class DialogIFrame implements IIFrameExtensions {
+
+  sxcCacheKey: string;
+  dialogName: string;
 
   /**
    * internal object to keep track of the sxc-instance
@@ -66,10 +69,6 @@ export class DialogIFrame implements IIFrameExtensions {
 
   run(verb: string) {
     this.reSxc().manage.run(verb);
-  }
-
-  getManageInfo() {
-    return NgDialogParams.fromContext(this.reSxc().manage.context);
   }
 
   showMessage(message: string) {

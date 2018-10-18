@@ -677,7 +677,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Container = __webpack_require__(38);
 var ContainerSize = __webpack_require__(40);
 var UrlHandler = __webpack_require__(84);
-console.log('quick diag 2018-10-10 16:16');
+console.log('quick diag 2018-10-16 21:26');
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -719,8 +719,9 @@ function hide() {
  */
 function isShowing(context, dialogName) {
     return current // there is a current dialog
-        && current.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
-        && current.dialogName === dialogName; // the view is the same as previously
+        //todo next: unclear where thes should be set, probably move to bridge?
+        && current.bridge.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
+        && current.bridge.dialogName === dialogName; // the view is the same as previously
 }
 /**
  * show / reset the current iframe to use new url and callback
@@ -738,13 +739,13 @@ function showOrToggle(context, url, closeCallback, fullScreen, dialogName) {
     if (dialogName && isShowing(context, dialogName)) {
         return hide();
     }
-    iFrame.rewire(context.sxc, closeCallback, dialogName);
+    iFrame.bridge.rewire(context.sxc, closeCallback, dialogName);
     iFrame.setAttribute('src', UrlHandler.rewriteUrl(url));
     // if the window had already been loaded, re-init
     if (iFrame.contentWindow && iFrame.contentWindow.reboot)
         iFrame.contentWindow.reboot();
     // make sure it's visible'
-    iFrame.toggle(true);
+    iFrame.bridge.toggle(true);
     return iFrame;
 }
 
@@ -1542,13 +1543,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var UserOfEditContext = /** @class */ (function () {
     function UserOfEditContext() {
     }
-    // todo: stv, constructor should be removed after refactoring
-    //constructor(editContext?: DataEditContext) {
-    //  if (editContext) {
-    //    this.canDesign = editContext.User.CanDesign;
-    //    this.canDevelop = editContext.User.CanDesign;
-    //  }
-    //}
     UserOfEditContext.fromContext = function (context) {
         var user = new UserOfEditContext();
         user.canDesign = context.user.canDesign;
@@ -1567,7 +1561,7 @@ exports.UserOfEditContext = UserOfEditContext;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var session_state_handler_1 = __webpack_require__(83);
+var session_state_handler_1 = __webpack_require__(82);
 exports.cbId = new session_state_handler_1.SessionStateHandler('dia-cbid');
 exports.cancelled = new session_state_handler_1.SessionStateHandler('cancelled-dialog');
 
@@ -2555,7 +2549,7 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Iframebridge = __webpack_require__(192);
+var Iframebridge = __webpack_require__(81);
 var ContainerSize = __webpack_require__(40);
 var IFrame = Iframebridge.build;
 /**
@@ -4139,53 +4133,168 @@ exports._contentBlock = new MainContentBlock();
 
 /***/ }),
 /* 81 */
-/***/ (function(module, exports) {
-
-"use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Projects\\2sxc-inpage\\src\\quick-dialog\\iframe-bridge.ts'");
-
-/***/ }),
-/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var user_of_edit_context_1 = __webpack_require__(22);
-var QuickDialogConfig = /** @class */ (function () {
-    function QuickDialogConfig() {
+var render_1 = __webpack_require__(16);
+var templates_1 = __webpack_require__(17);
+var context_1 = __webpack_require__(5);
+var api_1 = __webpack_require__(4);
+var quick_dialog_1 = __webpack_require__(11);
+var QuickEditState = __webpack_require__(23);
+var quick_dialog_config_1 = __webpack_require__(83);
+var scrollTopOffset = 80;
+var animationTime = 400;
+function build(iFrame) {
+    console.log('prot: ', DialogIFrame.prototype);
+    var iFrameExtended = iFrame;
+    iFrameExtended.bridge = new DialogIFrame();
+    console.log('extensions: ', iFrameExtended.bridge);
+    //const merged = Object.assign(iFrame, DialogIFrame.prototype) as IDialogFrameElement;
+    //console.log('merged: ', merged);
+    return iFrameExtended; // merged;
+}
+exports.build = build;
+/**
+ *
+ */
+var DialogIFrame = /** @class */ (function () {
+    function DialogIFrame() {
     }
-    //constructor(editContext: DataEditContext) {
-    //  this.appId = editContext.ContentGroup.AppId;
-    //  this.isContent = editContext.ContentGroup.IsContent;
-    //  this.hasContent = editContext.ContentGroup.HasContent;
-    //  this.isList = editContext.ContentGroup.IsList;
-    //  this.templateId = editContext.ContentGroup.TemplateId;
-    //  this.contentTypeId = editContext.ContentGroup.ContentTypeName;
-    //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
-    //  this.user = getUserOfEditContext(editContext);
-    //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
-    //}
-    QuickDialogConfig.fromContext = function (context) {
-        var config = new QuickDialogConfig();
-        config.appId = context.app.id;
-        config.isContent = context.app.isContent;
-        config.hasContent = context.app.hasContent;
-        config.isList = context.contentBlock.isList;
-        config.templateId = context.contentBlock.templateId;
-        config.contentTypeId = context.contentBlock.contentTypeId;
-        config.templateChooserVisible = context.contentBlock.showTemplatePicker; // todo = maybe move to content-group
-        config.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
-        config.supportsAjax = context.app.supportsAjax;
-        return config;
+    /**
+     * get the sxc-object of this iframe
+     * @returns {Object<any>} refreshed sxc-object
+     */
+    DialogIFrame.prototype.reSxc = function () {
+        if (!this.hiddenSxc)
+            throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
+        return this.hiddenSxc.recreate();
     };
-    return QuickDialogConfig;
+    DialogIFrame.prototype.getContext = function () {
+        return context_1.context(api_1.getTag(this.reSxc()));
+    };
+    DialogIFrame.prototype.getAdditionalDashboardConfig = function () {
+        return quick_dialog_config_1.QuickDialogConfig.fromContext(this.reSxc().manage.context);
+    };
+    DialogIFrame.prototype.persistDia = function () {
+        return QuickEditState.cbId.set(this.getContext().contentBlock.id.toString());
+    };
+    DialogIFrame.prototype.toggle = function (show) {
+        quick_dialog_1.quickDialogInternals.toggle(show);
+    };
+    DialogIFrame.prototype.run = function (verb) {
+        this.reSxc().manage.run(verb);
+    };
+    DialogIFrame.prototype.showMessage = function (message) {
+        render_1.showMessage(this.getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>");
+    };
+    DialogIFrame.prototype.reloadAndReInit = function () {
+        return render_1.reloadAndReInitialize(this.getContext(), true, true);
+    };
+    DialogIFrame.prototype.saveTemplate = function (templateId) {
+        return templates_1.updateTemplateFromDia(this.getContext(), templateId, false);
+    };
+    DialogIFrame.prototype.previewTemplate = function (templateId) {
+        return render_1.ajaxLoad(this.getContext(), templateId, true);
+    };
+    DialogIFrame.prototype.closeCallback = function () { };
+    ;
+    DialogIFrame.prototype.scrollToTarget = function () {
+        $('body').animate({
+            scrollTop: this.tagModule.offset().top - scrollTopOffset
+        }, animationTime);
+    };
+    ;
+    DialogIFrame.prototype.rewire = function (sxc, callback, dialogName) {
+        console.log('rewire with sxc: ', sxc);
+        this.hiddenSxc = sxc;
+        this.tagModule = $($(api_1.getTag(sxc)).parent().eq(0));
+        this.sxcCacheKey = sxc.cacheKey;
+        this.closeCallback = callback;
+        if (dialogName) {
+            this.dialogName = dialogName;
+        }
+    };
+    ;
+    DialogIFrame.prototype.cancel = function () {
+        this.toggle(false);
+        // todo: only re-init if something was changed?
+        // return cbApi.reloadAndReInitialize(reSxc());
+        // cancel the dialog
+        QuickEditState.cancelled.set('true');
+        this.closeCallback();
+    };
+    ;
+    return DialogIFrame;
 }());
-exports.QuickDialogConfig = QuickDialogConfig;
+exports.DialogIFrame = DialogIFrame;
+///**
+// * extend IFrame with Sxc state
+// * @param iFrame
+// */
+//export function connectIframeToSxcInstance(iFrame: HTMLElement): IDialogFrameExtended {
+//  //let hiddenSxc: SxcInstanceWithInternals = null;
+//  //const cbApi = _contentBlock;
+//  //let tagModule: JQuery<HTMLElement> = null;
+//  const newFrm = Object.assign(
+//    iFrame,
+//    {
+//      getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),
+//      persistDia: () => QuickEditState.cbId.set(getContext().contentBlock.id.toString()),
+//      toggle: (show: boolean) => quickDialogInternals.toggle(show),
+//      run: (verb: string) => reSxc().manage.run(verb),
+//      getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),
+//      showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
+//      reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
+//      saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
+//      previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
+//      cancel: null,
+//      closeCallback: null
+//    },
+//  ) as IDialogFrameExtended;
+//  /**
+//   * get the sxc-object of this iframe
+//   * @returns {Object<any>} refreshed sxc-object
+//   */
+//  function reSxc(): SxcInstanceWithInternals {
+//    if (!newFrm.hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
+//    return newFrm.hiddenSxc.recreate();
+//  }
+//  function getContext(): ContextOfButton {
+//    return context(getTag(reSxc()));
+//  }
+//  newFrm.scrollToTarget = () => {
+//    $('body').animate({
+//        scrollTop: newFrm.tagModule.offset().top - scrollTopOffset
+//      } as any,
+//      animationTime);
+//  };
+//  newFrm.rewire = (sxc: SxcInstanceWithInternals, callback: () => void, dialogName: string) => {
+//    newFrm.hiddenSxc = sxc;
+//    newFrm.tagModule = $($(getTag(sxc)).parent().eq(0));
+//    newFrm.sxcCacheKey = sxc.cacheKey;
+//    newFrm.closeCallback = callback;
+//    if (dialogName) {
+//      newFrm.dialogName = dialogName;
+//    }
+//  };
+//  newFrm.cancel = () => {
+//    newFrm.toggle(false);
+//    // todo: only re-init if something was changed?
+//    // return cbApi.reloadAndReInitialize(reSxc());
+//    // cancel the dialog
+//    QuickEditState.cancelled.set('true');
+//    //localStorage.setItem('cancelled-dialog', 'true');
+//    newFrm.closeCallback();
+//  };
+//  return newFrm;
+//}
 
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4222,6 +4331,47 @@ var SessionStorageHelper = /** @class */ (function () {
     };
     return SessionStorageHelper;
 }());
+
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var user_of_edit_context_1 = __webpack_require__(22);
+var QuickDialogConfig = /** @class */ (function () {
+    function QuickDialogConfig() {
+    }
+    //constructor(editContext: DataEditContext) {
+    //  this.appId = editContext.ContentGroup.AppId;
+    //  this.isContent = editContext.ContentGroup.IsContent;
+    //  this.hasContent = editContext.ContentGroup.HasContent;
+    //  this.isList = editContext.ContentGroup.IsList;
+    //  this.templateId = editContext.ContentGroup.TemplateId;
+    //  this.contentTypeId = editContext.ContentGroup.ContentTypeName;
+    //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
+    //  this.user = getUserOfEditContext(editContext);
+    //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
+    //}
+    QuickDialogConfig.fromContext = function (context) {
+        var config = new QuickDialogConfig();
+        config.appId = context.app.id;
+        config.isContent = context.app.isContent;
+        config.isInnerContent = context.instance.id !== context.contentBlock.id; // if it differs, it's inner
+        config.hasContent = context.app.hasContent;
+        config.isList = context.contentBlock.isList;
+        config.templateId = context.contentBlock.templateId;
+        config.contentTypeId = context.contentBlock.contentTypeId;
+        config.templateChooserVisible = context.contentBlock.showTemplatePicker; // todo = maybe move to content-group
+        config.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
+        config.supportsAjax = context.app.supportsAjax;
+        return config;
+    };
+    return QuickDialogConfig;
+}());
+exports.QuickDialogConfig = QuickDialogConfig;
 
 
 /***/ }),
@@ -5342,13 +5492,15 @@ __webpack_require__(154);
 __webpack_require__(155);
 __webpack_require__(156);
 __webpack_require__(157);
-__webpack_require__(3);
-__webpack_require__(1);
 __webpack_require__(158);
 __webpack_require__(159);
+__webpack_require__(3);
+__webpack_require__(1);
+__webpack_require__(160);
+__webpack_require__(161);
 __webpack_require__(71);
 __webpack_require__(14);
-__webpack_require__(160);
+__webpack_require__(162);
 __webpack_require__(99);
 __webpack_require__(7);
 __webpack_require__(4);
@@ -5357,40 +5509,41 @@ __webpack_require__(74);
 __webpack_require__(88);
 __webpack_require__(39);
 __webpack_require__(82);
-__webpack_require__(83);
 __webpack_require__(22);
 __webpack_require__(67);
 __webpack_require__(47);
 __webpack_require__(49);
 __webpack_require__(46);
 __webpack_require__(48);
-__webpack_require__(161);
+__webpack_require__(163);
 __webpack_require__(50);
 __webpack_require__(40);
 __webpack_require__(38);
-__webpack_require__(162);
+__webpack_require__(164);
 __webpack_require__(81);
+__webpack_require__(165);
+__webpack_require__(83);
 __webpack_require__(11);
 __webpack_require__(23);
 __webpack_require__(84);
-__webpack_require__(163);
+__webpack_require__(166);
 __webpack_require__(43);
 __webpack_require__(24);
 __webpack_require__(102);
-__webpack_require__(164);
-__webpack_require__(78);
-__webpack_require__(165);
-__webpack_require__(79);
-__webpack_require__(166);
 __webpack_require__(167);
+__webpack_require__(78);
+__webpack_require__(168);
+__webpack_require__(79);
+__webpack_require__(169);
+__webpack_require__(170);
 __webpack_require__(45);
 __webpack_require__(44);
-__webpack_require__(168);
+__webpack_require__(171);
 __webpack_require__(36);
 __webpack_require__(2);
 __webpack_require__(8);
-__webpack_require__(169);
-__webpack_require__(170);
+__webpack_require__(172);
+__webpack_require__(173);
 __webpack_require__(35);
 __webpack_require__(41);
 __webpack_require__(92);
@@ -5402,23 +5555,23 @@ __webpack_require__(32);
 __webpack_require__(13);
 __webpack_require__(20);
 __webpack_require__(21);
-__webpack_require__(171);
+__webpack_require__(174);
 __webpack_require__(15);
 __webpack_require__(76);
-__webpack_require__(172);
+__webpack_require__(175);
 __webpack_require__(93);
-__webpack_require__(173);
+__webpack_require__(176);
 __webpack_require__(19);
 __webpack_require__(69);
 __webpack_require__(27);
 __webpack_require__(18);
-__webpack_require__(174);
-__webpack_require__(175);
+__webpack_require__(177);
+__webpack_require__(178);
 __webpack_require__(28);
-__webpack_require__(176);
+__webpack_require__(179);
 __webpack_require__(72);
 __webpack_require__(73);
-__webpack_require__(177);
+__webpack_require__(180);
 __webpack_require__(29);
 __webpack_require__(77);
 __webpack_require__(30);
@@ -8441,25 +8594,55 @@ window_in_page_1.windowInPage.$2sxcActionMenuMapper = function (moduleId) {
 
 /***/ }),
 /* 155 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-// ReSharper restore InconsistentNaming
+"use strict";
+
+//
+// Note: this interface is copied/shared between this and angular quick-edit
+//
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
 /* 156 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+//
+// Note: this interface is copied/shared between this and angular quick-edit
+//
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
 /* 157 */
 /***/ (function(module, exports) {
 
+// ReSharper restore InconsistentNaming
 
 
 /***/ }),
 /* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//
+// Note: this interface is copied/shared between this and angular quick-edit
+//
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8481,32 +8664,13 @@ exports.extend = extend;
 
 
 /***/ }),
-/* 159 */
+/* 161 */
 /***/ (function(module, exports) {
 
 /**
  * jquery helper
  */
 //declare let $: any;
-
-
-/***/ }),
-/* 160 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-/***/ }),
-/* 161 */
-/***/ (function(module, exports) {
-
-/**
- * Symbol polyfill for es5 from lib.es6
- * https://github.com/Microsoft/TypeScript/blob/f17bf54bfe3f1e02e47af7660336a88f9ed2a316/lib/lib.es6.d.ts#L5501
- */
 
 
 /***/ }),
@@ -8520,6 +8684,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 /***/ }),
 /* 163 */
+/***/ (function(module, exports) {
+
+/**
+ * Symbol polyfill for es5 from lib.es6
+ * https://github.com/Microsoft/TypeScript/blob/f17bf54bfe3f1e02e47af7660336a88f9ed2a316/lib/lib.es6.d.ts#L5501
+ */
+
+
+/***/ }),
+/* 164 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//
+// Note: NOT shared between this project and angular, because that object is a bit different
+//
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 165 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//
+// Note: NOT shared between this project and angular, because these properties are not needed there
+//
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8537,7 +8735,7 @@ exports.CbOrMod = CbOrMod;
 
 
 /***/ }),
-/* 164 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8552,7 +8750,7 @@ exports.Conf = Conf;
 
 
 /***/ }),
-/* 165 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8588,19 +8786,19 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 
 /***/ }),
-/* 166 */
+/* 169 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 167 */
+/* 170 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 168 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8633,7 +8831,7 @@ quick_e_1.$quickE.modActions.click(onModuleButtonClick);
 
 
 /***/ }),
-/* 169 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8651,7 +8849,7 @@ exports.Selectors = Selectors;
 
 
 /***/ }),
-/* 170 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8666,7 +8864,7 @@ exports.Specs = Specs;
 
 
 /***/ }),
-/* 171 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8685,7 +8883,7 @@ exports.ButtonDefinition = ButtonDefinition;
 
 
 /***/ }),
-/* 172 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8709,7 +8907,7 @@ exports.GroupConfig = GroupConfig;
 
 
 /***/ }),
-/* 173 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8724,7 +8922,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 174 */
+/* 177 */
 /***/ (function(module, exports) {
 
 /*
@@ -8827,7 +9025,7 @@ exports.ItemRender = ItemRender;
 
 
 /***/ }),
-/* 175 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8839,7 +9037,7 @@ $(sxc_controller_in_page_1.$2sxcInPage.c.sel.scMenu /*".sc-menu"*/).click(functi
 
 
 /***/ }),
-/* 176 */
+/* 179 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -8854,7 +9052,7 @@ $(function () {
 
 
 /***/ }),
-/* 177 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8876,185 +9074,6 @@ var item = /** @class */ (function () {
     }
     return item;
 }());
-
-
-/***/ }),
-/* 178 */,
-/* 179 */,
-/* 180 */,
-/* 181 */,
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(16);
-var templates_1 = __webpack_require__(17);
-var context_1 = __webpack_require__(5);
-var api_1 = __webpack_require__(4);
-var quick_dialog_config_1 = __webpack_require__(82);
-var ng_dialog_params_1 = __webpack_require__(39);
-var quick_dialog_1 = __webpack_require__(11);
-var QuickEditState = __webpack_require__(23);
-var scrollTopOffset = 80;
-var animationTime = 400;
-function build(iFrame) {
-    console.log('prot: ', DialogIFrame.prototype);
-    var extensions = new DialogIFrame();
-    console.log('extensions: ', extensions);
-    var merged = Object.assign(iFrame, DialogIFrame.prototype);
-    console.log('merged: ', merged);
-    return merged;
-}
-exports.build = build;
-/**
- *
- */
-var DialogIFrame = /** @class */ (function () {
-    function DialogIFrame() {
-    }
-    /**
-     * get the sxc-object of this iframe
-     * @returns {Object<any>} refreshed sxc-object
-     */
-    DialogIFrame.prototype.reSxc = function () {
-        if (!this.hiddenSxc)
-            throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-        return this.hiddenSxc.recreate();
-    };
-    DialogIFrame.prototype.getContext = function () {
-        return context_1.context(api_1.getTag(this.reSxc()));
-    };
-    DialogIFrame.prototype.getAdditionalDashboardConfig = function () {
-        return quick_dialog_config_1.QuickDialogConfig.fromContext(this.reSxc().manage.context);
-    };
-    DialogIFrame.prototype.persistDia = function () {
-        return QuickEditState.cbId.set(this.getContext().contentBlock.id.toString());
-    };
-    DialogIFrame.prototype.toggle = function (show) {
-        quick_dialog_1.quickDialogInternals.toggle(show);
-    };
-    DialogIFrame.prototype.run = function (verb) {
-        this.reSxc().manage.run(verb);
-    };
-    DialogIFrame.prototype.getManageInfo = function () {
-        return ng_dialog_params_1.NgDialogParams.fromContext(this.reSxc().manage.context);
-    };
-    DialogIFrame.prototype.showMessage = function (message) {
-        render_1.showMessage(this.getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>");
-    };
-    DialogIFrame.prototype.reloadAndReInit = function () {
-        return render_1.reloadAndReInitialize(this.getContext(), true, true);
-    };
-    DialogIFrame.prototype.saveTemplate = function (templateId) {
-        return templates_1.updateTemplateFromDia(this.getContext(), templateId, false);
-    };
-    DialogIFrame.prototype.previewTemplate = function (templateId) {
-        return render_1.ajaxLoad(this.getContext(), templateId, true);
-    };
-    DialogIFrame.prototype.closeCallback = function () { };
-    ;
-    DialogIFrame.prototype.scrollToTarget = function () {
-        $('body').animate({
-            scrollTop: this.tagModule.offset().top - scrollTopOffset
-        }, animationTime);
-    };
-    ;
-    DialogIFrame.prototype.rewire = function (sxc, callback, dialogName) {
-        console.log('rewire with sxc: ', sxc);
-        this.hiddenSxc = sxc;
-        this.tagModule = $($(api_1.getTag(sxc)).parent().eq(0));
-        this.sxcCacheKey = sxc.cacheKey;
-        this.closeCallback = callback;
-        if (dialogName) {
-            this.dialogName = dialogName;
-        }
-    };
-    ;
-    DialogIFrame.prototype.cancel = function () {
-        this.toggle(false);
-        // todo: only re-init if something was changed?
-        // return cbApi.reloadAndReInitialize(reSxc());
-        // cancel the dialog
-        QuickEditState.cancelled.set('true');
-        this.closeCallback();
-    };
-    ;
-    return DialogIFrame;
-}());
-exports.DialogIFrame = DialogIFrame;
-///**
-// * extend IFrame with Sxc state
-// * @param iFrame
-// */
-//export function connectIframeToSxcInstance(iFrame: HTMLElement): IDialogFrameExtended {
-//  //let hiddenSxc: SxcInstanceWithInternals = null;
-//  //const cbApi = _contentBlock;
-//  //let tagModule: JQuery<HTMLElement> = null;
-//  const newFrm = Object.assign(
-//    iFrame,
-//    {
-//      getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),
-//      persistDia: () => QuickEditState.cbId.set(getContext().contentBlock.id.toString()),
-//      toggle: (show: boolean) => quickDialogInternals.toggle(show),
-//      run: (verb: string) => reSxc().manage.run(verb),
-//      getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),
-//      showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
-//      reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
-//      saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
-//      previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
-//      cancel: null,
-//      closeCallback: null
-//    },
-//  ) as IDialogFrameExtended;
-//  /**
-//   * get the sxc-object of this iframe
-//   * @returns {Object<any>} refreshed sxc-object
-//   */
-//  function reSxc(): SxcInstanceWithInternals {
-//    if (!newFrm.hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-//    return newFrm.hiddenSxc.recreate();
-//  }
-//  function getContext(): ContextOfButton {
-//    return context(getTag(reSxc()));
-//  }
-//  newFrm.scrollToTarget = () => {
-//    $('body').animate({
-//        scrollTop: newFrm.tagModule.offset().top - scrollTopOffset
-//      } as any,
-//      animationTime);
-//  };
-//  newFrm.rewire = (sxc: SxcInstanceWithInternals, callback: () => void, dialogName: string) => {
-//    newFrm.hiddenSxc = sxc;
-//    newFrm.tagModule = $($(getTag(sxc)).parent().eq(0));
-//    newFrm.sxcCacheKey = sxc.cacheKey;
-//    newFrm.closeCallback = callback;
-//    if (dialogName) {
-//      newFrm.dialogName = dialogName;
-//    }
-//  };
-//  newFrm.cancel = () => {
-//    newFrm.toggle(false);
-//    // todo: only re-init if something was changed?
-//    // return cbApi.reloadAndReInitialize(reSxc());
-//    // cancel the dialog
-//    QuickEditState.cancelled.set('true');
-//    //localStorage.setItem('cancelled-dialog', 'true');
-//    newFrm.closeCallback();
-//  };
-//  return newFrm;
-//}
 
 
 /***/ })

@@ -11,7 +11,7 @@ import { UserOfEditContext } from './user-of-edit-context';
 import { buttonConfigAdapter } from '../toolbar/adapters/button-config-adapter';
 import { ToolbarSettings } from '../toolbar/toolbar/toolbar-settings';
 import { ContextOfButton } from '../context/context-of-button';
-import QuickEditState = require('../quick-dialog/quick-edit-state');
+import QuickEditState = require('../quick-dialog/state');
 
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it

@@ -1,17 +1,10 @@
-﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
-import { ContextOfButton } from '../context/context-of-button';
+﻿import { ContextOfButton } from '../context/context-of-button';
+import { IUserOfEditContext } from '../interfaces/iuser-of-edit-context';
 
-export class UserOfEditContext {
+
+export class UserOfEditContext implements IUserOfEditContext {
   canDesign: boolean;
   canDevelop: boolean;
-
-  // todo: stv, constructor should be removed after refactoring
-  //constructor(editContext?: DataEditContext) {
-  //  if (editContext) {
-  //    this.canDesign = editContext.User.CanDesign;
-  //    this.canDevelop = editContext.User.CanDesign;
-  //  }
-  //}
 
   static fromContext(context: ContextOfButton): UserOfEditContext {
     const user = new UserOfEditContext();
