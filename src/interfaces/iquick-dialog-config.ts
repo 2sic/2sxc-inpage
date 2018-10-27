@@ -15,7 +15,8 @@ export interface IQuickDialogConfig {
   isList: boolean;
   templateId: number;
   contentTypeId: string;
-  templateChooserVisible: boolean;
+  //templateChooserVisible: boolean;
   user: IUserOfEditContext; // not part of the interface, which is shared to the angular project
   supportsAjax: boolean;
+  debug: boolean;
 }

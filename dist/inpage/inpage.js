@@ -245,17 +245,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_controller_in_page_1 = __webpack_require__(3);
 var api_1 = __webpack_require__(4);
 var sxc_1 = __webpack_require__(6);
-var system_context_1 = __webpack_require__(52);
-var tenant_context_1 = __webpack_require__(53);
-var user_context_1 = __webpack_require__(54);
-var content_block_context_1 = __webpack_require__(55);
-var context_of_button_1 = __webpack_require__(56);
-var app_context_1 = __webpack_require__(63);
-var instance_context_1 = __webpack_require__(64);
-var item_context_1 = __webpack_require__(65);
-var page_context_1 = __webpack_require__(66);
-var is_1 = __webpack_require__(67);
-var ui_context_1 = __webpack_require__(68);
+var system_context_1 = __webpack_require__(51);
+var tenant_context_1 = __webpack_require__(52);
+var user_context_1 = __webpack_require__(53);
+var content_block_context_1 = __webpack_require__(54);
+var context_of_button_1 = __webpack_require__(55);
+var app_context_1 = __webpack_require__(62);
+var instance_context_1 = __webpack_require__(63);
+var item_context_1 = __webpack_require__(64);
+var page_context_1 = __webpack_require__(65);
+var is_1 = __webpack_require__(66);
+var ui_context_1 = __webpack_require__(67);
 /**
  * Primary API to get the context (context is cached)
  * @param htmlElement or Id (moduleId)
@@ -432,7 +432,7 @@ exports.getSxcInstance = getSxcInstance;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var entry_1 = __webpack_require__(71);
+var entry_1 = __webpack_require__(70);
 var maxScopeLen = 3;
 var maxNameLen = 6;
 var liveDump = false;
@@ -675,8 +675,8 @@ exports.Commands = Commands;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var Container = __webpack_require__(38);
-var ContainerSize = __webpack_require__(40);
-var UrlHandler = __webpack_require__(84);
+var ContainerSize = __webpack_require__(39);
+var UrlHandler = __webpack_require__(83);
 console.log('quick diag 2018-10-16 21:26');
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -1214,7 +1214,7 @@ var window_in_page_1 = __webpack_require__(1);
 var api_1 = __webpack_require__(4);
 var start_1 = __webpack_require__(35);
 var build_toolbars_1 = __webpack_require__(13);
-var main_content_block_1 = __webpack_require__(80);
+var main_content_block_1 = __webpack_require__(79);
 var web_api_promises_1 = __webpack_require__(37);
 var quick_dialog_1 = __webpack_require__(11);
 /*
@@ -1401,7 +1401,7 @@ exports.updateTemplate = updateTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_groups_1 = __webpack_require__(69);
+var render_groups_1 = __webpack_require__(68);
 var render_helpers_1 = __webpack_require__(27);
 function renderToolbar(context) {
     // render groups of buttons
@@ -1436,7 +1436,7 @@ exports.renderToolbar = renderToolbar;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var old_parameters_adapter_1 = __webpack_require__(70);
+var old_parameters_adapter_1 = __webpack_require__(69);
 var render_helpers_1 = __webpack_require__(27);
 /**
  * generate the html for a button
@@ -1540,6 +1540,18 @@ exports.ButtonConfig = ButtonConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var session_state_handler_1 = __webpack_require__(81);
+exports.cbId = new session_state_handler_1.SessionStateHandler('dia-cbid');
+exports.cancelled = new session_state_handler_1.SessionStateHandler('cancelled-dialog');
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var UserOfEditContext = /** @class */ (function () {
     function UserOfEditContext() {
     }
@@ -1555,18 +1567,6 @@ exports.UserOfEditContext = UserOfEditContext;
 
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var session_state_handler_1 = __webpack_require__(82);
-exports.cbId = new session_state_handler_1.SessionStateHandler('dia-cbid');
-exports.cancelled = new session_state_handler_1.SessionStateHandler('cancelled-dialog');
-
-
-/***/ }),
 /* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1575,7 +1575,7 @@ exports.cancelled = new session_state_handler_1.SessionStateHandler('cancelled-d
 Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_1 = __webpack_require__(6);
 var cmds_strategy_factory_1 = __webpack_require__(102);
-var mod_1 = __webpack_require__(44);
+var mod_1 = __webpack_require__(43);
 var quick_e_1 = __webpack_require__(2);
 var selectors_instance_1 = __webpack_require__(8);
 /** add a clipboard to the quick edit */
@@ -1708,7 +1708,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var engine_1 = __webpack_require__(51);
+var engine_1 = __webpack_require__(50);
 var has_log_1 = __webpack_require__(14);
 var log_1 = __webpack_require__(7);
 var context_1 = __webpack_require__(5);
@@ -1777,7 +1777,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_page_1 = __webpack_require__(60);
+var context_of_page_1 = __webpack_require__(59);
 var ContextOfInstance = /** @class */ (function (_super) {
     __extends(ContextOfInstance, _super);
     function ContextOfInstance() {
@@ -1890,8 +1890,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var default_toolbar_template_1 = __webpack_require__(72);
-var left_toolbar_template_1 = __webpack_require__(73);
+var default_toolbar_template_1 = __webpack_require__(71);
+var left_toolbar_template_1 = __webpack_require__(72);
 var has_log_1 = __webpack_require__(14);
 var ToolbarConfigTemplates = /** @class */ (function (_super) {
     __extends(ToolbarConfigTemplates, _super);
@@ -1935,11 +1935,11 @@ exports.ToolbarConfigTemplates = ToolbarConfigTemplates;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var log_1 = __webpack_require__(7);
-var instance_config_1 = __webpack_require__(74);
-var old_toolbar_settings_adapter_1 = __webpack_require__(75);
+var instance_config_1 = __webpack_require__(73);
+var old_toolbar_settings_adapter_1 = __webpack_require__(74);
 var expand_button_config_1 = __webpack_require__(15);
-var expand_group_config_1 = __webpack_require__(76);
-var toolbar_config_1 = __webpack_require__(77);
+var expand_group_config_1 = __webpack_require__(75);
+var toolbar_config_1 = __webpack_require__(76);
 var toolbar_settings_1 = __webpack_require__(34);
 var toolbar_config_templates_1 = __webpack_require__(29);
 function expandToolbarConfig(context, toolbarData, toolbarSettings, parentLog) {
@@ -2205,7 +2205,7 @@ exports.settingsForEmptyToolbar = new ToolbarSettings({
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var config_1 = __webpack_require__(78);
+var config_1 = __webpack_require__(77);
 var positioning_1 = __webpack_require__(36);
 var quick_e_1 = __webpack_require__(2);
 var selectors_instance_1 = __webpack_require__(8);
@@ -2280,7 +2280,7 @@ exports.reset = reset;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var coords_1 = __webpack_require__(79);
+var coords_1 = __webpack_require__(78);
 var quick_e_1 = __webpack_require__(2);
 var selectors_instance_1 = __webpack_require__(8);
 /**
@@ -2549,8 +2549,8 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Iframebridge = __webpack_require__(81);
-var ContainerSize = __webpack_require__(40);
+var Iframebridge = __webpack_require__(80);
+var ContainerSize = __webpack_require__(39);
 var IFrame = Iframebridge.build;
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -2597,60 +2597,6 @@ function buildContainerAndIFrame() {
 
 /***/ }),
 /* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var user_of_edit_context_1 = __webpack_require__(22);
-var NgDialogParams = /** @class */ (function () {
-    function NgDialogParams() {
-    }
-    //constructor(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
-    //  this.zoneId = editContext.ContentGroup.ZoneId;
-    //  this.appId = editContext.ContentGroup.AppId;
-    //  this.tid = editContext.Environment.PageId;
-    //  this.mid = editContext.Environment.InstanceId;
-    //  this.cbid = sxc.cbid;
-    //  this.lang = editContext.Language.Current;
-    //  this.langpri = editContext.Language.Primary;
-    //  this.langs = JSON.stringify(editContext.Language.All);
-    //  this.portalroot = editContext.Environment.WebsiteUrl;
-    //  this.websiteroot = editContext.Environment.SxcRootUrl;
-    //  this.partOfPage = editContext.ContentBlock.PartOfPage;
-    //  // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-    //  this.publishing = editContext.ContentBlock.VersioningRequirements;
-    //  // todo= probably move the user into the dashboard info
-    //  this.user = getUserOfEditContext(editContext);
-    //  this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-    //}
-    NgDialogParams.fromContext = function (context) {
-        var params = new NgDialogParams();
-        params.zoneId = context.app.zoneId;
-        params.appId = context.app.id;
-        params.tid = context.page.id;
-        params.mid = context.instance.id;
-        params.cbid = context.contentBlock.id;
-        params.lang = context.app.currentLanguage;
-        params.langpri = context.app.primaryLanguage;
-        params.langs = JSON.stringify(context.app.allLanguages);
-        params.portalroot = context.tenant.url;
-        params.websiteroot = context.instance.sxcRootUrl;
-        params.partOfPage = context.contentBlock.partOfPage;
-        // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
-        params.publishing = context.contentBlock.versioningRequirements;
-        // todo= probably move the user into the dashboard info
-        params.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
-        params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-        return params;
-    };
-    return NgDialogParams;
-}());
-exports.NgDialogParams = NgDialogParams;
-
-
-/***/ }),
-/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2705,7 +2651,7 @@ exports.watchForResize = watchForResize;
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2720,7 +2666,7 @@ var DialogPaths;
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2729,7 +2675,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var render_1 = __webpack_require__(16);
 var sxc_controller_in_page_1 = __webpack_require__(3);
 var window_in_page_1 = __webpack_require__(1);
-var command_link_to_ng_dialog_1 = __webpack_require__(85);
+var command_link_to_ng_dialog_1 = __webpack_require__(84);
 var quick_dialog_1 = __webpack_require__(11);
 /**
  * open a new dialog of the angular-ui
@@ -2778,7 +2724,7 @@ exports.commandOpenNgDialog = commandOpenNgDialog;
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2805,13 +2751,13 @@ exports.Cb = Cb;
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var mod_manage_1 = __webpack_require__(45);
+var mod_manage_1 = __webpack_require__(44);
 var quick_e_1 = __webpack_require__(2);
 var selectors_instance_1 = __webpack_require__(8);
 var Mod = /** @class */ (function () {
@@ -2844,7 +2790,7 @@ exports.Mod = Mod;
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2985,22 +2931,22 @@ function generatePaneMoveButtons(current) {
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 // polyfills
-__webpack_require__(47); // fix for IE11 Array.find
-__webpack_require__(48); // fix for IE11 Object.assign
+__webpack_require__(46); // fix for IE11 Array.find
+__webpack_require__(47); // fix for IE11 Object.assign
 __webpack_require__(105); // polyfill of the ES6 Promise
-__webpack_require__(49); // fix for IE11 Element.closest
-__webpack_require__(50); // fix for IE11 window.CustomEvent
+__webpack_require__(48); // fix for IE11 Element.closest
+__webpack_require__(49); // fix for IE11 window.CustomEvent
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -3044,7 +2990,7 @@ if (!Array.prototype.find) {
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports) {
 
 if (typeof Object.assign != 'function') {
@@ -3072,7 +3018,7 @@ if (typeof Object.assign != 'function') {
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports) {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
@@ -3093,7 +3039,7 @@ if (!Element.prototype.closest) {
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports) {
 
 // Polyfill for creating CustomEvents on IE9/10/11
@@ -3136,7 +3082,7 @@ catch (e) {
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3153,7 +3099,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var templates_1 = __webpack_require__(17);
-var command_open_ng_dialog_1 = __webpack_require__(42);
+var command_open_ng_dialog_1 = __webpack_require__(41);
 var commands_1 = __webpack_require__(10);
 var button_action_1 = __webpack_require__(20);
 var button_config_1 = __webpack_require__(21);
@@ -3261,7 +3207,7 @@ exports.Engine = Engine;
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3279,7 +3225,7 @@ exports.SystemContext = SystemContext;
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3297,7 +3243,7 @@ exports.TenantContext = TenantContext;
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3315,7 +3261,7 @@ exports.UserContext = UserContext;
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3330,6 +3276,39 @@ var ContentBlockContext = /** @class */ (function () {
     return ContentBlockContext;
 }());
 exports.ContentBlockContext = ContentBlockContext;
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var context_of_toolbar_1 = __webpack_require__(56);
+var ContextOfButton = /** @class */ (function (_super) {
+    __extends(ContextOfButton, _super);
+    function ContextOfButton() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ContextOfButton;
+}(context_of_toolbar_1.ContextOfToolbar));
+exports.ContextOfButton = ContextOfButton;
+function isContextOfButton(thing) {
+    var maybeButton = thing;
+    return maybeButton.button !== undefined && maybeButton.tenant !== undefined;
+}
+exports.isContextOfButton = isContextOfButton;
 
 
 /***/ }),
@@ -3349,20 +3328,15 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_toolbar_1 = __webpack_require__(57);
-var ContextOfButton = /** @class */ (function (_super) {
-    __extends(ContextOfButton, _super);
-    function ContextOfButton() {
+var context_of_item_1 = __webpack_require__(57);
+var ContextOfToolbar = /** @class */ (function (_super) {
+    __extends(ContextOfToolbar, _super);
+    function ContextOfToolbar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    return ContextOfButton;
-}(context_of_toolbar_1.ContextOfToolbar));
-exports.ContextOfButton = ContextOfButton;
-function isContextOfButton(thing) {
-    var maybeButton = thing;
-    return maybeButton.button !== undefined && maybeButton.tenant !== undefined;
-}
-exports.isContextOfButton = isContextOfButton;
+    return ContextOfToolbar;
+}(context_of_item_1.ContextOfItem));
+exports.ContextOfToolbar = ContextOfToolbar;
 
 
 /***/ }),
@@ -3382,35 +3356,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_item_1 = __webpack_require__(58);
-var ContextOfToolbar = /** @class */ (function (_super) {
-    __extends(ContextOfToolbar, _super);
-    function ContextOfToolbar() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ContextOfToolbar;
-}(context_of_item_1.ContextOfItem));
-exports.ContextOfToolbar = ContextOfToolbar;
-
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_content_block_1 = __webpack_require__(59);
+var context_of_content_block_1 = __webpack_require__(58);
 var ContextOfItem = /** @class */ (function (_super) {
     __extends(ContextOfItem, _super);
     function ContextOfItem() {
@@ -3422,7 +3368,7 @@ exports.ContextOfItem = ContextOfItem;
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3450,6 +3396,34 @@ exports.ContextOfContentBlock = ContextOfContentBlock;
 
 
 /***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var context_of_1 = __webpack_require__(60);
+var ContextOfPage = /** @class */ (function (_super) {
+    __extends(ContextOfPage, _super);
+    function ContextOfPage() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ContextOfPage;
+}(context_of_1.ContextOf));
+exports.ContextOfPage = ContextOfPage;
+
+
+/***/ }),
 /* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3466,35 +3440,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var context_of_1 = __webpack_require__(61);
-var ContextOfPage = /** @class */ (function (_super) {
-    __extends(ContextOfPage, _super);
-    function ContextOfPage() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ContextOfPage;
-}(context_of_1.ContextOf));
-exports.ContextOfPage = ContextOfPage;
-
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var base_context_1 = __webpack_require__(62);
+var base_context_1 = __webpack_require__(61);
 var ContextOf = /** @class */ (function (_super) {
     __extends(ContextOf, _super);
     function ContextOf() {
@@ -3506,7 +3452,7 @@ exports.ContextOf = ContextOf;
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3529,7 +3475,7 @@ exports.isContext = isContext;
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3547,7 +3493,7 @@ exports.AppContext = AppContext;
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3565,7 +3511,7 @@ exports.InstanceContext = InstanceContext;
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3583,7 +3529,7 @@ exports.ItemContext = ItemContext;
 
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3601,7 +3547,7 @@ exports.PageContext = PageContext;
 
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3614,7 +3560,7 @@ exports.isSxcInstance = isSxcInstance;
 
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3632,7 +3578,7 @@ exports.UiContext = UiContext;
 
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3665,7 +3611,7 @@ exports.renderGroups = renderGroups;
 
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3687,7 +3633,7 @@ exports.oldParametersAdapter = oldParametersAdapter;
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3706,7 +3652,7 @@ exports.Entry = Entry;
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3748,7 +3694,7 @@ exports.defaultToolbarTemplate = {
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3790,7 +3736,7 @@ exports.leftToolbarTemplate = {
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3835,7 +3781,7 @@ exports.InstanceConfig = InstanceConfig;
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3859,7 +3805,7 @@ exports.oldToolbarSettingsAddapter = oldToolbarSettingsAddapter;
 
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3997,7 +3943,7 @@ function expandButtonList(root, settings, parentLog) {
 
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4017,7 +3963,7 @@ exports.ToolbarConfig = ToolbarConfig;
 
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4071,7 +4017,7 @@ exports._readPageConfig = _readPageConfig;
 
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4091,7 +4037,7 @@ exports.Coords = Coords;
 
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4132,7 +4078,7 @@ exports._contentBlock = new MainContentBlock();
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4143,8 +4089,8 @@ var templates_1 = __webpack_require__(17);
 var context_1 = __webpack_require__(5);
 var api_1 = __webpack_require__(4);
 var quick_dialog_1 = __webpack_require__(11);
-var QuickEditState = __webpack_require__(23);
-var quick_dialog_config_1 = __webpack_require__(83);
+var QuickEditState = __webpack_require__(22);
+var quick_dialog_config_1 = __webpack_require__(82);
 var scrollTopOffset = 80;
 var animationTime = 400;
 function build(iFrame) {
@@ -4294,7 +4240,7 @@ exports.DialogIFrame = DialogIFrame;
 
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4334,13 +4280,13 @@ var SessionStorageHelper = /** @class */ (function () {
 
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var user_of_edit_context_1 = __webpack_require__(22);
+var user_of_edit_context_1 = __webpack_require__(23);
 var QuickDialogConfig = /** @class */ (function () {
     function QuickDialogConfig() {
     }
@@ -4364,9 +4310,10 @@ var QuickDialogConfig = /** @class */ (function () {
         config.isList = context.contentBlock.isList;
         config.templateId = context.contentBlock.templateId;
         config.contentTypeId = context.contentBlock.contentTypeId;
-        config.templateChooserVisible = context.contentBlock.showTemplatePicker; // todo = maybe move to content-group
+        //config.templateChooserVisible = context.contentBlock.showTemplatePicker; // todo = maybe move to content-group
         config.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
         config.supportsAjax = context.app.supportsAjax;
+        config.debug = window.$2sxc.debug.load;
         return config;
     };
     return QuickDialogConfig;
@@ -4375,13 +4322,13 @@ exports.QuickDialogConfig = QuickDialogConfig;
 
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var DialogPaths_1 = __webpack_require__(41);
+var DialogPaths_1 = __webpack_require__(40);
 /**
  * rewrite the url to fit the quick-dialog situation
  * optionally with a live-compiled version from ng-serve
@@ -4416,13 +4363,13 @@ function changePathToDevIfNecessary(url) {
 
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var command_create_1 = __webpack_require__(86);
+var command_create_1 = __webpack_require__(85);
 /**
  * create a dialog link
  * @param sxc
@@ -4447,15 +4394,15 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var window_in_page_1 = __webpack_require__(1);
-var DialogPaths_1 = __webpack_require__(41);
-var command_1 = __webpack_require__(87);
+var DialogPaths_1 = __webpack_require__(40);
+var command_1 = __webpack_require__(86);
 /**
  * assemble an object which will store the configuration and execute it
  * @param sxc
@@ -4475,13 +4422,13 @@ exports.commandCreate = commandCreate;
 
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ng_dialog_params_1 = __webpack_require__(39);
+var ng_dialog_params_1 = __webpack_require__(87);
 var _2sxc_translate_1 = __webpack_require__(9);
 var Command = /** @class */ (function () {
     function Command(context, ngDialogUrl, isDebug) {
@@ -4581,6 +4528,60 @@ exports.Command = Command;
 
 
 /***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var user_of_edit_context_1 = __webpack_require__(23);
+var NgDialogParams = /** @class */ (function () {
+    function NgDialogParams() {
+    }
+    //constructor(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
+    //  this.zoneId = editContext.ContentGroup.ZoneId;
+    //  this.appId = editContext.ContentGroup.AppId;
+    //  this.tid = editContext.Environment.PageId;
+    //  this.mid = editContext.Environment.InstanceId;
+    //  this.cbid = sxc.cbid;
+    //  this.lang = editContext.Language.Current;
+    //  this.langpri = editContext.Language.Primary;
+    //  this.langs = JSON.stringify(editContext.Language.All);
+    //  this.portalroot = editContext.Environment.WebsiteUrl;
+    //  this.websiteroot = editContext.Environment.SxcRootUrl;
+    //  this.partOfPage = editContext.ContentBlock.PartOfPage;
+    //  // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+    //  this.publishing = editContext.ContentBlock.VersioningRequirements;
+    //  // todo= probably move the user into the dashboard info
+    //  this.user = getUserOfEditContext(editContext);
+    //  this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+    //}
+    NgDialogParams.fromContext = function (context) {
+        var params = new NgDialogParams();
+        params.zoneId = context.app.zoneId;
+        params.appId = context.app.id;
+        params.tid = context.page.id;
+        params.mid = context.instance.id;
+        params.cbid = context.contentBlock.id;
+        params.lang = context.app.currentLanguage;
+        params.langpri = context.app.primaryLanguage;
+        params.langs = JSON.stringify(context.app.allLanguages);
+        params.portalroot = context.tenant.url;
+        params.websiteroot = context.instance.sxcRootUrl;
+        params.partOfPage = context.contentBlock.partOfPage;
+        // versioningRequirements= editContext.ContentBlock.VersioningRequirements;
+        params.publishing = context.contentBlock.versioningRequirements;
+        // todo= probably move the user into the dashboard info
+        params.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
+        params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+        return params;
+    };
+    return NgDialogParams;
+}());
+exports.NgDialogParams = NgDialogParams;
+
+
+/***/ }),
 /* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4621,9 +4622,9 @@ var render_button_1 = __webpack_require__(19);
 var render_toolbar_1 = __webpack_require__(18);
 var toolbar_expand_config_1 = __webpack_require__(30);
 var api_1 = __webpack_require__(4);
-var user_of_edit_context_1 = __webpack_require__(22);
+var user_of_edit_context_1 = __webpack_require__(23);
 var button_config_adapter_1 = __webpack_require__(92);
-var QuickEditState = __webpack_require__(23);
+var QuickEditState = __webpack_require__(22);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -5152,7 +5153,7 @@ var sxc_1 = __webpack_require__(6);
 var log_1 = __webpack_require__(7);
 var log_utils_1 = __webpack_require__(99);
 var quick_dialog_1 = __webpack_require__(11);
-var QuickEditState = __webpack_require__(23);
+var QuickEditState = __webpack_require__(22);
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
@@ -5380,8 +5381,8 @@ exports.contentItems = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var cb_1 = __webpack_require__(43);
-var mod_1 = __webpack_require__(44);
+var cb_1 = __webpack_require__(42);
+var mod_1 = __webpack_require__(43);
 var CmdsStrategyFactory = /** @class */ (function () {
     function CmdsStrategyFactory() {
         this.cmds = {};
@@ -5411,11 +5412,11 @@ __webpack_require__(108);
 __webpack_require__(109);
 __webpack_require__(25);
 __webpack_require__(0);
-__webpack_require__(86);
-__webpack_require__(100);
 __webpack_require__(85);
-__webpack_require__(42);
-__webpack_require__(87);
+__webpack_require__(100);
+__webpack_require__(84);
+__webpack_require__(41);
+__webpack_require__(86);
 __webpack_require__(110);
 __webpack_require__(111);
 __webpack_require__(112);
@@ -5444,37 +5445,37 @@ __webpack_require__(134);
 __webpack_require__(10);
 __webpack_require__(135);
 __webpack_require__(136);
-__webpack_require__(51);
+__webpack_require__(50);
 __webpack_require__(90);
 __webpack_require__(137);
 __webpack_require__(138);
 __webpack_require__(139);
 __webpack_require__(12);
-__webpack_require__(80);
+__webpack_require__(79);
 __webpack_require__(140);
 __webpack_require__(91);
 __webpack_require__(16);
 __webpack_require__(17);
 __webpack_require__(141);
 __webpack_require__(37);
-__webpack_require__(62);
+__webpack_require__(61);
+__webpack_require__(51);
 __webpack_require__(52);
 __webpack_require__(53);
 __webpack_require__(54);
 __webpack_require__(55);
-__webpack_require__(56);
-__webpack_require__(59);
-__webpack_require__(26);
 __webpack_require__(58);
-__webpack_require__(60);
+__webpack_require__(26);
 __webpack_require__(57);
-__webpack_require__(61);
+__webpack_require__(59);
+__webpack_require__(56);
+__webpack_require__(60);
 __webpack_require__(5);
+__webpack_require__(62);
 __webpack_require__(63);
+__webpack_require__(67);
 __webpack_require__(64);
-__webpack_require__(68);
 __webpack_require__(65);
-__webpack_require__(66);
 __webpack_require__(142);
 __webpack_require__(143);
 __webpack_require__(144);
@@ -5498,46 +5499,46 @@ __webpack_require__(3);
 __webpack_require__(1);
 __webpack_require__(160);
 __webpack_require__(161);
-__webpack_require__(71);
+__webpack_require__(70);
 __webpack_require__(14);
 __webpack_require__(162);
 __webpack_require__(99);
 __webpack_require__(7);
 __webpack_require__(4);
 __webpack_require__(89);
-__webpack_require__(74);
+__webpack_require__(73);
 __webpack_require__(88);
-__webpack_require__(39);
-__webpack_require__(82);
-__webpack_require__(22);
-__webpack_require__(67);
-__webpack_require__(47);
-__webpack_require__(49);
+__webpack_require__(87);
+__webpack_require__(81);
+__webpack_require__(23);
+__webpack_require__(66);
 __webpack_require__(46);
 __webpack_require__(48);
+__webpack_require__(45);
+__webpack_require__(47);
 __webpack_require__(163);
-__webpack_require__(50);
-__webpack_require__(40);
+__webpack_require__(49);
+__webpack_require__(39);
 __webpack_require__(38);
 __webpack_require__(164);
-__webpack_require__(81);
+__webpack_require__(80);
 __webpack_require__(165);
-__webpack_require__(83);
+__webpack_require__(82);
 __webpack_require__(11);
-__webpack_require__(23);
-__webpack_require__(84);
+__webpack_require__(22);
+__webpack_require__(83);
 __webpack_require__(166);
-__webpack_require__(43);
+__webpack_require__(42);
 __webpack_require__(24);
 __webpack_require__(102);
 __webpack_require__(167);
-__webpack_require__(78);
+__webpack_require__(77);
 __webpack_require__(168);
-__webpack_require__(79);
+__webpack_require__(78);
 __webpack_require__(169);
 __webpack_require__(170);
-__webpack_require__(45);
 __webpack_require__(44);
+__webpack_require__(43);
 __webpack_require__(171);
 __webpack_require__(36);
 __webpack_require__(2);
@@ -5545,11 +5546,11 @@ __webpack_require__(8);
 __webpack_require__(172);
 __webpack_require__(173);
 __webpack_require__(35);
-__webpack_require__(41);
+__webpack_require__(40);
 __webpack_require__(92);
 __webpack_require__(33);
-__webpack_require__(70);
-__webpack_require__(75);
+__webpack_require__(69);
+__webpack_require__(74);
 __webpack_require__(31);
 __webpack_require__(32);
 __webpack_require__(13);
@@ -5557,23 +5558,23 @@ __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(174);
 __webpack_require__(15);
-__webpack_require__(76);
+__webpack_require__(75);
 __webpack_require__(175);
 __webpack_require__(93);
 __webpack_require__(176);
 __webpack_require__(19);
-__webpack_require__(69);
+__webpack_require__(68);
 __webpack_require__(27);
 __webpack_require__(18);
 __webpack_require__(177);
 __webpack_require__(178);
 __webpack_require__(28);
 __webpack_require__(179);
+__webpack_require__(71);
 __webpack_require__(72);
-__webpack_require__(73);
 __webpack_require__(180);
 __webpack_require__(29);
-__webpack_require__(77);
+__webpack_require__(76);
 __webpack_require__(30);
 __webpack_require__(34);
 __webpack_require__(94);
@@ -5589,7 +5590,7 @@ module.exports = __webpack_require__(6);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(46);
+__webpack_require__(45);
 var sxc_controller_in_page_1 = __webpack_require__(3);
 var window_in_page_1 = __webpack_require__(1);
 var commands_1 = __webpack_require__(10);
@@ -7911,7 +7912,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_base_1 = __webpack_require__(0);
-var command_open_ng_dialog_1 = __webpack_require__(42);
+var command_open_ng_dialog_1 = __webpack_require__(41);
 /**
  * new is a dialog to add something, and will not add if cancelled
  * new can also be used for mini-toolbars which just add an entity not attached to a module
@@ -8756,7 +8757,7 @@ exports.Conf = Conf;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var cb_1 = __webpack_require__(43);
+var cb_1 = __webpack_require__(42);
 var clipboard_1 = __webpack_require__(24);
 var quick_e_1 = __webpack_require__(2);
 var selectors_instance_1 = __webpack_require__(8);
@@ -8805,7 +8806,7 @@ quick_e_1.$quickE.cbActions.click(onCbButtonClick);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var clipboard_1 = __webpack_require__(24);
-var mod_manage_1 = __webpack_require__(45);
+var mod_manage_1 = __webpack_require__(44);
 var quick_e_1 = __webpack_require__(2);
 var selectors_instance_1 = __webpack_require__(8);
 /**
