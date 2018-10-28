@@ -4132,6 +4132,9 @@ var DialogIFrame = /** @class */ (function () {
     DialogIFrame.prototype.getAdditionalDashboardConfig = function () {
         return quick_dialog_config_1.QuickDialogConfig.fromContext(this.reSxc().manage.context);
     };
+    DialogIFrame.prototype.hide = function () {
+        quick_dialog_1.quickDialogInternals.toggle(false);
+    };
     DialogIFrame.prototype.toggle = function (show) {
         quick_dialog_1.quickDialogInternals.toggle(show);
     };
@@ -4145,30 +4148,32 @@ var DialogIFrame = /** @class */ (function () {
     DialogIFrame.prototype.reloadAndReInit = function () {
         var _this = this;
         return render_1.reloadAndReInitialize(this.getContext(), true, true)
-            .then(function () { return scrollToTarget(_this.tagModule); });
+            .then(function () { return scrollToTarget(_this.tagModule); })
+            .then(function () { return Promise.resolve(_this.getAdditionalDashboardConfig()); });
     };
-    DialogIFrame.prototype.setTemplate = function (templateId, templateName, closeDialog) {
+    DialogIFrame.prototype.setTemplate = function (templateId, templateName, final) {
+        var _this = this;
         var config = this.getAdditionalDashboardConfig();
         var ajax = config.isContent || config.supportsAjax;
         this.showMessage("refreshing <b>" + templateName + "</b>...");
         var promise = ajax
-            ? this.previewTemplate(templateId)
-            : this.saveTemplate(templateId)
+            ? render_1.ajaxLoad(this.getContext(), templateId, !final)
+                .then(function () { return scrollToTarget(_this.tagModule); })
+            : templates_1.updateTemplateFromDia(this.getContext(), templateId, false)
                 .then(function () { return window.parent.location.reload(); });
         return promise.then(function (result) {
-            if (closeDialog)
-                quick_dialog_1.quickDialogInternals.toggle(false);
+            if (final)
+                _this.hide();
             return result;
         });
     };
-    DialogIFrame.prototype.saveTemplate = function (templateId) {
-        return templates_1.updateTemplateFromDia(this.getContext(), templateId, false);
-    };
-    DialogIFrame.prototype.previewTemplate = function (templateId) {
-        var _this = this;
-        return render_1.ajaxLoad(this.getContext(), templateId, true)
-            .then(function () { return scrollToTarget(_this.tagModule); });
-    };
+    //private saveTemplate(templateId: number) {
+    //  return updateTemplateFromDia(this.getContext(), templateId, false);
+    //}
+    //private previewTemplate(templateId: number, justPreview: boolean) {
+    //  return ajaxLoad(this.getContext(), templateId, justPreview)
+    //    .then(() => scrollToTarget(this.tagModule));
+    //}
     DialogIFrame.prototype.closeCallback = function () { };
     ;
     DialogIFrame.prototype.rewire = function (sxc, callback, dialogName) {
@@ -4183,7 +4188,7 @@ var DialogIFrame = /** @class */ (function () {
     };
     ;
     DialogIFrame.prototype.cancel = function () {
-        this.toggle(false);
+        this.hide();
         // todo: only re-init if something was changed?
         // return cbApi.reloadAndReInitialize(reSxc());
         // cancel the dialog

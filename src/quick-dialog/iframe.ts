@@ -8,6 +8,7 @@ import QuickEditState = require('./state');
 import { IDialogFrameElement } from './iDialogFrameElement';
 import { IIFrameExtensions } from './iiframe-extensions';
 import { QuickDialogConfig } from './quick-dialog-config';
+import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
 
 const scrollTopOffset: number = 80;
 const animationTime: number = 400;
@@ -52,6 +53,10 @@ export class DialogIFrame implements IIFrameExtensions {
     return QuickDialogConfig.fromContext(this.reSxc().manage.context);
   }
 
+  hide(): void {
+    quickDialogInternals.toggle(false);
+  }
+
   toggle(show: boolean) {
     quickDialogInternals.toggle(show);
   }
@@ -65,33 +70,35 @@ export class DialogIFrame implements IIFrameExtensions {
     scrollToTarget(this.tagModule);
   }
 
-  reloadAndReInit(): Promise<any> {
+  reloadAndReInit(): Promise<IQuickDialogConfig> {
     return reloadAndReInitialize(this.getContext(), true, true)
-      .then(() => scrollToTarget(this.tagModule));
+      .then(() => scrollToTarget(this.tagModule))
+      .then(() => Promise.resolve(this.getAdditionalDashboardConfig()));
   }
 
-  setTemplate(templateId: number, templateName: string, closeDialog: boolean): Promise<any> {
+  setTemplate(templateId: number, templateName: string, final: boolean): Promise<any> {
     const config = this.getAdditionalDashboardConfig();
     const ajax = config.isContent || config.supportsAjax;
     this.showMessage(`refreshing <b>${templateName}</b>...`);
-    const promise = ajax
-      ? this.previewTemplate(templateId)
-      : this.saveTemplate(templateId)
+    const promise = ajax 
+      ? ajaxLoad(this.getContext(), templateId, !final)
+        .then(() => scrollToTarget(this.tagModule))
+      : updateTemplateFromDia(this.getContext(), templateId, false)
         .then(() => window.parent.location.reload());
     return promise.then(result => {
-      if (closeDialog) quickDialogInternals.toggle(false);
+      if (final) this.hide();
       return result;
     });
   }
 
-  saveTemplate(templateId: number) {
-    return updateTemplateFromDia(this.getContext(), templateId, false);
-  }
+  //private saveTemplate(templateId: number) {
+  //  return updateTemplateFromDia(this.getContext(), templateId, false);
+  //}
 
-  previewTemplate(templateId: number) {
-    return ajaxLoad(this.getContext(), templateId, true)
-      .then(() => scrollToTarget(this.tagModule));
-  }
+  //private previewTemplate(templateId: number, justPreview: boolean) {
+  //  return ajaxLoad(this.getContext(), templateId, justPreview)
+  //    .then(() => scrollToTarget(this.tagModule));
+  //}
 
   closeCallback() {};
 
@@ -111,7 +118,7 @@ export class DialogIFrame implements IIFrameExtensions {
   };
 
   cancel() {
-    this.toggle(false);
+    this.hide();
     // todo: only re-init if something was changed?
     // return cbApi.reloadAndReInitialize(reSxc());
     // cancel the dialog
