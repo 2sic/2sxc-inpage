@@ -57,8 +57,12 @@ function tryShowTemplatePicker(): boolean {
   let sxc: SxcInstanceWithInternals = undefined;
   // first check if we should show one according to the state-settings
   const openDialogId = QuickEditState.cbId.get();
-  if (openDialogId)
-    sxc = window.$2sxc(openDialogId) as SxcInstanceWithInternals;
+  if (openDialogId) {
+    // must check if it's on this page, as it could be from another page
+    const found = $(`[data-cb-id="${openDialogId}"]`);
+    if(found.length)
+      sxc = window.$2sxc(openDialogId) as SxcInstanceWithInternals;
+  }
 
   if (!sxc) {
     const uninitializedModules: any = $('.sc-uninitialized');
