@@ -674,10 +674,12 @@ exports.Commands = Commands;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var QuickEditState = __webpack_require__(22);
 var Container = __webpack_require__(38);
 var ContainerSize = __webpack_require__(39);
 var UrlHandler = __webpack_require__(83);
-console.log('quick diag 2018-10-16 21:26');
+var DebugConfig_1 = __webpack_require__(195);
+var dbg = DebugConfig_1.DebugConfig.qDialog;
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -705,7 +707,20 @@ function toggle(show) {
         show = !cont.hasClass(diagShowClass);
     // show/hide visually
     cont.toggleClass(diagShowClass, show);
+    persistDia(Container.getIFrame(cont), show);
     current = show ? Container.getIFrame() : null;
+}
+function persistDia(iframe, state) {
+    if (dbg.showHide)
+        console.log("qDialog persistDia(..., " + state + ")");
+    if (state) {
+        var cbId = iframe.bridge.getContext().contentBlock.id.toString();
+        if (dbg.showHide)
+            console.log("contentBlockId: " + cbId + ")");
+        return QuickEditState.cbId.set(cbId);
+    }
+    else
+        return QuickEditState.cbId.remove();
 }
 function hide() {
     if (current)
@@ -1288,8 +1303,8 @@ function reloadAndReInitialize(context, forceAjax, preview) {
         return Promise.resolve();
     }
     return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, preview)
-        .then(function (rez) {
-        // tell Evoq that page has changed if it has changed (Ajax call)
+        .then(function (result) {
+        // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
         if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
             try {
                 window_in_page_1.windowInPage.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
@@ -1298,13 +1313,10 @@ function reloadAndReInitialize(context, forceAjax, preview) {
                 // sink
             }
         }
-        // maybe check if already publish
-        // compare to HTML module
-        // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
         // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
         // must check for side-effects, which would need the manager to re-build the configuration
         quick_dialog_1.quickDialog.hide();
-        return rez;
+        return result;
     }).catch(function (error) {
         console.log('Error in reloadAndReInitialize', error);
     });
@@ -1322,7 +1334,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(13);
 var render_1 = __webpack_require__(16);
 var web_api_promises_1 = __webpack_require__(37);
-var quick_dialog_1 = __webpack_require__(11);
 /**
  * prepare the instance so content can be added
  * this ensure the content-group has been created, which is required to add content
@@ -1357,7 +1368,7 @@ function updateTemplateFromDia(context, templateId, forceCreate) {
     // or just reset it, so it picks up the right values again ?
     return updateTemplate(context, templateId, forceCreate)
         .then(function () {
-        quick_dialog_1.quickDialog.hide();
+        //quickDialog.hide();
         // if it didn't have content, then it only has now...
         if (!context.app.hasContent) {
             context.app.hasContent = forceCreate;
@@ -1713,8 +1724,8 @@ var has_log_1 = __webpack_require__(14);
 var log_1 = __webpack_require__(7);
 var context_1 = __webpack_require__(5);
 var context_of_instance_1 = __webpack_require__(26);
+var DebugConfig_1 = __webpack_require__(195);
 var logId = 'Cms.Api';
-var dumpLog = true;
 var Cms = /** @class */ (function (_super) {
     __extends(Cms, _super);
     function Cms() {
@@ -1724,7 +1735,7 @@ var Cms = /** @class */ (function (_super) {
          * if false, will preserve the log over multiple calls
          */
         _this.autoReset = true;
-        _this.autoDump = dumpLog;
+        _this.autoDump = DebugConfig_1.DebugConfig.cms.autoDump;
         return _this;
     }
     /**
@@ -2523,8 +2534,8 @@ function getPreviewWithTemplate(context, templateId) {
             url: 'view/module/rendertemplate',
             params: params,
             dataType: 'html',
-        }).done(function (data, textStatus, jqXHR) {
-            if (jqXHR.status === 204 || jqXHR.status === 200) {
+        }).done(function (data, textStatus, jqXhr) {
+            if (jqXhr.status === 204 || jqXhr.status === 200) {
                 // resolve the promise with the response text
                 resolve(data);
             }
@@ -2533,7 +2544,7 @@ function getPreviewWithTemplate(context, templateId) {
                 // which will hopefully be a meaningful error
                 reject(Error(textStatus));
             }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
+        }).fail(function (jqXhr, textStatus, errorThrown) {
             reject(Error(errorThrown));
         });
     });
@@ -3995,8 +4006,7 @@ function _readPageConfig() {
         for (var c = configs.length; c >= 0; c--) {
             confJ = configs[0].getAttribute(configAttr);
             try {
-                var confO = void 0;
-                confO = JSON.parse(confJ);
+                var confO = JSON.parse(confJ);
                 Object.assign(finalConfig, confO);
             }
             catch (e) {
@@ -4098,9 +4108,7 @@ function build(iFrame) {
     var iFrameExtended = iFrame;
     iFrameExtended.bridge = new DialogIFrame();
     console.log('extensions: ', iFrameExtended.bridge);
-    //const merged = Object.assign(iFrame, DialogIFrame.prototype) as IDialogFrameElement;
-    //console.log('merged: ', merged);
-    return iFrameExtended; // merged;
+    return iFrameExtended;
 }
 exports.build = build;
 /**
@@ -4124,9 +4132,6 @@ var DialogIFrame = /** @class */ (function () {
     DialogIFrame.prototype.getAdditionalDashboardConfig = function () {
         return quick_dialog_config_1.QuickDialogConfig.fromContext(this.reSxc().manage.context);
     };
-    DialogIFrame.prototype.persistDia = function () {
-        return QuickEditState.cbId.set(this.getContext().contentBlock.id.toString());
-    };
     DialogIFrame.prototype.toggle = function (show) {
         quick_dialog_1.quickDialogInternals.toggle(show);
     };
@@ -4135,23 +4140,36 @@ var DialogIFrame = /** @class */ (function () {
     };
     DialogIFrame.prototype.showMessage = function (message) {
         render_1.showMessage(this.getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>");
+        scrollToTarget(this.tagModule);
     };
     DialogIFrame.prototype.reloadAndReInit = function () {
-        return render_1.reloadAndReInitialize(this.getContext(), true, true);
+        var _this = this;
+        return render_1.reloadAndReInitialize(this.getContext(), true, true)
+            .then(function () { return scrollToTarget(_this.tagModule); });
+    };
+    DialogIFrame.prototype.setTemplate = function (templateId, templateName, closeDialog) {
+        var config = this.getAdditionalDashboardConfig();
+        var ajax = config.isContent || config.supportsAjax;
+        this.showMessage("refreshing <b>" + templateName + "</b>...");
+        var promise = ajax
+            ? this.previewTemplate(templateId)
+            : this.saveTemplate(templateId)
+                .then(function () { return window.parent.location.reload(); });
+        return promise.then(function (result) {
+            if (closeDialog)
+                quick_dialog_1.quickDialogInternals.toggle(false);
+            return result;
+        });
     };
     DialogIFrame.prototype.saveTemplate = function (templateId) {
         return templates_1.updateTemplateFromDia(this.getContext(), templateId, false);
     };
     DialogIFrame.prototype.previewTemplate = function (templateId) {
-        return render_1.ajaxLoad(this.getContext(), templateId, true);
+        var _this = this;
+        return render_1.ajaxLoad(this.getContext(), templateId, true)
+            .then(function () { return scrollToTarget(_this.tagModule); });
     };
     DialogIFrame.prototype.closeCallback = function () { };
-    ;
-    DialogIFrame.prototype.scrollToTarget = function () {
-        $('body').animate({
-            scrollTop: this.tagModule.offset().top - scrollTopOffset
-        }, animationTime);
-    };
     ;
     DialogIFrame.prototype.rewire = function (sxc, callback, dialogName) {
         console.log('rewire with sxc: ', sxc);
@@ -4176,6 +4194,13 @@ var DialogIFrame = /** @class */ (function () {
     return DialogIFrame;
 }());
 exports.DialogIFrame = DialogIFrame;
+function scrollToTarget(target) {
+    var specs = {
+        scrollTop: target.offset().top - scrollTopOffset
+    };
+    $('body').animate(specs, animationTime);
+}
+;
 ///**
 // * extend IFrame with Sxc state
 // * @param iFrame
@@ -4246,6 +4271,7 @@ exports.DialogIFrame = DialogIFrame;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var DebugConfig_1 = __webpack_require__(195);
 /**
  * This object helps persist / load / reset
  * a setting in the session-state
@@ -4254,10 +4280,23 @@ var SessionStateHandler = /** @class */ (function () {
     function SessionStateHandler(key) {
         this.key = key;
     }
-    SessionStateHandler.prototype.set = function (value) { sessionStorage.setItem(this.key, value); };
+    SessionStateHandler.prototype.set = function (value) {
+        if (DebugConfig_1.DebugConfig.state.change)
+            console.log("state '" + this.key + "' set(" + value + ")");
+        sessionStorage.setItem(this.key, value);
+    };
     ;
-    SessionStateHandler.prototype.remove = function () { sessionStorage.removeItem(this.key); };
-    SessionStateHandler.prototype.get = function () { return SessionStorageHelper.getItemValue(this.key); };
+    SessionStateHandler.prototype.remove = function () {
+        if (DebugConfig_1.DebugConfig.state.change)
+            console.log("state '" + this.key + "' remove()");
+        sessionStorage.removeItem(this.key);
+    };
+    SessionStateHandler.prototype.get = function () {
+        var result = SessionStorageHelper.getItemValue(this.key);
+        if (DebugConfig_1.DebugConfig.state.get)
+            console.log("state '" + this.key + "' get() = '" + result + "'");
+        return result;
+    };
     return SessionStateHandler;
 }());
 exports.SessionStateHandler = SessionStateHandler;
@@ -4310,7 +4349,6 @@ var QuickDialogConfig = /** @class */ (function () {
         config.isList = context.contentBlock.isList;
         config.templateId = context.contentBlock.templateId;
         config.contentTypeId = context.contentBlock.contentTypeId;
-        //config.templateChooserVisible = context.contentBlock.showTemplatePicker; // todo = maybe move to content-group
         config.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
         config.supportsAjax = context.app.supportsAjax;
         config.debug = window.$2sxc.debug.load;
@@ -4624,7 +4662,6 @@ var toolbar_expand_config_1 = __webpack_require__(30);
 var api_1 = __webpack_require__(4);
 var user_of_edit_context_1 = __webpack_require__(23);
 var button_config_adapter_1 = __webpack_require__(92);
-var QuickEditState = __webpack_require__(22);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
  * all in-page toolbars etc.
@@ -4654,8 +4691,8 @@ function _initInstance(sxc) {
     var userInfo = user_of_edit_context_1.UserOfEditContext.fromContext(myContext); // 2dm simplified getUserOfEditContext(context);
     var cmdEngine = new instance_engine_1.InstanceEngine(myContext.sxc);
     var editManager = new EditManager(myContext.sxc, editContext, userInfo, cmdEngine, myContext);
-    editManager.init();
     sxc.manage = editManager;
+    editManager.init();
     return editManager;
 }
 var EditManager = /** @class */ (function () {
@@ -4672,10 +4709,6 @@ var EditManager = /** @class */ (function () {
          * it is publicly used out of inpage, so take a care to preserve function signature
          */
         this.run = this.cmdEngine.run;
-        /**
-         * run2 a command - new command used in toolbars and custom buttons
-         */
-        //run2 = this.cmdEngine.run2;
         /**
          * Generate a button (an <a>-tag) for one specific toolbar-action.
          * @param {Object<any>} actDef - settings, an object containing the spec for the expected button
@@ -4712,14 +4745,12 @@ var EditManager = /** @class */ (function () {
         /**
          * internal method to find out if it's in edit-mode
          */
-        // _isEditMode = () => this.editContext.Environment.IsEditable;
         this._isEditMode = function () { return _this.editContext.Environment.IsEditable; };
         /**
          * used for various dialogues
          */
-        // _reloadWithAjax = this.editContext.ContentGroup.SupportsAjax;
         this._reloadWithAjax = this.context.app.supportsAjax;
-        // 2dm disabled
+        // #region 2dm disabled / todo q2stv
         // todo q2stv - I think we don't need this any more
         // 
         //_dialogParameters = buildNgDialogParams(this.context);
@@ -4729,37 +4760,18 @@ var EditManager = /** @class */ (function () {
           * used to configure buttons / toolbars
           */
         //_instanceConfig = buildInstanceConfig(this.context);
-        /**
-         * metadata necessary to know what/how to edit
-         */
-        this._editContext = this.editContext;
         // 2dm disabled
         // todo q2stv - I think we don't need this any more
         /**
          * used for in-page dialogues
          */
         //_quickDialogConfig = buildQuickDialogConfig(this.context);
-        /**
-         * used to handle the commands for this content-block
-         */
+        //#endregion
+        /** metadata necessary to know what/how to edit */
+        this._editContext = this.editContext;
+        /** used to handle the commands for this content-block */
         this._commands = this.cmdEngine;
         this._user = this.userInfo;
-        /**
-         * private: show error when the app-data hasn't been installed yet for this imported-module
-         */
-        this._handleErrors = function (errType, cbTag) {
-            var errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
-            var msg = '';
-            var toolbar = $("<ul class='sc-menu'></ul>");
-            if (errType === 'DataIsMissing') {
-                msg =
-                    'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
-                toolbar.attr('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
-            }
-            errWrapper.append(msg);
-            errWrapper.append(toolbar);
-            $(cbTag).append(errWrapper);
-        };
         this._getCbManipulator = function () { return manipulate_1.manipulator(_this.sxc); };
         // ReSharper restore InconsistentNaming
         /**
@@ -4768,19 +4780,9 @@ var EditManager = /** @class */ (function () {
         this.init = function () {
             var tag = api_1.getTag(_this.sxc);
             // enhance UI in case there are known errors / issues
-            if (_this.editContext && _this.editContext.error && _this.editContext.error.type) {
-                _this._handleErrors(_this.editContext.error.type, tag);
-            }
-            // todo: move this to dialog-handling
-            // display the dialog
-            var openDialogId = QuickEditState.cbId.get(); // SessionStorageHelper.getItemValue<number>('dia-cbid');
-            if ((_this.editContext && _this.editContext.error && _this.editContext.error.type) || !openDialogId || openDialogId != _this.sxc.cbid) {
-                return false;
-            }
-            QuickEditState.cbId.remove();
-            //sessionStorage.removeItem('dia-cbid');
-            _this.run('layout');
-            return true;
+            var isErrorState = _this.editContext && _this.editContext.error && _this.editContext.error.type;
+            if (isErrorState)
+                handleErrors(_this.editContext.error.type, tag);
         };
     }
     /**
@@ -4790,11 +4792,28 @@ var EditManager = /** @class */ (function () {
         context.contentBlock.contentGroupId = newGuid;
         this.editContext.ContentGroup.Guid = newGuid;
         // 2dm disabled, doesn't seem used - 
-        // todo q2stv - pls confirm
+        // todo q2stv - question, pls confirm
         //this._instanceConfig = InstanceConfig.fromContext(context);// 2dm simplified buildInstanceConfig(context);
     };
     return EditManager;
 }());
+exports.EditManager = EditManager;
+/**
+ * private: show error when the app-data hasn't been installed yet for this imported-module
+ */
+function handleErrors(errType, cbTag) {
+    var errWrapper = $('<div class="dnnFormMessage dnnFormWarning sc-element"></div>');
+    var msg = '';
+    var toolbar = $("<ul class='sc-menu'></ul>");
+    if (errType === 'DataIsMissing') {
+        msg =
+            'Error: System.Exception: Data is missing - usually when a site is copied but the content / apps have not been imported yet - check 2sxc.org/help?tag=export-import';
+        toolbar.attr('data-toolbar', '[{\"action\": \"zone\"}, {\"action\": \"more\"}]');
+    }
+    errWrapper.append(msg);
+    errWrapper.append(toolbar);
+    $(cbTag).append(errWrapper);
+}
 
 
 /***/ }),
@@ -5154,6 +5173,7 @@ var log_1 = __webpack_require__(7);
 var log_utils_1 = __webpack_require__(99);
 var quick_dialog_1 = __webpack_require__(11);
 var QuickEditState = __webpack_require__(22);
+var window_in_page_1 = __webpack_require__(1);
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
@@ -5168,10 +5188,9 @@ var initAllModulesCallback = function (mutationsList) {
 // create an observer instance linked to the callback function
 var observer = new MutationObserver(initAllModulesCallback);
 $(document).ready(function () {
-    cancelledDialog = QuickEditState.cancelled.get(); // localStorage.getItem('cancelled-dialog');
+    cancelledDialog = QuickEditState.cancelled.get();
     if (cancelledDialog) {
         QuickEditState.cancelled.remove();
-        //localStorage.removeItem('cancelled-dialog');
     }
     ;
     initAllModules(true);
@@ -5183,7 +5202,8 @@ function initAllModules(isFirstRun) {
     $('div[data-edit-context]').each(function () {
         initModule(this, isFirstRun);
     });
-    tryShowTemplatePicker();
+    if (isFirstRun)
+        tryShowTemplatePicker();
 }
 /**
  * Show the template picker if
@@ -5193,43 +5213,42 @@ function initAllModules(isFirstRun) {
  * @returns
  */
 function tryShowTemplatePicker() {
-    var uninitializedModules = $('.sc-uninitialized');
-    if (cancelledDialog || openedTemplatePickerOnce) {
-        return false;
+    var sxc = undefined;
+    // first check if we should show one according to the state-settings
+    var openDialogId = QuickEditState.cbId.get();
+    if (openDialogId)
+        sxc = window_in_page_1.windowInPage.$2sxc(openDialogId);
+    if (!sxc) {
+        var uninitializedModules = $('.sc-uninitialized');
+        if (cancelledDialog || openedTemplatePickerOnce)
+            return false;
+        // already showing a dialog
+        if (quick_dialog_1.quickDialog.isShowing())
+            return false;
+        // not exactly one uninitialized module
+        if (uninitializedModules.length !== 1)
+            return false;
+        // show the template picker of this module
+        var module = uninitializedModules.parent('div[data-edit-context]')[0];
+        sxc = sxc_1.getSxcInstance(module);
     }
-    ;
-    // already showing a dialog
-    if (quick_dialog_1.quickDialog.isShowing()) { // (current !== null) {
-        return false;
+    if (sxc) {
+        sxc.manage.run('layout');
+        openedTemplatePickerOnce = true;
     }
-    ;
-    // not exactly one uninitialized module
-    if (uninitializedModules.length !== 1) {
-        return false;
-    }
-    ;
-    // show the template picker of this module
-    var module = uninitializedModules.parent('div[data-edit-context]')[0];
-    var sxc = sxc_1.getSxcInstance(module);
-    sxc.manage.run('layout');
-    openedTemplatePickerOnce = true;
     return true;
 }
 function initModule(module, isFirstRun) {
     // check if module is already in the list of initialized modules
-    if (initializedModules.find(function (m) { return m === module; })) {
+    if (initializedModules.find(function (m) { return m === module; }))
         return false;
-    }
-    ;
     // add to modules-list
     initializedModules.push(module);
     var sxc = sxc_1.getSxcInstance(module);
     // check if the sxc must be re-created. This is necessary when modules are dynamically changed
     // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-    if (!isFirstRun) {
+    if (!isFirstRun)
         sxc = sxc.recreate(true);
-    }
-    ;
     // check if we must show the glasses
     // this must run even after first-run, because it can be added ajax-style
     var wasEmpty = showGlassesButtonIfUninitialized(sxc);
@@ -9075,6 +9094,43 @@ var item = /** @class */ (function () {
     }
     return item;
 }());
+
+
+/***/ }),
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+// ReSharper disable once InconsistentNaming
+exports.DebugConfig = {
+    cms: {
+        autoDump: false,
+        run: true
+    },
+    qDialog: {
+        showHide: true
+    },
+    state: {
+        change: true,
+        get: false
+    }
+};
 
 
 /***/ })

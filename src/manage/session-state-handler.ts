@@ -1,4 +1,5 @@
-﻿
+﻿import { DebugConfig } from "../DebugConfig";
+
 /**
  * This object helps persist / load / reset 
  * a setting in the session-state
@@ -6,11 +7,21 @@
 export class SessionStateHandler<T> {
   constructor(private readonly key: string) { }
 
-  set(value: string): void { sessionStorage.setItem(this.key, value); };
+  set(value: string): void {
+    if(DebugConfig.state.change) console.log(`state '${this.key}' set(${value})`);
+    sessionStorage.setItem(this.key, value);
+  };
 
-  remove(): void { sessionStorage.removeItem(this.key); }
+  remove(): void {
+    if (DebugConfig.state.change) console.log(`state '${this.key}' remove()`);
+    sessionStorage.removeItem(this.key);
+  }
 
-  get(): T { return SessionStorageHelper.getItemValue<T>(this.key); }
+  get(): T {
+    const result = SessionStorageHelper.getItemValue<T>(this.key);
+    if (DebugConfig.state.get) console.log(`state '${this.key}' get() = '${result}'`);
+    return result;
+  }
 }
 
 /**

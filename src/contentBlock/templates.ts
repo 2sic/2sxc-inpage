@@ -43,7 +43,7 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
   return updateTemplate(context, templateId, forceCreate)
     .then(() => {
 
-      quickDialog.hide();
+      //quickDialog.hide();
 
       // if it didn't have content, then it only has now...
       if (!context.app.hasContent) {

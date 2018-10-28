@@ -5,6 +5,7 @@ import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import QuickEditState = require('../quick-dialog/state');
+import { windowInPage as window } from '../interfaces/window-in-page';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -24,11 +25,10 @@ let observer = new MutationObserver(initAllModulesCallback);
 
 $(document).ready(() => {
 
-  cancelledDialog = QuickEditState.cancelled.get(); // localStorage.getItem('cancelled-dialog');
+  cancelledDialog = QuickEditState.cancelled.get(); 
 
   if (cancelledDialog) {
     QuickEditState.cancelled.remove();
-    //localStorage.removeItem('cancelled-dialog');
   };
 
   initAllModules(true);
@@ -42,7 +42,8 @@ function initAllModules(isFirstRun: boolean): void {
   $('div[data-edit-context]').each(function() {
     initModule(this, isFirstRun);
   });
-  tryShowTemplatePicker();
+  if (isFirstRun)
+    tryShowTemplatePicker();
 }
 
 /**
@@ -53,35 +54,39 @@ function initAllModules(isFirstRun: boolean): void {
  * @returns
  */
 function tryShowTemplatePicker(): boolean {
-  const uninitializedModules: any = $('.sc-uninitialized');
+  let sxc: SxcInstanceWithInternals = undefined;
+  // first check if we should show one according to the state-settings
+  const openDialogId = QuickEditState.cbId.get();
+  if (openDialogId)
+    sxc = window.$2sxc(openDialogId) as SxcInstanceWithInternals;
 
-  if (cancelledDialog || openedTemplatePickerOnce) {
-    return false;
-  };
+  if (!sxc) {
+    const uninitializedModules: any = $('.sc-uninitialized');
 
-  // already showing a dialog
-  if (quickDialog.isShowing()) {// (current !== null) {
-    return false;
-  };
+    if (cancelledDialog || openedTemplatePickerOnce) return false;
 
-  // not exactly one uninitialized module
-  if (uninitializedModules.length !== 1) {
-    return false;
-  };
+    // already showing a dialog
+    if (quickDialog.isShowing()) return false;
 
-  // show the template picker of this module
-  const module = uninitializedModules.parent('div[data-edit-context]')[0];
-  const sxc = getSxcInstance(module);
-  sxc.manage.run('layout');
-  openedTemplatePickerOnce = true;
+    // not exactly one uninitialized module
+    if (uninitializedModules.length !== 1) return false;
+
+    // show the template picker of this module
+    const module = uninitializedModules.parent('div[data-edit-context]')[0];
+    sxc = getSxcInstance(module);
+  }
+
+  if (sxc) {
+    sxc.manage.run('layout');
+    openedTemplatePickerOnce = true;
+  }
   return true;
 }
 
 function initModule(module: any, isFirstRun: boolean) {
   // check if module is already in the list of initialized modules
-  if (initializedModules.find((m) => m === module)) {
+  if (initializedModules.find((m) => m === module))
     return false;
-  };
 
   // add to modules-list
   initializedModules.push(module);
@@ -90,9 +95,8 @@ function initModule(module: any, isFirstRun: boolean) {
   
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-  if (!isFirstRun) {
+  if (!isFirstRun)
     sxc = sxc.recreate(true);
-  };
 
   // check if we must show the glasses
   // this must run even after first-run, because it can be added ajax-style

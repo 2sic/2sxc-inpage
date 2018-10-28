@@ -37,7 +37,6 @@ export class QuickDialogConfig implements IQuickDialogConfig {
     config.isList = context.contentBlock.isList;
     config.templateId = context.contentBlock.templateId;
     config.contentTypeId = context.contentBlock.contentTypeId;
-    //config.templateChooserVisible = context.contentBlock.showTemplatePicker; // todo = maybe move to content-group
     config.user = UserOfEditContext.fromContext(context);
     config.supportsAjax = context.app.supportsAjax;
     config.debug = ((window as any).$2sxc as SxcControllerWithInternals).debug.load;

@@ -3,7 +3,6 @@ import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { ContextOfButton } from '../context/context-of-button';
-import { NgDialogParams } from '../manage/ng-dialog-params';
 import { quickDialogInternals } from './quick-dialog';
 import QuickEditState = require('./state');
 import { IDialogFrameElement } from './iDialogFrameElement';
@@ -18,9 +17,7 @@ export function build(iFrame: HTMLIFrameElement): IDialogFrameElement {
   const iFrameExtended = iFrame as IDialogFrameElement;
   iFrameExtended.bridge = new DialogIFrame();
   console.log('extensions: ', iFrameExtended.bridge);
-  //const merged = Object.assign(iFrame, DialogIFrame.prototype) as IDialogFrameElement;
-  //console.log('merged: ', merged);
-  return iFrameExtended;// merged;
+  return iFrameExtended;
 }
 
 /**
@@ -31,14 +28,10 @@ export class DialogIFrame implements IIFrameExtensions {
   sxcCacheKey: string;
   dialogName: string;
 
-  /**
-   * internal object to keep track of the sxc-instance
-   */
+  /** internal object to keep track of the sxc-instance */
   hiddenSxc: SxcInstanceWithInternals;
 
-  /**
-   * The html-tag of the current module
-   */
+  /** The html-tag of the current module */
   tagModule: JQuery<HTMLElement>;
 
   /**
@@ -59,10 +52,6 @@ export class DialogIFrame implements IIFrameExtensions {
     return QuickDialogConfig.fromContext(this.reSxc().manage.context);
   }
 
-  persistDia() {
-    return QuickEditState.cbId.set(this.getContext().contentBlock.id.toString());
-  }
-
   toggle(show: boolean) {
     quickDialogInternals.toggle(show);
   }
@@ -73,10 +62,26 @@ export class DialogIFrame implements IIFrameExtensions {
 
   showMessage(message: string) {
     showMessage(this.getContext(), `<p class="no-live-preview-available">${message}</p>`);
+    scrollToTarget(this.tagModule);
   }
 
-  reloadAndReInit() {
-    return reloadAndReInitialize(this.getContext(), true, true);
+  reloadAndReInit(): Promise<any> {
+    return reloadAndReInitialize(this.getContext(), true, true)
+      .then(() => scrollToTarget(this.tagModule));
+  }
+
+  setTemplate(templateId: number, templateName: string, closeDialog: boolean): Promise<any> {
+    const config = this.getAdditionalDashboardConfig();
+    const ajax = config.isContent || config.supportsAjax;
+    this.showMessage(`refreshing <b>${templateName}</b>...`);
+    const promise = ajax
+      ? this.previewTemplate(templateId)
+      : this.saveTemplate(templateId)
+        .then(() => window.parent.location.reload());
+    return promise.then(result => {
+      if (closeDialog) quickDialogInternals.toggle(false);
+      return result;
+    });
   }
 
   saveTemplate(templateId: number) {
@@ -84,18 +89,14 @@ export class DialogIFrame implements IIFrameExtensions {
   }
 
   previewTemplate(templateId: number) {
-    return ajaxLoad(this.getContext(), templateId, true);
+    return ajaxLoad(this.getContext(), templateId, true)
+      .then(() => scrollToTarget(this.tagModule));
   }
 
   closeCallback() {};
 
 
-  scrollToTarget() {
-    $('body').animate({
-        scrollTop: this.tagModule.offset().top - scrollTopOffset
-      } as any,
-      animationTime);
-  };
+
 
 
   rewire(sxc: SxcInstanceWithInternals, callback: () => void, dialogName: string) {
@@ -118,6 +119,13 @@ export class DialogIFrame implements IIFrameExtensions {
     this.closeCallback();
   };
 }
+
+function scrollToTarget(target: JQuery<HTMLElement>) {
+  const specs = {
+    scrollTop: target.offset().top - scrollTopOffset
+  } as any;
+  $('body').animate(specs, animationTime);
+};
 
 ///**
 // * extend IFrame with Sxc state

@@ -71,7 +71,7 @@ export function saveTemplate(context: ContextOfButton, templateId: number, force
  * @param {number} templateId
  * @returns {promise} promise with the html in the result
  */
-export function getPreviewWithTemplate(context: ContextOfButton, templateId: number): Promise<any> {
+export function getPreviewWithTemplate(context: ContextOfButton, templateId: number): Promise<string> {
   templateId = templateId || -1; // fallback, meaning use saved ID
   const params: WebApiParams = {
     templateId: templateId,
@@ -85,8 +85,8 @@ export function getPreviewWithTemplate(context: ContextOfButton, templateId: num
         url: 'view/module/rendertemplate',
         params: params,
         dataType: 'html',
-      }).done((data: any, textStatus: string, jqXHR: any) => {
-        if (jqXHR.status === 204 || jqXHR.status === 200) {
+      }).done((data: any, textStatus: string, jqXhr: any) => {
+        if (jqXhr.status === 204 || jqXhr.status === 200) {
           // resolve the promise with the response text
           resolve(data);
         } else {
@@ -94,7 +94,7 @@ export function getPreviewWithTemplate(context: ContextOfButton, templateId: num
           // which will hopefully be a meaningful error
           reject(Error(textStatus));
         }
-        }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+        }).fail((jqXhr: any, textStatus: string, errorThrown: string) => {
           reject(Error(errorThrown));
       });
     });

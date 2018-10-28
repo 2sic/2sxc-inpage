@@ -30,8 +30,7 @@ export function _readPageConfig() {
     for (let c = configs.length; c >= 0; c--) {
       confJ = configs[0].getAttribute(configAttr);
       try {
-        let confO: Conf;
-        confO = JSON.parse(confJ) as Conf;
+        const confO = JSON.parse(confJ) as Conf;
         Object.assign(finalConfig, confO);
       } catch (e) {
         console.warn('had trouble with json', e);

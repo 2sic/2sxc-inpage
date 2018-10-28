@@ -1,11 +1,15 @@
-﻿import { ContextOfButton } from '../context/context-of-button';
+﻿import QuickEditState = require('./state');
+import { ContextOfButton } from '../context/context-of-button';
 import Container = require('./container');
 import ContainerSize = require('./container-size');
 import UrlHandler = require('./url-handler');
 import DialogFrameElement = require('./iDialogFrameElement');
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
+import Iframe = require('./iframe');
+import DialogIFrame = Iframe.DialogIFrame;
+import { DebugConfig } from '../DebugConfig';
 
-console.log('quick diag 2018-10-16 21:26');
+const dbg = DebugConfig.qDialog;
 
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -38,7 +42,18 @@ function toggle(show: boolean): void {
     show = !cont.hasClass(diagShowClass);
   // show/hide visually
   cont.toggleClass(diagShowClass, show);
+  persistDia(Container.getIFrame(cont), show);
   current = show ? Container.getIFrame() : null;
+}
+
+function persistDia(iframe: IDialogFrameElement, state: boolean): void {
+  if (dbg.showHide) console.log(`qDialog persistDia(..., ${state})`);
+  if (state) {
+    const cbId = (iframe.bridge as DialogIFrame).getContext().contentBlock.id.toString();
+    if (dbg.showHide) console.log(`contentBlockId: ${cbId})`);
+    return QuickEditState.cbId.set(cbId);
+  } else
+    return QuickEditState.cbId.remove();
 }
 
 function hide(): void {

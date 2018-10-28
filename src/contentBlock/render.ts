@@ -26,7 +26,7 @@ import { quickDialog } from '../quick-dialog/quick-dialog';
  * @param {boolean} justPreview
  * @returns {}
  */
-function replaceCb(context: ContextOfButton, newContent: any, justPreview: boolean): void {
+function replaceCb(context: ContextOfButton, newContent: string, justPreview: boolean): void {
   try {
     const newStuff = $(newContent);
 
@@ -60,7 +60,7 @@ export function showMessage(context: ContextOfButton, newContent: any): void {
  */
 export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, justPreview: boolean): Promise<any> {
   return getPreviewWithTemplate(context, alternateTemplateId)
-    .then((result: any) => {
+    .then((result: string) => {
       replaceCb(context, result, justPreview);
     })
     .then(() => {
@@ -82,8 +82,8 @@ export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: bool
   }
 
   return ajaxLoad(context, MainContentBlock.cUseExistingTemplate, preview)
-    .then((rez) => {
-      // tell Evoq that page has changed if it has changed (Ajax call)
+    .then((result) => {
+      // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
       if (window.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
         try {
           window.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
@@ -91,14 +91,11 @@ export function reloadAndReInitialize(context: ContextOfButton, forceAjax?: bool
           // sink
         }
       }
-      // maybe check if already publish
-      // compare to HTML module
-      // if (publishing is required (FROM CONTENT BLOCK) and publish button not visible) show publish button
 
       // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
       // must check for side-effects, which would need the manager to re-build the configuration
       quickDialog.hide();
-      return rez;
+      return result;
     }).catch((error) => {
       console.log('Error in reloadAndReInitialize', error);
     });
