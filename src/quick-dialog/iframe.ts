@@ -3,7 +3,7 @@ import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
 import { getTag } from '../manage/api';
 import { ContextOfButton } from '../context/context-of-button';
-import { quickDialogInternals } from './quick-dialog';
+import { quickDialog } from './quick-dialog';
 import QuickEditState = require('./state');
 import { IDialogFrameElement } from './iDialogFrameElement';
 import { IIFrameExtensions } from './iiframe-extensions';
@@ -39,30 +39,30 @@ export class DialogIFrame implements IIFrameExtensions {
    * get the sxc-object of this iframe
    * @returns {Object<any>} refreshed sxc-object
    */
-  reSxc(): SxcInstanceWithInternals {
+  uncachedSxc(): SxcInstanceWithInternals {
     if (!this.hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
     return this.hiddenSxc.recreate();
   }
 
   getContext(): ContextOfButton {
-    return context(getTag(this.reSxc()));
+    return context(getTag(this.uncachedSxc()));
   }
 
 
   getAdditionalDashboardConfig() {
-    return QuickDialogConfig.fromContext(this.reSxc().manage.context);
+    return QuickDialogConfig.fromContext(this.getContext()/* this.reSxc().manage.context*/);
   }
 
   hide(): void {
-    quickDialogInternals.toggle(false);
+    quickDialog.toggle(false);
   }
 
-  toggle(show: boolean) {
-    quickDialogInternals.toggle(show);
-  }
+  //toggle(show: boolean) {
+  //  quickDialog.toggle(show);
+  //}
 
   run(verb: string) {
-    this.reSxc().manage.run(verb);
+    this.uncachedSxc().manage.run(verb);
   }
 
   showMessage(message: string) {
@@ -77,13 +77,17 @@ export class DialogIFrame implements IIFrameExtensions {
   }
 
   setTemplate(templateId: number, templateName: string, final: boolean): Promise<any> {
-    const config = this.getAdditionalDashboardConfig();
+    const config = this.getAdditionalDashboardConfig(),
+      context = this.getContext();
     const ajax = config.isContent || config.supportsAjax;
     this.showMessage(`refreshing <b>${templateName}</b>...`);
-    const promise = ajax 
-      ? ajaxLoad(this.getContext(), templateId, !final)
+
+    const promise = ajax
+      ? (final
+        ? updateTemplateFromDia(context, templateId /*, false*/)
+        : ajaxLoad(context, templateId, true))
         .then(() => scrollToTarget(this.tagModule))
-      : updateTemplateFromDia(this.getContext(), templateId, false)
+      : updateTemplateFromDia(context, templateId /*, false*/)
         .then(() => window.parent.location.reload());
     return promise.then(result => {
       if (final) this.hide();
@@ -133,73 +137,3 @@ function scrollToTarget(target: JQuery<HTMLElement>) {
   } as any;
   $('body').animate(specs, animationTime);
 };
-
-///**
-// * extend IFrame with Sxc state
-// * @param iFrame
-// */
-//export function connectIframeToSxcInstance(iFrame: HTMLElement): IDialogFrameExtended {
-//  //let hiddenSxc: SxcInstanceWithInternals = null;
-//  //const cbApi = _contentBlock;
-//  //let tagModule: JQuery<HTMLElement> = null;
-
-//  const newFrm = Object.assign(
-//    iFrame,
-//    {
-//      getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),
-//      persistDia: () => QuickEditState.cbId.set(getContext().contentBlock.id.toString()),
-//      toggle: (show: boolean) => quickDialogInternals.toggle(show),
-//      run: (verb: string) => reSxc().manage.run(verb),
-//      getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),
-//      showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
-//      reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
-//      saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
-//      previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
-//      cancel: null,
-//      closeCallback: null
-//    },
-//  ) as IDialogFrameExtended;
-
-//  /**
-//   * get the sxc-object of this iframe
-//   * @returns {Object<any>} refreshed sxc-object
-//   */
-//  function reSxc(): SxcInstanceWithInternals {
-//    if (!newFrm.hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-//    return newFrm.hiddenSxc.recreate();
-//  }
-
-//  function getContext(): ContextOfButton {
-//    return context(getTag(reSxc()));
-//  }
-
-//  newFrm.scrollToTarget = () => {
-//    $('body').animate({
-//        scrollTop: newFrm.tagModule.offset().top - scrollTopOffset
-//      } as any,
-//      animationTime);
-//  };
-
-
-//  newFrm.rewire = (sxc: SxcInstanceWithInternals, callback: () => void, dialogName: string) => {
-//    newFrm.hiddenSxc = sxc;
-//    newFrm.tagModule = $($(getTag(sxc)).parent().eq(0));
-//    newFrm.sxcCacheKey = sxc.cacheKey;
-//    newFrm.closeCallback = callback;
-//    if (dialogName) {
-//      newFrm.dialogName = dialogName;
-//    }
-//  };
-
-//  newFrm.cancel = () => {
-//    newFrm.toggle(false);
-//    // todo: only re-init if something was changed?
-//    // return cbApi.reloadAndReInitialize(reSxc());
-//    // cancel the dialog
-//    QuickEditState.cancelled.set('true');
-//    //localStorage.setItem('cancelled-dialog', 'true');
-//    newFrm.closeCallback();
-//  };
-
-//  return newFrm;
-//}

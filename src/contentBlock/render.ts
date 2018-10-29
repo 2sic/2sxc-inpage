@@ -58,7 +58,7 @@ export function showMessage(context: ContextOfButton, newContent: any): void {
  * @param {number} alternateTemplateId
  * @param {boolean} justPreview
  */
-export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, justPreview: boolean): Promise<any> {
+export function ajaxLoad(context: ContextOfButton, alternateTemplateId: number, justPreview: boolean): Promise<void> {
   return getPreviewWithTemplate(context, alternateTemplateId)
     .then((result: string) => {
       replaceCb(context, result, justPreview);

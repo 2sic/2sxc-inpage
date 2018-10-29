@@ -15,45 +15,39 @@ import { quickDialog } from '../quick-dialog/quick-dialog';
 
 export function commandOpenNgDialog(context: ContextOfButton, event: any) : Promise<any> {
 
-  // testing this - ideally it should now work as a promise...
-  return new Promise<any>((resolve, reject) => {
+  // the link contains everything to open a full dialog (lots of params added)
+  const link = commandLinkToNgDialog(context);
 
-    // the callback will handle events after closing the dialog
-    // and reload the in-page view w/ajax or page reload
-    const callback = () => {
-      resolve(context);
+  let fullScreen = false;
+  const origEvent: any = event || window.event;
+
+  return new Promise<any>(resolve => {
+
+    // prepare promise for callback when the dialog closes
+    // to reload the in-page view w/ajax or page reload
+    const closeCallback = () => {
+      resolve(context); // resolve the promise
       reloadAndReInitialize(context);
-      // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
     };
 
-    // the link contains everything to open a full dialog (lots of params added)
-    const link = commandLinkToNgDialog(context);
-
+    // check if inline window (quick-dialog)
     if (context.button.inlineWindow) {
 
-      let fullScreen = false;
-      if (!!context.button.fullScreen) {
-        if (typeof (context.button.fullScreen) === 'function') {
-          fullScreen = context.button.fullScreen(context);
-        }
-      }
+      // test if it should be full screen (value or resolve-function)
+      if (typeof (context.button.fullScreen) === 'function')
+        fullScreen = context.button.fullScreen(context);
 
-      /*return*/ quickDialog.showOrToggle(context,
-        link,
-        callback,
-        fullScreen,
+      quickDialog.showOrToggle(context, link, closeCallback, fullScreen,
         context.button.dialog(context).toString());
-    } else {
-      const origEvent: any = event || window.event;
 
+    // else it's a normal pop-up dialog
+    } else {
+      // check if new-window
       if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-        /*return*/
         resolve(context);
         window.open(link);
-        //return;
       } else {
-      /*return*/
-        $2sxc.totalPopup.open(link, callback);
+        $2sxc.totalPopup.open(link, closeCallback);
       }
 
     }

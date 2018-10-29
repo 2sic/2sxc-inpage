@@ -1248,80 +1248,84 @@ var diagShowClass = 'dia-select';
  * dialog manager - the currently active dialog object
  */
 var current = null;
-exports.quickDialog = {
-    hide: hide,
-    showOrToggle: showOrToggle,
-    isShowing: function () { return current != null; },
-};
-exports.quickDialogInternals = {
-    toggle: toggle
-};
-/**
- * toggle visibility
- * @param {boolean} [show] true/false optional
- */
-function toggle(show) {
-    var cont = Container.getOrCreate();
-    if (show === undefined)
-        show = !cont.hasClass(diagShowClass);
-    // show/hide visually
-    cont.toggleClass(diagShowClass, show);
-    persistDia(Container.getIFrame(cont), show);
-    current = show ? Container.getIFrame() : null;
-}
-function persistDia(iframe, state) {
-    if (dbg.showHide)
-        console.log("qDialog persistDia(..., " + state + ")");
-    if (state) {
-        var cbId = iframe.bridge.getContext().contentBlock.id.toString();
+var QuickDialogManager = /** @class */ (function () {
+    function QuickDialogManager() {
+    }
+    /**
+     * Determines if any dialog is currently showing
+     */
+    QuickDialogManager.prototype.isShowing = function () {
+        return current != null;
+    };
+    ;
+    /**
+     * toggle visibility
+     * @param {boolean} [show] true/false optional
+     */
+    QuickDialogManager.prototype.toggle = function (show) {
+        var cont = Container.getOrCreate();
+        if (show === undefined)
+            show = !cont.hasClass(diagShowClass);
+        // show/hide visually
+        cont.toggleClass(diagShowClass, show);
+        this.rememberDialogState(Container.getIFrame(cont), show);
+        current = show ? Container.getIFrame() : null;
+    };
+    QuickDialogManager.prototype.rememberDialogState = function (iframe, state) {
         if (dbg.showHide)
-            console.log("contentBlockId: " + cbId + ")");
-        return QuickEditState.cbId.set(cbId);
-    }
-    else
-        return QuickEditState.cbId.remove();
-}
-function hide() {
-    if (current)
-        toggle(false);
-}
-/**
- * check if the dialog is showing for the current sxc-instance
- * @param {ContextOfButton} context object
- * @param {string} dialogName - name of dialog
- * @returns {boolean} true if it's currently showing for this sxc-instance
- */
-function isShowing(context, dialogName) {
-    return current // there is a current dialog
-        //todo next: unclear where thes should be set, probably move to bridge?
-        && current.bridge.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
-        && current.bridge.dialogName === dialogName; // the view is the same as previously
-}
-/**
- * show / reset the current iframe to use new url and callback
- * @param {ContextOfButton} context object
- * @param {string} url - url to show
- * @param {function()} closeCallback - callback event
- * @param {boolean} fullScreen - if it should open full screen
- * @param {string} [dialogName] - optional name of dialog, to check if it's already open
- * @returns {any} jquery object of the iframe
- */
-function showOrToggle(context, url, closeCallback, fullScreen, dialogName) {
-    ContainerSize.setSize(fullScreen);
-    var iFrame = Container.getIFrame();
-    // in case it's a toggle
-    if (dialogName && isShowing(context, dialogName)) {
-        return hide();
-    }
-    iFrame.bridge.rewire(context.sxc, closeCallback, dialogName);
-    iFrame.setAttribute('src', UrlHandler.rewriteUrl(url));
-    // if the window had already been loaded, re-init
-    if (iFrame.contentWindow && iFrame.contentWindow.reboot)
-        iFrame.contentWindow.reboot();
-    // make sure it's visible'
-    iFrame.bridge.toggle(true);
-    return iFrame;
-}
+            console.log("qDialog persistDia(..., " + state + ")");
+        if (state) {
+            var cbId = iframe.bridge.getContext().contentBlock.id.toString();
+            if (dbg.showHide)
+                console.log("contentBlockId: " + cbId + ")");
+            return QuickEditState.cbId.set(cbId);
+        }
+        else
+            return QuickEditState.cbId.remove();
+    };
+    QuickDialogManager.prototype.hide = function () {
+        if (current)
+            this.toggle(false);
+    };
+    /**
+     * check if the dialog is showing for the current sxc-instance
+     * @param {ContextOfButton} context object
+     * @param {string} dialogName - name of dialog
+     * @returns {boolean} true if it's currently showing for this sxc-instance
+     */
+    QuickDialogManager.prototype.showingThis = function (context, dialogName) {
+        return current // there is a current dialog
+            //todo next: unclear where thes should be set, probably move to bridge?
+            && current.bridge.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
+            && current.bridge.dialogName === dialogName; // the view is the same as previously
+    };
+    /**
+     * show / reset the current iframe to use new url and callback
+     * @param {ContextOfButton} context object
+     * @param {string} url - url to show
+     * @param {function()} closeCallback - callback event
+     * @param {boolean} fullScreen - if it should open full screen
+     * @param {string} [dialogName] - optional name of dialog, to check if it's already open
+     * @returns {any} jquery object of the iframe
+     */
+    QuickDialogManager.prototype.showOrToggle = function (context, url, closeCallback, fullScreen, dialogName) {
+        ContainerSize.setSize(fullScreen);
+        var iFrame = Container.getIFrame();
+        // in case it's a toggle
+        if (dialogName && this.showingThis(context, dialogName))
+            return this.hide();
+        iFrame.bridge.rewire(context.sxc, closeCallback, dialogName);
+        iFrame.setAttribute('src', UrlHandler.rewriteUrl(url));
+        // if the window had already been loaded, re-init
+        if (iFrame.contentWindow && iFrame.contentWindow.reboot)
+            iFrame.contentWindow.reboot();
+        // make sure it's visible'
+        /*iFrame.bridge*/ this.toggle(true);
+        return iFrame;
+    };
+    return QuickDialogManager;
+}());
+exports.quickDialog = new QuickDialogManager();
 
 
 /***/ }),
@@ -1362,22 +1366,17 @@ exports.prepareToAddContent = prepareToAddContent;
  * @param {number} templateId
  * @param {boolean} forceCreate
  */
-function updateTemplateFromDia(context, templateId, forceCreate) {
-    var showingAjaxPreview = build_toolbars_1.isDisabled(context.sxc);
-    // todo: should move things like remembering undo etc. back into the contentBlock state manager
-    // or just reset it, so it picks up the right values again ?
-    return updateTemplate(context, templateId, forceCreate)
+function updateTemplateFromDia(context, templateId /*, forceCreate: boolean*/) {
+    var wasShowingPreview = build_toolbars_1.isDisabled(context.sxc);
+    return updateTemplate(context, templateId, false) // forceCreate)
         .then(function () {
-        //quickDialog.hide();
         // if it didn't have content, then it only has now...
-        if (!context.app.hasContent) {
-            context.app.hasContent = forceCreate;
-        }
+        //if (!context.app.hasContent)
+        //  context.app.hasContent = forceCreate;
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
-        if (showingAjaxPreview) {
+        if (wasShowingPreview)
             render_1.reloadAndReInitialize(context);
-        }
         return;
     });
 }
@@ -1392,17 +1391,14 @@ function updateTemplate(context, templateId, forceCreate) {
         }
         // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
         var newGuid = data.replace(/[\",\']/g, '');
-        if (console) {
+        if (console)
             console.log("created content group {" + newGuid + "}");
-        }
         return context.contentBlock.contentGroupId = newGuid;
-        // $2sxc._manage._updateContentGroupGuid(context, newGuid);
     }).catch(function () {
         // error handling
         return alert('error - result not ok, was not able to create ContentGroup');
     });
 }
-exports.updateTemplate = updateTemplate;
 
 
 /***/ }),
@@ -2719,37 +2715,33 @@ var quick_dialog_1 = __webpack_require__(16);
  * @param editContext
  */
 function commandOpenNgDialog(context, event) {
-    // testing this - ideally it should now work as a promise...
-    return new Promise(function (resolve, reject) {
-        // the callback will handle events after closing the dialog
-        // and reload the in-page view w/ajax or page reload
-        var callback = function () {
-            resolve(context);
+    // the link contains everything to open a full dialog (lots of params added)
+    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context);
+    var fullScreen = false;
+    var origEvent = event || window_in_page_1.windowInPage.event;
+    return new Promise(function (resolve) {
+        // prepare promise for callback when the dialog closes
+        // to reload the in-page view w/ajax or page reload
+        var closeCallback = function () {
+            resolve(context); // resolve the promise
             render_1.reloadAndReInitialize(context);
-            // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
         };
-        // the link contains everything to open a full dialog (lots of params added)
-        var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context);
+        // check if inline window (quick-dialog)
         if (context.button.inlineWindow) {
-            var fullScreen = false;
-            if (!!context.button.fullScreen) {
-                if (typeof (context.button.fullScreen) === 'function') {
-                    fullScreen = context.button.fullScreen(context);
-                }
-            }
-            /*return*/ quick_dialog_1.quickDialog.showOrToggle(context, link, callback, fullScreen, context.button.dialog(context).toString());
+            // test if it should be full screen (value or resolve-function)
+            if (typeof (context.button.fullScreen) === 'function')
+                fullScreen = context.button.fullScreen(context);
+            quick_dialog_1.quickDialog.showOrToggle(context, link, closeCallback, fullScreen, context.button.dialog(context).toString());
+            // else it's a normal pop-up dialog
         }
         else {
-            var origEvent = event || window_in_page_1.windowInPage.event;
+            // check if new-window
             if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-                /*return*/
                 resolve(context);
                 window_in_page_1.windowInPage.open(link);
-                //return;
             }
             else {
-                /*return*/
-                sxc_controller_in_page_1.$2sxcInPage.totalPopup.open(link, callback);
+                sxc_controller_in_page_1.$2sxcInPage.totalPopup.open(link, closeCallback);
             }
         }
     });
@@ -4095,7 +4087,7 @@ var templates_1 = __webpack_require__(17);
 var MainContentBlock = /** @class */ (function () {
     function MainContentBlock() {
         this.prepareToAddContent = templates_1.prepareToAddContent;
-        this.updateTemplateFromDia = templates_1.updateTemplateFromDia;
+        //updateTemplateFromDia = updateTemplateFromDia;
     }
     // constants
     MainContentBlock.cViewWithoutContent = '_LayoutElement'; // needed to differentiate the "select item" from the "empty-is-selected" which are both empty
@@ -4198,25 +4190,25 @@ var DialogIFrame = /** @class */ (function () {
      * get the sxc-object of this iframe
      * @returns {Object<any>} refreshed sxc-object
      */
-    DialogIFrame.prototype.reSxc = function () {
+    DialogIFrame.prototype.uncachedSxc = function () {
         if (!this.hiddenSxc)
             throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
         return this.hiddenSxc.recreate();
     };
     DialogIFrame.prototype.getContext = function () {
-        return context_1.context(api_1.getTag(this.reSxc()));
+        return context_1.context(api_1.getTag(this.uncachedSxc()));
     };
     DialogIFrame.prototype.getAdditionalDashboardConfig = function () {
-        return quick_dialog_config_1.QuickDialogConfig.fromContext(this.reSxc().manage.context);
+        return quick_dialog_config_1.QuickDialogConfig.fromContext(this.getContext() /* this.reSxc().manage.context*/);
     };
     DialogIFrame.prototype.hide = function () {
-        quick_dialog_1.quickDialogInternals.toggle(false);
+        quick_dialog_1.quickDialog.toggle(false);
     };
-    DialogIFrame.prototype.toggle = function (show) {
-        quick_dialog_1.quickDialogInternals.toggle(show);
-    };
+    //toggle(show: boolean) {
+    //  quickDialog.toggle(show);
+    //}
     DialogIFrame.prototype.run = function (verb) {
-        this.reSxc().manage.run(verb);
+        this.uncachedSxc().manage.run(verb);
     };
     DialogIFrame.prototype.showMessage = function (message) {
         render_1.showMessage(this.getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>");
@@ -4230,13 +4222,15 @@ var DialogIFrame = /** @class */ (function () {
     };
     DialogIFrame.prototype.setTemplate = function (templateId, templateName, final) {
         var _this = this;
-        var config = this.getAdditionalDashboardConfig();
+        var config = this.getAdditionalDashboardConfig(), context = this.getContext();
         var ajax = config.isContent || config.supportsAjax;
         this.showMessage("refreshing <b>" + templateName + "</b>...");
         var promise = ajax
-            ? render_1.ajaxLoad(this.getContext(), templateId, !final)
+            ? (final
+                ? templates_1.updateTemplateFromDia(context, templateId /*, false*/)
+                : render_1.ajaxLoad(context, templateId, true))
                 .then(function () { return scrollToTarget(_this.tagModule); })
-            : templates_1.updateTemplateFromDia(this.getContext(), templateId, false)
+            : templates_1.updateTemplateFromDia(context, templateId /*, false*/)
                 .then(function () { return window.parent.location.reload(); });
         return promise.then(function (result) {
             if (final)
@@ -4283,67 +4277,6 @@ function scrollToTarget(target) {
     $('body').animate(specs, animationTime);
 }
 ;
-///**
-// * extend IFrame with Sxc state
-// * @param iFrame
-// */
-//export function connectIframeToSxcInstance(iFrame: HTMLElement): IDialogFrameExtended {
-//  //let hiddenSxc: SxcInstanceWithInternals = null;
-//  //const cbApi = _contentBlock;
-//  //let tagModule: JQuery<HTMLElement> = null;
-//  const newFrm = Object.assign(
-//    iFrame,
-//    {
-//      getAdditionalDashboardConfig: () => QuickDialogConfig.fromContext(reSxc().manage.context),
-//      persistDia: () => QuickEditState.cbId.set(getContext().contentBlock.id.toString()),
-//      toggle: (show: boolean) => quickDialogInternals.toggle(show),
-//      run: (verb: string) => reSxc().manage.run(verb),
-//      getManageInfo: () => NgDialogParams.fromContext(reSxc().manage.context),
-//      showMessage: (message: string) => showMessage(getContext(), `<p class="no-live-preview-available">${message}</p>`),
-//      reloadAndReInit: () => reloadAndReInitialize(getContext(), true, true),
-//      saveTemplate: (templateId: number) => updateTemplateFromDia(getContext(), templateId, false),
-//      previewTemplate: (templateId: number) => ajaxLoad(getContext(), templateId, true),
-//      cancel: null,
-//      closeCallback: null
-//    },
-//  ) as IDialogFrameExtended;
-//  /**
-//   * get the sxc-object of this iframe
-//   * @returns {Object<any>} refreshed sxc-object
-//   */
-//  function reSxc(): SxcInstanceWithInternals {
-//    if (!newFrm.hiddenSxc) throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-//    return newFrm.hiddenSxc.recreate();
-//  }
-//  function getContext(): ContextOfButton {
-//    return context(getTag(reSxc()));
-//  }
-//  newFrm.scrollToTarget = () => {
-//    $('body').animate({
-//        scrollTop: newFrm.tagModule.offset().top - scrollTopOffset
-//      } as any,
-//      animationTime);
-//  };
-//  newFrm.rewire = (sxc: SxcInstanceWithInternals, callback: () => void, dialogName: string) => {
-//    newFrm.hiddenSxc = sxc;
-//    newFrm.tagModule = $($(getTag(sxc)).parent().eq(0));
-//    newFrm.sxcCacheKey = sxc.cacheKey;
-//    newFrm.closeCallback = callback;
-//    if (dialogName) {
-//      newFrm.dialogName = dialogName;
-//    }
-//  };
-//  newFrm.cancel = () => {
-//    newFrm.toggle(false);
-//    // todo: only re-init if something was changed?
-//    // return cbApi.reloadAndReInitialize(reSxc());
-//    // cancel the dialog
-//    QuickEditState.cancelled.set('true');
-//    //localStorage.setItem('cancelled-dialog', 'true');
-//    newFrm.closeCallback();
-//  };
-//  return newFrm;
-//}
 
 
 /***/ }),

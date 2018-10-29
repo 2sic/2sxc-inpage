@@ -2,7 +2,6 @@
 import { isDisabled } from '../toolbar/build-toolbars';
 import { reloadAndReInitialize } from './render';
 import { saveTemplate } from './web-api-promises';
-import { quickDialog } from '../quick-dialog/quick-dialog';
 
 /**
  * prepare the instance so content can be added
@@ -20,7 +19,7 @@ export function prepareToAddContent(context: ContextOfButton, useModuleList: boo
   // let showingAjaxPreview = $2sxc._toolbarManager.isDisabled(sxc);
   // let groupExistsAndTemplateUnchanged = !!contentGroup.HasContent; // && !showingAjaxPreview;
 
-  const templateId: number = context.contentBlock.templateId;
+  const templateId = context.contentBlock.templateId;
 
   // template has not changed
   // if (groupExistsAndTemplateUnchanged) return $.when(null);
@@ -35,26 +34,20 @@ export function prepareToAddContent(context: ContextOfButton, useModuleList: boo
  * @param {number} templateId
  * @param {boolean} forceCreate
  */
-export function updateTemplateFromDia(context: ContextOfButton, templateId: number, forceCreate: boolean): Promise<any> {
-  const showingAjaxPreview = isDisabled(context.sxc);
+export function updateTemplateFromDia(context: ContextOfButton, templateId: number/*, forceCreate: boolean*/): Promise<void> {
+  const wasShowingPreview = isDisabled(context.sxc);
 
-  // todo: should move things like remembering undo etc. back into the contentBlock state manager
-  // or just reset it, so it picks up the right values again ?
-  return updateTemplate(context, templateId, forceCreate)
+  return updateTemplate(context, templateId, false)// forceCreate)
     .then(() => {
 
-      //quickDialog.hide();
-
       // if it didn't have content, then it only has now...
-      if (!context.app.hasContent) {
-        context.app.hasContent = forceCreate;
-      }
+      //if (!context.app.hasContent)
+      //  context.app.hasContent = forceCreate;
 
       // only reload on ajax, not on app as that was already re-loaded on the preview
       // necessary to show the original template again
-      if (showingAjaxPreview) {
+      if (wasShowingPreview)
         reloadAndReInitialize(context);
-      }
 
       return;
     });
@@ -63,7 +56,7 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
 /**
  * Update the template.
  */
-export function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean): Promise<any> {
+function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean): Promise<any> {
 
   return saveTemplate(context, templateId, forceCreate).then((data) => {
     if (!data) {
@@ -73,12 +66,10 @@ export function updateTemplate(context: ContextOfButton, templateId: number, for
     // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
     const newGuid: string = data.replace(/[\",\']/g, '');
 
-    if (console) {
+    if (console)
       console.log(`created content group {${newGuid}}`);
-    }
 
     return context.contentBlock.contentGroupId = newGuid;
-    // $2sxc._manage._updateContentGroupGuid(context, newGuid);
   }).catch(() => {
     // error handling
     return alert('error - result not ok, was not able to create ContentGroup');
