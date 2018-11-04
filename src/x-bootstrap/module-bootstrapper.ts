@@ -6,44 +6,45 @@ import { LogUtils } from '../logging/log-utils';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import QuickEditState = require('../quick-dialog/state');
 import { windowInPage as window } from '../interfaces/window-in-page';
+import { DebugConfig } from '../DebugConfig';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
  */
-const initializedModules: any[] = [];
+const initializedInstances: JQuery<HTMLElement>[] = [];
 let openedTemplatePickerOnce = false;
-let cancelledDialog: boolean;
+const diagCancelStateOnStart = QuickEditState.cancelled.get();
 
-// callback function to execute when mutations are observed
-let initAllModulesCallback = (mutationsList: any) => {
-  initAllModules(false);
-};
-
-// create an observer instance linked to the callback function
-let observer = new MutationObserver(initAllModulesCallback);
 
 $(document).ready(() => {
-
-  cancelledDialog = QuickEditState.cancelled.get(); 
-
-  if (cancelledDialog) {
+  // reset cancelled state after one reload
+  if (diagCancelStateOnStart)
     QuickEditState.cancelled.remove();
-  };
 
-  initAllModules(true);
+  // initialize all modules
+  initAllInstances(true);
 
-  // document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(false), false);
   // start observing the body for configured mutations
-  observer.observe(document.body, { attributes: false, childList: true, subtree: true });
+  watchDomChanges();
 });
 
-function initAllModules(isFirstRun: boolean): void {
-  $('div[data-edit-context]').each(function() {
-    initModule(this, isFirstRun);
-  });
+/**
+ * Scan all instances and initialize them
+ * @param isFirstRun should be true only on the very initial call
+ */
+function initAllInstances(isFirstRun: boolean): void {
+  $('div[data-edit-context]').each(function() { initInstance(this, isFirstRun)});
   if (isFirstRun)
     tryShowTemplatePicker();
+}
+
+/**
+ * create an observer instance and start observing
+ */
+function watchDomChanges() {
+  const observer = new MutationObserver(() => initAllInstances(false));
+  observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 }
 
 /**
@@ -67,10 +68,10 @@ function tryShowTemplatePicker(): boolean {
   if (!sxc) {
     const uninitializedModules: any = $('.sc-uninitialized');
 
-    if (cancelledDialog || openedTemplatePickerOnce) return false;
+    if (diagCancelStateOnStart || openedTemplatePickerOnce) return false;
 
     // already showing a dialog
-    if (quickDialog.isShowing()) return false;
+    if (quickDialog.isVisible()) return false;
 
     // not exactly one uninitialized module
     if (uninitializedModules.length !== 1) return false;
@@ -87,13 +88,12 @@ function tryShowTemplatePicker(): boolean {
   return true;
 }
 
-function initModule(module: any, isFirstRun: boolean) {
+function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
   // check if module is already in the list of initialized modules
-  if (initializedModules.find((m) => m === module))
-    return false;
+  if (initializedInstances.find((m) => m === module)) return;
 
-  // add to modules-list
-  initializedModules.push(module);
+  // add to modules-list first, in case we run into recursions
+  initializedInstances.push(module);
 
   let sxc = getSxcInstance(module);
   
@@ -103,39 +103,39 @@ function initModule(module: any, isFirstRun: boolean) {
     sxc = sxc.recreate(true);
 
   // check if we must show the glasses
-  // this must run even after first-run, because it can be added ajax-style
+  // this must always run because it can be added ajax-style
   const wasEmpty = showGlassesButtonIfUninitialized(sxc);
 
   if (isFirstRun || !wasEmpty) {
     // use a logger for each iteration
     const log = new Log('Bts.Module');
     buildToolbars(log, module);
-    LogUtils.logDump(log);
+    if(DebugConfig.bootstrap.initInstance)
+      LogUtils.logDump(log);
   };
-
-  return true;
 }
 
-function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals) {
+function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals): boolean {
   // already initialized
-  if (sxci && sxci.manage && sxci.manage._editContext && sxci.manage._editContext.ContentGroup && sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
-    return false;
-  };
+  if (isInitialized(sxci)) return false;
 
   // already has a glasses button
   const tag: any = $(getTag(sxci));
-  if (tag.find('.sc-uninitialized').length !== 0) {
-    return false;
-  }
+  if (tag.find('.sc-uninitialized').length !== 0) return false;
 
   // note: title is added on mouseover, as the translation isn't ready at page-load
-  const btn = $('<div class="sc-uninitialized"  onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
+  const btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">'
+    + '<div class="icon-sxc-glasses"></div>'
+    + '</div>');
 
-  btn.on('click',
-    (): void => {
-      sxci.manage.run('layout');
-    });
+  btn.on('click', () => sxci.manage.run('layout'));
 
   tag.append(btn);
   return true;
 }
+
+function isInitialized(sxci: SxcInstanceWithInternals): boolean {
+  const cg = sxci && sxci.manage && sxci.manage._editContext && sxci.manage._editContext.ContentGroup;
+  return (cg && cg.TemplateId !== 0);
+}
+

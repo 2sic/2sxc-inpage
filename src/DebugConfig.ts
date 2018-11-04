@@ -8,6 +8,9 @@ export const DebugConfig = {
   qDialog: {
     showHide: true
   },
+  bootstrap: {
+    initInstance: true
+  },
   state: {
     change: true,
     get: false

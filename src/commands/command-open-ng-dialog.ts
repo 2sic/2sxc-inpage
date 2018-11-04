@@ -1,4 +1,4 @@
-﻿import { reloadAndReInitialize } from '../contentBlock/render';
+﻿import { renderer } from '../contentBlock/render';
 import { ContextOfButton } from '../context/context-of-button';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { windowInPage as window } from '../interfaces/window-in-page';
@@ -21,13 +21,13 @@ export function commandOpenNgDialog(context: ContextOfButton, event: any) : Prom
   let fullScreen = false;
   const origEvent: any = event || window.event;
 
-  return new Promise<any>(resolve => {
+  return new Promise<any>(resolvePromise => {
 
     // prepare promise for callback when the dialog closes
     // to reload the in-page view w/ajax or page reload
-    const closeCallback = () => {
-      resolve(context); // resolve the promise
-      reloadAndReInitialize(context);
+    const resolveAndReInit = () => {
+      resolvePromise(context);
+      renderer.reloadAndReInitialize(context);
     };
 
     // check if inline window (quick-dialog)
@@ -36,18 +36,19 @@ export function commandOpenNgDialog(context: ContextOfButton, event: any) : Prom
       // test if it should be full screen (value or resolve-function)
       if (typeof (context.button.fullScreen) === 'function')
         fullScreen = context.button.fullScreen(context);
+      const diagName = context.button.dialog(context).toString();
 
-      quickDialog.showOrToggle(context, link, closeCallback, fullScreen,
-        context.button.dialog(context).toString());
+      quickDialog.showOrToggleFromToolbar(context, link, fullScreen, diagName)
+        .then(isChanged => { if(isChanged) resolveAndReInit(); });
 
     // else it's a normal pop-up dialog
     } else {
       // check if new-window
       if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-        resolve(context);
+        resolvePromise(context);
         window.open(link);
       } else {
-        $2sxc.totalPopup.open(link, closeCallback);
+        $2sxc.totalPopup.open(link, resolveAndReInit);
       }
 
     }

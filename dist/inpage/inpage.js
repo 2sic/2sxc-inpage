@@ -261,18 +261,18 @@ var ui_context_1 = __webpack_require__(68);
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-function context(htmlElementOrId, cbid) {
-    var sxc = null;
+function context(tagOrSxc, cbid) {
+    var sxc;
     var containerTag = null;
-    if (is_1.isSxcInstance(htmlElementOrId)) { // it is SxcInstance
-        sxc = htmlElementOrId;
+    if (is_1.isSxcInstance(tagOrSxc)) { // it is SxcInstance
+        sxc = tagOrSxc;
     }
-    else if (typeof htmlElementOrId === 'number') { // it is number
-        sxc = sxc_1.getSxcInstance(htmlElementOrId, cbid);
+    else if (typeof tagOrSxc === 'number') { // it is number
+        sxc = sxc_1.getSxcInstance(tagOrSxc, cbid);
     }
     else { // it is HTMLElement
-        sxc = sxc_1.getSxcInstance(htmlElementOrId);
-        containerTag = api_1.getContainerTag(htmlElementOrId);
+        sxc = sxc_1.getSxcInstance(tagOrSxc);
+        containerTag = api_1.getContainerTag(tagOrSxc);
     }
     ;
     var contextOfButton = getContextInstance(sxc, containerTag);
@@ -711,7 +711,7 @@ function getAndReload(context, url, params) {
             reject(Error(errorThrown));
         });
         ;
-    }).then(function () { render_1.reloadAndReInitialize(context); });
+    }).then(function () { render_1.renderer.reloadAndReInitialize(context); });
 }
 /**
  * remove an item from a list, then reload
@@ -1133,7 +1133,6 @@ var start_1 = __webpack_require__(36);
 var build_toolbars_1 = __webpack_require__(12);
 var main_content_block_1 = __webpack_require__(80);
 var web_api_promises_1 = __webpack_require__(38);
-var quick_dialog_1 = __webpack_require__(16);
 /*
  * this is the content block manager in the browser
  *
@@ -1144,86 +1143,88 @@ var quick_dialog_1 = __webpack_require__(16);
  *
  * it should be able to render itself
  */
-/**
- * ajax update/replace the content of the content-block
- * optionally also initialize the toolbar (if not just preview)
- * @param {ContextOfButton} context
- * @param {string} newContent
- * @param {boolean} justPreview
- * @returns {}
- */
-function replaceCb(context, newContent, justPreview) {
-    try {
-        var newStuff = $(newContent);
-        // Must disable toolbar before we attach to DOM
-        if (justPreview)
-            build_toolbars_1.disable(newStuff);
-        $(api_1.getTag(context.sxc)).replaceWith(newStuff);
-        // reset the cache, so the sxc-object is refreshed
-        context.sxc.recreate(true);
+var Renderer = /** @class */ (function () {
+    function Renderer() {
     }
-    catch (e) {
-        console.log('Error while rendering template:', e);
-    }
-}
-/**
- * Show a message where the content of a module should be - usually as placeholder till something else happens
- * @param {ContextOfButton} context
- * @param {string} newContent
- * @returns {} nothing
- */
-function showMessage(context, newContent) {
-    $(api_1.getTag(context.sxc)).html(newContent);
-}
-exports.showMessage = showMessage;
-/**
- * ajax-call, then replace
- * @param {ContextOfButton} context
- * @param {number} alternateTemplateId
- * @param {boolean} justPreview
- */
-function ajaxLoad(context, alternateTemplateId, justPreview) {
-    return web_api_promises_1.getPreviewWithTemplate(context, alternateTemplateId)
-        .then(function (result) {
-        replaceCb(context, result, justPreview);
-    })
-        .then(function () {
-        start_1.reset();
-    }); // reset quick-edit, because the config could have changed
-}
-exports.ajaxLoad = ajaxLoad;
-/**
- * this one assumes a replace / change has already happened, but now must be finalized...
- * @param {ContextOfButton} context
- * @param {boolean} forceAjax
- * @param {boolean} preview
- */
-function reloadAndReInitialize(context, forceAjax, preview) {
-    // if ajax is not supported, we must reload the whole page
-    if (!forceAjax && !context.app.supportsAjax) {
-        window_in_page_1.windowInPage.location.reload();
-        return Promise.resolve();
-    }
-    return ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, preview)
-        .then(function (result) {
-        // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
-        if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
-            try {
-                window_in_page_1.windowInPage.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
-            }
-            catch (e) {
-                // sink
-            }
+    /**
+     * Show a message where the content of a module should be - usually as placeholder till something else happens
+     * @param {ContextOfButton} context
+     * @param {string} newContent
+     * @returns {} nothing
+     */
+    Renderer.prototype.showMessage = function (context, newContent) {
+        $(api_1.getTag(context.sxc)).html(newContent);
+    };
+    /**
+     * this one assumes a replace / change has already happened, but now must be finalized...
+     * @param {ContextOfButton} context
+     * @param {boolean} forceAjax
+     * @param {boolean} preview
+     */
+    Renderer.prototype.reloadAndReInitialize = function (context, forceAjax, preview) {
+        // if ajax is not supported, we must reload the whole page
+        if (!forceAjax && !context.app.supportsAjax) {
+            window_in_page_1.windowInPage.location.reload();
+            return Promise.resolve();
         }
-        // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
-        // must check for side-effects, which would need the manager to re-build the configuration
-        quick_dialog_1.quickDialog.hide();
-        return result;
-    }).catch(function (error) {
-        console.log('Error in reloadAndReInitialize', error);
-    });
-}
-exports.reloadAndReInitialize = reloadAndReInitialize;
+        return this.ajaxLoad(context, main_content_block_1.MainContentBlock.cUseExistingTemplate, preview)
+            .then(function (result) {
+            // If Evoq, tell Evoq that page has changed if it has changed (Ajax call)
+            if (window_in_page_1.windowInPage.dnn_tabVersioningEnabled) { // this only exists in evoq or on new DNNs with tabVersioning
+                try {
+                    window_in_page_1.windowInPage.dnn.ContentEditorManager.triggerChangeOnPageContentEvent();
+                }
+                catch (e) {
+                    // ignore
+                }
+            }
+            // 2017-09-02 2dm - believe this was meant to re-init the dialog manager, but it doesn't actually work
+            // must check for side-effects, which would need the manager to re-build the configuration
+            // 2018-11-03 2dm disabled completely for now
+            // quickDialog.hide();
+            return result;
+        }).catch(function (error) { return console.log('Error in reloadAndReInitialize', error); });
+    };
+    /**
+     * ajax-call, then replace
+     * @param {ContextOfButton} context
+     * @param {number} alternateTemplateId
+     * @param {boolean} justPreview
+     */
+    Renderer.prototype.ajaxLoad = function (context, alternateTemplateId, justPreview) {
+        var _this = this;
+        return web_api_promises_1.getPreviewWithTemplate(context, alternateTemplateId)
+            .then(function (result) {
+            _this.replaceContentBlock(context, result, justPreview);
+        })
+            .then(function () {
+            start_1.reset();
+        }); // reset quick-edit, because the config could have changed
+    };
+    /**
+     * ajax update/replace the content of the content-block
+     * optionally also initialize the toolbar (if not just preview)
+     * @param {ContextOfButton} context
+     * @param {string} newContent
+     * @param {boolean} justPreview
+     */
+    Renderer.prototype.replaceContentBlock = function (context, newContent, justPreview) {
+        try {
+            var newDom = $(newContent);
+            // Must disable toolbar before we attach to DOM
+            if (justPreview)
+                build_toolbars_1.disable(newDom);
+            $(api_1.getTag(context.sxc)).replaceWith(newDom);
+            // reset the cache, so the sxc-object is refreshed
+            context.sxc.recreate(true);
+        }
+        catch (e) {
+            console.log('Error while rendering template:', e);
+        }
+    };
+    return Renderer;
+}());
+exports.renderer = new Renderer();
 
 
 /***/ }),
@@ -1233,99 +1234,23 @@ exports.reloadAndReInitialize = reloadAndReInitialize;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var QuickEditState = __webpack_require__(22);
-var Container = __webpack_require__(39);
-var ContainerSize = __webpack_require__(40);
-var UrlHandler = __webpack_require__(84);
-var DebugConfig_1 = __webpack_require__(23);
-var dbg = DebugConfig_1.DebugConfig.qDialog;
-/**
- * this is a dialog manager which is in charge of all quick-dialogues
- * it always has a reference to the latest dialog created by any module instance
- */
-var diagShowClass = 'dia-select';
-/**
- * dialog manager - the currently active dialog object
- */
-var current = null;
-var QuickDialogManager = /** @class */ (function () {
-    function QuickDialogManager() {
+// ReSharper disable once InconsistentNaming
+exports.DebugConfig = {
+    cms: {
+        autoDump: false,
+        run: true
+    },
+    qDialog: {
+        showHide: true
+    },
+    bootstrap: {
+        initInstance: true
+    },
+    state: {
+        change: true,
+        get: false
     }
-    /**
-     * Determines if any dialog is currently showing
-     */
-    QuickDialogManager.prototype.isShowing = function () {
-        return current != null;
-    };
-    ;
-    /**
-     * toggle visibility
-     * @param {boolean} [show] true/false optional
-     */
-    QuickDialogManager.prototype.toggle = function (show) {
-        var cont = Container.getOrCreate();
-        if (show === undefined)
-            show = !cont.hasClass(diagShowClass);
-        // show/hide visually
-        cont.toggleClass(diagShowClass, show);
-        this.rememberDialogState(Container.getIFrame(cont), show);
-        current = show ? Container.getIFrame() : null;
-    };
-    QuickDialogManager.prototype.rememberDialogState = function (iframe, state) {
-        if (dbg.showHide)
-            console.log("qDialog persistDia(..., " + state + ")");
-        if (state) {
-            var cbId = iframe.bridge.getContext().contentBlock.id.toString();
-            if (dbg.showHide)
-                console.log("contentBlockId: " + cbId + ")");
-            return QuickEditState.cbId.set(cbId);
-        }
-        else
-            return QuickEditState.cbId.remove();
-    };
-    QuickDialogManager.prototype.hide = function () {
-        if (current)
-            this.toggle(false);
-    };
-    /**
-     * check if the dialog is showing for the current sxc-instance
-     * @param {ContextOfButton} context object
-     * @param {string} dialogName - name of dialog
-     * @returns {boolean} true if it's currently showing for this sxc-instance
-     */
-    QuickDialogManager.prototype.showingThis = function (context, dialogName) {
-        return current // there is a current dialog
-            //todo next: unclear where thes should be set, probably move to bridge?
-            && current.bridge.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
-            && current.bridge.dialogName === dialogName; // the view is the same as previously
-    };
-    /**
-     * show / reset the current iframe to use new url and callback
-     * @param {ContextOfButton} context object
-     * @param {string} url - url to show
-     * @param {function()} closeCallback - callback event
-     * @param {boolean} fullScreen - if it should open full screen
-     * @param {string} [dialogName] - optional name of dialog, to check if it's already open
-     * @returns {any} jquery object of the iframe
-     */
-    QuickDialogManager.prototype.showOrToggle = function (context, url, closeCallback, fullScreen, dialogName) {
-        ContainerSize.setSize(fullScreen);
-        var iFrame = Container.getIFrame();
-        // in case it's a toggle
-        if (dialogName && this.showingThis(context, dialogName))
-            return this.hide();
-        iFrame.bridge.rewire(context.sxc, closeCallback, dialogName);
-        iFrame.setAttribute('src', UrlHandler.rewriteUrl(url));
-        // if the window had already been loaded, re-init
-        if (iFrame.contentWindow && iFrame.contentWindow.reboot)
-            iFrame.contentWindow.reboot();
-        // make sure it's visible'
-        /*iFrame.bridge*/ this.toggle(true);
-        return iFrame;
-    };
-    return QuickDialogManager;
-}());
-exports.quickDialog = new QuickDialogManager();
+};
 
 
 /***/ }),
@@ -1376,7 +1301,7 @@ function updateTemplateFromDia(context, templateId /*, forceCreate: boolean*/) {
         // only reload on ajax, not on app as that was already re-loaded on the preview
         // necessary to show the original template again
         if (wasShowingPreview)
-            render_1.reloadAndReInitialize(context);
+            render_1.renderer.reloadAndReInitialize(context);
         return;
     });
 }
@@ -1547,41 +1472,6 @@ exports.ButtonConfig = ButtonConfig;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var session_state_handler_1 = __webpack_require__(81);
-exports.cbId = new session_state_handler_1.SessionStateHandler('dia-cbid');
-exports.cancelled = new session_state_handler_1.SessionStateHandler('cancelled-dialog');
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-// ReSharper disable once InconsistentNaming
-exports.DebugConfig = {
-    cms: {
-        autoDump: false,
-        run: true
-    },
-    qDialog: {
-        showHide: true
-    },
-    state: {
-        change: true,
-        get: false
-    }
-};
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var UserOfEditContext = /** @class */ (function () {
     function UserOfEditContext() {
     }
@@ -1594,6 +1484,133 @@ var UserOfEditContext = /** @class */ (function () {
     return UserOfEditContext;
 }());
 exports.UserOfEditContext = UserOfEditContext;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var QuickEditState = __webpack_require__(24);
+var Container = __webpack_require__(41);
+var ContainerSize = __webpack_require__(42);
+var UrlHandler = __webpack_require__(88);
+var DebugConfig_1 = __webpack_require__(16);
+var dbg = DebugConfig_1.DebugConfig.qDialog;
+var diagShowClass = 'dia-select';
+/** dialog manager - the currently active dialog object */
+var current = null;
+/**
+ * this is a dialog manager which is in charge of all quick-dialogues
+ * it always has a reference to the latest dialog created by any module instance
+ */
+var QuickDialogManager = /** @class */ (function () {
+    function QuickDialogManager() {
+    }
+    /**
+     * Determines if any dialog is currently showing
+     */
+    QuickDialogManager.prototype.isVisible = function () {
+        return current != null;
+    };
+    ;
+    /**
+     * toggle visibility
+     * @param {boolean} [show] true/false optional
+     */
+    QuickDialogManager.prototype.setVisible = function (show) {
+        var cont = Container.getOrCreate();
+        //if (show === undefined)
+        //  show = !cont.hasClass(diagShowClass);
+        // show/hide visually
+        cont.toggleClass(diagShowClass, show);
+        this.rememberDialogState(Container.getIFrame(cont), show);
+        current = show ? Container.getIFrame() : null;
+    };
+    /**
+     * show / reset the current iframe to use new url and callback
+     * @param {ContextOfButton} context object
+     * @param {string} url - url to show
+     * @param {function()} closeCallback - callback event
+     * @param {boolean} fullScreen - if it should open full screen
+     * @param {string} [dialogName] - optional name of dialog, to check if it's already open
+     * @returns {any} jquery object of the iframe
+     */
+    QuickDialogManager.prototype.showOrToggleFromToolbar = function (context, url, fullScreen, dialogName) {
+        ContainerSize.setSize(fullScreen);
+        var iFrame = Container.getIFrame();
+        // in case it's a toggle
+        if (this.isVisible()) {
+            // check if we're just toggling the current, or will show a new one afterwards
+            var currentPromise = dialogName && this.isShowingContext(context, dialogName)
+                ? this.promise
+                : null;
+            this.cancel(current.bridge);
+            // just a hide this, return the old promise
+            if (currentPromise)
+                return currentPromise;
+        }
+        var dialogUrl = UrlHandler.rewriteUrl(url);
+        iFrame.bridge.setup(context.sxc, dialogName);
+        iFrame.setAttribute('src', dialogUrl);
+        // if the window had already been loaded, re-init
+        if (iFrame.contentWindow && iFrame.contentWindow.reboot)
+            iFrame.contentWindow.reboot();
+        // make sure it's visible'
+        this.setVisible(true);
+        return this.promiseRestart();
+    };
+    QuickDialogManager.prototype.cancel = function (bridge) {
+        this.setVisible(false);
+        QuickEditState.cancelled.set('true');
+        this.resolvePromise(bridge.changed);
+    };
+    QuickDialogManager.prototype.rememberDialogState = function (iframe, state) {
+        if (dbg.showHide)
+            console.log("qDialog persistDia(..., " + state + ")");
+        if (state) {
+            var cbId = iframe.bridge.getContext().contentBlock.id.toString();
+            if (dbg.showHide)
+                console.log("contentBlockId: " + cbId + ")");
+            return QuickEditState.cbId.set(cbId);
+        }
+        else
+            return QuickEditState.cbId.remove();
+    };
+    /**
+   * check if the dialog is showing for the current sxc-instance
+   * @param {ContextOfButton} context object
+   * @param {string} dialogName - name of dialog
+   * @returns {boolean} true if it's currently showing for this sxc-instance
+   */
+    QuickDialogManager.prototype.isShowingContext = function (context, dialogName) {
+        return current // there is a current dialog
+            //todo next: unclear where thes should be set, probably move to bridge?
+            && current.bridge.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
+            && current.bridge.dialogName === dialogName; // the view is the same as previously
+    };
+    QuickDialogManager.prototype.promiseRestart = function () {
+        var _this = this;
+        this.promise = new Promise(function (resolve) { return _this.resolvePromise = resolve; });
+        return this.promise;
+    };
+    return QuickDialogManager;
+}());
+exports.quickDialog = new QuickDialogManager();
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var session_state_handler_1 = __webpack_require__(85);
+exports.cbId = new session_state_handler_1.SessionStateHandler('dia-cbid');
+exports.cancelled = new session_state_handler_1.SessionStateHandler('cancelled-dialog');
 
 
 /***/ }),
@@ -1743,7 +1760,7 @@ var has_log_1 = __webpack_require__(13);
 var log_1 = __webpack_require__(7);
 var context_1 = __webpack_require__(5);
 var context_of_instance_1 = __webpack_require__(27);
-var DebugConfig_1 = __webpack_require__(23);
+var DebugConfig_1 = __webpack_require__(16);
 var logId = 'Cms.Api';
 var Cms = /** @class */ (function (_super) {
     __extends(Cms, _super);
@@ -2579,8 +2596,80 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Iframebridge = __webpack_require__(82);
-var ContainerSize = __webpack_require__(40);
+var render_1 = __webpack_require__(15);
+var sxc_controller_in_page_1 = __webpack_require__(3);
+var window_in_page_1 = __webpack_require__(1);
+var command_link_to_ng_dialog_1 = __webpack_require__(81);
+var quick_dialog_1 = __webpack_require__(23);
+/**
+ * open a new dialog of the angular-ui
+ * @param settings
+ * @param event
+ * @param sxc
+ * @param editContext
+ */
+function commandOpenNgDialog(context, event) {
+    // the link contains everything to open a full dialog (lots of params added)
+    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context);
+    var fullScreen = false;
+    var origEvent = event || window_in_page_1.windowInPage.event;
+    return new Promise(function (resolvePromise) {
+        // prepare promise for callback when the dialog closes
+        // to reload the in-page view w/ajax or page reload
+        var resolveAndReInit = function () {
+            resolvePromise(context);
+            render_1.renderer.reloadAndReInitialize(context);
+        };
+        // check if inline window (quick-dialog)
+        if (context.button.inlineWindow) {
+            // test if it should be full screen (value or resolve-function)
+            if (typeof (context.button.fullScreen) === 'function')
+                fullScreen = context.button.fullScreen(context);
+            var diagName = context.button.dialog(context).toString();
+            quick_dialog_1.quickDialog.showOrToggleFromToolbar(context, link, fullScreen, diagName)
+                .then(function (isChanged) { if (isChanged)
+                resolveAndReInit(); });
+            // else it's a normal pop-up dialog
+        }
+        else {
+            // check if new-window
+            if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
+                resolvePromise(context);
+                window_in_page_1.windowInPage.open(link);
+            }
+            else {
+                sxc_controller_in_page_1.$2sxcInPage.totalPopup.open(link, resolveAndReInit);
+            }
+        }
+    });
+}
+exports.commandOpenNgDialog = commandOpenNgDialog;
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var DialogPaths;
+(function (DialogPaths) {
+    DialogPaths["ng1"] = "dist/dnn/ui.html";
+    DialogPaths["quickDialog"] = "dist/ng/ui.html";
+    DialogPaths["ng5"] = "dist/ng-edit/index.html";
+})(DialogPaths = exports.DialogPaths || (exports.DialogPaths = {}));
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Iframebridge = __webpack_require__(86);
+var ContainerSize = __webpack_require__(42);
 var IFrame = Iframebridge.build;
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
@@ -2626,13 +2715,13 @@ function buildContainerAndIFrame() {
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Container = __webpack_require__(39);
+var Container = __webpack_require__(41);
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -2678,75 +2767,6 @@ function watchForResize(container) {
         }, resizeInterval);
 }
 exports.watchForResize = watchForResize;
-
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var DialogPaths;
-(function (DialogPaths) {
-    DialogPaths["ng1"] = "dist/dnn/ui.html";
-    DialogPaths["quickDialog"] = "dist/ng/ui.html";
-    DialogPaths["ng5"] = "dist/ng-edit/index.html";
-})(DialogPaths = exports.DialogPaths || (exports.DialogPaths = {}));
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(15);
-var sxc_controller_in_page_1 = __webpack_require__(3);
-var window_in_page_1 = __webpack_require__(1);
-var command_link_to_ng_dialog_1 = __webpack_require__(85);
-var quick_dialog_1 = __webpack_require__(16);
-/**
- * open a new dialog of the angular-ui
- * @param settings
- * @param event
- * @param sxc
- * @param editContext
- */
-function commandOpenNgDialog(context, event) {
-    // the link contains everything to open a full dialog (lots of params added)
-    var link = command_link_to_ng_dialog_1.commandLinkToNgDialog(context);
-    var fullScreen = false;
-    var origEvent = event || window_in_page_1.windowInPage.event;
-    return new Promise(function (resolve) {
-        // prepare promise for callback when the dialog closes
-        // to reload the in-page view w/ajax or page reload
-        var closeCallback = function () {
-            resolve(context); // resolve the promise
-            render_1.reloadAndReInitialize(context);
-        };
-        // check if inline window (quick-dialog)
-        if (context.button.inlineWindow) {
-            // test if it should be full screen (value or resolve-function)
-            if (typeof (context.button.fullScreen) === 'function')
-                fullScreen = context.button.fullScreen(context);
-            quick_dialog_1.quickDialog.showOrToggle(context, link, closeCallback, fullScreen, context.button.dialog(context).toString());
-            // else it's a normal pop-up dialog
-        }
-        else {
-            // check if new-window
-            if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-                resolve(context);
-                window_in_page_1.windowInPage.open(link);
-            }
-            else {
-                sxc_controller_in_page_1.$2sxcInPage.totalPopup.open(link, closeCallback);
-            }
-        }
-    });
-}
-exports.commandOpenNgDialog = commandOpenNgDialog;
 
 
 /***/ }),
@@ -3125,7 +3145,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var templates_1 = __webpack_require__(17);
-var command_open_ng_dialog_1 = __webpack_require__(42);
+var command_open_ng_dialog_1 = __webpack_require__(39);
 var commands_1 = __webpack_require__(10);
 var button_action_1 = __webpack_require__(20);
 var button_config_1 = __webpack_require__(21);
@@ -4109,266 +4129,7 @@ exports._contentBlock = new MainContentBlock();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var DebugConfig_1 = __webpack_require__(23);
-/**
- * This object helps persist / load / reset
- * a setting in the session-state
- * */
-var SessionStateHandler = /** @class */ (function () {
-    function SessionStateHandler(key) {
-        this.key = key;
-    }
-    SessionStateHandler.prototype.set = function (value) {
-        if (DebugConfig_1.DebugConfig.state.change)
-            console.log("state '" + this.key + "' set(" + value + ")");
-        sessionStorage.setItem(this.key, value);
-    };
-    ;
-    SessionStateHandler.prototype.remove = function () {
-        if (DebugConfig_1.DebugConfig.state.change)
-            console.log("state '" + this.key + "' remove()");
-        sessionStorage.removeItem(this.key);
-    };
-    SessionStateHandler.prototype.get = function () {
-        var result = SessionStorageHelper.getItemValue(this.key);
-        if (DebugConfig_1.DebugConfig.state.get)
-            console.log("state '" + this.key + "' get() = '" + result + "'");
-        return result;
-    };
-    return SessionStateHandler;
-}());
-exports.SessionStateHandler = SessionStateHandler;
-/**
- * session storage helper to get typed values from it
- */
-var SessionStorageHelper = /** @class */ (function () {
-    function SessionStorageHelper() {
-    }
-    SessionStorageHelper.getItemValueString = function (key) {
-        var value = sessionStorage.getItem(key);
-        return value;
-    };
-    SessionStorageHelper.getItemValue = function (key) {
-        var value = sessionStorage.getItem(key);
-        return JSON.parse(value);
-    };
-    return SessionStorageHelper;
-}());
-
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(15);
-var templates_1 = __webpack_require__(17);
-var context_1 = __webpack_require__(5);
-var api_1 = __webpack_require__(4);
-var quick_dialog_1 = __webpack_require__(16);
-var QuickEditState = __webpack_require__(22);
-var quick_dialog_config_1 = __webpack_require__(83);
-var scrollTopOffset = 80;
-var animationTime = 400;
-function build(iFrame) {
-    console.log('prot: ', DialogIFrame.prototype);
-    var iFrameExtended = iFrame;
-    iFrameExtended.bridge = new DialogIFrame();
-    console.log('extensions: ', iFrameExtended.bridge);
-    return iFrameExtended;
-}
-exports.build = build;
-/**
- *
- */
-var DialogIFrame = /** @class */ (function () {
-    function DialogIFrame() {
-    }
-    /**
-     * get the sxc-object of this iframe
-     * @returns {Object<any>} refreshed sxc-object
-     */
-    DialogIFrame.prototype.uncachedSxc = function () {
-        if (!this.hiddenSxc)
-            throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
-        return this.hiddenSxc.recreate();
-    };
-    DialogIFrame.prototype.getContext = function () {
-        return context_1.context(api_1.getTag(this.uncachedSxc()));
-    };
-    DialogIFrame.prototype.getAdditionalDashboardConfig = function () {
-        return quick_dialog_config_1.QuickDialogConfig.fromContext(this.getContext() /* this.reSxc().manage.context*/);
-    };
-    DialogIFrame.prototype.hide = function () {
-        quick_dialog_1.quickDialog.toggle(false);
-    };
-    //toggle(show: boolean) {
-    //  quickDialog.toggle(show);
-    //}
-    DialogIFrame.prototype.run = function (verb) {
-        this.uncachedSxc().manage.run(verb);
-    };
-    DialogIFrame.prototype.showMessage = function (message) {
-        render_1.showMessage(this.getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>");
-        scrollToTarget(this.tagModule);
-    };
-    DialogIFrame.prototype.reloadAndReInit = function () {
-        var _this = this;
-        return render_1.reloadAndReInitialize(this.getContext(), true, true)
-            .then(function () { return scrollToTarget(_this.tagModule); })
-            .then(function () { return Promise.resolve(_this.getAdditionalDashboardConfig()); });
-    };
-    DialogIFrame.prototype.setTemplate = function (templateId, templateName, final) {
-        var _this = this;
-        var config = this.getAdditionalDashboardConfig(), context = this.getContext();
-        var ajax = config.isContent || config.supportsAjax;
-        this.showMessage("refreshing <b>" + templateName + "</b>...");
-        var promise = ajax
-            ? (final
-                ? templates_1.updateTemplateFromDia(context, templateId /*, false*/)
-                : render_1.ajaxLoad(context, templateId, true))
-                .then(function () { return scrollToTarget(_this.tagModule); })
-            : templates_1.updateTemplateFromDia(context, templateId /*, false*/)
-                .then(function () { return window.parent.location.reload(); });
-        return promise.then(function (result) {
-            if (final)
-                _this.hide();
-            return result;
-        });
-    };
-    //private saveTemplate(templateId: number) {
-    //  return updateTemplateFromDia(this.getContext(), templateId, false);
-    //}
-    //private previewTemplate(templateId: number, justPreview: boolean) {
-    //  return ajaxLoad(this.getContext(), templateId, justPreview)
-    //    .then(() => scrollToTarget(this.tagModule));
-    //}
-    DialogIFrame.prototype.closeCallback = function () { };
-    ;
-    DialogIFrame.prototype.rewire = function (sxc, callback, dialogName) {
-        console.log('rewire with sxc: ', sxc);
-        this.hiddenSxc = sxc;
-        this.tagModule = $($(api_1.getTag(sxc)).parent().eq(0));
-        this.sxcCacheKey = sxc.cacheKey;
-        this.closeCallback = callback;
-        if (dialogName) {
-            this.dialogName = dialogName;
-        }
-    };
-    ;
-    DialogIFrame.prototype.cancel = function () {
-        this.hide();
-        // todo: only re-init if something was changed?
-        // return cbApi.reloadAndReInitialize(reSxc());
-        // cancel the dialog
-        QuickEditState.cancelled.set('true');
-        this.closeCallback();
-    };
-    ;
-    return DialogIFrame;
-}());
-exports.DialogIFrame = DialogIFrame;
-function scrollToTarget(target) {
-    var specs = {
-        scrollTop: target.offset().top - scrollTopOffset
-    };
-    $('body').animate(specs, animationTime);
-}
-;
-
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var user_of_edit_context_1 = __webpack_require__(24);
-var QuickDialogConfig = /** @class */ (function () {
-    function QuickDialogConfig() {
-    }
-    //constructor(editContext: DataEditContext) {
-    //  this.appId = editContext.ContentGroup.AppId;
-    //  this.isContent = editContext.ContentGroup.IsContent;
-    //  this.hasContent = editContext.ContentGroup.HasContent;
-    //  this.isList = editContext.ContentGroup.IsList;
-    //  this.templateId = editContext.ContentGroup.TemplateId;
-    //  this.contentTypeId = editContext.ContentGroup.ContentTypeName;
-    //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
-    //  this.user = getUserOfEditContext(editContext);
-    //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
-    //}
-    QuickDialogConfig.fromContext = function (context) {
-        var config = new QuickDialogConfig();
-        config.appId = context.app.id;
-        config.isContent = context.app.isContent;
-        config.isInnerContent = context.instance.id !== context.contentBlock.id; // if it differs, it's inner
-        config.hasContent = context.app.hasContent;
-        config.isList = context.contentBlock.isList;
-        config.templateId = context.contentBlock.templateId;
-        config.contentTypeId = context.contentBlock.contentTypeId;
-        config.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
-        config.supportsAjax = context.app.supportsAjax;
-        config.debug = window.$2sxc.debug.load;
-        return config;
-    };
-    return QuickDialogConfig;
-}());
-exports.QuickDialogConfig = QuickDialogConfig;
-
-
-/***/ }),
-/* 84 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var DialogPaths_1 = __webpack_require__(41);
-/**
- * rewrite the url to fit the quick-dialog situation
- * optionally with a live-compiled version from ng-serve
- * @param {string} url - original url pointing to the "wrong" dialog
- * @returns {string} new url
- */
-function rewriteUrl(url) {
-    // change default url-schema from the primary angular-app to the quick-dialog
-    url = url.replace(DialogPaths_1.DialogPaths.ng1, DialogPaths_1.DialogPaths.quickDialog)
-        .replace(DialogPaths_1.DialogPaths.ng5, DialogPaths_1.DialogPaths.quickDialog);
-    url = changePathToDevIfNecessary(url);
-    return url;
-}
-exports.rewriteUrl = rewriteUrl;
-/**
- * special debug-code when running on local ng-serve
- * this is only activated if the developer manually sets a value in the localStorage
- * @param url
- */
-function changePathToDevIfNecessary(url) {
-    try {
-        var devMode = localStorage.getItem('devMode');
-        if (devMode && ~~devMode) {
-            return url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
-        }
-    }
-    catch (e) {
-        // ignore
-    }
-    return url;
-}
-
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var command_create_1 = __webpack_require__(86);
+var command_create_1 = __webpack_require__(82);
 /**
  * create a dialog link
  * @param sxc
@@ -4393,15 +4154,15 @@ exports.commandLinkToNgDialog = commandLinkToNgDialog;
 
 
 /***/ }),
-/* 86 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var window_in_page_1 = __webpack_require__(1);
-var DialogPaths_1 = __webpack_require__(41);
-var command_1 = __webpack_require__(87);
+var DialogPaths_1 = __webpack_require__(40);
+var command_1 = __webpack_require__(83);
 /**
  * assemble an object which will store the configuration and execute it
  * @param sxc
@@ -4421,13 +4182,13 @@ exports.commandCreate = commandCreate;
 
 
 /***/ }),
-/* 87 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ng_dialog_params_1 = __webpack_require__(88);
+var ng_dialog_params_1 = __webpack_require__(84);
 var _2sxc_translate_1 = __webpack_require__(9);
 var Command = /** @class */ (function () {
     function Command(context, ngDialogUrl, isDebug) {
@@ -4527,13 +4288,13 @@ exports.Command = Command;
 
 
 /***/ }),
-/* 88 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var user_of_edit_context_1 = __webpack_require__(24);
+var user_of_edit_context_1 = __webpack_require__(22);
 var NgDialogParams = /** @class */ (function () {
     function NgDialogParams() {
     }
@@ -4581,6 +4342,257 @@ exports.NgDialogParams = NgDialogParams;
 
 
 /***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var DebugConfig_1 = __webpack_require__(16);
+/**
+ * This object helps persist / load / reset
+ * a setting in the session-state
+ * */
+var SessionStateHandler = /** @class */ (function () {
+    function SessionStateHandler(key) {
+        this.key = key;
+    }
+    SessionStateHandler.prototype.set = function (value) {
+        if (DebugConfig_1.DebugConfig.state.change)
+            console.log("state '" + this.key + "' set(" + value + ")");
+        sessionStorage.setItem(this.key, value);
+    };
+    ;
+    SessionStateHandler.prototype.remove = function () {
+        if (DebugConfig_1.DebugConfig.state.change)
+            console.log("state '" + this.key + "' remove()");
+        sessionStorage.removeItem(this.key);
+    };
+    SessionStateHandler.prototype.get = function () {
+        var result = SessionStorageHelper.getItemValue(this.key);
+        if (DebugConfig_1.DebugConfig.state.get)
+            console.log("state '" + this.key + "' get() = '" + result + "'");
+        return result;
+    };
+    return SessionStateHandler;
+}());
+exports.SessionStateHandler = SessionStateHandler;
+/**
+ * session storage helper to get typed values from it
+ */
+var SessionStorageHelper = /** @class */ (function () {
+    function SessionStorageHelper() {
+    }
+    SessionStorageHelper.getItemValueString = function (key) {
+        var value = sessionStorage.getItem(key);
+        return value;
+    };
+    SessionStorageHelper.getItemValue = function (key) {
+        var value = sessionStorage.getItem(key);
+        return JSON.parse(value);
+    };
+    return SessionStorageHelper;
+}());
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var render_1 = __webpack_require__(15);
+var templates_1 = __webpack_require__(17);
+var context_1 = __webpack_require__(5);
+var api_1 = __webpack_require__(4);
+var quick_dialog_1 = __webpack_require__(23);
+var quick_dialog_config_1 = __webpack_require__(87);
+var scrollTopOffset = 80;
+var animationTime = 400;
+function build(iFrame) {
+    console.log('prot: ', IFrameBridge.prototype);
+    var iFrameExtended = iFrame;
+    iFrameExtended.bridge = new IFrameBridge();
+    console.log('extensions: ', iFrameExtended.bridge);
+    return iFrameExtended;
+}
+exports.build = build;
+/**
+ *
+ */
+// ReSharper disable once InconsistentNaming
+var IFrameBridge = /** @class */ (function () {
+    function IFrameBridge() {
+        //private saveTemplate(templateId: number) {
+        //  return updateTemplateFromDia(this.getContext(), templateId, false);
+        //}
+        //private previewTemplate(templateId: number, justPreview: boolean) {
+        //  return ajaxLoad(this.getContext(), templateId, justPreview)
+        //    .then(() => scrollToTarget(this.tagModule));
+        //}
+        //cancelCallback() {};
+        this.changed = false;
+    }
+    /**
+     * get the sxc-object of this iframe
+     * @returns {Object<any>} refreshed sxc-object
+     */
+    IFrameBridge.prototype.uncachedSxc = function () {
+        if (!this.instanceSxc)
+            throw "can't find sxc-instance of IFrame, probably it wasn't initialized yet";
+        return this.instanceSxc.recreate();
+    };
+    IFrameBridge.prototype.getContext = function () { return context_1.context(this.uncachedSxc()); };
+    IFrameBridge.prototype.getAdditionalDashboardConfig = function () { return quick_dialog_config_1.QuickDialogConfig.fromContext(this.getContext()); };
+    IFrameBridge.prototype.hide = function () { quick_dialog_1.quickDialog.setVisible(false); };
+    IFrameBridge.prototype.run = function (verb) { this.uncachedSxc().manage.run(verb); };
+    IFrameBridge.prototype.showMessage = function (message) {
+        render_1.renderer.showMessage(this.getContext(), "<p class=\"no-live-preview-available\">" + message + "</p>");
+        scrollToTarget(this.tagModule);
+    };
+    IFrameBridge.prototype.reloadAndReInit = function () {
+        var _this = this;
+        this.changed = false;
+        return render_1.renderer.reloadAndReInitialize(this.getContext(), true, true)
+            .then(function () { return scrollToTarget(_this.tagModule); })
+            .then(function () { return Promise.resolve(_this.getAdditionalDashboardConfig()); });
+    };
+    IFrameBridge.prototype.setTemplate = function (templateId, templateName, final) {
+        var _this = this;
+        this.changed = true;
+        var config = this.getAdditionalDashboardConfig(), context = this.getContext();
+        var ajax = config.isContent || config.supportsAjax;
+        this.showMessage("refreshing <b>" + templateName + "</b>...");
+        var promise = ajax
+            ? (final
+                ? templates_1.updateTemplateFromDia(context, templateId /*, false*/)
+                : render_1.renderer.ajaxLoad(context, templateId, true))
+                .then(function () { return scrollToTarget(_this.tagModule); })
+            : templates_1.updateTemplateFromDia(context, templateId /*, false*/)
+                .then(function () { return window.parent.location.reload(); });
+        return promise.then(function (result) {
+            if (final)
+                _this.hide();
+            return result;
+        });
+    };
+    //promise: Promise<boolean>;
+    //resolvePromise: (value?: boolean) => void;
+    IFrameBridge.prototype.setup = function (sxc, dialogName) {
+        console.log('rewire with sxc: ', sxc);
+        //this.promise = new Promise<boolean>(resolve => this.resolvePromise = resolve);
+        this.changed = false;
+        this.instanceSxc = sxc;
+        this.tagModule = $($(api_1.getTag(sxc)).parent().eq(0));
+        this.sxcCacheKey = sxc.cacheKey;
+        if (dialogName)
+            this.dialogName = dialogName;
+        //return this.promise;
+    };
+    ;
+    IFrameBridge.prototype.cancel = function () {
+        quick_dialog_1.quickDialog.cancel(this);
+        //this.hide();
+        //QuickEditState.cancelled.set('true');
+        //this.resolvePromise(this.changed);
+    };
+    ;
+    return IFrameBridge;
+}());
+exports.IFrameBridge = IFrameBridge;
+function scrollToTarget(target) {
+    var specs = {
+        scrollTop: target.offset().top - scrollTopOffset
+    };
+    $('body').animate(specs, animationTime);
+}
+;
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var user_of_edit_context_1 = __webpack_require__(22);
+var QuickDialogConfig = /** @class */ (function () {
+    function QuickDialogConfig() {
+    }
+    //constructor(editContext: DataEditContext) {
+    //  this.appId = editContext.ContentGroup.AppId;
+    //  this.isContent = editContext.ContentGroup.IsContent;
+    //  this.hasContent = editContext.ContentGroup.HasContent;
+    //  this.isList = editContext.ContentGroup.IsList;
+    //  this.templateId = editContext.ContentGroup.TemplateId;
+    //  this.contentTypeId = editContext.ContentGroup.ContentTypeName;
+    //  this.templateChooserVisible = editContext.ContentBlock.ShowTemplatePicker; // todo = maybe move to content-group
+    //  this.user = getUserOfEditContext(editContext);
+    //  this.supportsAjax = editContext.ContentGroup.SupportsAjax;
+    //}
+    QuickDialogConfig.fromContext = function (context) {
+        var config = new QuickDialogConfig();
+        config.appId = context.app.id;
+        config.isContent = context.app.isContent;
+        config.isInnerContent = context.instance.id !== context.contentBlock.id; // if it differs, it's inner
+        config.hasContent = context.app.hasContent;
+        config.isList = context.contentBlock.isList;
+        config.templateId = context.contentBlock.templateId;
+        config.contentTypeId = context.contentBlock.contentTypeId;
+        config.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
+        config.supportsAjax = context.app.supportsAjax;
+        config.debug = window.$2sxc.debug.load;
+        return config;
+    };
+    return QuickDialogConfig;
+}());
+exports.QuickDialogConfig = QuickDialogConfig;
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var DialogPaths_1 = __webpack_require__(40);
+/**
+ * rewrite the url to fit the quick-dialog situation
+ * optionally with a live-compiled version from ng-serve
+ * @param {string} url - original url pointing to the "wrong" dialog
+ * @returns {string} new url
+ */
+function rewriteUrl(url) {
+    // change default url-schema from the primary angular-app to the quick-dialog
+    url = url.replace(DialogPaths_1.DialogPaths.ng1, DialogPaths_1.DialogPaths.quickDialog)
+        .replace(DialogPaths_1.DialogPaths.ng5, DialogPaths_1.DialogPaths.quickDialog);
+    url = changePathToDevIfNecessary(url);
+    return url;
+}
+exports.rewriteUrl = rewriteUrl;
+/**
+ * special debug-code when running on local ng-serve
+ * this is only activated if the developer manually sets a value in the localStorage
+ * @param url
+ */
+function changePathToDevIfNecessary(url) {
+    try {
+        var devMode = localStorage.getItem('devMode');
+        if (devMode && ~~devMode) {
+            return url.replace('/desktopmodules/tosic_sexycontent/dist/ng/ui.html', 'http://localhost:4200');
+        }
+    }
+    catch (e) {
+        // ignore
+    }
+    return url;
+}
+
+
+/***/ }),
 /* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4621,7 +4633,7 @@ var render_button_1 = __webpack_require__(19);
 var render_toolbar_1 = __webpack_require__(18);
 var toolbar_expand_config_1 = __webpack_require__(31);
 var api_1 = __webpack_require__(4);
-var user_of_edit_context_1 = __webpack_require__(24);
+var user_of_edit_context_1 = __webpack_require__(22);
 var button_config_adapter_1 = __webpack_require__(93);
 /**
  * A helper-controller in charge of opening edit-dialogues + creating the toolbars for it
@@ -5132,39 +5144,41 @@ var build_toolbars_1 = __webpack_require__(12);
 var sxc_1 = __webpack_require__(6);
 var log_1 = __webpack_require__(7);
 var log_utils_1 = __webpack_require__(100);
-var quick_dialog_1 = __webpack_require__(16);
-var QuickEditState = __webpack_require__(22);
+var quick_dialog_1 = __webpack_require__(23);
+var QuickEditState = __webpack_require__(24);
 var window_in_page_1 = __webpack_require__(1);
+var DebugConfig_1 = __webpack_require__(16);
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
  */
-var initializedModules = [];
+var initializedInstances = [];
 var openedTemplatePickerOnce = false;
-var cancelledDialog;
-// callback function to execute when mutations are observed
-var initAllModulesCallback = function (mutationsList) {
-    initAllModules(false);
-};
-// create an observer instance linked to the callback function
-var observer = new MutationObserver(initAllModulesCallback);
+var diagCancelStateOnStart = QuickEditState.cancelled.get();
 $(document).ready(function () {
-    cancelledDialog = QuickEditState.cancelled.get();
-    if (cancelledDialog) {
+    // reset cancelled state after one reload
+    if (diagCancelStateOnStart)
         QuickEditState.cancelled.remove();
-    }
-    ;
-    initAllModules(true);
-    // document.body.addEventListener('DOMSubtreeModified', (event) => initAllModules(false), false);
+    // initialize all modules
+    initAllInstances(true);
     // start observing the body for configured mutations
-    observer.observe(document.body, { attributes: false, childList: true, subtree: true });
+    watchDomChanges();
 });
-function initAllModules(isFirstRun) {
-    $('div[data-edit-context]').each(function () {
-        initModule(this, isFirstRun);
-    });
+/**
+ * Scan all instances and initialize them
+ * @param isFirstRun should be true only on the very initial call
+ */
+function initAllInstances(isFirstRun) {
+    $('div[data-edit-context]').each(function () { initInstance(this, isFirstRun); });
     if (isFirstRun)
         tryShowTemplatePicker();
+}
+/**
+ * create an observer instance and start observing
+ */
+function watchDomChanges() {
+    var observer = new MutationObserver(function () { return initAllInstances(false); });
+    observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 }
 /**
  * Show the template picker if
@@ -5185,10 +5199,10 @@ function tryShowTemplatePicker() {
     }
     if (!sxc) {
         var uninitializedModules = $('.sc-uninitialized');
-        if (cancelledDialog || openedTemplatePickerOnce)
+        if (diagCancelStateOnStart || openedTemplatePickerOnce)
             return false;
         // already showing a dialog
-        if (quick_dialog_1.quickDialog.isShowing())
+        if (quick_dialog_1.quickDialog.isVisible())
             return false;
         // not exactly one uninitialized module
         if (uninitializedModules.length !== 1)
@@ -5203,47 +5217,48 @@ function tryShowTemplatePicker() {
     }
     return true;
 }
-function initModule(module, isFirstRun) {
+function initInstance(module, isFirstRun) {
     // check if module is already in the list of initialized modules
-    if (initializedModules.find(function (m) { return m === module; }))
-        return false;
-    // add to modules-list
-    initializedModules.push(module);
+    if (initializedInstances.find(function (m) { return m === module; }))
+        return;
+    // add to modules-list first, in case we run into recursions
+    initializedInstances.push(module);
     var sxc = sxc_1.getSxcInstance(module);
     // check if the sxc must be re-created. This is necessary when modules are dynamically changed
     // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
     if (!isFirstRun)
         sxc = sxc.recreate(true);
     // check if we must show the glasses
-    // this must run even after first-run, because it can be added ajax-style
+    // this must always run because it can be added ajax-style
     var wasEmpty = showGlassesButtonIfUninitialized(sxc);
     if (isFirstRun || !wasEmpty) {
         // use a logger for each iteration
         var log = new log_1.Log('Bts.Module');
         build_toolbars_1.buildToolbars(log, module);
-        log_utils_1.LogUtils.logDump(log);
+        if (DebugConfig_1.DebugConfig.bootstrap.initInstance)
+            log_utils_1.LogUtils.logDump(log);
     }
     ;
-    return true;
 }
 function showGlassesButtonIfUninitialized(sxci) {
     // already initialized
-    if (sxci && sxci.manage && sxci.manage._editContext && sxci.manage._editContext.ContentGroup && sxci.manage._editContext.ContentGroup.TemplateId !== 0) {
+    if (isInitialized(sxci))
         return false;
-    }
-    ;
     // already has a glasses button
     var tag = $(api_1.getTag(sxci));
-    if (tag.find('.sc-uninitialized').length !== 0) {
+    if (tag.find('.sc-uninitialized').length !== 0)
         return false;
-    }
     // note: title is added on mouseover, as the translation isn't ready at page-load
-    var btn = $('<div class="sc-uninitialized"  onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement"><div class="icon-sxc-glasses"></div></div>');
-    btn.on('click', function () {
-        sxci.manage.run('layout');
-    });
+    var btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">'
+        + '<div class="icon-sxc-glasses"></div>'
+        + '</div>');
+    btn.on('click', function () { return sxci.manage.run('layout'); });
     tag.append(btn);
     return true;
+}
+function isInitialized(sxci) {
+    var cg = sxci && sxci.manage && sxci.manage._editContext && sxci.manage._editContext.ContentGroup;
+    return (cg && cg.TemplateId !== 0);
 }
 
 
@@ -5396,11 +5411,11 @@ __webpack_require__(109);
 __webpack_require__(110);
 __webpack_require__(26);
 __webpack_require__(0);
-__webpack_require__(86);
+__webpack_require__(82);
 __webpack_require__(101);
-__webpack_require__(85);
-__webpack_require__(42);
-__webpack_require__(87);
+__webpack_require__(81);
+__webpack_require__(39);
+__webpack_require__(83);
 __webpack_require__(111);
 __webpack_require__(112);
 __webpack_require__(113);
@@ -5469,7 +5484,7 @@ __webpack_require__(148);
 __webpack_require__(149);
 __webpack_require__(150);
 __webpack_require__(151);
-__webpack_require__(23);
+__webpack_require__(16);
 __webpack_require__(152);
 __webpack_require__(153);
 __webpack_require__(102);
@@ -5493,9 +5508,9 @@ __webpack_require__(4);
 __webpack_require__(90);
 __webpack_require__(74);
 __webpack_require__(89);
-__webpack_require__(88);
-__webpack_require__(81);
-__webpack_require__(24);
+__webpack_require__(84);
+__webpack_require__(85);
+__webpack_require__(22);
 __webpack_require__(67);
 __webpack_require__(47);
 __webpack_require__(49);
@@ -5503,15 +5518,15 @@ __webpack_require__(46);
 __webpack_require__(48);
 __webpack_require__(164);
 __webpack_require__(50);
-__webpack_require__(40);
-__webpack_require__(39);
+__webpack_require__(42);
+__webpack_require__(41);
 __webpack_require__(165);
-__webpack_require__(82);
+__webpack_require__(86);
 __webpack_require__(166);
-__webpack_require__(83);
-__webpack_require__(16);
-__webpack_require__(22);
-__webpack_require__(84);
+__webpack_require__(87);
+__webpack_require__(23);
+__webpack_require__(24);
+__webpack_require__(88);
 __webpack_require__(167);
 __webpack_require__(43);
 __webpack_require__(25);
@@ -5531,7 +5546,7 @@ __webpack_require__(8);
 __webpack_require__(173);
 __webpack_require__(174);
 __webpack_require__(36);
-__webpack_require__(41);
+__webpack_require__(40);
 __webpack_require__(93);
 __webpack_require__(34);
 __webpack_require__(70);
@@ -7897,7 +7912,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_base_1 = __webpack_require__(0);
-var command_open_ng_dialog_1 = __webpack_require__(42);
+var command_open_ng_dialog_1 = __webpack_require__(39);
 /**
  * new is a dialog to add something, and will not add if cancelled
  * new can also be used for mini-toolbars which just add an entity not attached to a module

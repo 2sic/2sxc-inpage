@@ -1,5 +1,5 @@
 ﻿import { ActionParams } from './action-params';
-import { reloadAndReInitialize } from './render';
+import { renderer } from './render';
 import { ContextOfButton } from '../context/context-of-button';
 /*
  * this is a content block in the browser
@@ -37,7 +37,7 @@ function getAndReload(context: ContextOfButton, url: string, params: ActionParam
       }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
         reject(Error(errorThrown));
       });;
-  }).then(() => { reloadAndReInitialize(context); });
+  }).then(() => { renderer.reloadAndReInitialize(context); });
 }
 
 /**

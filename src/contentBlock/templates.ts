@@ -1,6 +1,6 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
 import { isDisabled } from '../toolbar/build-toolbars';
-import { reloadAndReInitialize } from './render';
+import { renderer } from './render';
 import { saveTemplate } from './web-api-promises';
 
 /**
@@ -47,7 +47,7 @@ export function updateTemplateFromDia(context: ContextOfButton, templateId: numb
       // only reload on ajax, not on app as that was already re-loaded on the preview
       // necessary to show the original template again
       if (wasShowingPreview)
-        reloadAndReInitialize(context);
+        renderer.reloadAndReInitialize(context);
 
       return;
     });
