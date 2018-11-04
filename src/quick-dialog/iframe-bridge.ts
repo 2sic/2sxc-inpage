@@ -74,7 +74,7 @@ export class IFrameBridge implements IIFrameBridge {
     const ajax = config.isContent || config.supportsAjax;
 
     // add msg on full-reload, as it takes longer
-    // don't add on ajax, as it will have side-effects because sometimes
+    // don't add this on ajax, as it will have side-effects because sometimes
     // in ajax the content won't be replaced
     if (!ajax)
       this.showMessage(`refreshing <b>${templateName}</b>...`);
@@ -95,22 +95,15 @@ export class IFrameBridge implements IIFrameBridge {
     return promise.then(() => ajax);
   }
 
-  //private saveTemplate(templateId: number) {
-  //  return updateTemplateFromDia(this.getContext(), templateId, false);
-  //}
-
-  //private previewTemplate(templateId: number, justPreview: boolean) {
-  //  return ajaxLoad(this.getContext(), templateId, justPreview)
-  //    .then(() => scrollToTarget(this.tagModule));
-  //}
-
   changed = false;
 
+  /**
+   * prepare the bridge with the info of the current instance
+   */
   setup(sxc: SxcInstanceWithInternals, dialogName: string): void {
     console.log('rewire with sxc: ', sxc);
 
     this.changed = false;
-
     this.instanceSxc = sxc;
     this.tagModule = $($(getTag(sxc)).parent().eq(0));
     this.sxcCacheKey = sxc.cacheKey;

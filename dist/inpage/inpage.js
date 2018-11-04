@@ -8593,13 +8593,6 @@ exports.build = build;
 // ReSharper disable once InconsistentNaming
 var IFrameBridge = /** @class */ (function () {
     function IFrameBridge() {
-        //private saveTemplate(templateId: number) {
-        //  return updateTemplateFromDia(this.getContext(), templateId, false);
-        //}
-        //private previewTemplate(templateId: number, justPreview: boolean) {
-        //  return ajaxLoad(this.getContext(), templateId, justPreview)
-        //    .then(() => scrollToTarget(this.tagModule));
-        //}
         this.changed = false;
     }
     /**
@@ -8634,7 +8627,7 @@ var IFrameBridge = /** @class */ (function () {
         var config = this.getAdditionalDashboardConfig(), context = this.getContext();
         var ajax = config.isContent || config.supportsAjax;
         // add msg on full-reload, as it takes longer
-        // don't add on ajax, as it will have side-effects because sometimes
+        // don't add this on ajax, as it will have side-effects because sometimes
         // in ajax the content won't be replaced
         if (!ajax)
             this.showMessage("refreshing <b>" + templateName + "</b>...");
@@ -8651,6 +8644,9 @@ var IFrameBridge = /** @class */ (function () {
         // return true if ajax, so upstream can update UIs
         return promise.then(function () { return ajax; });
     };
+    /**
+     * prepare the bridge with the info of the current instance
+     */
     IFrameBridge.prototype.setup = function (sxc, dialogName) {
         console.log('rewire with sxc: ', sxc);
         this.changed = false;
