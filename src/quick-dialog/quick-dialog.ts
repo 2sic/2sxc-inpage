@@ -5,8 +5,7 @@ import ContainerSize = require('./container-size');
 import UrlHandler = require('./url-handler');
 import DialogFrameElement = require('./iDialogFrameElement');
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
-import Iframe = require('./iframe');
-import DialogIFrame = Iframe.IFrameBridge;
+import { IFrameBridge } from './iframe-bridge';
 import { DebugConfig } from '../DebugConfig';
 
 const dbg = DebugConfig.qDialog;
@@ -47,21 +46,18 @@ class QuickDialogManager {
    * @param {ContextOfButton} context object
    * @param {string} url - url to show
    * @param {function()} closeCallback - callback event
-   * @param {boolean} fullScreen - if it should open full screen
+   * @param {boolean} isFullscreen - if it should open full screen
    * @param {string} [dialogName] - optional name of dialog, to check if it's already open
    * @returns {any} jquery object of the iframe
    */
-  showOrToggleFromToolbar(context: ContextOfButton,
-    url: string,
-    fullScreen: boolean,
-    dialogName: string): Promise<boolean> {
-    ContainerSize.setSize(fullScreen);
+  showOrToggleFromToolbar(context: ContextOfButton, url: string, isFullscreen: boolean, dialogName: string): Promise<boolean> {
+    ContainerSize.setSize(isFullscreen);
     const iFrame = Container.getIFrame();
 
     // in case it's a toggle
     if (this.isVisible()) {
       // check if we're just toggling the current, or will show a new one afterwards
-      const currentPromise = dialogName && this.isShowingContext(context, dialogName)
+      const currentPromise = dialogName && current && current.bridge.isConfiguredFor(context.sxc.cacheKey, dialogName)
         ? this.promise
         : null;
       this.cancel(current.bridge);
@@ -81,38 +77,22 @@ class QuickDialogManager {
     return this.promiseRestart();
   }
 
-  cancel(bridge: DialogIFrame) {
+  cancel(bridge: IFrameBridge) {
     this.setVisible(false);
     QuickEditState.cancelled.set('true');
     this.resolvePromise(bridge.changed);
-
   }
 
 
   private rememberDialogState(iframe: IDialogFrameElement, state: boolean): void {
     if (dbg.showHide) console.log(`qDialog persistDia(..., ${state})`);
     if (state) {
-      const cbId = (iframe.bridge as DialogIFrame).getContext().contentBlock.id.toString();
+      const cbId = (iframe.bridge as IFrameBridge).getContext().contentBlock.id.toString();
       if (dbg.showHide) console.log(`contentBlockId: ${cbId})`);
       return QuickEditState.cbId.set(cbId);
     } else
       return QuickEditState.cbId.remove();
   }
-
-  /**
- * check if the dialog is showing for the current sxc-instance
- * @param {ContextOfButton} context object
- * @param {string} dialogName - name of dialog
- * @returns {boolean} true if it's currently showing for this sxc-instance
- */
-  private isShowingContext(context: ContextOfButton, dialogName: string): boolean {
-    return current // there is a current dialog
-
-      //todo next: unclear where thes should be set, probably move to bridge?
-      && current.bridge.sxcCacheKey === context.sxc.cacheKey // the iframe is showing for the current sxc
-      && current.bridge.dialogName === dialogName; // the view is the same as previously
-  }
-
 
   //#region promise handling
   private promise: Promise<boolean>;

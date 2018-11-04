@@ -12,7 +12,7 @@ import { saveTemplate } from './web-api-promises';
 
 export function prepareToAddContent(context: ContextOfButton, useModuleList: boolean): Promise<any> {
   const isCreated: boolean = context.contentBlock.isCreated;
-  if (isCreated || !useModuleList) return Promise.resolve(); //$.when(null);
+  if (isCreated || !useModuleList) return Promise.resolve();
   // return persistTemplate(sxc, null);
   // let manage = sxc.manage;
   // let contentGroup = manage._editContext.ContentGroup;
@@ -34,37 +34,28 @@ export function prepareToAddContent(context: ContextOfButton, useModuleList: boo
  * @param {number} templateId
  * @param {boolean} forceCreate
  */
-export function updateTemplateFromDia(context: ContextOfButton, templateId: number/*, forceCreate: boolean*/): Promise<void> {
+export function updateTemplateFromDia(context: ContextOfButton, templateId: number): Promise<void> {
   const wasShowingPreview = isDisabled(context.sxc);
 
-  return updateTemplate(context, templateId, false)// forceCreate)
+  return updateTemplate(context, templateId, false)
     .then(() => {
-
-      // if it didn't have content, then it only has now...
-      //if (!context.app.hasContent)
-      //  context.app.hasContent = forceCreate;
-
       // only reload on ajax, not on app as that was already re-loaded on the preview
       // necessary to show the original template again
       if (wasShowingPreview)
         renderer.reloadAndReInitialize(context);
-
-      return;
     });
 }
 
 /**
  * Update the template.
  */
-function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean): Promise<any> {
+function updateTemplate(context: ContextOfButton, templateId: number, forceCreate: boolean): Promise<string | void> {
 
   return saveTemplate(context, templateId, forceCreate).then((data) => {
-    if (!data) {
-      return;
-    }
+    if (!data) return null;
 
     // fixes a special case where the guid is given with quotes (depends on version of angularjs) issue #532
-    const newGuid: string = data.replace(/[\",\']/g, '');
+    const newGuid = data.replace(/[\",\']/g, '');
 
     if (console)
       console.log(`created content group {${newGuid}}`);

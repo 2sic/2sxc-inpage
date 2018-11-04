@@ -1,6 +1,5 @@
-﻿import Iframebridge = require('./iframe');
+﻿import Iframebridge = require('./iframe-bridge');
 import ContainerSize = require('./container-size');
-import IFrame = Iframebridge.build;
 import DialogFrameElement = require('./iDialogFrameElement');
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
@@ -42,7 +41,7 @@ export function getIFrame(container?: JQuery): IDialogFrameElement {
 function buildContainerAndIFrame(): JQuery<HTMLElement> {
   const container = $(containerTemplate);
   const newIFrame = document.createElement(iframeTag);
-  const extendedIFrame = IFrame(newIFrame);// Iframebridge.connectIframeToSxcInstance(newIFrame);
+  const extendedIFrame = Iframebridge.build(newIFrame);
   container.find(`.${iframeClass}`).append(extendedIFrame);
   $('body').append(container);
   ContainerSize.watchForResize(container);

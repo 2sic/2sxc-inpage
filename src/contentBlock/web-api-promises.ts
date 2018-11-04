@@ -38,7 +38,7 @@ import { ContextOfButton } from '../context/context-of-button';
  * @param {boolean} [forceCreateContentGroup]
  * @returns {promise}
  */
-export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): Promise<any> {
+export function saveTemplate(context: ContextOfButton, templateId: number, forceCreateContentGroup: boolean): Promise<string> {
   const params: WebApiParams = {
     templateId: templateId,
     forceCreateContentGroup: forceCreateContentGroup,
@@ -50,16 +50,13 @@ export function saveTemplate(context: ContextOfButton, templateId: number, force
         {
           url: 'view/module/savetemplateid',
           params: params,
-        }).done((data: any, textStatus: string, jqXHR: any) => {
-          if (jqXHR.status === 204 || jqXHR.status === 200) {
-            // resolve the promise with the response text
+        }).done((data: any, textStatus: string, jqXhr: any) => {
+          // resolve or reject based on http-status: 200 & 204 = ok
+          if (jqXhr.status === 204 || jqXhr.status === 200)
             resolve(data);
-          } else {
-            // otherwise reject with the status text
-            // which will hopefully be a meaningful error
+          else
             reject(Error(textStatus));
-          }
-        }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
+      }).fail((jqXhr: any, textStatus: string, errorThrown: string) => {
           reject(Error(errorThrown));
         });
     });
