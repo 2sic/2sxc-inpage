@@ -13,8 +13,8 @@ export function flattenActionDefinition(actDef: any): void {
   const editInfo = actDef.entity._2sxcEditInformation;
   actDef.useModuleList = (editInfo.sortOrder !== undefined); // has sort-order, so use list
 
-  if (editInfo.entityId !== undefined) {
-    actDef.entityId = editInfo.entityId;
+  if (actDef.entity.EntityId !== undefined) {
+    actDef.entityId = actDef.entity.EntityId;
   }
 
   if (editInfo.sortOrder !== undefined) {
