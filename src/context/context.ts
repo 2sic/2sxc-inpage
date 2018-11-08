@@ -1,6 +1,6 @@
 ﻿import { DataEditContext } from '../data-edit-context/data-edit-context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
-import { getEditContext, getEditContextOfTag, getContainerTag } from '../manage/api';
+import { getEditContext, getContainerTag } from '../manage/api';
 import { getSxcInstance } from '../x-bootstrap/sxc';
 import { SystemContext } from './base-context/system-context';
 import { TenantContext } from './base-context/tenant-context';
@@ -19,22 +19,21 @@ import { UiContext } from './instance-context/ui-context';
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-export function context(htmlElementOrId: SxcInstanceWithInternals | HTMLElement | number, cbid?: number): ContextOfButton {
-  let sxc: SxcInstanceWithInternals = null;
+export function context(tagOrSxc: SxcInstanceWithInternals | HTMLElement | number, cbid?: number): ContextOfButton {
+  let sxc: SxcInstanceWithInternals;
   let containerTag: any = null;
 
-  if (isSxcInstance(htmlElementOrId)) { // it is SxcInstance
-    sxc = htmlElementOrId;
-  } else if (typeof htmlElementOrId === 'number') { // it is number
-    sxc = getSxcInstance(htmlElementOrId, cbid);
+  if (isSxcInstance(tagOrSxc)) { // it is SxcInstance
+    sxc = tagOrSxc;
+  } else if (typeof tagOrSxc === 'number') { // it is number
+    sxc = getSxcInstance(tagOrSxc, cbid);
   } else { // it is HTMLElement
-    sxc = getSxcInstance(htmlElementOrId);
-    containerTag = getContainerTag(htmlElementOrId);
+    sxc = getSxcInstance(tagOrSxc);
+    containerTag = getContainerTag(tagOrSxc);
   };
 
   const contextOfButton = getContextInstance(sxc, containerTag);
   contextOfButton.sxc = sxc;
-  
   return contextOfButton;
 }
 

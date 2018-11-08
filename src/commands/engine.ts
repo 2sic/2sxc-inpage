@@ -33,9 +33,9 @@ export class Engine extends HasLog {
     if (thirdParamIsEvent) { // no event param, but settings contains the event-object
       this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
       event = eventOrSettings as Event; // move it to the correct variable
-      settings = this.nameOrSettingsAddapter(nameOrSettings);
+      settings = this.nameOrSettingsAdapter(nameOrSettings);
     } else {
-      settings = Object.assign(eventOrSettings || {}, this.nameOrSettingsAddapter(nameOrSettings)) as Partial<Settings>;
+      settings = Object.assign(eventOrSettings || {}, this.nameOrSettingsAdapter(nameOrSettings)) as Partial<Settings>;
     }
 
     // ensure we have the right event despite browser differences
@@ -56,7 +56,7 @@ export class Engine extends HasLog {
     nameOrSettings: string | Partial<Settings>,
     event: Event) : Promise<any> { // | any is temporary, just to get it to work; should be improved to only give a promise
 
-    let settings = this.nameOrSettingsAddapter(nameOrSettings);
+    let settings = this.nameOrSettingsAdapter(nameOrSettings);
 
     settings = this.expandSettingsWithDefaults(settings);
 
@@ -107,7 +107,7 @@ export class Engine extends HasLog {
    * @param nameOrSettings
    * @returns settings
    */
-  nameOrSettingsAddapter(nameOrSettings: string | Partial<Settings>): Partial<Settings> {
+  nameOrSettingsAdapter(nameOrSettings: string | Partial<Settings>): Partial<Settings> {
     let settings: Partial<Settings>;
     // check if nameOrString is name (string) or object (settings)
     const nameIsString = typeof nameOrSettings === 'string';

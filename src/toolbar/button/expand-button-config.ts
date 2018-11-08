@@ -29,6 +29,7 @@ export function expandButtonConfig(original: any, sharedProps: any[], parentLog:
     original.action = original.action.trim();
     original = { command: original };
   }
+
   // some clean-up
   delete original.action; // remove the action property
   original._expanded = true;

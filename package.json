@@ -10,6 +10,7 @@
     "@types/i18next-xhr-backend": "^1.4.1",
     "@types/jasmine": "^2.8.7",
     "@types/jasminewd2": "^2.0.3",
+    "@types/jquery": "^1.10.27",
     "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.11",
@@ -31,6 +32,7 @@
     "lint": "tslint ./src/**/*.ts -t verbose",
     "test": "ts-node node_modules/jasmine/bin/jasmine",
     "test-once": "karma start --single-run",
+    "dev": "webpack --watch",
     "dist": "@ECHO *** 2sxc-inpage webpack build for DEVELOPMENT ***&& SET NODE_ENV=development&& webpack --color --display-error-details --bail&& @ECHO ***  2sxc-inpage webpack build for PRODUCTION ***&& SET NODE_ENV=production&& webpack --color --display-error-details --bail&& @ECHO *** END ***"
   },
   "repository": {

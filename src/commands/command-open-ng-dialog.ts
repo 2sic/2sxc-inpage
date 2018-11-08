@@ -1,9 +1,9 @@
-﻿import { reloadAndReInitialize } from '../contentBlock/render';
+﻿import { renderer } from '../contentBlock/render';
 import { ContextOfButton } from '../context/context-of-button';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { showOrToggle } from '../quick-dialog/quick-dialog';
 import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
+import { quickDialog } from '../quick-dialog/quick-dialog';
 
 /**
  * open a new dialog of the angular-ui
@@ -15,45 +15,40 @@ import { commandLinkToNgDialog } from './command-link-to-ng-dialog';
 
 export function commandOpenNgDialog(context: ContextOfButton, event: any) : Promise<any> {
 
-  // testing this - ideally it should now work as a promise...
-  return new Promise<any>((resolve, reject) => {
+  // the link contains everything to open a full dialog (lots of params added)
+  const link = commandLinkToNgDialog(context);
 
-    // the callback will handle events after closing the dialog
-    // and reload the in-page view w/ajax or page reload
-    const callback = () => {
-      resolve(context);
-      reloadAndReInitialize(context);
-      // 2017-09-29 2dm: no call of _openNgDialog seems to give a callback ATM closeCallback();
+  let fullScreen = false;
+  const origEvent: any = event || window.event;
+
+  return new Promise<any>(resolvePromise => {
+
+    // prepare promise for callback when the dialog closes
+    // to reload the in-page view w/ajax or page reload
+    const resolveAndReInit = () => {
+      resolvePromise(context);
+      renderer.reloadAndReInitialize(context);
     };
 
-    // the link contains everything to open a full dialog (lots of params added)
-    const link = commandLinkToNgDialog(context);
-
+    // check if inline window (quick-dialog)
     if (context.button.inlineWindow) {
 
-      let fullScreen = false;
-      if (!!context.button.fullScreen) {
-        if (typeof (context.button.fullScreen) === 'function') {
-          fullScreen = context.button.fullScreen(context);
-        }
-      }
+      // test if it should be full screen (value or resolve-function)
+      if (typeof (context.button.fullScreen) === 'function')
+        fullScreen = context.button.fullScreen(context);
+      const diagName = context.button.dialog(context).toString();
 
-      /*return*/ showOrToggle(context,
-        link,
-        callback,
-        fullScreen,
-        context.button.dialog(context).toString());
+      quickDialog.showOrToggleFromToolbar(context, link, fullScreen, diagName)
+        .then(isChanged => { if(isChanged) resolveAndReInit(); });
+
+    // else it's a normal pop-up dialog
     } else {
-      const origEvent: any = event || window.event;
-
+      // check if new-window
       if (context.button.newWindow || (origEvent && origEvent.shiftKey)) {
-        /*return*/
-        resolve(context);
+        resolvePromise(context);
         window.open(link);
-        //return;
       } else {
-      /*return*/
-        $2sxc.totalPopup.open(link, callback);
+        $2sxc.totalPopup.open(link, resolveAndReInit);
       }
 
     }

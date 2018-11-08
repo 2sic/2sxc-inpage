@@ -4,17 +4,17 @@ import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
 import { context as getContext} from '../context/context';
 import { ContextOfInstance, isContextOfInstance } from '../context/context-of-instance';
+import { DebugConfig } from '../DebugConfig';
 
 const logId = 'Cms.Api';
-const dumpLog = true;
 
 export class Cms extends HasLog {
   /**
    * if true (default) will reset the log everytime something is done
    * if false, will preserve the log over multiple calls
    */
-  autoReset: boolean = true;
-  autoDump: boolean = dumpLog;
+  autoReset = true;
+  autoDump = DebugConfig.cms.autoDump;
 
   constructor() {
     super(logId, null);

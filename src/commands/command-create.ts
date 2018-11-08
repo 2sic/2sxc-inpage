@@ -1,6 +1,6 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
 import { windowInPage as window } from '../interfaces/window-in-page';
-import { Dialog } from '../settings/dialog';
+import { DialogPaths as Dialog } from '../settings/DialogPaths';
 import { Command } from './command';
 
 /**

@@ -1,5 +1,6 @@
 ﻿import { translate } from '../translate/2sxc.translate';
 import { ContextOfButton } from '../context/context-of-button';
+import { WebApiParams } from '../contentBlock/web-api-params';
 
 /**
  * this enhances the $2sxc client controller with stuff only needed when logged in
@@ -18,9 +19,19 @@ export let contentItems = {
       return Promise.resolve();
     }
 
-    // convert jQuery ajax promise object to ES6 promise
+    /**
+     * ZoneId and AppId are sent becase of rare, special case that is not default
+     * (default is that 2sxc is finding ZoneId and AppId on server side from ModuleId)
+     * when we need to delete entity from other app or zone, than current one.
+     * TODO: send this params, only when is necesary (value change detection for ZoneId, AppId)
+     */
+    const params: WebApiParams = {
+      zoneId: context.app.zoneId,
+      appId: context.app.id
+    };
+
     return new Promise((resolve: any, reject: any) => {
-      context.sxc.webApi.delete(`app-content/any/${itemGuid}`, null, null, true)
+      context.sxc.webApi.delete(`app-content/any/${itemGuid}`, params, null, true)
         .done((data: any, textStatus: string, jqXHR: any) => {
           if (jqXHR.status === 204 || jqXHR.status === 200) {
             // resolve the promise with the response text

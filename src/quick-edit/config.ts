@@ -18,7 +18,7 @@ const conf = quickE.config = {
 } as Conf;
 
 export function _readPageConfig() {
-  const configs: Conf[] = $(`[${configAttr}]`);
+  const configs /*: Conf[]*/ = $(`[${configAttr}]`);
   let confJ: string;
 
   // any inner blocks found? will currently affect if modules can be inserted...
@@ -30,8 +30,7 @@ export function _readPageConfig() {
     for (let c = configs.length; c >= 0; c--) {
       confJ = configs[0].getAttribute(configAttr);
       try {
-        let confO: Conf;
-        confO = JSON.parse(confJ) as Conf;
+        const confO = JSON.parse(confJ) as Conf;
         Object.assign(finalConfig, confO);
       } catch (e) {
         console.warn('had trouble with json', e);

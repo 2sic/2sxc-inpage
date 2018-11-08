@@ -48,4 +48,10 @@ export class ButtonDefinition {
   newWindow?: boolean;
   inlineWindow?: boolean;
   fullScreen?: boolean;
+
+  // entity support (vertical compatibility for pre 2sxc v9.x)
+  entity?: any;
+  useModuleList?: boolean;
+  entityId?: number;
+  sortOrder?: number;
 }

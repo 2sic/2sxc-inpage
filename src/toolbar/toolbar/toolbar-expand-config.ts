@@ -29,7 +29,7 @@ export function expandToolbarConfig(context: ContextOfButton, toolbarData: any, 
 
   const instanceConfig = InstanceConfig.fromContext(context);
 
- // whatever we had, if more settings were provided, override with these...
+  // whatever we had, if more settings were provided, override with these...
   const config = buildFullDefinition(context, unstructuredConfig, instanceConfig, toolbarSettings, log);
 
   log.add('expand done');
@@ -50,23 +50,23 @@ export function expandToolbarConfig(context: ContextOfButton, toolbarData: any, 
  * @param instanceConfig
  * @param toolbarSettings
  */
-function buildFullDefinition(toolbarContext: any, unstructuredConfig: any, instanceConfig: any, toolbarSettings: ToolbarSettings, parentLog : Log) {
-    const log = new Log('Tlb.BldFul', parentLog, 'start');
-    const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings, log);
+function buildFullDefinition(toolbarContext: ContextOfButton, unstructuredConfig: any, instanceConfig: InstanceConfig, toolbarSettings: ToolbarSettings, parentLog: Log) {
+  const log = new Log('Tlb.BldFul', parentLog, 'start');
+  const fullConfig = ensureDefinitionTree(unstructuredConfig, toolbarSettings, log);
 
-    // ToDo: don't use console.log in production
-    if (unstructuredConfig.debug) console.log('toolbar: detailed debug on; start build full Def');
+  // ToDo: don't use console.log in production
+  if (unstructuredConfig.debug) console.log('toolbar: detailed debug on; start build full Def');
 
-    expandButtonGroups(fullConfig, log);
+  expandButtonGroups(fullConfig, log);
 
-    removeDisableButtons(toolbarContext, fullConfig, instanceConfig, log);
+  removeDisableButtons(toolbarContext, fullConfig, instanceConfig, log);
 
-    if (fullConfig.debug) console.log('after remove: ', fullConfig);
+  if (fullConfig.debug) console.log('after remove: ', fullConfig);
 
-    customize(fullConfig);
+  customize(fullConfig);
 
-    return fullConfig;
-  };
+  return fullConfig;
+};
 
 //#region build initial toolbar object
 /**
@@ -80,7 +80,7 @@ function buildFullDefinition(toolbarContext: any, unstructuredConfig: any, insta
  * @param unstructuredConfig
  * @param toolbarSettings
  */
-function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarSettings, parentLog : Log): ToolbarConfig {
+function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarSettings, parentLog: Log): ToolbarConfig {
   const log = new Log("Tlb.DefTre", parentLog, "start");
   // original is null/undefined, just return empty set
   if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);

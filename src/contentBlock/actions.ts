@@ -1,5 +1,5 @@
 ﻿import { ActionParams } from './action-params';
-import { reloadAndReInitialize } from './render';
+import { renderer } from './render';
 import { ContextOfButton } from '../context/context-of-button';
 /*
  * this is a content block in the browser
@@ -37,7 +37,7 @@ function getAndReload(context: ContextOfButton, url: string, params: ActionParam
       }).fail((jqXHR: any, textStatus: string, errorThrown: string) => {
         reject(Error(errorThrown));
       });;
-  }).then(() => { reloadAndReInitialize(context); });
+  }).then(() => { renderer.reloadAndReInitialize(context); });
 }
 
 /**
@@ -48,8 +48,9 @@ function getAndReload(context: ContextOfButton, url: string, params: ActionParam
  */
 export function removeFromList(context: ContextOfButton, sortOrder: number): Promise<any> {
   return getAndReload(context,
-    'view/module/removefromlist',
-    { sortOrder: sortOrder } as ActionParams);
+    'view/module/removefromlist', {
+      sortOrder: sortOrder
+    } as ActionParams);
 }
 
 /**
@@ -61,8 +62,10 @@ export function removeFromList(context: ContextOfButton, sortOrder: number): Pro
  */
 export function changeOrder(context: ContextOfButton, initOrder: number, newOrder: number): Promise<any> {
   return getAndReload(context,
-    'view/module/changeorder',
-    { sortOrder: initOrder, destinationSortOrder: newOrder } as ActionParams);
+    'view/module/changeorder', {
+      sortOrder: initOrder,
+      destinationSortOrder: newOrder
+    } as ActionParams);
 }
 
 /**
@@ -73,8 +76,9 @@ export function changeOrder(context: ContextOfButton, initOrder: number, newOrde
  */
 export function addItem(context: ContextOfButton, sortOrder: number): Promise<any> {
   return getAndReload(context,
-    'view/module/additem',
-    { sortOrder: sortOrder } as ActionParams);
+    'view/module/additem', {
+      sortOrder: sortOrder
+    } as ActionParams);
 }
 
 /**
@@ -86,8 +90,10 @@ export function addItem(context: ContextOfButton, sortOrder: number): Promise<an
  */
 export function publish(context: ContextOfButton, part: string, sortOrder: number): Promise<any> {
   return getAndReload(context,
-    'view/module/publish',
-    { part: part, sortOrder: sortOrder } as ActionParams);
+    'view/module/publish', {
+      part: part,
+      sortOrder: sortOrder
+    } as ActionParams);
 }
 
 /**
@@ -98,6 +104,7 @@ export function publish(context: ContextOfButton, part: string, sortOrder: numbe
  */
 export function publishId(context: ContextOfButton, entityId: number): Promise<any> {
   return getAndReload(context,
-    'view/module/publish',
-    { id: entityId } as ActionParams);
+    'view/module/publish', {
+      id: entityId
+    } as ActionParams);
 }
