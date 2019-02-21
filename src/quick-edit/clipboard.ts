@@ -26,7 +26,7 @@ export function copyPasteInPage(cbAction: string, list: any, index: number, type
     case 'paste':
       const from = data.index;
       const to = newClip.index;
-      // check that we only move block-to-block or module to module
+       // check that we only move block-to-block or module to module
       if (data.type !== newClip.type)
         return alert("can't move module-to-block; move only works from module-to-module or block-to-block");
 
@@ -89,9 +89,14 @@ export function clear(): void {
 
 export function createSpecs(type: string, list: any, index: number): Specs {
   const listItems: any = list.find(selectors[type].selector);
-  if (index >= listItems.length
-  ) index = listItems.length - 1; // sometimes the index is 1 larger than the length, then select last
-  const currentItem: any = listItems[index];
+  let currentItem: any;
+  if (index >= listItems.length) {
+    // when paste module below the last module in pane
+    // index is 1 larger than the length, then select last
+    currentItem = listItems[listItems.length - 1];
+  } else {
+    currentItem = listItems[index];
+  }
   const editContext = JSON.parse(list.attr(selectors.cb.context) || null) || { parent: 'dnn', field: list.id };
   return {
     parent: editContext.parent,
