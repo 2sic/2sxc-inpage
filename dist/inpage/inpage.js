@@ -811,11 +811,11 @@ function buildToolbars(parentLog, parentTag, optionalId) {
     var toolbars = getToolbarTags(parentTag);
     // no toolbars found, must help a bit because otherwise editing is hard
     if (toolbars.length === 0)
-        toolbars = addFallbackAndGetThatToolbar(parentTag);
+        toolbars = addFallbackToolbar(parentTag);
     for (var i = 0; i < toolbars.length; i++) {
         var tag = $(toolbars[i]);
         var config = loadConfigFromAttributes(toolbars[i]);
-        if (config != null)
+        if (config != null) // is null if load failed
             try {
                 convertConfigToToolbarTags(tag, config, log);
             }
@@ -826,6 +826,7 @@ function buildToolbars(parentLog, parentTag, optionalId) {
     }
 }
 exports.buildToolbars = buildToolbars;
+//////////////////////////////// Private Functions ////////////////////////////////////
 /**
  * Load the toolbar configuration from the sxc-toolbar attribute OR the old schema
  * @param tag
@@ -852,6 +853,12 @@ function loadConfigFromAttributes(tag) {
         return null;
     }
 }
+/**
+ * Take a configuration and convert into a toolbar-menu; also attach the hover-attribute
+ * @param tag
+ * @param config
+ * @param log
+ */
 function convertConfigToToolbarTags(tag, config, log) {
     var cnt = context_1.context(tag);
     cnt.toolbar = toolbar_expand_config_1.expandToolbarConfig(cnt, config.toolbar, config.settings, log);
@@ -869,12 +876,7 @@ function convertConfigToToolbarTags(tag, config, log) {
             ensureToolbarHoverClass(scElementParent);
     }
 }
-// generate an empty / fallback toolbar tag
-//function generateFallbackToolbar(): JQuery<HTMLElement> {
-//  const settingsString = JSON.stringify(settingsForEmptyToolbar);
-//  return $(`<ul class='sc-menu' toolbar='' settings='${settingsString}'/>`);
-//}
-// find current toolbars inside this wrapper-tag
+/** find current toolbars inside this wrapper-tag */
 function getToolbarTags(parentTag) {
     var allInner = $(".sc-menu[toolbar],.sc-menu[data-toolbar],[" + Constants.toolbar.attr.full + "]", parentTag);
     // return only those, which don't belong to a sub-item
@@ -884,6 +886,7 @@ function getToolbarTags(parentTag) {
         console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
     return onlyDirectDescendents;
 }
+/** add hover-attribute to tag */
 function ensureToolbarHoverClass(jtag) {
     if (jtag.length <= 0)
         return; // skip in case nothing was given
@@ -892,22 +895,16 @@ function ensureToolbarHoverClass(jtag) {
         tag.setAttribute(Constants.toolbar.attr.hover, '');
 }
 /** Create a default/fallback toolbar and return it */
-function addFallbackAndGetThatToolbar(parentTag) {
+function addFallbackToolbar(parentTag) {
     if (dbg)
         console.log("didn't find toolbar, so will auto-create", parentTag);
     var outsideCb = !parentTag.hasClass(Constants.cb.classes.name);
     var contentTag = outsideCb ? parentTag.find('div' + Constants.cb.selectors.ofName) : parentTag;
-    // todo: modify to use the new 2sxc 9.40 syntax, drop the sc-element
-    //contentTag.addClass(Constants.toolbar.classes.oldHover);
     // auto toolbar
-    var cnt = context_1.context(contentTag);
-    if (cnt.ui.autoToolbar !== false) {
-        //const settingsString = JSON.stringify(settingsForEmptyToolbar);
-        //const fbToolbar = $(`<ul class='sc-menu' toolbar='' settings='${settingsString}'/>`);
-        //contentTag.prepend(fbToolbar);
+    var ctx = context_1.context(contentTag);
+    if (ctx.ui.autoToolbar !== false)
         contentTag.attr(Constants.toolbar.attr.full, JSON.stringify(toolbar_settings_1.emptyToolbar));
-    }
-    return parentTag; // getToolbarTags(parentTag);
+    return parentTag;
 }
 /** Find the text of one or more attributes in fallback order, till we found one */
 function getFirstAttribute(toolbar, name1, name2) {
@@ -9068,7 +9065,7 @@ exports.ItemRender = ItemRender;
 Object.defineProperty(exports, "__esModule", { value: true });
 var sxc_controller_in_page_1 = __webpack_require__(3);
 // prevent propagation of the click (if menu was clicked)
-$(sxc_controller_in_page_1.$2sxcInPage.c.sel.scMenu /*".sc-menu"*/).click(function (e) { return e.stopPropagation(); });
+$(sxc_controller_in_page_1.$2sxcInPage.c.sel.scMenu).click(function (e) { return e.stopPropagation(); });
 
 
 /***/ }),
