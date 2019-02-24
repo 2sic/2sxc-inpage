@@ -48,9 +48,9 @@ export class Cms extends HasLog {
    */
   private do(innerCall : () => Promise<any>) : Promise<any> {
     if (this.autoReset) this.resetLog();
-    console.log('before');
+    //console.log('before');
     const result = innerCall();
-    console.log('after');
+    //console.log('after');
     if (this.autoDump) console.log(this.log.dump());
     return result;
   }

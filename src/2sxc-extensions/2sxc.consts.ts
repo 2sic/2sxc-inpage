@@ -6,8 +6,9 @@ if (window.$2sxc && !window.$2sxc.consts) {
     // classes
     cls: {
       scMenu: 'sc-menu',
-      scCb: 'sc-content-block',
-      scElm: 'sc-element',
+      // 2019-02-18 2dm moved to constants
+      //scCb: 'sc-content-block',
+      //scElm: 'sc-element',
     },
     // attributes
     attr: {

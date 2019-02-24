@@ -14,12 +14,7 @@ export class ToolbarManager extends HasLog {
     super('Tlb.Mngr', parentLog, 'init');
   }
   
-  // internal constants
-  //cDisableAttrName: string = 'data-disable-toolbar';
-  // build toolbars
-  //buildToolbars: this.build.build;
-
-  buildToolbars(parentTag: any, optionalId?: number) {
+  buildToolbars(parentTag: JQuery<HTMLElement>, optionalId?: number) {
     buildToolbars(this.log, parentTag, optionalId);
   }
 
@@ -31,7 +26,8 @@ export class ToolbarManager extends HasLog {
   toolbarTemplate = ToolbarConfigTemplates.Instance(this.log).get('default');
 }
 
-export const disableToolbarAttribute = 'data-disable-toolbar';
+// 2019-02-18 2dm moved to constants
+//export const disableToolbarAttribute = 'data-disable-toolbar';
 
 //2dm 2018-03-22 this seems to be unused
 const sharedTbm = new ToolbarManager(null);

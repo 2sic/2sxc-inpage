@@ -1,4 +1,5 @@
 ﻿import { CommandBase } from '../command-base';
+import Constants = require('../../constants');
 
 /**
  * import this module to commands.ts
@@ -44,7 +45,7 @@ export class More extends CommandBase {
             }
 
             // because of issue in Chrome we need to override CSS rules in edit.css for toolbar toggle on mouse hover
-            const scElement: Element = fullMenu2.closest('.sc-element');
+            const scElement = fullMenu2.closest('.' + Constants.toolbar.classes.oldHover);
             // add mouseenter and mouseleave events to parent sc-element if not already added
             if (scElement && fullMenu2.getAttribute('listener') !== 'true') {
               scElement.addEventListener('mouseenter', mouseenterHandler);
