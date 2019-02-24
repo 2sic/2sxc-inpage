@@ -26,7 +26,8 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
 .sc-element:hover .sc-element:not(:hover) .sc-menu.sc-tb-show-hover { opacity: 0; }*/   /* prevent hover of a parent, when the item itself is not hovered */
 
 /* todo: discuss w/2rm, maybe there's a better way without changing the positioning of the main element... */
-[sxc-toolbar-hover] { position: relative; }
+/* ReSharper disable Html.AttributeNotResolved */
+*[sxc-toolbar-hover] { position: relative; }
 [sxc-toolbar-hover] .sc-menu.sc-tb-hover-right { position:absolute; left: auto; right: 5px;top: 5px; }
 [sxc-toolbar-hover] .sc-menu.sc-tb-hover-left { position:absolute; left: 5px;right: auto;top: 5px; }
 [sxc-toolbar-hover] .sc-menu.sc-tb-hover-center { position:absolute;margin-left: 0;margin-right: 0; top: 5px; display: inline-block }
@@ -39,6 +40,7 @@ body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
 body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu { display: initial !important; }
 [sxc-toolbar-hover]:hover .sc-menu.sc-tb-show-hover { display: block; opacity: 1; }
 [sxc-toolbar-hover]:hover [sxc-toolbar-hover]:not(:hover) .sc-menu.sc-tb-show-hover { opacity: 0; }   /* prevent hover of a parent, when the item itself is not hovered */
+/* ReSharper restore Html.AttributeNotResolved */
 
 .sc-menu { list-style-type:none; margin:0; padding:0;display: inline;z-index: 1499; }
 .sc-menu li { list-style-type:none; padding:0!important; margin:0!important; display:inline; }

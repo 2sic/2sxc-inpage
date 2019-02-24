@@ -26,9 +26,6 @@ export class ToolbarManager extends HasLog {
   toolbarTemplate = ToolbarConfigTemplates.Instance(this.log).get('default');
 }
 
-// 2019-02-18 2dm moved to constants
-//export const disableToolbarAttribute = 'data-disable-toolbar';
-
 //2dm 2018-03-22 this seems to be unused
 const sharedTbm = new ToolbarManager(null);
-export const _toolbarManager = sharedTbm;// new ToolbarManager();
+export const _toolbarManager = sharedTbm;

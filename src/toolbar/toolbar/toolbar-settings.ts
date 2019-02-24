@@ -1,4 +1,6 @@
-﻿/** contains toolbar behaviour settings like float, etc. */
+﻿import { ToolbarConfig } from '../toolbar-config';
+
+/** contains toolbar behaviour settings like float, etc. */
 export class ToolbarSettings {
   autoAddMore: null | 'start' | 'end' | true = null; //  [true: used to be right/start]
   hover: 'left' | 'right' | 'none' = 'right';
@@ -25,3 +27,8 @@ export const settingsForEmptyToolbar: ToolbarSettings = new ToolbarSettings({
   hover: 'left',
   show: 'hover',
 });
+
+export const emptyToolbar: ToolbarConfig = {
+  toolbar: '',
+  settings: settingsForEmptyToolbar,
+} as ToolbarConfig;
