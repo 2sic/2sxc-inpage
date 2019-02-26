@@ -28,8 +28,10 @@ export function buildToolbars(parentLog: Log, parentTag: JQuery<HTMLElement>, op
   let toolbars = getToolbarTags(parentTag);
 
   // no toolbars found, must help a bit because otherwise editing is hard
-  if (toolbars.length === 0)
+  if (toolbars.length === 0) {
     toolbars = addFallbackToolbar(parentTag);
+    if (toolbars == null) return;
+  }
 
   for (let i = 0; i < toolbars.length; i++) {
     const tag = $(toolbars[i]);
@@ -126,15 +128,17 @@ function ensureToolbarHoverClass(jtag: JQuery<HTMLElement>): void {
 function addFallbackToolbar(parentTag: JQuery<HTMLElement>): JQuery<HTMLElement> {
   if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
 
-  const outsideCb = !parentTag.hasClass(Constants.cb.classes.name); 
-  const contentTag = outsideCb ? parentTag.find('div' + Constants.cb.selectors.ofName) : parentTag;
+  const outsideCb = !parentTag.hasClass(Constants.cb.classes.name);
+  const contentTag = outsideCb ? parentTag.find(`div${Constants.cb.selectors.ofName}`) : parentTag;
 
   // auto toolbar
   const ctx = context(contentTag);
-  if (ctx.ui.autoToolbar !== false)
-    contentTag.attr(Constants.toolbar.attr.full, JSON.stringify(emptyToolbar));
+  if (ctx.ui.autoToolbar === false)
+    return null;
 
-  return parentTag;
+  contentTag.attr(Constants.toolbar.attr.full, JSON.stringify(emptyToolbar));
+  
+  return contentTag;
 }
 
 /** Find the text of one or more attributes in fallback order, till we found one */
