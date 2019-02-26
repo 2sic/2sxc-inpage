@@ -5615,11 +5615,12 @@ __webpack_require__(27);
 __webpack_require__(18);
 __webpack_require__(178);
 __webpack_require__(179);
-__webpack_require__(93);
 __webpack_require__(180);
+__webpack_require__(93);
+__webpack_require__(181);
 __webpack_require__(76);
 __webpack_require__(77);
-__webpack_require__(181);
+__webpack_require__(182);
 __webpack_require__(33);
 __webpack_require__(75);
 __webpack_require__(28);
@@ -9070,6 +9071,15 @@ $(sxc_controller_in_page_1.$2sxcInPage.c.sel.scMenu).click(function (e) { return
 
 /***/ }),
 /* 180 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+/* 181 */
 /***/ (function(module, exports) {
 
 // enable shake detection on all toolbars
@@ -9084,7 +9094,7 @@ $(function () {
 
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
