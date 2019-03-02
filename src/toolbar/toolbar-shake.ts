@@ -1,4 +1,5 @@
-﻿declare let Shake: any;
+﻿// ReSharper disable once InconsistentNaming
+declare let Shake: any;
 
 // enable shake detection on all toolbars
 $(() => {

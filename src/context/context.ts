@@ -19,7 +19,7 @@ import { UiContext } from './instance-context/ui-context';
  * @param htmlElement or Id (moduleId)
  * @param cbid
  */
-export function context(tagOrSxc: SxcInstanceWithInternals | HTMLElement | number, cbid?: number): ContextOfButton {
+export function context(tagOrSxc: SxcInstanceWithInternals | HTMLElement | JQuery<HTMLElement>| number, cbid?: number): ContextOfButton {
   let sxc: SxcInstanceWithInternals;
   let containerTag: any = null;
 

@@ -62,8 +62,10 @@ function moveMod(modId: number, pane: string, order: number): any {
     TabId: tabId,
     ModuleId: modId,
     Pane: pane,
-    ModuleOrder: (2 * order + 4
-    ), // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
+    ModuleOrder: (2 * order + 0), 
+    // strange formula, copied from DNN https://github.com/dnnsoftware/Dnn.Platform/blob/fd225b8de07042837f7473cd49fba13de42a3cc0/Website/admin/Menus/ModuleActions/ModuleActions.js#L70
+    // stv: changed formula from: (2 * order + 4)
+    // ...to: (2 * order + 0)
   };
 
   sendDnnAjax(modId,
@@ -101,11 +103,11 @@ function sendDnnAjax(modId: number, serviceName: string, options: any): any {
   const service: any = $.dnnSF(modId);
 
   return $.ajax($.extend({
-      type: 'GET',
-      url: service.getServiceRoot('internalservices') + serviceName,
-      beforeSend: service.setModuleHeaders,
-      error: xhrError,
-    },
+    type: 'GET',
+    url: service.getServiceRoot('internalservices') + serviceName,
+    beforeSend: service.setModuleHeaders,
+    error: xhrError,
+  },
     options));
 }
 
@@ -145,7 +147,7 @@ function generatePaneMoveButtons(current: string): any {
 
   // attach click event...
   // ReSharper disable once UnusedParameter
-  targets.find('a').click(function(d: any) {
+  targets.find('a').click(function (d: any) {
     const link = $(this);
     const clip = data;
     const modId = getModuleId(clip.item.className);

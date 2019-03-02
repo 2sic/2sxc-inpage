@@ -2,131 +2,162 @@
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
 import { getTag } from '../manage/api';
 import { renderToolbar } from './item/render-toolbar';
-import { disableToolbarAttribute } from './toolbar-manager';
 import { expandToolbarConfig } from './toolbar/toolbar-expand-config';
-import { settingsForEmptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
-import { HasLog } from '../logging/has-log';
+import { ToolbarSettings, emptyToolbar } from './toolbar/toolbar-settings';
 import { Log } from '../logging/log';
+import Constants = require('../constants');
+import { ToolbarInitConfig } from './toolbar-init-config';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
 
-// generate an empty / fallback toolbar tag
-export function generateFallbackToolbar(): any {
-  const settingsString = JSON.stringify(settingsForEmptyToolbar);
-  return $(`<ul class='sc-menu' toolbar='' settings='${settingsString}'/>`);
-}
-
-// find current toolbars inside this wrapper-tag
-function getToolbarTags(parentTag: any): any {
-  const allInner: any = $('.sc-menu[toolbar],.sc-menu[data-toolbar]', parentTag);
-
-  // return only those, which don't belong to a sub-item
-  const res: any = allInner.filter((i: any, e: any) => $(e).closest('.sc-content-block')[0] === parentTag[0]);
-  if (dbg) {
-    console.log('found toolbars for parent', parentTag, res);
-  }
-  return res;
-}
-
-
-// create a process-toolbar command to generate toolbars inside a tag
-export function buildToolbars(parentLog: Log, parentTag: any, optionalId?: number): void {
+/**
+ * create a process - toolbar command to generate toolbars inside a tag
+ * @param parentLog
+ * @param parentTag
+ * @param optionalId
+ */
+export function buildToolbars(parentLog: Log, parentTag: JQuery<HTMLElement>, optionalId?: number): void {
   const log = new Log('Tlb.BldAll', parentLog);
   parentTag = $(parentTag || '.DnnModule-' + optionalId);
 
   // if something says the toolbars are disabled, then skip
-  if (parentTag.attr(disableToolbarAttribute)) {
+  if (parentTag.attr(Constants.toolbar.attr.disable))
     return;
-  }
 
-  // todo: change mechanism to not render toolbar, this uses a secret class name which the toolbar shouldn't know
-  // don't add, if it is has un-initialized content
-  // 2017-09-08 2dm disabled this, I believe the bootstrapping should never call this any more, if sc-uninitialized. if ok, then delete this in a few days
-  // let disableAutoAdd = $(".sc-uninitialized", parentTag).length !== 0;
-
-  let toolbars: any = getToolbarTags(parentTag);
+  let toolbars = getToolbarTags(parentTag);
 
   // no toolbars found, must help a bit because otherwise editing is hard
-  if (toolbars.length === 0) { // && !disableAutoAdd) {
-    if (dbg) {
-      console.log("didn't find toolbar, so will auto-create", parentTag);
-    }
-
-    const outsideCb = !parentTag.hasClass($2sxc.c.cls.scCb); // "sc-content-block");
-    const contentTag: any = outsideCb ? parentTag.find('div.sc-content-block') : parentTag;
-    contentTag.addClass($2sxc.c.cls.scElm); // "sc-element");
-
-    // auto toolbar
-    const cnt = context(contentTag);
-    if (cnt.ui.autoToolbar !== false) {
-      contentTag.prepend(generateFallbackToolbar());
-    }
-    
-    toolbars = getToolbarTags(parentTag);
+  if (toolbars.length === 0) {
+    toolbars = addFallbackToolbar(parentTag);
+    if (toolbars == null) return;
   }
 
   for (let i = 0; i < toolbars.length; i++) {
+    const tag = $(toolbars[i]);
+    const config = loadConfigFromAttributes(toolbars[i]);
 
-    const tag: any = $(toolbars[i]);
-
-    let toolbarData: any;
-    let toolbarSettings: ToolbarSettings;
-    const at = $2sxc.c.attr;
-
-    try {
-      const data = getTextContent(toolbars[i], at.toolbar, at.toolbarData);
-
-      toolbarData = JSON.parse(data);
-
-      const settings = getTextContent(toolbars[i], at.settings, at.settingsData);
-
-      toolbarSettings = JSON.parse(settings) as ToolbarSettings;
-
-    } catch (err) {
-      console.error(
-        'error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...',
-        // ReSharper disable once UsageOfPossiblyUnassignedValue
-        toolbarData,
-        err);
-      return;
-    }
-
-    try {
-
-      const cnt = context(tag);
-
-      cnt.toolbar = expandToolbarConfig(cnt, toolbarData, toolbarSettings, log);
-
-      const toolbar = renderToolbar(cnt);
-
-      tag.replaceWith(toolbar);
-
-    } catch (err2) {
-      // note: errors happen a lot on custom toolbars, make sure the others are still rendered
-      console.error('error creating toolbar - will skip this one', err2);
-    }
-
+    if(config != null)  // is null if load failed
+      try {
+        convertConfigToToolbarTags(tag, config, log);
+      } catch (err2) {
+        // catch any errors, as this is very common - make sure the others are still rendered
+        console.error('error creating toolbar - will skip this one', err2);
+      }
   }
 }
 
-function getTextContent(toolbar: any, name1: string, name2: string): string {
-  const item1 = toolbar.attributes.getNamedItem(name1);
-  const item2 = toolbar.attributes.getNamedItem(name2);
-  if (item1 && item1.textContent) {
-    return item1.textContent;
-  } else if (item2 && item2.textContent) {
-    return item2.textContent;
-  };
-  return '{}';
+//////////////////////////////// Private Functions ////////////////////////////////////
+
+/**
+ * Load the toolbar configuration from the sxc-toolbar attribute OR the old schema
+ * @param tag
+ * @return a configuration object or null in case of an error
+ */
+function loadConfigFromAttributes(tag: HTMLElement): ToolbarInitConfig {
+  try {
+    const newConfigFormat = tryGetAttrText(tag, Constants.toolbar.attr.full);
+    if (newConfigFormat) {
+      return JSON.parse(newConfigFormat) as ToolbarInitConfig;
+    } else {
+      const at = $2sxc.c.attr;
+      const data = getFirstAttribute(tag, at.toolbar, at.toolbarData);
+      const settings = getFirstAttribute(tag, at.settings, at.settingsData);
+      return {
+        toolbar: JSON.parse(data),
+        settings: JSON.parse(settings) as ToolbarSettings
+      } as ToolbarInitConfig;
+    }
+  } catch (err) {
+    console.error(
+      'error in settings JSON - probably invalid - make sure you also quote your properties like "name": ...',
+      tag, err);
+    return null;
+  }
 }
 
-export function disable(tag: any): void {
-  tag = $(tag);
-  tag.attr(disableToolbarAttribute, true);
+/**
+ * Take a configuration and convert into a toolbar-menu; also attach the hover-attribute
+ * @param tag
+ * @param config
+ * @param log
+ */
+function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarInitConfig, log: Log): void {
+  const cnt = context(tag);
+  cnt.toolbar = expandToolbarConfig(cnt, config.toolbar, config.settings, log);
+
+  const toolbar = renderToolbar(cnt);
+
+  if (tag.attr(Constants.toolbar.attr.full)) {
+    // new case, where the full toolbar is included in one setting
+    tag.prepend(toolbar);
+    ensureToolbarHoverClass(tag);
+  } else {
+    // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
+    const scElementParent = tag.closest(Constants.toolbar.selectors.ofOldHover);
+    tag.replaceWith(toolbar);
+
+    if (scElementParent.length > 0)
+      ensureToolbarHoverClass(scElementParent);
+  }
+
+}
+
+
+/** find current toolbars inside this wrapper-tag */
+function getToolbarTags(parentTag: JQuery<HTMLElement>): JQuery<HTMLElement> {
+  const allInner = $(`.sc-menu[toolbar],.sc-menu[data-toolbar],[${Constants.toolbar.attr.full}]`, parentTag);
+
+  // return only those, which don't belong to a sub-item
+  const onlyDirectDescendents = allInner
+    .filter((i: number, e: HTMLElement) => $(e).closest(Constants.cb.selectors.ofName)[0] === parentTag[0]);
+  if (dbg)
+    console.log('found toolbars for parent', parentTag, onlyDirectDescendents);
+  return onlyDirectDescendents;
+}
+
+/** add hover-attribute to tag */
+function ensureToolbarHoverClass(jtag: JQuery<HTMLElement>): void {
+  if (jtag.length <= 0) return; // skip in case nothing was given
+  const tag = jtag[0];
+  if (!tag.hasAttribute(Constants.toolbar.attr.hover))
+    tag.setAttribute(Constants.toolbar.attr.hover, '');
+}
+
+/** Create a default/fallback toolbar and return it */
+function addFallbackToolbar(parentTag: JQuery<HTMLElement>): JQuery<HTMLElement> {
+  if (dbg) console.log("didn't find toolbar, so will auto-create", parentTag);
+
+  const outsideCb = !parentTag.hasClass(Constants.cb.classes.name);
+  const contentTag = outsideCb ? parentTag.find(`div${Constants.cb.selectors.ofName}`) : parentTag;
+
+  // auto toolbar
+  const ctx = context(contentTag);
+  if (ctx.ui.autoToolbar === false)
+    return null;
+
+  contentTag.attr(Constants.toolbar.attr.full, JSON.stringify(emptyToolbar));
+  
+  return contentTag;
+}
+
+/** Find the text of one or more attributes in fallback order, till we found one */
+function getFirstAttribute(toolbar: HTMLElement, name1: string, name2: string): string {
+  return tryGetAttrText(toolbar, name1) || tryGetAttrText(toolbar, name2) || '{}';
+}
+
+/** Get text-content of an attribute (or return null) */
+function tryGetAttrText(tag: HTMLElement, name: string): string {
+  const item1 = tag.attributes.getNamedItem(name);
+  return item1 && item1.textContent;
+}
+
+export function disable(tag: HTMLElement | JQuery<HTMLElement>): void {
+  const jtag = $(tag);
+  jtag.attr(Constants.toolbar.attr.disable, 'true');
 }
 
 export function isDisabled(sxc: SxcInstanceWithInternals): boolean {
   const tag: any = $(getTag(sxc));
-  return !!tag.attr(disableToolbarAttribute);
+  return !!tag.attr(Constants.toolbar.attr.disable);
 }
