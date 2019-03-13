@@ -7,6 +7,7 @@ import { quickDialog } from '../quick-dialog/quick-dialog';
 import QuickEditState = require('../quick-dialog/state');
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { DebugConfig } from '../DebugConfig';
+import { CleanupTagToolbars } from '../toolbar/tag-toolbar'
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -106,9 +107,14 @@ function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
   // this must always run because it can be added ajax-style
   const wasEmpty = showGlassesButtonIfUninitialized(sxc);
 
+  // Remove orphan tag-toolbars
+  if (!isFirstRun)
+    CleanupTagToolbars();
+
   if (isFirstRun || !wasEmpty) {
     // use a logger for each iteration
     const log = new Log('Bts.Module');
+
     buildToolbars(log, module);
     if(DebugConfig.bootstrap.initInstance)
       LogUtils.logDump(log);

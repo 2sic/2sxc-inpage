@@ -7,6 +7,7 @@ import { ToolbarSettings, emptyToolbar } from './toolbar/toolbar-settings';
 import { Log } from '../logging/log';
 import Constants = require('../constants');
 import { ToolbarInitConfig } from './toolbar-init-config';
+import { AppendTagToolbar } from './tag-toolbar';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -90,7 +91,7 @@ function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarIni
 
   if (tag.attr(Constants.toolbar.attr.full)) {
     // new case, where the full toolbar is included in one setting
-    tag.prepend(toolbar);
+    AppendTagToolbar(tag, cnt, toolbar);
     ensureToolbarHoverClass(tag);
   } else {
     // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
