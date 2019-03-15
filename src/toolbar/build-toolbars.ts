@@ -87,13 +87,12 @@ function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarIni
   const cnt = context(tag);
   cnt.toolbar = expandToolbarConfig(cnt, config.toolbar, config.settings, log);
 
-  const toolbar = renderToolbar(cnt);
-
   if (tag.attr(Constants.toolbar.attr.full)) {
     // new case, where the full toolbar is included in one setting
-    AppendTagToolbar(tag, cnt, toolbar);
+    AppendTagToolbar(tag, cnt);
     ensureToolbarHoverClass(tag);
   } else {
+    const toolbar = renderToolbar(cnt);
     // default case, tag is the old <ul> tag, so find the sc-element parent before replacing
     const scElementParent = tag.closest(Constants.toolbar.selectors.ofOldHover);
     tag.replaceWith(toolbar);
