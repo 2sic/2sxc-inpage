@@ -70,7 +70,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var expand_button_config_1 = __webpack_require__(13);
+var expand_button_config_1 = __webpack_require__(14);
 var command_definition_1 = __webpack_require__(103);
 var commands_1 = __webpack_require__(10);
 var CommandBase = /** @class */ (function () {
@@ -674,7 +674,7 @@ exports.Commands = Commands;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(15);
+var render_1 = __webpack_require__(16);
 /*
  * this is a content block in the browser
  *
@@ -789,7 +789,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = __webpack_require__(5);
 var sxc_controller_in_page_1 = __webpack_require__(3);
 var api_1 = __webpack_require__(4);
-var render_toolbar_1 = __webpack_require__(18);
+var render_toolbar_1 = __webpack_require__(13);
 var toolbar_expand_config_1 = __webpack_require__(28);
 var toolbar_settings_1 = __webpack_require__(32);
 var log_1 = __webpack_require__(7);
@@ -934,6 +934,41 @@ exports.isDisabled = isDisabled;
 
 /***/ }),
 /* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var render_groups_1 = __webpack_require__(70);
+var render_helpers_1 = __webpack_require__(27);
+function renderToolbar(context) {
+    // render groups of buttons
+    var groups = render_groups_1.renderGroups(context);
+    // render toolbar
+    var toolbar = document.createElement('ul');
+    toolbar.classList.add('sc-menu');
+    toolbar.classList.add('group-0'); // IE11 fix, add each class separately
+    // add behaviour classes
+    toolbar.classList.add("sc-tb-hover-" + context.toolbar.settings.hover);
+    toolbar.classList.add("sc-tb-show-" + context.toolbar.settings.show);
+    if (context.toolbar.params.sortOrder === -1) {
+        toolbar.classList.add('listContent');
+    }
+    render_helpers_1.addClasses(toolbar, context.toolbar.settings.classes, ' ');
+    // stv: commented because I do not see that we need click event
+    // toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; e.preventDefault();'); // serialize JavaScript because of ajax
+    // add button groups to toolbar
+    toolbar.setAttribute('group-count', context.toolbar.groups.length.toString());
+    for (var g = 0; g < groups.length; g++) {
+        toolbar.appendChild(groups[g]);
+    }
+    return toolbar.outerHTML;
+}
+exports.renderToolbar = renderToolbar;
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1118,7 +1153,7 @@ exports.customize = customize;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1159,7 +1194,7 @@ exports.HasLog = HasLog;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1266,7 +1301,7 @@ exports.renderer = new Renderer();
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1292,14 +1327,14 @@ exports.DebugConfig = {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var build_toolbars_1 = __webpack_require__(12);
-var render_1 = __webpack_require__(15);
+var render_1 = __webpack_require__(16);
 var web_api_promises_1 = __webpack_require__(38);
 /**
  * prepare the instance so content can be added
@@ -1357,41 +1392,6 @@ function updateTemplate(context, templateId, forceCreate) {
         return alert('error - result not ok, was not able to create ContentGroup');
     });
 }
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var render_groups_1 = __webpack_require__(70);
-var render_helpers_1 = __webpack_require__(27);
-function renderToolbar(context) {
-    // render groups of buttons
-    var groups = render_groups_1.renderGroups(context);
-    // render toolbar
-    var toolbar = document.createElement('ul');
-    toolbar.classList.add('sc-menu');
-    toolbar.classList.add('group-0'); // IE11 fix, add each class separately
-    // add behaviour classes
-    toolbar.classList.add("sc-tb-hover-" + context.toolbar.settings.hover);
-    toolbar.classList.add("sc-tb-show-" + context.toolbar.settings.show);
-    if (context.toolbar.params.sortOrder === -1) {
-        toolbar.classList.add('listContent');
-    }
-    render_helpers_1.addClasses(toolbar, context.toolbar.settings.classes, ' ');
-    // stv: commented because I do not see that we need click event
-    // toolbar.setAttribute('onclick', 'var e = arguments[0] || window.event; e.preventDefault();'); // serialize JavaScript because of ajax
-    // add button groups to toolbar
-    toolbar.setAttribute('group-count', context.toolbar.groups.length.toString());
-    for (var g = 0; g < groups.length; g++) {
-        toolbar.appendChild(groups[g]);
-    }
-    return toolbar.outerHTML;
-}
-exports.renderToolbar = renderToolbar;
 
 
 /***/ }),
@@ -1530,7 +1530,7 @@ var QuickEditState = __webpack_require__(41);
 var Container = __webpack_require__(42);
 var ContainerSize = __webpack_require__(43);
 var UrlHandler = __webpack_require__(89);
-var DebugConfig_1 = __webpack_require__(16);
+var DebugConfig_1 = __webpack_require__(17);
 var dbg = DebugConfig_1.DebugConfig.qDialog;
 var diagShowClass = 'dia-select';
 /** dialog manager - the currently active dialog object */
@@ -1771,11 +1771,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(52);
-var has_log_1 = __webpack_require__(14);
+var has_log_1 = __webpack_require__(15);
 var log_1 = __webpack_require__(7);
 var context_1 = __webpack_require__(5);
 var context_of_instance_1 = __webpack_require__(26);
-var DebugConfig_1 = __webpack_require__(16);
+var DebugConfig_1 = __webpack_require__(17);
 var logId = 'Cms.Api';
 var Cms = /** @class */ (function (_super) {
     __extends(Cms, _super);
@@ -1891,7 +1891,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var log_1 = __webpack_require__(7);
 var instance_config_1 = __webpack_require__(73);
 var old_toolbar_settings_adapter_1 = __webpack_require__(74);
-var expand_button_config_1 = __webpack_require__(13);
+var expand_button_config_1 = __webpack_require__(14);
 var expand_group_config_1 = __webpack_require__(75);
 var toolbar_config_1 = __webpack_require__(76);
 var toolbar_settings_1 = __webpack_require__(32);
@@ -2175,7 +2175,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var default_toolbar_template_1 = __webpack_require__(77);
 var left_toolbar_template_1 = __webpack_require__(78);
-var has_log_1 = __webpack_require__(14);
+var has_log_1 = __webpack_require__(15);
 var ToolbarConfigTemplates = /** @class */ (function (_super) {
     __extends(ToolbarConfigTemplates, _super);
     function ToolbarConfigTemplates(parentLog) {
@@ -2249,17 +2249,17 @@ exports.cb = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_toolbar_1 = __webpack_require__(18);
+var render_toolbar_1 = __webpack_require__(13);
 var tagToolbarPadding = 4;
-var tagToolbarAttr = "data-tagtoolbar";
-var tagToolbarForAttr = "data-tagtoolbar-for";
+var tagToolbarAttr = 'data-tagtoolbar';
+var tagToolbarForAttr = 'data-tagtoolbar-for';
 /**
  * Returns the body offset if positioning is relative or absolute
  */
 function getBodyOffset() {
-    var body = $("body");
+    var body = $('body');
     var bodyPos = body.css('position');
-    if (bodyPos == 'relative' || bodyPos == 'absolute') {
+    if (bodyPos === 'relative' || bodyPos === 'absolute') {
         return {
             top: body.offset().top,
             left: body.offset().left
@@ -2299,31 +2299,14 @@ $(window).on('mousemove', function (e) {
     mousePosition.y = e.clientY;
 });
 var TagToolbar = /** @class */ (function () {
+    //tag: JQuery<HTMLElement>;
+    //cnt: ContextOfButton;
     function TagToolbar(tag, cnt) {
         var _this = this;
+        this.tag = tag;
+        this.cnt = cnt;
         this.toolbarElement = null;
         this.initialized = false;
-        this.updatePosition = function () {
-            var position = {
-                top: 'auto',
-                left: 'auto',
-                right: 'auto'
-            };
-            // If we scrolled down, the toolbar might not be visible - calculate offset
-            var viewportOffset = this.tag[0].getBoundingClientRect();
-            var scrollOffset = Math.min(viewportOffset.top - getBodyOffset().top, 0);
-            // Update top coordinates
-            if (scrollOffset == 0)
-                position.top = this.tag.offset().top + tagToolbarPadding + getBodyOffset().top - scrollOffset;
-            else
-                position.top = mousePosition.y + window.scrollY;
-            // Update left / right coordinates
-            if (this.toolbarElement.hasClass("sc-tb-hover-right"))
-                position.right = window.outerWidth - this.tag.offset().left - this.tag.outerWidth() + tagToolbarPadding - getBodyOffset().left;
-            else
-                position.left = this.tag.offset().left + tagToolbarPadding + getBodyOffset().left;
-            this.toolbarElement.css(position);
-        };
         // Ensure toolbar gets visible when hovering
         tag.on('mouseenter', function () {
             _this.initialize();
@@ -2332,7 +2315,7 @@ var TagToolbar = /** @class */ (function () {
         tag.on('mouseleave', function (e) {
             _this.initialize();
             // if we hover the menu itself now, don't hide it
-            if (!$.contains(_this.toolbarElement[0], e.relatedTarget) && _this.toolbarElement[0] != e.relatedTarget)
+            if (!$.contains(_this.toolbarElement[0], e.relatedTarget) && _this.toolbarElement[0] !== e.relatedTarget)
                 _this.hideToolbar();
         });
     }
@@ -2345,24 +2328,48 @@ var TagToolbar = /** @class */ (function () {
         this.toolbarElement = $(render_toolbar_1.renderToolbar(this.cnt));
         this.toolbarElement.on('mouseleave', function (e) {
             // if we do not hover the tag now, hide it
-            if (!$.contains(_this.tag[0], e.relatedTarget) && _this.tag[0] != e.relatedTarget)
+            if (!$.contains(_this.tag[0], e.relatedTarget) && _this.tag[0] !== e.relatedTarget)
                 _this.hideToolbar();
         });
-        $("body").append(this.toolbarElement);
+        $('body').append(this.toolbarElement);
         this.toolbarElement.attr(tagToolbarForAttr, toolbarId);
         this.tag.attr(tagToolbarAttr, toolbarId);
         this.toolbarElement.css({ display: 'none', position: 'absolute', transition: 'top 0.5s ease-out' });
         this.initialized = true;
     };
+    TagToolbar.prototype.updatePosition = function () {
+        var position = {
+            top: 'auto',
+            left: 'auto',
+            right: 'auto'
+        };
+        // If we scrolled down, the toolbar might not be visible - calculate offset
+        console.log(this);
+        var viewportOffset = this.tag[0].getBoundingClientRect();
+        var scrollOffset = Math.min(viewportOffset.top - getBodyOffset().top, 0);
+        // Update top coordinates
+        if (scrollOffset === 0)
+            position.top = this.tag.offset().top + tagToolbarPadding + getBodyOffset().top - scrollOffset;
+        else
+            position.top = mousePosition.y + window.scrollY;
+        // Update left / right coordinates
+        if (this.toolbarElement.hasClass('sc-tb-hover-right'))
+            position.right = window.outerWidth - this.tag.offset().left - this.tag.outerWidth() + tagToolbarPadding - getBodyOffset().left;
+        else
+            position.left = this.tag.offset().left + tagToolbarPadding + getBodyOffset().left;
+        this.toolbarElement.css(position);
+    };
     TagToolbar.prototype.hideToolbar = function () {
-        $(window).off('scroll', this.updatePosition);
+        var _this = this;
+        $(window).off('scroll', function () { return _this.updatePosition(); }); // important: use the () => syntax!
         this.toolbarElement.css({ display: 'none' });
     };
     TagToolbar.prototype.showToolbar = function () {
-        if (this.toolbarElement.is(":visible"))
+        var _this = this;
+        if (this.toolbarElement.is(':visible'))
             return;
         this.toolbarElement.css({ display: 'block' });
-        $(window).on('scroll', this.updatePosition);
+        $(window).on('scroll', function () { return _this.updatePosition(); }); // important: use the () => syntax!
         this.updatePosition();
     };
     return TagToolbar;
@@ -2720,7 +2727,7 @@ exports.getPreviewWithTemplate = getPreviewWithTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(15);
+var render_1 = __webpack_require__(16);
 var sxc_controller_in_page_1 = __webpack_require__(3);
 var window_in_page_1 = __webpack_require__(1);
 var command_link_to_ng_dialog_1 = __webpack_require__(82);
@@ -3279,13 +3286,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(17);
+var templates_1 = __webpack_require__(18);
 var command_open_ng_dialog_1 = __webpack_require__(39);
 var commands_1 = __webpack_require__(10);
 var button_action_1 = __webpack_require__(20);
 var button_config_1 = __webpack_require__(21);
 var settings_adapter_1 = __webpack_require__(30);
-var has_log_1 = __webpack_require__(14);
+var has_log_1 = __webpack_require__(15);
 var Engine = /** @class */ (function (_super) {
     __extends(Engine, _super);
     function Engine(parentLog) {
@@ -3913,7 +3920,7 @@ var parameters_adapter_1 = __webpack_require__(29);
 var settings_adapter_1 = __webpack_require__(30);
 var button_action_1 = __webpack_require__(20);
 var button_config_1 = __webpack_require__(21);
-var expand_button_config_1 = __webpack_require__(13);
+var expand_button_config_1 = __webpack_require__(14);
 var log_1 = __webpack_require__(7);
 var flatten_action_definition_1 = __webpack_require__(31);
 /**
@@ -4223,7 +4230,7 @@ exports.Coords = Coords;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var templates_1 = __webpack_require__(17);
+var templates_1 = __webpack_require__(18);
 /*
  * this is a content block in the browser
  *
@@ -4483,7 +4490,7 @@ exports.NgDialogParams = NgDialogParams;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var DebugConfig_1 = __webpack_require__(16);
+var DebugConfig_1 = __webpack_require__(17);
 /**
  * This object helps persist / load / reset
  * a setting in the session-state
@@ -4537,8 +4544,8 @@ var SessionStorageHelper = /** @class */ (function () {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(15);
-var templates_1 = __webpack_require__(17);
+var render_1 = __webpack_require__(16);
+var templates_1 = __webpack_require__(18);
 var context_1 = __webpack_require__(5);
 var api_1 = __webpack_require__(4);
 var quick_dialog_1 = __webpack_require__(23);
@@ -4764,7 +4771,7 @@ var instance_engine_1 = __webpack_require__(92);
 var manipulate_1 = __webpack_require__(93);
 var context_1 = __webpack_require__(5);
 var render_button_1 = __webpack_require__(19);
-var render_toolbar_1 = __webpack_require__(18);
+var render_toolbar_1 = __webpack_require__(13);
 var toolbar_expand_config_1 = __webpack_require__(28);
 var api_1 = __webpack_require__(4);
 var user_of_edit_context_1 = __webpack_require__(22);
@@ -5068,10 +5075,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var has_log_1 = __webpack_require__(14);
+var has_log_1 = __webpack_require__(15);
 var build_toolbars_1 = __webpack_require__(12);
 var render_button_1 = __webpack_require__(19);
-var render_toolbar_1 = __webpack_require__(18);
+var render_toolbar_1 = __webpack_require__(13);
 var toolbar_config_templates_1 = __webpack_require__(33);
 /**
  * Toolbar manager for the whole page - basically a set of APIs
@@ -5110,7 +5117,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var commands_1 = __webpack_require__(10);
 var button_action_1 = __webpack_require__(20);
 var button_config_1 = __webpack_require__(21);
-var expand_button_config_1 = __webpack_require__(13);
+var expand_button_config_1 = __webpack_require__(14);
 var mod_config_1 = __webpack_require__(96);
 var flatten_action_definition_1 = __webpack_require__(31);
 var parameters_adapter_1 = __webpack_require__(29);
@@ -5330,7 +5337,7 @@ var log_utils_1 = __webpack_require__(102);
 var quick_dialog_1 = __webpack_require__(23);
 var QuickEditState = __webpack_require__(41);
 var window_in_page_1 = __webpack_require__(1);
-var DebugConfig_1 = __webpack_require__(16);
+var DebugConfig_1 = __webpack_require__(17);
 var tag_toolbar_1 = __webpack_require__(35);
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
@@ -5641,8 +5648,8 @@ __webpack_require__(11);
 __webpack_require__(81);
 __webpack_require__(143);
 __webpack_require__(93);
-__webpack_require__(15);
-__webpack_require__(17);
+__webpack_require__(16);
+__webpack_require__(18);
 __webpack_require__(144);
 __webpack_require__(38);
 __webpack_require__(63);
@@ -5672,7 +5679,7 @@ __webpack_require__(150);
 __webpack_require__(151);
 __webpack_require__(152);
 __webpack_require__(153);
-__webpack_require__(16);
+__webpack_require__(17);
 __webpack_require__(154);
 __webpack_require__(155);
 __webpack_require__(104);
@@ -5688,7 +5695,7 @@ __webpack_require__(1);
 __webpack_require__(163);
 __webpack_require__(164);
 __webpack_require__(72);
-__webpack_require__(14);
+__webpack_require__(15);
 __webpack_require__(165);
 __webpack_require__(102);
 __webpack_require__(7);
@@ -5744,7 +5751,7 @@ __webpack_require__(12);
 __webpack_require__(20);
 __webpack_require__(21);
 __webpack_require__(176);
-__webpack_require__(13);
+__webpack_require__(14);
 __webpack_require__(75);
 __webpack_require__(177);
 __webpack_require__(96);
@@ -5752,7 +5759,7 @@ __webpack_require__(178);
 __webpack_require__(19);
 __webpack_require__(70);
 __webpack_require__(27);
-__webpack_require__(18);
+__webpack_require__(13);
 __webpack_require__(179);
 __webpack_require__(35);
 __webpack_require__(180);

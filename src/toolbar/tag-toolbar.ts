@@ -2,16 +2,16 @@
 import { renderToolbar } from './item/render-toolbar';
 
 const tagToolbarPadding = 4;
-const tagToolbarAttr = "data-tagtoolbar"
-const tagToolbarForAttr = "data-tagtoolbar-for"
+const tagToolbarAttr = 'data-tagtoolbar';
+const tagToolbarForAttr = 'data-tagtoolbar-for';
 
 /**
  * Returns the body offset if positioning is relative or absolute
  */
 function getBodyOffset() {
-  var body = $("body");
+  const body = $('body');
   const bodyPos = body.css('position');
-  if (bodyPos == 'relative' || bodyPos == 'absolute') {
+  if (bodyPos === 'relative' || bodyPos === 'absolute') {
     return {
       top: body.offset().top,
       left: body.offset().left
@@ -35,9 +35,9 @@ function getMenuNumber() {
  * Remove orphan tag-toolbars from DOM
  */
 export function CleanupTagToolbars() {
-  var tagToolbars = $(`[${tagToolbarForAttr}]`);
+  const tagToolbars = $(`[${tagToolbarForAttr}]`);
   tagToolbars.each((i, e) => {
-    let id = $(e).attr(tagToolbarForAttr);
+    const id = $(e).attr(tagToolbarForAttr);
     if (!$(`[${tagToolbarAttr}=${id}]`).length) {
       $(e).remove();
     }
@@ -54,12 +54,12 @@ $(window).on('mousemove', (e) => {
 });
 
 class TagToolbar {
-  toolbarElement = <JQuery<HTMLElement>>null;
+  toolbarElement = null as JQuery<HTMLElement>;
   initialized = false;
-  tag: JQuery<HTMLElement>;
-  cnt: ContextOfButton;
+  //tag: JQuery<HTMLElement>;
+  //cnt: ContextOfButton;
 
-  constructor(tag: JQuery<HTMLElement>, cnt: ContextOfButton) {
+  constructor(private readonly tag: JQuery<HTMLElement>, private readonly cnt: ContextOfButton) {
     // Ensure toolbar gets visible when hovering
     tag.on('mouseenter', () => {
       this.initialize();
@@ -70,7 +70,7 @@ class TagToolbar {
       this.initialize();
 
       // if we hover the menu itself now, don't hide it
-      if (!$.contains(this.toolbarElement[0], e.relatedTarget) && this.toolbarElement[0] != e.relatedTarget)
+      if (!$.contains(this.toolbarElement[0], e.relatedTarget) && this.toolbarElement[0] !== e.relatedTarget)
         this.hideToolbar();
     });
   }
@@ -79,18 +79,18 @@ class TagToolbar {
     if (this.initialized)
       return;
 
-    var toolbarId = `${this.cnt.instance.id}-${this.cnt.contentBlock.id}-${getMenuNumber()}`;
+    const toolbarId = `${this.cnt.instance.id}-${this.cnt.contentBlock.id}-${getMenuNumber()}`;
 
     // render toolbar and append tag to body
     this.toolbarElement = $(renderToolbar(this.cnt));
 
     this.toolbarElement.on('mouseleave', (e) => {
       // if we do not hover the tag now, hide it
-      if (!$.contains(this.tag[0], e.relatedTarget) && this.tag[0] != e.relatedTarget)
+      if (!$.contains(this.tag[0], e.relatedTarget) && this.tag[0] !== e.relatedTarget)
         this.hideToolbar();
     });
 
-    $("body").append(this.toolbarElement);
+    $('body').append(this.toolbarElement);
 
     this.toolbarElement.attr(tagToolbarForAttr, toolbarId);
     this.tag.attr(tagToolbarAttr, toolbarId);
@@ -100,26 +100,27 @@ class TagToolbar {
     this.initialized = true;
   }
 
-  updatePosition = function () {
+  updatePosition() {
 
-    var position = {
-      top: <any>'auto',
-      left: <any>'auto',
-      right: <any>'auto'
+    const position = {
+      top: 'auto' as any,
+      left: 'auto' as any,
+      right: 'auto' as any
     };
 
     // If we scrolled down, the toolbar might not be visible - calculate offset
-    var viewportOffset = this.tag[0].getBoundingClientRect();
-    var scrollOffset = Math.min(viewportOffset.top - getBodyOffset().top, 0);
+    console.log(this);
+    const viewportOffset = this.tag[0].getBoundingClientRect();
+    const scrollOffset = Math.min(viewportOffset.top - getBodyOffset().top, 0);
 
     // Update top coordinates
-    if (scrollOffset == 0)
+    if (scrollOffset === 0)
       position.top = this.tag.offset().top + tagToolbarPadding + getBodyOffset().top - scrollOffset;
     else
       position.top = mousePosition.y + window.scrollY;
 
     // Update left / right coordinates
-    if (this.toolbarElement.hasClass("sc-tb-hover-right"))
+    if (this.toolbarElement.hasClass('sc-tb-hover-right'))
       position.right = window.outerWidth - this.tag.offset().left - this.tag.outerWidth() + tagToolbarPadding - getBodyOffset().left;
     else
       position.left = this.tag.offset().left + tagToolbarPadding + getBodyOffset().left;
@@ -128,15 +129,15 @@ class TagToolbar {
   }
   
   hideToolbar() {
-    $(window).off('scroll', this.updatePosition);
+    $(window).off('scroll', () => this.updatePosition()); // important: use the () => syntax!
     this.toolbarElement.css({ display: 'none' });
   }
 
   showToolbar() {
-    if (this.toolbarElement.is(":visible"))
+    if (this.toolbarElement.is(':visible'))
       return;
     this.toolbarElement.css({ display: 'block' });
-    $(window).on('scroll', this.updatePosition);
+    $(window).on('scroll', () => this.updatePosition());  // important: use the () => syntax!
     this.updatePosition();
   }
 
