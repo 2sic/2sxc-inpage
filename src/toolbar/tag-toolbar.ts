@@ -133,6 +133,8 @@ class TagToolbar {
     this.toolbarElement.css({ display: 'none' });
   }
 
+
+
   showToolbar() {
     if (this.toolbarElement.is(':visible'))
       return;
