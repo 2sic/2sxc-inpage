@@ -2250,7 +2250,7 @@ exports.cb = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var render_toolbar_1 = __webpack_require__(13);
-var tagToolbarPadding = 4;
+var tagToolbarPadding = 4, tagToolbarPaddingRight = 0, toolbarHeight = 20;
 var tagToolbarAttr = 'data-tagtoolbar';
 var tagToolbarForAttr = 'data-tagtoolbar-for';
 /**
@@ -2341,23 +2341,40 @@ var TagToolbar = /** @class */ (function () {
         var position = {
             top: 'auto',
             left: 'auto',
-            right: 'auto'
+            right: 'auto',
+            viewportOffset: this.tag[0].getBoundingClientRect().top,
+            bodyOffset: getBodyOffset(),
+            tagScrollOffset: 0,
+            tagOffset: this.tag.offset(),
+            tagWidth: this.tag.outerWidth(),
+            mousePos: mousePosition,
+            win: {
+                scrollY: window.scrollY,
+                width: $('body').width()
+            },
+            padding: tagToolbarPadding
         };
         // If we scrolled down, the toolbar might not be visible - calculate offset
         console.log(this);
-        var viewportOffset = this.tag[0].getBoundingClientRect();
-        var scrollOffset = Math.min(viewportOffset.top - getBodyOffset().top, 0);
+        position.tagScrollOffset = Math.min(position.viewportOffset - position.bodyOffset.top, 0);
         // Update top coordinates
-        if (scrollOffset === 0)
-            position.top = this.tag.offset().top + tagToolbarPadding + getBodyOffset().top - scrollOffset;
+        if (position.tagScrollOffset === 0)
+            position.top = position.tagOffset.top + tagToolbarPadding - position.bodyOffset.top;
         else
-            position.top = mousePosition.y + window.scrollY;
+            position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
         // Update left / right coordinates
+        // todo: try to change class to use attribute or something
         if (this.toolbarElement.hasClass('sc-tb-hover-right'))
-            position.right = window.outerWidth - this.tag.offset().left - this.tag.outerWidth() + tagToolbarPadding - getBodyOffset().left;
+            position.right = position.win.width - position.tagOffset.left - position.tagWidth + tagToolbarPaddingRight - position.bodyOffset.left;
         else
-            position.left = this.tag.offset().left + tagToolbarPadding + getBodyOffset().left;
-        this.toolbarElement.css(position);
+            position.left = position.tagOffset.left + tagToolbarPadding + position.bodyOffset.left;
+        //console.log('positions', position);
+        var cssPos = {
+            top: position.top,
+            left: position.left,
+            right: position.right
+        };
+        this.toolbarElement.css(cssPos);
     };
     TagToolbar.prototype.hideToolbar = function () {
         var _this = this;
