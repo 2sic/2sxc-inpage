@@ -2311,6 +2311,7 @@ var TagToolbar = /** @class */ (function () {
         this.cnt = cnt;
         this.toolbarElement = null;
         this.initialized = false;
+        this.updatePosition = this.updatePosition.bind(this);
         // Ensure toolbar gets visible when hovering
         tag.on('mouseenter', function () {
             _this.initialize();
@@ -2383,12 +2384,10 @@ var TagToolbar = /** @class */ (function () {
         this.toolbarElement.css({ display: 'none' });
     };
     TagToolbar.prototype.showToolbar = function () {
-        if (this.toolbarElement.is(':visible'))
-            return;
+        /*if (this.toolbarElement.is(':visible'))
+          return;*/
         this.toolbarElement.css({ display: 'block' });
-        // Attach the event, but use a $.proxy to ensure that the "this" context remains
-        // see also https://stackoverflow.com/questions/14990057/typescript-event-binding-and-unbinding
-        $(window).on('scroll', $.proxy(this.updatePosition, this));
+        $(window).on('scroll', this.updatePosition);
         this.updatePosition();
     };
     return TagToolbar;
