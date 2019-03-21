@@ -4491,6 +4491,7 @@ var NgDialogParams = /** @class */ (function () {
         // todo= probably move the user into the dashboard info
         params.user = user_of_edit_context_1.UserOfEditContext.fromContext(context);
         params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+        params.fa = !context.app.isContent;
         return params;
     };
     return NgDialogParams;
