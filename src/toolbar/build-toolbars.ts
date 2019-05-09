@@ -7,7 +7,7 @@ import { ToolbarSettings, emptyToolbar } from './toolbar/toolbar-settings';
 import { Log } from '../logging/log';
 import Constants = require('../constants');
 import { ToolbarInitConfig } from './toolbar-init-config';
-import { AppendTagToolbar } from './tag-toolbar';
+import { TagToolbar } from './tag-toolbar';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -89,7 +89,8 @@ function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarIni
 
   if (tag.attr(Constants.toolbar.attr.full)) {
     // new case, where the full toolbar is included in one setting
-    AppendTagToolbar(tag, cnt);
+    // ReSharper disable once WrongExpressionStatement
+    new TagToolbar(tag, cnt);
     ensureToolbarHoverClass(tag);
   } else {
     const toolbar = renderToolbar(cnt);

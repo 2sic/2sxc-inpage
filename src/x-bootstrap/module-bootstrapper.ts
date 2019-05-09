@@ -35,6 +35,7 @@ $(document).ready(() => {
  * @param isFirstRun should be true only on the very initial call
  */
 function initAllInstances(isFirstRun: boolean): void {
+  (window.$2sxc as any).stats.watchDomChanges++;
   $('div[data-edit-context]').each(function() { initInstance(this, isFirstRun)});
   if (isFirstRun)
     tryShowTemplatePicker();

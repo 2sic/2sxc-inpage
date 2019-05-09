@@ -18,6 +18,9 @@ export class NgDialogParams {
   user: UserOfEditContext;
   approot: string | null;
 
+  /** features of App - this is to tell the UI it can show advanced features of an app like permissions, API, REST etc. */
+  fa: boolean;
+
   //constructor(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
   //  this.zoneId = editContext.ContentGroup.ZoneId;
   //  this.appId = editContext.ContentGroup.AppId;
@@ -55,6 +58,7 @@ export class NgDialogParams {
     // todo= probably move the user into the dashboard info
     params.user = UserOfEditContext.fromContext(context);
     params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+    params.fa = !context.app.isContent;
     return params;
   }
 }
