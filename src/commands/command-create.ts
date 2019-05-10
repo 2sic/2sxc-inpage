@@ -13,7 +13,7 @@ export function commandCreate(context: ContextOfButton): Command {
 
   const ngDialogUrl = context.instance.sxcRootUrl +
     'desktopmodules/tosic_sexycontent/' +
-    ((context.ui.form === 'ng5' && context.button.dialog(context) === 'edit') ? Dialog.ng5 : Dialog.ng1) +
+    ((context.ui.form === 'ng8' && context.button.dialog(context) === 'edit') ? Dialog.ng8 : Dialog.ng1) +
     '?sxcver=' + context.instance.sxcVersion;
 
   const isDebug: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';

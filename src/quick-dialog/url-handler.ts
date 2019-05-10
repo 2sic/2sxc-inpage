@@ -10,7 +10,7 @@
 export function rewriteUrl(url: string): string {
   // change default url-schema from the primary angular-app to the quick-dialog
   url = url.replace(DialogPaths.ng1, DialogPaths.quickDialog)
-    .replace(DialogPaths.ng5, DialogPaths.quickDialog);
+    .replace(DialogPaths.ng8, DialogPaths.quickDialog);
   url = changePathToDevIfNecessary(url);
   return url;
 }
