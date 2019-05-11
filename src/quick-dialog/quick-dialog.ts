@@ -65,7 +65,7 @@ class QuickDialogManager {
       if (currentPromise) return currentPromise;
     }
 
-    const dialogUrl = UrlHandler.rewriteUrl(url);
+    const dialogUrl = UrlHandler.setUrlToQuickDialog(url);
     iFrame.bridge.setup(context.sxc, dialogName);
     iFrame.setAttribute('src', dialogUrl);
     // if the window had already been loaded, re-init

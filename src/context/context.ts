@@ -65,106 +65,106 @@ export function getContextInstance(sxc: SxcInstanceWithInternals, htmlElement?: 
 
 /**
  * create part of context object (it is not cached)
- * @param editContext
+ * @param editCtx
  */
-export function createContextFromEditContext(editContext: DataEditContext) {
-  const contextOfButton = new ContextOfButton();
+export function createContextFromEditContext(editCtx: DataEditContext) {
+  const btnCtx = new ContextOfButton();
 
   // *** ContextOf ***
   // this will be everything about the current system, like system / api -paths etc.
-  contextOfButton.system = new SystemContext();
-  if (editContext.error) {
-    contextOfButton.system.error = editContext.error.type;
+  btnCtx.system = new SystemContext();
+  if (editCtx.error) {
+    btnCtx.system.error = editCtx.error.type;
   }
   // empty
 
   // this will be something about the current tenant(the dnn portal)
-  contextOfButton.tenant = new TenantContext();
-  if (editContext.Environment) {
-    contextOfButton.tenant.id = editContext.Environment.WebsiteId; // InstanceConfig.portalId
-    contextOfButton.tenant.url = editContext.Environment.WebsiteUrl; // NgDialogParams.portalroot
+  btnCtx.tenant = new TenantContext();
+  if (editCtx.Environment) {
+    btnCtx.tenant.id = editCtx.Environment.WebsiteId; // InstanceConfig.portalId
+    btnCtx.tenant.url = editCtx.Environment.WebsiteUrl; // NgDialogParams.portalroot
   }
 
   // things about the user
-  contextOfButton.user = new UserContext();
-  if (editContext.User) {
-    contextOfButton.user.canDesign = editContext.User.CanDesign;
-    contextOfButton.user.canDevelop = editContext.User.CanDevelop;
+  btnCtx.user = new UserContext();
+  if (editCtx.User) {
+    btnCtx.user.canDesign = editCtx.User.CanDesign;
+    btnCtx.user.canDevelop = editCtx.User.CanDevelop;
   }
 
   // *** ContextOfPage ***
   // this will be information related to the current page
-  contextOfButton.page = new PageContext();
-  if (editContext.Environment) {
-    contextOfButton.page.id = editContext.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
-    contextOfButton.page.url = editContext.Environment.PageUrl;
+  btnCtx.page = new PageContext();
+  if (editCtx.Environment) {
+    btnCtx.page.id = editCtx.Environment.PageId; // InstanceConfig.tabId, NgDialogParams.tid
+    btnCtx.page.url = editCtx.Environment.PageUrl;
   }
 
   // *** ContextOfInstance ***
   // information related to the current DNN module, incl.instanceId, etc.
-  contextOfButton.instance = new InstanceContext();
-  if (editContext.Environment) {
-    contextOfButton.instance.id = editContext.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
-    contextOfButton.instance.isEditable = editContext.Environment.IsEditable;
+  btnCtx.instance = new InstanceContext();
+  if (editCtx.Environment) {
+    btnCtx.instance.id = editCtx.Environment.InstanceId; // InstanceConfig.moduleId, NgDialogParams.mid
+    btnCtx.instance.isEditable = editCtx.Environment.IsEditable;
     // sxc
-    contextOfButton.instance.sxcVersion = editContext.Environment.SxcVersion;
-    contextOfButton.instance.parameters = editContext.Environment.parameters;
-    contextOfButton.instance.sxcRootUrl = editContext.Environment.SxcRootUrl;// NgDialogParams.websiteroot
+    btnCtx.instance.sxcVersion = editCtx.Environment.SxcVersion;
+    btnCtx.instance.parameters = editCtx.Environment.parameters;
+    btnCtx.instance.sxcRootUrl = editCtx.Environment.SxcRootUrl;// NgDialogParams.websiteroot
   }
-  if (editContext.ContentBlock) {
-    contextOfButton.instance.allowPublish = editContext.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;// NgDialogParams.publishing
+  if (editCtx.ContentBlock) {
+    btnCtx.instance.allowPublish = editCtx.ContentBlock.VersioningRequirements === $2sxc.c.publishAllowed;// NgDialogParams.publishing
   }
 
   // this will be about the current app, settings of the app, app - paths, etc.
-  contextOfButton.app = new AppContext();
-  if (editContext.ContentGroup) {
-    contextOfButton.app.id = editContext.ContentGroup.AppId; // or NgDialogParams.appId
-    contextOfButton.app.isContent = editContext.ContentGroup.IsContent;
-    contextOfButton.app.resourcesId = editContext.ContentGroup.AppResourcesId;
-    contextOfButton.app.settingsId = editContext.ContentGroup.AppSettingsId;
-    contextOfButton.app.appPath = editContext.ContentGroup.AppUrl; // InstanceConfig.appPath, NgDialogParams.approot, this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-    contextOfButton.app.hasContent = editContext.ContentGroup.HasContent;
-    contextOfButton.app.supportsAjax = editContext.ContentGroup.SupportsAjax;
-    contextOfButton.app.zoneId = editContext.ContentGroup.ZoneId; // or NgDialogParams.zoneId
+  btnCtx.app = new AppContext();
+  if (editCtx.ContentGroup) {
+    btnCtx.app.id = editCtx.ContentGroup.AppId; // or NgDialogParams.appId
+    btnCtx.app.isContent = editCtx.ContentGroup.IsContent;
+    btnCtx.app.resourcesId = editCtx.ContentGroup.AppResourcesId;
+    btnCtx.app.settingsId = editCtx.ContentGroup.AppSettingsId;
+    btnCtx.app.appPath = editCtx.ContentGroup.AppUrl; // InstanceConfig.appPath, NgDialogParams.approot, this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
+    btnCtx.app.hasContent = editCtx.ContentGroup.HasContent;
+    btnCtx.app.supportsAjax = editCtx.ContentGroup.SupportsAjax;
+    btnCtx.app.zoneId = editCtx.ContentGroup.ZoneId; // or NgDialogParams.zoneId
   }
-  if (editContext.Language) {
+  if (editCtx.Language) {
     // languages
-    contextOfButton.app.currentLanguage = editContext.Language.Current; // NgDialogParams.lang
-    contextOfButton.app.primaryLanguage = editContext.Language.Primary; // NgDialogParams.langpri
-    contextOfButton.app.allLanguages = editContext.Language.All; // or NgDialogParams.langs
+    btnCtx.app.currentLanguage = editCtx.Language.Current; // NgDialogParams.lang
+    btnCtx.app.primaryLanguage = editCtx.Language.Primary; // NgDialogParams.langpri
+    btnCtx.app.allLanguages = editCtx.Language.All; // or NgDialogParams.langs
   }
 
   // ensure that the UI will load the correct assets to enable editing
-  contextOfButton.ui = new UiContext();
-  if (editContext.Ui) {
-    contextOfButton.ui.autoToolbar = editContext.Ui.AutoToolbar; // toolbar auto-show
-    if (editContext.Ui.Form) contextOfButton.ui.form = editContext.Ui.Form; // decide which dialog opens, eg ng8
+  btnCtx.ui = new UiContext();
+  if (editCtx.Ui) {
+    btnCtx.ui.autoToolbar = editCtx.Ui.AutoToolbar; // toolbar auto-show
+    if (editCtx.Ui.Form) btnCtx.ui.form = editCtx.Ui.Form; // decide which dialog opens, eg ng8
   }
 
   // *** ContextOfContentBlock ***
   // information related to the current contentBlock
-  contextOfButton.contentBlock = new ContentBlockContext();
-  if (editContext.ContentBlock) {
-    contextOfButton.contentBlock.id = editContext.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
-    contextOfButton.contentBlock.isEntity = editContext.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
-    contextOfButton.contentBlock.showTemplatePicker = editContext.ContentBlock.ShowTemplatePicker;
-    contextOfButton.contentBlock.versioningRequirements = editContext.ContentBlock.VersioningRequirements;
-    contextOfButton.contentBlock.parentFieldName = editContext.ContentBlock.ParentFieldName;
-    contextOfButton.contentBlock.parentFieldSortOrder = editContext.ContentBlock.ParentFieldSortOrder;
-    contextOfButton.contentBlock.partOfPage = editContext.ContentBlock.PartOfPage;// NgDialogParams.partOfPage
+  btnCtx.contentBlock = new ContentBlockContext();
+  if (editCtx.ContentBlock) {
+    btnCtx.contentBlock.id = editCtx.ContentBlock.Id; // or sxc.cbid or InstanceConfig.cbid
+    btnCtx.contentBlock.isEntity = editCtx.ContentBlock.IsEntity; // ex: InstanceConfig.cbIsEntity
+    btnCtx.contentBlock.showTemplatePicker = editCtx.ContentBlock.ShowTemplatePicker;
+    btnCtx.contentBlock.versioningRequirements = editCtx.ContentBlock.VersioningRequirements;
+    btnCtx.contentBlock.parentFieldName = editCtx.ContentBlock.ParentFieldName;
+    btnCtx.contentBlock.parentFieldSortOrder = editCtx.ContentBlock.ParentFieldSortOrder;
+    btnCtx.contentBlock.partOfPage = editCtx.ContentBlock.PartOfPage;// NgDialogParams.partOfPage
   }
-  if (editContext.ContentGroup) {
-    contextOfButton.contentBlock.isCreated = editContext.ContentGroup.IsCreated;
-    contextOfButton.contentBlock.isList = editContext.ContentGroup.IsList; // ex: InstanceConfig.isList
-    contextOfButton.contentBlock.queryId = editContext.ContentGroup.QueryId;
-    contextOfButton.contentBlock.templateId = editContext.ContentGroup.TemplateId;
-    contextOfButton.contentBlock.contentTypeId = editContext.ContentGroup.ContentTypeName;
-    contextOfButton.contentBlock.contentGroupId = editContext.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
+  if (editCtx.ContentGroup) {
+    btnCtx.contentBlock.isCreated = editCtx.ContentGroup.IsCreated;
+    btnCtx.contentBlock.isList = editCtx.ContentGroup.IsList; // ex: InstanceConfig.isList
+    btnCtx.contentBlock.queryId = editCtx.ContentGroup.QueryId;
+    btnCtx.contentBlock.templateId = editCtx.ContentGroup.TemplateId;
+    btnCtx.contentBlock.contentTypeId = editCtx.ContentGroup.ContentTypeName;
+    btnCtx.contentBlock.contentGroupId = editCtx.ContentGroup.Guid; // ex: InstanceConfig.contentGroupId
   }
 
   // *** ContextOfItem ***
   // information about the current item
-  contextOfButton.item = new ItemContext();
+  btnCtx.item = new ItemContext();
   // empty
 
   // *** ContextOfToolbar ***
@@ -173,6 +173,6 @@ export function createContextFromEditContext(editContext: DataEditContext) {
   // *** ContextOfButton ***
   // fill externally
 
-  return contextOfButton;
+  return btnCtx;
 }
 
