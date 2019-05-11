@@ -33,7 +33,7 @@
     "test": "ts-node node_modules/jasmine/bin/jasmine",
     "test-once": "karma start --single-run",
     "dev": "webpack --watch",
-    "dist": "@ECHO *** 2sxc-inpage webpack build for DEVELOPMENT ***&& SET NODE_ENV=development&& webpack --color --display-error-details --bail&& @ECHO ***  2sxc-inpage webpack build for PRODUCTION ***&& SET NODE_ENV=production&& webpack --color --display-error-details --bail&& @ECHO *** END ***"
+    "prod": "@ECHO *** 2sxc-inpage webpack build for DEVELOPMENT ***&& SET NODE_ENV=development&& webpack --color --display-error-details --bail&& @ECHO ***  2sxc-inpage webpack build for PRODUCTION ***&& SET NODE_ENV=production&& webpack --color --display-error-details --bail&& @ECHO *** END ***"
   },
   "repository": {
     "type": "git",
