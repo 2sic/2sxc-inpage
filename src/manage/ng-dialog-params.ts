@@ -21,7 +21,10 @@ export class NgDialogParams {
   /** features of App - this is to tell the UI it can show advanced features of an app like permissions, API, REST etc. */
   fa: boolean;
 
-  //constructor(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
+  /** request verification token for form */
+  rvt: string;
+
+  // constructor(sxc: SxcInstanceWithInternals, editContext: DataEditContext) {
   //  this.zoneId = editContext.ContentGroup.ZoneId;
   //  this.appId = editContext.ContentGroup.AppId;
   //  this.tid = editContext.Environment.PageId;
@@ -38,7 +41,7 @@ export class NgDialogParams {
   //  // todo= probably move the user into the dashboard info
   //  this.user = getUserOfEditContext(editContext);
   //  this.approot = editContext.ContentGroup.AppUrl || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
-  //}
+  // }
 
   static fromContext(context: ContextOfButton): NgDialogParams {
     const params = new NgDialogParams();
@@ -59,6 +62,8 @@ export class NgDialogParams {
     params.user = UserOfEditContext.fromContext(context);
     params.approot = context.app.appPath || null; // this is the only value which doesn't have a slash by default. note that the app-root doesn't exist when opening "manage-app"
     params.fa = !context.app.isContent;
+    params.rvt = $.ServicesFramework(0).getAntiForgeryValue();
+    console.log('rvt', params.rvt);
     return params;
   }
 }
