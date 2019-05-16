@@ -1,17 +1,16 @@
-﻿import { context } from '../context/context';
-//import { ContextOfButton } from '../context/context-of-button';
-//import { commandCreate } from './command-create';
-//import { Commands } from './commands';
+﻿import { Cms } from '../cms/Cms';
+import { context } from '../context/context';
 import { Settings } from './settings';
-import { Cms } from '../cms/Cms';
 
 export class InstanceEngine {
+  constructor(private sxc: SxcInstanceWithInternals) {}
 
-  constructor(private sxc: SxcInstanceWithInternals) {  }
-
-  run(nameOrSettings: string | Partial<Settings>, eventOrSettings?: Partial<Settings> | Event, event?: Event): Promise<any> {
+  run(
+    nameOrSettings: string | Partial<Settings>,
+    eventOrSettings?: Partial<Settings> | MouseEvent,
+    event?: MouseEvent,
+  ): Promise<any> {
     const cntx = context(this.sxc);
     return new Cms().run(cntx, nameOrSettings, eventOrSettings, event);
   }
-
 }
