@@ -1,4 +1,15 @@
-﻿# 2sxc-inpage notes for developers
+﻿# 2sxc-inpage for 2sxc and DNN
+
+This is the inpage libraries / code which are responsible for creating toolbars etc. for [2sxc](https://2sxc.org). 
+
+## Build
+
+Production `npm run dist`
+
+Develop with watcher `npm run dev`
+
+
+## 2sxc-inpage notes for developers
 
 ## Karma test runner
 

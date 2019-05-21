@@ -1,10 +1,13 @@
 ﻿import { Engine } from '../commands/engine';
 import { Settings } from '../commands/settings';
+import { context as getContext } from '../context/context';
+import {
+  ContextOfInstance,
+  isContextOfInstance,
+} from '../context/context-of-instance';
+import { DebugConfig } from '../DebugConfig';
 import { HasLog } from '../logging/has-log';
 import { Log } from '../logging/log';
-import { context as getContext} from '../context/context';
-import { ContextOfInstance, isContextOfInstance } from '../context/context-of-instance';
-import { DebugConfig } from '../DebugConfig';
 
 const logId = 'Cms.Api';
 
@@ -25,34 +28,35 @@ export class Cms extends HasLog {
    */
   resetLog() {
     this.log = new Log(logId, null, 'log was reset');
-  };
+  }
 
-
-  run(context: ContextOfInstance | HTMLElement,
+  run(
+    context: ContextOfInstance | HTMLElement,
     nameOrSettings: string | Partial<Settings>,
-    eventOrSettings?: Partial<Settings> | Event,
-    event?: Event) : Promise<any> {
-
-    const realContext = (isContextOfInstance(context))
+    eventOrSettings?: Partial<Settings> | MouseEvent,
+    event?: MouseEvent,
+  ): Promise<any> {
+    const realContext = isContextOfInstance(context)
       ? context
       : getContext(context);
 
-    return this.do(() => new Engine(this.log)
-      .detectParamsAndRun(realContext, nameOrSettings, eventOrSettings, event)
+    return this.do(() =>
+      new Engine(this.log).detectParamsAndRun(
+        realContext,
+        nameOrSettings,
+        eventOrSettings,
+        event,
+      ),
     );
-
   }
 
   /**
    * reset/clear the log if alwaysResetLog is true
    */
-  private do(innerCall : () => Promise<any>) : Promise<any> {
+  private do(innerCall: () => Promise<any>): Promise<any> {
     if (this.autoReset) this.resetLog();
-    //console.log('before');
     const result = innerCall();
-    //console.log('after');
     if (this.autoDump) console.log(this.log.dump());
     return result;
   }
-
 }

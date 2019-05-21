@@ -1,19 +1,16 @@
 ﻿import { prepareToAddContent } from '../contentBlock/templates';
 import { ContextOfButton } from '../context/context-of-button';
+import { ContextOfInstance } from '../context/context-of-instance';
+import { HasLog } from '../logging/has-log';
+import { Log } from '../logging/log';
+import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
+import { ButtonAction } from '../toolbar/button/button-action';
+import { ButtonConfig } from '../toolbar/button/button-config';
 import { commandOpenNgDialog } from './command-open-ng-dialog';
 import { Commands } from './commands';
 import { Settings } from './settings';
-import { ButtonAction } from '../toolbar/button/button-action';
-import { ButtonConfig } from '../toolbar/button/button-config';
-import { settingsAdapter } from '../toolbar/adapters/settings-adapter';
-import { Log } from '../logging/log';
-import { HasLog } from '../logging/has-log';
-import { ContextOfInstance } from '../context/context-of-instance';
-
-
 
 export class Engine extends HasLog {
-
   constructor(parentLog?: Log) {
     super('Cmd.Exec', parentLog);
   }
@@ -21,31 +18,44 @@ export class Engine extends HasLog {
   detectParamsAndRun(
     context: ContextOfInstance,
     nameOrSettings: string | Partial<Settings>,
-    eventOrSettings: Partial<Settings> | Event,
-    event?: Event) : Promise<any> {
-
-    this.log.add(`detecting params and running - has ${arguments.length} params`);
+    eventOrSettings: Partial<Settings> | MouseEvent,
+    event?: MouseEvent,
+  ): Promise<any> {
+    this.log.add(
+      `detecting params and running - has ${arguments.length} params`,
+    );
 
     let settings: Partial<Settings>;
 
-    const thirdParamIsEvent = (!event && eventOrSettings && typeof (eventOrSettings as MouseEvent).altKey !== 'undefined');
-    this.log.add(`might cycle parameters, in case not all were given. third is event=${thirdParamIsEvent}`);
-    if (thirdParamIsEvent) { // no event param, but settings contains the event-object
-      this.log.add('cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty');
-      event = eventOrSettings as Event; // move it to the correct variable
+    const thirdParamIsEvent =
+      !event &&
+      eventOrSettings &&
+      typeof (eventOrSettings as MouseEvent).altKey !== 'undefined';
+    this.log.add(
+      `might cycle parameters, in case not all were given. third is event=${thirdParamIsEvent}`,
+    );
+    if (thirdParamIsEvent) {
+      // no event param, but settings contains the event-object
+      this.log.add(
+        'cycling parameters as event was missing & eventOrSettings seems to be an event; settings must be empty',
+      );
+      event = eventOrSettings as MouseEvent; // move it to the correct variable
       settings = this.nameOrSettingsAdapter(nameOrSettings);
     } else {
-      settings = Object.assign(eventOrSettings || {}, this.nameOrSettingsAdapter(nameOrSettings)) as Partial<Settings>;
+      settings = Object.assign(
+        eventOrSettings || {},
+        this.nameOrSettingsAdapter(nameOrSettings),
+      ) as Partial<Settings>;
     }
 
     // ensure we have the right event despite browser differences
-    event = event || window.event;
+    event = event || (window.event as MouseEvent);
 
     return this.run(context as ContextOfButton, settings, event);
   }
 
   /**
-   * run a command 
+   * run a command
    * this method expects a clear order of parameters
    * @param context
    * @param settings
@@ -54,7 +64,9 @@ export class Engine extends HasLog {
   run(
     context: ContextOfButton,
     nameOrSettings: string | Partial<Settings>,
-    event: Event) : Promise<any> { // | any is temporary, just to get it to work; should be improved to only give a promise
+    event: MouseEvent,
+  ): Promise<any> {
+    // | any is temporary, just to get it to work; should be improved to only give a promise
 
     let settings = this.nameOrSettingsAdapter(nameOrSettings);
 
@@ -71,35 +83,49 @@ export class Engine extends HasLog {
     const newButtonConfig = new ButtonConfig(newButtonAction);
     newButtonConfig.name = name;
 
-    const button = context.button = Object.assign(newButtonConfig,
+    const button = (context.button = Object.assign(
+      newButtonConfig,
       newButtonAction.commandDefinition.buttonConfig,
-      settingsAdapter(settings)) as ButtonConfig; // merge conf & settings, but settings has higher priority
+      settingsAdapter(settings),
+    ) as ButtonConfig); // merge conf & settings, but settings has higher priority
 
     // todo: stv, fix this in case that is function
     if (!button.dialog) {
-      this.log.add(`button.dialog method missing, must be old implementation which used the action-name - generating method`);
-      button.dialog = () => { return name; };
+      this.log.add(
+        'button.dialog method missing, must be old implementation which used the action-name - generating method',
+      );
+      button.dialog = () => {
+        return name;
+      };
     }
 
     // todo: stv, fix this in case that is function
     if (!button.code) {
-      this.log.add(`simple button without code - generating code to open standard dialog`);
-      button.code = (contextParam: ContextOfButton, event: Event) : Promise<any> => {
-        return commandOpenNgDialog(contextParam, event);
+      this.log.add(
+        'simple button without code - generating code to open standard dialog',
+      );
+      button.code = (
+        contextParam: ContextOfButton,
+        evt: MouseEvent,
+      ): Promise<any> => {
+        return commandOpenNgDialog(contextParam, evt);
       };
     }
 
     if (button.uiActionOnly(context)) {
-      this.log.add(`just a UI command, will not run pre-flight to ensure content-block - now running the code`);
+      this.log.add(
+        'just a UI command, will not run pre-flight to ensure content-block - now running the code',
+      );
       return button.code(context, origEvent);
     }
 
     // if more than just a UI-action, then it needs to be sure the content-group is created first
-    this.log.add(`command might change data, will wrap in pre-flight to ensure content-block`);
-    return prepareToAddContent(context, settings.useModuleList)
-        .then(() => {
-          return context.button.code(context, origEvent);
-      });
+    this.log.add(
+      'command might change data, will wrap in pre-flight to ensure content-block',
+    );
+    return prepareToAddContent(context, settings.useModuleList).then(() => {
+      return context.button.code(context, origEvent);
+    });
   }
 
   /**
@@ -107,14 +133,20 @@ export class Engine extends HasLog {
    * @param nameOrSettings
    * @returns settings
    */
-  nameOrSettingsAdapter(nameOrSettings: string | Partial<Settings>): Partial<Settings> {
+  nameOrSettingsAdapter(
+    nameOrSettings: string | Partial<Settings>,
+  ): Partial<Settings> {
     let settings: Partial<Settings>;
     // check if nameOrString is name (string) or object (settings)
     const nameIsString = typeof nameOrSettings === 'string';
-    this.log.add(`adapting settings; name is string: ${nameIsString}; name = ${nameOrSettings}`);
+    this.log.add(
+      `adapting settings; name is string: ${nameIsString}; name = ${nameOrSettings}`,
+    );
 
     if (nameIsString) {
-      settings = Object.assign({}, { action: nameOrSettings }) as Partial<Settings>; // place the name as an action-name into a command-object
+      settings = Object.assign({}, { action: nameOrSettings }) as Partial<
+        Settings
+      >; // place the name as an action-name into a command-object
     } else {
       settings = nameOrSettings as Partial<Settings>;
     }
@@ -123,8 +155,8 @@ export class Engine extends HasLog {
   }
 
   /**
-   * Take a settings-name or partial settings object, 
-   * and return a full settings object with all defaults from 
+   * Take a settings-name or partial settings object,
+   * and return a full settings object with all defaults from
    * the command definition
    * @param settings
    */
@@ -136,7 +168,4 @@ export class Engine extends HasLog {
 
     return full;
   }
-
-  
 }
-

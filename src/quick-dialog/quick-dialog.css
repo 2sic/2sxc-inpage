@@ -29,6 +29,10 @@
     z-index: 9999;
 }
 
+.inpage-frame-wrapper.persona-bar-visible {
+    padding-left:80px;
+}
+
 .DNNModuleContent .sc-uninitialized {
     cursor: pointer;
     width: 100%;
