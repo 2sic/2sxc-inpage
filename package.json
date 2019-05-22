@@ -1,5 +1,6 @@
 {
   "name": "2sxc-inpage",
+  "//": "The version is used for the font-files (break cache) and distribution of .map files",
   "version": "10.00.00",
   "description": "",
   "main": "webpack.config.js",

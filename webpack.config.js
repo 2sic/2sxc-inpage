@@ -20,13 +20,11 @@ For faster webpack execution during development it is not enabled by default.
 
 var webpack = require('webpack');
 var glob = require('glob');
-// var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var FileManagerPlugin = require('filemanager-webpack-plugin');
 var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 var TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-// var merge = require('webpack-merge');
 
 var entryJsFiles = glob.sync('./src/**/libs/*.js');
 var entryTsFiles = glob.sync('./src/**/*.ts', {
@@ -46,6 +44,9 @@ var generateTypedocDocumentation = false;
 var package = require('./package.json');
 var version = package.version;
 
+var inpageCss = isProd ? './inpage/inpage.min.css' : './inpage/inpage.css';
+
+// Webpack plugins
 var plugins = [
   new webpack.DefinePlugin({
     'process.env': {
@@ -54,8 +55,35 @@ var plugins = [
   }),
 
   new ForkTsCheckerWebpackPlugin(),
+
+  new UglifyJsPlugin({
+    include: /\.min\.js$/,
+    sourceMap: true,
+  }),
+
+  new ExtractTextPlugin(inpageCss),
+
+  new FileManagerPlugin({
+    onEnd: [
+      {
+        copy: [
+          {
+            source: './dist/inpage/*',
+            destination:
+              '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage',
+          },
+          {
+            source: './dist/assets/*',
+            destination:
+              '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets',
+          },
+        ],
+      },
+    ],
+  }),
 ];
 
+// Build the webpack config
 var config = {
   // to automatically find tsconfig.json
   context: __dirname,
@@ -92,62 +120,7 @@ var config = {
   plugins: plugins,
 };
 
-if (!isProd) {
-  // development
-
-  plugins.push(
-    new UglifyJsPlugin({
-      include: /\.min\.js$/,
-      sourceMap: true,
-    })
-  );
-
-  plugins.push(new ExtractTextPlugin('./inpage/inpage.css'));
-} else {
-  // production
-
-  plugins.push(
-    new UglifyJsPlugin({
-      include: /\.min\.js$/,
-      sourceMap: true,
-    })
-  );
-
-  plugins.push(new ExtractTextPlugin('./inpage/inpage.min.css'));
-}
-
-plugins.push(
-  new FileManagerPlugin({
-    onStart: [
-      {
-        delete: [
-          //'./dist/inpage/*.js'
-        ],
-      },
-    ],
-    onEnd: [
-      {
-        copy: [
-          {
-            source: './dist/inpage/*',
-            destination:
-              '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage',
-          },
-          {
-            source: './dist/assets/*',
-            destination:
-              '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets',
-          },
-        ],
-        delete: [
-          //'./dist/inpage/inpage.css.map',
-          //'../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/inpage.css.map'
-        ],
-      },
-    ],
-  })
-);
-
+// note: is false as configured in this document, doesn't seem used ATM
 if (generateTypedocDocumentation) {
   plugins.push(
     new TypedocWebpackPlugin(
@@ -169,41 +142,22 @@ if (generateTypedocDocumentation) {
   );
 }
 
-if (!isProd) {
-  config.entry['./inpage/inpage.css'] = entryCssFiles;
+config.entry[inpageCss] = entryCssFiles;
 
-  config.module.rules.push({
-    test: /\.css$/,
-    include: [/src/, /icons/],
-    use: ExtractTextPlugin.extract([
-      {
-        loader: 'css-loader',
-        options: {
-          minimize: false,
-          sourceMap: true,
-          name: './inpage/[name].[ext]',
-        },
+config.module.rules.push({
+  test: /\.css$/,
+  include: [/src/, /icons/],
+  use: ExtractTextPlugin.extract([
+    {
+      loader: 'css-loader',
+      options: {
+        minimize: isProd,
+        sourceMap: true,
+        name: './inpage/[name].[ext]',
       },
-    ]),
-  });
-} else {
-  config.entry['./inpage/inpage.min.css'] = entryCssFiles;
-
-  config.module.rules.push({
-    test: /\.css$/,
-    include: [/src/, /icons/],
-    use: ExtractTextPlugin.extract([
-      {
-        loader: 'css-loader',
-        options: {
-          minimize: true,
-          sourceMap: true,
-          name: './inpage/[name].[ext]',
-        },
-      },
-    ]),
-  });
-}
+    },
+  ]),
+});
 
 config.module.rules.push({
   test: /\.png$/,
@@ -217,7 +171,7 @@ config.module.rules.push({
 });
 
 config.module.rules.push({
-  test: /\.(woff|eot|ttf)$/,
+  test: /\.(woff)$/,
   exclude: /node_modules/,
   use: {
     loader: 'file-loader',
