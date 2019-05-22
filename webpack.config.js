@@ -26,6 +26,8 @@ var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 var TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
+const setExternalSourceMaps = require('./build-helpers/external-source-maps');
+
 var entryJsFiles = glob.sync('./src/**/libs/*.js');
 var entryTsFiles = glob.sync('./src/**/*.ts', {
   ignore: ['./src/inpage.{}.ts'],
@@ -119,6 +121,9 @@ var config = {
 
   plugins: plugins,
 };
+
+// set external source map - do this with the prepared config
+if (isProd) setExternalSourceMaps(config, 'inpage');
 
 // note: is false as configured in this document, doesn't seem used ATM
 if (generateTypedocDocumentation) {
