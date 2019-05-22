@@ -16,7 +16,7 @@ class QuickE {
   selected: any = $("<div class='sc-content-block-menu sc-content-block-selected-menu sc-i18n'></div>")
     .append(
       btn('delete', 'trash-empty', 'Delete'),
-      btn('sendToPane', 'export', 'Move', null, null, 'sc-cb-mod-only'),
+      btn('sendToPane', 'move', 'Move', null, null, 'sc-cb-mod-only'),
       "<div id='paneList'></div>",
     );
   // will be populated later in the module section
