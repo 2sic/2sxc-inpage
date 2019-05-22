@@ -29,27 +29,31 @@ var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // var merge = require('webpack-merge');
 
 var entryJsFiles = glob.sync('./src/**/libs/*.js');
-var entryTsFiles = glob.sync('./src/**/*.ts', { ignore: ['./src/inpage.{}.ts'] });
-var entryFiles = ['./src/inpage.{}.ts'].concat(entryJsFiles.concat(entryTsFiles));
-var entryCssFiles = glob.sync('./src/**/*.css').concat(['./icons/css/inpage-icons-codes.css']);
+var entryTsFiles = glob.sync('./src/**/*.ts', {
+  ignore: ['./src/inpage.{}.ts'],
+});
+var entryFiles = ['./src/inpage.{}.ts'].concat(
+  entryJsFiles.concat(entryTsFiles)
+);
+var entryCssFiles = glob
+  .sync('./src/**/*.css')
+  .concat(['./icons/inpage-icons-codes.css']);
 
 var nodeEnv = (process.env.NODE_ENV || 'development').trim();
-var isProd = (nodeEnv === 'production');
+var isProd = nodeEnv === 'production';
 var generateTypedocDocumentation = false;
 
 var package = require('./package.json');
 var version = package.version;
 
 var plugins = [
-
   new webpack.DefinePlugin({
     'process.env': {
-      NODE_ENV: JSON.stringify(nodeEnv)
-    }
+      NODE_ENV: JSON.stringify(nodeEnv),
+    },
   }),
 
-  new ForkTsCheckerWebpackPlugin()
-
+  new ForkTsCheckerWebpackPlugin(),
 ];
 
 var config = {
@@ -62,12 +66,12 @@ var config = {
   // get all files for boundles
   entry: {
     './inpage/inpage.js': entryFiles,
-    './inpage/inpage.min.js': entryFiles
+    './inpage/inpage.min.js': entryFiles,
   },
 
   output: {
     filename: '[name]',
-    path: __dirname + '/dist'
+    path: __dirname + '/dist',
   },
 
   module: {
@@ -77,120 +81,128 @@ var config = {
         include: /src/,
         loader: 'ts-loader',
         options: {
-          transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
-        }
-      }
-    ]
+          transpileOnly: true, // IMPORTANT! use transpileOnly mode to speed-up compilation
+        },
+      },
+    ],
   },
 
   resolve: { extensions: ['.ts', '.js', '.css'] },
 
-  plugins: plugins
-}
+  plugins: plugins,
+};
 
 if (!isProd) {
   // development
 
   plugins.push(
-    new UglifyJsPlugin(
-      {
-        include: /\.min\.js$/,
-        sourceMap: true
-      }));
+    new UglifyJsPlugin({
+      include: /\.min\.js$/,
+      sourceMap: true,
+    })
+  );
 
   plugins.push(new ExtractTextPlugin('./inpage/inpage.css'));
-
 } else {
   // production
 
   plugins.push(
-    new UglifyJsPlugin(
-      {
-        include: /\.min\.js$/,
-        sourceMap: true
-      }));
+    new UglifyJsPlugin({
+      include: /\.min\.js$/,
+      sourceMap: true,
+    })
+  );
 
   plugins.push(new ExtractTextPlugin('./inpage/inpage.min.css'));
 }
 
-plugins.push(new FileManagerPlugin(
-  {
+plugins.push(
+  new FileManagerPlugin({
     onStart: [
       {
         delete: [
           //'./dist/inpage/*.js'
-        ]
-      }
+        ],
+      },
     ],
     onEnd: [
       {
         copy: [
-          { source: './dist/inpage/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage' },
-          { source: './dist/assets/*', destination: '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets' }
+          {
+            source: './dist/inpage/*',
+            destination:
+              '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage',
+          },
+          {
+            source: './dist/assets/*',
+            destination:
+              '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets',
+          },
         ],
         delete: [
           //'./dist/inpage/inpage.css.map',
           //'../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/inpage.css.map'
-        ]
-      }
-    ]
-  }));
+        ],
+      },
+    ],
+  })
+);
 
 if (generateTypedocDocumentation) {
-
-  plugins.push(new TypedocWebpackPlugin({
-    name: '2sxc-inpage',
-    mode: 'modules',
-    includeDeclarations: true,
-    ignoreCompilerErrors: true,
-    out: '../docs',
-    module: 'commonjs',
-    target: 'es5',
-    exclude: '**/node_modules/**/*.*',
-    experimentalDecorators: true,
-    excludeExternals: true,
-    extends: './tsconfig.json'
-  }, entryTsFiles));
-
+  plugins.push(
+    new TypedocWebpackPlugin(
+      {
+        name: '2sxc-inpage',
+        mode: 'modules',
+        includeDeclarations: true,
+        ignoreCompilerErrors: true,
+        out: '../docs',
+        module: 'commonjs',
+        target: 'es5',
+        exclude: '**/node_modules/**/*.*',
+        experimentalDecorators: true,
+        excludeExternals: true,
+        extends: './tsconfig.json',
+      },
+      entryTsFiles
+    )
+  );
 }
 
 if (!isProd) {
-
   config.entry['./inpage/inpage.css'] = entryCssFiles;
 
   config.module.rules.push({
     test: /\.css$/,
     include: [/src/, /icons/],
-    use: ExtractTextPlugin.extract(
-      [
-        {
-          loader: 'css-loader',
-          options: {
-            minimize: false,
-            sourceMap: true,
-            name: './inpage/[name].[ext]'
-          }
-        }
-      ])
+    use: ExtractTextPlugin.extract([
+      {
+        loader: 'css-loader',
+        options: {
+          minimize: false,
+          sourceMap: true,
+          name: './inpage/[name].[ext]',
+        },
+      },
+    ]),
   });
-
 } else {
-
   config.entry['./inpage/inpage.min.css'] = entryCssFiles;
 
   config.module.rules.push({
     test: /\.css$/,
     include: [/src/, /icons/],
-    use: ExtractTextPlugin.extract([{
-      loader: 'css-loader',
-      options: {
-        minimize: true,
-        sourceMap: true,
-        name: './inpage/[name].[ext]'
-      }
-    }])
+    use: ExtractTextPlugin.extract([
+      {
+        loader: 'css-loader',
+        options: {
+          minimize: true,
+          sourceMap: true,
+          name: './inpage/[name].[ext]',
+        },
+      },
+    ]),
   });
-
 }
 
 config.module.rules.push({
@@ -199,9 +211,9 @@ config.module.rules.push({
   use: {
     loader: 'file-loader',
     options: {
-      name: '../../[name].[ext]' // copy 4 icon*.png images to C:\Projects as side effect of Run-Production, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
-    }
-  }
+      name: '../../[name].[ext]', // copy 4 icon*.png images to C:\Projects as side effect of Run-Production, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
+    },
+  },
 });
 
 config.module.rules.push({
@@ -210,9 +222,9 @@ config.module.rules.push({
   use: {
     loader: 'file-loader',
     options: {
-      name: 'assets/[name].[ext]?' + version // package.json version
-    }
-  }
+      name: 'assets/[name].[ext]?' + version, // package.json version
+    },
+  },
 });
 
 module.exports = config;

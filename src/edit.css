@@ -4,46 +4,76 @@
 */
 
 /* enable DNNEmptyPane for Quick-Edit */
-.DNNEmptyPane { 
-    /*width: auto;*/
-    disablednote: "temporary disabled as it has side-effects";
-    special-instructions: "read more on 2sxc.org/help?tag=quick-edit"
+.DNNEmptyPane {
+  /*width: auto;*/
+  disablednote: 'temporary disabled as it has side-effects';
+  special-instructions: 'read more on 2sxc.org/help?tag=quick-edit';
 }
-
-
-/****** the in-page toolbar and positioning / visibility thereof */
-/*.sc-element { position:relative; }
-.sc-element .sc-menu.sc-tb-hover-right { position:absolute; left: auto; right: 5px;top: 5px; }
-.sc-element .sc-menu.sc-tb-hover-left { position:absolute; left: 5px;right: auto;top: 5px; }
-.sc-element .sc-menu.sc-tb-hover-center { position:absolute;margin-left: 0;margin-right: 0; top: 5px; display: inline-block }
-.sc-element .sc-menu.sc-tb-hover-none { position:static; right:auto;top: auto; }*/
-
-/*.sc-element .sc-menu.sc-tb-show-always, 
-.sc-element:hover .sc-menu.sc-tb-show-always  { display: initial; }
-.sc-element .sc-menu.sc-tb-show-hover { opacity: 0; }
-body.sc-tb-show-all .sc-element .sc-menu { display: initial !important; }
-.sc-element:hover .sc-menu.sc-tb-show-hover { display: block; opacity: 1; }
-.sc-element:hover .sc-element:not(:hover) .sc-menu.sc-tb-show-hover { opacity: 0; }*/   /* prevent hover of a parent, when the item itself is not hovered */
 
 /* todo: discuss w/2rm, maybe there's a better way without changing the positioning of the main element... */
 /* ReSharper disable Html.AttributeNotResolved */
-*[sxc-toolbar-hover] { position: relative; }
-[sxc-toolbar-hover] .sc-menu.sc-tb-hover-right { position:absolute; left: auto; right: 5px;top: 5px; }
-[sxc-toolbar-hover] .sc-menu.sc-tb-hover-left { position:absolute; left: 5px;right: auto;top: 5px; }
-[sxc-toolbar-hover] .sc-menu.sc-tb-hover-center { position:absolute;margin-left: 0;margin-right: 0; top: 5px; display: inline-block }
-[sxc-toolbar-hover] .sc-menu.sc-tb-hover-none { position:static; right:auto;top: auto; }
+*[sxc-toolbar-hover] {
+  position: relative;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-hover-right {
+  position: absolute;
+  left: auto;
+  right: 5px;
+  top: 5px;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-hover-left {
+  position: absolute;
+  left: 5px;
+  right: auto;
+  top: 5px;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-hover-center {
+  position: absolute;
+  margin-left: 0;
+  margin-right: 0;
+  top: 5px;
+  display: inline-block;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-hover-none {
+  position: static;
+  right: auto;
+  top: auto;
+}
 
-
-[sxc-toolbar-hover] .sc-menu.sc-tb-show-always, 
-    [sxc-toolbar-hover]:hover .sc-menu.sc-tb-show-always  { display: initial; }
-[sxc-toolbar-hover] .sc-menu.sc-tb-show-hover { opacity: 0; }
-body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu { display: initial !important; }
-[sxc-toolbar-hover]:hover .sc-menu.sc-tb-show-hover { display: block; opacity: 1; }
-[sxc-toolbar-hover]:hover [sxc-toolbar-hover]:not(:hover) .sc-menu.sc-tb-show-hover { opacity: 0; }   /* prevent hover of a parent, when the item itself is not hovered */
+[sxc-toolbar-hover] .sc-menu.sc-tb-show-always,
+[sxc-toolbar-hover]:hover .sc-menu.sc-tb-show-always {
+  display: initial;
+}
+[sxc-toolbar-hover] .sc-menu.sc-tb-show-hover {
+  opacity: 0;
+}
+body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu {
+  display: initial !important;
+}
+[sxc-toolbar-hover]:hover .sc-menu.sc-tb-show-hover {
+  display: block;
+  opacity: 1;
+}
+[sxc-toolbar-hover]:hover
+  [sxc-toolbar-hover]:not(:hover)
+  .sc-menu.sc-tb-show-hover {
+  opacity: 0;
+} /* prevent hover of a parent, when the item itself is not hovered */
 /* ReSharper restore Html.AttributeNotResolved */
 
-.sc-menu { list-style-type:none; margin:0; padding:0;display: inline;z-index: 1499; }
-.sc-menu li { list-style-type:none; padding:0!important; margin:0!important; display:inline; }
+.sc-menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: inline;
+  z-index: 1499;
+}
+.sc-menu li {
+  list-style-type: none;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline;
+}
 .sc-menu a {
   margin-right: 4px !important;
   cursor: pointer;
@@ -52,16 +82,18 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu { display: initial !important; 
 
 /* this one is for buttons which can have a full/empty state */
 .sc-menu li a.empty i {
-  opacity: 0.4
-} 
+  opacity: 0.4;
+}
 /* this one is for buttons which can be disabled, like publish */
-.sc-menu li a.disabled i {opacity: 0.4}
+.sc-menu li a.disabled i {
+  opacity: 0.4;
+}
 
 .sc-menu a div {
-    width: 28px !important;
+  width: 28px !important;
   height: 28px !important;
   line-height: 28px !important;
-  background-color:  #0088f4;
+  background-color: #0088f4;
   border-style: solid;
   box-sizing: content-box;
   -webkit-border-radius: 20px;
@@ -70,12 +102,12 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu { display: initial !important; 
   color: #fff;
   text-align: center;
   font-size: 15px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .sc-menu a div:hover {
-    box-shadow: 0 10px 28px rgba(0,0,0,.25), 0 6px 10px rgba(0,0,0,.22);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 6px 10px rgba(0, 0, 0, 0.22);
 }
 
 .sc-menu a div i {
@@ -117,75 +149,74 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu { display: initial !important; 
 }
 
 .sc-menu a.group-default div {
-  background-color: #0088f4
+  background-color: #0088f4;
 }
-.sc-menu a.group-pro div {background-color: #96D500}
-.sc-menu a.group-alert div {background-color: #ff0000}
-
-.sc-menu span.disabled { color: #aaa}
-
-.group-1 i.btn-mode:before, .group-5 i.btn-mode:before { 
-    transform: rotate(45deg);
+.sc-menu a.group-pro div {
+  background-color: #96d500;
 }
-.group-2 i.btn-mode:before, .group-6 i.btn-mode:before { 
-    transform: rotate(90deg);
-}
-.group-3 i.btn-mode:before, .group-7 i.btn-mode:before { 
-    transform: rotate(135deg);
+.sc-menu a.group-alert div {
+  background-color: #ff0000;
 }
 
+.sc-menu span.disabled {
+  color: #aaa;
+}
 
-
-
-
-
-
-
+.group-1 i.btn-mode:before,
+.group-5 i.btn-mode:before {
+  transform: rotate(45deg);
+}
+.group-2 i.btn-mode:before,
+.group-6 i.btn-mode:before {
+  transform: rotate(90deg);
+}
+.group-3 i.btn-mode:before,
+.group-7 i.btn-mode:before {
+  transform: rotate(135deg);
+}
 
 /****** Prevent scrolling when sxc popup is open */
-.sxc-popup-open { overflow:hidden; }
-
-
-
+.sxc-popup-open {
+  overflow: hidden;
+}
 
 /* The font icons we use for the inpage buttons */
 /* only use the WOFF, as all modern browsers support that */
 @font-face {
   font-family: 'inpage-icons';
-  src: url('../icons/font/inpage-icons.woff?v=10.00.00') format('woff');
+  src: url('../icons/inpage-icons.woff?v=10.00.00') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
-
- [class^="icon-sxc-"]:before, [class*=" icon-sxc-"]:before {
-  font-family: "inpage-icons";
+[class^='icon-sxc-']:before,
+[class*=' icon-sxc-']:before {
+  font-family: 'inpage-icons';
   font-style: normal;
   font-weight: normal;
   speak: none;
- 
+
   display: inline-block;
   text-decoration: inherit;
   width: 1em;
-  margin-right: .3em;
+  margin-right: 0.3em;
   text-align: center;
- 
+
   /* For safety - reset parent styles, that can break glyph codes*/
   font-variant: normal;
   text-transform: none;
- 
+
   /* fix buttons height, for twitter bootstrap */
-     line-height: 28px; 
- 
+  line-height: 28px;
+
   /* Animation center compensation - margins should be symmetric */
   /* remove if not needed */
-  margin-left: .2em;
- 
+  margin-left: 0.2em;
+
   /* you can be more comfortable with increased icons size */
-     font-size: 125%;  
- 
+  font-size: 125%;
+
   /* Font smoothing. That was taken from TWBS */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
- 
 }
