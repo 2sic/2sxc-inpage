@@ -152,9 +152,7 @@ body.sc-tb-show-all [sxc-toolbar-hover] .sc-menu { display: initial !important; 
 /* only use the WOFF, as all modern browsers support that */
 @font-face {
   font-family: 'inpage-icons';
-  src: url('../lib/fonts/inpage-icons.woff') format('woff'),
-       url('../lib/fonts/inpage-icons.eot?0#iefix') format('embedded-opentype'),
-       url('../lib/fonts/inpage-icons.ttf') format('truetype');
+  src: url('../icons/font/inpage-icons.woff?v=10.00.00') format('woff');
   font-weight: normal;
   font-style: normal;
 }
