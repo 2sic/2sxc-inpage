@@ -4,9 +4,9 @@ This is the inpage libraries / code which are responsible for creating toolbars 
 
 ## Build
 
-Production `npm run dist`
+Release: `npm run release`
 
-Develop with watcher `npm run dev`
+Develop with watcher: `npm run dev`
 
 ## 2sxc-inpage notes for developers
 
