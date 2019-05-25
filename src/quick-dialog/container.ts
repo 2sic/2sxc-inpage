@@ -40,6 +40,8 @@ export function getIFrame(container?: JQuery): IDialogFrameElement {
  */
 function buildContainerAndIFrame(): JQuery<HTMLElement> {
   const container = $(containerTemplate);
+  if ($("#personaBar-iframe").length > 0)
+    container.addClass("persona-bar-visible");
   const newIFrame = document.createElement(iframeTag);
   const extendedIFrame = Iframebridge.build(newIFrame);
   container.find(`.${iframeClass}`).append(extendedIFrame);

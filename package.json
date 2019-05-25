@@ -1,6 +1,7 @@
 {
   "name": "2sxc-inpage",
-  "version": "9.42.00",
+  "//": "The version is used for the font-files (break cache) and distribution of .map files",
+  "version": "10.00.00",
   "description": "",
   "main": "webpack.config.js",
   "dependencies": {},
@@ -33,7 +34,7 @@
     "test": "ts-node node_modules/jasmine/bin/jasmine",
     "test-once": "karma start --single-run",
     "dev": "webpack --watch",
-    "dist": "@ECHO *** 2sxc-inpage webpack build for DEVELOPMENT ***&& SET NODE_ENV=development&& webpack --color --display-error-details --bail&& @ECHO ***  2sxc-inpage webpack build for PRODUCTION ***&& SET NODE_ENV=production&& webpack --color --display-error-details --bail&& @ECHO *** END ***"
+    "release": "@ECHO *** 2sxc-inpage webpack build for DEVELOPMENT *** && SET NODE_ENV=development && webpack --color --display-error-details --bail && @ECHO ***  2sxc-inpage webpack build for PRODUCTION *** && SET NODE_ENV=production && webpack --color --display-error-details --bail && @ECHO *** END ***"
   },
   "repository": {
     "type": "git",

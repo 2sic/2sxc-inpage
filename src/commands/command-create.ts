@@ -5,20 +5,17 @@ import { Command } from './command';
 
 /**
  * assemble an object which will store the configuration and execute it
- * @param sxc
- * @param editContext
- * @param specialSettings
  */
 export function commandCreate(context: ContextOfButton): Command {
 
   const ngDialogUrl = context.instance.sxcRootUrl +
     'desktopmodules/tosic_sexycontent/' +
-    ((context.ui.form === 'ng5' && context.button.dialog(context) === 'edit') ? Dialog.ng5 : Dialog.ng1) +
+    ((context.ui.form === 'ng8' && context.button.dialog(context) === 'edit') ? Dialog.ng8 : Dialog.ng1) +
     '?sxcver=' + context.instance.sxcVersion;
 
-  const isDebug: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
+  const debugUrlParam: string = window.$2sxc.urlParams.get('debug') ? '&debug=true' : '';
 
-  const cmd = new Command(context, ngDialogUrl, isDebug);
+  const cmd = new Command(context, ngDialogUrl, debugUrlParam);
 
   return cmd;
 }

@@ -8,7 +8,7 @@ export class AppResources extends CommandBase {
     super();
     this.makeDef('app-resources',
       'AppResources',
-      'language',
+      'translate',
       true,
       false,
       {

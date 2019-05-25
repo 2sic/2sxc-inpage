@@ -1,4 +1,14 @@
-﻿# 2sxc-inpage notes for developers
+﻿# 2sxc-inpage for 2sxc 10.00 on DNN
+
+This is the inpage libraries / code which are responsible for creating toolbars etc. for [2sxc](https://2sxc.org).
+
+## Build
+
+Release: `npm run release`
+
+Develop with watcher: `npm run dev`
+
+## 2sxc-inpage notes for developers
 
 ## Karma test runner
 
@@ -11,7 +21,7 @@ c:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Web\External\node
 Solution is to config VS to use regular updated version of **npm** that is usual installed in folder like:
 C:\Program Files\nodejs\
 
-Add this path at top of the list that is configured via VS2017 Tools > Options > Projects & Solutions > External Web Tools like is explained in 
+Add this path at top of the list that is configured via VS2017 Tools > Options > Projects & Solutions > External Web Tools like is explained in
 https://www.ryadel.com/en/visual-studio-2015-update-nodejs-andor-npm-latest-version/
 
 ### karma.config.js part to fix references to $ and $2sxc
@@ -24,7 +34,7 @@ I added reference to jquery and 2sxc js files with in our 2sxc DNN 7.4.2 install
       '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/Js/2sxc.api.min.js', // resolve $2sxc
 ```
 
-### run 
+### run
 
 #### contionus test mode
 
@@ -37,7 +47,9 @@ C:\Projects\2sxc-inpage> karma start
 ```cmd
 C:\Projects\2sxc-inpage> karma start --single-run
 ```
+
 ### karma and webpack
+
 There is version of karma.config.js that is using webpack.
 It is not our default, because it is slower than default one.
 It is still in project in case that we need more advanced configuration in future.
@@ -46,8 +58,7 @@ It is still in project in case that we need more advanced configuration in futur
 C:\Projects\2sxc-inpage> karma start karma.config-webpack.js
 ```
 
-
-## webpack static module bundler 
+## webpack static module bundler
 
 After bounding, it will copy of all files from **./dist/** to **C:/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage** folder.
 
@@ -56,13 +67,13 @@ Our **webpack.config.js** supports bundling for Development or Production (depen
 ### Development
 
 - currently bundles only ts & js files to support watch mode
-- bundling of *.css, and other assets is skipped
+- bundling of \*.css, and other assets is skipped
 
 ### Production
 
 - bundles all ts/js and css files
 - currently all css files are minimized (but only min.css have to be minimized)
-- copy 4 icon*.png images to C:\Projects as side effect of Run-Production, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
+- copy 4 icon\*.png images to C:\Projects as side effect of Run-Production, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
 - currently do not work in watch mode
 
 ### TypeDoc
