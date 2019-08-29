@@ -1,5 +1,5 @@
 ﻿import { getTag } from '../manage/api';
-import { buildToolbars} from '../toolbar/build-toolbars';
+import { buildToolbars, buildToolbarsFromAnyNode } from '../toolbar/build-toolbars';
 import { getSxcInstance } from './sxc';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
@@ -35,8 +35,8 @@ $(document).ready(() => {
  * @param isFirstRun should be true only on the very initial call
  */
 function initAllInstances(isFirstRun: boolean): void {
-  (window.$2sxc as any).stats.watchDomChanges++;
-  $('div[data-edit-context]').each(function() { initInstance(this, isFirstRun)});
+
+  $('div[data-edit-context]').each(function () { initInstance(this, isFirstRun) });
   if (isFirstRun)
     tryShowTemplatePicker();
 }
@@ -45,7 +45,40 @@ function initAllInstances(isFirstRun: boolean): void {
  * create an observer instance and start observing
  */
 function watchDomChanges() {
-  const observer = new MutationObserver(() => initAllInstances(false));
+  const observer = new MutationObserver((m) => {
+
+    // Watch how many changes were processed (statistics)
+    (window.$2sxc as any).stats.watchDomChanges++;
+    // Create toolbars for added nodes
+    const log = new Log('Bts.Module');
+    let processed = 0;
+
+    // 2019-08-29 2rm added automatic initialization of toolbars (not only module nodes)
+    m.forEach((v) => {
+      Array.prototype.forEach.call(v.addedNodes, (n: HTMLElement) => {
+        let node = $(n);
+        // Ignore added menu nodes as this may cause performance issues
+        if (node.is(".sc-menu"))
+          return;
+
+        processed++;
+
+        // If the added node is a [data-edit-context], it is either a module or a content block which was replaced
+        // re-initialize the module
+        if (node.is("div[data-edit-context]"))
+          initInstance(node, false);
+        // In all other cases, build the toolbars inside the added node
+        else
+          buildToolbarsFromAnyNode(log, node);
+
+      });
+    });
+
+    if (processed) {
+      // Clean up orphan tags if nodes have been added
+      CleanupTagToolbars();
+    }
+  });
   observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 }
 
@@ -63,7 +96,7 @@ function tryShowTemplatePicker(): boolean {
   if (openDialogId) {
     // must check if it's on this page, as it could be from another page
     const found = $(`[data-cb-id="${openDialogId}"]`);
-    if(found.length)
+    if (found.length)
       sxc = window.$2sxc(openDialogId) as SxcInstanceWithInternals;
   }
 
@@ -98,7 +131,7 @@ function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
   initializedInstances.push(module);
 
   let sxc = getSxcInstance(module);
-  
+
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
   if (!isFirstRun)
@@ -108,16 +141,12 @@ function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
   // this must always run because it can be added ajax-style
   const wasEmpty = showGlassesButtonIfUninitialized(sxc);
 
-  // Remove orphan tag-toolbars
-  if (!isFirstRun)
-    CleanupTagToolbars();
-
   if (isFirstRun || !wasEmpty) {
     // use a logger for each iteration
     const log = new Log('Bts.Module');
 
     buildToolbars(log, module);
-    if(DebugConfig.bootstrap.initInstance)
+    if (DebugConfig.bootstrap.initInstance)
       LogUtils.logDump(log);
   };
 }

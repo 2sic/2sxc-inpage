@@ -11,9 +11,10 @@ import { TagToolbar } from './tag-toolbar';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
+const toolbarSelector = `.sc-menu[toolbar],.sc-menu[data-toolbar],[${Constants.toolbar.attr.full}]`;
 
 /**
- * create a process - toolbar command to generate toolbars inside a tag
+ * Generate toolbars inside a MODULE tag (usually a div with class sc-edit-context)
  * @param parentLog
  * @param parentTag
  * @param optionalId
@@ -34,21 +35,57 @@ export function buildToolbars(parentLog: Log, parentTag: JQuery<HTMLElement>, op
     if (toolbars == null) return;
   }
 
-  for (let i = 0; i < toolbars.length; i++) {
-    const tag = $(toolbars[i]);
-    const config = loadConfigFromAttributes(toolbars[i]);
+  toolbars.each((i, e: HTMLElement) => loadAndConvertTag(log, e));
+}
 
-    if(config != null)  // is null if load failed
-      try {
-        convertConfigToToolbarTags(tag, config, log);
-      } catch (err2) {
-        // catch any errors, as this is very common - make sure the others are still rendered
-        console.error('error creating toolbar - will skip this one', err2);
-      }
-  }
+/**
+ * Build toolbar, but allow any node as target
+ * Will automatically find a wrapping sc-edit-context and all containing toolbars
+ * @param parentLog 
+ * @param node 
+ */
+export function buildToolbarsFromAnyNode(parentLog: Log, node: JQuery<HTMLElement>): void {
+  const log = new Log('Tlb.BldAny', parentLog);
+  let contextNode = $(node).closest(Constants.cb.selectors.ofName)[0];
+
+  // if we have no contextNode (a parent content block), we can
+  //assume the node is outside of a 2sxc module so not interesting
+  if (contextNode == null)
+    return;
+
+  if (node.is(toolbarSelector)) // toolbar itself has been added
+    loadAndConvertTag(log, node[0]);
+
+  let toolbars = $(toolbarSelector, node);
+  toolbars.each((i, e: HTMLElement) => loadAndConvertTag(log, e));
 }
 
 //////////////////////////////// Private Functions ////////////////////////////////////
+
+/**
+ * Setup a toolbar for a specific tag/node by loading its self-contained configuration
+ * and replacing / preparing the toolbar as needed.
+ * @param log 
+ * @param node 
+ */
+function loadAndConvertTag(log: Log, node: HTMLElement): void {
+  const tag = $(node);
+
+  // Do not process tag if a toolbar has already been attached
+  if (tag.data("2sxc-tagtoolbar"))
+    return;
+
+  const config = loadConfigFromAttributes(node);
+
+  if (config != null) {  // is null if load failed
+    try {
+      convertConfigToToolbarTags(tag, config, log);
+    } catch (err2) {
+      // catch any errors, as this is very common - make sure the others are still rendered
+      console.error('error creating toolbar - will skip this one', err2);
+    }
+  }
+}
 
 /**
  * Load the toolbar configuration from the sxc-toolbar attribute OR the old schema
@@ -90,7 +127,7 @@ function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarIni
   if (tag.attr(Constants.toolbar.attr.full)) {
     // new case, where the full toolbar is included in one setting
     // ReSharper disable once WrongExpressionStatement
-    new TagToolbar(tag, cnt);
+    tag.data("2sxc-tagtoolbar", new TagToolbar(tag, cnt));
     ensureToolbarHoverClass(tag);
   } else {
     const toolbar = renderToolbar(cnt);
@@ -107,7 +144,7 @@ function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarIni
 
 /** find current toolbars inside this wrapper-tag */
 function getToolbarTags(parentTag: JQuery<HTMLElement>): JQuery<HTMLElement> {
-  const allInner = $(`.sc-menu[toolbar],.sc-menu[data-toolbar],[${Constants.toolbar.attr.full}]`, parentTag);
+  const allInner = $(toolbarSelector, parentTag);
 
   // return only those, which don't belong to a sub-item
   const onlyDirectDescendents = allInner
@@ -138,7 +175,7 @@ function addFallbackToolbar(parentTag: JQuery<HTMLElement>): JQuery<HTMLElement>
     return null;
 
   contentTag.attr(Constants.toolbar.attr.full, JSON.stringify(emptyToolbar));
-  
+
   return contentTag;
 }
 

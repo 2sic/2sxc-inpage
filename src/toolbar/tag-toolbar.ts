@@ -34,7 +34,7 @@ function getBodyOffset() {
     }
   }
   return {
-    top: 0, 
+    top: 0,
     left: 0
   }
 }
@@ -153,7 +153,7 @@ export class TagToolbar {
     this.toolbarElement.css(cssPos);
   }
 
- 
+
   hideToolbar() {
     $(window).off('scroll', this.updatePosition);
     this.toolbarElement.css({ display: 'none' });
