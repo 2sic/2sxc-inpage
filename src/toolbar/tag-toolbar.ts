@@ -34,7 +34,7 @@ function getBodyOffset() {
     }
   }
   return {
-    top: 0, 
+    top: 0,
     left: 0
   }
 }
@@ -123,7 +123,7 @@ export class TagToolbar {
       mousePos: mousePosition,
       win: {
         scrollY: window.scrollY,
-        width: $('body').width()
+        width: $(window).width()
       },
       padding: tagToolbarPadding
     };
@@ -137,6 +137,7 @@ export class TagToolbar {
     else
       position.top = position.mousePos.y + position.win.scrollY - position.bodyOffset.top - toolbarHeight / 2;
 
+    console.log(position);
     // Update left / right coordinates
     // todo: try to change class to use attribute or something
     if (this.toolbarElement.hasClass('sc-tb-hover-right'))
@@ -153,7 +154,7 @@ export class TagToolbar {
     this.toolbarElement.css(cssPos);
   }
 
- 
+
   hideToolbar() {
     $(window).off('scroll', this.updatePosition);
     this.toolbarElement.css({ display: 'none' });
