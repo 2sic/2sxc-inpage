@@ -63,10 +63,17 @@ function watchDomChanges() {
 
         processed++;
 
+        console.log("Mutation Observer saw ", v.addedNodes);
         // If the added node is a [data-edit-context], it is either a module or a content block which was replaced
         // re-initialize the module
         if (node.is("div[data-edit-context]"))
           initInstance(node, false);
+        // If the added node contains [data-edit-context] nodes, it is likely the DNN module drag manager which added
+        // the node. To prevent multiple initialization while dragging modules, we additionally check for the
+        // .active-module class which seems to be applied while dragging the module.
+        else if (node.is(":not(.active-module)") && node.has("div[data-edit-context]")) {
+          $('div[data-edit-context]', node).each(function () { initInstance(this, false) });
+        }
         // In all other cases, build the toolbars inside the added node
         else
           buildToolbarsFromAnyNode(log, node);
@@ -124,6 +131,8 @@ function tryShowTemplatePicker(): boolean {
 }
 
 function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
+  console.log("initInstance called with ", module, isFirstRun);
+  console.log("Initialized instances are ", initializedInstances);
   // check if module is already in the list of initialized modules
   if (initializedInstances.find((m) => m === module)) return;
 
