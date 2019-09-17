@@ -63,7 +63,6 @@ function watchDomChanges() {
 
         processed++;
 
-        console.log("Mutation Observer saw ", v.addedNodes);
         // If the added node is a [data-edit-context], it is either a module or a content block which was replaced
         // re-initialize the module
         if (node.is("div[data-edit-context]"))
