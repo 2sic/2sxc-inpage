@@ -70,7 +70,7 @@ var plugins = [
       {
         copy: [
           {
-            source: './dist/inpage/*',
+            source: './dist/inpage/*.min.*',
             destination:
               '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage',
           },
