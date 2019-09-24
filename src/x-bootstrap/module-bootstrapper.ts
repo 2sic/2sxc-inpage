@@ -1,27 +1,28 @@
-﻿import { getTag } from '../manage/api';
-import { buildToolbars, buildToolbarsFromAnyNode } from '../toolbar/build-toolbars';
-import { getSxcInstance } from './sxc';
+﻿import { DebugConfig } from '../DebugConfig';
+import { windowInPage as window } from '../interfaces/window-in-page';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
+import { getTag } from '../manage/api';
 import { quickDialog } from '../quick-dialog/quick-dialog';
 import QuickEditState = require('../quick-dialog/state');
-import { windowInPage as window } from '../interfaces/window-in-page';
-import { DebugConfig } from '../DebugConfig';
-import { CleanupTagToolbars } from '../toolbar/tag-toolbar'
+import {
+  buildToolbars,
+  buildToolbarsFromAnyNode,
+} from '../toolbar/build-toolbars';
+import { CleanupTagToolbars } from '../toolbar/tag-toolbar';
+import { getSxcInstance } from './sxc';
 
 /**
  * module & toolbar bootstrapping (initialize all toolbars after loading page)
  * this will run onReady...
  */
-const initializedInstances: JQuery<HTMLElement>[] = [];
+const initializedInstances: Array<JQuery<HTMLElement>> = [];
 let openedTemplatePickerOnce = false;
 const diagCancelStateOnStart = QuickEditState.cancelled.get();
 
-
 $(document).ready(() => {
   // reset cancelled state after one reload
-  if (diagCancelStateOnStart)
-    QuickEditState.cancelled.remove();
+  if (diagCancelStateOnStart) QuickEditState.cancelled.remove();
 
   // initialize all modules
   initAllInstances(true);
@@ -35,10 +36,10 @@ $(document).ready(() => {
  * @param isFirstRun should be true only on the very initial call
  */
 function initAllInstances(isFirstRun: boolean): void {
-
-  $('div[data-edit-context]').each(function () { initInstance(this, isFirstRun) });
-  if (isFirstRun)
-    tryShowTemplatePicker();
+  $('div[data-edit-context]').each(function() {
+    initInstance(this, isFirstRun);
+  });
+  if (isFirstRun) tryShowTemplatePicker();
 }
 
 /**
@@ -46,7 +47,6 @@ function initAllInstances(isFirstRun: boolean): void {
  */
 function watchDomChanges() {
   const observer = new MutationObserver((m) => {
-
     // Watch how many changes were processed (statistics)
     (window.$2sxc as any).stats.watchDomChanges++;
     // Create toolbars for added nodes
@@ -56,21 +56,26 @@ function watchDomChanges() {
     // 2019-08-29 2rm added automatic initialization of toolbars (not only module nodes)
     m.forEach((v) => {
       Array.prototype.forEach.call(v.addedNodes, (n: HTMLElement) => {
-        let node = $(n);
+        const node = $(n);
         // Ignore added menu nodes as this may cause performance issues
-        if (node.is(".sc-menu"))
-          return;
+        if (node.is('.sc-menu')) return;
 
         processed++;
 
         // If the added node is a [data-edit-context], it is either a module or a content block which was replaced
         // re-initialize the module
-        if (node.is("div[data-edit-context]"))
-          initInstance(node, false);
-        // In all other cases, build the toolbars inside the added node
-        else
-          buildToolbarsFromAnyNode(log, node);
-
+        if (node.is('div[data-edit-context]')) initInstance(node, false);
+        // If the added node contains [data-edit-context] nodes, it is likely the DNN module drag manager which added
+        // the node. To prevent multiple initialization while dragging modules, we additionally check for the
+        // .active-module class which seems to be applied while dragging the module.
+        else if (
+          node.is(':not(.active-module)') &&
+          node.has('div[data-edit-context]')
+        ) {
+          $('div[data-edit-context]', node).each(function() {
+            initInstance(this, false);
+          });
+        } else buildToolbarsFromAnyNode(log, node);
       });
     });
 
@@ -79,7 +84,11 @@ function watchDomChanges() {
       CleanupTagToolbars();
     }
   });
-  observer.observe(document.body, { attributes: false, childList: true, subtree: true });
+  observer.observe(document.body, {
+    attributes: false,
+    childList: true,
+    subtree: true,
+  });
 }
 
 /**
@@ -90,7 +99,7 @@ function watchDomChanges() {
  * @returns
  */
 function tryShowTemplatePicker(): boolean {
-  let sxc: SxcInstanceWithInternals = undefined;
+  let sxc: SxcInstanceWithInternals;
   // first check if we should show one according to the state-settings
   const openDialogId = QuickEditState.cbId.get();
   if (openDialogId) {
@@ -124,6 +133,9 @@ function tryShowTemplatePicker(): boolean {
 }
 
 function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
+  // console.log("initInstance called with ", module, isFirstRun);
+  // console.log("Initialized instances are ", initializedInstances);
+
   // check if module is already in the list of initialized modules
   if (initializedInstances.find((m) => m === module)) return;
 
@@ -134,8 +146,7 @@ function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
 
   // check if the sxc must be re-created. This is necessary when modules are dynamically changed
   // because the configuration may change, and that is cached otherwise, resulting in toolbars with wrong config
-  if (!isFirstRun)
-    sxc = sxc.recreate(true);
+  if (!isFirstRun) sxc = sxc.recreate(true);
 
   // check if we must show the glasses
   // this must always run because it can be added ajax-style
@@ -146,12 +157,13 @@ function initInstance(module: JQuery<HTMLElement>, isFirstRun: boolean): void {
     const log = new Log('Bts.Module');
 
     buildToolbars(log, module);
-    if (DebugConfig.bootstrap.initInstance)
-      LogUtils.logDump(log);
-  };
+    if (DebugConfig.bootstrap.initInstance) LogUtils.logDump(log);
+  }
 }
 
-function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals): boolean {
+function showGlassesButtonIfUninitialized(
+  sxci: SxcInstanceWithInternals,
+): boolean {
   // already initialized
   if (isInitialized(sxci)) return false;
 
@@ -160,9 +172,11 @@ function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals): boole
   if (tag.find('.sc-uninitialized').length !== 0) return false;
 
   // note: title is added on mouseover, as the translation isn't ready at page-load
-  const btn = $('<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">'
-    + '<div class="icon-sxc-glasses"></div>'
-    + '</div>');
+  const btn = $(
+    '<div class="sc-uninitialized" onmouseover="this.title = $2sxc.translate(this.title)" title="InPage.NewElement">' +
+      '<div class="icon-sxc-glasses"></div>' +
+      '</div>',
+  );
 
   btn.on('click', () => sxci.manage.run('layout'));
 
@@ -171,7 +185,10 @@ function showGlassesButtonIfUninitialized(sxci: SxcInstanceWithInternals): boole
 }
 
 function isInitialized(sxci: SxcInstanceWithInternals): boolean {
-  const cg = sxci && sxci.manage && sxci.manage._editContext && sxci.manage._editContext.ContentGroup;
-  return (cg && cg.TemplateId !== 0);
+  const cg =
+    sxci &&
+    sxci.manage &&
+    sxci.manage._editContext &&
+    sxci.manage._editContext.ContentGroup;
+  return cg && cg.TemplateId !== 0;
 }
-
