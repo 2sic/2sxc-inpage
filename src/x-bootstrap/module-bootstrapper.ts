@@ -1,4 +1,5 @@
-﻿import { DebugConfig } from '../DebugConfig';
+﻿import { Attributes } from '../constants';
+import { DebugConfig } from '../DebugConfig';
 import { windowInPage as window } from '../interfaces/window-in-page';
 import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
@@ -105,8 +106,21 @@ function tryShowTemplatePicker(): boolean {
   if (openDialogId) {
     // must check if it's on this page, as it could be from another page
     const found = $(`[data-cb-id="${openDialogId}"]`);
-    if (found.length)
-      sxc = window.$2sxc(openDialogId) as SxcInstanceWithInternals;
+    if (found.length) {
+      // since the CB-ID could also be an inner content (marked as a negative "-" number)
+      // we must be sure that we use the right id anyhow
+      if (openDialogId < 0) {
+        const instanceId = Number(
+          found[0].attributes.getNamedItem(Attributes.InstanceId).value,
+        );
+        sxc = window.$2sxc(
+          instanceId,
+          openDialogId,
+        ) as SxcInstanceWithInternals;
+      } else {
+        sxc = window.$2sxc(openDialogId) as SxcInstanceWithInternals;
+      }
+    }
   }
 
   if (!sxc) {
