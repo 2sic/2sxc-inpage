@@ -10,16 +10,22 @@ export const toolbar = {
     oldHover: 'sc-element',
   },
   selectors: {
-    ofOldHover: '.sc-element'
-  }
-}
+    ofOldHover: '.sc-element',
+  },
+};
 
 /** ContentBlock constants  */
 export const cb = {
   classes: {
-    name: 'sc-content-block'
+    name: 'sc-content-block',
   },
   selectors: {
-    ofName: '.sc-content-block'
-  }
-}
+    ofName: '.sc-content-block',
+  },
+};
+
+export const Attributes = {
+  InstanceId: 'data-cb-instance',
+  Context: 'data-edit-context',
+  ContentBlockId: 'data-cb-id',
+};
