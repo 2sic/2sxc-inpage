@@ -5,8 +5,6 @@
         "**/CVS": false,
         "dist": true
     },
-    "editor.formatOnSave": true,
     "javascript.preferences.quoteStyle": "single",
-    "prettier.trailingComma": "es5",
-    "prettier.tslintIntegration": true
+    "prettier.trailingComma": "es5"
 }
