@@ -124,7 +124,7 @@ function tryShowTemplatePicker(): boolean {
   }
 
   if (!sxc) {
-    const uninitializedModules: any = $('.sc-uninitialized');
+    const uninitializedModules = $('.sc-uninitialized');
 
     if (diagCancelStateOnStart || openedTemplatePickerOnce) return false;
 
@@ -182,7 +182,7 @@ function showGlassesButtonIfUninitialized(
   if (isInitialized(sxci)) return false;
 
   // already has a glasses button
-  const tag: any = $(getTag(sxci));
+  const tag = $(getTag(sxci));
   if (tag.find('.sc-uninitialized').length !== 0) return false;
 
   // note: title is added on mouseover, as the translation isn't ready at page-load
