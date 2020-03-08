@@ -1,14 +1,9 @@
-﻿import { ToolbarSettings } from './toolbar-settings';
+﻿import { ButtonGroup } from './button-group';
+import { ToolbarSettings } from './toolbar-settings';
 
 export class ToolbarConfigTemplate {
-  groups: item[] = [];
+  groups: ButtonGroup[] = [];
   defaults?: HashTable<string> = {};
   params?: HashTable<string> = {};
   settings?: Partial<ToolbarSettings> = {};
-}
-
-class item {
-  name: string;
-  buttons: string;
-  defaults?: HashTable<string> = {};
 }

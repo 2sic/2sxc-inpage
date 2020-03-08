@@ -10,10 +10,10 @@ import { ToolbarConfigTemplates } from './toolbar/toolbar-config-templates';
  * the toolbar manager is an internal helper taking care of toolbars, buttons etc.
  */
 export class ToolbarManager extends HasLog {
-  constructor(parentLog :Log) {
+  constructor(parentLog: Log) {
     super('Tlb.Mngr', parentLog, 'init');
   }
-  
+
   buildToolbars(parentTag: JQuery<HTMLElement>, optionalId?: number) {
     buildToolbars(this.log, parentTag, optionalId);
   }
@@ -26,6 +26,6 @@ export class ToolbarManager extends HasLog {
   toolbarTemplate = ToolbarConfigTemplates.Instance(this.log).get('default');
 }
 
-//2dm 2018-03-22 this seems to be unused
+// 2dm 2018-03-22 this seems to be unused
 const sharedTbm = new ToolbarManager(null);
 export const _toolbarManager = sharedTbm;

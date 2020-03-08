@@ -14,6 +14,7 @@ export function CleanupTagToolbars() {
   });
 }
 
+// tslint:disable-next-line: one-variable-per-declaration
 const tagToolbarPadding = 4,
   tagToolbarPaddingRight = 0,
   toolbarHeight = 20;
@@ -30,13 +31,13 @@ function getBodyOffset() {
     const offset = body.offset();
     return {
       top: offset.top,
-      left: offset.left
-    }
+      left: offset.left,
+    };
   }
   return {
     top: 0,
-    left: 0
-  }
+    left: 0,
+  };
 }
 
 /**
@@ -51,8 +52,8 @@ function getMenuNumber() {
 /** The current mouseposition, always updated when the mouse changes */
 const mousePosition = {
   x: 0,
-  y: 0
-}
+  y: 0,
+};
 
 /**
  * Keep the mouse-position update for future use
@@ -123,9 +124,9 @@ export class TagToolbar {
       mousePos: mousePosition,
       win: {
         scrollY: window.scrollY,
-        width: $(window).width()
+        width: $(window).width(),
       },
-      padding: tagToolbarPadding
+      padding: tagToolbarPadding,
     };
 
     // If we scrolled down, the toolbar might not be visible - calculate offset
@@ -147,8 +148,8 @@ export class TagToolbar {
     const cssPos = {
       top: position.top,
       left: position.left,
-      right: position.right
-    }
+      right: position.right,
+    };
 
     this.toolbarElement.css(cssPos);
   }

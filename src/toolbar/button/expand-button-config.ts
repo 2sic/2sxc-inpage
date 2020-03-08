@@ -1,10 +1,10 @@
 ﻿import { Commands } from '../../commands/commands';
 import { Definition } from '../../commands/definition';
 import { ContextOfButton } from '../../context/context-of-button';
-import { ButtonConfig } from './button-config';
-import { ToolbarConfig } from '../toolbar/toolbar-config';
-import { GroupConfig } from './group-config';
 import { Log } from '../../logging/log';
+import { ToolbarConfig } from '../toolbar/toolbar-config';
+import { ButtonConfig } from './button-config';
+import { GroupConfig } from './group-config';
 
 // takes an object like "actionname" or { action: "actionname", ... } and changes it to a { command: { action: "actionname" }, ... }
 // ReSharper disable once UnusedParameter
@@ -13,19 +13,19 @@ export function expandButtonConfig(original: any, sharedProps: any[], parentLog:
 
   // prevent multiple inits
   if (original._expanded || original.command) {
-    log.add(`already expanded, won't modify`);
+    log.add("already expanded, won't modify");
     return original;
-  };
+  }
 
   // if just a name, turn into a command
   if (typeof original === 'string') {
     log.add(`name "${original}" found, will re-map to .command.action`);
     original = { command: { action: original.trim() } };
-  };
+  }
 
   // if it's a command w/action, wrap into command + trim
   if (typeof original.action === 'string') {
-    log.add(`action found, will move down to .command`);
+    log.add('action found, will move down to .command');
     original.action = original.action.trim();
     original = { command: original };
   }
@@ -44,7 +44,7 @@ export function getButtonConfigDefaultsV1(name: string,
                                           uiOnly: boolean,
                                           partOfPage: boolean,
                                           more: Definition): Partial<ButtonConfig> {
-  // 
+  //
   // stv: v1 code
   const partialButtonConfig = {
     icon: (context: ContextOfButton) => `icon-sxc-${icon}`,
@@ -72,7 +72,7 @@ export function removeDisableButtons(context: any, full: ToolbarConfig, config: 
     // remove the group, if no buttons left, or only "more"
     // if (btns.length === 0 || (btns.length === 1 && btns[0].command.action === 'more'))
     if (btns.length === 0 || (btns.length === 1 && btns[0].action.name === 'more')) {
-      log.add(`found no more buttons except for the "more" - will remove that too`);
+      log.add('found no more buttons except for the "more" - will remove that too');
       btnGroups.splice(g--, 1);
     } // remove, and decrement counter
   }
@@ -91,7 +91,7 @@ function removeUnfitButtons(context: any, btns: ButtonConfig[], config: any, log
       btns.splice(i--, 1);
     }
   }
-  if(removals)
+  if (removals)
     log.add(`removed buttons: ${removals}`);
 }
 
@@ -106,7 +106,7 @@ function disableButtons(context: ContextOfButton, btns: ButtonConfig[], config: 
         config,
         false);
     } else {
-      btns[i].disabled = ((context: ContextOfButton,) => false);
+      btns[i].disabled = (() => false);
     }
 
   }
@@ -149,13 +149,13 @@ const btnProperties = [
   'title',
   'dynamicClasses',
   'showCondition',
-  'disabled'
+  'disabled',
 ];
 
 const prvProperties = [
   'defaults',
   'params',
-  'name'
+  'name',
 ];
 
 /**

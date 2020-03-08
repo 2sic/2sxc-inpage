@@ -1,17 +1,17 @@
 ﻿import { Commands } from '../../commands/commands';
 import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonAction } from '../button/button-action';
-import { ButtonDefinition } from '../button/button-definition';
 import { ButtonConfig } from '../button/button-config';
+import { ButtonDefinition } from '../button/button-definition';
 import { expandButtonConfig } from '../button/expand-button-config';
 import { ModConfig } from '../button/mod-config';
 import { flattenActionDefinition } from './flatten-action-definition';
 import { parametersAdapter } from './parameters-adapter';
 
-export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefinition, groupIndex: number): ButtonConfig {
+export function buttonConfigAdapter(actDef: ButtonDefinition): ButtonConfig {
 
   const partialButtonConfig: Partial<ButtonConfig> = {};
-  
+
   if (actDef.code) {
     partialButtonConfig.code = (context: ContextOfButton) => {
 
@@ -21,13 +21,13 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
       // modConfig.isList = false;
 
       return actDef.code(context.button.action.params, modConfig);
-    }
+    };
   }
 
   if (actDef.icon) {
-    partialButtonConfig.icon = (context: ContextOfButton) => {
+    partialButtonConfig.icon = () => {
       return `icon-sxc-${actDef.icon}`;
-    }
+    };
   }
 
   if (actDef.classes) {
@@ -35,33 +35,33 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.dialog) {
-    partialButtonConfig.dialog = (context: ContextOfButton) => {
+    partialButtonConfig.dialog = () => {
       return actDef.dialog;
     };
   }
 
   if (actDef.disabled) {
-    partialButtonConfig.disabled = (context: ContextOfButton) => {
+    partialButtonConfig.disabled = () => {
       return actDef.disabled;
-    }
+    };
   }
 
   if (actDef.dynamicClasses) {
     partialButtonConfig.dynamicClasses = (context: ContextOfButton) => {
       return actDef.dynamicClasses(context.button.action.params);
-    }
+    };
   }
 
   if (actDef.fullScreen) {
-    partialButtonConfig.fullScreen = (context: ContextOfButton) => {
+    partialButtonConfig.fullScreen = () => {
       return actDef.fullScreen;
-    }
+    };
   }
 
   if (actDef.inlineWindow) {
-    partialButtonConfig.inlineWindow = (context: ContextOfButton) => {
+    partialButtonConfig.inlineWindow = () => {
       return actDef.inlineWindow;
-    }
+    };
   }
 
   if (actDef.name) {
@@ -69,9 +69,9 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.newWindow) {
-    partialButtonConfig.newWindow = (context: ContextOfButton) => {
+    partialButtonConfig.newWindow = () => {
       return actDef.newWindow;
-    }
+    };
   }
 
   if (actDef.params) {
@@ -81,9 +81,9 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
   }
 
   if (actDef.partOfPage) {
-    partialButtonConfig.partOfPage = (context: ContextOfButton) => {
+    partialButtonConfig.partOfPage = () => {
       return actDef.partOfPage;
-    }
+    };
   }
 
   if (actDef.showCondition) {
@@ -95,19 +95,19 @@ export function buttonConfigAdapter(context: ContextOfButton, actDef: ButtonDefi
       // modConfig.isList = false;
 
       return actDef.showCondition(context.button.action.params, modConfig);
-    }
+    };
   }
 
   if (actDef.title) {
-    partialButtonConfig.title = (context: ContextOfButton) => {
+    partialButtonConfig.title = () => {
       return `Toolbar.${actDef.title}`;
-    }
+    };
   }
 
   if (actDef.uiActionOnly) {
-    partialButtonConfig.uiActionOnly = (context: ContextOfButton) => {
+    partialButtonConfig.uiActionOnly = () => {
       return actDef.uiActionOnly;
-    }
+    };
   }
 
   actDef = (expandButtonConfig(actDef, [], null)) as ButtonDefinition;

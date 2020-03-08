@@ -1,5 +1,5 @@
-﻿import { Settings } from '../../commands/settings';
-import { Params } from '../../commands/params';
+﻿import { Params } from '../../commands/params';
+import { Settings } from '../../commands/settings';
 import { ModConfig } from './mod-config';
 
 /**

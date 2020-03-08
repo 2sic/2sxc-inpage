@@ -1,12 +1,12 @@
-﻿import { Log } from '../../logging/log';
+﻿import { ContextOfButton } from '../../context/context-of-button';
+import { Log } from '../../logging/log';
 import { InstanceConfig } from '../../manage/instance-config';
 import { oldToolbarSettingsAddapter } from '../adapters/old-toolbar-settings-adapter';
 import { customize, removeDisableButtons } from '../button/expand-button-config';
 import { expandButtonGroups } from '../button/expand-group-config';
 import { ToolbarConfig } from './toolbar-config';
-import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 import { ToolbarConfigTemplates } from './toolbar-config-templates';
-import { ContextOfButton } from '../../context/context-of-button';
+import { defaultToolbarSettings, settingsForEmptyToolbar, ToolbarSettings } from './toolbar-settings';
 
 export function expandToolbarConfig(context: ContextOfButton, toolbarData: any, toolbarSettings: ToolbarSettings, parentLog?: Log): ToolbarConfig {
   const log = new Log('Tlb.ExpTop', parentLog, 'expand start');
@@ -66,7 +66,7 @@ function buildFullDefinition(toolbarContext: ContextOfButton, unstructuredConfig
   customize(fullConfig);
 
   return fullConfig;
-};
+}
 
 //#region build initial toolbar object
 /**
@@ -81,7 +81,7 @@ function buildFullDefinition(toolbarContext: ContextOfButton, unstructuredConfig
  * @param toolbarSettings
  */
 function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarSettings, parentLog: Log): ToolbarConfig {
-  const log = new Log("Tlb.DefTre", parentLog, "start");
+  const log = new Log('Tlb.DefTre', parentLog, 'start');
   // original is null/undefined, just return empty set
   if (!unstructuredConfig) throw (`preparing toolbar, with nothing to work on: ${unstructuredConfig}`);
 
@@ -120,5 +120,5 @@ function ensureDefinitionTree(unstructuredConfig: any, toolbarSettings: ToolbarS
 
   log.add('done');
   return toolbarConfig;
-};
+}
 //#endregion initial toolbar object

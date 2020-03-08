@@ -1,6 +1,6 @@
 ﻿export function oldParametersAdapter(action: any): any {
 
-  let params: any = {};
+  const params: any = {};
 
   if (action) {
 

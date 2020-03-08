@@ -1,15 +1,15 @@
-﻿import { defaultToolbarTemplate } from './templates/default-toolbar-template';
+﻿import { HasLog } from '../../logging/has-log';
+import { Log } from '../../logging/log';
+import { defaultToolbarTemplate } from './templates/default-toolbar-template';
 import { leftToolbarTemplate } from './templates/left-toolbar-template';
 import { ToolbarConfigTemplate } from './toolbar-config-template';
-import { HasLog } from '../../logging/has-log';
-import { Log } from '../../logging/log';
 
 export class ToolbarConfigTemplates extends HasLog {
   private static singleton: ToolbarConfigTemplates = null; // A variable which stores the singleton object. Initially, the variable acts like a placeholder
   configTemplateList: ToolbarConfigTemplate[] = [];
   list: HashTable<ToolbarConfigTemplate> = {}; // hash - table of templates, to be used a list()['template - name']
   private constructor(parentLog: Log) {
-    super('Tlb.TmpMan', parentLog, "build");
+    super('Tlb.TmpMan', parentLog, 'build');
     this.add('default', defaultToolbarTemplate);
     this.add('left', leftToolbarTemplate);
   }

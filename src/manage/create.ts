@@ -76,9 +76,10 @@ export class EditManager {
     //const myContext = context(tag);
 
     const newButtonConfig = buttonConfigAdapter(
-      this.context,
+      // this.context,
       actDef,
-      groupIndex);
+      // groupIndex
+      );
 
     this.context.button = newButtonConfig;
  

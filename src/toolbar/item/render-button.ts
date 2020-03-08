@@ -1,9 +1,6 @@
 ﻿import { ContextOfButton } from '../../context/context-of-button';
 import { oldParametersAdapter } from '../adapters/old-parameters-adapter';
-import { ButtonConfig } from '../button/button-config';
 import { addClasses } from './render-helpers';
-import { Settings } from '../../commands/settings';
-import { ButtonDefinition } from '../button/button-definition';
 
 /**
  * generate the html for a button
@@ -20,7 +17,7 @@ export function renderButton(context: ContextOfButton, groupIndex: number): HTML
 
   let onclick: string = '';
 
-  if (!buttonConfig.disabled){
+  if (!buttonConfig.disabled) {
     onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run(${JSON.stringify(oldParamsAdapter)}, event);`;
     // onclick = `$2sxc(${context.instance.id}, ${context.contentBlock.id}).manage.run2($2sxc.context(this), ${JSON.stringify(oldParamsAdapter)}, event);`;
   }

@@ -1,13 +1,13 @@
 ﻿import { Commands } from '../../commands/commands';
-import { parametersAdapter } from '../adapters/parameters-adapter';
-import { settingsAdapter } from '../adapters/settings-adapter';
-import { ButtonAction } from './button-action';
-import { ButtonConfig } from './button-config';
-import { ToolbarConfig } from '../toolbar/toolbar-config';
-import { ToolbarSettings } from '../toolbar/toolbar-settings';
-import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-config';
 import { Log } from '../../logging/log';
 import { flattenActionDefinition } from '../adapters/flatten-action-definition';
+import { parametersAdapter } from '../adapters/parameters-adapter';
+import { settingsAdapter } from '../adapters/settings-adapter';
+import { ToolbarConfig } from '../toolbar/toolbar-config';
+import { ToolbarSettings } from '../toolbar/toolbar-settings';
+import { ButtonAction } from './button-action';
+import { ButtonConfig } from './button-config';
+import { addDefaultBtnSettings, expandButtonConfig } from './expand-button-config';
 
 /**
  * this will traverse a groups-tree and expand each group
@@ -16,7 +16,7 @@ import { flattenActionDefinition } from '../adapters/flatten-action-definition';
  */
 export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: Log): void {
   const log = new Log('Tlb.ExpGrp', parentLog, 'start');
-  
+
   const actions = Commands.getInstance();
 
   // by now we should have a structure, let's check/fix the buttons
@@ -67,8 +67,7 @@ export function expandButtonGroups(fullToolbarConfig: ToolbarConfig, parentLog: 
 
         buttonConfigs.push(newButtonConfig);
       }
-    }
-    else log.add(`no button array found, won't do anything`);
+    } else log.add("no button array found, won't do anything");
 
     // Toolbar API v2 overwrite V1
     fullToolbarConfig.groups[g].buttons = buttonConfigs;
@@ -119,7 +118,7 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
     delete sharedProperties.action; //
 
   } else {
-    log.add(`no special case detected, will use the buttons-object as is`);
+    log.add('no special case detected, will use the buttons-object as is');
     btns = root.buttons;
   }
   log.add(`after check, found ${btns.length} buttons`);
@@ -131,8 +130,7 @@ function expandButtonList(root: any, settings: ToolbarSettings, parentLog: Log):
       ) {
       log.add('will add a more "..." button to end');
       btns.push('more');
-    }
-    else {
+    } else {
       log.add('will add a more "..." button to start');
       btns.unshift('more');
     }

@@ -1,13 +1,13 @@
-﻿import { context } from '../context/context';
+﻿import Constants = require('../constants');
+import { context } from '../context/context';
 import { $2sxcInPage as $2sxc } from '../interfaces/sxc-controller-in-page';
+import { Log } from '../logging/log';
 import { getTag } from '../manage/api';
 import { renderToolbar } from './item/render-toolbar';
-import { expandToolbarConfig } from './toolbar/toolbar-expand-config';
-import { ToolbarSettings, emptyToolbar } from './toolbar/toolbar-settings';
-import { Log } from '../logging/log';
-import Constants = require('../constants');
-import { ToolbarInitConfig } from './toolbar-init-config';
 import { TagToolbar } from './tag-toolbar';
+import { ToolbarInitConfig } from './toolbar-init-config';
+import { expandToolbarConfig } from './toolbar/toolbar-expand-config';
+import { emptyToolbar, ToolbarSettings } from './toolbar/toolbar-settings';
 
 // quick debug - set to false if not needed for production
 const dbg = false;
@@ -41,22 +41,22 @@ export function buildToolbars(parentLog: Log, parentTag: JQuery<HTMLElement>, op
 /**
  * Build toolbar, but allow any node as target
  * Will automatically find a wrapping sc-edit-context and all containing toolbars
- * @param parentLog 
- * @param node 
+ * @param parentLog
+ * @param node
  */
 export function buildToolbarsFromAnyNode(parentLog: Log, node: JQuery<HTMLElement>): void {
   const log = new Log('Tlb.BldAny', parentLog);
-  let contextNode = $(node).closest(Constants.cb.selectors.ofName)[0];
+  const contextNode = $(node).closest(Constants.cb.selectors.ofName)[0];
 
   // if we have no contextNode (a parent content block), we can
-  //assume the node is outside of a 2sxc module so not interesting
+  // assume the node is outside of a 2sxc module so not interesting
   if (contextNode == null)
     return;
 
   if (node.is(toolbarSelector)) // toolbar itself has been added
     loadAndConvertTag(log, node[0]);
 
-  let toolbars = $(toolbarSelector, node);
+  const toolbars = $(toolbarSelector, node);
   toolbars.each((i, e: HTMLElement) => loadAndConvertTag(log, e));
 }
 
@@ -65,14 +65,14 @@ export function buildToolbarsFromAnyNode(parentLog: Log, node: JQuery<HTMLElemen
 /**
  * Setup a toolbar for a specific tag/node by loading its self-contained configuration
  * and replacing / preparing the toolbar as needed.
- * @param log 
- * @param node 
+ * @param log
+ * @param node
  */
 function loadAndConvertTag(log: Log, node: HTMLElement): void {
   const tag = $(node);
 
   // Do not process tag if a toolbar has already been attached
-  if (tag.data("2sxc-tagtoolbar"))
+  if (tag.data('2sxc-tagtoolbar'))
     return;
 
   const config = loadConfigFromAttributes(node);
@@ -103,7 +103,7 @@ function loadConfigFromAttributes(tag: HTMLElement): ToolbarInitConfig {
       const settings = getFirstAttribute(tag, at.settings, at.settingsData);
       return {
         toolbar: JSON.parse(data),
-        settings: JSON.parse(settings) as ToolbarSettings
+        settings: JSON.parse(settings) as ToolbarSettings,
       } as ToolbarInitConfig;
     }
   } catch (err) {
@@ -127,7 +127,7 @@ function convertConfigToToolbarTags(tag: JQuery<HTMLElement>, config: ToolbarIni
   if (tag.attr(Constants.toolbar.attr.full)) {
     // new case, where the full toolbar is included in one setting
     // ReSharper disable once WrongExpressionStatement
-    tag.data("2sxc-tagtoolbar", new TagToolbar(tag, cnt));
+    tag.data('2sxc-tagtoolbar', new TagToolbar(tag, cnt));
     ensureToolbarHoverClass(tag);
   } else {
     const toolbar = renderToolbar(cnt);

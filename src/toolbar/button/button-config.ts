@@ -1,5 +1,4 @@
 ﻿import { Command } from '../../commands/command';
-import { Settings } from '../../commands/settings';
 import { ContextOfButton } from '../../context/context-of-button';
 import { ButtonAction } from './button-action';
 
