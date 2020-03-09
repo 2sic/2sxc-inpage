@@ -5,7 +5,7 @@ import { Log } from '../logging/log';
 import { LogUtils } from '../logging/log-utils';
 import { getTag } from '../manage/api';
 import { quickDialog } from '../quick-dialog/quick-dialog';
-import QuickEditState = require('../quick-dialog/state');
+import * as QuickEditState from '../quick-dialog/state';
 import {
   buildToolbars,
   buildToolbarsFromAnyNode,

@@ -1,6 +1,5 @@
-﻿import 'shake.js';
+﻿const Shake = require('shake.js');
 // ReSharper disable once InconsistentNaming
-declare let Shake: any;
 
 // enable shake detection on all toolbars
 $(() => {
@@ -10,6 +9,7 @@ $(() => {
     $(document.body).toggleClass('sc-tb-show-all');
   }
 
+  const shake = new Shake({ callback: toggleAllToolbars });
   // start shake-event monitoring, which will then generate a window-event
-  (new Shake({ callback: toggleAllToolbars })).start();
+  shake.start();
 });

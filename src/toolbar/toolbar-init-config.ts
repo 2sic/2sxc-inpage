@@ -1,4 +1,4 @@
-import Toolbarsettings = require('./toolbar/toolbar-settings');
+import * as Toolbarsettings from './toolbar/toolbar-settings';
 import ToolbarSettings = Toolbarsettings.ToolbarSettings;
 
 export interface ToolbarInitConfig {

@@ -1,6 +1,6 @@
-﻿import Iframebridge = require('./iframe-bridge');
-import ContainerSize = require('./container-size');
-import DialogFrameElement = require('./iDialogFrameElement');
+﻿import * as ContainerSize from './container-size';
+import * as DialogFrameElement from './iDialogFrameElement';
+import * as Iframebridge from './iframe-bridge';
 import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 

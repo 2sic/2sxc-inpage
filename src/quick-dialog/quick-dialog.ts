@@ -1,12 +1,12 @@
 ﻿import { ContextOfButton } from '../context/context-of-button';
 import { DebugConfig } from '../DebugConfig';
-import Container = require('./container');
-import ContainerSize = require('./container-size');
-import DialogFrameElement = require('./iDialogFrameElement');
-import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
+import * as Container from './container';
+import * as ContainerSize from './container-size';
+import * as DialogFrameElement from './iDialogFrameElement';
 import { IFrameBridge } from './iframe-bridge';
-import QuickEditState = require('./state');
-import UrlHandler = require('./url-handler');
+import * as QuickEditState from './state';
+import * as UrlHandler from './url-handler';
+import IDialogFrameElement = DialogFrameElement.IDialogFrameElement;
 
 const dbg = DebugConfig.qDialog;
 const diagShowClass: string = 'dia-select';

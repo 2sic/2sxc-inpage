@@ -1,5 +1,8 @@
-﻿// import 'shake.js';
-import './polyfills/include-polyfills';
+﻿import 'shake.js';
+// import * as Shake from 'shake.js';
+// import {Shake } from 'shake.js';
+// import * as Shake from 'shake.js';
+// import './polyfills/include-polyfills';
 
 import { Cms } from './cms/Cms';
 import { Commands } from './commands/commands';

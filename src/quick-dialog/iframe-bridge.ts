@@ -1,13 +1,13 @@
 ﻿import { renderer } from '../contentBlock/render';
 import { updateTemplateFromDia } from '../contentBlock/templates';
 import { context } from '../context/context';
-import { getTag } from '../manage/api';
 import { ContextOfButton } from '../context/context-of-button';
-import { quickDialog } from './quick-dialog';
-import { IDialogFrameElement } from './iDialogFrameElement';
-import { QuickDialogConfig } from './quick-dialog-config';
+import * as Iiframebridge from '../interfaces/iiframe-bridge';
 import { IQuickDialogConfig } from '../interfaces/iquick-dialog-config';
-import Iiframebridge = require('../interfaces/iiframe-bridge');
+import { getTag } from '../manage/api';
+import { IDialogFrameElement } from './iDialogFrameElement';
+import { quickDialog } from './quick-dialog';
+import { QuickDialogConfig } from './quick-dialog-config';
 import IIFrameBridge = Iiframebridge.IIFrameBridge;
 
 const scrollTopOffset: number = 80;
@@ -22,7 +22,7 @@ export function build(iFrame: HTMLIFrameElement): IDialogFrameElement {
 }
 
 /**
- * 
+ *
  */
 // ReSharper disable once InconsistentNaming
 export class IFrameBridge implements IIFrameBridge {
@@ -53,7 +53,7 @@ export class IFrameBridge implements IIFrameBridge {
 
   run(verb: string) { this.uncachedSxc().manage.run(verb); }
 
-  cancel(): void { quickDialog.cancel(this); };
+  cancel(): void { quickDialog.cancel(this); }
 
   showMessage(message: string) {
     renderer.showMessage(this.getContext(), `<p class="no-live-preview-available">${message}</p>`);
@@ -109,7 +109,7 @@ export class IFrameBridge implements IIFrameBridge {
     this.sxcCacheKey = sxc.cacheKey;
     if (dialogName)
       this.dialogName = dialogName;
-  };
+  }
 
   /**
   * check if the dialog is showing for the current sxc-instance
@@ -124,7 +124,7 @@ export class IFrameBridge implements IIFrameBridge {
 
 function scrollToTarget(target: JQuery<HTMLElement>) {
   const specs = {
-    scrollTop: target.offset().top - scrollTopOffset
+    scrollTop: target.offset().top - scrollTopOffset,
   } as any;
   $('body').animate(specs, animationTime);
-};
+}

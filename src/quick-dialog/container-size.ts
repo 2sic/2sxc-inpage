@@ -1,4 +1,4 @@
-﻿import Container = require('./container');
+﻿import * as Container from './container';
 /**
  * this is a dialog manager which is in charge of all quick-dialogues
  * it always has a reference to the latest dialog created by any module instance
@@ -48,4 +48,3 @@ export function watchForResize(container: JQuery<HTMLElement>): void {
       }
     }, resizeInterval);
 }
-

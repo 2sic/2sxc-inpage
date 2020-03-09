@@ -1,5 +1,5 @@
-﻿import { CommandBase } from '../command-base';
-import Constants = require('../../constants');
+﻿import * as Constants from '../../constants';
+import { CommandBase } from '../command-base';
 
 /**
  * import this module to commands.ts
