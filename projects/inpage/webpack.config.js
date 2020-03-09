@@ -72,12 +72,14 @@ var plugins = [
           {
             source: './dist/inpage/*.min.*',
             destination:
-              '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage',
+            // note: destination must probably be relative, because the icons reference in code are also relative
+            '../../../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage',
           },
           {
             source: './dist/assets/*',
+            // note: destination must probably be relative, because the icons reference in code are also relative
             destination:
-              '../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets',
+              '../../../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets',
           },
         ],
       },
@@ -170,7 +172,9 @@ config.module.rules.push({
   use: {
     loader: 'file-loader',
     options: {
-      name: '../../[name].[ext]', // copy 4 icon*.png images to C:\Projects as side effect of Run-Production, so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
+      // copy 4 icon*.png images two folders up as side effect of Run-Production, 
+      // so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
+      name: '../../[name].[ext]', 
     },
   },
 });
