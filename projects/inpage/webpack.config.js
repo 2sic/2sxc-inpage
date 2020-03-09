@@ -1,6 +1,6 @@
 ﻿/* webpack static module bundler
 
-After bounding, it will copy of all files from **./dist/** to **C:/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage folder.
+After bounding, it will copy of all files from **./dist/** to **C:/Projects/2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/ folder.
 Supports bundling for Development or Production (depending on process.env.NODE_ENV, but 'development' is default).
 
 Development
@@ -48,6 +48,12 @@ var version = package.version;
 
 var inpageCss = isProd ? './inpage/inpage.min.css' : './inpage/inpage.css';
 
+// The dist folder must be "deeper" than normal, because some files also get written to a folder above it
+const deepDistFolder = '/dist/ToSic_SexyContent/dist';
+
+//
+const deployFolder = '../../../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage';
+
 // Webpack plugins
 var plugins = [
   new webpack.DefinePlugin({
@@ -65,21 +71,18 @@ var plugins = [
 
   new ExtractTextPlugin(inpageCss),
 
+  // copy the files to the dnn folder where 2sxc is being developed
   new FileManagerPlugin({
     onEnd: [
       {
         copy: [
           {
-            source: './dist/inpage/*.min.*',
-            destination:
-            // note: destination must probably be relative, because the icons reference in code are also relative
-            '../../../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage',
+            source: '.' + deepDistFolder + '/inpage/*.min.*',
+            destination: deployFolder,
           },
           {
-            source: './dist/assets/*',
-            // note: destination must probably be relative, because the icons reference in code are also relative
-            destination:
-              '../../../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage/assets',
+            source: '.' + deepDistFolder + '/assets/*',
+            destination: deployFolder + '/assets'
           },
         ],
       },
@@ -103,7 +106,7 @@ var config = {
 
   output: {
     filename: '[name]',
-    path: __dirname + '/dist',
+    path: __dirname + deepDistFolder,
   },
 
   module: {
