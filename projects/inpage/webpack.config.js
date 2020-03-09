@@ -51,7 +51,7 @@ var inpageCss = isProd ? './inpage/inpage.min.css' : './inpage/inpage.css';
 // The dist folder must be "deeper" than normal, because some files also get written to a folder above it
 const deepDistFolder = '/dist/ToSic_SexyContent/dist';
 
-//
+// the deployment folder, where things should be copied to after building
 const deployFolder = '../../../2sxc-dnn742/Website/DesktopModules/ToSIC_SexyContent/dist/inpage';
 
 // Webpack plugins
@@ -152,8 +152,8 @@ if (generateTypedocDocumentation) {
   );
 }
 
+// also build / minify the CSS with source-maps
 config.entry[inpageCss] = entryCssFiles;
-
 config.module.rules.push({
   test: /\.css$/,
   include: [/src/, /icons/],
@@ -169,19 +169,21 @@ config.module.rules.push({
   ]),
 });
 
+// include the 4 icons, but put them in a special place so links in the CSS get rewritten like we need them
+// so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
 config.module.rules.push({
   test: /\.png$/,
   exclude: /node_modules/,
   use: {
     loader: 'file-loader',
     options: {
-      // copy 4 icon*.png images two folders up as side effect of Run-Production, 
-      // so that link reference in css file are correctly pointing to C:\Projects\2sxc-dnn742\Website\DesktopModules\ToSIC_SexyContent
       name: '../../[name].[ext]', 
     },
   },
 });
 
+// also copy-deploy the woff font file
+// and update the link to them using the release version, so updates will break caches
 config.module.rules.push({
   test: /\.(woff)$/,
   exclude: /node_modules/,

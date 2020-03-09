@@ -6,16 +6,12 @@
     {
       "type": "npm",
       "script": "dev",
+      "path": "projects/inpage/",
       "problemMatcher": []
     },
     {
       "type": "npm",
       "script": "release",
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
-      "script": "dev",
       "path": "projects/inpage/",
       "problemMatcher": []
     }

@@ -11,7 +11,7 @@ function setExternalSourceMaps(configuration, path) {
   const ifProd = x => isProd && x;
   const pjson = require('../package.json');
 
-  console.log('isprod ' + isProd + '; process.env... ' + process.env.NODE_ENV);
+  console.warn('External Source Map: isprod ' + isProd + '; process.env... ' + process.env.NODE_ENV);
 
   if (isProd) {
     // devTool option is not needed anymore for prod
