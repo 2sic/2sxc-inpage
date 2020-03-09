@@ -13,4 +13,4 @@ export interface WindowInPage extends Window {
 }
 // ReSharper restore InconsistentNaming
 
-export const windowInPage: WindowInPage = window as WindowInPage;
+export const windowInPage: WindowInPage = window as any as WindowInPage;

@@ -1,4 +1,5 @@
-﻿// ReSharper disable once InconsistentNaming
+﻿import 'shake.js';
+// ReSharper disable once InconsistentNaming
 declare let Shake: any;
 
 // enable shake detection on all toolbars

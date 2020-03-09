@@ -4,9 +4,11 @@
   "version": "10.27.00",
   "description": "",
   "main": "webpack.config.js",
-  "dependencies": {},
+  "dependencies": {
+    "shake.js": "git+https://github.com/alexgibson/shake.js.git"
+  },
   "devDependencies": {
-    "@2sic.com/2sxc-typings": "^9.0.4",
+    "@2sic.com/2sxc-typings": "^10.25.3",
     "@types/i18next": "^8.4.3",
     "@types/i18next-xhr-backend": "^1.4.1",
     "@types/jasmine": "^2.8.7",
@@ -26,7 +28,7 @@
     "tslint": "^5.10.0",
     "typedoc": "^0.16.11",
     "typedoc-webpack-plugin": "^1.1.4",
-    "typescript": "^2.9.2",
+    "typescript": "^3.8.3",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "webpack": "^3.12.0"
   },

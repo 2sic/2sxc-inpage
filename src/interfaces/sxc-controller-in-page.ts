@@ -1,6 +1,6 @@
 ﻿import { Cms } from '../cms/Cms';
 import { windowInPage as window } from './window-in-page';
-
+// import { SxcRoot} from '@2sic.com/2sxc-typings'
 /**
  * $2sxc interface declaration merging for in-page
  */

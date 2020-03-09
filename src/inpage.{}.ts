@@ -1,10 +1,11 @@
-﻿import './polyfills/include-polyfills';
+﻿// import 'shake.js';
+import './polyfills/include-polyfills';
 
+import { Cms } from './cms/Cms';
+import { Commands } from './commands/commands';
+import { context } from './context/context';
 import { $2sxcInPage as $2sxc } from './interfaces/sxc-controller-in-page';
 import { windowInPage as window } from './interfaces/window-in-page';
-import { Commands } from './commands/commands';
-import { Cms } from './cms/Cms';
-import { context } from './context/context';
 import { _manage } from './manage/manage';
 import { $quickE } from './quick-edit/quick-e';
 import { start } from './quick-edit/start';
